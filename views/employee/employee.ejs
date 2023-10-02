@@ -1,0 +1,157 @@
+<button type="button" id="addemployeebtn" class="btn btn-danger" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">+ Add New</button>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-danger">Employee</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th><span style="color: green">Action</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Add employee modal -->
+<div id="addemployeemodal" class="modal">
+    <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: red;">
+        <h5 class="modal-title" id="exampleModalLabel" style="color: #fff;">Add Employee</h5>
+      </div>
+      <div class="modal-body">
+        <form>
+            <br>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeefname" name="employeefname" placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeelname" name="employeelname" placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="date" class="form-control" id="employeebirthday" name="employeebirthday">
+                    <label for="floatingInput">Birthday</label>
+                    </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="employeegender" name="employeegender" aria-label="Floating label select example">
+                          <option selected>Choose gender</option>
+                          <option value="1">Male</option>
+                          <option value="2">Female</option>
+                        </select>
+                        <label for="floatingSelectGrid">Gender</label>
+                      </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeaddress" name="employeeaddress" placeholder="Address">
+                    <label for="floatingInput">Address</label>
+                    </div>
+                </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeephone" name="employeephone" placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeemail" name="employeeemail" placeholder="Email">
+                    <label for="floatingInput">Email</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                    <label for="floatingInput">Hire Date</label>
+                    </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="col g-6">
+                    <input type="file" class="form-control" id="employeephoto" name="employeephoto">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
+                          <option selected>Choose Department</option>
+                          <option value="1">IT</option>
+                          <option value="2">HR</option>
+                        </select>
+                        <label for="floatingSelectGrid">Department</label>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="employeeposition" name="employeeposition" aria-label="Floating label select example">
+                          <option selected>Choose Position</option>
+                          <option value="1">Senior</option>
+                          <option value="2">Junior</option>
+                        </select>
+                        <label for="floatingSelectGrid">Position</label>
+                      </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname" placeholder="Emergency Contact Name">
+                        <label for="floatingInput">Emergency Contact Name</label>
+                        </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone" placeholder="Emergency Contact Phone">
+                        <label for="floatingInput">Emergency Contact Phone</label>
+                        </div>
+                </div>
+        </form>
+        <br>
+        <br>
+        <br>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="close">Close</button>
+        <button type="button" class="btn btn-danger" id="saveaddemployeebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+  
