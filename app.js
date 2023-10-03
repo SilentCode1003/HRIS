@@ -9,6 +9,10 @@ var usersRouter = require('./routes/users');
 var employeeRouter = require('./routes/employee');
 var employeeprofileRouter = require('./routes/employeeprofile');
 var departmentRouter = require('./routes/department');
+var allleaveRouter = require('./routes/alleave');
+var pendingleaveRouter = require('./routes/pendingleave');
+var approvedleaveRouter = require('./routes/approvedleave');
+var rejectedleaveRouter = require('./routes/rejectedleave');
 
 var app = express();
 
@@ -27,6 +31,11 @@ app.use('/users', usersRouter);
 app.use('/employee', employeeRouter);
 app.use('/employeeprofile', employeeprofileRouter);
 app.use('/department', departmentRouter);
+app.use('/allleave', allleaveRouter);
+app.use('/pendingleave', pendingleaveRouter);
+app.use('/approvedleave', approvedleaveRouter);
+app.use('/rejectedleave', rejectedleaveRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
