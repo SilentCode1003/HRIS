@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="dataTableapprovedleave" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -24,7 +24,9 @@
                     <td>2023-01-01</td>
                     <td>2030-01-01</td>
                     <td><span style="color: green">Approved</span></td>
-                    <td>View</td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvedleavemodal">
+                      View
+                    </button></td>
                   </tr>
                   <tr>
                     <td>Wendell</td>
@@ -32,7 +34,9 @@
                     <td>2023-01-01</td>
                     <td>2030-01-01</td>
                     <td><span style="color: green">Approved</span></td>
-                    <td>View</td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvedleavemodal">
+                      View
+                    </button></td>
                   </tr>
                   <tr>
                     <td>Wendell</td>
@@ -40,7 +44,9 @@
                     <td>2023-01-01</td>
                     <td>2030-01-01</td>
                     <td><span style="color: green">Approved</span></td>
-                    <td>View</td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvedleavemodal">
+                      View
+                    </button></td>
                   </tr>
                 </tbody>
             </table>
@@ -49,3 +55,81 @@
 </div>
 </div>
 </div>
+
+<div class="modal fade" id="approvedleavemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Leave</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+          <div class="col">
+            <label for="editfname" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="approvedleavename" name="approvedleavename" value="Wendell Blanco" disabled>
+          </div>
+          <div class="col">
+            <label for="editlname" class="form-label">Email</label>
+            <input type="text" class="form-control" id="approvedleaveemail" name="approvedleaveemail" value="Blanco@gmail.com" disabled>
+          </div>
+          <div class="col">
+            <label for="editbday" class="form-label">Gender</label>
+            <input type="text" class="form-control" id="approvedleavegender" name="approvedleavegender" value="Male" disabled>
+          </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <label for="editfname" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="approvedleavephone" name="approvedleavephone" value="09205844276" disabled>
+            </div>
+            <div class="col">
+              <label for="editlname" class="form-label">Leave Type</label>
+              <input type="text" class="form-control" id="approvedleavetype" name="approvedleavetype" value="Casual" disabled>
+            </div>
+            <div class="col">
+              <label for="editbday" class="form-label">Apply Date</label>
+              <input type="text" class="form-control" id="approvedleaveapplydate" name="approvedleaveapplydate" value="2000-10-10" disabled>
+            </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="editphone" class="form-label">Applied No. of Days</label>
+                <input type="text" class="form-control" id="approvedleaveapplynodays" name="approvedleaveapplynodays" value="5" disabled>
+              </div>
+              <div class="col">
+                <label for="editemail" class="form-label">Available No. of Days</label>
+                <input type="text" class="form-control" id="approvedleaveavailabledays" name="approvedleaveavailabledays" value="6" disabled>
+              </div>
+              <div class="col">
+                <label for="editpassword" class="form-label">Leave Period</label>
+                <input type="text" class="form-control" id="approvedleaveaperiod" name="approvedleaveaperiod" value="2000-10-10 to 2000-11-11" disabled>
+              </div>
+              </div>
+              <div class="row g-3">
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Reason:</label>
+                  <textarea class="form-control" id="approvedleavereason" name="approvedleavereason" disabled>Masakit ulo ko</textarea>
+                </div>
+                <div class="col-md-8">
+                  <label for="editemail" class="form-label">Remarks</label>
+                  <input type="email" class="form-control" id="approvedleaveremarks" name="approvedleaveremarks" value="Approved by HR" disabled>
+                </div>
+                <div class="col">
+                  <label for="editpassword" class="form-label">Status</label>
+                  <input type="text" class="form-control" id="approvedleaveaperiod" name="approvedleaveaperiod" value="Approved" disabled>
+                </div>
+                </div>
+                <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
