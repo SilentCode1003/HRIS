@@ -14,6 +14,8 @@ var pendingleaveRouter = require('./routes/pendingleave');
 var approvedleaveRouter = require('./routes/approvedleave');
 var rejectedleaveRouter = require('./routes/rejectedleave');
 var attendanceRouter = require('./routes/attendance');
+var shiftRouter = require('./routes/shift');
+var trainingsRouter = require('./routes/trainings');
 
 var app = express();
 
@@ -37,6 +39,8 @@ app.use('/pendingleave', pendingleaveRouter);
 app.use('/approvedleave', approvedleaveRouter);
 app.use('/rejectedleave', rejectedleaveRouter);
 app.use('/attendance', attendanceRouter);
+app.use('/shift', shiftRouter);
+app.use('/trainings', trainingsRouter);
 
 
 // catch 404 and forward to error handler

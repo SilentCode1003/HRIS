@@ -141,13 +141,30 @@
             </div>
             <br>
             <div class="row g-3">
-              
             <div class="col">
               <div class="form-floating">
               <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
               <label for="floatingInput">Hire Date</label>
               </div>
           </div>
+          <div class="col">
+            <div class="form-floating">
+            <input type="text" class="form-control" id="employeeleavedays" name="employeeleavedays" placeholder="Available No. of Leave Days">
+            <label for="floatingInput">Available No. of Leave Days</label>
+            </div>
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            <select class="form-select" id="employeejobstatus" name="employeejobstatus" aria-label="Floating label select example">
+              <option selected>Job Status</option>
+              <option value="1">Regular</option>
+              <option value="2">Ireg</option>
+            </select>
+            <label for="floatingSelectGrid">Job Status</label>
+          </div>
+      </div>
+          </div>
+          <div class="row g-3">
               <div class="col">
                   <div class="form-floating">
                       <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname" placeholder="Emergency Contact Name">
@@ -158,7 +175,7 @@
                   <div class="form-floating">
                       <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone" placeholder="Emergency Contact Phone">
                       <label for="floatingInput">Emergency Contact Phone</label>
-                      </div>
+                    </div>
               </div>
       </form>
       </div>
