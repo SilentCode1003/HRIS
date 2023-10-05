@@ -1,0 +1,75 @@
+<script>
+    $(document).ready(function(){
+        console.log('Initialize');
+        LoadTable();
+    
+        function LoadTable() {
+            $("#dataTableallleave").DataTable({
+              destroy: true,
+              processing: true,
+              serverSide: true,
+              paging: false,
+              searching: false,
+              info: false,
+              scrollY: 400,
+              scrollCollapse: true,
+              serverMethod: "GET",
+              ajax: {
+                url: "/allleave/load",
+                dataSrc: (json) => {
+                  var finalData = [];
+                  var data = json.data;
+      
+                  console.log(data);
+                  $.each(data, (key, item) => {
+                    var action = "";
+                    var status = item.status;
+    
+                    action = `
+                    <button id="editBtn" class="btn btn-outline-danger fa fa-edit text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#updateEventModal">Edit</button>
+                    <button id="editBtn" class="btn btn-outline-danger fa fa-edit text-primary" name="editBtn" data-toggle="modal" data-target="#cablingitempriceModal">Delete</button>
+                   `;
+      
+                    finalData.push({
+                        leaveid: item.leaveid,
+                        employeeid: item.employeeid,
+                        leavestartdate: item.leavestartdate,
+                        leaveenddate: item.leaveenddate,
+                        leavetype: item.leavetype,
+                        reason: item.reason,
+                        status: item.status,
+                        applieddate: item.applieddate,
+                        action: action,
+                    });
+                  });
+      
+                  return finalData;
+                },
+              },
+              columnDefs: [
+                {
+                  targets: 1,
+                  className: "td-indent",
+                },
+              ],
+              columns: [
+                { data: "leaveid" },
+                { data: "employeeid" },
+                { data: "leavestartdate"},
+                { data: "leaveenddate" },
+                { data: "leavetype" },
+                { data: "reason" },
+                { data: "status" },
+                { data: "applieddate" },
+                { data: "action" },
+              ],
+              initComplete: function () {
+                console.log('Done');
+              },
+            });
+          }
+      
+    });
+    
+    
+</script>
