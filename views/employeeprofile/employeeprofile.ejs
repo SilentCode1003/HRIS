@@ -12,17 +12,16 @@
           <img src="/images/img/toy.jpg" alt="avatar"
           class="img-profile rounded-circle" style="width: 200px; height: 200px;">
         <h5 class="my-3">Wendell Blanco</h5>
-        <p class="text-muted mb-1">markanasarias6@gmail.com</p>
-        <p class="text-muted mb-1">09205844176</p>
+        <label for="editphone" class="form-label">Department:</label>
+        <p class="text-muted mb-1">IT</p>
+        <label for="editphone" class="form-label">Position:</label>
         <p class="text-muted mb-1">Full Stack Developer</p>
-        <p class="text-muted mb-4">Dating taga riles</p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <label for="editphone" class="form-label">Email:</label>
+        <p class="text-muted mb-1">wendell@gmail.com</p>
+        <label for="editphone" class="form-label">Phone:</label>
+        <p class="text-muted mb-1">09205844176</p>
+        <label for="editphone" class="form-label">Address</label>
+        <p class="text-muted mb-1">Dating taga riles</p>
         </div>
         </div>
         </div>
@@ -41,13 +40,24 @@
                   <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Leave History</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Desciplinary</button>
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Disciplinary</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Training Attended</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Health Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Attendance</button>
                 </li>
               </ul>
+              <!-- Employee Info -->
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                   <form>
                     <div class="row g-3">
+                      <input type="hidden" class="form-control" id="editid" name="editid">
                     <div class="col">
                       <label for="editfname" class="form-label">First Name</label>
                       <input type="text" class="form-control" id="editfname" name="editfname" value="Wendell">
@@ -113,6 +123,14 @@
                               <option value="2">Senior</option>
                             </select>
                           </div>
+                          <div class="col">
+                            <label for="editbday" class="form-label">Job Status</label>
+                            <select class="form-select" id="autoSizingSelect">
+                              <option selected>Choose...</option>
+                              <option value="1">Junior</option>
+                              <option value="2">Senior</option>
+                            </select>
+                          </div>
                     <br>
                         <div class="row g-3">
                           <div class="col">
@@ -135,10 +153,12 @@
                   </form>
                   </div>
                 </div>
+
+                <!-- Leave History -->
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                   <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id=" " width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Date Started</th>
@@ -173,9 +193,113 @@
                 </div>
                 
                 </div>
-                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"><h1>Action</h1>
-        
+
+                <!-- Disciplinary -->
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTabledeciplinary" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Offense Type</th>
+                                <th>Disciplinary Action</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td>Awol</td>
+                              <td>Written Reprimand</td>
+                              <td>Awol</td>
+                              <td>1st Offense</td>
+                            </tr> 
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+
+            <!-- training training -->
+    <div class="tab-pane fade" id="pills-training" role="tabpanel" aria-labelledby="pills-contact-tab">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTabletraining" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Traning Name</th>
+                    <th>Date Started</th>
+                    <th>Date Finished</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td>IT Seminar</td>
+                  <td>2023-01-01</td>
+                  <td>2023-01-10</td>
+                  <td>Pacita</td>
+                  <td>Completed</td>
+                </tr> 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- healh record -->
+<div class="tab-pane fade" id="pills-healthrecord" role="tabpanel" aria-labelledby="pills-contact-tab">
+  <div class="table-responsive">
+    <table class="table table-bordered" id="dataTablehealth" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Blood Type</th>
+                <th>Medical Condition</th>
+                <th>Prescribe Medication</th>
+                <th>Last Checkup</th>
+                <th>Insurance</th>
+                <th>Insurance Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>Type O</td>
+              <td>High Blood</td>
+              <td>Reduce Eating Calories</td>
+              <td>2023-01-01</td>
+              <td>HMO</td>
+              <td>123456789</td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- attendance -->
+<div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-contact-tab">
+  <div class="table-responsive">
+    <table class="table table-bordered" id="dataTableattendance" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Location In</th>
+                <th>Location Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>2023-01-01</td>
+              <td>8:00:00</td>
+              <td>17:00:00</td>
+              <td>Pacita</td>
+              <td>Pacita</td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
+</div>
+    
+                
     </div>
     </div>
     </div>
+    
