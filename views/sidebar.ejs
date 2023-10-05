@@ -25,9 +25,23 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link" href="/employee">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Employee</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseemployee"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Employee</span>
+        </a>
+        <div id="collapseemployee" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Employee:</h6>
+                <a class="collapse-item" href="/employee">List of Employee</a>
+                <a class="collapse-item" href="/schedule">Schedule</a>
+                <a class="collapse-item" href="/trainings">Trainings</a>
+                <a class="collapse-item" href="/performance">Performance</a>
+                <a class="collapse-item" href="/disciplinary">Disciplinary</a>
+                <a class="collapse-item" href="/healthrecord">Health Record</a>
+                <a class="collapse-item" href="/govermentid">Goverment ID</a>
+            </div>
+        </div>
     </li>
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsedepartment"
@@ -39,7 +53,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Department:</h6>
                 <a class="collapse-item" href="/department">Department</a>
-                <a class="collapse-item" href="cards.html">Position</a>
+                <a class="collapse-item" href="/department">Position</a>
             </div>
         </div>
     </li>
@@ -54,8 +68,22 @@
         <div id="collapseattendance" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Attendance:</h6>
-                <a class="collapse-item" href="buttons.html">All Attendance</a>
-                <a class="collapse-item" href="cards.html">Payroll</a>
+                <a class="collapse-item" href="/attendance">All Attendance</a>
+                <a class="collapse-item" href="cards.html">Overtime</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsepayroll"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Payroll</span>
+        </a>
+        <div id="collapsepayroll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Payroll:</h6>
+                <a class="collapse-item" href="/attendance">Salary</a>
+                <a class="collapse-item" href="cards.html">Deduction</a>
             </div>
         </div>
     </li>
@@ -84,8 +112,7 @@
         <div id="collapsedeviation" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Deviation Notices:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
+                <a class="collapse-item" href="buttons.html">Offenses</a>
             </div>
         </div>
     </li>
