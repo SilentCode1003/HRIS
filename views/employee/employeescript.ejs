@@ -1,2 +1,224 @@
+<script>
+  $(document).ready(function(){
+    console.log('Initialize');
+    LoadTable();
 
+    $(document).on("click", "#saveBtn", function () {
+      console.log("Save button clicked");
+      let id = $("#employeeid").val();
+      let firstname = $("#savefname").val();
+      let lastname = $("#savelname").val();
+      let birthday = $("#savebday").val();
+      let gender = $("#savegender").val();
+      let phone = $("#savephone").val();
+      let email = $("#saveemail").val();
+      let hiredate = $("#savehiredate").val();
+      let jobstatus = $("#savejob").val();
+      let ercontactname = $("#saveECname").val();
+      let ercontactphone = $("#saveECphone").val();
+      let department = $("#savedepartment").val();
+      let position = $("#saveposition").val();
+      let address = $("#saveaddress").val();
+      console.log(`${tittle} ${topic_name} ${content}`);
+
+
+      var message = "";
+
+      if (id == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (firstname == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (lastname == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (birthday == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (gender == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (phone == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (email == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (hiredate == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (jobstatus == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (ercontactname == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (ercontactphone == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (department == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (position == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (address == "") {
+        message += "POSITION NAME ";
+      }
+
+
+      if (message != "") {
+       
+      } else {
+
+        $.ajax({
+          type: "POST",
+          url: "/employee/save",
+          data: {
+            id: item.id,
+            firstname: item.firstname,
+            lastname: item.lastname,
+            birthday: item.birthday,
+            gender: item.gender,
+            phone: item.phone,
+            email: item.email,
+            hiredate: item.hiredate,
+            jobstatus: item.jobstatus,
+            ercontactname: item.ercontactname,
+            ercontactphone: item.ercontactphone,
+            department: item.department,
+            position: item.position,
+            address: item.address,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+              .then(results => {
+              window.location.reload();
+              })
+              LoadTable();
+            }
+             else {
+            swal({
+              title: "Exist",
+              text: "Data already exists!",
+              icon: "warning",
+              button: "OK!",
+            });
+          }
+  
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+
+    });
+
+    function LoadTable() {
+        $("#dataTableemployee").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/employee/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              console.log(data);
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+
+                action = `
+                <button id="employeeprofile" class="btn btn-outline-danger fa fa-edit text-primary" name="employeeprofile" data-bs-toggle="modal" data-bs-target="employeeprofile">View Profile</button>
+               `;
+  
+                finalData.push({
+                    id: item.id,
+                    firstname: item.firstname,
+                    phone: item.phone,
+                    email: item.email,
+                    department: item.department,
+                    position: item.position,
+                    action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            { data: "id" },
+            { data: "firstname" },
+            { data: "phone"},
+            { data: "email" },
+            { data: "department" },
+            { data: "position" },
+            { data: "action" },
+          ],
+          initComplete: function () {
+            console.log('Done');
+          },
+        });
+      }
+  
+});
+
+
+    // Get the modal
+    var modal = document.getElementById("addemployeemodal");
+    // Get the button that opens the modal
+    var btn = document.getElementById("addemployeebtn");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+    
+</script>
     

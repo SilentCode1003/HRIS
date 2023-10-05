@@ -24,11 +24,5 @@ $(document).ready(function() {
   $('#dataTabledeciplinary').DataTable();
 });
 $(document).ready(function() {
-  $('#dataTableattendance').DataTable();
-});
-$(document).ready(function() {
-  $('#dataTabletraining').DataTable();
-});
-$(document).ready(function() {
-  $('#dataTablehealth').DataTable();
+  $('#employeeprofile').DataTable();
 });
