@@ -41,29 +41,38 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addemployeemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addemployeemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+        <h5 class="modal-title" id="exampleModalLabel">ADD Employee</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <br>
+        <br>
         <div class="row">
           <div class="col-xl-2 col-lg-4" style="margin-left: 10px;  margin-top: 100px;" >
             <div class="col g-6">
-              <div class="p-4 border border-secondary">
-                  <h2 class="border-bottom pb-3 mb-4">Avatar Preview</h2>
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
                   <div class="text-center">
                       <img id="image-preview" 
-                           src="https://via.placeholder.com/400"
-                           style="width:200px; height:200px;"
+                           src="https://via.placeholder.com/250"
+                           style="width:250px; height:250px;"
                            class="rounded rounded-circle" alt="placeholder">
                   </div>
+                  <br>
+                  <div class="col">
+                    <div class="col g-6">
+                      <input type="file" name="image" class="form-control" accept="image/*"
+                      onchange="updatePreview(this, 'image-preview')" >
+                    </div>
+                </div>
+                <br>
+                  <h2 class="border-top pb-3 mb-4 text-center">Avatar Preview</h2>
               </div>
           </div>
           </div>
-          
           <div class="col-xl-8 col-lg-7" style="margin-left: 150px;" >
             <form>
               <br>
@@ -82,7 +91,7 @@
                     </div>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="employeebirthday" name="employeebirthday" placeholder="Middle Name">
+                        <input type="text" class="form-control" id="employeemname" name="employeemname" placeholder="Middle Name">
                         <label for="floatingInput">Middle Name</label>
                         </div>
                     </div>
@@ -116,13 +125,13 @@
                   </div>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="number" class="form-control" id="employeefname" name="employeefname" placeholder="First Name">
+                        <input type="number" class="form-control" id="employeephone" name="employeephone" placeholder="Phone Number">
                         <label for="floatingInput">Phone Number</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="email" class="form-control" id="employeelname" name="employeelname" placeholder="Last Name">
+                        <input type="email" class="form-control" id="employeeemail" name="employeeemail" placeholder="Email">
                         <label for="floatingInput">Email</label>
                         </div>
                     </div>
@@ -130,17 +139,15 @@
                   <br>
                   <div class="row g-3">
                     <div class="col">
-                      <div class="col g-6">
-                        <input type="file" name="image" class="form-control" accept="image/*"
-                        onchange="updatePreview(this, 'image-preview')" >
+                      <div class="form-floating">
+                      <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                      <label for="floatingInput">Hire Date</label>
                       </div>
                   </div>
                   <div class="col">
                     <div class="form-floating">
                         <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
                           <option selected>Choose Department</option>
-                          <option value="1">IT</option>
-                          <option value="2">HR</option>
                         </select>
                         <label for="floatingSelectGrid">Department</label>
                       </div>
@@ -158,18 +165,7 @@
                 </div>
                   <br>
                   <div class="row g-3">
-                    <div class="col">
-                      <div class="form-floating">
-                      <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
-                      <label for="floatingInput">Hire Date</label>
-                      </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeleavedays" name="employeeleavedays" placeholder="Available No. of Leave Days">
-                    <label for="floatingInput">Available No. of Leave Days</label>
-                    </div>
-                </div>
+                    
                     <div class="col">
                       <div class="form-floating">
                         <select class="form-select" id="employeejobstatus" name="employeejobstatus" aria-label="Floating label select example">
@@ -180,9 +176,7 @@
                         <label for="floatingSelectGrid">Job Status</label>
                       </div>
                     </div>
-                  </div>
                   <br>
-                  <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
                         <input type="text" class="form-control" id="employeeemergencyname" name="employeefname" placeholder="Emergency Contact Name">
@@ -195,16 +189,9 @@
                         <label for="floatingInput">Emergency Contact Phone</label>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="hidden" class="form-control" id="employeebirthday" name="employeebirthday">
-                        <label for="floatingInput"></label>
-                        </div>
-                    </div>
                   </div>
                   <br>
-          
-      </form>
+             </form>
           </div>
           </div>
       </div>
@@ -237,17 +224,17 @@
                       
                 <img src="/images/img/mark1.jpg" alt="avatar"
                 class="img-profile rounded-circle" style="width: 200px; height: 200px;">
-              <h5 class="my-3">Wendell Blanco</h5>
+              <h5 class="my-3" id="employeeprofilename" >Wendell Blanco</h5>
               <label for="editphone" class="form-label">Department:</label>
-              <p class="text-muted mb-1">IT</p>
+              <p class="text-muted mb-1" id="employeeprofiledepartment">IT</p>
               <label for="editphone" class="form-label">Position:</label>
-              <p class="text-muted mb-1">Full Stack Developer</p>
+              <p class="text-muted mb-1" id="employeeprofileposition">Full Stack Developer</p>
               <label for="editphone" class="form-label">Email:</label>
-              <p class="text-muted mb-1">wendell@gmail.com</p>
+              <p class="text-muted mb-1" id="employeeprofileemail">wendell@gmail.com</p>
               <label for="editphone" class="form-label">Phone:</label>
-              <p class="text-muted mb-1">09205844176</p>
+              <p class="text-muted mb-1" id="employeeprofilephone">09205844176</p>
               <label for="editphone" class="form-label">Address</label>
-              <p class="text-muted mb-1">Dating taga riles</p>
+              <p class="text-muted mb-1" id="employeeprofileaddress">Dating taga riles</p>
               </div>
               </div>
               </div>
@@ -276,6 +263,9 @@
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Health Data</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-govermentid" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">goverment ID</button>
+                </li>
                 
               </ul>
               <!-- Employee Info -->
@@ -283,25 +273,25 @@
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                   <form>
                     <div class="row g-3">
-                      <input type="hidden" class="form-control" id="editid" name="editid">
+                      <input type="hidden" class="form-control" id="editemployeeid" name="editemployeeid">
                     <div class="col">
                       <label for="editfname" class="form-label">First Name</label>
-                      <input type="text" class="form-control" id="editfname" name="editfname" value="Wendell">
+                      <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
                     </div>
                     <div class="col">
                       <label for="editlname" class="form-label">Last Name</label>
-                      <input type="text" class="form-control" id="editlname" name="editlname" value="Blanco">
+                      <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
                     </div>
                     <div class="col">
                       <label for="editbday" class="form-label">Birthday</label>
-                      <input type="date" class="form-control" id="editbday" name="editbday" 01-01-1990>
+                      <input type="date" class="form-control" id="editemployeebday" name="editemployeebday" 01-01-1990>
                     </div>
                     </div>
                     <br>
                     <div class="row g-3">
                       <div class="col">
                         <label for="editgender" class="form-label">Gender</label>
-                        <select class="form-select" id="autoSizingSelect">
+                        <select class="form-select" id="editemployeegender" name="editemployeegender">
                           <option>Choose...</option>
                           <option value="1" selected>Male</option>
                           <option value="2">Female</option>
@@ -309,39 +299,33 @@
                       </div>
                       <div class="col-md-8">
                         <label for="editaddress" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="editaddress" name="editaddress" value="Maligaya 7">
+                        <input type="text" class="form-control" id="editemployeeaddress" name="editemployeeaddress" value="Maligaya 7">
                       </div>
                       </div>
                       <br>
                       <div class="row g-3">
                         <div class="col">
-                            <div class="form-floating">
-                            <input type="text" class="form-control" id="employeephone" name="employeephone" placeholder="Phone Number">
-                            <label for="floatingInput">Phone Number</label>
-                            </div>
+                          <label for="editemployeephone" class="form-label">Phone Number</label>
+                          <input type="number" class="form-control" id="editemployeephone" name="editemployeephone">
                         </div>
                         <div class="col">
-                            <div class="form-floating">
-                            <input type="text" class="form-control" id="employeeemail" name="employeeemail" placeholder="Email">
-                            <label for="floatingInput">Email</label>
-                            </div>
+                          <label for="editemployeeemail" class="form-label">Email</label>
+                          <input type="email" class="form-control" id="editemployeeemail" name="editemployeeemail">
                         </div>
                         <div class="col">
-                            <div class="form-floating">
-                            <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
-                            <label for="floatingInput">Hire Date</label>
-                            </div>
-                    </div>
+                          <label for="editemployeehiredate" class="form-label">Hire Date</label>
+                          <input type="date" class="form-control" id="editemployeehiredate" name="editemployeehiredate">
+                        </div>
                     </div>
                         <br>
                         <div class="row g-3">
                           <div class="col">
                             <label for="edithiredate" class="form-label">Profile</label>
-                            <input type="file" class="form-control" id="editprofile" name="editprofile">
+                            <input type="file" class="form-control" id="editemployeeprofile" name="editemployeeprofile">
                           </div>
                           <div class="col">
                             <label for="editdepartment" class="form-label">Department</label>
-                            <select class="form-select" id="autoSizingSelect">
+                            <select class="form-select" id="editemployeedepartment" name="editemployeedepartment">
                               <option selected>Choose...</option>
                               <option value="1">IT</option>
                               <option value="2">HR</option>
@@ -349,7 +333,7 @@
                           </div>
                           <div class="col">
                             <label for="editbday" class="form-label">Position</label>
-                            <select class="form-select" id="autoSizingSelect">
+                            <select class="form-select" id="editemployeeposition" name="editemployeeposition">
                               <option selected>Choose...</option>
                               <option value="1">Junior</option>
                               <option value="2">Senior</option>
@@ -359,15 +343,15 @@
                         <div class="row g-3">
                           <div class="col">
                             <label for="edithiredate" class="form-label">Available No. of Leave Days</label>
-                            <input type="text" class="form-control" id="edithiredate" name="edithiredate" value="5">
+                            <input type="text" class="form-control" id="editemployeehiredate" name="editemployeehiredate" value="5">
                           </div>
                           <div class="col">
                             <label for="editECname" class="form-label">Emergency Contact Name</label>
-                            <input type="text" class="form-control" id="editECname" name="editECname" value="wendell">
+                            <input type="text" class="form-control" id="editemployeeECname" name="editemployeeECname" value="wendell">
                           </div>
                           <div class="col">
                             <label for="editECphone" class="form-label">Emergency Contact Phone</label>
-                            <input type="text" class="form-control" id="editECphone" name="editECphone" value="09205844176">
+                            <input type="text" class="form-control" id="editemployeeECphone" name="editemployeeECphone" value="09205844176">
                           </div>
                           </div>
                     <br>

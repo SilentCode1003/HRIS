@@ -1,11 +1,11 @@
-
 exports.Master_Employee = (data) => {
     let dataResult = [];
 
     data.forEach((key, item) => {
         dataResult.push({
-            id: key.me_id,
+            newEmployeeId: key.me_id,
             firstname: key.me_firstname,
+            middlename: key.me_middlename,
             lastname: key.me_lastname,
             birthday: key.me_birthday,
             gender: key.me_gender,

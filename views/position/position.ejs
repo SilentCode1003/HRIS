@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#departmentmodal" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#positionmodal" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">
     + Add New
   </button>
 <br>
@@ -30,7 +30,7 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="departmentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="positionmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -41,21 +41,21 @@
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="departmentname" name="departmentname" placeholder="Department Name">
+                        <input type="text" class="form-control" id="positionname" name="positionname" placeholder="Department Name">
                         <label for="floatingInput">Position Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="departmentname" name="departmentname" placeholder="Created By">
+                        <input type="text" class="form-control" id="positioncreatedby" name="positioncreatedby" placeholder="Created By">
                         <label for="floatingInput">Created By</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="departmentstatus" name="departmentstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="positionstatus" name="positionstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="1">Active</option>
                               <option value="2">Inactive</option>
@@ -68,43 +68,39 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="departmentsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" id="positionsavebtn">Save</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editdepartmentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editpositionmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Department</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Position</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="editdepartmentname" name="editdepartmentname" placeholder="Department Name" value="IT">
-                        <label for="floatingInput">Department Name</label>
+                        <input type="text" class="form-control" id="editpositionname" name="editpositionname" placeholder="Department Name" value="IT">
+                        <label for="floatingInput">Position Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="editdepartmenthead" name="editdepartmenthead" aria-label="Floating label select example">
-                              <option>Department Head</option>
-                              <option value="1"  selected>Wendell</option>
-                              <option value="2">Sibunga</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department Head</label>
-                          </div>
-                    </div>
-                    <br>
+                      <div class="form-floating">
+                      <input type="text" class="form-control" id="editpositioncreatedby" name="editpositioncreatedby" placeholder="Department Name" value="IT">
+                      <label for="floatingInput">Create By</label>
+                      </div>
+                  </div>
+                  <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="editdepartmentstatus" name="editdepartmentstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="editpositionstatus" name="editpositionstatus" aria-label="Floating label select example">
                               <option>Status</option>
                               <option value="1"  selected>Active</option>
                               <option value="2">Inactive</option>
@@ -117,7 +113,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editdepartmentsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" id="editpositionsavebtn">Save</button>
         </div>
       </div>
     </div>
