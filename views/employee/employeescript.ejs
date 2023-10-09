@@ -136,7 +136,7 @@
     });
 
     function LoadTable() {
-        $("#dataTableemployee").DataTable({
+        $("#dataTableemployees").DataTable({
           destroy: true,
           processing: true,
           serverSide: true,
@@ -158,7 +158,7 @@
                 var status = item.status;
 
                 action = `
-                <button id="employeeprofile" class="btn btn-outline-danger fa fa-edit text-primary" name="employeeprofile" data-bs-toggle="modal" data-bs-target="employeeprofile">View Profile</button>
+                <button id="editBtn" class="btn btn-outline-danger text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#viewmodal">Edit</button>
                `;
   
                 finalData.push({
@@ -218,6 +218,18 @@
       if (event.target == modal) {
         modal.style.display = "none";
       }
+    }
+    //img preview
+    function updatePreview(input, target) {
+        let file = input.files[0];
+        let reader = new FileReader();
+        
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            let img = document.getElementById(target);
+            // can also use "this.result"
+            img.src = reader.result;
+        }
     }
     
 </script>

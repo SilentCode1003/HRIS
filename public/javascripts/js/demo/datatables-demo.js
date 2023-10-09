@@ -3,6 +3,9 @@ $(document).ready(function() {
   $('#dataTableemployee').DataTable();
 });
 $(document).ready(function() {
+  $('#dataTableemployees').DataTable();
+});
+$(document).ready(function() {
   $('#dataTableallleave').DataTable();
 });
 $(document).ready(function() {

@@ -6,15 +6,15 @@
 <!-- Table -->
 <div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Department</h6>
+        <h6 class="m-0 font-weight-bold text-danger">Position</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive"  style="overflow: hidden;">
-            <table class="table table-striped" id="dataTabledepartment">
+            <table class="table table-striped" id="dataTableposition">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Department Name</th>
+                        <th>Position Name</th>
                         <th>Created By</th>
                         <th>Create Date</th>
                         <th>Status</th>
@@ -34,7 +34,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Department</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Position</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -42,19 +42,15 @@
                     <div class="col">
                         <div class="form-floating">
                         <input type="text" class="form-control" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Department Name</label>
+                        <label for="floatingInput">Position Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="departmenthead" name="departmenthead" aria-label="Floating label select example">
-                              <option selected>Department Head</option>
-                              <option value="1">Wendell</option>
-                              <option value="2">Sibunga</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department Head</label>
-                          </div>
+                        <input type="text" class="form-control" id="departmentname" name="departmentname" placeholder="Created By">
+                        <label for="floatingInput">Created By</label>
+                        </div>
                     </div>
                     <br>
                     <div class="col">
@@ -64,7 +60,7 @@
                               <option value="1">Active</option>
                               <option value="2">Inactive</option>
                             </select>
-                            <label for="floatingSelectGrid">Department</label>
+                            <label for="floatingSelectGrid">Position</label>
                           </div>
                     </div>
                     <br>

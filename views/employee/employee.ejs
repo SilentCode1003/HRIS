@@ -1,20 +1,29 @@
-<button type="button" id="addemployeebtn" class="btn btn-danger" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal" style="margin-top: 10px; margin-left: 110px; height: 60px; width: 150px; font-size: larger;">
   + Add New
 </button>
 
 <br>
 <br>
 <!-- Table -->
-<div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
+<div class="card shadow mb-4" style="width: 85%; margin-left: 110px; margin-right: 100px;">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-danger">Employee</h6>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTableemployee" width="100%" cellspacing="0">
+        <div class="table-responsive" style=" overflow: hidden;">
+            <table class="table table-striped" id="dataTableemployees">
+              <colgroup>
+                <col width="10%">
+                <col width="30%">
+                <col width="15%">
+               <col width="15%">
+              <col width="20%">
+              <col width="15%">
+            <col width="5%">
+              </colgroup>
                 <thead>
                     <tr>
-                        <td>ID</th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Contact</th>
                         <th>Email</th>
@@ -31,47 +40,56 @@
 </div>
 </div>
 </div>
-
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
+<div class="modal fade" id="addemployeemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Employee</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
-            <br>
-            <div class="row g-3">
-              <div class="col">
-                <div class="form-floating">
-                <input type="text" class="form-control" id="employeeid" name="employeeid" placeholder="First Name">
-                <label for="employeeid">Id</label>
-                </div>
-               </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeefname" name="employeefname" placeholder="First Name">
-                    <label for="floatingInput">First Name</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeelname" name="employeelname" placeholder="Last Name">
-                    <label for="floatingInput">Last Name</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="employeebirthday" name="employeebirthday">
-                    <label for="floatingInput">Birthday</label>
-                    </div>
-                </div>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;  margin-top: 100px;" >
+            <div class="col g-6">
+              <div class="p-4 border border-secondary">
+                  <h2 class="border-bottom pb-3 mb-4">Avatar Preview</h2>
+                  <div class="text-center">
+                      <img id="image-preview" 
+                           src="https://via.placeholder.com/400"
+                           style="width:200px; height:200px;"
+                           class="rounded rounded-circle" alt="placeholder">
+                  </div>
               </div>
+          </div>
+          </div>
+          
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;" >
+            <form>
               <br>
-              <div class="row g-3">
-                <div class="col">
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="employeefname" name="employeefname" placeholder="First Name">
+                        <label for="floatingInput">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="employeelname" name="employeelname" placeholder="Last Name">
+                        <label for="floatingInput">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="employeebirthday" name="employeebirthday" placeholder="Middle Name">
+                        <label for="floatingInput">Middle Name</label>
+                        </div>
+                    </div>
+                  </div>
+                  <br>
+                <div class="row g-3">
+                  <div class="col">
                     <div class="form-floating">
                         <select class="form-select" id="employeegender" name="employeegender" aria-label="Floating label select example">
                           <option selected>Choose gender</option>
@@ -82,106 +100,435 @@
                       </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeaddress" name="employeeaddress" placeholder="Address">
-                    <label for="floatingInput">Address</label>
-                    </div>
-                </div>
-              <br>
-              <div class="row g-3">
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeephone" name="employeephone" placeholder="Phone Number">
-                    <label for="floatingInput">Phone Number</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeemail" name="employeeemail" placeholder="Email">
-                    <label for="floatingInput">Email</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
-                    <label for="floatingInput">Hire Date</label>
-                    </div>
-            </div>
-            </div>
-            <br>
-            <div class="row g-3">
-              <div class="col">
-                  <div class="col g-6">
-                  <input type="file" class="form-control" id="employeephoto" name="employeephoto">
+                  <div class="form-floating">
+                  <input type="text" class="form-control" id="employeeaddress" name="employeeaddress" placeholder="Address">
+                  <label for="floatingInput">Address</label>
                   </div>
               </div>
-              <div class="col">
-                  <div class="form-floating">
-                      <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
-                        <option selected>Choose Department</option>
-                        <option value="1">IT</option>
-                        <option value="2">HR</option>
-                      </select>
-                      <label for="floatingSelectGrid">Department</label>
+                  </div>
+                  <br>
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                      <input type="date" class="form-control" id="employeebirthday" name="employeebirthday">
+                      <label for="floatingInput">Birthday</label>
+                      </div>
+                  </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="number" class="form-control" id="employeefname" name="employeefname" placeholder="First Name">
+                        <label for="floatingInput">Phone Number</label>
+                        </div>
                     </div>
-              </div>
-              <div class="col">
-                  <div class="form-floating">
-                      <select class="form-select" id="employeeposition" name="employeeposition" aria-label="Floating label select example">
-                        <option selected>Choose Position</option>
-                        <option value="1">Senior</option>
-                        <option value="2">Junior</option>
-                      </select>
-                      <label for="floatingSelectGrid">Position</label>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="email" class="form-control" id="employeelname" name="employeelname" placeholder="Last Name">
+                        <label for="floatingInput">Email</label>
+                        </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="col g-6">
+                        <input type="file" name="image" class="form-control" accept="image/*"
+                        onchange="updatePreview(this, 'image-preview')" >
+                      </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
+                          <option selected>Choose Department</option>
+                          <option value="1">IT</option>
+                          <option value="2">HR</option>
+                        </select>
+                        <label for="floatingSelectGrid">Department</label>
+                      </div>
+                </div>
+                    <div class="col">
+                      <div class="form-floating">
+                          <select class="form-select" id="employeeposition" name="employeeposition" aria-label="Floating label select example">
+                            <option selected>Choose Position</option>
+                            <option value="1">Senior</option>
+                            <option value="2">Junior</option>
+                          </select>
+                          <label for="floatingSelectGrid">Position</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br>
-            <div class="row g-3">
-            <div class="col">
-              <div class="form-floating">
-              <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
-              <label for="floatingInput">Hire Date</label>
-              </div>
-          </div>
-          <div class="col">
-            <div class="form-floating">
-            <input type="text" class="form-control" id="employeeleavedays" name="employeeleavedays" placeholder="Available No. of Leave Days">
-            <label for="floatingInput">Available No. of Leave Days</label>
-            </div>
-        </div>
-        <div class="col">
-          <div class="form-floating">
-            <select class="form-select" id="employeejobstatus" name="employeejobstatus" aria-label="Floating label select example">
-              <option selected>Job Status</option>
-              <option value="1">Regular</option>
-              <option value="2">Ireg</option>
-            </select>
-            <label for="floatingSelectGrid">Job Status</label>
-          </div>
-      </div>
-          </div>
-          <div class="row g-3">
-              <div class="col">
-                  <div class="form-floating">
-                      <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname" placeholder="Emergency Contact Name">
-                      <label for="floatingInput">Emergency Contact Name</label>
+                  <br>
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                      <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                      <label for="floatingInput">Hire Date</label>
                       </div>
-              </div>
-              <div class="col">
-                  <div class="form-floating">
-                      <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone" placeholder="Emergency Contact Phone">
-                      <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                  <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeleavedays" name="employeeleavedays" placeholder="Available No. of Leave Days">
+                    <label for="floatingInput">Available No. of Leave Days</label>
                     </div>
-              </div>
+                </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <select class="form-select" id="employeejobstatus" name="employeejobstatus" aria-label="Floating label select example">
+                          <option selected>Job Status</option>
+                          <option value="1">Regular</option>
+                          <option value="2">Ireg</option>
+                        </select>
+                        <label for="floatingSelectGrid">Job Status</label>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="employeeemergencyname" name="employeefname" placeholder="Emergency Contact Name">
+                        <label for="floatingInput">Emergency Contact Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="employeeemergencyphone" name="employeelname" placeholder="Emergency Contact Phone">
+                        <label for="floatingInput">Emergency Contact Phone</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="hidden" class="form-control" id="employeebirthday" name="employeebirthday">
+                        <label for="floatingInput"></label>
+                        </div>
+                    </div>
+                  </div>
+                  <br>
+          
       </form>
+          </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn">Save changes</button>
+        <button type="button" class="btn btn-primary" id="departmentsavebtn">Save</button>
       </div>
     </div>
   </div>
 </div>
 
-  
+<!-- Edit Modal -->
+<div class="modal fade" id="viewmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content"   style="width: 1550px; margin-left: -525px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <!-- Area Chart -->
+          <div class="col-xl-4 col-lg-5" style="margin-left: 50px;" >
+          
+              <div class="card shadow mb-8">
+                  <!-- Card Body -->
+                  <div class="card-body text-center">
+                      
+                <img src="/images/img/mark1.jpg" alt="avatar"
+                class="img-profile rounded-circle" style="width: 200px; height: 200px;">
+              <h5 class="my-3">Wendell Blanco</h5>
+              <label for="editphone" class="form-label">Department:</label>
+              <p class="text-muted mb-1">IT</p>
+              <label for="editphone" class="form-label">Position:</label>
+              <p class="text-muted mb-1">Full Stack Developer</p>
+              <label for="editphone" class="form-label">Email:</label>
+              <p class="text-muted mb-1">wendell@gmail.com</p>
+              <label for="editphone" class="form-label">Phone:</label>
+              <p class="text-muted mb-1">09205844176</p>
+              <label for="editphone" class="form-label">Address</label>
+              <p class="text-muted mb-1">Dating taga riles</p>
+              </div>
+              </div>
+              </div>
+
+        <!-- Pie Chart -->
+    <div class="col-xl-7 col-lg-6">
+        <div class="card shadow mb-4">
+            <!-- Card Body -->
+            <div id="employeeprofile" class="card-body"  style="height: 600px;">
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Profile</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Leave History</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Disciplinary</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Attendance</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Training Attended</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Health Data</button>
+                </li>
+                
+              </ul>
+              <!-- Employee Info -->
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                  <form>
+                    <div class="row g-3">
+                      <input type="hidden" class="form-control" id="editid" name="editid">
+                    <div class="col">
+                      <label for="editfname" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="editfname" name="editfname" value="Wendell">
+                    </div>
+                    <div class="col">
+                      <label for="editlname" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="editlname" name="editlname" value="Blanco">
+                    </div>
+                    <div class="col">
+                      <label for="editbday" class="form-label">Birthday</label>
+                      <input type="date" class="form-control" id="editbday" name="editbday" 01-01-1990>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="editgender" class="form-label">Gender</label>
+                        <select class="form-select" id="autoSizingSelect">
+                          <option>Choose...</option>
+                          <option value="1" selected>Male</option>
+                          <option value="2">Female</option>
+                        </select>
+                      </div>
+                      <div class="col-md-8">
+                        <label for="editaddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="editaddress" name="editaddress" value="Maligaya 7">
+                      </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="employeephone" name="employeephone" placeholder="Phone Number">
+                            <label for="floatingInput">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="employeeemail" name="employeeemail" placeholder="Email">
+                            <label for="floatingInput">Email</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                            <label for="floatingInput">Hire Date</label>
+                            </div>
+                    </div>
+                    </div>
+                        <br>
+                        <div class="row g-3">
+                          <div class="col">
+                            <label for="edithiredate" class="form-label">Profile</label>
+                            <input type="file" class="form-control" id="editprofile" name="editprofile">
+                          </div>
+                          <div class="col">
+                            <label for="editdepartment" class="form-label">Department</label>
+                            <select class="form-select" id="autoSizingSelect">
+                              <option selected>Choose...</option>
+                              <option value="1">IT</option>
+                              <option value="2">HR</option>
+                            </select>
+                          </div>
+                          <div class="col">
+                            <label for="editbday" class="form-label">Position</label>
+                            <select class="form-select" id="autoSizingSelect">
+                              <option selected>Choose...</option>
+                              <option value="1">Junior</option>
+                              <option value="2">Senior</option>
+                            </select>
+                          </div>
+                    <br>
+                        <div class="row g-3">
+                          <div class="col">
+                            <label for="edithiredate" class="form-label">Available No. of Leave Days</label>
+                            <input type="text" class="form-control" id="edithiredate" name="edithiredate" value="5">
+                          </div>
+                          <div class="col">
+                            <label for="editECname" class="form-label">Emergency Contact Name</label>
+                            <input type="text" class="form-control" id="editECname" name="editECname" value="wendell">
+                          </div>
+                          <div class="col">
+                            <label for="editECphone" class="form-label">Emergency Contact Phone</label>
+                            <input type="text" class="form-control" id="editECphone" name="editECphone" value="09205844176">
+                          </div>
+                          </div>
+                    <br>
+                    <div class="col-12" style="margin-left: 90%;">
+                      <button type="submit" class="btn btn-primary" >Save</button>
+                    </div>
+                  </form>
+                  </div>
+                </div>
+
+                <!-- Leave History -->
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                  <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id=" " width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Date Started</th>
+                                    <th>Date Finished</th>
+                                    <th>Leave Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                  <td>2023-01-01</td>
+                                  <td>2023-01-10</td>
+                                  <td>Vacation</td>
+                                  <td>Approved</td>
+                                </tr> 
+                                <tr>
+                                  <td>2023-01-01</td>
+                                  <td>2023-01-10</td>
+                                  <td>Vacation</td>
+                                  <td>Pending</td>
+                                </tr>
+                                <tr>
+                                  <td>2023-01-01</td>
+                                  <td>2023-01-10</td>
+                                  <td>Vacation</td>
+                                  <td>Rejected</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                </div>
+
+                <!-- Disciplinary -->
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTabledeciplinary" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Offense Type</th>
+                                <th>Disciplinary Action</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td>Awol</td>
+                              <td>Written Reprimand</td>
+                              <td>Awol</td>
+                              <td>1st Offense</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- training training -->
+    <div class="tab-pane fade" id="pills-training" role="tabpanel" aria-labelledby="pills-contact-tab">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTabletraining" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Traning Name</th>
+                    <th>Date Started</th>
+                    <th>Date Finished</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <td>IT Seminar</td>
+                  <td>2023-01-01</td>
+                  <td>2023-01-10</td>
+                  <td>Pacita</td>
+                  <td>Completed</td>
+                </tr> 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- healh record -->
+<div class="tab-pane fade" id="pills-healthrecord" role="tabpanel" aria-labelledby="pills-contact-tab">
+  <div class="table-responsive">
+    <table class="table table-bordered" id="dataTablehealth" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Blood Type</th>
+                <th>Medical Condition</th>
+                <th>Prescribe Medication</th>
+                <th>Last Checkup</th>
+                <th>Insurance</th>
+                <th>Insurance Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>Type O</td>
+              <td>High Blood</td>
+              <td>Reduce Eating Calories</td>
+              <td>2023-01-01</td>
+              <td>HMO</td>
+              <td>123456789</td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- attendance -->
+<div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-contact-tab">
+  <div class="table-responsive" id="employeedatatable">
+    <table class="table-responsive" id="dataTableattendance" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Location In</th>
+                <th>Location Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>2023-01-01</td>
+              <td>8:00:00</td>
+              <td>17:00:00</td>
+              <td>Pacita</td>
+              <td>Pacita</td>
+            </tr> 
+        </tbody>
+    </table>
+</div>
+</div>
+    
+                
+    </div>
+    </div>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
