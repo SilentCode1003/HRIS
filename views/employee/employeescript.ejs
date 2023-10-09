@@ -2,11 +2,13 @@
   $(document).ready(function(){
     console.log('Initialize');
     LoadTable();
+    LoadList();
+    LoadPosition();
 
     $(document).on("click", "#saveBtn", function () {
       console.log("Save button clicked");
-      let id = $("#employeeid").val();
       let firstname = $("#savefname").val();
+      let middlename = $("#savemname").val();
       let lastname = $("#savelname").val();
       let birthday = $("#savebday").val();
       let gender = $("#savegender").val();
@@ -16,93 +18,91 @@
       let jobstatus = $("#savejob").val();
       let ercontactname = $("#saveECname").val();
       let ercontactphone = $("#saveECphone").val();
-      let department = $("#savedepartment").val();
+      let department = $("#employeedepartment").val();
       let position = $("#saveposition").val();
       let address = $("#saveaddress").val();
-      console.log(`${tittle} ${topic_name} ${content}`);
-
-
+    
       var message = "";
-
-      if (id == "") {
-        message += "POSITION NAME ";
-      }
-
+    
       if (firstname == "") {
-        message += "POSITION NAME ";
+        message += "First Name is required. ";
       }
 
+      if (middlename == "") {
+        message += "First Name is required. ";
+      }
+    
       if (lastname == "") {
-        message += "POSITION NAME ";
+        message += "Last Name is required. ";
       }
-
+    
       if (birthday == "") {
-        message += "POSITION NAME ";
+        message += "Birthday is required. ";
       }
-
+    
       if (gender == "") {
-        message += "POSITION NAME ";
+        message += "Gender is required. ";
       }
-
+    
       if (phone == "") {
-        message += "POSITION NAME ";
+        message += "Phone is required. ";
       }
-
+    
       if (email == "") {
-        message += "POSITION NAME ";
+        message += "Email is required. ";
       }
-
+    
       if (hiredate == "") {
-        message += "POSITION NAME ";
+        message += "Hire Date is required. ";
       }
-
+    
       if (jobstatus == "") {
-        message += "POSITION NAME ";
+        message += "Job Status is required. ";
       }
-
+    
       if (ercontactname == "") {
-        message += "POSITION NAME ";
+        message += "Emergency Contact Name is required. ";
       }
-
+    
       if (ercontactphone == "") {
-        message += "POSITION NAME ";
+        message += "Emergency Contact Phone is required. ";
       }
-
+    
       if (department == "") {
-        message += "POSITION NAME ";
+        message += "Department is required. ";
       }
-
+    
       if (position == "") {
-        message += "POSITION NAME ";
+        message += "Position is required. ";
       }
-
+    
       if (address == "") {
-        message += "POSITION NAME ";
+        message += "Address is required. ";
       }
-
-
+    
       if (message != "") {
-       
+        // Display an error message indicating which fields are missing
+        swal("Validation Error", message, "error");
       } else {
-
         $.ajax({
           type: "POST",
           url: "/employee/save",
           data: {
-            id: item.id,
-            firstname: item.firstname,
-            lastname: item.lastname,
-            birthday: item.birthday,
-            gender: item.gender,
-            phone: item.phone,
-            email: item.email,
-            hiredate: item.hiredate,
-            jobstatus: item.jobstatus,
-            ercontactname: item.ercontactname,
-            ercontactphone: item.ercontactphone,
-            department: item.department,
-            position: item.position,
-            address: item.address,
+            newEmployeeId: newEmployeeId,
+            firstname: firstname,
+            middlename: middlename,
+            lastname: lastname,
+            birthday: birthday,
+            gender: gender,
+            phone: phone,
+            email: email,
+            hiredate: hiredate,
+            jobstatus: jobstatus,
+            ercontactname: ercontactname,
+            ercontactphone: ercontactphone,
+            department: department,
+            position: position,
+            address: address,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -113,27 +113,73 @@
                 button: "OK!",
               })
               .then(results => {
-              window.location.reload();
-              })
+                window.location.reload();
+              });
               LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
             }
-             else {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
-            });
-          }
-  
           },
           error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
+            swal("Error", "An error occurred while saving data.", "error");
           },
         });
       }
-
     });
+
+    function LoadList () {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+            console.log(result.data);
+            var data = result.data;
+    
+            $.each(data, function (key, item) {
+                var options = new Option(item.departmentname, item.departmentname);
+                $(options).html(item.departmentname);
+                $('#employeedepartment').append(options);
+                console.log(item.departmentname);
+            });
+        },
+        error: function (result) {
+            alert('error: ' + result.data);
+        }
+    });
+    
+      
+    }
+
+    function LoadPosition () {
+      $.ajax({
+        type: "GET",
+        url: "/position/load",
+        success: function (result) {
+            console.log(result.data);
+            var data = result.data;
+    
+            $.each(data, function (key, item) {
+                var options = new Option(item.positionname, item.positionname);
+                $(options).html(item.positionname);
+                $('#saveposition').append(options);
+                console.log(item.positionname);
+            });
+        },
+        error: function (result) {
+            alert('error: ' + result.data);
+        }
+    });
+    
+      
+    }
+    
 
     function LoadTable() {
         $("#dataTableemployees").DataTable({
@@ -162,7 +208,7 @@
                `;
   
                 finalData.push({
-                    id: item.id,
+                    newEmployeeId: item.newEmployeeId,
                     firstname: item.firstname,
                     phone: item.phone,
                     email: item.email,
@@ -182,7 +228,7 @@
             },
           ],
           columns: [
-            { data: "id" },
+            { data: "newEmployeeId" },
             { data: "firstname" },
             { data: "phone"},
             { data: "email" },
@@ -233,4 +279,3 @@
     }
     
 </script>
-    

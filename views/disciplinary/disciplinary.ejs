@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#shiftmodal" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#disciplinarymodal" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">
     + Add New
   </button>
 <br>
@@ -6,19 +6,20 @@
 <!-- Table -->
 <div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Shift</h6>
+        <h6 class="m-0 font-weight-bold text-danger">Disciplinary</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTabledepartment" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="dataTabledisciplianary" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Shift Hours</th>
-                        <th>Department</th>
-                        <th>Status</th>
+                        <th>Action Code</th>
+                        <th>Offense ID</th>
+                        <th>Description</th>
                         <th>Created By</th>
                         <th>Created Date</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -29,6 +30,7 @@
                         <td>Information Technology</td>
                         <td>Active</td>
                         <td>Wendell</td>
+                        <td>2023-01-01</td>
                         <td>2023-01-01</td>
                         <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editshiftmodal">
                             Edit
@@ -42,11 +44,11 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="shiftmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="disciplinarymodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Disciplinary</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -54,7 +56,7 @@
                     <div class="col">
                         <div class="form-floating">
                         <input type="text" class="form-control" id="shifthours" name="shifthours" placeholder="Department Name">
-                        <label for="floatingInput">Shift Hours</label>
+                        <label for="floatingInput">disciplinary</label>
                         </div>
                     </div>
                     <br>

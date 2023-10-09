@@ -17,6 +17,10 @@ var attendanceRouter = require('./routes/attendance');
 var shiftRouter = require('./routes/shift');
 var trainingsRouter = require('./routes/trainings');
 var positionRouter = require('./routes/position');
+var disciplinaryRouter = require('./routes/disciplinary');
+var disciplinaryactionRouter = require('./routes/disciplinaryaction');
+var offensesRouter = require('./routes/offenses');
+var violationRouter = require('./routes/violation');
 
 var app = express();
 
@@ -43,7 +47,10 @@ app.use('/attendance', attendanceRouter);
 app.use('/shift', shiftRouter);
 app.use('/trainings', trainingsRouter);
 app.use('/position', positionRouter);
-
+app.use('/disciplinary', disciplinaryRouter);
+app.use('/disciplinaryaction', disciplinaryactionRouter);
+app.use('/offenses', offensesRouter);
+app.use('/violation', violationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
