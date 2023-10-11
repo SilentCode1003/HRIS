@@ -1,0 +1,146 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Performance</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#performancemodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTableperformance">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee ID</th>
+                        <th>Appraisal Date</th>
+                        <th>Appraisal Type</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="performancemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Performance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="performanceemployeeid" name="performanceemployeeid" aria-label="Floating label select example">
+                        </select>
+                        <label for="floatingSelectGrid">Employee ID</label>
+                      </div>
+                </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="performanceappraisaldate" name="performanceappraisaldate" placeholder="Created By">
+                        <label for="floatingInput">Appraisal Date</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="performanceappraisaltype" name="performanceappraisaltype" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Appraisal Type</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="performancerating" name="performancerating" placeholder="Created By">
+                        <label for="floatingInput">Rating</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="performancecomment" name="performancecomment" placeholder="Created By">
+                        <label for="floatingInput">Comment</label>
+                        </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="performancesavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="editperformanceemployeeid" name="editperformanceemployeeid" aria-label="Floating label select example">
+                        </select>
+                        <label for="floatingSelectGrid">Employee ID</label>
+                      </div>
+                </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="editperformanceappraisaldate" name="editperformanceappraisaldate" placeholder="Created By">
+                        <label for="floatingInput">Appraisal Date</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="editperformanceappraisaltype" name="editperformanceappraisaltype" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Appraisal Type</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="editperformancerating" name="editperformancerating" placeholder="Created By">
+                        <label for="floatingInput">Rating</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="editperformancecomment" name="editperformancecomment" placeholder="Created By">
+                        <label for="floatingInput">Comment</label>
+                        </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="editperformancesavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
