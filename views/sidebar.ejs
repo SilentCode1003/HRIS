@@ -1,4 +1,4 @@
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: rgba(255,0,0,1);">
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: rgba(179, 2, 2);">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -69,7 +69,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Attendance:</h6>
                 <a class="collapse-item" href="/attendance">All Attendance</a>
-                <a class="collapse-item" href="cards.html">Overtime</a>
+                <a class="collapse-item" href="/overtime">Overtime</a>
+                <a class="collapse-item" href="/ojt">OJT</a>
             </div>
         </div>
     </li>
@@ -119,14 +120,23 @@
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-calendar-check"></i>
-            <span>Holiday</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseholiday"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Holiday</span>
+        </a>
+        <div id="collapseholiday" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Holiday:</h6>
+                <a class="collapse-item" href="/holiday">Holiday</a>
+                <a class="collapse-item" href="/holidayrate">Holiday Rate</a>
+            </div>
+        </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-user-shield"></i>
-            <span>Admin</span></a>
+        <a class="nav-link" href="/announcement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Announcement</span></a>
     </li>
 
     <!-- Divider -->

@@ -21,6 +21,12 @@ var disciplinaryRouter = require('./routes/disciplinary');
 var disciplinaryactionRouter = require('./routes/disciplinaryaction');
 var offensesRouter = require('./routes/offenses');
 var violationRouter = require('./routes/violation');
+var healthrecordRouter = require('./routes/healthrecord');
+var govermentidRouter = require('./routes/govermentid');
+var performanceRouter = require('./routes/performance');
+var holidayRouter = require('./routes/holiday');
+var holidayrateRouter = require('./routes/holidayrate');
+var ojtRouter = require('./routes/ojt');
 
 var app = express();
 
@@ -51,6 +57,12 @@ app.use('/disciplinary', disciplinaryRouter);
 app.use('/disciplinaryaction', disciplinaryactionRouter);
 app.use('/offenses', offensesRouter);
 app.use('/violation', violationRouter);
+app.use('/healthrecord', healthrecordRouter);
+app.use('/govermentid', govermentidRouter);
+app.use('/performance', performanceRouter);
+app.use('/holiday', holidayRouter);
+app.use('/holidayrate', holidayrateRouter);
+app.use('/ojt', ojtRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
