@@ -1,12 +1,15 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Pending Leave</h1>
 
+<br>
+<br>
 <!-- Table -->
-<div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
+<div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Pending Leave</h6>
+      <input id='myInput2' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTablependingleave" width="100%" cellspacing="0">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTablependingleave">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -18,36 +21,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Wendell</td>
-                    <td>Sick Leave</td>
-                    <td>2023-01-01</td>
-                    <td>2030-01-01</td>
-                    <td><span style="color: yellow">Pending</span></td>
-                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-                      View
-                    </button></td>
-                  </tr>
-                  <tr>
-                    <td>Wendell</td>
-                    <td>Sick Leave</td>
-                    <td>2023-01-01</td>
-                    <td>2030-01-01</td>
-                    <td><span style="color: yellow">Pending</span></td>
-                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-                      View
-                    </button></td>
-                  </tr>
-                  <tr>
-                    <td>Wendell</td>
-                    <td>Sick Leave</td>
-                    <td>2023-01-01</td>
-                    <td>2030-01-01</td>
-                    <td><span style="color: yellow">Pending</span></td>
-                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-                      View
-                    </button></td>
-                  </tr>
                 </tbody>
             </table>
         </div>

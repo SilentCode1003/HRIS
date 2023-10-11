@@ -1,16 +1,17 @@
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal" style="margin-top: 10px; margin-left: 110px; height: 60px; width: 150px; font-size: larger;">
-  + Add New
-</button>
+<h1 class="font-weight-bold text-danger" id="head-title">Employees</h1>
 
 <br>
 <br>
 <!-- Table -->
-<div class="card shadow mb-4" style="width: 85%; margin-left: 110px; margin-right: 100px;">
+<div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Employee</h6>
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
-        <div class="table-responsive" style=" overflow: hidden;">
+        <div class="table-responsive" id="table-responsive-id">
             <table class="table table-striped" id="dataTableemployees">
               <colgroup>
                 <col width="10%">
@@ -147,7 +148,6 @@
                   <div class="col">
                     <div class="form-floating">
                         <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
-                          <option selected>Choose Department</option>
                         </select>
                         <label for="floatingSelectGrid">Department</label>
                       </div>
@@ -155,9 +155,6 @@
                     <div class="col">
                       <div class="form-floating">
                           <select class="form-select" id="employeeposition" name="employeeposition" aria-label="Floating label select example">
-                            <option selected>Choose Position</option>
-                            <option value="1">Senior</option>
-                            <option value="2">Junior</option>
                           </select>
                           <label for="floatingSelectGrid">Position</label>
                         </div>
@@ -197,7 +194,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="departmentsavebtn">Save</button>
+        <button type="button" class="btn btn-primary" id="employeesavebtn">Save</button>
       </div>
     </div>
   </div>
@@ -221,20 +218,31 @@
               <div class="card shadow mb-8">
                   <!-- Card Body -->
                   <div class="card-body text-center">
-                      
-                <img src="/images/img/mark1.jpg" alt="avatar"
-                class="img-profile rounded-circle" style="width: 200px; height: 200px;">
+                    
+                    <div class="text-center">
+                      <img id="image-editpreview" 
+                           src="./images/img/mark1.jpg"
+                           style="width:200px; height:200px;"
+                           class="rounded rounded-circle" alt="placeholder">
+                  </div>
+                <br>
+                <center>
+                <div class="col">
+                  <div class="col g-6" style="width: 200px;">
+                    <input type="file" id="editimage" name="editimage" class="form-control" accept="image/*"
+                    onchange="EditPreview(this, 'image-editpreview')" >
+                  </div>
+              </div></center>
               <h5 class="my-3" id="employeeprofilename" >Wendell Blanco</h5>
+              <label for="editphone" class="form-label">Employee ID</label>
+              <p class="text-muted mb-1" id="employeeprofileaddress">123124</p>
               <label for="editphone" class="form-label">Department:</label>
               <p class="text-muted mb-1" id="employeeprofiledepartment">IT</p>
               <label for="editphone" class="form-label">Position:</label>
               <p class="text-muted mb-1" id="employeeprofileposition">Full Stack Developer</p>
-              <label for="editphone" class="form-label">Email:</label>
-              <p class="text-muted mb-1" id="employeeprofileemail">wendell@gmail.com</p>
               <label for="editphone" class="form-label">Phone:</label>
               <p class="text-muted mb-1" id="employeeprofilephone">09205844176</p>
-              <label for="editphone" class="form-label">Address</label>
-              <p class="text-muted mb-1" id="employeeprofileaddress">Dating taga riles</p>
+              
               </div>
               </div>
               </div>
@@ -264,14 +272,14 @@
                   <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Health Data</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-govermentid" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">goverment ID</button>
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-govermentid" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Goverment ID</button>
                 </li>
                 
               </ul>
               <!-- Employee Info -->
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                  <form>
+                  <form id="updateForm">
                     <div class="row g-3">
                       <input type="hidden" class="form-control" id="editemployeeid" name="editemployeeid">
                     <div class="col">
@@ -283,8 +291,8 @@
                       <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
                     </div>
                     <div class="col">
-                      <label for="editbday" class="form-label">Birthday</label>
-                      <input type="date" class="form-control" id="editemployeebday" name="editemployeebday" 01-01-1990>
+                      <label for="editbday" class="form-label">Middle Name</label>
+                      <input type="text" class="form-control" id="editemployeemname" name="editemployeemname" 01-01-1990>
                     </div>
                     </div>
                     <br>
@@ -305,6 +313,10 @@
                       <br>
                       <div class="row g-3">
                         <div class="col">
+                          <label for="editbday" class="form-label">Birthday</label>
+                          <input type="date" class="form-control" id="editemployeebday" name="editemployeebday" 01-01-1990>
+                        </div>
+                        <div class="col">
                           <label for="editemployeephone" class="form-label">Phone Number</label>
                           <input type="number" class="form-control" id="editemployeephone" name="editemployeephone">
                         </div>
@@ -312,16 +324,21 @@
                           <label for="editemployeeemail" class="form-label">Email</label>
                           <input type="email" class="form-control" id="editemployeeemail" name="editemployeeemail">
                         </div>
-                        <div class="col">
-                          <label for="editemployeehiredate" class="form-label">Hire Date</label>
-                          <input type="date" class="form-control" id="editemployeehiredate" name="editemployeehiredate">
-                        </div>
                     </div>
                         <br>
                         <div class="row g-3">
                           <div class="col">
-                            <label for="edithiredate" class="form-label">Profile</label>
-                            <input type="file" class="form-control" id="editemployeeprofile" name="editemployeeprofile">
+                            <label for="editbday" class="form-label">Jobstatus</label>
+                            <select class="form-select" id="editemployeejobstatus" name="editemployeejobstatus">
+                              <option selected>Choose...</option>
+                              <option value="1">Regular</option>
+                              <option value="2">Probitionary</option>
+                              <option value="3">Project Based</option>
+                            </select>
+                          </div>
+                          <div class="col">
+                            <label for="editemployeehiredate" class="form-label">Hire Date</label>
+                            <input type="date" class="form-control" id="editemployeehiredate" name="editemployeehiredate">
                           </div>
                           <div class="col">
                             <label for="editdepartment" class="form-label">Department</label>
@@ -356,7 +373,7 @@
                           </div>
                     <br>
                     <div class="col-12" style="margin-left: 90%;">
-                      <button type="submit" class="btn btn-primary" >Save</button>
+                      <button type="submit" class="btn btn-primary" id="editemployeesavebtn" name="editemployeesavebtn">Save</button>
                     </div>
                   </form>
                   </div>

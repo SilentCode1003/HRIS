@@ -1,25 +1,25 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Violation</h1>
+<h1 class="font-weight-bold text-danger" id="head-title">Holiday</h1>
 
 <br>
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#violationmodal">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#holidaymodal">
         + Add New
       </button>
         <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableviolation">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTableholiday">
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Date</th>
                         <th>Description</th>
-                        <th>Action ID</th>
                         <th>Created By</th>
-                        <th>Created Date</th>
+                        <th>Create Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -33,48 +33,44 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="violationmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Violation</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="violationdescription" name="violationdescription" placeholder="Department Name">
+                        <input type="date" class="form-control" id="holidaydate" name="holidaydate">
+                        <label for="floatingInput">Date</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="holidaydescription" name="holidaydescription" placeholder="Description">
                         <label for="floatingInput">Description</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="violationactionid" name="violationactionid" aria-label="Floating label select example">
-                              <option selected>Action ID</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Action ID</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="violationcreatedby" name="violationcreatedby" placeholder="Created By">
+                        <input type="text" class="form-control" id="holidaycreatedby" name="holidaycreatedby" placeholder="Created By">
                         <label for="floatingInput">Created By</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="vatiolationstatus" name="vatiolationstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="holidaytstatus" name="holidaytstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="1">Active</option>
                               <option value="2">Inactive</option>
                             </select>
-                            <label for="floatingSelectGrid">Violation</label>
+                            <label for="floatingSelectGrid">Holiday</label>
                           </div>
                     </div>
                     <br>
@@ -82,55 +78,51 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="violationsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" id="holidaysavebtn">Save</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editviolationmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editdepartmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Violation</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                 <div class="col">
                     <div class="form-floating">
-                    <input type="text" class="form-control" id="editviolationdescription" name="editviolationdescription" placeholder="Department Name">
+                    <input type="date" class="form-control" id="editholidaydate" name="editholidaydate">
+                    <label for="floatingInput">Date</label>
+                    </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="editholidaydescription" name="editholidaydescription" placeholder="Description">
                     <label for="floatingInput">Description</label>
                     </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editviolationactionid" name="editviolationactionid" aria-label="Floating label select example">
-                          <option selected>Action ID</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Action ID</label>
-                      </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editviolationcreatedby" name="editviolationcreatedby" placeholder="Created By">
+                    <input type="text" class="form-control" id="editholidaycreatedby" name="editholidaycreatedby" placeholder="Created By">
                     <label for="floatingInput">Created By</label>
                     </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editvatiolationstatus" name="editvatiolationstatus" aria-label="Floating label select example">
+                        <select class="form-select" id="editholidaytstatus" name="editholidaytstatus" aria-label="Floating label select example">
                           <option selected>Status</option>
                           <option value="1">Active</option>
                           <option value="2">Inactive</option>
                         </select>
-                        <label for="floatingSelectGrid">Violation</label>
+                        <label for="floatingSelectGrid">Holiday</label>
                       </div>
                 </div>
                 <br>
@@ -138,7 +130,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="violationeditbtn">Save</button>
+          <button type="button" class="btn btn-primary" id="editholidaysavebtn">Save</button>
         </div>
       </div>
     </div>

@@ -1,32 +1,30 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Attendance</h1>
+<br>
+<br>
 <!-- Table -->
-<div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
+<div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Attendance</h6>
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#attendancemodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTableemployee" width="100%" cellspacing="0">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTableattendance">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>Contact</th>
-                        <th>Email</th>
-                        <th>Department</th>
-                        <th>Position</th>
+                        <th>Employee ID</th>
+                        <th>Date</th>
+                        <th>Clock In</th>
+                        <th>Device In</th>
+                        <th>Clock Out</th>
+                        <th>Device Out</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Wendell</td>
-                      <td>09205844176</td>
-                      <td>wendell@gmail.com</td>
-                      <td>IT</td>
-                      <td>Senior</td>
-                      <td><a class="nav-link" href="/employeeprofile">View</td>
-                    </tr> 
                 </tbody>
             </table>
         </div>
@@ -34,3 +32,78 @@
 </div>
 </div>
 </div>
+
+<!-- attendance Modal -->
+<div class="modal fade" id="attendancemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Attendance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+              <div class="row g-3">
+              <div class="col">
+                <label for="editfname" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+              </div>
+              <div class="col">
+                <label for="editlname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+              </div>
+              <div class="row g-3">
+                <div class="col">
+                  <label for="editfname" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+                </div>
+                <div class="col">
+                  <label for="editlname" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+                </div>
+                <div class="row g-3">
+                  <div class="col">
+                    <label for="editfname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+                  </div>
+                  <div class="col">
+                    <label for="editlname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+                  </div>
+                  <div class="row g-3">
+                    <div class="col">
+                      <label for="editfname" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+                    </div>
+                    <div class="col">
+                      <label for="editlname" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+                    </div>
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="editfname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+                      </div>
+                      <div class="col">
+                        <label for="editlname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+                      </div>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="editfname" class="form-label">First Name</label>
+                          <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
+                        </div>
+                        <div class="col">
+                          <label for="editlname" class="form-label">Last Name</label>
+                          <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
+                        </div>
+              </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="departmentsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

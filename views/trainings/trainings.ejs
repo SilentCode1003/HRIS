@@ -1,16 +1,17 @@
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#departmentmodal" style="margin-top: 10px; margin-left: 50px; height: 60px; width: 150px; font-size: larger;">
-    + Add New
-  </button>
+<h1 class="font-weight-bold text-danger" id="head-title">Training</h1>
 <br>
 <br>
 <!-- Table -->
-<div class="card shadow mb-4" style="margin-left: 50px; margin-right: 50px;">
+<div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-danger">Training</h6>
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#trainingmodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTabledepartment" width="100%" cellspacing="0">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTabletraining">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -25,19 +26,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>20230908</td>
-                        <td>Mark Anasarias</td>
-                        <td>IT Seminar</td>
-                        <td>2023-01-01</td>
-                        <td>2023-01-10</td>
-                        <td>Pacita</td>
-                        <td>Completed</td>
-                        <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#editdepartmentmodal">
-                            Edit
-                          </button></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -46,7 +34,7 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="departmentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="trainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -95,7 +83,7 @@
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editdepartmentmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edittrainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

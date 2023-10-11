@@ -1,0 +1,228 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Health Records</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#healthrecordmodal">
+            + Add New
+          </button>
+            <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTablehealthrecord">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee ID</th>
+                        <th>Blood Type</th>
+                        <th>Medical Condition</th>
+                        <th>Prescribe Medication</th>
+                        <th>Last Checkup</th>
+                        <th>Insurance</th>
+                        <th>Insurance ID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="healthrecordmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Health Record</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="healthrecordemployeeid" name="healthrecordemployeeid" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Employee ID</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="healthrecordbloodtype" name="healthrecordbloodtype" aria-label="Floating label select example">
+                              <option value="1">A</option>
+                              <option value="2">B</option>
+                            </select>
+                            <label for="floatingSelectGrid">Blood Type</label>
+                          </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="healthrecordmedicalcondition" name="healthrecordmedicalcondition" placeholder="First Name">
+                        <label for="floatingInput">Medical Condition</label>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="healthrecordprescribemedication" name="healthrecordprescribemedication" placeholder="First Name">
+                        <label for="floatingInput">Prescribe Medication</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="healthrecordlastcheckup" name="healthrecordlastcheckup" placeholder="First Name">
+                        <label for="floatingInput">Last Check Up</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="healthrecordinsurance" name="healthrecordinsurance" placeholder="First Name">
+                        <label for="floatingInput">Insurance</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="healthrecordinsurancenumber" name="healthrecordinsurancenumber" placeholder="First Name">
+                        <label for="floatingInput">Insurance Number</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="healthrecordemergencycontactname" name="healthrecordemergencycontactname" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Name</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="healthrecordemergencycontactnumber" name="healthrecordemergencycontactnumber" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Number</label>
+                            </div>
+                        </div>
+                    </div>
+                        <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="healthsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editdepartmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="healthrecordemployeeid" name="healthrecordemployeeid" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Employee ID</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="edithealthrecordbloodtype" name="edithealthrecordbloodtype" aria-label="Floating label select example">
+                              <option value="1">A</option>
+                              <option value="2">B</option>
+                            </select>
+                            <label for="floatingSelectGrid">Blood Type</label>
+                          </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordmedicalcondition" name="edithealthrecordmedicalcondition" placeholder="First Name">
+                        <label for="floatingInput">Medical Condition</label>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordprescribemedication" name="edithealthrecordprescribemedication" placeholder="First Name">
+                        <label for="floatingInput">Prescribe Medication</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="edithealthrecordlastcheckup" name="edithealthrecordlastcheckup" placeholder="First Name">
+                        <label for="floatingInput">Last Check Up</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="vhealthrecordinsurance" name="edithealthrecordinsurance" placeholder="First Name">
+                        <label for="floatingInput">Insurance</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordinsurancenumber" name="edithealthrecordinsurancenumber" placeholder="First Name">
+                        <label for="floatingInput">Insurance Number</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="edithealthrecordemergencycontactname" name="edithealthrecordemergencycontactname" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Name</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="edithealthrecordemergencycontactnumber" name="edithealthrecordemergencycontactnumber" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Number</label>
+                            </div>
+                        </div>
+                    </div>
+                        <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="edithealthrecordsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
