@@ -1,3 +1,4 @@
+
 exports.Master_Employee = (data) => {
     let dataResult = [];
 
@@ -18,6 +19,7 @@ exports.Master_Employee = (data) => {
             department: key.me_department,
             position: key.me_position,
             address: key.me_address,
+            profilePicturePath: key.me_profile_pic,
         });
     });
 
