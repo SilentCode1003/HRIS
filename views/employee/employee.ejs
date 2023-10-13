@@ -57,7 +57,7 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                   <div class="text-center">
-                      <img id="image-preview" 
+                      <img id="preview" 
                            src="https://via.placeholder.com/250"
                            style="width:250px; height:250px;"
                            class="rounded rounded-circle" alt="placeholder">
@@ -65,8 +65,8 @@
                   <br>
                   <div class="col">
                     <div class="col g-6">
-                      <input type="file" name="image" class="form-control" accept="image/*"
-                      onchange="updatePreview(this, 'image-preview')" >
+                      <input type="file" name="employeeprofile" id="employeeprofile" class="form-control" accept="image/*"
+                      onchange="imageUploaded(this, 'preview')" >
                     </div>
                 </div>
                 <br>
@@ -220,8 +220,7 @@
                   <div class="card-body text-center">
                     
                     <div class="text-center">
-                      <img id="image-editpreview" 
-                           src="./images/img/mark1.jpg"
+                      <img id="editpreview" 
                            style="width:200px; height:200px;"
                            class="rounded rounded-circle" alt="placeholder">
                   </div>
@@ -229,8 +228,8 @@
                 <center>
                 <div class="col">
                   <div class="col g-6" style="width: 200px;">
-                    <input type="file" id="editimage" name="editimage" class="form-control" accept="image/*"
-                    onchange="EditPreview(this, 'image-editpreview')" >
+                    <input type="file" id="editemployeeprofile" name="editemployeeprofile" class="form-control" accept="image/*"
+                    onchange="editimage(this, 'editpreview')" >
                   </div>
               </div></center>
               <h5 class="my-3" id="employeeprofilename" >Wendell Blanco</h5>
@@ -283,37 +282,37 @@
                     <div class="row g-3">
                       <input type="hidden" class="form-control" id="editemployeeid" name="editemployeeid">
                     <div class="col">
-                      <label for="editfname" class="form-label">First Name</label>
+                      <label for="editemployeefname" class="form-label">First Name</label>
                       <input type="text" class="form-control" id="editemployeefname" name="editemployeefname" value="Wendell">
                     </div>
                     <div class="col">
-                      <label for="editlname" class="form-label">Last Name</label>
+                      <label for="editemployeelname" class="form-label">Last Name</label>
                       <input type="text" class="form-control" id="editemployeelname" name="editemployeelname" value="Blanco">
                     </div>
                     <div class="col">
-                      <label for="editbday" class="form-label">Middle Name</label>
+                      <label for="editemployeemname" class="form-label">Middle Name</label>
                       <input type="text" class="form-control" id="editemployeemname" name="editemployeemname" 01-01-1990>
                     </div>
                     </div>
                     <br>
                     <div class="row g-3">
                       <div class="col">
-                        <label for="editgender" class="form-label">Gender</label>
+                        <label for="editemployeegender" class="form-label">Gender</label>
                         <select class="form-select" id="editemployeegender" name="editemployeegender">
                           <option>Choose...</option>
-                          <option value="1" selected>Male</option>
-                          <option value="2">Female</option>
+                          <option value="Male" selected>Male</option>
+                          <option value="Female">Female</option>
                         </select>
                       </div>
                       <div class="col-md-8">
-                        <label for="editaddress" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="editemployeeaddress" name="editemployeeaddress" value="Maligaya 7">
+                        <label for="editemployeeaddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="c" name="editemployeeaddress" value="Maligaya 7">
                       </div>
                       </div>
                       <br>
                       <div class="row g-3">
                         <div class="col">
-                          <label for="editbday" class="form-label">Birthday</label>
+                          <label for="editemployeebday" class="form-label">Birthday</label>
                           <input type="date" class="form-control" id="editemployeebday" name="editemployeebday" 01-01-1990>
                         </div>
                         <div class="col">
@@ -328,12 +327,12 @@
                         <br>
                         <div class="row g-3">
                           <div class="col">
-                            <label for="editbday" class="form-label">Jobstatus</label>
+                            <label for="editemployeejobstatus" class="form-label">Jobstatus</label>
                             <select class="form-select" id="editemployeejobstatus" name="editemployeejobstatus">
                               <option selected>Choose...</option>
-                              <option value="1">Regular</option>
-                              <option value="2">Probitionary</option>
-                              <option value="3">Project Based</option>
+                              <option value="Regular">Regular</option>
+                              <option value="Probitionary">Probitionary</option>
+                              <option value="Project Based">Project Based</option>
                             </select>
                           </div>
                           <div class="col">
@@ -341,39 +340,35 @@
                             <input type="date" class="form-control" id="editemployeehiredate" name="editemployeehiredate">
                           </div>
                           <div class="col">
-                            <label for="editdepartment" class="form-label">Department</label>
+                            <label for="editemployeedepartment" class="form-label">Department</label>
                             <select class="form-select" id="editemployeedepartment" name="editemployeedepartment">
                               <option selected>Choose...</option>
-                              <option value="1">IT</option>
-                              <option value="2">HR</option>
                             </select>
                           </div>
                           <div class="col">
-                            <label for="editbday" class="form-label">Position</label>
+                            <label for="editemployeeposition" class="form-label">Position</label>
                             <select class="form-select" id="editemployeeposition" name="editemployeeposition">
                               <option selected>Choose...</option>
-                              <option value="1">Junior</option>
-                              <option value="2">Senior</option>
                             </select>
                           </div>
                     <br>
                         <div class="row g-3">
                           <div class="col">
-                            <label for="edithiredate" class="form-label">Available No. of Leave Days</label>
+                            <label for="editemployeehiredate" class="form-label">Available No. of Leave Days</label>
                             <input type="text" class="form-control" id="editemployeehiredate" name="editemployeehiredate" value="5">
                           </div>
                           <div class="col">
-                            <label for="editECname" class="form-label">Emergency Contact Name</label>
-                            <input type="text" class="form-control" id="editemployeeECname" name="editemployeeECname" value="wendell">
+                            <label for="editemployeeemergencyname" class="form-label">Emergency Contact Name</label>
+                            <input type="text" class="form-control" id="editemployeeemergencyname" name="editemployeeemergencyname" value="wendell">
                           </div>
                           <div class="col">
-                            <label for="editECphone" class="form-label">Emergency Contact Phone</label>
-                            <input type="text" class="form-control" id="editemployeeECphone" name="editemployeeECphone" value="09205844176">
+                            <label for="editemployeeemergencyphone" class="form-label">Emergency Contact Phone</label>
+                            <input type="text" class="form-control" id="editemployeeemergencyphone" name="editemployeeemergencyphone" value="09205844176">
                           </div>
                           </div>
                     <br>
                     <div class="col-12" style="margin-left: 90%;">
-                      <button type="submit" class="btn btn-primary" id="editemployeesavebtn" name="editemployeesavebtn">Save</button>
+                      <button type="submit" class="btn btn-primary" id="editsavebtn" name="editsavebtn">Save</button>
                     </div>
                   </form>
                   </div>
