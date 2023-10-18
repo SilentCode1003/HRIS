@@ -16,8 +16,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Shift Hours</th>
-                        <th>Department</th>
                         <th>Status</th>
+                        <th>Department</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Action</th>
@@ -50,26 +50,24 @@
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example">
-                              <option selected>Department</option>
-                              <option value="1">IT</option>
-                              <option value="2">HR</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
                             <select class="form-select" id="shiftstatus" name="shiftstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
                             </select>
                             <label for="floatingSelectGrid">Shift</label>
                           </div>
                     </div>
                     <br>
+                    <div class="col">
+                      <div class="form-floating">
+                          <select class="form-select" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example">
+                            <option selected>Department</option>
+                          </select>
+                          <label for="floatingSelectGrid">Department</label>
+                        </div>
+                  </div>
+                  <br>
                     <div class="col">
                         <div class="form-floating">
                         <input type="text" class="form-control" id="shiftcreatedby" name="shiftcreatedby" placeholder="Created By">
@@ -98,6 +96,7 @@
         <div class="modal-body">
             <form>
                 <div class="col">
+                    <input type="hidden" id="editshiftid" name="editshiftid">
                     <div class="form-floating">
                     <input type="text" class="form-control" id="editshift" name="editshift" value="8:00:00 - 17:00:00">
                     <label for="floatingInput">Shift Hours</label>
@@ -108,8 +107,6 @@
                     <div class="form-floating">
                         <select class="form-select" id="editshiftdepartment" name="editshiftdepartment" aria-label="Floating label select example">
                           <option>Department</option>
-                          <option value="1" selected>IT</option>
-                          <option value="2">HR</option>
                         </select>
                         <label for="floatingSelectGrid">Department</label>
                       </div>
@@ -119,8 +116,8 @@
                     <div class="form-floating">
                         <select class="form-select" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
                           <option>Status</option>
-                          <option value="1"  selected>Active</option>
-                          <option value="2">Inactive</option>
+                          <option value="Active"selected>Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                         <label for="floatingSelectGrid">Shift</label>
                       </div>
