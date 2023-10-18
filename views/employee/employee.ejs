@@ -59,14 +59,13 @@
                   <div class="text-center">
                       <img id="preview" 
                            src="https://via.placeholder.com/250"
-                           style="width:250px; height:250px;"
+                           style="width: 250px;; height: 250px;;"
                            class="rounded rounded-circle" alt="placeholder">
                   </div>
                   <br>
                   <div class="col">
                     <div class="col g-6">
-                      <input type="file" name="employeeprofile" id="employeeprofile" class="form-control" accept="image/*"
-                      onchange="imageUploaded(this, 'preview')" >
+                      <input type="file" name="employeeprofile" id="employeeprofile" class="form-control" accept="image/*">
                     </div>
                 </div>
                 <br>
@@ -103,8 +102,8 @@
                     <div class="form-floating">
                         <select class="form-select" id="employeegender" name="employeegender" aria-label="Floating label select example">
                           <option selected>Choose gender</option>
-                          <option value="1">Male</option>
-                          <option value="2">Female</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
                         </select>
                         <label for="floatingSelectGrid">Gender</label>
                       </div>
@@ -149,7 +148,7 @@
                     <div class="form-floating">
                         <select class="form-select" id="employeedepartment" name="employeedepartment" aria-label="Floating label select example">
                         </select>
-                        <label for="floatingSelectGrid">Department</label>
+                        <label for="employeedepartment">Department</label>
                       </div>
                 </div>
                     <div class="col">
@@ -166,9 +165,10 @@
                     <div class="col">
                       <div class="form-floating">
                         <select class="form-select" id="employeejobstatus" name="employeejobstatus" aria-label="Floating label select example">
-                          <option selected>Job Status</option>
-                          <option value="1">Regular</option>
-                          <option value="2">Ireg</option>
+                          <option selected>Choose...</option>
+                          <option value="Regular">Regular</option>
+                          <option value="Probitionary">Probitionary</option>
+                          <option value="Project Based">Project Based</option>
                         </select>
                         <label for="floatingSelectGrid">Job Status</label>
                       </div>
@@ -176,13 +176,13 @@
                   <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="employeeemergencyname" name="employeefname" placeholder="Emergency Contact Name">
+                        <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname" placeholder="Emergency Contact Name">
                         <label for="floatingInput">Emergency Contact Name</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="employeeemergencyphone" name="employeelname" placeholder="Emergency Contact Phone">
+                        <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone" placeholder="Emergency Contact Phone">
                         <label for="floatingInput">Emergency Contact Phone</label>
                         </div>
                     </div>
@@ -201,11 +201,11 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="viewmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="viewmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editmodal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content"   style="width: 1550px; margin-left: -525px;">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Profile</h5>
+        <h5 class="modal-title" id="editmodal">Profile</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -228,8 +228,7 @@
                 <center>
                 <div class="col">
                   <div class="col g-6" style="width: 200px;">
-                    <input type="file" id="editemployeeprofile" name="editemployeeprofile" class="form-control" accept="image/*"
-                    onchange="editimage(this, 'editpreview')" >
+                    <input type="file" id="editemployeeprofile" name="editemployeeprofile" class="form-control" accept="image/*">
                   </div>
               </div></center>
               <h5 class="my-3" id="employeeprofilename" >Wendell Blanco</h5>
@@ -250,7 +249,7 @@
     <div class="col-xl-7 col-lg-6">
         <div class="card shadow mb-4">
             <!-- Card Body -->
-            <div id="employeeprofile" class="card-body"  style="height: 600px;">
+            <div id="" class="card-body"  style="height: 600px;">
               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Profile</button>
@@ -306,7 +305,7 @@
                       </div>
                       <div class="col-md-8">
                         <label for="editemployeeaddress" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="c" name="editemployeeaddress" value="Maligaya 7">
+                        <input type="text" class="form-control" id="editemployeeaddress" name="editemployeeaddress" value="Maligaya 7">
                       </div>
                       </div>
                       <br>

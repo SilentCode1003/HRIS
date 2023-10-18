@@ -44,23 +44,38 @@
                 <div class="col">
                     <div class="form-floating">
                         <select class="form-select" id="performanceemployeeid" name="performanceemployeeid" aria-label="Floating label select example">
+                          <option selected>Choose...</option>
                         </select>
                         <label for="floatingSelectGrid">Employee ID</label>
                       </div>
                 </div>
                     <br>
-                    <div class="col">
+                     <div class="col">
+                            <label for="floatingSelectGrid">Appraisal</label>
+                            <input type="date" class="form-control" id="performanceappraisaldate" name="performanceappraisaldate">
+                          </div>
+                    <!-- <div class="col">
+                      <div class="form-floating">
+                          <select type="date" class="form-select" id="performanceappraisaldate" name="performanceappraisaldate" aria-label="Floating label select example"></select>
+                          </select>
+                          <label type="date" for="floatingSelectGrid">Appraisal Date</label>
+                        </div>
+                  </div> -->
+                    <!-- <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="performanceappraisaldate" name="performanceappraisaldate" placeholder="Created By">
+                        <input type="date" class="form-control" id="performanceappraisaltype" name="performanceappraisaltype" placeholder="Created By">
                         <label for="floatingInput">Appraisal Date</label>
                         </div>
-                    </div>
+                    </div> -->
                     <br>
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="performanceappraisaltype" name="performanceappraisaltype" aria-label="Floating label select example">
+                              <option value="SILP">SILP</option>
+                              <option value="Recomendations">Recomendations</option>
+                              <option value="Promotions">Promotions</option>
                             </select>
-                            <label for="floatingSelectGrid">Appraisal Type</label>
+                            <label for="floatingSelectGrid">Appraisal</label>
                           </div>
                     </div>
                     <br>
@@ -89,7 +104,7 @@
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editperformancemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -99,8 +114,10 @@
         <div class="modal-body">
             <form>
                 <div class="col">
+                  <input type="hidden" id="editperformanceid" name="editperformanceid">
                     <div class="form-floating">
                         <select class="form-select" id="editperformanceemployeeid" name="editperformanceemployeeid" aria-label="Floating label select example">
+                          <option selected>Choose...</option>
                         </select>
                         <label for="floatingSelectGrid">Employee ID</label>
                       </div>
@@ -116,6 +133,9 @@
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="editperformanceappraisaltype" name="editperformanceappraisaltype" aria-label="Floating label select example">
+                              <option value="SILP">SILP</option>
+                              <option value="Recomendations">Recomendations</option>
+                              <option value="Promotions">Promotions</option>
                             </select>
                             <label for="floatingSelectGrid">Appraisal Type</label>
                           </div>

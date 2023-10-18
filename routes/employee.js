@@ -17,15 +17,37 @@ module.exports = router;
 router.post('/getemployee', (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `select * from master_employee where me_id='${employeeid}'`;
+    let sql = `SELECT
+    me_id as employeeid,
+    me_firstname as firstname,
+    me_middlename as middlename,
+    me_lastname as lastname,
+    me_birthday as birthday,
+    me_gender as gender,
+    me_phone as phone,
+    me_email as email,
+    me_hiredate as hiredate,
+    me_jobstatus as jobstatus,
+    me_ercontactname as ercontactname,
+    me_ercontactphone as ercontactphone,
+    md_departmentname as department,
+    mp_positionname as position,
+    me_address as address,
+    me_profile_pic as profilePicturePath
+    FROM master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    where me_id='${employeeid}'`;
 
-    mysql.Select(sql, 'Master_Employee', (err, result) => {
-      if (err) console.error('Error: ', err);
-
+    mysql.mysqlQueryPromise(sql).then((result) => {
       res.json({
-        msg: 'success', data: result
+        msg:"success",data: result
       });
-    });
+    }).catch((error) => {
+      res.json({
+        msg: error
+      })
+    })
   } catch (error) {
     res.json({
       msg: error
@@ -189,45 +211,60 @@ router.post('/save', async (req, res) => {
 });
 
 
-
- router.post('/update', async (req, res) => {
+router.post('/update', async (req, res) => {
   try {
-    const newEmployeeId = req.body.newEmployeeId;
-    
-    const {
-      firstname,
-      middlename,
-      lastname,
-      birthday,
-      gender,
-      phone,
-      hiredate,
-      jobstatus,
-      ercontactname,
-      ercontactphone,
-      departmentId,
-      positionId,
-      address,
-      profilePicturePath,
+    // Retrieve request parameters
+    let newEmployeeId = req.body.newEmployeeId;
+    let firstname = req.body.firstname;
+    let middlename = req.body.middlename;
+    let lastname = req.body.lastname;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let phone = req.body.phone;
+    let email = req.body.email;
+    let hiredate = req.body.hiredate;
+    let jobstatus = req.body.jobstatus;
+    let ercontactname = req.body.ercontactname;
+    let ercontactphone = req.body.ercontactphone;
+    let department = req.body.department;
+    let position = req.body.position;
+    let address = req.body.address;
+    let profilePicturePath = req.body.profilePicturePath;
 
-    } = req.body;
+    // Get department ID based on department name
+    const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
+    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [department]);
+    if (!departmentIdRow) {
+      return res.status(400).json({ msg: 'Department not found' });
+    }
+    const departmentId = departmentIdRow.md_departmentid;
 
-    const sqlupdate = `UPDATE master_employee set
-    me_firstname = ?,
-    me_middlename = ?,
-    me_lastname = ?,
-    me_birthday = ?,
-    me_gender = ?,
-    me_phone = ?,
-    me_hiredate = ?,
-    me_jobstatus = ?,
-    me_ercontactname = ?,
-    me_ercontactphone = ?,
-    me_department = ?,
-    me_position = ?,
-    me_address = ?,
-    me_profile_pic = ?
-  WHERE me_id = ?`;
+    // Get position ID based on position name
+    const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
+    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [position]);
+    if (!positionIdRow) {
+      return res.status(400).json({ msg: 'Position not found' });
+    }
+    const positionId = positionIdRow.mp_positionid;
+
+    // Define the SQL query
+    const sql = `UPDATE master_employee SET
+      me_firstname = ?,
+      me_middlename = ?,
+      me_lastname = ?,
+      me_birthday = ?,
+      me_gender = ?,
+      me_phone = ?,
+      me_email = ?,
+      me_hiredate = ?,
+      me_jobstatus = ?,
+      me_ercontactname = ?,
+      me_ercontactphone = ?,
+      me_department = ?,
+      me_position = ?,
+      me_address = ?,
+      me_profile_pic = ?
+      WHERE me_id = ?`;
 
     const values = [
       firstname,
@@ -236,6 +273,7 @@ router.post('/save', async (req, res) => {
       birthday,
       gender,
       phone,
+      email,
       hiredate,
       jobstatus,
       ercontactname,
@@ -247,33 +285,18 @@ router.post('/save', async (req, res) => {
       newEmployeeId
     ];
 
-    console.log(values);
-
-
-    mysql.UpdateMultiple(sqlupdate, values, (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      console.log(result);
-      res.json({
-        msg: 'success'
-      })
+    mysql.UpdateMultiple(sql, values, (err, result) => {
+      if (err) {
+        console.error('Error: ', err);
+        return res.status(500).json({ msg: 'Error updating data' });
+      }
+      res.json({ msg: 'success', data: result });
     });
-
-    //return promise
-    // mysql.Update(sql_statement)
-    //   .then((result) => {
-    //     console.log(result);
-
-    //   }).catch((error) => {
-    //     return res.json({
-    //       msg: error
-    //     })
-    //   });
-
   } catch (error) {
-    res.status(500).json({ msg: 'error' });
+    res.status(500).json({ msg: 'Internal server error', error: error.message });
   }
 });
+
 
 
 module.exports = router;
