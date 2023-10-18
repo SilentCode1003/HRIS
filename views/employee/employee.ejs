@@ -13,15 +13,6 @@
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
             <table class="table table-striped" id="dataTableemployees">
-              <colgroup>
-                <col width="10%">
-                <col width="30%">
-                <col width="15%">
-               <col width="15%">
-              <col width="20%">
-              <col width="15%">
-            <col width="5%">
-              </colgroup>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -376,36 +367,17 @@
                 <!-- Leave History -->
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                   <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id=" " width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Date Started</th>
-                                    <th>Date Finished</th>
-                                    <th>Leave Type</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                    <div class="table-responsive"  id="table-responsive-id">
+                        <table class="table table-striped" id="dataTabledepartment">
+                          <thead>
+                            <tr>
+                                <th>Date Started</th>
+                                <th>Date Finished</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
                             <tbody>
-                                <tr>
-                                  <td>2023-01-01</td>
-                                  <td>2023-01-10</td>
-                                  <td>Vacation</td>
-                                  <td>Approved</td>
-                                </tr> 
-                                <tr>
-                                  <td>2023-01-01</td>
-                                  <td>2023-01-10</td>
-                                  <td>Vacation</td>
-                                  <td>Pending</td>
-                                </tr>
-                                <tr>
-                                  <td>2023-01-01</td>
-                                  <td>2023-01-10</td>
-                                  <td>Vacation</td>
-                                  <td>Rejected</td>
-                                </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -415,105 +387,106 @@
 
                 <!-- Disciplinary -->
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                  <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTabledeciplinary" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Offense Type</th>
-                                <th>Disciplinary Action</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                              <td>Awol</td>
-                              <td>Written Reprimand</td>
-                              <td>Awol</td>
-                              <td>1st Offense</td>
-                            </tr> 
-                        </tbody>
-                    </table>
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="dataTabledisciplianary">
+                            <thead>
+                                <tr>
+                                    <th>Action Code</th>
+                                    <th>Offense ID</th>
+                                    <th>Description</th>
+                                    <th>Created Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- training training -->
     <div class="tab-pane fade" id="pills-training" role="tabpanel" aria-labelledby="pills-contact-tab">
-      <div class="table-responsive">
-        <table class="table table-bordered" id="dataTabletraining" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Traning Name</th>
-                    <th>Date Started</th>
-                    <th>Date Finished</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  <td>IT Seminar</td>
-                  <td>2023-01-01</td>
-                  <td>2023-01-10</td>
-                  <td>Pacita</td>
-                  <td>Completed</td>
-                </tr> 
-            </tbody>
-        </table>
+      <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTabletraining">
+                <thead>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Date Started</th>
+                        <th>Date Finished</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <!-- healh record -->
 <div class="tab-pane fade" id="pills-healthrecord" role="tabpanel" aria-labelledby="pills-contact-tab">
-  <div class="table-responsive">
-    <table class="table table-bordered" id="dataTablehealth" width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Blood Type</th>
-                <th>Medical Condition</th>
-                <th>Prescribe Medication</th>
-                <th>Last Checkup</th>
-                <th>Insurance</th>
-                <th>Insurance Number</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td>Type O</td>
-              <td>High Blood</td>
-              <td>Reduce Eating Calories</td>
-              <td>2023-01-01</td>
-              <td>HMO</td>
-              <td>123456789</td>
-            </tr> 
-        </tbody>
-    </table>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+        <table class="table table-striped" id="dataTablehealthrecord">
+            <thead>
+                <tr>
+                    <th>Blood Type</th>
+                    <th>Medical Condition</th>
+                    <th>Prescribe Medication</th>
+                    <th>Last Checkup</th>
+                    <th>Insurance</th>
+                    <th>Insurance ID</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 </div>
 
 <!-- attendance -->
 <div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-contact-tab">
-  <div class="table-responsive" id="employeedatatable">
-    <table class="table-responsive" id="dataTableattendance" width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Time In</th>
-                <th>Time Out</th>
-                <th>Location In</th>
-                <th>Location Out</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td>2023-01-01</td>
-              <td>8:00:00</td>
-              <td>17:00:00</td>
-              <td>Pacita</td>
-              <td>Pacita</td>
-            </tr> 
-        </tbody>
-    </table>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+        <table class="table table-striped" id="dataTableattendance">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Clock In</th>
+                    <th>Device In</th>
+                    <th>Clock Out</th>
+                    <th>Device Out</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Goverment ID -->
+<div class="tab-pane fade" id="pills-govermentid" role="tabpanel" aria-labelledby="pills-contact-tab">
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+        <table class="table table-striped" id="dataTablegovermentid">
+            <thead>
+                <tr>
+                    <th>ID Type</th>
+                    <th>ID Number</th>
+                    <th>Issue Daten</th>
+                    <th>Expiry Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 </div>
     
