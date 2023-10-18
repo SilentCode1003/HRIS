@@ -31,35 +31,35 @@
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="positionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="positionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Position</h5>
+          <h5 class="modal-title" id="EditModalLabel">Position</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="positionname" name="positionname" placeholder="Department Name">
+                        <input type="text" class="form-control" id="savepositionname" name="savepositionname">
                         <label for="floatingInput">Position Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="positioncreatedby" name="positioncreatedby" placeholder="Created By">
+                        <input type="text" class="form-control" id="savepositioncreatedby" name="savepositioncreatedby">
                         <label for="floatingInput">Created By</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="positionstatus" name="positionstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="savepositionstatus" name="savepositionstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
                             </select>
                             <label for="floatingSelectGrid">Position</label>
                           </div>
@@ -69,25 +69,26 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="positionsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" name="positionsavebtn" id="positionsavebtn">Save</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editpositionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editpositionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Position</h5>
+          <h5 class="modal-title" id="EditModalLabel">Position</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                     <div class="col">
+                        <input type="hidden" id="editpostid" name="editpostid">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="editpositionname" name="editpositionname" placeholder="Department Name" value="IT">
+                        <input type="text" class="form-control" id="editpostname" name="editpostname" placeholder="Department Name" value="IT">
                         <label for="floatingInput">Position Name</label>
                         </div>
                     </div>
@@ -103,8 +104,8 @@
                         <div class="form-floating">
                             <select class="form-select" id="editpositionstatus" name="editpositionstatus" aria-label="Floating label select example">
                               <option>Status</option>
-                              <option value="1"  selected>Active</option>
-                              <option value="2">Inactive</option>
+                              <option value="Active"  selected>Active</option>
+                              <option value="Inactive">Inactive</option>
                             </select>
                             <label for="floatingSelectGrid">Department</label>
                           </div>

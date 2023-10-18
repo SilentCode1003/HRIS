@@ -1,4 +1,5 @@
 <script>
+  let departmentid = "";
 
   $(document).ready(function(){
     console.log('Initialize');
@@ -33,6 +34,7 @@
                 finalData.push({
                   departmentid: item.departmentid,
                   departmentname: item.departmentname,
+                  departmenthead: item.departmenthead,
                   createdby: item.createdby,
                   createdate: item.createdate,
                   status: item.status,
@@ -52,6 +54,7 @@
           columns: [
             { data: "departmentid" },
             { data: "departmentname" },
+            { data: "departmenthead" },
             { data: "createdby"},
             { data: "createdate" },
             { data: "status" },
@@ -62,18 +65,22 @@
           },
         });
       }
-  
-});
 
-$(document).on("click", "#saveBtn", function () {
+      
+$(document).on("click", "#departmentsavebtn", function () {
   let departmentname = $("#departmentname").val();
+  let departmenthead = $("#departhead").val();
   let createdby = $("#departcreatedby").val();
-  let createdate = $("departcreatedate").val();
-  let status = $("#departstatus").val();
+  let createdate = $("#departcreatedate").val();
+  let status = $("#departmentstatus").val();
 
   var message = "";
 
   if (departmentname == "") {
+    message += "TITTLE ";
+  }
+
+  if (departmenthead == "") {
     message += "TITTLE ";
   }
 
@@ -89,14 +96,15 @@ $(document).on("click", "#saveBtn", function () {
     message += "POSITION NAME ";
   }
 
-  if (message != "") {
-  } else {
-
+  if (message !== "") {
+    swal("Validation Error", message, "error");
+    } else {
     $.ajax({
       type: "POST",
       url: "/department/save",
       data: {
         departmentname: departmentname,
+        departmenthead: departmenthead,
         createdby: createdby,
         createdate: createdate,
         status: status,
@@ -133,10 +141,108 @@ $(document).on("click", "#saveBtn", function () {
 
 });
 
+$("#dataTabledepartment tbody").on("click", "tr", function () {
+  var dataRow = [];
+  $(this)
+    .closest("tr")
+    .find("td")
+    .each(function () {
+      dataRow.push($(this).text());
+    });
+  console.log(dataRow);
+  departmentid = dataRow[0];
+});
 
-
-   //search bar
+$(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/department/getdepartment",
+        data: {
+          departmentid: departmentid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
     
+            $.each(existingData, (key, item) => {
+              $("#editdepartmentid").val(item.departmentid); 
+              $("#editdepartmentname").val(item.departmentname);
+              $("#editdepartmenthead").val(item.departmenthead);
+              $("#editdepartmentstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", message, "error");
+        },
+      });
+    });
+    
+    $(document).on("click", "#editdepartmentsavebtn", function () {
+      console.log("Save button clicked");
+      let id = departmentid
+      let departmentname = $("#editdepartmentname").val();
+      let departmenthead = $("#editdepartmenthead").val();
+      let status = $("#editdepartmentstatus").val();
+    
+    var message = "";
+  
+    if (departmentname === "") {
+      message += "departmentname is required. ";
+    }
+  
+    if (departmenthead === "") {
+      message += "departmenthead is required. ";
+    }
+  
+    if (status === "") {
+      message += "status is required. ";
+    }
+
+    if (message !== "") {
+      swal("Validation Error", message, "error");
+  } else {
+    $.ajax({
+      type: "POST",
+      url: "department/update",
+      data: { 
+        departmentid: id,
+        departmentname: departmentname,
+        departmenthead: departmenthead,
+        status: status, 
+      },
+      success: function (result) {
+        if (result.msg == "success") {
+          swal({
+            title: "Update Successfully",
+            text: "You clicked the button!",
+            icon: "success",
+            button: "OK!",
+          })
+            .then(results => {
+              window.location.reload();
+            });
+          LoadTable();
+        } else if (result.msg == "exist") {
+          swal({
+            title: "Exist",
+            text: "Data already exists!",
+            icon: "warning",
+            button: "OK!",
+          });
+        } else {
+          swal("Data already exists!", "You clicked the button!", "warning");
+        }
+      },
+      error: function (err) {
+        swal("Error", "An error occurred while saving data.", "error");
+      },
+    });
+  }
+});
+              
 function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");
@@ -158,5 +264,9 @@ function searchTable() {
         }
     }
 }
+
+  
+});
+
 </script>
     

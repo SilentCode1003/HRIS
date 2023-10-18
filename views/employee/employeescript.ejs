@@ -286,17 +286,21 @@
               $("#editemployeemname").val(item.middlename);
               $("#editemployeelname").val(item.lastname);
               $("#editemployeebday").val(item.birthday);
-              $("#editemployeegender").val(item.gender);
+              $('#editemployeegender').val(`${item.gender}`)
+              //$('#editemployeegender').append(`<option selected value="${item.gender}">${item.gender}</option>`);
               $("#editemployeephone").val(item.phone);
               $("#editemployeeemail").val(item.email);
               $("#editemployeehiredate").val(item.hiredate);
-              $("#editemployeejobstatus").val(item.jobstatus);
+              $('#editemployeejobstatus').val(`${item.jobstatus}`)
+             // $('#editemployeejobstatus').append(`<option selected value="${item.jobstatus}">${item.jobstatus}</option>`);
               $("#editemployeeemergencyname").val(item.ercontactname);
               $("#editemployeeemergencyphone").val(item.ercontactphone);
               $("#editemployeedepartment").val(item.department);
-              $("#editemployeeposition").val(item.position);
+              //$('#editemployeeposition').append(`<option selected value="${item.position}">${item.position}</option>`);
               $("#editemployeeaddress").val(item.address);
-              $("#editemployeeprofile").val(item.profilePicturePath);
+              $('#editpreview').attr('src', "data:image/jpg;base64," + item.profilePicturePath);
+              $('#editemployeeposition').val(`${item.position}`)
+              base64String =item.profilePicturePath;
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -322,28 +326,10 @@
       let jobstatus = $("#editemployeejobstatus").val();
       let ercontactname = $("#editemployeeemergencyname").val();
       let ercontactphone = $("#editemployeeemergencyphone").val();
-      let departmentId = $("#editemployeedepartment").val();
-      let positionId = $("#editemployeeposition").val();
+      let department = $("#editemployeedepartment").val();
+      let position = $("#editemployeeposition").val();
       let address = $("#editemployeeaddress").val();
-      let profilePicturePath = $("#editemployeeprofile").val(); // Use base64String for profile picture path
-      console.log(`
-      ${newEmployeeId}
-      ${firstname} 
-      ${middlename} 
-      ${lastname}
-      ${birthday}
-      ${gender}
-      ${phone}
-      ${email}
-      ${hiredate}
-      ${jobstatus}
-      ${ercontactname}
-      ${ercontactphone}
-      ${departmentId}
-      ${positionId}
-      ${address}
-      ${profilePicturePath}`);
-      
+      let profilePicturePath =base64String;// Use base64String for profile picture path      
       var message = "";
       
         if (firstname === "") {
@@ -386,11 +372,11 @@
           message += "ercontactphone is required. ";
         }
   
-        if (departmentId === "") {
+        if (department === "") {
           message += "departmentId is required. ";
         }
   
-        if (positionId === "") {
+        if (position === "") {
           message += "positionId is required. ";
         }
   
@@ -400,11 +386,8 @@
   
         if (profilePicturePath === "") {
           message += "profilePicturePath is required. ";
-        }
-  
-      
+        }      
         if (message !== "") {
-          // Handle the case where there are validation errors, e.g., show an error message to the user.
           swal("Validation Error", message, "error");
       } else {
         $.ajax({
@@ -423,27 +406,36 @@
             jobstatus: jobstatus,
             ercontactname: ercontactname,
             ercontactphone: ercontactphone,
-            departmentId: departmentId,
-            positionId: positionId,
+            department: department,
+            position: position,
             address: address,
             profilePicturePath: profilePicturePath,
           },
           success: function (result) {
-            console.log("Department data retrieved:", result.data);
-            if (result.msg === "success") {
+            if (result.msg == "success") {
               swal({
-                title: "Saved Successfully",
+                title: "Update Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then(() => {
-                window.location.reload();
-                LoadTable();
+              })
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
               });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
             }
           },
           error: function (err) {
-            swal("Error!", "Something went wrong while saving.", "error");
+            swal("Error", "An error occurred while saving data.", "error");
           },
         });
       }
@@ -500,9 +492,11 @@
     
     
 
-    $(document).on('change', '#employeeprofile', function () {
+    $(document).on('change', '#employeeprofile', function (e) {
       const input = document.getElementById('employeeprofile');
       const file = input.files[0];
+
+      console.log('click');
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -536,7 +530,7 @@
     }
 
 
-    $(document).on('change', '#editemployeeprofile', function () {
+    $(document).on('change', '#editemployeeprofile', function (e) {
       const input = document.getElementById('editemployeeprofile');
       const file = input.files[0];
 

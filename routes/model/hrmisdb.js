@@ -33,6 +33,7 @@ exports.Master_Department = (data) => {
         dataResult.push({
             departmentid: key.md_departmentid,
             departmentname: key.md_departmentname,
+            departmenthead: key.md_departmenthead,
             createdby: key.md_createdby,
             createdate: key.md_createddate,
             status: key.md_status,
