@@ -243,7 +243,7 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_disciplinary_action(
         mda_actioncode,
         mda_offenseid,
-        mada_description,
+        mda_description,
         mda_createdate,
         mda_createby,
         mda_status) VALUES ?`;
@@ -289,7 +289,8 @@ exports.InsertTable = (tablename, data, callback) => {
         mg_issuedate,
         mg_expirydate,
         mg_createby,
-        mg_createdate) VALUES ?`;
+        mg_createdate,
+        mg_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
