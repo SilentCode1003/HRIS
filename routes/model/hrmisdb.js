@@ -167,6 +167,7 @@ exports.Master_GovId = (data) => {
             expirydate: key.mg_expirydate,
             createby: key.mg_createby,
             createdate: key.mg_createdate,
+            status: key.mg_status,
         });
     });
 
