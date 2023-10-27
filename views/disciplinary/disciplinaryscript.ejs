@@ -3,13 +3,11 @@
   let index = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
+    console.log("Initialize");
     LoadTable();
     LoadListEmp();
     LoadListviolation();
-    LoadListOffensename();
-
-
+    // LoadListOffensename();
 
     function LoadTable() {
       $("#dataTabledisciplianary").DataTable({
@@ -73,11 +71,10 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
+          console.log("Done");
         },
       });
     }
-
 
     $(document).on("click", "#shiftsavebtn", function () {
       let shiftname = $("#shifthours").val();
@@ -113,7 +110,6 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-
         $.ajax({
           type: "POST",
           url: "/shift/save",
@@ -122,7 +118,6 @@
             status: status,
             department: department,
             createby: createby,
-
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -131,13 +126,11 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                })
+              }).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
-            }
-            else {
+            } else {
               swal({
                 title: "Exist",
                 text: "Data already exists!",
@@ -145,14 +138,12 @@
                 button: "OK!",
               });
             }
-
           },
           error: function (err) {
             swal("Data already exist!", "You clicked the button!", "warning");
           },
         });
       }
-
     });
 
     function LoadListEmp() {
@@ -166,18 +157,15 @@
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.newEmployeeId);
-            $('#disciplinaryemployeeid').append(options);
+            $("#disciplinaryemployeeid").append(options);
             console.log(item.newEmployeeId);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
-
-
     }
-
 
     function LoadDesciplinary() {
       $.ajax({
@@ -190,19 +178,17 @@
           $.each(data, function (key, item) {
             var options = new Option(item.description, item.description);
             $(options).html(item.description);
-            $('#disciplinaryactionid').append(options);
+            $("#disciplinaryactionid").append(options);
             console.log(item.description);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
-
-
     }
 
-    $('#disciplinaryviolationid').on("change", function () {
+    $("#disciplinaryviolationid").on("change", function () {
       var description = $(this).val();
       console.log(index);
       $.ajax({
@@ -217,93 +203,101 @@
             var data = result.data;
             let actioncode = data[0].actioncode;
 
-            $('#disciplinaryactionid').empty();
+            $("#disciplinaryactionid").empty();
+            $("#disciplinaryoffenseid").empty();
 
             $.ajax({
-              type: 'POST',
-              url:  "/disciplinary/getactioncode",
+              type: "POST",
+              url: "/disciplinary/getactioncode",
               data: {
-                actioncode: actioncode
+                actioncode: actioncode,
               },
               success: function (result) {
                 var data = result.data;
 
                 $.each(data, function (index, value) {
-                  var options = new Option(value.actioncode, value.actioncode);
-                  $(options).html(`${value.actioncode} - ${value.description}`);
-                  $('#disciplinaryactionid').append(options);
+                  var actionoptions = new Option(
+                    value.actioncode,
+                    value.actioncode
+                  );
+                  $(actionoptions).html(
+                    `${value.actioncode} - ${value.description}`
+                  );
+                  $("#disciplinaryactionid").append(actionoptions);
 
-                  $('#disciplinaryactionid').val(value.actioncode);
+                  $("#disciplinaryactionid").val(value.actioncode);
 
                   console.log(value.actioncode);
+
+                  var offenceoption = new Option(
+                    value.offencename,
+                    value.offencename
+                  );
+                  $(offenceoption).html(value.offencename);
+                  $("#disciplinaryoffenseid").append(offenceoption);
+
+                  $("#disciplinaryoffenseid").val(value.offencename);
+
+                  console.log(value.offencename);
                 });
               },
-              error: function (error) {
-
-              }
+              error: function (error) {},
             });
-
-
           } catch (error) {
-            console.error('Error parsing response data:', error);
+            console.error("Error parsing response data:", error);
           }
         },
         error: function (xhr, status, error) {
-          console.error('AJAX request failed:', error);
-        }
+          console.error("AJAX request failed:", error);
+        },
       });
     });
 
-    $('#disciplinaryoffenseid').on("change", function () {
+    $("#disciplinaryoffenseid").on("change", function () {
       var offensename = $(this).val();
+      var description = $("#disciplinaryviolationid").val();
+
       console.log(offensename);
       $.ajax({
         type: "POST",
-        url: "/disciplinary/getoffensename",
+        url: "/disciplinary/getactionoffense",
         data: {
-          offensename: offensename,
+          description: description,
         },
 
         success: function (result) {
-          try{
-            console.log(result.data);
+          try {
+            // console.log(result.data);
             var data = result.data;
             let actioncode = data[0].actioncode;
 
-            $('#disciplinaryactionid').empty();
-
             $.ajax({
-              type: 'POST',
+              type: "POST",
               url: "/disciplinary/getoffenseaction",
               data: {
-                actioncode: actioncode
+                actioncode: actioncode,
+                offenceid: offensename,
               },
-              success: function (result) { 
+              success: function (result) {
                 var data = result.data;
-                let offensename = data[0].offensename;
-                
 
+                console.log(data);
                 $.each(data, function (index, value) {
-                  var options = new Option(value.actioncode, value.actioncode);
-                  $(options).html(`${value.actioncode} - ${value.description}`);
-                  $('#disciplinaryactionid').append(options);
+                  $("#disciplinaryactionid").val(value.actioncode);
 
-                  $('#disciplinaryactionid').val(value.actioncode);
-
-                  console.log(value.actioncode);
+                  console.log(`${value.actioncode} - ${value.description}`);
                 });
-              }
-            })
+              },
+            });
           } catch (error) {
-            console.error('error:', error);
+            console.error("error:", error);
           }
         },
         error: function (xhr, status, error) {
-          console.error('ajax request failed', error);
-        }
+          console.error("ajax request failed", error);
+        },
       });
     });
-
 
     function LoadListOffensename() {
       $.ajax({
@@ -316,18 +310,15 @@
           $.each(data, function (key, item) {
             var options = new Option(item.offensename, item.offensename);
             $(options).html(item.offensename);
-            $('#disciplinaryoffenseid').append(options);
+            $("#disciplinaryoffenseid").append(options);
             console.log(item.offensename);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
-
-
     }
-
 
     function LoadListviolation() {
       $.ajax({
@@ -340,16 +331,14 @@
           $.each(data, function (key, item) {
             var options = new Option(item.description, item.description);
             $(options).html(item.description);
-            $('#disciplinaryviolationid').append(options);
+            $("#disciplinaryviolationid").append(options);
             console.log(item.description);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
-
-
     }
 
     $("#dataTableshift tbody").on("click", "tr", function () {
@@ -394,7 +383,7 @@
     });
     $(document).on("click", "#editshiftsavebtn", function () {
       console.log("Save button clicked");
-      let id = shiftid
+      let id = shiftid;
       let shiftname = $("#editshift").val();
       let status = $("#editshiftstatus").val();
       let department = $("#editshiftdepartment").val();
@@ -444,10 +433,9 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                });
+              }).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
             } else if (result.msg == "exist") {
               swal({
@@ -457,7 +445,11 @@
                 button: "OK!",
               });
             } else {
-              swal("Data already exists!", "You clicked the button!", "warning");
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
             }
           },
           error: function (err) {
@@ -488,11 +480,5 @@
         }
       }
     }
-
-
-
-
   });
-
-
 </script>
