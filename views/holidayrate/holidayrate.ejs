@@ -44,14 +44,21 @@
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="holidayratedate" name="holidayratedate">
+                        <select type="date" class="form-control" id="holidayratedate" name="holidayratedate">
+                          <option selected>Choose............................................</option>
+                        </select>
                         <label for="floatingInput">Date</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="holidayraterate" name="holidayraterate" placeholder="Rate">
+                        <select type="text" class="form-control" id="holidayraterate" name="holidayraterate" placeholder="Rate">
+                          <option selected>Choose............................................</option>
+                          <option>100%</option>
+                          <option>75%</option>
+                          <option>50%</option>
+                        </select>
                         <label for="floatingInput">Rate</label>
                         </div>
                     </div>
@@ -67,8 +74,8 @@
                         <div class="form-floating">
                             <select class="form-select" id="holidaytratestatus" name="holidaytratestatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
                             </select>
                             <label for="floatingSelectGrid">Holiday</label>
                           </div>
@@ -94,12 +101,14 @@
         </div>
         <div class="modal-body">
             <form>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="editholidayratedate" name="editholidayratedate">
-                    <label for="floatingInput">Date</label>
-                    </div>
+              <div class="col">
+                <div class="form-floating">
+                <select type="date" class="form-control" id="editholidayratedate" name="editholidayratedate">
+                  <option selected>Choose............................................</option>
+                </select>
+                <label for="floatingInput">Date</label>
                 </div>
+            </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
@@ -119,8 +128,8 @@
                     <div class="form-floating">
                         <select class="form-select" id="editholidaytratestatus" name="editholidaytratestatus" aria-label="Floating label select example">
                           <option selected>Status</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                         <label for="floatingSelectGrid">Holiday Rate</label>
                       </div>

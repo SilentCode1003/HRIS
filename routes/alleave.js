@@ -1,7 +1,8 @@
-const moment = require('moment');
 const mysql = require('./repository/hrmisdb');
+const moment = require('moment');
 var express = require('express');
 var router = express.Router();
+const currentDate = moment();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
