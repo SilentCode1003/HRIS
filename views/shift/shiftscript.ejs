@@ -179,7 +179,7 @@ function LoadEditShift() {
         var data = result.data;
 
         $.each(data, function (key, item) {
-          var options = new Option(item.departmentname, item.departmentname);
+          var options = new Option(item.departmentid, item.departmentid);
           $(options).html(item.departmentname);
           $('#editshiftdepartment').append(options);
           console.log(item.departmentname);

@@ -55,6 +55,33 @@ var hrdiscriplinaryactionRouter = require('./routes/hrdisciplinaryaction');
 
 var app = express();
 
+const session = require('express-session');
+const mongoose = require('mongoose');
+const MongoDBSession = require('connect-mongodb-session')(session);
+
+const mysql = require('./routes/repository/hrmisdb');
+
+//mongodb
+mongoose.connect('mongodb://localhost:27017/HRMIS')
+  .then((res) => {
+    console.log("MongoDB Connected!");
+  });
+
+const store = new MongoDBSession({
+  uri: 'mongodb://localhost:27017/HRMIS',
+  collection: 'HRMISSessions',
+});
+
+//Session
+app.use(
+  session({
+    secret: "5L Secret Key",
+    resave: false,
+    saveUninitialized: false,
+    store: store
+  })
+);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
