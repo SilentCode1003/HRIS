@@ -339,6 +339,7 @@ exports.Offense_Disciplinary_Actions = (data) => {
             employeeid: key.oda_employeeid,
             offenseid: key.oda_offenseid,
             actionid: key.oda_actionid,
+            violation: key.oda_violation,
             date: key.oda_date,
             createby: key.oda_createby,
             createdate: key.oda_createdate,

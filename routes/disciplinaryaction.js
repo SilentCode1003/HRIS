@@ -12,6 +12,46 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
+router.post('/getdisciplinaryaction', (req, res) => {
+  try {
+    let disciplinaryactionid = req.body.disciplinaryactionid;
+    let sql = `SELECT
+      mda_actioncode as actioncode,
+      mda_offenseid as offenseid,
+      mda_description as description,
+      mda_createby as createby,
+      mda_status as status
+      FROM master_disciplinary_action
+      WHERE mda_actionid = '${disciplinaryactionid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: result
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found"
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error
+        });
+      });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error
+    });
+  }
+});
+
+
 router.get('/load', (req, res) => {
   try {
     let sql = `SELECT 
@@ -77,5 +117,43 @@ router.post('/save', async (req, res) => {
     console.log(error);
     console.error('Error: ', error);
     res.json({ msg: 'error' });
+  }
+});
+
+router.post('/update', (req, res) => {
+  try {
+    let disciplinaryactionid = req.body.disciplinaryactionid;
+    let actioncode = req.body.actioncode;
+    let offenseid = req.body.offenseid;
+    let description = req.body.description;
+    let createby = req.body.createby;
+    let status = req.body.status;
+    
+    let sqlupdate = `UPDATE master_disciplinary_action SET   
+    mda_actioncode ='${actioncode}', 
+    mda_offenseid ='${offenseid}', 
+    mda_description ='${description}',
+    mda_createby ='${createby}', 
+    mda_status ='${status}'
+    WHERE mda_actionid ='${disciplinaryactionid}'`;
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      console.log(result);
+  
+      res.json({
+        msg: 'success'
+      })
+    })
+    .catch((error) =>{
+      res.json({
+        msg:error
+      })
+      
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
   }
 });

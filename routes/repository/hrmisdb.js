@@ -69,7 +69,7 @@ exports.Select = (sql, table, callback) => {
       }
 
       if (table == "Master_Health") {
-        callback(null, model.Master_GovId(results));
+        callback(null, model.Master_Health(results));
       }
 
       if (table == "Master_Holiday") {
@@ -459,6 +459,7 @@ exports.InsertTable = (tablename, data, callback) => {
         oda_employeeid,
         oda_offenseid,
         oda_actionid,
+        oda_violation,
         oda_date,
         oda_createby,
         oda_createdate,

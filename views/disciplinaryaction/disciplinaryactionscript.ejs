@@ -32,7 +32,7 @@
                     var status = item.status;
     
                     action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshiftmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdisciplinaryactionmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
       
                     finalData.push({
@@ -186,7 +186,7 @@ function LoadList() {
         $.each(data, function (key, item) {
           var options = new Option(item.offenseid, item.offenseid);
           $(options).html(item.offensename);
-          $('#shiftdepartment').append(options);
+          $('#editdisciplinaryactionoffenseid').append(options);
           console.log(item.offensename);
         });
       },
@@ -214,7 +214,7 @@ disciplinaryactionid = dataRow[0];
 $(document).on("click", "#editBtn", function () {
   $.ajax({
     type: "POST",
-    url: "/offenses/getoffenses",
+    url: "/disciplinaryaction/getdisciplinaryaction",
     data: {
         disciplinaryactionid: disciplinaryactionid,
     },
@@ -224,11 +224,11 @@ $(document).on("click", "#editBtn", function () {
 
         $.each(existingData, (key, item) => {
           $("#editshiftid").val(item.disciplinaryactionid); 
-          $("#editshift").val(item.actioncode);
-          $("#editshiftdepartment").val(item.offenseid);
-          $("#editshiftstatus").val(item.description);
-          $("#editshiftcreateby").val(item.createby);
-          $("#editshiftstatus").val(item.status);
+          $("#editdisciplinaryactionactioncode").val(item.actioncode);
+          $("#editdisciplinaryactionoffenseid").val(item.offenseid);
+          $("#editdisciplinaryactiondescription").val(item.description);
+          $("#editdisciplinaryactioncreatedby").val(item.createby);
+          $("#editdisciplinaryactionstatus").val(item.status);
         });
       } else {
         swal("Error fetching employee data", "success");
@@ -239,14 +239,14 @@ $(document).on("click", "#editBtn", function () {
     },
   });
 });
-$(document).on("click", "#editshiftsavebtn", function () {
+$(document).on("click", "#disciplinaryactioneditbtn", function () {
   console.log("Save button clicked");
   let id = disciplinaryactionid
-  let actioncode = $("#editshift").val();
-  let offenseid = $("#editshiftdepartment").val();
-  let description = $("#editshiftdepartment").val();
-  let createby = $("#editshiftcreateby").val();
-  let status = $("#editshiftstatus").val();
+  let actioncode = $("#editdisciplinaryactionactioncode").val();
+  let offenseid = $("#editdisciplinaryactionoffenseid").val();
+  let description = $("#editdisciplinaryactiondescription").val();
+  let createby = $("#editdisciplinaryactioncreatedby").val();
+  let status = $("#editdisciplinaryactionstatus").val();
   
   var message = "";
       
