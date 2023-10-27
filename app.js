@@ -35,23 +35,7 @@ var eportalprofileRouter = require('./routes/eportalprofile');
 var eportalsalaryRouter = require('./routes/eportalsalary');
 var eportalcashadvanceRouter = require('./routes/eportalcashadvance');
 var eportalpayslipRouter = require('./routes/eportalpayslip');
-var hrindexRouter = require('./routes/hrindex');
-var hremployeeRouter = require('./routes/hremployee');
-var hrshiftRouter = require('./routes/hrshift');
-var hrtrainingRouter = require('./routes/hrtraining');
-var hrperformanceRouter = require('./routes/hrperformance');
-var hrdisciplinaryRouter = require('./routes/hrdisciplinary');
-var hrhealthrecordRouter  = require('./routes/hrhealthrecord');
-var hrgovermentidRouter = require('./routes/hrgovermentid');
-var hrattendanceRouter = require('./routes/hrattendance');
-var hrojtRouter = require('./routes/hrojt');
-var hrallleaveRouter = require('./routes/hrallleave');
-var hrpendingleaveRouter = require('./routes/hrpendingleave');
-var hrapprovedleaveRouter = require('./routes/hrapprovedleave');
-var hrrejectedleaveRouter = require('./routes/hrrejectedleave');
-var hroffensesRouter = require('./routes/hroffenses');
-var hrviolationRouter = require('./routes/hrviolation');
-var hrdiscriplinaryactionRouter = require('./routes/hrdisciplinaryaction');
+var loginlayoutRouter = require('./routes/login');
 
 var app = express();
 
@@ -123,23 +107,7 @@ app.use('/eportalprofile', eportalprofileRouter);
 app.use('/eportalsalary', eportalsalaryRouter);
 app.use('/eportalcashadvance', eportalcashadvanceRouter);
 app.use('/eportalpayslip', eportalpayslipRouter);
-app.use('/hrindex', hrindexRouter);
-app.use('/hremployee', hremployeeRouter);
-app.use('/hrshift', hrshiftRouter);
-app.use('/hrtraining', hrtrainingRouter);
-app.use('/hrperformance', hrperformanceRouter);
-app.use('/hrdisciplinary', hrdisciplinaryRouter);
-app.use('/hrhealthrecord', hrhealthrecordRouter);
-app.use('/hrgovermentid', hrgovermentidRouter);
-app.use('/hrattendance', hrattendanceRouter);
-app.use('/hrojt', hrojtRouter);
-app.use('/hrallleave', hrallleaveRouter);
-app.use('/hrpendingleave', hrpendingleaveRouter);
-app.use('/hrapprovedleave', hrapprovedleaveRouter);
-app.use('/hrrejectedleave', hrrejectedleaveRouter);
-app.use('/hroffenses', hroffensesRouter);
-app.use('/hrviolation', hrviolationRouter);
-app.use('/hrdiscriplinaryaction', hrdiscriplinaryactionRouter);
+app.use('/login', loginlayoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

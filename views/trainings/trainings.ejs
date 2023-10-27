@@ -38,32 +38,50 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Department</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Training</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                     <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Department Name</label>
-                        </div>
+                      <div class="form-floating">
+                        <select class="form-select" id="trainingname" name="trainingname" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                          <option value="">Web dev</option>
+                          <option value="">Field</option>
+                        </select>
+                        <label for="floatingSelectGrid">Training Name</label>
+                      </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="departmenthead" name="departmenthead" aria-label="Floating label select example">
-                              <option selected>Department Head</option>
-                              <option value="1">Wendell</option>
-                              <option value="2">Sibunga</option>
+                            <select class="form-select" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example">
+                              <option selected>Choose....</option>
+                              <option value="">Wendell</option>
+                              <option value="">Sibunga</option>
                             </select>
-                            <label for="floatingSelectGrid">Department Head</label>
+                            <label for="floatingSelectGrid">Employee name</label>
                           </div>
                     </div>
                     <br>
                     <div class="col">
+                      <div class="form-floating">
+                      <input type="date" class="form-control" id="trainingdatestarted" name="trainingdatestarted">
+                      <label for="floatingInput">Date Started</label>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="col">
+                    <div class="form-floating">
+                    <input type="date" class="form-control" id="trainingdatefinished" name="trainingdatefinished">
+                    <label for="floatingInput">Date Finished</label>
+                    </div>
+                </div>
+                <br>
+                    <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="departmentstatus" name="departmentstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="trainingstatus" name="departmetrainingstatusntstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="1">Active</option>
                               <option value="2">Inactive</option>
@@ -76,7 +94,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="departmentsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" id="trainingsavebtn">Save</button>
         </div>
       </div>
     </div>
