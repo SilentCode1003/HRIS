@@ -297,6 +297,116 @@ router.post('/update', async (req, res) => {
   }
 });
 
+router.post('/getgovid',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    mg_idtype as idtype,
+    mg_idnumber as idnumber,
+    mg_issuedate as issuedate,
+    mg_expirydate as expirydate
+    from master_govid
+    inner join master_employee on mg_employeeid = me_id
+    where mg_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
+router.post('/gethealth',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    mh_bloodtype as bloodtype,
+    mh_medicalcondition as medicalcondition,
+    mh_prescribemedications as prescribemedications,
+    mh_lastcheckup as lastcheckup,
+    mh_insurance as insurance,
+    mh_insurancenumber as insurancenumber
+    from master_health
+    inner join master_employee on mh_employeeid = me_id
+    where mh_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
+
+router.post('/gettraining',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = ` select 
+    mt_name as name,
+    mt_startdate as startdate,
+    mt_enddate as enddate,
+    mt_location as location,
+    mt_status as status
+    from master_training 
+    inner join master_employee on mt_employeeid = me_id
+    where mt_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
+
 
 
 module.exports = router;

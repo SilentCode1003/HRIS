@@ -8,6 +8,7 @@
     LoadPosition();
     LoadModal();
     LoadModalPosition();
+    //LoadGovermentTable();
 
 
     $(document).on("click", "#employeesavebtn", function () {
@@ -568,6 +569,184 @@
   
   });
 
+  $(document).on("click", "#showgov", function () {
+    $.ajax({
+      type: "POST",
+      url: '/employee/getgovid',
+      data: {
+        employeeid: employeeid,
+      },
+      success: function (json) {
+        console.log("API response", json);
+        
+        // Prepare the data for the DataTable
+        var finalData = [];
+        var data = json.data;
   
+        $.each(data, function (key, item) {
+          finalData.push({
+            idtype: item.idtype,
+            idnumber: item.idnumber,
+            issuedate: item.issuedate,
+            expirydate: item.expirydate,
+          });
+        });
+  
+        if ($.fn.DataTable.isDataTable('#dataTableemployees')) {
+          $('#dataTablegovermentid').DataTable().destroy();
+        }
+  
+        $('#dataTablegovermentid').DataTable({
+          processing: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          data: finalData,
+          columns: [
+            { data: "idtype" },
+            { data: "idnumber" },
+            { data: "issuedate" },
+            { data: "expirydate" },
+          ],
+          initComplete: function () {
+            console.log('Done');
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.log("API error", error);
+      },
+    });
+  });
 
+  $(document).on("click", "#showhealth", function () {
+    $.ajax({
+      type: "POST",
+      url: '/employee/gethealth',
+      data: {
+        employeeid: employeeid,
+      },
+      success: function (json) {
+        console.log("API response", json);
+        
+        // Prepare the data for the DataTable
+        var finalData = [];
+        var data = json.data;
+  
+        $.each(data, function (key, item) {
+          finalData.push({
+            bloodtype: item.bloodtype,
+            medicalcondition: item.medicalcondition,
+            prescribemedications: item.prescribemedications,
+            lastcheckup: item.lastcheckup,
+            insurance: item.insurance,
+            insurancenumber: item.insurancenumber,
+          });
+        });
+  
+        if ($.fn.DataTable.isDataTable('#dataTablehealthrecord')) {
+          $('#dataTablehealthrecord').DataTable().destroy();
+        }
+  
+        $('#dataTablehealthrecord').DataTable({
+          processing: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          data: finalData, // Set the data for DataTable
+          columns: [
+            { data: "bloodtype" },
+            { data: "medicalcondition" },
+            { data: "prescribemedications" },
+            { data: "lastcheckup" },
+            { data: "insurance" },
+            { data: "insurancenumber" },
+          ],
+          initComplete: function () {
+            console.log('Done');
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.log("API error", error);
+      },
+    });
+  });
+
+  $(document).on("click", "#showtraining", function () {
+    $.ajax({
+      type: "POST",
+      url: '/employee/gettraining',
+      data: {
+        employeeid: employeeid,
+      },
+      success: function (json) {
+        console.log("API response", json);
+        
+        // Prepare the data for the DataTable
+        var finalData = [];
+        var data = json.data;
+  
+        $.each(data, function (key, item) {
+          finalData.push({
+            name: item.name,
+            startdate: item.startdate,
+            enddate: item.enddate,
+            location: item.location,
+            status: item.status,
+          });
+        });
+  
+        if ($.fn.DataTable.isDataTable('#dataTabletraining')) {
+          $('#dataTabletraining').DataTable().destroy();
+        }
+  
+        $('#dataTabletraining').DataTable({
+          processing: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          data: finalData, // Set the data for DataTable
+          columns: [
+            { data: "name" },
+            { data: "startdate" },
+            { data: "enddate" },
+            { data: "location" },
+            { data: "status" },
+          ],
+          initComplete: function () {
+            console.log('Done');
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.log("API error", error);
+      },
+    });
+  });
+  
 </script>

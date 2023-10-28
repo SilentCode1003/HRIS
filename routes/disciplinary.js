@@ -163,7 +163,7 @@ router.post("/getoffensename", (req, res) => {
   }
 });
 
-router.post("/getoffenseaction", (req, res) => {
+router.post('/getoffenseaction',(req, res) => {
   try {
     let actioncode = req.body.actioncode;
     let offenceid = req.body.offenceid;
@@ -175,8 +175,7 @@ router.post("/getoffenseaction", (req, res) => {
     where mda_actioncode like '${actioncode[0]}%'
     AND mo_offensename = '${offenceid}'`;
 
-    mysql
-      .mysqlQueryPromise(sql)
+    mysql.mysqlQueryPromise(sql)
       .then((result) => {
         console.log(result);
 
@@ -198,3 +197,66 @@ router.post("/getoffenseaction", (req, res) => {
     });
   }
 });
+
+
+router.post('/save', async (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let offenseid = req.body.offenseid; 
+    let actionid = req.body.actionid;
+    let violation = req.body.violation;
+    let date = req.body.date;
+    let createby = req.body.createby;
+    let status = req.body.status;
+    console.log('Received department name:', employeeid);
+    console.log('Received department name:', offenseid);
+    console.log('Received department name:', actionid);
+    console.log('Received department name:', violation);
+
+
+    let employeeidQuery = `SELECT me_id FROM master_employee WHERE me_id ='${employeeid}'`;
+    let offenseIdQuery = `SELECT mo_offenseid FROM master_offense WHERE mo_offensename = '${offenseid}'`;
+    let actionidQuery = `select mda_actionid FROM master_disciplinary_action WHERE mda_description = '${actionid}'`;
+    let violatioidQuery = `select mv_violationid from master_violation where mv_description ='${violation}'`;
+
+
+    const employeeidResult = await mysql.mysqlQueryPromise(employeeidQuery, [employeeid]);
+    const offenseIdResult = await mysql.mysqlQueryPromise(offenseIdQuery, [offenseid]);
+    const actionidResult = await mysql.mysqlQueryPromise(actionidQuery, [actionid]);
+    const violationResult = await mysql.mysqlQueryPromise(violatioidQuery, [violation]);
+
+    if (offenseIdResult.length > 0 &&
+      employeeidResult.length > 0 &&
+      actionidResult.length > 0 &&  // Check if actionidResult contains data
+      violationResult.length > 0) {
+      const employeeID = employeeidResult[0].me_id; 
+      const offenseID = offenseIdResult[0].mo_offenseid;
+      const actionID = actionidResult[0].mda_actionid;
+      const violationID = violationResult[0].mv_violationid;
+
+
+      const data = [
+        [employeeID, offenseID, actionID, violationID, date, createby, status]
+      ];
+
+      mysql.InsertTable('offense_disciplinary_actions', data, (insertErr, insertResult) => {
+        if (insertErr) {
+          console.error('Error inserting record: ', insertErr);
+          res.json({ msg: 'insert_failed' });
+        } else {
+          console.log(insertResult);
+          res.json({ msg: 'success' });
+        }
+      });
+    } else {
+      res.json({ msg: 'offense_not_found' });
+    }
+  } catch (error) {
+    console.log(error);
+    console.error('Error: ', error);
+    res.json({ msg: 'error' });
+  }
+});
+
+
+

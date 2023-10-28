@@ -15,9 +15,8 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Employee ID</th>
-                        <th>Employee Name</th>
                         <th>Training Name</th>
+                        <th>Employee Name</th>
                         <th>Date Started</th>
                         <th>Date Finished</th>
                         <th>Location</th>
@@ -47,8 +46,8 @@
                       <div class="form-floating">
                         <select class="form-select" id="trainingname" name="trainingname" aria-label="Floating label select example">
                           <option selected>Choose....</option>
-                          <option value="">Web dev</option>
-                          <option value="">Field</option>
+                          <option value="Web dev">Web dev</option>
+                          <option value="Field">Field</option>
                         </select>
                         <label for="floatingSelectGrid">Training Name</label>
                       </div>
@@ -58,8 +57,6 @@
                         <div class="form-floating">
                             <select class="form-select" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example">
                               <option selected>Choose....</option>
-                              <option value="">Wendell</option>
-                              <option value="">Sibunga</option>
                             </select>
                             <label for="floatingSelectGrid">Employee name</label>
                           </div>
@@ -81,15 +78,26 @@
                 <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="trainingstatus" name="departmetrainingstatusntstatus" aria-label="Floating label select example">
-                              <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
+                            <select class="form-select" id="traininglocation" name="traininglocation" aria-label="Floating label select example">
+                              <option selected>Location</option>
+                              <option value="South">South</option>
+                              <option value="NCR">NCR</option>
                             </select>
                             <label for="floatingSelectGrid">Department</label>
                           </div>
                     </div>
                     <br>
+                    <div class="col">
+                      <div class="form-floating">
+                          <select class="form-select" id="trainingstatus" name="trainingstatus" aria-label="Floating label select example">
+                            <option selected>Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                          </select>
+                          <label for="floatingSelectGrid">Status</label>
+                        </div>
+                  </div>
+                  <br>
             </form>
         </div>
         <div class="modal-footer">
@@ -101,50 +109,94 @@
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="edittrainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="edittrainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+        <!-- Modal Header -->
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Department</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        
+        <!-- Modal Body -->
         <div class="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="editdepartmentname" name="editdepartmentname" placeholder="Department Name" value="IT">
-                        <label for="floatingInput">Department Name</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="editdepartmenthead" name="editdepartmenthead" aria-label="Floating label select example">
-                              <option>Department Head</option>
-                              <option value="1"  selected>Wendell</option>
-                              <option value="2">Sibunga</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department Head</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="editdepartmentstatus" name="editdepartmentstatus" aria-label="Floating label select example">
-                              <option>Status</option>
-                              <option value="1"  selected>Active</option>
-                              <option value="2">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department</label>
-                          </div>
-                    </div>
-                    <br>
-            </form>
+          <form>
+            <!-- Training Name Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select" id="edittrainingname" name="edittrainingname" aria-label="Floating label select example">
+                  <option selected>Choose....</option>
+                  <option value="Web dev">Web dev</option>
+                  <option value="Field">Field</option>
+                </select>
+                <label for="edittrainingname">Training Name</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Employee Name Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select" id="edittrainingemployeename" name="edittrainingemployeename" aria-label="Floating label select example">
+                  <option selected>Choose....</option>
+                  <!-- Employee name options should be dynamically loaded here -->
+                </select>
+                <label for="edittrainingemployeename">Employee name</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Date Started Input -->
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-control" id="edittrainingdatestarted" name="edittrainingdatestarted">
+                <label for="edittrainingdatestarted">Date Started</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Date Finished Input -->
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-control" id="edittrainingdatefinished" name="edittrainingdatefinished">
+                <label for="edittrainingdatefinished">Date Finished</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Location Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select" id="edittraininglocation" name="edittraininglocation" aria-label="Floating label select example">
+                  <option selected>Location</option>
+                  <option value="South">South</option>
+                  <option value="NCR">NCR</option>
+                </select>
+                <label for="edittraininglocation">Location</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Status Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select" id="edittrainingstatus" name="edittrainingstatus" aria-label="Floating label select example">
+                  <option selected>Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <label for="edittrainingstatus">Status</label>
+              </div>
+            </div>
+          </form>
         </div>
+        
+        <!-- Modal Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editdepartmentsavebtn">Save</button>
+          <button type="button" class="btn btn-primary" id="edittrainingsavebtn">Save</button>
         </div>
       </div>
     </div>
   </div>
+  
