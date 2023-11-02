@@ -13,11 +13,11 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `SELECT 
+    let sql = ` SELECT 
     oda_disciplinaryid,
-    me_id as oda_employeeid,
-    mo_offenseid as oda_offenseid,
-    mda_actioncode as oda_actionid,
+    concat(me_firstname,' ',me_lastname) as oda_employeeid,
+    mo_offensename as oda_offenseid,
+    mda_description as oda_actionid,
     mv_description as oda_violation,
     oda_date,
     oda_createby,
@@ -28,6 +28,7 @@ router.get("/load", (req, res) => {
     LEFT JOIN master_offense ON offense_disciplinary_actions.oda_offenseid = mo_offenseid
     LEFT JOIN master_disciplinary_action ON offense_disciplinary_actions.oda_actionid = mda_actionid
     LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid`;
+
 
     mysql.Select(sql, "Offense_Disciplinary_Actions", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -207,49 +208,73 @@ router.post('/save', async (req, res) => {
     let violation = req.body.violation;
     let date = req.body.date;
     let createby = req.body.createby;
+    let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
-    console.log('Received department name:', employeeid);
+    let data = [];
     console.log('Received department name:', offenseid);
     console.log('Received department name:', actionid);
     console.log('Received department name:', violation);
 
+    const offenseIDquery = `select mo_offenseid from master_offense where mo_offensename ='${offenseid}'`;
 
-    let employeeidQuery = `SELECT me_id FROM master_employee WHERE me_id ='${employeeid}'`;
-    let offenseIdQuery = `SELECT mo_offenseid FROM master_offense WHERE mo_offensename = '${offenseid}'`;
-    let actionidQuery = `select mda_actionid FROM master_disciplinary_action WHERE mda_description = '${actionid}'`;
-    let violatioidQuery = `select mv_violationid from master_violation where mv_description ='${violation}'`;
+    try {
+      const offenseidresult = await mysql.mysqlQueryPromise(offenseIDquery);
+      if (offenseidresult && offenseidresult.length > 0) {
+        const offenseID = offenseidresult[0].mo_offenseid;
 
+      const actionIDquery = `select mda_actionid from master_disciplinary_action where mda_actioncode = '${actionid}'`;
 
-    const employeeidResult = await mysql.mysqlQueryPromise(employeeidQuery, [employeeid]);
-    const offenseIdResult = await mysql.mysqlQueryPromise(offenseIdQuery, [offenseid]);
-    const actionidResult = await mysql.mysqlQueryPromise(actionidQuery, [actionid]);
-    const violationResult = await mysql.mysqlQueryPromise(violatioidQuery, [violation]);
+      try {
+        const actionidresult = await mysql.mysqlQueryPromise(actionIDquery);
+        if (actionidresult && actionidresult.length > 0) {
+          const actionID = actionidresult[0].mda_actionid;
+        
 
-    if (offenseIdResult.length > 0 &&
-      employeeidResult.length > 0 &&
-      actionidResult.length > 0 &&  // Check if actionidResult contains data
-      violationResult.length > 0) {
-      const employeeID = employeeidResult[0].me_id; 
-      const offenseID = offenseIdResult[0].mo_offenseid;
-      const actionID = actionidResult[0].mda_actionid;
-      const violationID = violationResult[0].mv_violationid;
+        const violationIDquery = `select mv_violationid from master_violation WHERE mv_description = '${violation}'`;
 
+        try {
+          const violationidresult = await mysql.mysqlQueryPromise(violationIDquery);
+          if (violationidresult && violationidresult.length > 0) {
+            const violationID = violationidresult[0].mv_violationid;
 
-      const data = [
-        [employeeID, offenseID, actionID, violationID, date, createby, status]
-      ];
+          data.push([
+            employeeid, offenseID, actionID, violationID, date, createby, createdate, status
+          ]);
 
-      mysql.InsertTable('offense_disciplinary_actions', data, (insertErr, insertResult) => {
-        if (insertErr) {
-          console.error('Error inserting record: ', insertErr);
-          res.json({ msg: 'insert_failed' });
+          mysql.InsertTable('offense_disciplinary_actions', data, (inserterr, insertresult) => {
+            if (inserterr) {
+              console.error('error inserting record: ', inserterr);
+              res.json({ msg: 'insert failed'});
+            } else {
+              console.log(insertresult);
+              res.json({msg: 'success'});
+            }
+          });
         } else {
-          console.log(insertResult);
-          res.json({ msg: 'success' });
+          console.error('Action ID not found');
+          res.json({ msg: 'violation_id_not_found' });
         }
-      });
+        } catch (violationerror) {
+          console.error('error inserting: ',violationerror);
+          
+        }
+      } else {
+        console.error('Action ID not found');
+        res.json({ msg: 'action_id_not_found' });
+      }
+        
+      } catch (actionerror) {
+        console.error('error inserting: ',actionerror);
+        res.json({ msg: 'error'});
+        
+      }
     } else {
-      res.json({ msg: 'offense_not_found' });
+      console.error('Action ID not found');
+      res.json({ msg: 'offense_id_not_found' });
+    }
+    } catch (offenseerror) {
+      console.error('error inserting record: ',offenseerror);
+      res.json({ msg: 'error'});
     }
   } catch (error) {
     console.log(error);

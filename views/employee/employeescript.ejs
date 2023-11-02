@@ -8,7 +8,36 @@
     LoadPosition();
     LoadModal();
     LoadModalPosition();
+    searchTable();
     //LoadGovermentTable();
+
+    $(document).ready(function() {
+      $("#uploadButton").on("click", function() {
+        const fileInput = document.getElementById("excelFileInput");
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Please select an Excel file to upload.");
+          return;
+        }
+       
+            const formData = new FormData();
+            formData.append("file", file);
+    
+            $.ajax({
+              type: "POST",
+              url: "/employee/upload",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(data) {
+                alert("Data uploaded successfully.");
+              },
+              error: function(xhr, status, error) {
+                alert("Error: " + error);
+              }
+            });
+      });
+    });
 
 
     $(document).on("click", "#employeesavebtn", function () {
@@ -303,6 +332,27 @@
               $('#editemployeeposition').val(`${item.position}`)
               base64String =item.profilePicturePath;
             });
+
+            $.ajax({
+              type: "POST",
+              url: '/employee/getemployeeprofile',
+              data: {
+                employeeid: employeeid,
+              },
+              success: function (result) {
+                if (result.msg === "success") {
+                  const employeeprofile = result.data;
+            
+                  $.each(employeeprofile, (key, item) => {
+                    $("#employeeprofileid").text(item.employeeid);
+                    $("#employeeprofilename").text(item.firstname);
+                    $("#employeeprofiledepartment").text(item.department);
+                    $("#employeeprofileposition").text(item.position);
+                    $("#employeeprofilephone").text(item.contact);
+                  });
+                }
+              }
+            });            
           } else {
             swal("Error fetching employee data", message, "error");
           }
@@ -748,5 +798,90 @@
       },
     });
   });
+
+  $(document).on("click", "#showdisciplinary", function () {
+    $.ajax({
+      type: "POST",
+      url: '/employee/getdisciplinary',
+      data: {
+        employeeid: employeeid,
+      },
+      success: function (json) {
+        console.log("API response", json);
+        
+        // Prepare the data for the DataTable
+        var finalData = [];
+        var data = json.data;
   
+        $.each(data, function (key, item) {
+          finalData.push({
+            actioncode: item.actioncode,
+            offenseid: item.offenseid,
+            description: item.description,
+            date: item.date,
+            status: item.status,
+          });
+        });
+  
+        if ($.fn.DataTable.isDataTable('#dataTabledisciplianary')) {
+          $('#dataTabledisciplianary').DataTable().destroy();
+        }
+  
+        $('#dataTabledisciplianary').DataTable({
+          processing: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          data: finalData, // Set the data for DataTable
+          columns: [
+            { data: "actioncode" },
+            { data: "offenseid" },
+            { data: "description" },
+            { data: "date" },
+            { data: "status" },
+          ],
+          initComplete: function () {
+            console.log('Done');
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.log("API error", error);
+      },
+    });
+  });
+  
+  
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableemployees");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+            }
+        }
+        if (found) {
+            tr[i].style.display = "";
+            found = false;
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
+
+
 </script>
