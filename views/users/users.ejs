@@ -1,0 +1,153 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Users</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#usersmodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTableusers">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee ID</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Access Type</th>
+                        <th>Date Finished</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="usersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                    <div class="col">
+                      <div class="form-floating">
+                        <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                        </select>
+                        <label for="floatingSelectGrid">Employee ID</label>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
+                              <option selected>Choose....</option>
+                              <option value="">Employee</option>
+                              <option value="">HR</option>
+                              <option value="">Admin</option>
+                            </select>
+                            <label for="floatingSelectGrid">Access Type</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="userscreatedby" name="userscreatedby" placeholder="First Name">
+                        <label for="floatingInput">Created By</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
+                              <option selected>Choose....</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
+                            </select>
+                            <label for="floatingSelectGrid">Status</label>
+                          </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="userssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editusersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="editusersname" name="editusersname" aria-label="Floating label select example">
+                      <option selected>Choose....</option>
+                    </select>
+                    <label for="floatingSelectGrid">Employee ID</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                          <option value="">Employee</option>
+                          <option value="">HR</option>
+                          <option value="">Admin</option>
+                        </select>
+                        <label for="floatingSelectGrid">Access Type</label>
+                      </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="edituserscreatedby" name="edituserscreatedby" placeholder="First Name">
+                    <label for="floatingInput">Created By</label>
+                    </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
+                        </select>
+                        <label for="floatingSelectGrid">Status</label>
+                      </div>
+                </div>
+                <br>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="edituserssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

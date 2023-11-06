@@ -239,6 +239,11 @@
     head-title{
       text-align: center;
     }
+    #card-header{
+      width: 370px;
+      margin-left: 3%;
+    }
+
   }
   
   

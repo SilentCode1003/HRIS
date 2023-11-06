@@ -29,6 +29,7 @@ var holidayRouter = require('./routes/holiday');
 var holidayrateRouter = require('./routes/holidayrate');
 var ojtRouter = require('./routes/ojt');
 var announcementRouter = require('./routes/announcement');
+var accessRouter = require('./routes/access');
 var eportalindexRouter = require('./routes/eportalindex');
 var eportalrequestleaveRouter = require('./routes/eportalrequestleave');
 var eportaldisciplinaryactionRouter = require('./routes/eportaldisciplinaryaction');
@@ -36,6 +37,7 @@ var eportalprofileRouter = require('./routes/eportalprofile');
 var eportalsalaryRouter = require('./routes/eportalsalary');
 var eportalcashadvanceRouter = require('./routes/eportalcashadvance');
 var eportalpayslipRouter = require('./routes/eportalpayslip');
+var eportalattendancelayoutRouter = require('./routes/eportalattendance');
 var loginlayoutRouter = require('./routes/login');
 
 
@@ -77,6 +79,7 @@ app.use('/holiday', holidayRouter);
 app.use('/holidayrate', holidayrateRouter);
 app.use('/ojt', ojtRouter);
 app.use('/announcement', announcementRouter);
+app.use('/access', accessRouter);
 app.use('/eportalindex', eportalindexRouter);
 app.use('/eportalrequestleave', eportalrequestleaveRouter);
 app.use('/eportaldisciplinaryaction', eportaldisciplinaryactionRouter);
@@ -84,6 +87,7 @@ app.use('/eportalprofile', eportalprofileRouter);
 app.use('/eportalsalary', eportalsalaryRouter);
 app.use('/eportalcashadvance', eportalcashadvanceRouter);
 app.use('/eportalpayslip', eportalpayslipRouter);
+app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);
 
 // catch 404 and forward to error handler
