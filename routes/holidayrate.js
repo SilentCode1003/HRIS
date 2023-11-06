@@ -126,7 +126,7 @@ router.post('/update', (req, res) => {
     
     let sqlupdate = `UPDATE master_holidayrate SET   
     mhr_holidaydate ='${holidaydate}', 
-    mhr_holidaydate ='${holidayrate}', 
+    mhr_holidayrate ='${holidayrate}', 
     mhr_holidaystatus ='${holidaystatus}',
     mhr_createby ='${createby}' 
     WHERE mhr_holidayrateid ='${holidayrateid}'`;

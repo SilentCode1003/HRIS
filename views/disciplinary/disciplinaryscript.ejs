@@ -1,12 +1,14 @@
 <script>
-  let shiftid = "";
+  let disciplinaryid = "";
   let index = "";
+
 
   $(document).ready(function () {
     console.log("Initialize");
     LoadTable();
     LoadListEmp();
     LoadListviolation();
+    searchTable();
     // LoadListOffensename();
 
     function LoadTable() {
@@ -76,48 +78,61 @@
       });
     }
 
-    $(document).on("click", "#shiftsavebtn", function () {
-      let shiftname = $("#shifthours").val();
-      let status = $("#shiftstatus").val();
-      let department = $("#shiftdepartment").val();
-      let createby = $("#shiftcreatedby").val();
-
-      console.log(`
-  ${shiftname}
-  ${status}
-  ${department}
-  ${createby}
-  `);
-
+    $(document).on("click", "#disciplinarysavebtn", function () {
+      let employeeid = $("#disciplinaryemployeeid").val();
+      let offenseid = $("#disciplinaryoffenseid").val();
+      let actionid = $("#disciplinaryactionid").val();
+      let violation = $("#disciplinaryviolationid").val();
+      let date = $("#disciplinarydate").val();
+      let createby = $("#disciplinarycreatedby").val();
+      let status = $("#disciplinarystatus").val();
+  
       var message = "";
 
-      if (shiftname == "") {
+      if (employeeid == "") {
         message += "shiftname is required ";
       }
 
-      if (status == "") {
+      if (offenseid == "") {
         message += "status is required ";
       }
 
-      if (department == "") {
+      if (actionid == "") {
         message += "department is required ";
       }
 
-      if (createby == "") {
+      if (violation == "") {
         message += "createby is required ";
       }
+
+      if (date == "") {
+        message += "shiftname is required ";
+      }
+
+      if (createby == "") {
+        message += "status is required ";
+      }
+
+
+      if (status == "") {
+        message += "createby is required ";
+      }
+
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
           type: "POST",
-          url: "/shift/save",
+          url: "/disciplinary/save",
           data: {
-            shiftname: shiftname,
-            status: status,
-            department: department,
+            employeeid: employeeid,
+            offenseid: offenseid,
+            actionid: actionid,
+            violation: violation,
+            date: date,
             createby: createby,
+            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -341,7 +356,7 @@
       });
     }
 
-    $("#dataTableshift tbody").on("click", "tr", function () {
+    $("#dataTabledisciplianary tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
         .closest("tr")
@@ -350,27 +365,29 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      shiftid = dataRow[0];
+      disciplinaryid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/shift/getshift",
+        url: "/disciplinary/getdisciplinarytbl",
         data: {
-          shiftid: shiftid,
+          disciplinaryid: disciplinaryid,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#editshiftid").val(item.shiftid);
-              $("#editshift").val(item.shiftname);
-              $("#editshiftdepartment").val(item.department);
+              $("#editshiftid").val(item.disciplinaryid);
+              $("#editshift").val(item.employeeid);
+              $("#editshiftdepartment").val(item.offenseid);
+              $("#editshiftstatus").val(item.actionid);
+              $("#editshiftcreateby").val(item.violation);
+              $("#editshift").val(item.date);
+              $("#editshiftdepartment").val(item.createby);
               $("#editshiftstatus").val(item.status);
-              //$('#editshiftdepartment').val(`${item.department}`);
-              $("#editshiftcreateby").val(item.createby);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -383,48 +400,63 @@
     });
     $(document).on("click", "#editshiftsavebtn", function () {
       console.log("Save button clicked");
-      let id = shiftid;
-      let shiftname = $("#editshift").val();
-      let status = $("#editshiftstatus").val();
-      let department = $("#editshiftdepartment").val();
-      let createby = $("#editshiftcreateby").val();
+      let id = disciplinaryid;
+      let employeeid = $("#editshift").val();
+      let offenseid = $("#editshiftstatus").val();
+      let actionid = $("#editshiftdepartment").val();
+      let violation = $("#editshiftcreateby").val();
+      let date = $("#editshiftstatus").val();
+      let createby = $("#editshiftdepartment").val();
+      let status = $("#editshiftcreateby").val();
 
-      console.log(`${id},
-  ${shiftname},
-  ${status},
-  ${department},
-  ${createby}`);
+      
 
       var message = "";
 
-      if (shiftname === "") {
+      if (employeeid === "") {
         message += "departmentname is required. ";
+      }
+
+      if (offenseid === "") {
+        message += "status is required. ";
+      }
+
+      if (actionid === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (violation === "") {
+        message += "status is required. ";
+      }
+
+      if (date === "") {
+        message += "status is required. ";
+      }
+
+      if (createby === "") {
+        message += "departmenthead is required. ";
       }
 
       if (status === "") {
         message += "status is required. ";
       }
 
-      if (department === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (createby === "") {
-        message += "status is required. ";
-      }
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
           type: "POST",
-          url: "shift/update",
+          url: "disciplinary/update",
           data: {
-            shiftid: id,
-            shiftname: shiftname,
-            status: status,
-            department: department,
+            disciplinaryid: id,
+            employeeid: employeeid,
+            offenseid: offenseid,
+            actionid: actionid,
+            violation: violation,
+            date: date,
             createby: createby,
+            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -458,27 +490,27 @@
         });
       }
     });
-
-    function searchTable() {
-      var input, filter, found, table, tr, td, i, j;
-      input = document.getElementById("myInput");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("dataTableposition");
-      tr = table.getElementsByTagName("tr");
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        for (j = 0; j < td.length; j++) {
-          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-            found = true;
-          }
-        }
-        if (found) {
-          tr[i].style.display = "";
-          found = false;
-        } else {
-          tr[i].style.display = "none";
+  });
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTabledisciplianary");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
         }
       }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
     }
-  });
+  }
+
 </script>

@@ -6,6 +6,8 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
+  
   res.render('announcementlayout', { title: 'Express' });
 });
 

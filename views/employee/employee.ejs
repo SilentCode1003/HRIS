@@ -1,4 +1,6 @@
 <h1 class="font-weight-bold text-danger" id="head-title">Employees</h1>
+<div id="loading" class="loading"></div>
+
 
 <br>
 <br>
@@ -8,10 +10,34 @@
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
         + Add New
       </button>
-      <button type="button" class="btn btn-danger">
-        Import Data
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#openModalButton">
+        Upload
       </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+
+      <!-- The Modal -->
+      
+<div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Batch Upload</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="modal-content">
+            <input type="file" class="form-control-file" id="excelFileInput" accept=".xls, .xlsx" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="uploadButton">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -225,15 +251,15 @@
                     <input type="file" id="editemployeeprofile" name="editemployeeprofile" class="form-control" accept="image/*">
                   </div>
               </div></center>
-              <h5 class="my-3" id="employeeprofilename" >Wendell Blanco</h5>
-              <label for="editphone" class="form-label">Employee ID</label>
-              <p class="text-muted mb-1" id="employeeprofileaddress">123124</p>
-              <label for="editphone" class="form-label">Department:</label>
-              <p class="text-muted mb-1" id="employeeprofiledepartment">IT</p>
-              <label for="editphone" class="form-label">Position:</label>
-              <p class="text-muted mb-1" id="employeeprofileposition">Full Stack Developer</p>
-              <label for="editphone" class="form-label">Phone:</label>
-              <p class="text-muted mb-1" id="employeeprofilephone">09205844176</p>
+              <h5 class="my-3" id="employeeprofilename" ></h5>
+              <label for="employeeprofileid" class="form-label"><i>Employee ID</i></label>
+              <p class="text-muted mb-1" id="employeeprofileid"></p>
+              <label for="employeeprofiledepartment" class="form-label"><i>Department:</i></label>
+              <p class="text-muted mb-1" id="employeeprofiledepartment"></p>
+              <label for="employeeprofileposition" class="form-label"><i>Position:</i></label>
+              <p class="text-muted mb-1" id="employeeprofileposition"></p>
+              <label for="employeeprofilephone" class="form-label"><i>Phone:</i></label>
+              <p class="text-muted mb-1" id="employeeprofilephone"></p>
               
               </div>
               </div>
@@ -249,22 +275,22 @@
                   <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Profile</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Leave History</button>
+                  <button class="nav-link" id="showleavehistory" data-bs-toggle="pill" data-bs-target="#pills-leaves" type="button" role="tab" aria-controls="pills-leave" aria-selected="false">Leave History</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Disciplinary</button>
+                  <button class="nav-link" id="showdisciplinary" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-disciplinary" aria-selected="false">Disciplinary</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Attendance</button>
+                  <button class="nav-link" id="showattendance" data-bs-toggle="pill" data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-attendance" aria-selected="false">Attendance</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Training Attended</button>
+                  <button class="nav-link" id="showtraining" data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab" aria-controls="pills-training" aria-selected="false">Training Attended</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Health Data</button>
+                  <button class="nav-link" id="showhealth" data-bs-toggle="pill" data-bs-target="#pills-healthrecord" type="button" role="tab" aria-controls="pills-health" aria-selected="false">Health Data</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-govermentid" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Goverment ID</button>
+                  <button class="nav-link"  id="showgov" data-bs-toggle="pill" data-bs-target="#pills-govermentid" type="button" role="tab" aria-controls="pills-goverment" aria-selected="false">Goverment ID</button>
                 </li>
                 
               </ul>
@@ -368,7 +394,7 @@
                 </div>
 
                 <!-- Leave History -->
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <div class="tab-pane fade" id="pills-leaves" role="tabpanel" aria-labelledby="pills-contact-tab">
                   <div class="card-body">
                     <div class="table-responsive"  id="table-responsive-id">
                         <table class="table table-striped" id="dataTabledepartment">
@@ -453,7 +479,7 @@
 </div>
 
 <!-- attendance -->
-<div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-contact-tab">
+<div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-attendance">
   <div class="card-body">
     <div class="table-responsive" id="table-responsive-id">
         <table class="table table-striped" id="dataTableattendance">
@@ -474,8 +500,8 @@
 </div>
 
 <!-- Goverment ID -->
-<div class="tab-pane fade" id="pills-govermentid" role="tabpanel" aria-labelledby="pills-contact-tab">
-  <div class="card-body">
+<div class="tab-pane fade" id="pills-govermentid" role="tabpanel" aria-labelledby="pills-govermentid">
+  <div class="card-body" >
     <div class="table-responsive" id="table-responsive-id">
         <table class="table table-striped" id="dataTablegovermentid">
             <thead>
@@ -490,7 +516,7 @@
             </tbody>
         </table>
     </div>
-</div>
+  </div>
 </div>
     
                 
