@@ -1,0 +1,125 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Access</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#accessmodal">
+        + Add New
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTabletraining">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Access Name</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="accessmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Access Type</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                    <div class="col">
+                      <div class="form-floating">
+                        <select class="form-select" id="accessname" name="accessname" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                        </select>
+                        <label for="floatingSelectGrid">Access Name</label>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="accesscreatedby" name="accesscreatedby" placeholder="First Name">
+                        <label for="floatingInput">Created By</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="accessstatus" name="accessstatus" aria-label="Floating label select example">
+                              <option selected>Status</option>
+                              <option value="1">Active</option>
+                              <option value="2">Inactive</option>
+                            </select>
+                            <label for="floatingSelectGrid">Access Type</label>
+                          </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="accesssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editaccessmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Access Type</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="editaccessname" name="editaccessname" aria-label="Floating label select example">
+                      <option selected>Choose....</option>
+                    </select>
+                    <label for="floatingSelectGrid">Access Name</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="editaccesscreatedby" name="editaccesscreatedby" placeholder="First Name">
+                    <label for="floatingInput">Created By</label>
+                    </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="editaccessstatus" name="editaccessstatus" aria-label="Floating label select example">
+                          <option selected>Status</option>
+                          <option value="1">Active</option>
+                          <option value="2">Inactive</option>
+                        </select>
+                        <label for="floatingSelectGrid">Access Type</label>
+                      </div>
+                </div>
+                <br>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="editaccesssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
