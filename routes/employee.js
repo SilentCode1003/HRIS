@@ -2,6 +2,8 @@ const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const XLSX = require('xlsx');
 
 
 const currentYear = moment().format('YY');
@@ -13,6 +15,64 @@ router.get('/', function (req, res, next) {
 });
 
 module.exports = router;
+
+router.post('/upload', (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+
+  const fileData = req.file.buffer;
+  const workbook = XLSX.read(fileData, { type: 'buffer' });
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  const excelData = XLSX.utils.sheet_to_json(worksheet);
+
+  // Assuming your Excel file has columns like 'name' and 'email'
+  excelData.forEach((row) => {
+    const sql = 'INSERT INTO master_employee (name, email) VALUES (?, ?)';
+    db.query(sql, [row.name, row.email], (err, result) => {
+      if (err) {
+        console.error('Error inserting data: ' + err.message);
+      } else {
+        console.log('Inserted data with ID: ' + result.insertId);
+      }
+    });
+  });
+
+  res.status(200).json({ message: 'Data uploaded successfully.' });
+});
+
+
+
+router.post('/getemployeeprofile', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql =  `select 
+    me_id as employeeid,
+    concat(me_firstname, ' ', me_lastname) AS firstname,
+    md_departmentname as department,
+    mp_positionname as position,
+    me_phone as contact
+   from master_employee
+   LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+   LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    where me_id = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql).then((result) => {
+      res.json({
+        msg:'success',data: result
+      });
+    }).catch((error) => {
+      res.json({
+        msg: 'error', error
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: error
+    })
+    
+  }
+});
 
 router.post('/getemployee', (req, res) => {
   try {
@@ -186,6 +246,7 @@ router.post('/save', async (req, res) => {
                 console.error('Error inserting record: ', insertErr);
                 res.json({ msg: 'insert_failed' });
               } else {
+                
                 console.log(insertResult);
                 res.json({ msg: 'success' });
               }
@@ -296,6 +357,155 @@ router.post('/update', async (req, res) => {
     res.status(500).json({ msg: 'Internal server error', error: error.message });
   }
 });
+
+router.post('/getgovid',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    mg_idtype as idtype,
+    mg_idnumber as idnumber,
+    mg_issuedate as issuedate,
+    mg_expirydate as expirydate
+    from master_govid
+    inner join master_employee on mg_employeeid = me_id
+    where mg_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
+router.post('/gethealth',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    mh_bloodtype as bloodtype,
+    mh_medicalcondition as medicalcondition,
+    mh_prescribemedications as prescribemedications,
+    mh_lastcheckup as lastcheckup,
+    mh_insurance as insurance,
+    mh_insurancenumber as insurancenumber
+    from master_health
+    inner join master_employee on mh_employeeid = me_id
+    where mh_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
+
+router.post('/gettraining',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = ` select 
+    mt_name as name,
+    mt_startdate as startdate,
+    mt_enddate as enddate,
+    mt_location as location,
+    mt_status as status
+    from master_training 
+    inner join master_employee on mt_employeeid = me_id
+    where mt_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+});
+
+router.post('/getdisciplinary',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    mda_description as actioncode,
+    mo_offensename as offenseid,
+    mv_description as description,
+    oda_date as date,
+    oda_status as status
+    from offense_disciplinary_actions 
+    LEFT JOIN master_employee ON offense_disciplinary_actions.oda_employeeid = me_id
+    LEFT JOIN master_offense ON offense_disciplinary_actions.oda_offenseid = mo_offenseid
+    LEFT JOIN master_disciplinary_action ON offense_disciplinary_actions.oda_actionid = mda_actionid
+    LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid
+    where oda_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      console.log(result);
+      console.log("SQL query:", sql);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+    .catch((error) => {
+      return res.json({
+        msg: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+})
+
 
 
 

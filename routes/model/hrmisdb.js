@@ -389,3 +389,22 @@ exports.Salary = (data) => {
 
     return dataResult;
 };
+
+exports.Master_User = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            userid: key.mu_userid,
+            employeeid: key.mu_employeeid,
+            username: key.mu_username,
+            password: key.mu_password,
+            accesstype: key.mu_accesstype,
+            createby: key.mu_createby,
+            createdate: key.mu_createdate,
+            status: key.mu_status,
+        });
+    });
+
+    return dataResult;
+};
