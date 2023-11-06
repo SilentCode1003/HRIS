@@ -116,6 +116,10 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Salary(results));
       }
 
+      if (table == "Master_User") {
+        callback(null, model.Master_User(results));
+      }
+
     });
   } catch (error) {
 

@@ -6,6 +6,7 @@
         LoadTable();
         LoadList();
         LoadEditEmp();
+        searchTable();
 
         
             
@@ -349,7 +350,7 @@ function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();
-    table = document.getElementById("govermentidmodal");
+    table = document.getElementById("dataTablegovermentid");
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");

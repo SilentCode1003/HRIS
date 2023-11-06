@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const { SetMongo } = require('./routes/controller/mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -39,34 +40,10 @@ var eportalpayslipRouter = require('./routes/eportalpayslip');
 var eportalattendancelayoutRouter = require('./routes/eportalattendance');
 var loginlayoutRouter = require('./routes/login');
 
+
 var app = express();
 
-const session = require('express-session');
-const mongoose = require('mongoose');
-const MongoDBSession = require('connect-mongodb-session')(session);
-
-const mysql = require('./routes/repository/hrmisdb');
-
-//mongodb
-mongoose.connect('mongodb://localhost:27017/HRMIS')
-  .then((res) => {
-    console.log("MongoDB Connected!");
-  });
-
-const store = new MongoDBSession({
-  uri: 'mongodb://localhost:27017/HRMIS',
-  collection: 'HRMISSessions',
-});
-
-//Session
-app.use(
-  session({
-    secret: "5L Secret Key",
-    resave: false,
-    saveUninitialized: false,
-    store: store
-  })
-);
+SetMongo(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -114,12 +91,12 @@ app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
