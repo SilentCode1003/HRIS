@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-striped" id="dataTabletraining">
+            <table class="table table-striped" id="dataTableaccess">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -42,11 +42,9 @@
             <form>
                     <div class="col">
                       <div class="form-floating">
-                        <select class="form-select" id="accessname" name="accessname" aria-label="Floating label select example">
-                          <option selected>Choose....</option>
-                        </select>
-                        <label for="floatingSelectGrid">Access Name</label>
-                      </div>
+                        <input type="text" class="form-control" id="accessname" name="accessname" placeholder="First Name">
+                        <label for="floatingInput">Access Name</label>
+                        </div>
                     </div>
                     <br>
                     <div class="col">
@@ -60,8 +58,8 @@
                         <div class="form-floating">
                             <select class="form-select" id="accessstatus" name="accessstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
                             </select>
                             <label for="floatingSelectGrid">Access Type</label>
                           </div>
@@ -89,10 +87,8 @@
             <form>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="editaccessname" name="editaccessname" aria-label="Floating label select example">
-                      <option selected>Choose....</option>
-                    </select>
-                    <label for="floatingSelectGrid">Access Name</label>
+                    <input type="text" class="form-control" id="editaccessname" name="editaccessname" placeholder="First Name">
+                    <label for="floatingInput">Access Name</label>
                   </div>
                 </div>
                 <br>
@@ -107,8 +103,8 @@
                     <div class="form-floating">
                         <select class="form-select" id="editaccessstatus" name="editaccessstatus" aria-label="Floating label select example">
                           <option selected>Status</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
