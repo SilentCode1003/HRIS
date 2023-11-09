@@ -1,0 +1,18 @@
+/* Initial state: Sidebar hidden */
+#accordionSidebar {
+  transform: translateX(-260px);
+  transition: transform 0.3s;
+}
+
+/* Toggled state: Sidebar visible */
+#accordionSidebar.active {
+  transform: translateX(0);
+}
+
+/* Hamburger menu icon styling */
+.hamburger-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+}

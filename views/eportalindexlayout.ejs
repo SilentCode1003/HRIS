@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<%- include("eportalheader.ejs")%>
+
+</head>
+
+<body id="page-top">
+
+    <%- include("./eportalsidebar.ejs")%>
+    
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="wrapper">
+            <%- include("./eportalrequestleave/eportalrequestleave.ejs")%>
+
+            <div id="content">
+                
+            </div>
+    
+            <!-- Sidebar -->
+            <!-- End of Sidebar -->
+    
+            <%- include("./employeetopbar/employeetopbar.ejs")%>
+            <%- include("./employeetopbar/employeetopbarscript.ejs")%>
+    
+            <!-- Content Wrapper -->
+            <!-- End of Content Wrapper -->
+    
+        </div>
+    </div>
+
+    <%- include("./scripts.ejs")%>
+    <%- include("./index/indexscript.ejs")%>
+</body>
+
+</html>

@@ -165,9 +165,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.newEmployeeId);
+            $(options).html(item.firstname);
             $('#trainingemployeename').append(options);
-            console.log(item.newEmployeeId);
+            console.log(item.firstname);
         });
       },
       error: function (result) {
@@ -187,9 +187,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.newEmployeeId);
+          $(options).html(item.firstname);
           $('#edittrainingemployeename').append(options);
-          console.log(item.newEmployeeId);
+          console.log(item.firstname);
         });
       },
       error: function (result) {
