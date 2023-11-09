@@ -1,11 +1,19 @@
 const model = require('../model/hrmisdb')
 const mysql = require('mysql');
+const { Encrypter, Decrypter } = require('./crytography');
 require("dotenv").config();
+
+let password = '';
+Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+  password = encrypted;
+})
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
   user: process.env._USER_ADMIN,
-  password: process.env._PASSWORD_ADMIN,
+  password: password,
   database: process.env._DATABASE_ADMIN,
   port: 3306
 });
@@ -542,23 +550,6 @@ exports.UpdateMultiple = async (sql, data, callback) => {
     console.log(error);
   }
 };
-
-
-
-// exports.UpdateMultiple = async (sql, data, callback) => {
-//   try {
-//     connection.query(sql, data, (error, results, fields) => {
-//       if (error) {
-//         callback(error, null);
-//       }
-//       console.log("Rows affected:", results.affectedRows);
-
-//       callback(null, `Rows affected: ${results.affectedRows}`);
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 // Helper function to promisify MySQL queries that modify data (e.g., INSERT, UPDATE, DELETE)
 exports.mysqlQueryPromise = (sql) => {
