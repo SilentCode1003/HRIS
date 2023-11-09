@@ -8,31 +8,47 @@
 
 <body id="page-top">
 
-    <%- include("./eportalsidebar.ejs")%>
-    
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="wrapper">
-            <%- include("./eportalrequestleave/eportalrequestleave.ejs")%>
+        <!-- Sidebar -->
+        <%- include("eportalsidebar.ejs")%>
+        <!-- End of Sidebar -->
 
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
             <div id="content">
-                
-            </div>
-    
-            <!-- Sidebar -->
-            <!-- End of Sidebar -->
-    
-            <%- include("./employeetopbar/employeetopbar.ejs")%>
-            <%- include("./employeetopbar/employeetopbarscript.ejs")%>
-    
-            <!-- Content Wrapper -->
-            <!-- End of Content Wrapper -->
-    
-        </div>
-    </div>
 
-    <%- include("./scripts.ejs")%>
-    <%- include("./index/indexscript.ejs")%>
+                <!-- Topbar -->
+                <%- include("topbar.ejs")%>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <%- include("./eportalindex/eportalindex.ejs")%>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <%- include("scripts.ejs")%>
+    <%- include("./eportalindex/eportalindexscript.ejs")%>
 </body>
 
 </html>
