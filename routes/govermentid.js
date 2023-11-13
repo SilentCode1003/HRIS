@@ -1,12 +1,14 @@
 const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 var express = require('express');
+const { Validator } = require('./controller/middleware');
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('govermentidlayout', { title: 'Express' });
+  //res.render('govermentidlayout', { title: 'Express' });
+  Validator(req, res, 'govermentidlayout');
 });
 
 module.exports = router;
@@ -106,7 +108,19 @@ router.post('/save', async (req, res) => {
 
 router.get('/load', (req, res) => {
   try {
-    let sql = 'select * from master_govid';
+    let sql = `    
+    SELECT 
+mg_governmentid,
+concat(me_firstname, ' ', me_lastname) AS mg_employeeid,
+mg_idtype,
+mg_idnumber,
+mg_issuedate,
+mg_expirydate,
+mg_createby,
+mg_createdate,
+mg_status
+FROM master_govid
+LEFT JOIN master_employee ON master_govid.mg_employeeid = me_id`;
 
     mysql.Select(sql, 'Master_GovId', (err, result) => {
       if (err) console.error('Error: ', err);
