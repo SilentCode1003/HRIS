@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const XLSX = require('xlsx');
+const { Validator } = require('./controller/middleware');
 
 
 const currentYear = moment().format('YY');
@@ -11,7 +12,9 @@ const currentMonth = moment().format('MM');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('employeelayout', { title: 'Express' });
+  //res.render('employeelayout', { title: 'Express' });
+
+  Validator(req, res, 'employeelayout');
 });
 
 module.exports = router;

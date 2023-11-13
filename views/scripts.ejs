@@ -12,7 +12,7 @@ aria-hidden="true">
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <button class="btn btn-danger" id="logoutBtn" name="logoutBtn">Logout</button>
         </div>
     </div>
 </div>
@@ -50,3 +50,38 @@ aria-hidden="true">
 <!-- Page level custom scripts -->
 <!-- <script src="/javascripts/js/demo/datatables-demo.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<script>
+     $(document).on("click", "#logoutBtn", function () {
+          $.ajax({
+            type: "POST",
+            url: "/login/logout",
+            success: function (result) {
+                swal({
+                    title: "success",
+                    text: "Log in Successfully",
+                    icon: "success",
+                    button: "Lets gooo!!",
+                  })
+                  .then(results => {
+                    window.location.reload();
+                  location.replace("/");
+                  });
+                },
+                error: function (err) {
+                  errormsg(err);
+                },
+              });
+            });
+</script>
+
+<script>
+  function showSweetAlert(title, text, icon, buttonText) {
+    swal({
+      title: title,
+      text: text,
+      icon: icon,
+      button: buttonText,
+    });
+  }
+</script>

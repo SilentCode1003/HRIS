@@ -13,7 +13,6 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col">Name</th>
         <th scope="col">Date Started</th>
         <th scope="col">Date Finished</th>
         <th scope="col">Leave Type</th>
@@ -23,41 +22,6 @@
         <th scope="col">Action</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Name">Wendell</td>
-        <td data-label="Date Started">2000-01-01</td>
-        <td data-label="Date Finished">2000-01-01</td>
-        <td data-label="Leave Type">vacation leave</td>
-        <td data-label="Reason">Masakit ulo</td>
-        <td data-label="Status">Approved</td>
-        <td data-label="Applied Date">3</td>
-        <td data-label="Action">Action</td>
-    </tr>
-    <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Name">Wendell</td>
-        <td data-label="Date Started">2000-01-01</td>
-        <td data-label="Date Finished">2000-01-01</td>
-        <td data-label="Leave Type">vacation leave</td>
-        <td data-label="Reason">Masakit ulo</td>
-        <td data-label="Status">Approved</td>
-        <td data-label="Applied Date">3</td>
-        <td data-label="Action">Action</td>
-    </tr>
-    <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Name">Wendell</td>
-        <td data-label="Date Started">2000-01-01</td>
-        <td data-label="Date Finished">2000-01-01</td>
-        <td data-label="Leave Type">vacation leave</td>
-        <td data-label="Reason">Masakit ulo</td>
-        <td data-label="Status">Approved</td>
-        <td data-label="Applied Date">3</td>
-        <td data-label="Action">Action</td>
-    </tr>
-    </tbody>
   </table>
         </div>
       </div>
@@ -72,55 +36,32 @@
               </div>
               <div class="modal-body">
                 <form>
-                  <div class="row g-3">
-                  <div class="col">
-                    <label for="editfname" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" value="Wendell" disabled>
-                  </div>
-                  <div class="col">
-                    <label for="editlname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" value="Blanco" disabled>
-                  </div>
-                  </div>
-                  <br>
-                  <div class="row g-3">
-                    <div class="col">
-                      <label for="editfname" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" value="09205844276" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="editlname" class="form-label">Email</label>
-                      <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" value="Blanco@gmail.com" disabled>
-                    </div>
-                    
-                    </div>
-                    <br>
                     <div class="row g-3">
                       <div class="col">
                         <label for="editgender" class="form-label">Leave Type</label>
-                        <select class="form-select" id="editemployeegender" name="editemployeegender">
+                        <select class="form-select" id="leavetype" name="leavetype">
                           <option  selected>Choose...</option>
-                          <option value="1">Service Incentive Leave</option>
-                          <option value="2">Vacation Leave</option>
-                          <option value="3">Sick Leave</option>
-                          <option value="4">Maternity Leave</option>
-                          <option value="5">Paternity Leave</option>
-                          <option value="6">Solo Parent Leave</option>
+                          <option value="Service Incentive Leave">Service Incentive Leave</option>
+                          <option value="Vacation Leave">Vacation Leave</option>
+                          <option value="Sick Leave">Sick Leave</option>
+                          <option value="Maternity Leave">Maternity Leave</option>
+                          <option value="Paternity Leave">Paternity Leave</option>
+                          <option value="Solo Parent Leave">Solo Parent Leave</option>
                         </select>
                       </div>
                       <div class="col">
                         <label for="editemail" class="form-label">Start Leave Date</label>
-                        <input type="date" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays">
+                        <input type="date" class="form-control" id="startldate" name="startldate">
                       </div>
                       <div class="col">
                         <label for="editpassword" class="form-label">End Leave Date</label>
-                        <input type="date" class="form-control" id="pendingleaveaperiod" name="pendingleaveaperiod">
+                        <input type="date" class="form-control" id="endldate" name="endldate">
                       </div>
                       </div>
                         <div class="row g-3">
                           <div class="mb-3">
                             <label for="message-text" class="col-form-label">Reason:</label>
-                            <textarea class="form-control" id="pendingleavereason" name="pendingleavereason"></textarea>
+                            <textarea class="form-control" id="leavereason" name="leavereason"></textarea>
                           </div>
                           </div>
                 </form>

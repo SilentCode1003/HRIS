@@ -1,6 +1,7 @@
 var express = require('express');
 const { Encrypter } = require('./repository/crytography');
-const { Select } = require('./repository/hrmisdb');
+const { Select, mysqlQueryPromise } = require('./repository/hrmisdb');
+const { UserLogin } = require('./helper');
 var router = express.Router();
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -19,15 +20,17 @@ router.post('/login', (req, res) => {
       console.log(encrypted);
 
       let sql = `select 
-        mu_employeeid as employeeid,
-        concat(me_firstname,'',me_lastname) as fullname,
-        mu_accesstype as accesstype
-        from master_user
-        inner join master_access on mu_accesstype = ma_accessid
-        left join master_employee on mu_employeeid = me_id
+      mu_employeeid as employeeid,
+      concat(me_firstname,'',me_lastname) as fullname,
+      ma_accessname as accesstype
+      from master_user
+      inner join master_access on mu_accesstype = ma_accessid
+      left join master_employee on mu_employeeid = me_id
         where mu_username ='${username}'  and mu_password = '${encrypted}'`;
-        
-      Select(sql, 'Master_User', (err, result) => {
+
+      console.log(sql);
+
+      mysqlQueryPromise(sql).then((result) => {
         if (err) console.error("Error: ", err);
         if (result.length != 0) {
           let data = UserLogin(result);
@@ -50,6 +53,10 @@ router.post('/login', (req, res) => {
             msg: "incorrect",
           });
         }
+      }).catch((error) => {
+        return res.json({
+          msg: "error",
+        });
       });
     });
   } catch (error) {
@@ -58,3 +65,14 @@ router.post('/login', (req, res) => {
     });
   }
 });
+
+router.post('/logout',(req, res) => {
+  req.session.destroy((err) => {
+    if(err) res.json({
+      msg: err
+    })
+    res.json({
+      msg: 'success',
+    })
+  })
+})

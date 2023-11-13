@@ -1,0 +1,73 @@
+<script>
+    $(document).ready(function () {
+        console.log('Initialize');
+        let employeeid = "<%= employeeid %>";
+        LoadTable();
+
+        function LoadTable() {
+            $("#dataTabledisciplinaryaction").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                type: "GET", 
+                ajax: {
+                    url: "/eportaldisciplinaryaction/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+                            //var action = "";
+                            //var status = item.status;
+
+                            //action = `
+                      //<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovermentidmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    //`;
+
+                            finalData.push({
+                                disciplinaryid: item.disciplinaryid,
+                                offenseid: item.offenseid,
+                                actionid: item.actionid,
+                                violation: item.violation,
+                                date: item.date,
+                                createby: item.createby,
+                                createdate: item.createdate,
+                                status: item.status,
+                            });
+                        });
+
+                        console.log(finalData);
+
+                        return finalData;
+                    },
+
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "disciplinaryid" },
+                    { data: "offenseid" },
+                    { data: "actionid" },
+                    { data: "violation" },
+                    { data: "date" },
+                    { data: "createby" },
+                    { data: "createdate" },
+                    { data: "status" },
+                ],
+                initComplete: function () {
+                    console.log('Done');
+                },
+            });
+        }
+    });
+</script>
