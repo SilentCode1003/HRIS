@@ -10,12 +10,17 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 })
 
+// Decrypter('211cd2b78344b571c748d6d15c1f64f0', (err, encrypted) => {
+//   if (err) console.error("Error: ", err);
+//   console.log(encrypted);
+//   password = encrypted;
+// })
+
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
   user: process.env._USER_ADMIN,
   password: password,
   database: process.env._DATABASE_ADMIN,
-  port: 3306
 });
 
 exports.CheckConnection = () => {
