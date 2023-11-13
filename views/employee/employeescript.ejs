@@ -146,25 +146,12 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                });
+              showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
+              window.location.reload();
               LoadTable();
-            } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
-            } else {
-              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+            if (result.msg === "exist") {
+              showSweetAlert("Data already exists!", "You clicked the button!", "warning");
             }
           },
           error: function (err) {

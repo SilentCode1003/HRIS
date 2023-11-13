@@ -53,8 +53,14 @@
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="healthrecordbloodtype" name="healthrecordbloodtype" aria-label="Floating label select example">
-                              <option value="1">A</option>
-                              <option value="2">B</option>
+                              <option value="A+">A+</option>
+                              <option value="B+">B+</option>
+                              <option value="AB+">AB+</option>
+                              <option value="O+">O+</option>
+                              <option value="A-">A-</option>
+                              <option value="B-">B-</option>
+                              <option value="AB-">AB-</option>
+                              <option value="O-">O-</option>
                             </select>
                             <label for="floatingSelectGrid">Blood Type</label>
                           </div>
@@ -129,7 +135,7 @@
   </div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editdepartmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edithealthrecordmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -141,7 +147,7 @@
                 <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="healthrecordemployeeid" name="healthrecordemployeeid" aria-label="Floating label select example">
+                            <select class="form-select" id="edithealthrecordemployeeid" name="edithealthrecordemployeeid" aria-label="Floating label select example">
                             </select>
                             <label for="floatingSelectGrid">Employee ID</label>
                           </div>
@@ -150,8 +156,14 @@
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="edithealthrecordbloodtype" name="edithealthrecordbloodtype" aria-label="Floating label select example">
-                              <option value="1">A</option>
-                              <option value="2">B</option>
+                                <option value="A+">A+</option>
+                                <option value="B+">B+</option>
+                                <option value="AB+">AB+</option>
+                                <option value="O+">O+</option>
+                                <option value="A-">A-</option>
+                                <option value="B-">B-</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O-">O-</option>
                             </select>
                             <label for="floatingSelectGrid">Blood Type</label>
                           </div>
@@ -186,7 +198,7 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="vhealthrecordinsurance" name="edithealthrecordinsurance" placeholder="First Name">
+                        <input type="text" class="form-control" id="edithealthrecordinsurance" name="edithealthrecordinsurance" placeholder="First Name">
                         <label for="floatingInput">Insurance</label>
                         </div>
                     </div>

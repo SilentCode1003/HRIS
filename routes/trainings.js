@@ -1,10 +1,12 @@
+const { Validator } = require('./controller/middleware');
 const mysql = require('./repository/hrmisdb');
 var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('trainingslayout', { title: 'Express' });
+  //res.render('trainingslayout', { title: 'Express' });
+  Validator(req, res, 'trainingslayout');
 });
 
 module.exports = router;

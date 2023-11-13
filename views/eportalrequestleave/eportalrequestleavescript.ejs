@@ -1,0 +1,132 @@
+<script>
+    $(document).ready(function () {
+        console.log('Initialize');
+        let employeeid = "<%= employeeid %>";
+        LoadTable();
+
+        function LoadTable() {
+            $("#dataTableapplyleave").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                type: "GET", 
+                ajax: {
+                    url: "/eportalrequestleave/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+                            var action = "";
+                            var status = item.status;
+
+                            action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovermentidmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    `;
+
+                            finalData.push({
+                                leaveid: item.leaveid,
+                                leavestartdate: item.leavestartdate,
+                                leaveenddate: item.leaveenddate,
+                                leavetype: item.leavetype,
+                                reason: item.reason,
+                                status: item.status,
+                                applieddate: item.applieddate,
+                                action: action,
+                            });
+                        });
+
+                        console.log(finalData);
+
+                        return finalData;
+                    },
+
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "leaveid" },
+                    { data: "leavestartdate" },
+                    { data: "leaveenddate" },
+                    { data: "leavetype" },
+                    { data: "reason" },
+                    { data: "status" },
+                    { data: "applieddate" },
+                    { data: "action" },
+                ],
+                initComplete: function () {
+                    console.log('Done');
+                },
+            });
+        }
+
+        $(document).on("click", "#pendingleavesavebtn", function () {
+            let startdate = $("#startldate").val();
+            let enddate = $("#endldate").val();
+            let leavetype = $("#leavetype").val();
+            let reason = $("#leavereason").val();
+
+            var message = "";
+
+            if (startdate == "") {
+                message += "shiftname is required ";
+            }
+
+            if (enddate == "") {
+                message += "status is required ";
+            }
+
+            if (leavetype == "") {
+                message += "department is required ";
+            }
+
+            if (reason == "") {
+                message += "createby is required ";
+            }
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/eportalrequestleave/submit",
+                    data: {
+                        startdate: startdate,
+                        enddate: enddate,
+                        leavetype: leavetype,
+                        reason: reason,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                          swal("Update Successfully","You clicked the button!","success",)
+                            .then(results => {
+                              window.location.reload();
+                            });
+                          LoadTable();
+                        } else if (result.msg == "exist") {
+                          swal("Exist","Data already exists!","warning",);
+                        }
+                    },
+                    error: function (err) {
+                      swal("Error", "An error occurred while saving data.", "error");
+                    },
+                });
+                
+            }
+
+        });
+
+    });
+
+
+</script>
