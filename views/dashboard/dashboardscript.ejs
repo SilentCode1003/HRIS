@@ -1,3 +1,70 @@
 <script>
+    $(document).ready(function(){
+        console.log('Initialize');
+        LoadTable();
+        //LoadList();
+        //LoadPerformanceList();
     
+        function LoadTable() {
+            $("#dataTableleaverequest").DataTable({
+              destroy: true,
+              processing: true,
+              serverSide: true,
+              paging: false,
+              searching: false,
+              info: false,
+              scrollY: 400,
+              scrollCollapse: true,
+              serverMethod: "GET",
+              ajax: {
+                url: "/load",
+                dataSrc: (json) => {
+                  var finalData = [];
+                  var data = json.data;
+      
+                  console.log(data);
+                  $.each(data, (key, item) => {
+                    var action = "";
+                    var status = item.status;
+    
+                    action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#dashboardleavemodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+      
+                    finalData.push({
+                        employeeid: item.employeeid,
+                        leavestartdate: item.leavestartdate,
+                        leaveenddate: item.leaveenddate,
+                        leavetype: item.leavetype,
+                        reason: item.reason,
+                        applieddate: item.applieddate,
+                        action: action,
+                    });
+                  });
+      
+                  return finalData;
+                },
+              },
+              columnDefs: [
+                {
+                  targets: 1,
+                  className: "td-indent",
+                },
+              ],
+              columns: [
+                { data: "employeeid" },
+                { data: "leavestartdate"},
+                { data: "leaveenddate" },
+                { data: "leavetype" },
+                { data: "reason" },
+                { data: "applieddate" },
+                { data: "action" },
+              ],
+              initComplete: function () {
+                console.log('Done');
+              },
+            });
+          }
+
+      });
 </script>

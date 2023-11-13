@@ -16,27 +16,22 @@ module.exports = router;
 
 router.get('/load', (req, res,) => {
   try {
-    let sql = `  
-    select * from leaves
+    let sql = `select 
+    concat(me_firstname,'',me_lastname) as l_employeeid,
+    l_leavestartdate,
+    l_leaveenddate,
+    l_leavetype,
+    l_leavereason,
+    l_leaveapplieddate
+    from leaves
+    left join master_employee on leaves.l_employeeid = me_id
     where l_leavestatus = 'Pending'`;
+    
+    mysql.Select(sql, 'Leaves', (err, result) => {
+      if (err) console.error('Error: ', err);
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: result
-        });
-      } else {
-        res.status(404).json({
-          msg: "leave not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching leave data",
-        error: error
+      res.json({
+        msg: 'success', data: result
       });
     });
   } catch (error) {

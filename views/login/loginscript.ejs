@@ -74,24 +74,18 @@
             password: password,
           },
           success: function (result) {
-            console.log(result.data[0].accesstype);
-            if (result.msg === "success") {
-              showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
-              //window.location.reload();
-              if (result.data[0].accesstype == 'Employee') {
-                location.replace("/eportalindex");
-              }
-              else {
-                location.replace("/");
-              }
-
-            }
-            if (result.msg === "incorrect") {
+            if (result.msg == "success") {
+              swal("Save Successfully","You clicked the button!","success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } if (result.msg === "incorrect") {
               showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
             }
           },
           error: function (err) {
-            errormsg(err);
+            swal("Error", "An error occurred while saving data.", "error");
           },
         });
       }
