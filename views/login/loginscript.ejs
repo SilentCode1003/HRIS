@@ -77,7 +77,12 @@
             if (result.msg == "success") {
               swal("Save Successfully","You clicked the button!","success",)
                 .then(results => {
-                  window.location.reload();
+                  if (result.data[0].accesstype == 'Employee') {
+                    location.replace("/eportalindex");
+                  }
+                  else {
+                    location.replace("/");
+                  }
                 });
               LoadTable();
             } if (result.msg === "incorrect") {
