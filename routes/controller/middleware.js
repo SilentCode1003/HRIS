@@ -1,78 +1,78 @@
 var roleacess = [
   {
-    role: "Administartor",
+    role: "Admin",
     routes: [
       {
-        layout: "dashboard",
+        layout: "indexlayout",
       },
       {
-        layout: "allleave",
+        layout: "accesslayout",
       },
       {
-        layout: "announcement",
+        layout: "allleavelayout",
       },
       {
-        layout: "approvedleave",
+        layout: "announcementlayout",
       },
       {
-        layout: "attendance",
+        layout: "approvedleavelayout",
       },
       {
-        layout: "department",
+        layout: "attendancelayout",
       },
       {
-        layout: "disciplinary",
+        layout: "departmentlayout",
       },
       {
-        layout: "disciplinaryaction",
+        layout: "disciplinarylayout",
       },
       {
-        layout: "employee",
+        layout: "disciplinaryactionlayout",
       },
       {
-        layout: "governmentid",
+        layout: "employeelayout",
       },
       {
-        layout: "healthrecord",
+        layout: "govermentidlayout",
       },
       {
-        layout: "holiday",
+        layout: "healthrecordlayout",
       },
       {
-        layout: "holidayrate",
+        layout: "holidaylayout",
       },
       {
-        layout: "index",
+        layout: "holidayratelayout",
       },
       {
-        layout: "offenses",
+        layout: "offenseslayout",
       },
       {
-        layout: "ojt",
+        layout: "ojtlayout",
       },
       {
-        layout: "pendingleave",
+        layout: "pendingleavelayout",
       },
       {
-        layout: "performance",
+        layout: "performancelayout",
       },
       {
-        layout: "position",
+        layout: "positionlayout",
       },
       {
-        layout: "rejectedleave",
+        layout: "rejectedleavelayout",
       },
       {
-        layout: "shift",
+        layout: "shiftlayout",
       },
       {
-        layout: "trainings",
+        layout: "trainingslayout",
       },
       {
-        layout: "users",
+        layout: "userslayout",
       },
       {
-        layout: "violation",
+        layout: "violationlayout",
       },
     ],
   },
@@ -80,28 +80,96 @@ var roleacess = [
     role: "Employee",
     routes: [
       {
-        layout: "employeedashboard",
+        layout: "eportalindexlayout",
       },
       {
-        layout: "eportalcashadvance",
+        layout: "eportalattendancelayout",
       },
       {
-        layout: "eportaldisciplinaryaction",
+        layout: "eportalcashadvancelayout",
       },
       {
-        layout: "eprotalindex",
+        layout: "eportaldisciplinaryactionlayout",
       },
       {
-        layout: "eportalpayslip",
+        layout: "eportalpaysliplayout",
       },
       {
-        layout: "eportalrequestleave",
+        layout: "eportalrequestleavelayout",
       },
       {
-        layout: "eportalprofile",
+        layout: "eportalprofilelayout",
       },
       {
-        layout: "eportalsalary",
+        layout: "eportalsalarylayout",
+      },
+    ],
+  },
+  {
+    role: "HR",
+    routes: [
+      {
+        layout: "indexlayout",
+      },
+      {
+        layout: "allleavelayout",
+      },
+      {
+        layout: "announcementlayout",
+      },
+      {
+        layout: "approvedleavelayout",
+      },
+      {
+        layout: "attendancelayout",
+      },
+      {
+        layout: "disciplinarylayout",
+      },
+      {
+        layout: "disciplinaryactionlayout",
+      },
+      {
+        layout: "employeelayout",
+      },
+      {
+        layout: "govermentidlayout",
+      },
+      {
+        layout: "healthrecordlayout",
+      },
+      {
+        layout: "holidaylayout",
+      },
+      {
+        layout: "holidayratelayout",
+      },
+      {
+        layout: "offenseslayout",
+      },
+      {
+        layout: "ojtlayout",
+      },
+      {
+        layout: "pendingleavelayout",
+      },
+      {
+        layout: "performancelayout",
+      },
+      {
+        layout: "positionlayout",
+      },
+      {
+        layout: "rejectedleavelayout",
+      },
+      {
+        layout: "shiftlayout",
+      },
+      {
+        layout: "trainingslayout",
+      },
+      {
+        layout: "violationlayout",
       },
     ],
   },
@@ -109,10 +177,16 @@ var roleacess = [
 
 exports.Validator = function (req, res, layout) {
   console.log(layout);
-  console.log(roleacess.length);
+  //console.log(roleacess.length);
 
-  if (req.session.accesstype == "User" && layout == "index") {
-    return res.redirect("/dashboard");
+  if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
+    console.log('hit');
+      return res.render(`${layout}`, {
+        employeeid: req.session.employeeid,
+        fullname: req.session.fullname,
+        accesstype: req.session.accesstype,
+      });
+    
   } else {
     roleacess.forEach((key, item) => {
       var routes = key.routes;

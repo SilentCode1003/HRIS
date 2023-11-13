@@ -1,65 +1,21 @@
 <script>
-
-    $(document).ready(function() {
-      console.log('Initialize');
-      document.addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-          let username = $("#username").val();
-          let password = $("#password").val();
-
-          console.log(`${username},
-          ${password}`);
-  
-          var message = "";
-  
-          if (username == "") {
-            message += "Username ";
-          }
-          if (password == "") {
-            message += "Password ";
-          }
-  
-          if (message != "") {
-            warning("Required", `Please fill up ${message}`);
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "/login/login",
-              data: {
-                username: username,
-                password: password,
-              },
-              success: function (result) {
-                if (result.msg == "success") {
-                  location.replace("/");
-                }
-  
-                if (result.msg == "incorrect") {
-                  info("Invalid Credentials","Username and Password do not match");
-                }
-              },
-              error: function (err) {
-                errormsg(err);
-              },
-            });
-          }
-        }
-      });
-  
-      $(document).on("click", "#loginBtn", function () {
+  $(document).ready(function () {
+    console.log('Initialize');
+    document.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
         let username = $("#username").val();
         let password = $("#password").val();
-  
+
         var message = "";
-  
-        if (username == "") {
+
+        if (username === "") {
           message += "Username ";
         }
-        if (password == "") {
+        if (password === "") {
           message += "Password ";
         }
-  
-        if (message != "") {
+
+        if (message !== "") {
           warning("Required", `Please fill up ${message}`);
         } else {
           $.ajax({
@@ -70,16 +26,20 @@
               password: password,
             },
             success: function (result) {
-              console.log(result.role);
-  
-              if (result.msg == "success") {
-                success("Logged In", "Successfully");
-  
-                location.replace("/");
+              console.log(result.data[0].accesstype);
+              if (result.msg === "success") {
+                showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
+                //window.location.reload();
+                if (result.data[0].accesstype == 'Employee') {
+                  location.replace("/eportalindex");
+                }
+                else {
+                  location.replace("/");
+                }
+
               }
-  
-              if (result.msg == "incorrect") {
-                warning("Invalid Credentials.");
+              if (result.msg === "incorrect") {
+                showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
               }
             },
             error: function (err) {
@@ -87,6 +47,56 @@
             },
           });
         }
-      });
+      }
     });
+
+    $(document).on("click", "#loginBtn", function () {
+      let username = $("#username").val();
+      let password = $("#password").val();
+
+      var message = "";
+
+      if (username === "") {
+        message += "Username ";
+      }
+      if (password === "") {
+        message += "Password ";
+      }
+
+      if (message !== "") {
+        warning("Required", `Please fill up ${message}`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/login/login",
+          data: {
+            username: username,
+            password: password,
+          },
+          success: function (result) {
+            console.log(result.data[0].accesstype);
+            if (result.msg === "success") {
+              showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
+              //window.location.reload();
+              if (result.data[0].accesstype == 'Employee') {
+                location.replace("/eportalindex");
+              }
+              else {
+                location.replace("/");
+              }
+
+            }
+            if (result.msg === "incorrect") {
+              showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
+            }
+          },
+          error: function (err) {
+            errormsg(err);
+          },
+        });
+      }
+    });
+  });
+
+
 </script>

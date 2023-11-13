@@ -1,12 +1,14 @@
 const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 var express = require('express');
+const { Validator } = require('./controller/middleware');
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('offenseslayout', { title: 'Express' });
+  //res.render('offenseslayout', { title: 'Express' });
+  Validator(req, res, 'offenseslayout');
 });
 
 module.exports = router;

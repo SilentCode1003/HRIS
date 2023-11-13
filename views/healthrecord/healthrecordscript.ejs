@@ -32,7 +32,7 @@
                     var status = item.status;
     
                     action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovermentidmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#edithealthrecordmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
       
                     finalData.push({
@@ -71,16 +71,16 @@
           }
 
            
-$(document).on("click", "#govermentidsavebtn", function () {
-  let employeeid = $("#govermentidemployeeid").val();
-  let bloodtype = $("#govermentidtype").val();
-  let medicalcondition = $("#govermentidnumber").val();
-  let prescribemedications = $("#govermentidissuedate").val();
-  let ercontactname = $("#govermentidissuedate").val();
-  let ercontactphone = $("#govermentidissuedate").val();
-  let lastcheckup = $("#govermentidexpirydate").val();
-  let incsurance = $("#govermentidcreatedby").val();
-  let insurancenumber = $("#govermentidstatus").val();
+$(document).on("click", "#healthsavebtn", function () {
+  let employeeid = $("#healthrecordemployeeid").val();
+  let bloodtype = $("#healthrecordbloodtype").val();
+  let medicalcondition = $("#healthrecordmedicalcondition").val();
+  let prescribemedications = $("#healthrecordprescribemedication").val();
+  let ercontactname = $("#healthrecordemergencycontactname").val();
+  let ercontactphone = $("#healthrecordemergencycontactnumber").val();
+  let lastcheckup = $("#healthrecordlastcheckup").val();
+  let insurance = $("#healthrecordinsurance").val();
+  let insurancenumber = $("#healthrecordinsurancenumber").val();
 
 
   var message = "";
@@ -139,35 +139,23 @@ $(document).on("click", "#govermentidsavebtn", function () {
         ercontactname: ercontactname,
         ercontactphone: ercontactphone,
         lastcheckup: lastcheckup,
-        incsurance: incsurance,
+        insurance: insurance,
         insurancenumber: insurancenumber,
       },
       success: function (result) {
         if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
-          window.location.reload();
-          })
+          swal("Update Successfully","You clicked the button!","success",)
+            .then(results => {
+              window.location.reload();
+            });
           LoadTable();
+        } else if (result.msg == "exist") {
+          swal("Exist","Data already exists!","warning",);
         }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
-        }
-      
-      },
-      error: function (err) {
-        swal("Data already exist!", "You clicked the button!", "warning");
-      },
+    },
+    error: function (err) {
+      swal("Error", "An error occurred while saving data.", "error");
+    },
     });
   }
     
@@ -183,9 +171,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.newEmployeeId);
-          $('#govermentidemployeeid').append(options);
-          console.log(item.newEmployeeId);
+          $(options).html(item.firstname);
+          $('#healthrecordemployeeid').append(options);
+          console.log(item.firstname);
         });
       },
       error: function (result) {
@@ -206,9 +194,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.newEmployeeId);
-          $('#editgovermentidemployeeid').append(options);
-          console.log(item.newEmployeeId);
+          $(options).html(item.firstname);
+          $('#edithealthrecordemployeeid').append(options);
+          console.log(item.firstname);
         });
       },
       error: function (result) {
@@ -243,16 +231,16 @@ $(document).on("click", "#editBtn", function () {
         const existingData = result.data;
 
         $.each(existingData, (key, item) => {
-          $("#editgovermentidemployeeid").val(item.healthid); 
-          $("#editgovermentidtype").val(item.employeeid);
-          $("#editgovermentidnumber").val(item.bloodtype);
-          $("#editgovermentidissuedate").val(item.medicalcondition);
-          $("#editgovermentidexpirydate").val(item.prescribemedications);
-          $("#editgovermentidcreatedby").val(item.ercontactname);
-          $("#editgovermentidstatus").val(item.ercontactphone);
-          $("#editgovermentidissuedate").val(item.lastcheckup);
-          $("#editgovermentidexpirydate").val(item.incsurance);
-          $("#editgovermentidcreatedby").val(item.insurancenumber);
+          $("#id").val(item.healthid); 
+          $("#edithealthrecordemployeeid").val(item.employeeid);
+          $("#edithealthrecordbloodtype").val(item.bloodtype);
+          $("#edithealthrecordmedicalcondition").val(item.medicalcondition);
+          $("#edithealthrecordprescribemedication").val(item.prescribemedications);
+          $("#edithealthrecordemergencycontactname").val(item.ercontactname);
+          $("#edithealthrecordemergencycontactnumber").val(item.ercontactphone);
+          $("#edithealthrecordlastcheckup").val(item.lastcheckup);
+          $("#edithealthrecordinsurance").val(item.insurance);
+          $("#edithealthrecordinsurancenumber").val(item.insurancenumber);
         });
       } else {
         swal("Error fetching employee data", "success");
@@ -266,15 +254,15 @@ $(document).on("click", "#editBtn", function () {
 $(document).on("click", "#edithealthrecordsavebtn", function () {
   console.log("Save button clicked");
   let id = healthid
-  let employeeid = $("#editgovermentidemployeeid").val();
-  let bloodtype = $("#editgovermentidtype").val();
-  let medicalcondition = $("#editgovermentidnumber").val();
-  let prescribemedications = $("#editgovermentidissuedate").val();
-  let ercontactname = $("#editgovermentidexpirydate").val();
-  let ercontactphone = $("#editgovermentidcreatedby").val();
-  let lastcheckup = $("#editgovermentidstatus").val();
-  let incsurance = $("#editgovermentidissuedate").val();
-  let insurancenumber = $("#editgovermentidexpirydate").val();
+  let employeeid = $("#edithealthrecordemployeeid").val();
+  let bloodtype = $("#edithealthrecordbloodtype").val();
+  let medicalcondition = $("#edithealthrecordmedicalcondition").val();
+  let prescribemedications = $("#edithealthrecordprescribemedication").val();
+  let ercontactname = $("#edithealthrecordemergencycontactname").val();
+  let ercontactphone = $("#edithealthrecordemergencycontactnumber").val();
+  let lastcheckup = $("#edithealthrecordlastcheckup").val();
+  let insurance = $("#edithealthrecordinsurance").val();
+  let insurancenumber = $("#edithealthrecordinsurancenumber").val();
   
   
            
@@ -309,7 +297,7 @@ $(document).on("click", "#edithealthrecordsavebtn", function () {
   }
 
   
-  if (incsurance === "") {
+  if (insurance === "") {
     message += "status is required. ";
   }
 
@@ -327,41 +315,31 @@ $(document).on("click", "#edithealthrecordsavebtn", function () {
     type: "POST",
     url: "healthrecord/update",
     data: { 
-        healthid: id,
+      healthid: id,
       employeeid: employeeid,
-      bloodtype: idtype,
+      bloodtype: bloodtype,
       medicalcondition: medicalcondition,
       prescribemedications: prescribemedications,
+      ercontactname: ercontactname,
+      ercontactphone: ercontactphone,
       lastcheckup: lastcheckup,
       insurance: insurance,
       insurancenumber: insurancenumber,
     },
     success: function (result) {
       if (result.msg == "success") {
-        swal({
-          title: "Update Successfully",
-          text: "You clicked the button!",
-          icon: "success",
-          button: "OK!",
-        })
+        swal("Update Successfully","You clicked the button!","success",)
           .then(results => {
             window.location.reload();
           });
         LoadTable();
       } else if (result.msg == "exist") {
-        swal({
-          title: "Exist",
-          text: "Data already exists!",
-          icon: "warning",
-          button: "OK!",
-        });
-      } else {
-        swal("Data already exists!", "You clicked the button!", "warning");
+        swal("Exist","Data already exists!","warning",);
       }
-    },
-    error: function (err) {
-      swal("Error", "An error occurred while saving data.", "error");
-    },
+  },
+  error: function (err) {
+    swal("Error", "An error occurred while saving data.", "error");
+  },
   });
 }
 });

@@ -1,3 +1,4 @@
+const { Validator } = require('./controller/middleware');
 const mysql = require('./repository/hrmisdb');
 var express = require('express');
 var router = express.Router();
@@ -5,7 +6,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('performancelayout', { title: 'Express' });
+  //res.render('performancelayout', { title: 'Express' });
+  Validator(req, res, 'performancelayout');
 });
 
 module.exports = router;
@@ -51,7 +53,15 @@ router.post('/getperformance', (req, res) => {
 
 router.get('/load', (req, res) => {
   try {
-    let sql = 'select * from master_performance_emp';
+    let sql = `SELECT 
+    mpe_performanceid,
+    concat(me_firstname, ' ', me_lastname) AS mpe_employeeid,
+    mpe_appraisaldate,
+    mpe_appraisaltype,
+    mpe_rating,
+    mpe_comments
+   FROM master_performance_emp
+    LEFT JOIN master_employee ON master_performance_emp.mpe_employeeid = me_id`;
 
     mysql.Select(sql, 'Master_Performance_Emp', (err, result) => {
       if (err) console.error('Error: ', err);
@@ -127,7 +137,7 @@ router.post('/update', (req, res) => {
     mpe_appraisaldate ='${appraisaldate}', 
     mpe_appraisaltype ='${appraisaltype}',
     mpe_rating ='${rating}', 
-    mpe_comments ='${comments}', 
+    mpe_comments ='${comments}' 
     WHERE mpe_performanceid ='${performanceid}'`;
 
     mysql.Update(sqlupdate)

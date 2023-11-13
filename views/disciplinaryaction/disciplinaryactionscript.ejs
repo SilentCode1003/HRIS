@@ -124,26 +124,13 @@ $(document).on("click", "#disciplinaryactionsavebtn", function () {
       },
       success: function (result) {
         if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
+          showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
           window.location.reload();
-          })
           LoadTable();
         }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
+        if (result.msg === "incorrect") {
+          showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
         }
-      
       },
       error: function (err) {
         swal("Data already exist!", "You clicked the button!", "warning");

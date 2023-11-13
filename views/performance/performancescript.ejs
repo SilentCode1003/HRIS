@@ -115,30 +115,18 @@ $(document).on("click", "#performancesavebtn", function () {
       },
       success: function (result) {
         if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
-          window.location.reload();
-          })
+          swal("Save Successfully","You clicked the button!","success",)
+            .then(results => {
+              window.location.reload();
+            });
           LoadTable();
+        } else if (result.msg == "exist") {
+          swal("Exist","Data already exists!","warning",);
         }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
-        }
-      
-      },
-      error: function (err) {
-        swal("Data already exist!", "You clicked the button!", "warning");
-      },
+    },
+    error: function (err) {
+      swal("Error", "An error occurred while saving data.", "error");
+    },
     });
   }
     
@@ -154,9 +142,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.newEmployeeId);
+          $(options).html(item.firstname);
           $('#performanceemployeeid').append(options);
-          console.log(item.newEmployeeId);
+          console.log(item.firstname);
         });
       },
       error: function (result) {
@@ -177,9 +165,9 @@ function LoadList() {
 
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.newEmployeeId);
+          $(options).html(item.firstname);
           $('#editperformanceemployeeid').append(options);
-          console.log(item.newEmployeeId);
+          console.log(item.firstname);
         });
       },
       error: function (result) {
@@ -278,30 +266,18 @@ $("#dataTableperformance tbody").on("click", "tr", function () {
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              })
+              swal("Update Successfully","You clicked the button!","success",)
                 .then(results => {
                   window.location.reload();
                 });
               LoadTable();
             } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
-            } else {
-              swal("Data already exists!", "You clicked the button!", "warning");
+              swal("Exist","Data already exists!","warning",);
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
+        },
+        error: function (err) {
+          swal("Error", "An error occurred while saving data.", "error");
+        },
         });
       }
  });
