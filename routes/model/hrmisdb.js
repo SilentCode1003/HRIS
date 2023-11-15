@@ -62,6 +62,26 @@ exports.Leaves = (data) => {
     return dataResult;
 };
 
+exports.Eportal_Leaves = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            leaveid: key.l_leaveid,
+            employeeid: key.l_employeeid,
+            leavestartdate: key.l_leavestartdate,
+            leaveenddate: key.l_leaveenddate,
+            leavetype: key.l_leavetype,
+            reason: key.l_leavereason,
+            status: key.l_leavestatus,
+            applieddate: key.l_leaveapplieddate,
+            comment: key.l_comment,
+        });
+    });
+
+    return dataResult;
+};
+
 exports.Cash_Advance = (data) => {
     let dataResult = [];
 

@@ -57,6 +57,11 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Leaves(results));
       }
 
+      if (table == "Eportal_Leaves") {
+        callback(null, model.Eportal_Leaves(results));
+      }
+
+
       if (table == "Cash_Advance") {
         callback(null, model.Cash_Advance(results));
       }

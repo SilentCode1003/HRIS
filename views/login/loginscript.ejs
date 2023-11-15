@@ -16,7 +16,7 @@
         }
 
         if (message !== "") {
-          warning("Required", `Please fill up ${message}`);
+          showSweetAlert("Required", `Please fill up ${message}`);
         } else {
           $.ajax({
             type: "POST",
@@ -26,25 +26,28 @@
               password: password,
             },
             success: function (result) {
-              console.log(result.data[0].accesstype);
               if (result.msg === "success") {
-                showSweetAlert("Success", "Log in Successfully", "success", "Let's go!");
-                //window.location.reload();
-                if (result.data[0].accesstype == 'Employee') {
-                  location.replace("/eportalindex");
-                }
-                else {
-                  location.replace("/");
-                }
-
-              }
-              if (result.msg === "incorrect") {
-                showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
-              }
-            },
-            error: function (err) {
-              errormsg(err);
-            },
+                swal("Save Successfully", "You clicked the button!", "success")
+                  .then(results => {
+                    if (result.data[0].accesstype === 'Employee') {
+                      location.replace("/eportalindex");
+                    } else {
+                      location.replace("/");
+                    }
+                  });
+                } else if (result.msg === "inactive") {
+                  swal("Inactive", "Your account is inactive. Please be guided accordingly.", "Ok")
+                    .then(() => {
+                      location.reload();
+                    });
+                  } else if (result.msg === "incorrect") {
+                    swal("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
+                  }
+                },
+                error: function (err) {
+                  swal("Error", "An error occurred while saving data.", "error");
+                }, 
+            
           });
         }
       }
@@ -64,7 +67,7 @@
       }
 
       if (message !== "") {
-        warning("Required", `Please fill up ${message}`);
+        showSweetAlert("Required", `Please fill up ${message}`);
       } else {
         $.ajax({
           type: "POST",
@@ -74,24 +77,25 @@
             password: password,
           },
           success: function (result) {
-            if (result.msg == "success") {
-              swal("Save Successfully","You clicked the button!","success",)
+            if (result.msg === "success") {
+              swal("Save Successfully", "You clicked the button!", "success")
                 .then(results => {
-                  if (result.data[0].accesstype == 'Employee') {
+                  if (result.data[0].accesstype === 'Employee') {
                     location.replace("/eportalindex");
-                  }
-                  else {
+                  } else {
                     location.replace("/");
                   }
                 });
-              LoadTable();
-            } if (result.msg === "incorrect") {
+            } else if (result.msg === "inactive") {
+              showSweetAlert("Inactive", "Your account is inactive. Please be guided accordingly.", "error", "Ok");
+            } else if (result.msg === "incorrect") {
               showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
             }
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");
           },
+          
         });
       }
     });

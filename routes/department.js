@@ -74,7 +74,7 @@ router.post('/save', (req, res) => {
     
     let departmentname = req.body.departmentname;
     let departmenthead = req.body.departmenthead;
-    let createdby = req.body.createdby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
@@ -82,7 +82,7 @@ router.post('/save', (req, res) => {
     let data = [];
   
     data.push([
-      departmentname, departmenthead, createdby, createdate, status,
+      departmentname, departmenthead, createby, createdate, status,
     ])
     let query = `SELECT * FROM master_department WHERE md_departmentname = '${departmentname}'`;
     mysql.Select(query, 'Master_Department', (err, result) => {

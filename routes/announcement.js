@@ -75,7 +75,7 @@ router.post('/save', (req, res) => {
   try {
     
     let description = req.body.description;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
@@ -119,7 +119,7 @@ router.post('/save', (req, res) => {
     try {
       let bulletinid = req.body.bulletinid;
       let description = req.body.description;
-      let createby = req.body.createby;
+      let createby = req.session.fullname; 
       let status = req.body.status;
       
       let sqlupdate = `UPDATE master_bulletin SET   
@@ -142,16 +142,6 @@ router.post('/save', (req, res) => {
         })
         
       });
-      
-      // mysql.Update(sqlupdate, (err,result) =>{
-      //   if(err) console.error('Error: ', err);
-    
-      //   console.log(result);
-    
-      //   res.json({
-      //     msg: 'success'
-      //   })
-      // })
     
     } catch (error) {
       res.json({

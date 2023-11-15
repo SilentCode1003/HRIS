@@ -75,53 +75,55 @@ router.get('/load', (req, res) => {
 
 router.post('/save', (req, res) => {
   try {
-    
     let accessname = req.body.accessname;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
-  
-    let data = [];
-  
-    data.push([
-      accessname, createby, createdate, status,
-    ])
-    let query = `SELECT * FROM master_access WHERE ma_accessname = '${accessname}'`;
-    mysql.Select(query, 'Master_Access', (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      if (result.length != 0) {
-        res.json({
-          msg: "exist"
-        });
-      }
-      else {
-        mysql.InsertTable('master_access', data, (err, result) => {
-          if (err) console.error('Error: ', err);
-
-          console.log(result);
-
-          res.json({
-            msg: 'success'
-          })
-        })
-      }
-    });
+    
+    let data = [[accessname, createby, createdate, status]];
 
     
+    let query = `SELECT * FROM master_access WHERE ma_accessname = '${accessname}'`;
+
+    mysql.Select(query, 'Master_Access', (err, result) => {
+      if (err) {
+        console.error("Error: ", err);
+        res.json({ msg: 'error' });
+        return;
+      }
+
+      
+      if (result.length != 0) {
+        res.json({ msg: "exist" });
+        return;
+      }
+
+    
+      mysql.InsertTable('master_access', data, (err, result) => {
+        if (err) {
+          console.error('Error: ', err);
+          res.json({ msg: 'error' });
+          return;
+        }
+
+        console.log(result);
+
+       
+        res.json({ msg: 'success' });
+      });
+    });
   } catch (error) {
-    res.json({
-      msg: 'error'
-    })
+    console.error('Error: ', error);
+    res.json({ msg: 'error' });
   }
-  });
+});
 
   router.post('/update', (req, res) => {
     try {
       let accessid = req.body.accessid;
       let accessname = req.body.accessname;
-      let createby = req.body.createby;
+      let createby = req.session.fullname; 
       let status = req.body.status;
       
       let sqlupdate = `UPDATE master_access SET 

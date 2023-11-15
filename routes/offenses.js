@@ -36,7 +36,7 @@ router.post('/save', (req, res) => {
   try {
     
     let offensename = req.body.offensename;
-    let createdby = req.body.createdby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
@@ -44,7 +44,7 @@ router.post('/save', (req, res) => {
     let data = [];
   
     data.push([
-      offensename, createdby, createdate, status,
+      offensename, createby, createdate, status,
     ])
     let query = `SELECT * FROM master_offense WHERE mo_offensename = '${offensename}'`;
     mysql.Select(query, 'Master_Offense', (err, result) => {

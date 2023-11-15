@@ -63,6 +63,9 @@ var roleacess = [
         layout: "rejectedleavelayout",
       },
       {
+        layout: "requestcashadvancelayout",
+      },
+      {
         layout: "shiftlayout",
       },
       {
