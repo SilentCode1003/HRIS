@@ -73,7 +73,6 @@ router.get('/load', (req, res) => {
     mu_userid,
     concat(me_firstname,' ',me_lastname) as mu_employeeid,
     mu_username,
-    mu_password,
     ma_accessname as mu_accesstype,
     mu_createby,
     mu_createdate,

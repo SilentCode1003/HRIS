@@ -92,6 +92,9 @@ var roleacess = [
         layout: "eportalcashadvancelayout",
       },
       {
+        layout: "eportalcooplayout",
+      },
+      {
         layout: "eportaldisciplinaryactionlayout",
       },
       {

@@ -81,7 +81,6 @@ router.post('/save', (req, res) => {
       let offenseid = req.body.offenseid;
       let sql = `SELECT
         mo_offensename as offensename,
-        mo_createdby as createdby,
         mo_status as status
         FROM master_offense
         WHERE mo_offenseid = '${offenseid}'`;
@@ -112,5 +111,51 @@ router.post('/save', (req, res) => {
       });
     }
   });
+
+  
+router.post('/update', (req, res) => {
+  try {
+    let offenseid = req.body.offenseid;
+    let offensename = req.body.offensename;
+    let createby = req.session.fullname; 
+    let status = req.body.status;
+    
+    let sqlupdate = `UPDATE master_offense SET   
+    mo_offensename ='${offensename}', 
+    mo_createdby ='${createby}',
+    mo_status = '${status}'
+    WHERE mo_offenseid ='${offenseid}'`;
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      console.log(result);
+  
+      res.json({
+        msg: 'success'
+      })
+    })
+    .catch((error) =>{
+      res.json({
+        msg:error
+      })
+      
+    });
+    
+    // mysql.Update(sqlupdate, (err,result) =>{
+    //   if(err) console.error('Error: ', err);
+  
+    //   console.log(result);
+  
+    //   res.json({
+    //     msg: 'success'
+    //   })
+    // })
+  
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
+  }
+});
   
 

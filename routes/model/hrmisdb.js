@@ -146,6 +146,7 @@ exports.Master_Bulletin = (data) => {
     data.forEach((key, item) => {
         dataResult.push({
             bulletinid: key.mb_bulletinid,
+            tittle: key.mb_tittle,
             description: key.mb_description,
             createby: key.mb_createby,
             createdate: key.mb_createdate,

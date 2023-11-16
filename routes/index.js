@@ -85,3 +85,40 @@ router.post('/getleave', (req, res) => {
   }
 });
 
+router.post('/getbulletin', (req, res) => {
+  try {
+    let bulletinid = req.body.bulletinid;
+    let sql = ` select 
+    mb_image as image,
+    mb_tittle as tittle,
+    mb_description as description
+    from master_bulletin
+    where mb_bulletinid = '${bulletinid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    //console.log(sql)
+    .then((result) => {
+      if (result.length > 0) {
+        res.status(200).json({
+          msg: "success",
+          data: result
+        });
+      } else {
+        res.status(404).json({
+          msg: "Department not found"
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        msg: "Error fetching department data",
+        error: error
+      });
+    });  
+  } catch (error) {
+    res.json({
+      msg:error
+    })
+    
+  }
+});

@@ -119,12 +119,14 @@ router.post('/save', (req, res) => {
     try {
       let departmentid = req.body.departmentid;
       let departmentname = req.body.departmentname;
+      let createby = req.session.fullname; 
       let departmenthead = req.body.departmenthead;
       let status = req.body.status;
       
       let sqlupdate = `UPDATE master_department SET   
-      md_departmentname ='${departmentname}', 
-      md_departmenthead ='${departmenthead}', 
+      md_departmentname ='${departmentname}',
+      md_departmenthead ='${departmenthead}',
+      md_createdby = '${createby}', 
       md_status ='${status}' 
       WHERE md_departmentid ='${departmentid}'`;
 
@@ -142,16 +144,6 @@ router.post('/save', (req, res) => {
         })
         
       });
-      
-      // mysql.Update(sqlupdate, (err,result) =>{
-      //   if(err) console.error('Error: ', err);
-    
-      //   console.log(result);
-    
-      //   res.json({
-      //     msg: 'success'
-      //   })
-      // })
     
     } catch (error) {
       res.json({
@@ -160,39 +152,4 @@ router.post('/save', (req, res) => {
     }
     });
 
-  // router.post('/update', async (req, res) => {
-  //   try {
-  //     // Retrieve request parameters
-  //     let departmentid = departmentid;
-  //     let departmentname = req.body.departmentname;
-  //     let departmenthead = req.body.departmenthead;
-  //     let status = req.body.status;
-     
-  //     let data = [];
   
-  //     data.push([
-  //       departmentid, departmentname, departmenthead, status,
-  //     ])
-  //     let query =  `UPDATE master_department SET
-  //     md_departmentname as departmentname, 
-  //     md_departmenthead as departmenthead,  
-  //     md_status as status 
-  //     WHERE md_departmentid = '${departmentid}'`;
-  
-  //     mysql.Update(query, data,(err , result) => {
-  //       if(err) console.error('Error', err);
-
-  //       console.log(data);
-  //       console.log(result);
-
-  //       res.json({
-  //         msg:'success'
-  //       })
-  //     })
-
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       msg: 'error'
-  //     });
-  //   }
-  // });

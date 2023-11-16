@@ -1,11 +1,42 @@
 <script>
   let leaveid = '';
   let cashadvanceid = '';
+  let bulletinid = '';
     $(document).ready(function(){
         console.log('Initialize');
         LoadTable();
         LoadTableca();
-    
+        LoadAnnouncement();
+
+        function LoadAnnouncement() {
+          $.ajax({
+              type: "POST",
+              url: "/getbulletin",
+              data: {
+                  bulletinid: bulletinid,
+              },
+              success: function (result) {
+                  if (result.msg === "success") {
+                      const announcementprofile = result.data;
+      
+                      $.each(announcementprofile, (key, item) => {
+                          $("#preview").attr("src", "data:image/jpg;base64," + item.image);
+                          $("#announcetittle").text(item.tittle);
+                          $("#announcedesc").text(item.description);
+                      });
+                  }
+              },
+              error: function (err) {
+                  swal(
+                      "An error occurred while fetching announcement data",
+                      err.responseText,
+                      "error"
+                  );
+              },
+          });
+      }
+      
+      
         function LoadTable() {
           $("#dataTableleaverequest").DataTable({
             destroy: true,
@@ -316,5 +347,20 @@
           }
           });
       
+      });
+
+      $(document).on("change", "#announcementimage", function (e) {
+        const input = document.getElementById("announcementimage");
+        const file = input.files[0];
+    
+        console.log("click");
+    
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function () {
+          const preview = document.getElementById("preview");
+          preview.src = reader.result;
+        };
+        imageUploaded();
       });
 </script>

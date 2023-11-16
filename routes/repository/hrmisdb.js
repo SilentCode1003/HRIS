@@ -234,6 +234,8 @@ exports.InsertTable = (tablename, data, callback) => {
   }
   if (tablename == "master_bulletin") {
     let sql = `INSERT INTO master_bulletin(
+        mb_image,
+        mb_tittle,
         mb_description,
         mb_createby,
         mb_createdate,
