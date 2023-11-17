@@ -81,7 +81,8 @@ router.post('/getleavedashboard', (req, res) => {
     l_leavestartdate as leavestartdate,
     l_leaveenddate as leaveenddate,
     l_leavereason as reason,
-    l_leavestatus as status
+    l_leavestatus as status,
+    l_comment as comment
     from leaves
     right join master_employee on leaves.l_employeeid = me_id
     where l_leaveid = '${leaveid}'`;
