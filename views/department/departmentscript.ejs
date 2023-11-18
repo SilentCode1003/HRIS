@@ -70,7 +70,6 @@
 $(document).on("click", "#departmentsavebtn", function () {
   let departmentname = $("#departmentname").val();
   let departmenthead = $("#departhead").val();
-  let createdby = $("#departcreatedby").val();
   let createdate = $("#departcreatedate").val();
   let status = $("#departmentstatus").val();
 
@@ -84,9 +83,6 @@ $(document).on("click", "#departmentsavebtn", function () {
     message += "TITTLE ";
   }
 
-  if (createdby == "") {
-    message += "DESCRIPTION ";
-  }
 
   if (createdate == "") {
     message += "DESCRIPTION ";
@@ -105,7 +101,6 @@ $(document).on("click", "#departmentsavebtn", function () {
       data: {
         departmentname: departmentname,
         departmenthead: departmenthead,
-        createdby: createdby,
         createdate: createdate,
         status: status,
 

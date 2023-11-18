@@ -67,7 +67,6 @@
         
   $(document).on("click", "#offensessavebtn", function () {
     let offensename = $("#offensesname").val();
-    let createdby = $("#offensescreatedby").val();
     let status = $("#offensesstatus").val();
   
     var message = "";
@@ -75,11 +74,7 @@
     if (offensename == "") {
       message += "TITTLE ";
     }
-  
-    if (createdby == "") {
-      message += "TITTLE ";
-    }
-  
+
     if (status == "") {
       message += "DESCRIPTION ";
     }
@@ -91,7 +86,6 @@
         url: "/offenses/save",
         data: {
           offensename: offensename,
-          createdby: createdby,
           status: status,
   
         },
@@ -152,7 +146,6 @@
               $.each(existingData, (key, item) => {
                 $("#editdepartmentid").val(item.offenseid); 
                 $("#editoffensesname").val(item.offensename);
-                $("#editoffensescreatedby").val(item.createdby);
                 $("#editoffensesstatus").val(item.status);
               });
             } else {
@@ -169,7 +162,6 @@
         console.log("Save button clicked");
         let id = offenseid
         let offensename = $("#editoffensesname").val();
-        let createdby = $("#editoffensescreatedby").val();
         let status = $("#editoffensesstatus").val();
       
       var message = "";
@@ -191,11 +183,10 @@
     } else {
       $.ajax({
         type: "POST",
-        url: "department/update",
+        url: "offenses/update",
         data: { 
           offenseid: id,
           offensename: offensename,
-          createdby: createdby,
           status: status, 
         },
         success: function (result) {

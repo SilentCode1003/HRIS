@@ -57,6 +57,11 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Leaves(results));
       }
 
+      if (table == "Eportal_Leaves") {
+        callback(null, model.Eportal_Leaves(results));
+      }
+
+
       if (table == "Cash_Advance") {
         callback(null, model.Cash_Advance(results));
       }
@@ -229,6 +234,8 @@ exports.InsertTable = (tablename, data, callback) => {
   }
   if (tablename == "master_bulletin") {
     let sql = `INSERT INTO master_bulletin(
+        mb_image,
+        mb_tittle,
         mb_description,
         mb_createby,
         mb_createdate,

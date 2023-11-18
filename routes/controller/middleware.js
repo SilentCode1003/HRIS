@@ -63,6 +63,9 @@ var roleacess = [
         layout: "rejectedleavelayout",
       },
       {
+        layout: "requestcashadvancelayout",
+      },
+      {
         layout: "shiftlayout",
       },
       {
@@ -87,6 +90,9 @@ var roleacess = [
       },
       {
         layout: "eportalcashadvancelayout",
+      },
+      {
+        layout: "eportalcooplayout",
       },
       {
         layout: "eportaldisciplinaryactionlayout",

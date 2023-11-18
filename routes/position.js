@@ -73,7 +73,7 @@ router.post('/save', (req, res) => {
   try {
     
     let positionname = req.body.positionname;
-    let createdby = req.body.createdby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
@@ -81,7 +81,7 @@ router.post('/save', (req, res) => {
     let data = [];
   
     data.push([
-      positionname, createdby, createdate, status,
+      positionname, createby, createdate, status,
     ])
     let query = `SELECT * FROM master_position WHERE mp_positionname = '${positionname}'`;
     mysql.Select(query, 'Master_Position', (err, result) => {
