@@ -33,6 +33,7 @@
     
                   finalData.push({
                     bulletinid: item.bulletinid,
+                    tittle: item.tittle,
                     description: item.description,
                     createby: item.createby,
                     createdate: item.createdate,
@@ -52,6 +53,7 @@
             ],
             columns: [
               { data: "bulletinid" },
+              { data: "tittle" },
               { data: "description" },
               { data: "createby" },
               { data: "createdate"},
@@ -66,19 +68,26 @@
   
         
   $(document).on("click", "#announcementsavebtn", function () {
+    let image = base64String;
+    let tittle = $('#announcementtittle').val();
     let description = $("#announcementdescription").val();
-    let createby = $("#announcementcreatedby").val();
     let status = $("#announcementstatus").val();
   
     var message = "";
+
+    if (image == "") {
+      message += "DESCRIPTION ";
+    }
+
+    if (tittle == "") {
+      message += "DESCRIPTION ";
+    }
+  
   
     if (description == "") {
       message += "TITTLE ";
     }
   
-    if (createby == "") {
-      message += "DESCRIPTION ";
-    }
   
     if (status == "") {
       message += "POSITION NAME ";
@@ -91,8 +100,9 @@
         type: "POST",
         url: "/announcement/save",
         data: {
+          image: image,
+          tittle: tittle,
           description: description,
-          createby: createby,
           status: status,
   
         },
@@ -152,8 +162,9 @@
       
               $.each(existingData, (key, item) => {
                 $("#editdepartmentid").val(item.bulletinid);
+                $("#editannouncementtittle").val(item.tittle);
+                $("#editpreview").attr("src","data:image/jpg;base64," + item.image);
                 $("#editannouncementdescription").val(item.description);
-                $("#editannouncementcreatedby").val(item.createby);
                 $("#editannouncementstatus").val(item.status);
               });
             } else {
@@ -169,21 +180,26 @@
       $(document).on("click", "#editannouncementsavebtn", function () {
         console.log("Save button clicked");
         let id = bulletinid
+        let image = base64String;
+        let tittle = $("#editannouncementtittle").val();
         let description = $("#editannouncementdescription").val();
-        let createby = $("#editannouncementcreatedby").val();
         let status = $("#editannouncementstatus").val();
       
       var message = "";
+
+      if (image === "") {
+        message += "departmenthead is required. ";
+      }
+      
+      if (tittle === "") {
+        message += "departmenthead is required. ";
+      }
+      
 
       if (description === "") {
         message += "departmenthead is required. ";
       }
 
-      if (createby === "") {
-        message += "departmenthead is required. ";
-      }
-
-    
       if (status === "") {
         message += "status is required. ";
       }
@@ -196,8 +212,9 @@
         url: "/announcement/update",
         data: { 
             bulletinid: id,
+            image: image,
+            tittle: tittle,
             description: description,
-            createby: createby,
             status: status, 
         },
         success: function (result) {
@@ -229,6 +246,74 @@
       });
     }
   });
+
+  $(document).on("change", "#announcementimage", function (e) {
+    const input = document.getElementById("announcementimage");
+    const file = input.files[0];
+
+    console.log("click");
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("preview");
+      preview.src = reader.result;
+    };
+    imageUploaded();
+  });
+
+ 
+  function imageUploaded() {
+    const input = document.getElementById("announcementimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+    console.log("next");
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+
+    
+      console.log(base64String);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#editannouncementimage", function (e) {
+    const input = document.getElementById("editannouncementimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("editpreview");
+      preview.src = reader.result;
+    };
+    editimage();
+  });
+
+
+
+ 
+  function editimage() {
+    const input = document.getElementById("editannouncementimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+    console.log("next");
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+
+   
+      console.log(base64String);
+    };
+    reader.readAsDataURL(file);
+  }
                 
   function searchTable() {
       var input, filter, found, table, tr, td, i, j;

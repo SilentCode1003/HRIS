@@ -84,7 +84,7 @@ router.post('/save', async (req, res) => {
     let holidaydate = req.body.holidaydate;
     let holidayrate = req.body.holidayrate;
     let holidaystatus = req.body.holidaystatus; 
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     console.log('Received department name:', holidaydate);
 
@@ -124,7 +124,7 @@ router.post('/update', (req, res) => {
     let holidaydate = req.body.holidaydate;
     let holidayrate = req.body.holidayrate;
     let holidaystatus = req.body.holidaystatus;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     
     let sqlupdate = `UPDATE master_holidayrate SET   
     mhr_holidaydate ='${holidaydate}', 

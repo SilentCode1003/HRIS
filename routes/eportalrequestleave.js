@@ -70,29 +70,60 @@ router.get('/load',(req , res) => {
   }
 })
 
-// router.get('/load/:employeeid', async (req, res) => {
-//   try {
-//     const employeeid = req.params.employeeid;
+router.post('/cancelLeave', async (req, res) => {
+  try {
+    const leaveid = req.body.leaveid;
 
-//     // Query the database to fetch leave records for the employee
-//     const leaveQuery = `SELECT * FROM leaves WHERE l_employeeid = '${employeeid}'`;
+    // Update the leave status to 'cancelled' in the database
+    const updateLeaveStatusQuery = `UPDATE leaves SET status = 'Cancelled' WHERE leaveid = ${leaveid}`;
 
-//     try {
-//       const leaveRecords = await mysql.mysqlQueryPromise(leaveQuery);
+    try {
+      await mysql.mysqlQueryPromise(updateLeaveStatusQuery, [leaveId]);
+      res.json({ msg: 'success', leaveid: leaveid, status: 'cancelled' });
+    } catch (updateError) {
+      console.error('Error updating leave status: ', updateError);
+      res.json({ msg: 'error' });
+    }
+  } catch (error) {
+    console.error('Error in /cancelLeave route: ', error);
+    res.json({ msg: 'error' });
+  }
+});
 
-//       res.json({
-//         msg: 'success',
-//         data: leaveRecords
-//       });
-//     } catch (error) {
-//       console.error('Error querying leave records: ', error);
-//       res.json({ msg: 'error' });
-//     }
-//   } catch (error) {
-//     console.error('Error in /leave/:employeeid route: ', error);
-//     res.json({ msg: 'error' });
-//   }
-// });
+router.post('/update', (req, res) => {
+  try {
+    let leaveid = req.body.leaveid;
+    let status = req.body.status; 
+    let comment = req.body.comment;
+
+    let sqlupdate =  `UPDATE 
+    leaves SET l_leavestatus = '${status}', 
+    l_comment = '${comment}'  
+    WHERE l_leaveid = '${leaveid}'`;
+
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      console.log(sqlupdate);
+  
+      res.json({
+        msg: 'success',
+        data: result
+      })
+    })
+    .catch((error) =>{
+      res.json({
+        msg:error
+      })
+      
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
+  }
+});
+
 
 
 module.exports = router;

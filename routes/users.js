@@ -18,7 +18,8 @@ module.exports = router;
 
 router.post('/save', async (req, res) => {
   try {
-    const { employeeid, accesstype, createby, status } = req.body;
+    const { employeeid, accesstype, status } = req.body;
+    let createby = req.session.fullname; 
     const createdate = currentDate.format('YYYY-MM-DD');
 
     const employeeQuery = `SELECT me_id, me_firstname, me_lastname, me_birthday FROM master_employee WHERE me_id = '${employeeid}'`;
@@ -70,14 +71,14 @@ router.get('/load', (req, res) => {
   try {
     let sql = `SELECT 
     mu_userid,
-    mu_employeeid,
+    concat(me_firstname,' ',me_lastname) as mu_employeeid,
     mu_username,
-    mu_password,
     ma_accessname as mu_accesstype,
     mu_createby,
     mu_createdate,
     mu_status
     from master_user
+      left join master_employee on master_user.mu_employeeid = me_id
     LEFT JOIN master_access ON master_user.mu_accesstype = ma_accessid`;
 
     mysql.Select(sql, 'Master_User', (err, result) => {
@@ -94,3 +95,74 @@ router.get('/load', (req, res) => {
     
   }
 });
+router.post('/update', async (req, res) => {
+  try {
+    let userid = req.body.userid;
+    let username = req.body.username;
+    let password = req.body.password;
+    let accesstype = req.body.accesstype;
+    let status = req.body.status;
+
+    // Wrap the Encrypter function in a promise
+    const encrypted = await new Promise((resolve, reject) => {
+      Encrypter(password, (err, result) => {
+        if (err) {
+          console.error("Error in Encrypter: ", err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    let sqlupdate = `UPDATE master_user SET 
+      mu_username = '${username}',
+      mu_password = '${encrypted}',
+      mu_accesstype = '${accesstype}',
+      mu_status ='${status}'
+      WHERE mu_userid ='${userid}'`;
+
+    const updateResult = await mysql.Update(sqlupdate);
+
+    console.log(updateResult);
+
+    res.json({
+      msg: 'success'
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({
+      msg: 'error'
+    });
+  }
+});
+
+
+
+router.post('/getusers', (req, res) => {
+  try {
+    let userid = req.body.userid;
+    let sql = `
+    SELECT 
+        mu_username,
+        mu_password,
+        mu_accesstype,
+        mu_status
+        from master_user
+        where mu_userid = '${userid}'`;
+
+    mysql.Select(sql, 'Master_User', (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      res.json({
+        msg: 'success', data: result
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error
+    });
+  }
+});
+

@@ -76,13 +76,11 @@ $(document).on("click", "#shiftsavebtn", function () {
   let shiftname = $("#shifthours").val();
   let status = $("#shiftstatus").val();
   let department = $("#shiftdepartment").val();
-  let createby = $("#shiftcreatedby").val();
 
   console.log(`
   ${shiftname}
   ${status}
   ${department}
-  ${createby}
   `);
 
   var message = "";
@@ -99,10 +97,6 @@ $(document).on("click", "#shiftsavebtn", function () {
     message += "department is required ";
   }
 
-  if (createby == "") {
-    message += "createby is required ";
-  }
-
   if (message !== "") {
     swal("Validation Error", message, "error"); 
   } else {
@@ -114,7 +108,6 @@ $(document).on("click", "#shiftsavebtn", function () {
         shiftname: shiftname,
         status: status,
         department: department,
-        createby: createby,
 
       },
       success: function (result) {
@@ -222,8 +215,6 @@ $(document).on("click", "#editBtn", function () {
           $("#editshift").val(item.shiftname);
           $("#editshiftdepartment").val(item.department);
           $("#editshiftstatus").val(item.status);
-          //$('#editshiftdepartment').val(`${item.department}`);
-          $("#editshiftcreateby").val(item.createby);
         });
       } else {
         swal("Error fetching employee data", "success");
@@ -240,13 +231,7 @@ $(document).on("click", "#editshiftsavebtn", function () {
   let shiftname = $("#editshift").val();
   let status = $("#editshiftstatus").val();
   let department = $("#editshiftdepartment").val();
-  let createby = $("#editshiftcreateby").val();
-  
-  console.log(`${id},
-  ${shiftname},
-  ${status},
-  ${department},
-  ${createby}`);
+ 
            
   var message = "";
       
@@ -262,9 +247,7 @@ $(document).on("click", "#editshiftsavebtn", function () {
     message += "departmenthead is required. ";
   }
 
-  if (createby === "") {
-      message += "status is required. ";
-    }
+ 
 
   if (message !== "") {
     swal("Validation Error", message, "error");
@@ -277,7 +260,6 @@ $(document).on("click", "#editshiftsavebtn", function () {
       shiftname: shiftname,
       status: status,
       department: department,
-      createby: createby, 
     },
     success: function (result) {
       if (result.msg == "success") {
