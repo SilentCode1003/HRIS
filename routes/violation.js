@@ -84,7 +84,7 @@ router.post('/save', async (req, res) => {
   try {
     let description = req.body.description;
     let actionid = req.body.actionid;
-    let createby = req.body.createby; 
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
     console.log('Received department name:', actionid);
@@ -123,7 +123,7 @@ router.post('/update', (req, res) => {
     let violationid = req.body.violationid;
     let description = req.body.description;
     let actionid = req.body.actionid;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let status = req.body.status;
     
     let sqlupdate = `UPDATE master_violation SET   

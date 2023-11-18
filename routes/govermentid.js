@@ -62,7 +62,7 @@ router.post('/save', async (req, res) => {
     let idnumber = req.body.idnumber;
     let issuedate = req.body.issuedate;
     let expirydate = req.body.expirydate;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
     let data = [];
@@ -145,7 +145,7 @@ router.post('/update', (req, res) => {
     let idnumber = req.body.idnumber;
     let issuedate = req.body.issuedate;
     let expirydate = req.body.expirydate;
-    let createby = req.body.createby; 
+    let createby = req.session.fullname; 
     let status = req.body.status; 
 
     let sqlupdate = `UPDATE master_govid SET   

@@ -83,7 +83,7 @@ router.post('/save', async (req, res) => {
     let shiftname = req.body.shiftname;
     let status = req.body.status;
     let department = req.body.department; 
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     console.log('Received department name:', department);
 
@@ -122,7 +122,7 @@ router.post('/update', (req, res) => {
     let shiftname = req.body.shiftname;
     let status = req.body.status;
     let department = req.body.department;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     
     let sqlupdate = `UPDATE master_shift SET   
     ms_shiftname ='${shiftname}', 

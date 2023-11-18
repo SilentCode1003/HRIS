@@ -1,0 +1,101 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Cash Advance</h1>
+
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+      <input id='myInput2' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTablependingca">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Request Date</th>
+                        <th>Amount</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                        <th>Approval Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="pendingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pending Cash Advance Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+            <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid" disabled>
+          <div class="col">
+            <label for="pendingcaname" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="pendingcaname" name="pendingcaname" disabled>
+          </div>
+          <div class="col">
+            <label for="pendingcaemail" class="form-label">Email</label>
+            <input type="text" class="form-control" id="pendingcaemail" name="pendingcaemail" disabled>
+          </div>
+          <div class="col">
+            <label for="pendingcagender" class="form-label">Gender</label>
+            <input type="text" class="form-control" id="pendingcagender" name="pendingcagender" disabled>
+          </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <label for="pendingcaphone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="pendingcaphone" name="pendingcaphone" disabled>
+            </div>
+            <div class="col">
+              <label for="pendingreqdate" class="form-label">Request Date</label>
+              <input type="text" class="form-control" id="pendingreqdate" name="pendingreqdate" disabled>
+            </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="pendingamount" class="form-label">Amount</label>
+                <input type="text" class="form-control" id="pendingamount" name="pendingamount" disabled>
+              </div>
+              <div class="col">
+                <label for="pendingpurpose" class="form-label">Purpose</label>
+                <input type="text" class="form-control" id="pendingpurpose" name="pendingpurpose" value="6" disabled>
+              </div>
+                <div class="col">
+                  <label for="pendingcastatus" class="form-label">Action</label>
+                  <select class="form-select" id="pendingcastatus" name="pendingcastatus" disabled>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div class="col-md-8">
+                    <label for="pendingcaremarks" class="form-label">Remarks</label>
+                    <input type="email" class="form-control" id="pendingcaremarks" name="pendingcaremarks">
+                  </div>
+                </div>
+                <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="pendingcasavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

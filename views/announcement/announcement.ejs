@@ -15,6 +15,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Tittle</th>
                         <th>Description</th>
                         <th>Created By</th>
                         <th>Created Date</th>
@@ -42,11 +43,18 @@
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="announcementdescription" name="announcementdescription" placeholder="Department Name">
-                        <label for="floatingInput">Description</label>
+                        <input type="text" class="form-control" id="announcementtittle" name="announcementtittle" placeholder="Department Name">
+                        <label for="floatingInput">Tittle</label>
                         </div>
                     </div>
                     <br>
+                    <div class="col">
+                      <div class="form-floating">
+                      <input type="text" class="form-control" id="announcementdescription" name="announcementdescription" placeholder="Department Name">
+                      <label for="floatingInput">Description</label>
+                      </div>
+                  </div>
+                  <br>
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="announcementstatus" name="announcementstatus" aria-label="Floating label select example">
@@ -59,10 +67,17 @@
                     </div>
                     <br>
                     <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="announcementcreatedby" name="announcementcreatedby" placeholder="Created By">
-                        <label for="floatingInput">Created By</label>
-                        </div>
+                      <div class="form-floating">
+                        <label class="form-label" for="customFile"></label>
+                        <input type="file" name="announcementimage" id="announcementimage" class="form-control" accept="image/*">
+                        <br>
+                        <div class="text-center">
+                          <img id="preview" 
+                               src="https://via.placeholder.com/250"
+                               style="width: 250px;; height: 250px;;"
+                               class="rounded" alt="placeholder">
+                      </div>
+                      </div>
                     </div>
                     <br>
             </form>
@@ -80,11 +95,18 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Edit Announcement</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
+              <div class="col">
+                <div class="form-floating">
+                <input type="text" class="form-control" id="editannouncementtittle" name="editannouncementtittle" placeholder="Department Name">
+                <label for="floatingInput">Tittle</label>
+                </div>
+            </div>
+            <br>
                 <div class="col">
                     <div class="form-floating">
                     <input type="text" class="form-control" id="editannouncementdescription" name="editannouncementdescription" placeholder="Department Name">
@@ -104,10 +126,17 @@
                 </div>
                 <br>
                 <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editannouncementcreatedby" name="editannouncementcreatedby" placeholder="Created By">
-                    <label for="floatingInput">Created By</label>
-                    </div>
+                  <div class="form-floating">
+                    <label class="form-label" for="customFile"></label>
+                    <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control" accept="image/*">
+                    <br>
+                    <div class="text-center">
+                      <img id="editpreview" 
+                           src="https://via.placeholder.com/250"
+                           style="width: 250px;; height: 250px;;"
+                           class="rounded" alt="placeholder">
+                  </div>
+                  </div>
                 </div>
                 <br>
         </form>

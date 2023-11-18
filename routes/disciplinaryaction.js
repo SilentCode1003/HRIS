@@ -89,7 +89,7 @@ router.post('/save', async (req, res) => {
     let offenseid = req.body.offenseid; // Get the offense name from the request
     let description = req.body.description;
     let createdate = currentDate.format('YYYY-MM-DD');
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let status = req.body.status;
     console.log('Received department name:', offenseid);
 

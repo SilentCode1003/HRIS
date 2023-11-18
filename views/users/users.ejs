@@ -17,7 +17,6 @@
                         <th>ID</th>
                         <th>Employee ID</th>
                         <th>Username</th>
-                        <th>Password</th>
                         <th>Access Type</th>
                         <th>Created By</th>
                         <th>Created Date</th>
@@ -43,42 +42,35 @@
         </div>
         <div class="modal-body">
             <form>
-                    <div class="col">
-                      <div class="form-floating">
-                        <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
-                          <option selected>Choose....</option>
-                        </select>
-                        <label for="floatingSelectGrid">Employee ID</label>
-                      </div>
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
+                    <option selected>Choose....</option>
+                  </select>
+                  <label for="floatingSelectGrid">Employee ID</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
+                        <option selected>Choose....</option>
+                      </select>
+                      <label for="floatingSelectGrid">Access Type</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
-                              <option selected>Choose....</option>
-                            </select>
-                            <label for="floatingSelectGrid">Access Type</label>
-                          </div>
+              </div>
+              <br>
+              <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
+                        <option selected>Choose....</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                      </select>
+                      <label for="floatingSelectGrid">Status</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="userscreatedby" name="userscreatedby" placeholder="First Name">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
-                              <option selected>Choose....</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Status</label>
-                          </div>
-                    </div>
-                    <br>
+              </div>
+              <br>
             </form>
         </div>
         <div class="modal-footer">
@@ -99,32 +91,27 @@
         </div>
         <div class="modal-body">
             <form>
+              <br>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="editusersname" name="editusersname" aria-label="Floating label select example">
-                      <option selected>Choose....</option>
-                    </select>
-                    <label for="floatingSelectGrid">Employee ID</label>
+                    <input type="text" class="form-control" id="editusername" name="editusername" placeholder="Created By">
+                    <label for="floatingInput">Username</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="editpassword" name="editpassword" placeholder="Created By">
+                    <label for="floatingInput">Password</label>
                   </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
                         <select class="form-select" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
-                          <option selected>Choose....</option>
-                          <option value="">Employee</option>
-                          <option value="">HR</option>
-                          <option value="">Admin</option>
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="edituserscreatedby" name="edituserscreatedby" placeholder="First Name">
-                    <label for="floatingInput">Created By</label>
-                    </div>
                 </div>
                 <br>
                 <div class="col">

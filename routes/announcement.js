@@ -18,6 +18,8 @@ router.post('/getannouncement', (req, res) => {
   try {
     let bulletinid = req.body.bulletinid;
     let sql = `SELECT
+      mb_image as image,
+      mb_tittle as tittle,
       mb_description as description,
       mb_createby as createby,
       mb_status as status
@@ -74,8 +76,10 @@ router.get('/load', (req, res) => {
 router.post('/save', (req, res) => {
   try {
     
+    let image = req.body.image;
+    let tittle = req.body.tittle;
     let description = req.body.description;
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = req.body.status;
 
@@ -83,7 +87,7 @@ router.post('/save', (req, res) => {
     let data = [];
   
     data.push([
-     description, createby, createdate,  status,
+      image, tittle, description, createby, createdate,  status,
     ])
     let query = `SELECT * FROM master_bulletin WHERE mb_description = '${description}'`;
     mysql.Select(query, 'Master_Bulletin', (err, result) => {
@@ -118,12 +122,16 @@ router.post('/save', (req, res) => {
   router.post('/update', (req, res) => {
     try {
       let bulletinid = req.body.bulletinid;
+      let image = req.body.image;
+      let tittle = req.body.tittle
       let description = req.body.description;
-      let createby = req.body.createby;
+      let createby = req.session.fullname; 
       let status = req.body.status;
       
       let sqlupdate = `UPDATE master_bulletin SET   
       mb_description ='${description}', 
+      mb_image ='${image}',
+      mb_tittle = '${tittle}',
       mb_createby ='${createby}', 
       mb_status ='${status}'
       WHERE mb_bulletinid ='${bulletinid}'`;
@@ -142,16 +150,6 @@ router.post('/save', (req, res) => {
         })
         
       });
-      
-      // mysql.Update(sqlupdate, (err,result) =>{
-      //   if(err) console.error('Error: ', err);
-    
-      //   console.log(result);
-    
-      //   res.json({
-      //     msg: 'success'
-      //   })
-      // })
     
     } catch (error) {
       res.json({
