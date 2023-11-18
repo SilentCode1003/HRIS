@@ -67,17 +67,12 @@
         
   $(document).on("click", "#accesssavebtn", function () {
     let accessname = $("#accessname").val();
-    let createby = $("#accesscreatedby").val();
     let status = $("#accessstatus").val();
   
     var message = "";
   
     if (accessname == "") {
       message += "TITTLE ";
-    }
-  
-    if (createby == "") {
-      message += "DESCRIPTION ";
     }
   
   
@@ -93,7 +88,6 @@
         url: "/access/save",
         data: {
           accessname: accessname,
-          createby: createby,
           status: status,
   
         },
@@ -154,7 +148,6 @@
               $.each(existingData, (key, item) => {
                 $("#editdepartmentid").val(item.accessid); 
                 $("#editaccessname").val(item.accessname);
-                $("#editaccesscreatedby").val(item.createby);
                 $("#editaccessstatus").val(item.status);
               });
             } else {
@@ -171,7 +164,6 @@
         console.log("Save button clicked");
         let id = accessid
         let accessname = $("#editaccessname").val();
-        let createby = $("#editaccesscreatedby").val();
         let status = $("#editaccessstatus").val();
       
       var message = "";
@@ -179,10 +171,7 @@
       if (accessname === "") {
         message += "departmentname is required. ";
       }
-    
-      if (createby === "") {
-        message += "departmenthead is required. ";
-      }
+  
     
       if (status === "") {
         message += "status is required. ";
@@ -197,7 +186,6 @@
         data: { 
             accessid: id,
             accessname: accessname,
-            createby: createby,
             status: status, 
         },
         success: function (result) {

@@ -38,3 +38,53 @@ router.get('/load', (req, res,) => {
     console.log(error);
   }
 })
+module.exports = router;
+
+
+
+router.post('/getleavedashboard', (req, res) => {
+  try {
+    let leaveid = req.body.leaveid;
+    let sql = `select 
+    concat(me_firstname,' ',me_lastname) as employeeid,
+    me_email as email,
+    me_gender as gender,
+    me_phone as phone,
+    l_leavetype as leavetype,
+    l_leaveapplieddate as applieddate,
+    l_leavestartdate as leavestartdate,
+    l_leaveenddate as leaveenddate,
+    l_leavereason as reason,
+    l_leavestatus as status
+    from leaves
+    right join master_employee on leaves.l_employeeid = me_id
+    where l_leaveid = '${leaveid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    //console.log(sql)
+    .then((result) => {
+      if (result.length > 0) {
+        res.status(200).json({
+          msg: "success",
+          data: result
+        });
+      } else {
+        res.status(404).json({
+          msg: "Department not found"
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        msg: "Error fetching department data",
+        error: error
+      });
+    });  
+  } catch (error) {
+    res.json({
+      msg:error
+    })
+    
+  }
+});
+

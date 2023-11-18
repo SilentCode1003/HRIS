@@ -19,35 +19,42 @@ router.post('/login', (req, res) => {
 
       console.log(encrypted);
 
-      let sql = `select 
+      let sql = `SELECT 
       mu_employeeid as employeeid,
-      concat(me_firstname,'',me_lastname) as fullname,
-      ma_accessname as accesstype
-      from master_user
-      inner join master_access on mu_accesstype = ma_accessid
-      left join master_employee on mu_employeeid = me_id
-        where mu_username ='${username}'  and mu_password = '${encrypted}'`;
+      CONCAT(me_firstname, '', me_lastname) as fullname,
+      ma_accessname as accesstype,
+      mu_status as status
+      FROM master_user
+      INNER JOIN master_access ON mu_accesstype = ma_accessid
+      LEFT JOIN master_employee ON mu_employeeid = me_id
+      WHERE mu_username ='${username}'  AND mu_password = '${encrypted}'`;
 
       console.log(sql);
 
       mysqlQueryPromise(sql).then((result) => {
-        if (err) console.error("Error: ", err);
-        if (result.length != 0) {
-          let data = UserLogin(result);
+        if (result.length !== 0) {
+          const user = result[0];
 
-          console.log(result);
+          if (user.status === 'Active') {
+            let data = UserLogin(result);
 
-          //<%= fullname%>
-          data.forEach((user) => {
-            req.session.employeeid = user.employeeid;
-            req.session.fullname = user.fullname;
-            req.session.accesstype = user.accesstype;
-          });
+            console.log(result);
 
-          return res.json({
-            msg: "success",
-            data: data,
-          });
+            data.forEach((user) => {
+              req.session.employeeid = user.employeeid;
+              req.session.fullname = user.fullname;
+              req.session.accesstype = user.accesstype;
+            });
+
+            return res.json({
+              msg: "success",
+              data: data,
+            });
+          } else {
+            return res.json({
+              msg: "inactive",
+            });
+          }
         } else {
           return res.json({
             msg: "incorrect",
@@ -65,6 +72,7 @@ router.post('/login', (req, res) => {
     });
   }
 });
+
 
 router.post('/logout',(req, res) => {
   req.session.destroy((err) => {

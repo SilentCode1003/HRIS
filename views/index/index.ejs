@@ -1,0 +1,333 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Employee</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">100</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Department</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Earnings (Monthly) Card Example -->
+         <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Cash Advance Request</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-money-line fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                leave Requests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-7 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Leave Request</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="dataTableleaverequest">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Start</th>
+                                    <th scope="col">End</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Reason</th>
+                                    <th scope="col">Applied</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Leave Modal-->
+        <div class="modal fade" id="pendingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="row g-3">
+                      <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid" disabled>
+                    <div class="col">
+                      <label for="pendingleavename" class="form-label">Full Name</label>
+                      <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" disabled>
+                    </div>
+                    <div class="col">
+                      <label for="pendingleaveemail" class="form-label">Email</label>
+                      <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" disabled>
+                    </div>
+                    <div class="col">
+                      <label for="pendingleavegender" class="form-label">Gender</label>
+                      <input type="text" class="form-control" id="pendingleavegender" name="pendingleavegender" disabled>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="pendingleavephone" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" disabled>
+                      </div>
+                      <div class="col">
+                        <label for="pendingleavetype" class="form-label">Leave Type</label>
+                        <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" disabled>
+                      </div>
+                      <div class="col">
+                        <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
+                        <input type="text" class="form-control" id="pendingleaveapplydate" name="pendingleaveapplydate" disabled>
+                      </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
+                          <input type="text" class="form-control" id="pendingleaveapplynodays" name="pendingleaveapplynodays" disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
+                          <input type="text" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleavestart" class="form-label">Leave Start</label>
+                          <input type="text" class="form-control" id="pendingleavestart" name="pendingleavestart"  disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleaveend" class="form-label">Leave End</label>
+                          <input type="text" class="form-control" id="pendingleaveend" name="pendingleaveend" disabled>
+                        </div>
+                        </div>
+                        <div class="row g-3">
+                          <div class="mb-3">
+                            <label for="pendingleavereason" class="col-form-label">Reason:</label>
+                            <textarea class="form-control" id="pendingleavereason" name="pendingleavereason" disabled></textarea>
+                          </div>
+                          <div class="col-md-8">
+                            <label for="pendingleaveremarks" class="form-label">Remarks</label>
+                            <input type="email" class="form-control" id="pendingleaveremarks" name="pendingleaveremarks">
+                          </div>
+                          <div class="col">
+                            <label for="pendingleaveaction" class="form-label">Action</label>
+                            <select class="form-select" id="pendingleaveaction" name="pendingleaveaction">
+                              <option  selected>Pending...</option>
+                              <option value="Approved">Approved</option>
+                              <option value="Rejected">Rejected</option>
+                            </select>
+                          </div>
+                          </div>
+                          <br>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        <!-- Announcement -->
+        <div class="col-xl-5 col-lg-5">
+          <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Announcement</h6>
+                  <div class="dropdown no-arrow">
+                      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                      </a>
+                  </div>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body" id="announcementprofile">
+                  <div id="announcement" class="card mb-3" style="max-width: 640px;">
+                      <!-- <div class="row g-0">
+                          <div class="col-md-4">
+                              <img id="preview" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                              <div class="card-body">
+                                  <h5 class="card-title" for="announcetitle" id="announcetitle"></h5>
+                                  <p class="card-text" for="announcedesc" id="announcedesc"></p>
+                              </div>
+                          </div>
+                      </div> -->
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-7 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Cash Advance</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="dataTablecashrequest">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Purpose</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-5 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Birthday Folks</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="card mb-3" style="max-width: 640px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="/images/img/toy.jpg" style="height: 170px; width: 640px;" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h5 class="card-title">Mark Anasarias</h5>
+                              <h6 class="card-text">November 14</h6>
+                              <p class="card-text">Wishing you a day filled with joy and success. Your contributions to our team are greatly appreciated.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card mb-3" style="max-width: 640px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="/images/img/toy.jpg" style="height: 170px; width: 640px;" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h5 class="card-title">Mark Anasarias</h5>
+                              <h6 class="card-text">November 14</h6>
+                              <p class="card-text">Wishing you a day filled with joy and success. Your contributions to our team are greatly appreciated.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->

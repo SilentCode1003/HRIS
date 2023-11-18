@@ -6,6 +6,7 @@
       LoadTable();
       LoadListEmp();
       LoadAccess();
+      LoadEditAccess();
   
       function LoadTable() {
           $("#dataTableusers").DataTable({
@@ -30,14 +31,13 @@
                   var status = item.status;
   
                   action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editaccessmodal"><i class="fas fa-fw fa-pen"></i></button>
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editusersmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
     
                   finalData.push({
                     userid: item.userid,
                     employeeid: item.employeeid,
                     username: item.username,
-                    password: item.password,
                     accesstype: item.accesstype,
                     createby: item.createby,
                     createdate: item.createdate,
@@ -59,7 +59,6 @@
               { data: "userid" },
               { data: "employeeid" },
               { data: "username"},
-              { data: "password" },
               { data: "accesstype" },
               { data: "createby" },
               { data: "createdate" },
@@ -76,7 +75,6 @@
   $(document).on("click", "#userssavebtn", function () {
     let employeeid = $("#usersname").val();
     let accesstype = $("#usersaccesstype").val();
-    let createby = $("#userscreatedby").val();
     let status = $("#usersstatus").val();
   
     var message = "";
@@ -88,10 +86,6 @@
     if (accesstype == "") {
       message += "DESCRIPTION ";
     }
-
-    if (createby == "") {
-        message += "DESCRIPTION ";
-      }
   
   
     if (status == "") {
@@ -107,7 +101,6 @@
         data: {
           employeeid: employeeid,
           accesstype: accesstype,
-          createby: createby,
           status: status,
   
         },
@@ -185,8 +178,29 @@
     });
   }
 
+  function LoadEditAccess() {
+    $.ajax({
+      type: "GET",
+      url: "/access/load",
+      success: function (result) {
+        console.log(result.data);
+        var data = result.data;
+
+        $.each(data, function (key, item) {
+          var options = new Option(item.accessid, item.accessid);
+          $(options).html(item.accessname);
+          $("#editusersaccesstype").append(options);
+          console.log(item.accessname);
+        });
+      },
+      error: function (result) {
+        alert("error: " + result.data);
+      },
+    });
+  }
+
   
-  $("#dataTableaccess tbody").on("click", "tr", function () {
+  $("#dataTableusers tbody").on("click", "tr", function () {
     var dataRow = [];
     $(this)
       .closest("tr")
@@ -195,25 +209,27 @@
         dataRow.push($(this).text());
       });
     console.log(dataRow);
-    accessid = dataRow[0];
+    userid = dataRow[0];
   });
   
   $(document).on("click", "#editBtn", function () {
+    console.log('hit');
         $.ajax({
           type: "POST",
-          url: "/access/getaccess",
+          url: "/users/getusers",
           data: {
-            accessid: accessid,
+            userid: userid,
           },
           success: function (result) {
             if (result.msg === "success") {
               const existingData = result.data;
       
               $.each(existingData, (key, item) => {
-                $("#editdepartmentid").val(item.accessid); 
-                $("#editaccessname").val(item.accessname);
-                $("#editaccesscreatedby").val(item.createby);
-                $("#editaccessstatus").val(item.status);
+                $("#editdepartmentid").val(item.userid); 
+                $("#editusername").val(item.username);
+                $("#editpassword").val(item.password);
+                $("#editusersaccesstype").val(item.accesstype);
+                $("#editusersstatus").val(item.status);
               });
             } else {
               swal("Error fetching employee data", message, "error");
@@ -225,21 +241,26 @@
         });
       });
       
-      $(document).on("click", "#editaccesssavebtn", function () {
+      $(document).on("click", "#edituserssavebtn", function () {
         console.log("Save button clicked");
-        let id = accessid
-        let accessname = $("#editaccessname").val();
-        let createby = $("#editaccesscreatedby").val();
-        let status = $("#editaccessstatus").val();
+        let id = userid
+        let username = $("#editusername").val();
+        let password = $("#editpassword").val();
+        let accesstype = $("#editusersaccesstype").val();
+        let status = $("#editusersstatus").val();
       
       var message = "";
     
-      if (accessname === "") {
+      if (username === "") {
         message += "departmentname is required. ";
       }
     
-      if (createby === "") {
-        message += "departmenthead is required. ";
+      if (password === "") {
+        message += "status is required. ";
+      }
+
+      if (accesstype === "") {
+        message += "departmentname is required. ";
       }
     
       if (status === "") {
@@ -251,11 +272,12 @@
     } else {
       $.ajax({
         type: "POST",
-        url: "access/update",
+        url: "/users/update",
         data: { 
-            accessid: id,
-            accessname: accessname,
-            createby: createby,
+            userid: id,
+            username: username,
+            password: password,
+            accesstype: accesstype,
             status: status, 
         },
         success: function (result) {

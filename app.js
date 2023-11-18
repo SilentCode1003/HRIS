@@ -40,6 +40,7 @@ var eportaldisciplinaryactionRouter = require('./routes/eportaldisciplinaryactio
 var eportalprofileRouter = require('./routes/eportalprofile');
 var eportalsalaryRouter = require('./routes/eportalsalary');
 var eportalcashadvanceRouter = require('./routes/eportalcashadvance');
+var eportalcoopRouter = require('./routes/eportalcoop');
 var eportalpayslipRouter = require('./routes/eportalpayslip');
 var eportalattendancelayoutRouter = require('./routes/eportalattendance');
 var loginlayoutRouter = require('./routes/login');
@@ -94,6 +95,7 @@ app.use('/eportaldisciplinaryaction', eportaldisciplinaryactionRouter);
 app.use('/eportalprofile', eportalprofileRouter);
 app.use('/eportalsalary', eportalsalaryRouter);
 app.use('/eportalcashadvance', eportalcashadvanceRouter);
+app.use('/eportalcoop', eportalcoopRouter);
 app.use('/eportalpayslip', eportalpayslipRouter);
 app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);

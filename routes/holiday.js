@@ -78,7 +78,7 @@ router.post('/save', (req, res) => {
     let date = req.body.date;
     let description = req.body.description;
     let createdate = currentDate.format('YYYY-MM-DD');
-    let createby = req.body.createby;
+    let createby = req.session.fullname; 
     let status = req.body.status;
 
   
@@ -122,7 +122,7 @@ router.post('/save', (req, res) => {
       let holidayid = req.body.holidayid;
       let date = req.body.date;
       let description = req.body.description;
-      let createby = req.body.createby;
+      let createby = req.session.fullname; 
       let status = req.body.status;
       
       let sqlupdate = `UPDATE master_holiday SET   
