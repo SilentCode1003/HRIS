@@ -246,8 +246,95 @@
 
   }
   
-  
-  
+  /* Load Spinner */
+  .loader-wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #669999;
+    opacity: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .loader {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    border: 4px solid #fff;
+    animation: loader 2s infinite ease;
+  }
+
+  .loader-inner {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    background-color: #fff;
+    animation: loader-inner 2s infinite ease-in;
+  }
+
+  .spinner {
+    height: 120px;
+    width: 120px;
+    border: 6px solid black;
+    border-color: black transparent black transparent;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    25% {
+      transform: rotate(180deg);
+    }
+
+    50% {
+      transform: rotate(180deg);
+    }
+
+    75% {
+      transform: rotate(360deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader-inner {
+    0% {
+      height: 0%;
+    }
+
+    25% {
+      height: 0%;
+    }
+
+    50% {
+      height: 100%;
+    }
+
+    75% {
+      height: 100%;
+    }
+
+    100% {
+      height: 0%;
+    }
+  }
   
   
   
