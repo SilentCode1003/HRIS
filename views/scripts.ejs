@@ -1,28 +1,63 @@
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-aria-hidden="true">
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-danger" id="logoutBtn" name="logoutBtn">Logout</button>
-        </div>
-    </div>
+<!-- LOADER -->
+<div class="loader-wrapper">
+  <div class="spinner"></div>
 </div>
+<!-- LOADER -->
+<div class="loader-wrapper">
+  <span class="loader"><span class="loader-inner"></span></span>
+</div>
+
+<!-- Logout Modal-->
+<div
+  class="modal fade"
+  id="logoutModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <button
+          class="close"
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Select "Logout" below if you are ready to end your current session.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-danger" id="logoutBtn" name="logoutBtn">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <!--Core bootstrap-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+  crossorigin="anonymous"
+></script>
 
 <!-- Core plugin JavaScript-->
 <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -45,37 +80,57 @@ aria-hidden="true">
 
 <script src="/javascripts/js/scripts.js"></script>
 
+<!-- XLSX -->
+<script src="/javascripts/js/xlsx.mini.min.js"></script>
+
 <script src=""></script>
 
 <!-- Page level custom scripts -->
 <!-- <script src="/javascripts/js/demo/datatables-demo.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+  crossorigin="anonymous"
+></script>
 
 <script>
-     $(document).on("click", "#logoutBtn", function () {
-          $.ajax({
-            type: "POST",
-            url: "/login/logout",
-            success: function (result) {
-                swal({
-                    title: "success",
-                    text: "Log in Successfully",
-                    icon: "success",
-                    button: "Lets gooo!!",
-                  })
-                  .then(results => {
-                    window.location.reload();
-                  location.replace("/");
-                  });
-                },
-                error: function (err) {
-                  errormsg(err);
-                },
-              });
-            });
+  $(document).on("click", "#logoutBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/login/logout",
+      success: function (result) {
+        swal({
+          title: "success",
+          text: "Log in Successfully",
+          icon: "success",
+          button: "Lets gooo!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
+    });
+  });
 </script>
 
 <script>
+  hidespinner();
+
+  function showspinner() {
+    console.log("show loader");
+    $(".loader-wrapper").show();
+  }
+
+  function hidespinner() {
+    console.log("hide loader");
+
+    setTimeout(() => {
+      $(".loader-wrapper").hide();
+    }, 1000);
+  }
+
   function showSweetAlert(title, text, icon, buttonText) {
     swal({
       title: title,
