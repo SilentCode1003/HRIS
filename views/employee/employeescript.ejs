@@ -1,3 +1,4 @@
+<script src="/javascripts/js/xlsx.full.min.js"></script>
 <script>
   let base64String = "";
   let employeeid = "";
@@ -11,33 +12,33 @@
     searchTable();
     //LoadGovermentTable();
 
-    $(document).ready(function () {
-      $("#uploadButton").on("click", function () {
-        const fileInput = document.getElementById("excelFileInput");
-        const file = fileInput.files[0];
-        if (!file) {
-          alert("Please select an Excel file to upload.");
-          return;
-        }
+    // $(document).ready(function () {
+    //   $("#uploadButton").on("click", function () {
+    //     const fileInput = document.getElementById("excelFileInput");
+    //     const file = fileInput.files[0];
+    //     if (!file) {
+    //       alert("Please select an Excel file to upload.");
+    //       return;
+    //     }
 
-        const formData = new FormData();
-        formData.append("file", file);
+    //     const formData = new FormData();
+    //     formData.append("file", file);
 
-        $.ajax({
-          type: "POST",
-          url: "/employee/upload",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (data) {
-            alert("Data uploaded successfully.");
-          },
-          error: function (xhr, status, error) {
-            alert("Error: " + error);
-          },
-        });
-      });
-    });
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/employee/upload",
+    //       data: formData,
+    //       processData: false,
+    //       contentType: false,
+    //       success: function (data) {
+    //         alert("Data uploaded successfully.");
+    //       },
+    //       error: function (xhr, status, error) {
+    //         alert("Error: " + error);
+    //       },
+    //     });
+    //   });
+    // });
 
     $(document).on("click", "#employeesavebtn", function () {
       console.log("Save button clicked");
@@ -291,7 +292,7 @@
         type: "POST",
         url: `/employee/getemployee`,
         data: {
-          employeeid: employeeid, 
+          employeeid: employeeid,
         },
         success: function (result) {
           if (result.msg === "success") {
@@ -374,7 +375,7 @@
       let department = $("#editemployeedepartment").val();
       let position = $("#editemployeeposition").val();
       let address = $("#editemployeeaddress").val();
-      let profilePicturePath = base64String; 
+      let profilePicturePath = base64String;
       var message = "";
 
       if (firstname === "") {
@@ -546,7 +547,6 @@
       imageUploaded();
     });
 
-   
     function imageUploaded() {
       const input = document.getElementById("employeeprofile");
       const file = input.files[0];
@@ -559,7 +559,6 @@
 
         imageBase64Stringsep = base64String;
 
-      
         console.log(base64String);
       };
       reader.readAsDataURL(file);
@@ -578,9 +577,6 @@
       editimage();
     });
 
-  
-
-   
     function editimage() {
       const input = document.getElementById("editemployeeprofile");
       const file = input.files[0];
@@ -593,7 +589,6 @@
 
         imageBase64Stringsep = base64String;
 
-     
         console.log(base64String);
       };
       reader.readAsDataURL(file);
@@ -611,7 +606,6 @@
         success: function (json) {
           console.log("API response", json);
 
-         
           var finalData = [];
           var data = json.data;
 
@@ -651,7 +645,6 @@
         success: function (json) {
           console.log("API response", json);
 
-       
           var finalData = [];
           var data = json.data;
 
@@ -659,7 +652,6 @@
             $("#dataTablehealthrecord").DataTable().destroy();
           }
           material_list_tbl = document.getElementById("dataTablehealthrecord");
-
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -683,8 +675,6 @@
         },
       });
     });
-
-
 
     $(document).on("click", "#showtraining", function () {
       $(`#dataTabletraining`).find("tr:gt(0)").remove();
@@ -727,10 +717,6 @@
       });
     });
 
-        
-
-        
-         
     $(document).on("click", "#showdisciplinary", function () {
       $(`#dataTabledisciplianary`).find("tr:gt(0)").remove();
 
@@ -743,7 +729,6 @@
         success: function (json) {
           console.log("API response", json);
 
-       
           var finalData = [];
           var data = json.data;
 
@@ -772,6 +757,145 @@
         },
       });
     });
+
+    $(document).on("click", "#uploadButton", function () {
+      //   console.log("clicked!");
+      showspinner();
+      UploadProcess();
+    });
+
+    function UploadProcess() {
+      //Reference the FileUpload element.
+      var fileUpload = document.getElementById("excelFileInput");
+
+      //Validate whether File is valid Excel file.
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          //For Browsers other than IE.
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcel(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            //For IE Browser.
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcel(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
+      }
+    }
+
+    function GetTableFromExcel(data) {
+      //Read the Excel File data in binary
+      var workbook = XLSX.read(data, {
+        type: "binary",
+      });
+
+      //get the name of First Sheet.
+      var Sheet = workbook.SheetNames[0];
+
+      //Read all rows from First Sheet into an JSON array.
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      //Create a HTML Table element.
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      //Add the header row.
+      var row = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+      //Add the data rows from Excel file.
+      for (var i = 0; i < excelRows.length; i++) {
+        //Add the data row.
+        var data = [];
+        var row = myTable.insertRow(-1);
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]];
+          data.push({
+            item: excelRows[i][columns[j]],
+          });
+        }
+        dataExcelArr.push({
+          id: data[0].item,
+          firstname: data[1].item,
+          middlename: data[2].item,
+          lastname: data[3].item,
+          dateofbirth: data[4].item,
+          gender: data[5].item,
+          contactno: data[6].item,
+          email: data[7].item,
+          hiredate: data[8].item,
+          jobstatus: data[9].item,
+          econtactname: data[10].item,
+          econtactno: data[11].item,
+          department: data[12].item,
+          position: data[13].item,
+          address: data[14].item,
+        });
+      }
+      excelDataSave(dataExcelArr);
+    }
+
+    function excelDataSave(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      $.ajax({
+        type: "POST",
+        url: "/employee/upload",
+        data: {
+          data: dataraw,
+        },
+        success: function (result) {
+          if (result.msg != "success") {
+            // warning(
+            //   "Duplicate",
+            //   `Some data already exist on the database. ID[${result.data}]`
+            // );
+
+            swal({
+              title: "Exist",
+              text: "Some data already exist on the database. ID[${result.data}]",
+              icon: "warning",
+              button: "OK!",
+            });
+          } else {
+            // success("Saved!", "Data saved!");
+            LoadTable();
+            swal({
+              title: "Success",
+              text: "Data saved!",
+              icon: "success",
+              button: "OK!",
+            });
+          }
+
+          // $('#item-tbl').DataTable().ajax.reload();
+        },
+        error: function (result) {
+          console.error(result);
+        },
+      });
+      hidespinner();
+    }
   });
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
