@@ -99,7 +99,7 @@ router.post('/update', async (req, res) => {
   try {
     let userid = req.body.userid;
     let username = req.body.username;
-    let password = req.body.password;
+    //let password = req.body.password;
     let accesstype = req.body.accesstype;
     let status = req.body.status;
 
@@ -117,7 +117,6 @@ router.post('/update', async (req, res) => {
 
     let sqlupdate = `UPDATE master_user SET 
       mu_username = '${username}',
-      mu_password = '${encrypted}',
       mu_accesstype = '${accesstype}',
       mu_status ='${status}'
       WHERE mu_userid ='${userid}'`;
