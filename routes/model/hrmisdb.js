@@ -26,6 +26,24 @@ exports.Master_Employee = (data) => {
     return dataResult;
 };
 
+exports.Master_Resigned = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            resignedid: key.mr_resignedid,
+            employeeid: key.mr_employeeid,
+            reason: key.mr_reason,
+            dateresigned: key.mr_dateresigned,
+            status: key.mr_status,
+            createby: key.mr_createby,
+            createdate: key.mr_createdate,
+        });
+    });
+
+    return dataResult;
+};
+
 exports.Master_Department = (data) => {
     let dataResult = [];
 

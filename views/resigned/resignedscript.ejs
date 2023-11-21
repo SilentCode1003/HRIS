@@ -1,5 +1,5 @@
 <script>
-    let userid = "";
+    let resignedid = "";
   
     $(document).ready(function(){
       console.log('Initialize');
@@ -9,7 +9,7 @@
       LoadEditAccess();
   
       function LoadTable() {
-          $("#dataTableusers").DataTable({
+          $("#dataTableresigned").DataTable({
             destroy: true,
             processing: true,
             serverSide: true,
@@ -20,7 +20,7 @@
             scrollCollapse: true,
             serverMethod: "GET",
             ajax: {
-              url: "/users/load",
+              url: "/resigned/load",
               dataSrc: (json) => {
                 var finalData = [];
                 var data = json.data;
@@ -35,13 +35,13 @@
                  `;
     
                   finalData.push({
-                    userid: item.userid,
+                    resignedid: item.resignedid,
                     employeeid: item.employeeid,
-                    username: item.username,
-                    accesstype: item.accesstype,
+                    reason: item.reason,
+                    dateresigned: item.dateresigned,
+                    status: item.status,
                     createby: item.createby,
                     createdate: item.createdate,
-                    status: item.status,
                     action: action,
                   });
                 });
@@ -56,13 +56,13 @@
               },
             ],
             columns: [
-              { data: "userid" },
+              { data: "resignedid" },
               { data: "employeeid" },
-              { data: "username"},
-              { data: "accesstype" },
+              { data: "reason"},
+              { data: "dateresigned" },
+              { data: "status" },
               { data: "createby" },
               { data: "createdate" },
-              { data: "status" },
               { data: "action" },
             ],
             initComplete: function () {
