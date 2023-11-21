@@ -340,6 +340,7 @@
                     $("#employeeprofiledepartment").text(item.department);
                     $("#employeeprofileposition").text(item.position);
                     $("#employeeprofilephone").text(item.contact);
+                    $("#employeework").text(item.workdays + " :Days");
                   });
                 }
               },
@@ -376,8 +377,9 @@
       let position = $("#editemployeeposition").val();
       let address = $("#editemployeeaddress").val();
       let profilePicturePath = base64String;
+    
       var message = "";
-
+    
       if (firstname === "") {
         message += "firstname is required. ";
       }
@@ -433,9 +435,11 @@
       if (profilePicturePath === "") {
         message += "profilePicturePath is required. ";
       }
+    
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        // Continue with the AJAX request
         $.ajax({
           type: "POST",
           url: "/employee/update",
@@ -459,36 +463,72 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
+              if (jobstatus !== result.previousJobStatus && ["terminated", "resigned", "end_of_contract"].includes(jobstatus)) {
+                swal({
+                  title: "Enter Reason",
+                  text: "Please enter the reason:",
+                  content: "input",
+                  button: {
+                    text: "Submit",
+                    closeModal: false,
+                  },
+                }).then((reason) => {
+                  if (!reason || reason.trim() === "") {
+                    swal("Validation Error", "Reason is required for termination, resignation, or end of contract.", "error");
+                  } else {
+                    $.ajax({
+                      type: "POST",
+                      url: "/employee/insert",
+                      data: {
+                        newEmployeeId: newEmployeeId,
+                        reason: reason,
+                        dateresigned: dateresigned,
+                        status: status,
+                      },
+                      success: function (resignedResult) {
+                        if (resignedResult.msg == "success") {
+                          swal({
+                            title: "Update Successfully",
+                            text: "You clicked the button!",
+                            icon: "success",
+                            button: "OK!",
+                          }).then(() => {
+                            window.location.reload();
+                          });
+                          LoadTable();
+                        } else if (resignedResult.msg == "exist") {
+                          swal({
+                            title: "Exist",
+                            text: "Data already exists!",
+                            icon: "warning",
+                            button: "OK!",
+                          });
+                        }
+                      },
+                      error: function (resignedError) {
+                        swal("Error", "An error occurred while updating data.", "error");
+                      },
+                    });
+                  }
+                });
+              } else {
+                swal("Update Successfully", "You clicked the button!", "success").then(() => {
+                  window.location.reload();
+                  LoadTable();
+                });
+              }
+
             } else {
-              swal(
-                "Data already exists!",
-                "You clicked the button!",
-                "warning"
-              );
+              swal("Error", "An error occurred while updating data.", "error");
             }
           },
           error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
+            swal("Error", "An error occurred while updating data.", "error");
           },
         });
       }
     });
+    
 
     function LoadModal() {
       $.ajax({
@@ -917,5 +957,9 @@
         tr[i].style.display = "none";
       }
     }
+  }
+
+  function reloadPage() {
+    location.reload();
   }
 </script>

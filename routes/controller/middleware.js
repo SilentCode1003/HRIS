@@ -66,6 +66,9 @@ var roleacess = [
         layout: "requestcashadvancelayout",
       },
       {
+        layout: "resignedlayout",
+      },
+      {
         layout: "shiftlayout",
       },
       {
@@ -176,6 +179,9 @@ var roleacess = [
       },
       {
         layout: "violationlayout",
+      },
+      {
+        layout: "resignedlayout",
       },
     ],
   },
