@@ -85,7 +85,7 @@
                   <br>
                   <div class="col">
                     <div class="col g-6">
-                        
+                      <input type="file" name="employeeprofile" id="employeeprofile" class="form-control" accept="image/*">      
                     </div>
                 </div>
                 <br>
@@ -226,7 +226,7 @@
     <div class="modal-content"   style="width: 1550px; margin-left: -525px;">
       <div class="modal-header">
         <h5 class="modal-title" id="editmodal">Profile</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" onclick="reloadPage()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
@@ -260,6 +260,8 @@
               <p class="text-muted mb-1" id="employeeprofileposition"></p>
               <label for="employeeprofilephone" class="form-label"><i>Phone:</i></label>
               <p class="text-muted mb-1" id="employeeprofilephone"></p>
+              <label for="employeework" class="form-label"><i>Work Term:</i></label>
+              <p class="text-muted mb-1" id="employeework">Days:</p>
               
               </div>
               </div>
@@ -348,10 +350,12 @@
                           <div class="col">
                             <label for="editemployeejobstatus" class="form-label">Jobstatus</label>
                             <select class="form-select" id="editemployeejobstatus" name="editemployeejobstatus">
-                              <option selected>Choose...</option>
                               <option value="Regular">Regular</option>
                               <option value="Probitionary">Probitionary</option>
                               <option value="Project Based">Project Based</option>
+                              <option value="resigned">Resigned</option>
+                              <option value="end_of_contract">End Of Contract</option>
+                              <option value="terminated">Terminate</option>
                             </select>
                           </div>
                           <div class="col">
@@ -524,7 +528,7 @@
     </div>
     </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" onclick="reloadPage()">Close</button>
       </div>
     </div>
   </div>

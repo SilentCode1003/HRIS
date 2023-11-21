@@ -81,16 +81,25 @@ router.post("/upload", (req, res) => {
 router.post("/getemployeeprofile", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `select 
-    me_id as employeeid,
-    concat(me_firstname, ' ', me_lastname) AS firstname,
-    md_departmentname as department,
-    mp_positionname as position,
-    me_phone as contact
-   from master_employee
-   LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
-   LEFT JOIN master_position ON master_employee.me_position = mp_positionid
-    where me_id = '${employeeid}'`;
+    let sql = `
+    SELECT 
+    me_id AS employeeid,
+    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+    md_departmentname AS department,
+    mp_positionname AS position,
+    me_phone AS contact,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+        DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+    ) AS Tenure
+FROM 
+    master_employee
+LEFT JOIN 
+    master_department md ON master_employee.me_department = md_departmentid
+LEFT JOIN 
+    master_position ON master_employee.me_position = mp_positionid
+where me_id = '231001'`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -579,6 +588,54 @@ router.post("/getdisciplinary", (req, res) => {
     });
   }
 });
+
+router.post('/insert', (req, res) => {
+  try {
+    
+    let newEmployeeId = req.body.newEmployeeId;
+    let reason = req.body.reason; 
+    let dateresigned = req.body.dateresigned;
+    let status = req.body.status;
+    let createby = req.session.fullname; 
+    let createdate = currentDate.format('YYYY-MM-DD');
+
+  
+    let data = [];
+  
+    data.push([
+      newEmployeeId, reason, dateresigned, status, createby, createdate,
+    ])
+    let query = `SELECT * FROM master_resigned WHERE mr_employeeid = '${newEmployeeId}'`;
+    mysql.Select(query, 'Master_Resigned', (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      if (result.length != 0) {
+        res.json({
+          msg: "exist"
+        });
+      }
+      else {
+        mysql.InsertTable('master_resigned', data, (err, result) => {
+          if (err) console.error('Error: ', err);
+
+          console.log(result);
+
+          res.json({
+            msg: 'success'
+          })
+        })
+      }
+    });
+
+    
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
+  }
+});
+
+
 
 module.exports = router;
 

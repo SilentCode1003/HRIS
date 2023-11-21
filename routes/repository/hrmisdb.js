@@ -138,6 +138,11 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Master_User(results));
       }
 
+      if (table == "Master_Resigned") {
+        callback(null, model.Master_Resigned(results));
+      }
+
+
     });
   } catch (error) {
 
@@ -524,6 +529,22 @@ exports.InsertTable = (tablename, data, callback) => {
         s_netsalary,
         s_paymentdate,
         s_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "master_resigned") {
+    let sql = `INSERT INTO master_resigned(
+        mr_employeeid,
+        mr_reason,
+        mr_dateresigned,
+        mr_status,
+        mr_createby,
+        mr_createdate) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
