@@ -10,35 +10,6 @@
     LoadModal();
     LoadModalPosition();
     searchTable();
-    //LoadGovermentTable();
-
-    // $(document).ready(function () {
-    //   $("#uploadButton").on("click", function () {
-    //     const fileInput = document.getElementById("excelFileInput");
-    //     const file = fileInput.files[0];
-    //     if (!file) {
-    //       alert("Please select an Excel file to upload.");
-    //       return;
-    //     }
-
-    //     const formData = new FormData();
-    //     formData.append("file", file);
-
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/employee/upload",
-    //       data: formData,
-    //       processData: false,
-    //       contentType: false,
-    //       success: function (data) {
-    //         alert("Data uploaded successfully.");
-    //       },
-    //       error: function (xhr, status, error) {
-    //         alert("Error: " + error);
-    //       },
-    //     });
-    //   });
-    // });
 
     $(document).on("click", "#employeesavebtn", function () {
       console.log("Save button clicked");
@@ -121,7 +92,6 @@
       }
 
       if (message != "") {
-        // Display an error message indicating which fields are missing
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
@@ -245,6 +215,7 @@
                 firstname: item.firstname,
                 phone: item.phone,
                 email: item.email,
+                jobstatus: item.jobstatus,
                 department: item.department,
                 position: item.position,
                 action: action,
@@ -265,6 +236,7 @@
           { data: "firstname" },
           { data: "phone" },
           { data: "email" },
+          { data: "jobstatus" },
           { data: "department" },
           { data: "position" },
           { data: "action" },
@@ -340,7 +312,7 @@
                     $("#employeeprofiledepartment").text(item.department);
                     $("#employeeprofileposition").text(item.position);
                     $("#employeeprofilephone").text(item.contact);
-                    $("#employeework").text(item.workdays + " :Days");
+                    $("#employeework").text(item.tenure);
                   });
                 }
               },
@@ -377,9 +349,9 @@
       let position = $("#editemployeeposition").val();
       let address = $("#editemployeeaddress").val();
       let profilePicturePath = base64String;
-    
+
       var message = "";
-    
+
       if (firstname === "") {
         message += "firstname is required. ";
       }
@@ -435,11 +407,10 @@
       if (profilePicturePath === "") {
         message += "profilePicturePath is required. ";
       }
-    
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        // Continue with the AJAX request
         $.ajax({
           type: "POST",
           url: "/employee/update",
@@ -462,64 +433,12 @@
             profilePicturePath: profilePicturePath,
           },
           success: function (result) {
-            if (result.msg == "success") {
-              if (jobstatus !== result.previousJobStatus && ["terminated", "resigned", "end_of_contract"].includes(jobstatus)) {
-                swal({
-                  title: "Enter Reason",
-                  text: "Please enter the reason:",
-                  content: "input",
-                  button: {
-                    text: "Submit",
-                    closeModal: false,
-                  },
-                }).then((reason) => {
-                  if (!reason || reason.trim() === "") {
-                    swal("Validation Error", "Reason is required for termination, resignation, or end of contract.", "error");
-                  } else {
-                    $.ajax({
-                      type: "POST",
-                      url: "/employee/insert",
-                      data: {
-                        newEmployeeId: newEmployeeId,
-                        reason: reason,
-                        dateresigned: dateresigned,
-                        status: status,
-                      },
-                      success: function (resignedResult) {
-                        if (resignedResult.msg == "success") {
-                          swal({
-                            title: "Update Successfully",
-                            text: "You clicked the button!",
-                            icon: "success",
-                            button: "OK!",
-                          }).then(() => {
-                            window.location.reload();
-                          });
-                          LoadTable();
-                        } else if (resignedResult.msg == "exist") {
-                          swal({
-                            title: "Exist",
-                            text: "Data already exists!",
-                            icon: "warning",
-                            button: "OK!",
-                          });
-                        }
-                      },
-                      error: function (resignedError) {
-                        swal("Error", "An error occurred while updating data.", "error");
-                      },
-                    });
-                  }
-                });
-              } else {
-                swal("Update Successfully", "You clicked the button!", "success").then(() => {
-                  window.location.reload();
-                  LoadTable();
-                });
-              }
-
+            if (result.msg === "success") {
+              swal("Success", "Employee information updated successfully.", "success");
+            } else if (result.msg === "exists") {
+              swal("Validation Error", "Employee with the same firstname and lastname already exists.", "error");
             } else {
-              swal("Error", "An error occurred while updating data.", "error");
+
             }
           },
           error: function (err) {
@@ -528,7 +447,8 @@
         });
       }
     });
-    
+
+
 
     function LoadModal() {
       $.ajax({

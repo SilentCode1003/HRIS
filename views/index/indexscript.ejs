@@ -2,12 +2,39 @@
   let leaveid = '';
   let cashadvanceid = '';
   let anouncementdiv = '';
+  let bdaydiv = '';
   //let bulletinid = '';
   $(document).ready(function () {
     console.log('Initialize');
     LoadTable();
     LoadTableca();
+    loadCard();
+    LoadBdayFolks();
     //LoadAnnouncement();
+
+
+    function loadCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countactive",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalActive = result.data.activeCount;
+
+            // Update the content of the #totalactive element
+            $("#totalactive").text(totalActive);
+          } else {
+            // Handle error cases if needed
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
 
     $.ajax({
       url: '/announcement/load',
@@ -50,7 +77,7 @@
         success: function (result) {
 
 
-          
+
           if (result.msg === "success") {
             const announcementData = result.data;
             let counter = 0
@@ -59,17 +86,17 @@
             $.each(announcementData, (key, item) => {
               counter++;
               anouncementdiv += `
-              <div class="row g-0">
-                <div class="col-md-4">
-                    <img id="preview${counter}" class="img-fluid rounded-start" src="data:image/jpg;base64,${item.image}" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title" for="announcetitle" id="announcetitle${counter}">${item.title}</h5>
-                        <p class="card-text" for="announcedesc" id="announcedesc${counter}">${item.description}</p>
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                        <img id="preview${counter}" class="img-fluid rounded-start" src="data:image/jpg;base64,${item.image}" alt="...">
                     </div>
-                </div>
-            </div>`;
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" for="announcetitle" id="announcetitle${counter}">${item.title}</h5>
+                            <p class="card-text" for="announcedesc" id="announcedesc${counter}">${item.description}</p>
+                        </div>
+                    </div>
+                </div>`;
 
               console.log(anouncementdiv);
 
@@ -103,6 +130,52 @@
 
     }
 
+    //<<<<<<<<<<<B DAY FOLKS>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+    function LoadBdayFolks() {
+      $.ajax({
+        type: "GET",
+        url: "/getbday",
+        success: function (result) {
+          if (result.msg === "success") {
+            const bdayData = result.data;
+            let counterbday = 0;
+
+            console.log(bdayData.length);
+            $.each(bdayData, (key, item) => {
+              counterbday++;
+              bdaydiv += `
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img id="preview${counterbday}" style="height: 170px; width: 640px;" class="img-fluid rounded-start" src="data:image/jpg;base64,${item.profilePicturePath}" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title" id="employeeid${counterbday}">${item.firstname}</h5>
+                      <h6 class="card-text" id="bdaydate${counterbday}">${item.birthday}</h6>
+                      <p class="card-text">Happy Na Birthday Pa</p>
+                    </div>
+                  </div>
+                </div>`;
+            });
+
+            console.log(bdaydiv);
+
+            $('#bdayfolks').html(bdaydiv);
+          } else {
+            console.error("Error: ", result.message);
+            swal(
+              "An error occurred while fetching announcement data",
+              "Please try again later.",
+              "error"
+            );
+          }
+        },
+        // Add a closing bracket here
+      });
+    }
+
 
 
 
@@ -129,8 +202,8 @@
               var status = item.status;
 
               action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-                 `;
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
+                     `;
 
               finalData.push({
                 employeeid: item.employeeid,
@@ -284,8 +357,8 @@
               var status = item.status;
 
               action = `
-                    <button id="editcaBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
-                   `;
+                        <button id="editcaBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
+                       `;
 
               finalData.push({
                 employeeid: item.employeeid,
@@ -433,5 +506,4 @@
     });
 
   });
-
 </script>

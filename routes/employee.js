@@ -92,14 +92,14 @@ router.post("/getemployeeprofile", (req, res) => {
         TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
         TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
         DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
-    ) AS Tenure
-FROM 
+    ) AS tenure
+    FROM 
     master_employee
-LEFT JOIN 
+    LEFT JOIN 
     master_department md ON master_employee.me_department = md_departmentid
-LEFT JOIN 
+    LEFT JOIN 
     master_position ON master_employee.me_position = mp_positionid
-where me_id = '231001'`;
+    where me_id = '${employeeid}'`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -142,10 +142,10 @@ router.post("/getemployee", (req, res) => {
     mp_positionname as position,
     me_address as address,
     me_profile_pic as profilePicturePath
-    FROM master_employee
-    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
-    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
-    where me_id='${employeeid}'`;
+    FROM master_employee me
+    LEFT JOIN master_department md ON me.me_department = md.md_departmentid
+    LEFT JOIN master_position mp ON me.me_position = mp.mp_positionid
+    WHERE me.me_id = '${employeeid}';`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -169,18 +169,20 @@ router.post("/getemployee", (req, res) => {
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `
-      SELECT
-        me_id,
-        CONCAT(master_employee.me_firstname, " ", master_employee.me_lastname) AS me_firstname, me_phone,
-        me_phone,
-        me_email,
-        md_departmentname AS me_department,  -- Fetch department name from master_department table
-        mp_positionname AS me_position
-      FROM master_employee
-      LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
-      LEFT JOIN master_position ON master_employee.me_position = mp_positionid
-    `;
+    let sql = ` SELECT
+    me_id,
+    CONCAT(master_employee.me_firstname, " ", master_employee.me_lastname) AS me_firstname,
+    me_phone,
+    me_email,
+    me_jobstatus,
+    md_departmentname AS me_department,
+    mp_positionname AS me_position
+    FROM
+    master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    WHERE
+    me_jobstatus IN ('regular', 'probitionary')`;
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
       if (err) {
@@ -429,7 +431,13 @@ router.post("/update", async (req, res) => {
         console.error("Error: ", err);
         return res.status(500).json({ msg: "Error updating data" });
       }
-      res.json({ msg: "success", data: result });
+      const rowsAffected = result && result.affectedRows;
+
+      if (rowsAffected > 0) {
+        return res.json({ msg: "success" });
+      } else {
+        return res.json({ msg: "exists" });
+      }
     });
   } catch (error) {
     res
@@ -589,54 +597,6 @@ router.post("/getdisciplinary", (req, res) => {
   }
 });
 
-router.post('/insert', (req, res) => {
-  try {
-    
-    let newEmployeeId = req.body.newEmployeeId;
-    let reason = req.body.reason; 
-    let dateresigned = req.body.dateresigned;
-    let status = req.body.status;
-    let createby = req.session.fullname; 
-    let createdate = currentDate.format('YYYY-MM-DD');
-
-  
-    let data = [];
-  
-    data.push([
-      newEmployeeId, reason, dateresigned, status, createby, createdate,
-    ])
-    let query = `SELECT * FROM master_resigned WHERE mr_employeeid = '${newEmployeeId}'`;
-    mysql.Select(query, 'Master_Resigned', (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      if (result.length != 0) {
-        res.json({
-          msg: "exist"
-        });
-      }
-      else {
-        mysql.InsertTable('master_resigned', data, (err, result) => {
-          if (err) console.error('Error: ', err);
-
-          console.log(result);
-
-          res.json({
-            msg: 'success'
-          })
-        })
-      }
-    });
-
-    
-  } catch (error) {
-    res.json({
-      msg: 'error'
-    })
-  }
-});
-
-
-
 module.exports = router;
 
 function GetDepartment(name, callback) {
@@ -656,3 +616,4 @@ function GetPosition(name, callback) {
     callback(null, result);
   });
 }
+

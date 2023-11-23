@@ -52,7 +52,6 @@
                 </div>
                  <br>
                   <div class="col">
-                    <input type="hidden" id="resignedreason" name="resignedreason">
                     <div class="form-floating">
                     <input type="text" class="form-control" id="resignedreason" name="resignedreason">
                     <label for="floatingInput">Reason</label>
@@ -60,7 +59,6 @@
                 </div>
                 <br>
                 <div class="col">
-                    <input type="hidden" id="dateresigned" name="dateresigned">
                     <div class="form-floating">
                     <input type="date" class="form-control" id="dateresigned" name="dateresigned">
                     <label for="floatingInput">Date Resigned</label>
@@ -71,8 +69,9 @@
                         <div class="form-floating">
                             <select class="form-select" id="resignedstatus" name="resignedstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="On Process">Active</option>
-                              <option value="Complete">Inactive</option>
+                              <option value="resigned">Resigned</option>
+                              <option value="terminated">Terminate</option>
+                              <option value="end_of_contract">End Of Contract</option>
                             </select>
                             <label for="floatingSelectGrid">Status</label>
                           </div>
