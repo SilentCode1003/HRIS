@@ -71,6 +71,8 @@
                 </div>
             </div>`;
 
+            
+
               console.log(anouncementdiv);
 
 
@@ -434,4 +436,170 @@
 
   });
 
+
+  document.addEventListener('DOMContentLoaded', function () {
+  // Define attendance data
+  const attendanceData = {
+    present: 80,
+    absent: 15,
+    late: 5,
+  };
+
+  // Get the canvas element for attendance chart
+  const attendanceCanvas = document.getElementById('attendanceChart');
+  const attendanceCtx = attendanceCanvas.getContext('2d');
+
+  // Set up attendance chart
+  const attendanceDataConfig = {
+    labels: ['Present', 'Absent', 'Late'],
+    datasets: [{
+      data: [attendanceData.present, attendanceData.absent, attendanceData.late],
+      backgroundColor: ['#36A2EB', '#F70101', '#FFAA33'],
+    }],
+  };
+
+  const attendanceOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Attendance Chart',
+        font: {
+          size: 16,
+        },
+      },
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem, data) {
+          const dataset = data.datasets[tooltipItem.datasetIndex];
+          const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
+          const currentValue = dataset.data[tooltipItem.index];
+          const percentage = ((currentValue / total) * 100).toFixed(2) + '%';
+          return data.labels[tooltipItem.index] + ': ' + percentage;
+        },
+      },
+    },
+  };
+
+  // Create attendance chart
+  const attendanceChart = new Chart(attendanceCtx, {
+    type: 'doughnut',
+    data: attendanceDataConfig,
+    options: attendanceOptions,
+  });
+
+  // Define employee data
+  const employeeData = {
+    Active: 70,
+    Resigned: 5,
+    Terminate: 5,
+    EndofContract : 20,
+  };
+
+  // Get the canvas element for employee chart
+  const employeeCanvas = document.getElementById('employeeChart');
+  const employeeCtx = employeeCanvas.getContext('2d');
+
+  // Set up employee chart
+  const employeeDataConfig = {
+    labels: ['Active', 'Resigned', 'Terminate', 'End of Contract'],
+    datasets: [{
+      data: [employeeData.Active, employeeData.Resigned, employeeData.Terminate, employeeData.EndofContract,],
+      backgroundColor: ['#32de84', '#36A2EB', '#F70101', '#FFAA33',],
+    }],
+  };
+
+  const employeeOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Employee',
+        font: {
+          size: 20,
+        },
+      },
+    },
+  };
+
+  // Create employee chart
+  const employeeChart = new Chart(employeeCtx, {
+    type: 'pie',
+    data: employeeDataConfig,
+    options: employeeOptions,
+  });
+});
+
+ //employee graph
+
+  // Sample data (replace this with your actual data)
+  var jobStatusData = {
+            labels: ['Regular', 'Probationary', 'Project Based'],
+            datasets: [{
+                label: 'Job Status',
+                data: [50, 30, 20], // Replace with actual counts
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 205, 86, 1)',
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        var departmentData = {
+            labels: ['Admin', 'IT', 'Cabling'],
+            datasets: [{
+                label: 'Employee Count',
+                data: [100, 75, 50], // Replace with actual counts
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 205, 86, 1)',
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Get the context of the canvases
+        var jobStatusCtx = document.getElementById('jobstatusChart').getContext('2d');
+        var departmentCtx = document.getElementById('departmentChart').getContext('2d');
+
+        // Create bar charts
+        var jobStatusChart = new Chart(jobStatusCtx, {
+            type: 'bar',
+            data: jobStatusData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var departmentChart = new Chart(departmentCtx, {
+            type: 'bar',
+            data: departmentData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
 </script>
