@@ -92,14 +92,14 @@ router.post("/getemployeeprofile", (req, res) => {
         TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
         TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
         DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
-    ) AS Tenure
+    ) AS tenure
 FROM 
     master_employee
 LEFT JOIN 
     master_department md ON master_employee.me_department = md_departmentid
 LEFT JOIN 
     master_position ON master_employee.me_position = mp_positionid
-where me_id = '231001'`;
+where me_id = '${employeeid}'`;
 
     mysql
       .mysqlQueryPromise(sql)

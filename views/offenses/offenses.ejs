@@ -4,105 +4,110 @@
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#offensesmodal">
-        + Add New
-      </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  <div class="card-header py-3">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#offensesmodal">
+      + Add New
+    </button>
+    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTabloeffenses">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Offense Name</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTabloeffenses">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Offense Name</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="offensesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Offense</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="offensesname" name="offensesname" placeholder="Department Name">
-                        <label for="floatingInput">Offense Name</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="offensesstatus" name="offensesstatus" aria-label="Floating label select example">
-                              <option selected>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Shift</label>
-                          </div>
-                    </div>
-                    <br>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="offensessavebtn">Save</button>
-        </div>
+<div class="modal fade" id="offensesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Offense</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
-  </div>
-
-  <!-- Edit Modal -->
-<div class="modal fade" id="editoffensesmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editoffensesname" name="editoffensesname" placeholder="Department Name">
-                    <label for="floatingInput">Offense Name</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editoffensesstatus" name="editoffensesstatus" aria-label="Floating label select example">
-                          <option selected>Status</option>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Shift</label>
-                      </div>
-                </div>
-                <br>
+      <div class="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="offensesname" name="offensesname"
+                placeholder="Department Name">
+              <label for="floatingInput">Offense Name</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="offensesstatus" name="offensesstatus"
+                aria-label="Floating label select example">
+                <option selected>Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingSelectGrid">Shift</label>
+            </div>
+          </div>
+          <br>
         </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="offenseseditbtn">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="offensessavebtn">Save</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editoffensesmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="editoffensesname" name="editoffensesname"
+                placeholder="Department Name">
+              <label for="floatingInput">Offense Name</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="editoffensesstatus" name="editoffensesstatus"
+                aria-label="Floating label select example">
+                <option selected>Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingSelectGrid">Shift</label>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="offenseseditbtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
