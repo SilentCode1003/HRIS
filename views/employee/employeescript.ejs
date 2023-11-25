@@ -340,7 +340,8 @@
                     $("#employeeprofiledepartment").text(item.department);
                     $("#employeeprofileposition").text(item.position);
                     $("#employeeprofilephone").text(item.contact);
-                    $("#employeework").text(item.workdays + " :Days");
+                    $("#employeework").text(item.tenure);
+
                   });
                 }
               },
@@ -959,7 +960,8 @@
     }
   }
 
-  function reloadPage() {
+function reloadPage() {
     location.reload();
   }
+
 </script>
