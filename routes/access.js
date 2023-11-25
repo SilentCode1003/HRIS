@@ -21,7 +21,7 @@ router.post('/getaccess', (req, res) => {
     ma_accessid as accessid,
     ma_accessname as accessname,
     ma_createby as createby,
-    ma_createdate as createdate,
+    ma_createdate as createdate,f
     ma_status as status 
     from master_access
     where ma_accessid = '${accessid}'`;

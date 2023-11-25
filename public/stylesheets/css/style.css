@@ -285,7 +285,6 @@
     border-radius: 50%;
     animation: spin 2s linear infinite;
   }
-
   @keyframes spin {
     to {
       transform: rotate(360deg);
@@ -334,6 +333,43 @@
     100% {
       height: 0%;
     }
+  }
+  /* 
+  input dropdown */
+  
+  .custom-input {
+    width: 100%;
+  }
+  
+  .categoryDropdown{
+    margin-left: 5.1rem !important;
+  }
+  
+  .hidden{
+    display: none;
+  }
+  
+  .custom-dropdown {
+    display: none;
+    width: 100%;
+    border: 1px solid #ccc;
+    max-height: 100px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: white;
+    width: 36.7vw;
+    z-index: 1000;
+    border-radius: 0.275rem;
+  }
+  
+  .dropdown-option {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown-option:hover {
+    background-color: var(--clr-6);
+    color: white;
   }
   .chart-container {
     width: 100%;

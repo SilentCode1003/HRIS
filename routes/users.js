@@ -104,16 +104,16 @@ router.post('/update', async (req, res) => {
     let status = req.body.status;
 
     // Wrap the Encrypter function in a promise
-    const encrypted = await new Promise((resolve, reject) => {
-      Encrypter(password, (err, result) => {
-        if (err) {
-          console.error("Error in Encrypter: ", err);
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
+    // const encrypted = await new Promise((resolve, reject) => {
+    //   Encrypter(password, (err, result) => {
+    //     if (err) {
+    //       console.error("Error in Encrypter: ", err);
+    //       reject(err);
+    //     } else {
+    //       resolve(result);
+    //     }
+    //   });
+    // });
 
     let sqlupdate = `UPDATE master_user SET 
       mu_username = '${username}',

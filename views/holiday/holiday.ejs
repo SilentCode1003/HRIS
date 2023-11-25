@@ -2,136 +2,73 @@
 
 <br>
 <br>
-<!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#holidaymodal">
-        + Add New
-      </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
-    </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-striped" id="dataTableholiday">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Create Date</th>
-                        <th>Created By</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="date" class="form-control" id="holidaydate" name="holidaydate">
-                        <label for="floatingInput">Date</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="holidaydescription" name="holidaydescription" placeholder="Description">
-                        <label for="floatingInput">Description</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="holidaycreatedby" name="holidaycreatedby" placeholder="Created By">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="holidaytstatus" name="holidaytstatus" aria-label="Floating label select example">
-                              <option selected>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Holiday</label>
-                          </div>
-                    </div>
-                    <br>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="holidaysavebtn">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Edit Modal -->
-<div class="modal fade" id="editholidaymentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header py-3">
+    <div class="col-md-6 mmb">
+      <div class="input-group">
+          <div class="input-group-prepend">
+              <span class="input-group-text">Add Holidays</span>
+          </div>
+          <input class="form-control text-center custom-input" placeholder="Select/Input Year" name="yearInput" id="yearInput"/>
+          <button type="button" class="btn btn-danger" id="generateHolidaysBtn">Generate Holidays</button>
+      </div>
+      <div class="custom-dropdown employees-position" id="positionDropdown">
+      </div>
+  </div>
+    <input id='myInput2' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTableholiday">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Day</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!--Modal-->
+<!-- <div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Generate Holidays</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="row g-3">
         <div class="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="editholidaydate" name="editholidaydate">
-                    <label for="floatingInput">Date</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editholidaydescription" name="editholidaydescription" placeholder="Description">
-                    <label for="floatingInput">Description</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editholidaycreatedby" name="editholidaycreatedby" placeholder="Created By">
-                    <label for="floatingInput">Created By</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editholidaytstatus" name="editholidaytstatus" aria-label="Floating label select example">
-                          <option selected>Status</option>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Holiday</label>
-                      </div>
-                </div>
-                <br>
-        </form>
+          <form>
+            <div class="col">
+              <div class="col">
+                <div class="form-floating">
+                <input type="number" class="form-control" id="yearInput" name="yearInput">
+                <label for="floatingInput">Enter Year</label>
+              </div>
+            </div>
+            </div>
+            <br>
+          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editholidaysavebtn">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="generateHolidaysBtn">Generate Holidays</button>
       </div>
     </div>
   </div>
+</div> -->
