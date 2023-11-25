@@ -5,8 +5,9 @@
       console.log('Initialize');
       LoadTable();
       LoadListEmp();
-      LoadAccess();
-      LoadEditAccess();
+      searchTable();
+      //LoadAccess();
+      //LoadEditAccess();
   
       function LoadTable() {
           $("#dataTableresigned").DataTable({
@@ -70,70 +71,80 @@
             },
           });
         }
-  
+
         
-  $(document).on("click", "#userssavebtn", function () {
-    let employeeid = $("#usersname").val();
-    let accesstype = $("#usersaccesstype").val();
-    let status = $("#usersstatus").val();
+           
+$(document).on("click", "#resignedsavebtn", function () {
+  let newEmployeeId = $("#resignedemployee").val();
+  let reason = $("#resignedreason").val();
+  let dateresigned = $("#dateresigned").val();
+  let status = $("#resignedstatus").val();
+
+  console.log(`${newEmployeeId}`,`${reason}`,`${dateresigned}`,`${status}`)
   
-    var message = "";
-  
-    if (employeeid == "") {
-      message += "TITTLE ";
-    }
-  
-    if (accesstype == "") {
-      message += "DESCRIPTION ";
-    }
-  
-  
-    if (status == "") {
-      message += "POSITION NAME ";
-    }
-  
-    if (message !== "") {
-      swal("Validation Error", message, "error");
-      } else {
-      $.ajax({
-        type: "POST",
-        url: "/users/save",
-        data: {
-          employeeid: employeeid,
-          accesstype: accesstype,
-          status: status,
-  
-        },
-        success: function (result) {
-          if (result.msg == "success") {
-            swal({
-              title: "Saved Successfully",
-              text: "You clicked the button!",
-              icon: "success",
-              button: "OK!",
-            })
-            .then(results => {
-            window.location.reload();
-            })
-            LoadTable();
-          }
-          else {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
-            });
-          }
-        
-        },
-        error: function (err) {
-          swal("Data already exist!", "You clicked the button!", "warning");
-        },
-      });
-    }
-  
-  });
+
+  var message = "";
+
+  if (newEmployeeId == "") {
+    message += "shiftname is required ";
+  }
+
+  if (reason == "") {
+    message += "status is required ";
+  }
+
+  if (dateresigned == "") {
+    message += "department is required ";
+  }
+
+  if (status == "") {
+    message += "createby is required ";
+  }
+
+  if (message !== "") {
+    swal("Validation Error", message, "error"); 
+  } else {
+
+    $.ajax({
+      type: "POST",
+      url: "/resigned/save",
+      data: {
+        newEmployeeId: newEmployeeId,
+        reason: reason,
+        dateresigned: dateresigned,
+        status: status,
+
+      },
+      success: function (result) {
+        if (result.msg == "success") {
+          swal({
+            title: "Saved Successfully",
+            text: "You clicked the button!",
+            icon: "success",
+            button: "OK!",
+          })
+          .then(results => {
+          window.location.reload();
+          })
+          LoadTable();
+        }
+        else {
+          swal({
+            title: "Exist",
+            text: "Data already exists!",
+            icon: "warning",
+            button: "OK!",
+          });
+        }
+      
+      },
+      error: function (err) {
+        swal("Data already exist!", "You clicked the button!", "warning");
+      },
+    });
+  }
+    
+});
 
   
  function LoadListEmp() {
@@ -147,7 +158,7 @@
         $.each(data, function (key, item) {
           var options = new Option(item.newEmployeeId, item.newEmployeeId);
           $(options).html(item.firstname);
-          $("#usersname").append(options);
+          $("#resignedemployee").append(options);
           console.log(item.firstname);
         });
       },
@@ -157,50 +168,50 @@
     });
   }
 
-  function LoadAccess() {
-    $.ajax({
-      type: "GET",
-      url: "/access/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
+//   function LoadAccess() {
+//     $.ajax({
+//       type: "GET",
+//       url: "/access/load",
+//       success: function (result) {
+//         console.log(result.data);
+//         var data = result.data;
 
-        $.each(data, function (key, item) {
-          var options = new Option(item.accessid, item.accessid);
-          $(options).html(item.accessname);
-          $("#usersaccesstype").append(options);
-          console.log(item.accessname);
-        });
-      },
-      error: function (result) {
-        alert("error: " + result.data);
-      },
-    });
-  }
+//         $.each(data, function (key, item) {
+//           var options = new Option(item.accessid, item.accessid);
+//           $(options).html(item.accessname);
+//           $("#usersaccesstype").append(options);
+//           console.log(item.accessname);
+//         });
+//       },
+//       error: function (result) {
+//         alert("error: " + result.data);
+//       },
+//     });
+//   }
 
-  function LoadEditAccess() {
-    $.ajax({
-      type: "GET",
-      url: "/access/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
+//   function LoadEditAccess() {
+//     $.ajax({
+//       type: "GET",
+//       url: "/access/load",
+//       success: function (result) {
+//         console.log(result.data);
+//         var data = result.data;
 
-        $.each(data, function (key, item) {
-          var options = new Option(item.accessid, item.accessid);
-          $(options).html(item.accessname);
-          $("#editusersaccesstype").append(options);
-          console.log(item.accessname);
-        });
-      },
-      error: function (result) {
-        alert("error: " + result.data);
-      },
-    });
-  }
+//         $.each(data, function (key, item) {
+//           var options = new Option(item.accessid, item.accessid);
+//           $(options).html(item.accessname);
+//           $("#editusersaccesstype").append(options);
+//           console.log(item.accessname);
+//         });
+//       },
+//       error: function (result) {
+//         alert("error: " + result.data);
+//       },
+//     });
+//   }
 
   
-  $("#dataTableusers tbody").on("click", "tr", function () {
+  $("#dataTableresigned tbody").on("click", "tr", function () {
     var dataRow = [];
     $(this)
       .closest("tr")
@@ -209,14 +220,14 @@
         dataRow.push($(this).text());
       });
     console.log(dataRow);
-    userid = dataRow[0];
+    resignedid = dataRow[0];
   });
   
   $(document).on("click", "#editBtn", function () {
     console.log('hit');
         $.ajax({
           type: "POST",
-          url: "/users/getusers",
+          url: "/resigned/getresigned",
           data: {
             userid: userid,
           },
@@ -310,11 +321,14 @@
     }
   });
                 
+    
+  });
+
   function searchTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInput");
       filter = input.value.toUpperCase();
-      table = document.getElementById("dataTableaccess");
+      table = document.getElementById("dataTableresigned");
       tr = table.getElementsByTagName("tr");
       for (i = 0; i < tr.length; i++) {
           td = tr[i].getElementsByTagName("td");
@@ -332,8 +346,6 @@
       }
   }
   
-    
-  });
   
   </script>
       
