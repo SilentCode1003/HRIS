@@ -87,18 +87,18 @@ router.get('/load', (req, res,) => {
 
   router.post('/update', (req, res) => {
     try {
-      let shiftid = req.body.shiftid;
-      let shiftname = req.body.shiftname;
+      let resignedid = req.body.resignedid;
+      let reason = req.body.reason;
       let status = req.body.status;
-      let department = req.body.department;
-      let createby = req.session.fullname; 
+      let createby = req.session.fullname;
+      let createdate = currentDate.format('YYYY-MM-DD');
       
-      let sqlupdate = `UPDATE master_shift SET   
-      ms_shiftname ='${shiftname}', 
-      ms_status ='${status}', 
-      ms_department ='${department}',
-      ms_createby ='${createby}' 
-      WHERE ms_shiftid ='${shiftid}'`;
+      let sqlupdate = `UPDATE master_resigned SET  
+      mr_reason = '${reason}',
+      mr_status = '${status}',
+      mr_createby = '${createby}',
+      mr_createdate = '${createdate}'
+      WHERE mr_resignedid ='${resignedid}'`;
   
       mysql.Update(sqlupdate)
       .then((result) =>{
@@ -121,16 +121,16 @@ router.get('/load', (req, res,) => {
     }
   });
 
-  router.post('/getshift', (req, res) => {
+  router.post('/getresigned', (req, res) => {
     try {
-      let shiftid = req.body.shiftid;
+      let resignedid = req.body.resignedid;
       let sql = `SELECT
-        ms_shiftname as shiftname,
-        ms_status as status,
-        ms_department as department,
-        ms_createby as createby
-        FROM master_shift
-        WHERE ms_shiftid = '${shiftid}'`;
+      mr_employeeid as employeeid,
+      mr_reason as reason,
+      mr_dateresigned as dateresigned,
+      mr_status as status
+      FROM master_resigned
+      WHERE mr_resignedid = '${resignedid}'`;
   
       mysql.mysqlQueryPromise(sql)
         .then((result) => {

@@ -167,6 +167,39 @@ router.post("/getemployee", (req, res) => {
   }
 });
 
+
+router.get("/loadedit", (req, res) => {
+  try {
+    let sql = ` SELECT
+    me_id,
+    CONCAT(master_employee.me_firstname, " ", master_employee.me_lastname) AS me_firstname,
+    me_phone,
+    me_email,
+    me_jobstatus,
+    md_departmentname AS me_department,
+    mp_positionname AS me_position
+    FROM
+    master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ msg: "Error fetching data" });
+        return;
+      }
+
+      res.json({ msg: "success", data: result });
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Internal server error", error: error.message });
+  }
+});
+
+
 router.get("/load", (req, res) => {
   try {
     let sql = ` SELECT

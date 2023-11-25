@@ -350,9 +350,9 @@ exports.InsertTable = (tablename, data, callback) => {
   if (tablename == "master_holiday") {
     let sql = `INSERT INTO master_holiday(
         mh_date,
-        mh_description,
-        mh_createdate,
-        mh_createby,
+        mh_name,
+        mh_day,
+        mh_type,
         mh_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {

@@ -6,6 +6,7 @@
       LoadTable();
       LoadListEmp();
       searchTable();
+      LoadeditListEmp();
       //LoadAccess();
       //LoadEditAccess();
   
@@ -32,7 +33,7 @@
                   var status = item.status;
   
                   action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editusersmodal"><i class="fas fa-fw fa-pen"></i></button>
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editresignedmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
     
                   finalData.push({
@@ -168,49 +169,28 @@ $(document).on("click", "#resignedsavebtn", function () {
     });
   }
 
-//   function LoadAccess() {
-//     $.ajax({
-//       type: "GET",
-//       url: "/access/load",
-//       success: function (result) {
-//         console.log(result.data);
-//         var data = result.data;
+   function LoadeditListEmp() {
+    $.ajax({
+      type: "GET",
+      url: "/employee/loadedit",
+      success: function (result) {
+        console.log(result.data);
+        var data = result.data;
 
-//         $.each(data, function (key, item) {
-//           var options = new Option(item.accessid, item.accessid);
-//           $(options).html(item.accessname);
-//           $("#usersaccesstype").append(options);
-//           console.log(item.accessname);
-//         });
-//       },
-//       error: function (result) {
-//         alert("error: " + result.data);
-//       },
-//     });
-//   }
+        $.each(data, function (key, item) {
+          var options = new Option(item.newEmployeeId, item.newEmployeeId);
+          $(options).html(item.firstname);
+          $("#editresignedemployee").append(options);
+          console.log(item.firstname);
+        });
+      },
+      error: function (result) {
+        alert("error: " + result.data);
+      },
+    });
+  }
 
-//   function LoadEditAccess() {
-//     $.ajax({
-//       type: "GET",
-//       url: "/access/load",
-//       success: function (result) {
-//         console.log(result.data);
-//         var data = result.data;
-
-//         $.each(data, function (key, item) {
-//           var options = new Option(item.accessid, item.accessid);
-//           $(options).html(item.accessname);
-//           $("#editusersaccesstype").append(options);
-//           console.log(item.accessname);
-//         });
-//       },
-//       error: function (result) {
-//         alert("error: " + result.data);
-//       },
-//     });
-//   }
-
-  
+ 
   $("#dataTableresigned tbody").on("click", "tr", function () {
     var dataRow = [];
     $(this)
@@ -229,18 +209,18 @@ $(document).on("click", "#resignedsavebtn", function () {
           type: "POST",
           url: "/resigned/getresigned",
           data: {
-            userid: userid,
+            resignedid: resignedid,
           },
           success: function (result) {
             if (result.msg === "success") {
               const existingData = result.data;
       
               $.each(existingData, (key, item) => {
-                $("#editdepartmentid").val(item.userid); 
-                $("#editusername").val(item.username);
-                //$("#editpassword").val(item.password);
-                $("#editusersaccesstype").val(item.accesstype);
-                $("#editusersstatus").val(item.status);
+                $("#editdepartmentid").val(item.resignedid); 
+                $("#editresignedemployee").val(item.employeeid);
+                $("#editresignedreason").val(item.reason);
+                $("#editdateresigned").val(item.dateresigned);
+                $("#editresignedstatus").val(item.status);
               });
             } else {
               swal("Error fetching employee data", message, "error");
@@ -252,30 +232,20 @@ $(document).on("click", "#resignedsavebtn", function () {
         });
       });
       
-      $(document).on("click", "#edituserssavebtn", function () {
+      $(document).on("click", "#editresignedsavebtn", function () {
         console.log("Save button clicked");
-        let id = userid
-        let username = $("#editusername").val();
-        //let password = $("#editpassword").val();
-        let accesstype = $("#editusersaccesstype").val();
-        let status = $("#editusersstatus").val();
+        let id = resignedid
+        let reason = $("#editresignedreason").val();
+        let status = $("#editresignedstatus").val();
       
       var message = "";
     
-      if (username === "") {
-        message += "departmentname is required. ";
-      }
-    
-      //if (password === "") {
-        //message += "status is required. ";
-      //}
-
-      if (accesstype === "") {
+      if (reason === "") {
         message += "departmentname is required. ";
       }
     
       if (status === "") {
-        message += "status is required. ";
+        message += "departmentname is required. ";
       }
   
       if (message !== "") {
@@ -283,13 +253,12 @@ $(document).on("click", "#resignedsavebtn", function () {
     } else {
       $.ajax({
         type: "POST",
-        url: "/users/update",
+        url: "/resigned/update",
         data: { 
-            userid: id,
-            username: username,
-            //password: password,
-            accesstype: accesstype,
-            status: status, 
+            resignedid: id,
+            reason: reason,
+            status: status,
+
         },
         success: function (result) {
           if (result.msg == "success") {
