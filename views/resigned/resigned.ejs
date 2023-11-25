@@ -92,14 +92,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Resigned Employee</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Edit Resigned Employee</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <form>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editresignedemployee" name="editresignedemployee" aria-label="Floating label select example">
+                        <select class="form-select" id="editresignedemployee" name="editresignedemployee" aria-label="Floating label select example" disabled>
                           <option selected>Choose..</option>
                         </select>
                         <label for="floatingSelectGrid">Employee</label>
@@ -107,7 +107,6 @@
                 </div>
                  <br>
                   <div class="col">
-                    <input type="hidden" id="editresignedreason" name="editresignedreason">
                     <div class="form-floating">
                     <input type="text" class="form-control" id="editresignedreason" name="editresignedreason">
                     <label for="floatingInput">Reason</label>
@@ -115,7 +114,6 @@
                 </div>
                 <br>
                 <div class="col">
-                    <input type="hidden" id="editdateresigned" name="editdateresigned">
                     <div class="form-floating">
                     <input type="date" class="form-control" id="editdateresigned" name="editdateresigned">
                     <label for="floatingInput">Date Resigned</label>
@@ -126,8 +124,9 @@
                         <div class="form-floating">
                             <select class="form-select" id="editresignedstatus" name="editresignedstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
-                              <option value="On Process">Active</option>
-                              <option value="Complete">Inactive</option>
+                              <option value="resigned">Resigned</option>
+                              <option value="terminated">Terminate</option>
+                              <option value="end_of_contract">End Of Contract</option>
                             </select>
                             <label for="floatingSelectGrid">Status</label>
                           </div>

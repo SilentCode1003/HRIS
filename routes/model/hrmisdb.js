@@ -240,10 +240,10 @@ exports.Master_Holiday = (data) => {
     data.forEach((key, item) => {
         dataResult.push({
             holidayid: key.mh_holidayid,
+            day: key.mh_day,
+            name: key.mh_name,
             date: key.mh_date,
-            description: key.mh_description,
-            createdate: key.mh_createdate,
-            createby: key.mh_createby,
+            type: key.mh_type,
             status: key.mh_status,
         });
     });
