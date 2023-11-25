@@ -1,83 +1,128 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-const express = require('express');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const XLSX = require('xlsx');
-const { Validator } = require('./controller/middleware');
+const multer = require("multer");
+const XLSX = require("xlsx");
+const { Validator } = require("./controller/middleware");
 
-
-const currentYear = moment().format('YY');
-const currentMonth = moment().format('MM');
+const currentYear = moment().format("YY");
+const currentMonth = moment().format("MM");
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  //res.render('employeelayout', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  // res.render('employeelayout', { title: 'Express' });
 
-  Validator(req, res, 'employeelayout');
+  Validator(req, res, "employeelayout");
 });
 
 module.exports = router;
 
-router.post('/upload', (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded.' });
-  }
+router.post("/upload", (req, res) => {
+  const { data } = req.body;
+  let dataJson = JSON.parse(data);
+  let inputFormat = "DD/MM/YYYY";
 
-  const fileData = req.file.buffer;
-  const workbook = XLSX.read(fileData, { type: 'buffer' });
-  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-  const excelData = XLSX.utils.sheet_to_json(worksheet);
+  let counter = 0;
 
-  // Assuming your Excel file has columns like 'name' and 'email'
-  excelData.forEach((row) => {
-    const sql = 'INSERT INTO master_employee (name, email) VALUES (?, ?)';
-    db.query(sql, [row.name, row.email], (err, result) => {
-      if (err) {
-        console.error('Error inserting data: ' + err.message);
-      } else {
-        console.log('Inserted data with ID: ' + result.insertId);
-      }
+  dataJson.forEach((key, item) => {
+    counter += 1;
+
+    GetDepartment(key.department, (err, result) => {
+      if (err) console.log("Error: ", err);
+      let departmentid = result[0].departmentid;
+      GetPosition(key.position, (err, result) => {
+        if (err) console.log("Error: ", err);
+        let positionid = result[0].positionid;
+
+        let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
+          "YYYY-MM-DD"
+        );
+        let datehired = moment(key.hiredate, "MM/DD/YYYY").format("YYYY-MM-DD");
+        console.log(key.hiredate);
+
+        master_employee = [
+          [
+            key.id,
+            key.firstname,
+            key.middlename,
+            key.lastname,
+            dateofbirth,
+            key.gender,
+            key.contactno,
+            key.email,
+            datehired,
+            key.jobstatus,
+            key.econtactname,
+            key.econtactno,
+            departmentid,
+            positionid,
+            key.address,
+            "",
+          ],
+        ];
+
+        mysql.InsertTable("master_employee", master_employee, (err, result) => {
+          if (err) console.error("Error: ", err);
+
+          console.log(result);
+        });
+      });
     });
-  });
 
-  res.status(200).json({ message: 'Data uploaded successfully.' });
+    if (counter == dataJson.length) {
+      res.json({
+        msg: "success",
+      });
+    }
+  });
 });
 
-
-
-router.post('/getemployeeprofile', (req, res) => {
+router.post("/getemployeeprofile", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql =  `select 
-    me_id as employeeid,
-    concat(me_firstname, ' ', me_lastname) AS firstname,
-    md_departmentname as department,
-    mp_positionname as position,
-    me_phone as contact
-   from master_employee
-   LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
-   LEFT JOIN master_position ON master_employee.me_position = mp_positionid
-    where me_id = '${employeeid}'`;
+    let sql = `
+    SELECT 
+    me_id AS employeeid,
+    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+    md_departmentname AS department,
+    mp_positionname AS position,
+    me_phone AS contact,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+        DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+    ) AS Tenure
+FROM 
+    master_employee
+LEFT JOIN 
+    master_department md ON master_employee.me_department = md_departmentid
+LEFT JOIN 
+    master_position ON master_employee.me_position = mp_positionid
+where me_id = '231001'`;
 
-    mysql.mysqlQueryPromise(sql).then((result) => {
-      res.json({
-        msg:'success',data: result
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
       });
-    }).catch((error) => {
-      res.json({
-        msg: 'error', error
-      });
-    });
   } catch (error) {
     res.json({
-      msg: error
-    })
-    
+      msg: error,
+    });
   }
 });
 
-router.post('/getemployee', (req, res) => {
+router.post("/getemployee", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT
@@ -102,23 +147,27 @@ router.post('/getemployee', (req, res) => {
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     where me_id='${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql).then((result) => {
-      res.json({
-        msg:"success",data: result
-      });
-    }).catch((error) => {
-      res.json({
-        msg: error
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg: error
-    })
+      msg: error,
+    });
   }
 });
 
-router.get('/load', (req, res) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `
       SELECT
@@ -133,17 +182,19 @@ router.get('/load', (req, res) => {
       LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     `;
 
-    mysql.Select(sql, 'Master_Employee', (err, result) => {
+    mysql.Select(sql, "Master_Employee", (err, result) => {
       if (err) {
-        console.error('Error: ', err);
-        res.status(500).json({ msg: 'Error fetching data' });
+        console.error("Error: ", err);
+        res.status(500).json({ msg: "Error fetching data" });
         return;
       }
 
-      res.json({ msg: 'success', data: result });
+      res.json({ msg: "success", data: result });
     });
   } catch (error) {
-    res.status(500).json({ msg: 'Internal server error', error: error.message });
+    res
+      .status(500)
+      .json({ msg: "Internal server error", error: error.message });
   }
 });
 
@@ -152,7 +203,8 @@ function checkEmployeeExists(firstname, lastname) {
   return new Promise((resolve, reject) => {
     const checkQuery = `SELECT COUNT(*) AS count FROM master_employee WHERE me_firstname = '${firstname}' AND me_lastname = '${lastname}'`;
 
-    mysql.mysqlQueryPromise(checkQuery)
+    mysql
+      .mysqlQueryPromise(checkQuery)
       .then((result) => {
         const count = parseInt(result[0].count);
 
@@ -176,23 +228,24 @@ function generateEmployeeId(year, month) {
 
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
-    mysql.mysqlQueryPromise(maxIdQuery).then((result) => {
+    mysql
+      .mysqlQueryPromise(maxIdQuery)
+      .then((result) => {
+        let currentCount = parseInt(result[0].count) + 1;
+        const paddedNumericPart = String(currentCount).padStart(2, "0");
 
-      let currentCount = parseInt(result[0].count) + 1;
-      const paddedNumericPart = String(currentCount).padStart(2, '0');
+        let newEmployeeID = `${year}${month}${paddedNumericPart}`;
 
-      let newEmployeeID = `${year}${month}${paddedNumericPart}`;
-
-      resolve(newEmployeeID);
-    }).catch((error) => {
-      reject(error);
-    });
+        resolve(newEmployeeID);
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 }
 
 // Function to convert an image file to a base64-encoded string
-
-router.post('/save', async (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     let firstname = req.body.firstname;
     let middlename = req.body.middlename;
@@ -213,10 +266,9 @@ router.post('/save', async (req, res) => {
 
     const employeeExists = await checkEmployeeExists(firstname, lastname);
 
-
     if (employeeExists) {
       // The employee already exists
-      res.json({ msg: 'exist' });
+      res.json({ msg: "exist" });
       return;
     }
 
@@ -228,54 +280,73 @@ router.post('/save', async (req, res) => {
         const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${departmentName}'`;
 
         try {
-          const departmentIdResult = await mysql.mysqlQueryPromise(departmentIdQuery);
+          const departmentIdResult = await mysql.mysqlQueryPromise(
+            departmentIdQuery
+          );
           const departmentId = departmentIdResult[0].md_departmentid;
 
           // Fetch the position ID based on the position name
           const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${positionName}'`;
 
           try {
-            const positionIdResult = await mysql.mysqlQueryPromise(positionIdQuery);
+            const positionIdResult = await mysql.mysqlQueryPromise(
+              positionIdQuery
+            );
             const positionId = positionIdResult[0].mp_positionid;
 
-
             data.push([
-              newEmployeeId, firstname, middlename, lastname, birthday, gender, phone, email, hiredate,
-              jobstatus, ercontactname, ercontactphone, departmentId, positionId, address, profilePicturePath
+              newEmployeeId,
+              firstname,
+              middlename,
+              lastname,
+              birthday,
+              gender,
+              phone,
+              email,
+              hiredate,
+              jobstatus,
+              ercontactname,
+              ercontactphone,
+              departmentId,
+              positionId,
+              address,
+              profilePicturePath,
             ]);
 
-            mysql.InsertTable('master_employee', data, (insertErr, insertResult) => {
-              if (insertErr) {
-                console.error('Error inserting record: ', insertErr);
-                res.json({ msg: 'insert_failed' });
-              } else {
-                
-                console.log(insertResult);
-                res.json({ msg: 'success' });
+            mysql.InsertTable(
+              "master_employee",
+              data,
+              (insertErr, insertResult) => {
+                if (insertErr) {
+                  console.error("Error inserting record: ", insertErr);
+                  res.json({ msg: "insert_failed" });
+                } else {
+                  console.log(insertResult);
+                  res.json({ msg: "success" });
+                }
               }
-            });
+            );
           } catch (positionIdError) {
-            console.error('Error fetching position ID: ', positionIdError);
-            res.json({ msg: 'position_id_fetch_error' });
+            console.error("Error fetching position ID: ", positionIdError);
+            res.json({ msg: "position_id_fetch_error" });
           }
         } catch (departmentIdError) {
-          console.error('Error fetching department ID: ', departmentIdError);
-          res.json({ msg: 'department_id_fetch_error' });
+          console.error("Error fetching department ID: ", departmentIdError);
+          res.json({ msg: "department_id_fetch_error" });
         }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         res.json({
-          msg: error
+          msg: error,
         });
       });
-
   } catch (error) {
-    console.error('Error in /save route: ', error);
-    res.json({ msg: 'error' });
+    console.error("Error in /save route: ", error);
+    res.json({ msg: "error" });
   }
 });
 
-
-router.post('/update', async (req, res) => {
+router.post("/update", async (req, res) => {
   try {
     // Retrieve request parameters
     let newEmployeeId = req.body.newEmployeeId;
@@ -297,17 +368,21 @@ router.post('/update', async (req, res) => {
 
     // Get department ID based on department name
     const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
-    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [department]);
+    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [
+      department,
+    ]);
     if (!departmentIdRow) {
-      return res.status(400).json({ msg: 'Department not found' });
+      return res.status(400).json({ msg: "Department not found" });
     }
     const departmentId = departmentIdRow.md_departmentid;
 
     // Get position ID based on position name
     const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
-    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [position]);
+    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [
+      position,
+    ]);
     if (!positionIdRow) {
-      return res.status(400).json({ msg: 'Position not found' });
+      return res.status(400).json({ msg: "Position not found" });
     }
     const positionId = positionIdRow.mp_positionid;
 
@@ -346,22 +421,24 @@ router.post('/update', async (req, res) => {
       positionId,
       address,
       profilePicturePath,
-      newEmployeeId
+      newEmployeeId,
     ];
 
     mysql.UpdateMultiple(sql, values, (err, result) => {
       if (err) {
-        console.error('Error: ', err);
-        return res.status(500).json({ msg: 'Error updating data' });
+        console.error("Error: ", err);
+        return res.status(500).json({ msg: "Error updating data" });
       }
-      res.json({ msg: 'success', data: result });
+      res.json({ msg: "success", data: result });
     });
   } catch (error) {
-    res.status(500).json({ msg: 'Internal server error', error: error.message });
+    res
+      .status(500)
+      .json({ msg: "Internal server error", error: error.message });
   }
 });
 
-router.post('/getgovid',(req , res) => {
+router.post("/getgovid", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -373,30 +450,31 @@ router.post('/getgovid',(req , res) => {
     inner join master_employee on mg_employeeid = me_id
     where mg_employeeid = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      console.log(result);
-      console.log("SQL query:", sql);
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
 
-      res.json({
-        msg: "success",
-        data: result,
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
       });
-    })
-    .catch((error) => {
-      return res.json({
-        msg: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
-})
+});
 
-router.post('/gethealth',(req , res) => {
+router.post("/gethealth", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -410,31 +488,31 @@ router.post('/gethealth',(req , res) => {
     inner join master_employee on mh_employeeid = me_id
     where mh_employeeid = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      console.log(result);
-      console.log("SQL query:", sql);
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
 
-      res.json({
-        msg: "success",
-        data: result,
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
       });
-    })
-    .catch((error) => {
-      return res.json({
-        msg: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
-})
+});
 
-
-router.post('/gettraining',(req , res) => {
+router.post("/gettraining", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = ` select 
@@ -447,30 +525,31 @@ router.post('/gettraining',(req , res) => {
     inner join master_employee on mt_employeeid = me_id
     where mt_employeeid = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      console.log(result);
-      console.log("SQL query:", sql);
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
 
-      res.json({
-        msg: "success",
-        data: result,
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
       });
-    })
-    .catch((error) => {
-      return res.json({
-        msg: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
 });
 
-router.post('/getdisciplinary',(req , res) => {
+router.post("/getdisciplinary", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -486,32 +565,94 @@ router.post('/getdisciplinary',(req , res) => {
     LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid
     where oda_employeeid = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      console.log(result);
-      console.log("SQL query:", sql);
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
 
-      res.json({
-        msg: "success",
-        data: result,
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
       });
-    })
-    .catch((error) => {
-      return res.json({
-        msg: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
-})
+});
 
+router.post('/insert', (req, res) => {
+  try {
+    
+    let newEmployeeId = req.body.newEmployeeId;
+    let reason = req.body.reason; 
+    let dateresigned = req.body.dateresigned;
+    let status = req.body.status;
+    let createby = req.session.fullname; 
+    let createdate = currentDate.format('YYYY-MM-DD');
+
+  
+    let data = [];
+  
+    data.push([
+      newEmployeeId, reason, dateresigned, status, createby, createdate,
+    ])
+    let query = `SELECT * FROM master_resigned WHERE mr_employeeid = '${newEmployeeId}'`;
+    mysql.Select(query, 'Master_Resigned', (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      if (result.length != 0) {
+        res.json({
+          msg: "exist"
+        });
+      }
+      else {
+        mysql.InsertTable('master_resigned', data, (err, result) => {
+          if (err) console.error('Error: ', err);
+
+          console.log(result);
+
+          res.json({
+            msg: 'success'
+          })
+        })
+      }
+    });
+
+    
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
+  }
+});
 
 
 
 module.exports = router;
 
+function GetDepartment(name, callback) {
+  let sql = `select * from master_department where md_departmentname='${name}'`;
+  mysql.Select(sql, "Master_Department", (err, result) => {
+    if (err) callback(err, null);
+    // console.log(result);
+    callback(null, result);
+  });
+}
 
+function GetPosition(name, callback) {
+  let sql = `select * from master_position where mp_positionname='${name}'`;
+  mysql.Select(sql, "Master_Position", (err, result) => {
+    if (err) callback(err, null);
+    // console.log(result);
+    callback(null, result);
+  });
+}

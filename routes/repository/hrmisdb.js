@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 })
 
-// Decrypter('211cd2b78344b571c748d6d15c1f64f0', (err, encrypted) => {
+// Decrypter('3f4380ddee5398218f6da93ec7d53ec9620d9655174e986656635aa6852a3d27', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
 //   password = encrypted;
@@ -137,6 +137,11 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_User") {
         callback(null, model.Master_User(results));
       }
+
+      if (table == "Master_Resigned") {
+        callback(null, model.Master_Resigned(results));
+      }
+
 
     });
   } catch (error) {
@@ -524,6 +529,22 @@ exports.InsertTable = (tablename, data, callback) => {
         s_netsalary,
         s_paymentdate,
         s_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "master_resigned") {
+    let sql = `INSERT INTO master_resigned(
+        mr_employeeid,
+        mr_reason,
+        mr_dateresigned,
+        mr_status,
+        mr_createby,
+        mr_createdate) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
