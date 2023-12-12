@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<%- include("eportalheader.ejs")%>
+<%- include("header.ejs")%>
 
 </head>
 
@@ -12,7 +12,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <%- include("eportalsidebar.ejs")%>
+        <%- include("sidebar.ejs")%>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -22,11 +22,11 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <%- include("eportaltopbar.ejs")%>
+                <%- include("topbar.ejs")%>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <%- include("./eportalattendance/eportalattendance.ejs")%>
+                <%- include("./settings/settings.ejs")%>
                 <!-- /.container-fluid -->
 
             </div>
@@ -48,7 +48,7 @@
 
     <!-- Bootstrap core JavaScript-->
     <%- include("scripts.ejs")%>
-    <%- include("./eportalattendance/eportalattendancescript.ejs")%>
+    <%- include("./settings/settingsscript.ejs")%>
 </body>
 
 </html>

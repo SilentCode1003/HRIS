@@ -27,7 +27,7 @@
             },
             success: function (result) {
               if (result.msg === "success") {
-                swal("Save Successfully", "You clicked the button!", "success")
+                swal("Login Successfully", "You clicked the button!", "success")
                   .then(results => {
                     if (result.data[0].accesstype === 'Employee') {
                       location.replace("/eportalindex");

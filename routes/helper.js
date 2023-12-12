@@ -20,6 +20,7 @@ exports.UserLogin = (result, callback) => {
   
         result.forEach((row) => {
           userData.push({
+            image: row.image,
             employeeid: row.employeeid,
             fullname: row.fullname,
             accesstype: row.accesstype,
