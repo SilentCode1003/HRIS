@@ -126,11 +126,24 @@
                   <div class="form-floating">
                     <select class="form-select" id="employeegender" name="employeegender"
                       aria-label="Floating label select example">
-                      <option selected>Choose gender</option>
+                      <option selected>Choose</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </select>
                     <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="employeecivilstatus" name="employeecivilstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Separated">Separated</option>
+                      <option value="Widow">Widow</option>
+                    </select>
+                    <label for="floatingSelectGrid">Civil Status</label>
                   </div>
                 </div>
                 <div class="col-md-8">
@@ -354,6 +367,16 @@
                             <option>Choose...</option>
                             <option value="Male" selected>Male</option>
                             <option value="Female">Female</option>
+                          </select>
+                        </div>
+                        <div class="col">
+                          <label for="editemployeegender" class="form-label">Civil Status</label>
+                          <select class="form-select" id="editemployeecivilstatus" name="editemployeecivilstatus">
+                            <option selected>Choose</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widow">Widow</option>
                           </select>
                         </div>
                         <div class="col-md-8">

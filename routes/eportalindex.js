@@ -1,3 +1,4 @@
+const mysql = require("./repository/hrmisdb");
 var express = require('express');
 const { Validator } = require('./controller/middleware');
 var router = express.Router();

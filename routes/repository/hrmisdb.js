@@ -292,6 +292,7 @@ exports.InsertTable = (tablename, data, callback) => {
         me_lastname,
         me_birthday,
         me_gender,
+        me_civilstatus,
         me_phone,
         me_email,
         me_hiredate,

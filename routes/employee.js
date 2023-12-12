@@ -132,6 +132,7 @@ router.post("/getemployee", (req, res) => {
     me_lastname as lastname,
     me_birthday as birthday,
     me_gender as gender,
+    me_civilstatus as civilstatus,
     me_phone as phone,
     me_email as email,
     me_hiredate as hiredate,
@@ -204,7 +205,7 @@ router.get("/load", (req, res) => {
   try {
     let sql = ` SELECT
     me_id,
-    CONCAT(master_employee.me_firstname, " ", master_employee.me_lastname) AS me_firstname,
+    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS me_firstname,
     me_phone,
     me_email,
     me_jobstatus,
@@ -244,10 +245,8 @@ function checkEmployeeExists(firstname, lastname) {
         const count = parseInt(result[0].count);
 
         if (count > 0) {
-          // The employee with the same firstname and lastname already exists
           resolve(true);
         } else {
-          // The employee does not exist
           resolve(false);
         }
       })
@@ -257,9 +256,8 @@ function checkEmployeeExists(firstname, lastname) {
   });
 }
 
-// Function to generate the employee ID
 function generateEmployeeId(year, month) {
-  // Query to find the maximum sequence number for the current year and month
+
 
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
@@ -287,6 +285,7 @@ router.post("/save", async (req, res) => {
     let lastname = req.body.lastname;
     let birthday = req.body.birthday;
     let gender = req.body.gender;
+    let civilstatus = req.body.civilstatus;
     let phone = req.body.phone;
     let email = req.body.email;
     let hiredate = req.body.hiredate;
@@ -336,6 +335,7 @@ router.post("/save", async (req, res) => {
               lastname,
               birthday,
               gender,
+              civilstatus,
               phone,
               email,
               hiredate,
@@ -390,6 +390,7 @@ router.post("/update", async (req, res) => {
     let lastname = req.body.lastname;
     let birthday = req.body.birthday;
     let gender = req.body.gender;
+    let civilstatus = req.body.civilstatus;
     let phone = req.body.phone;
     let email = req.body.email;
     let hiredate = req.body.hiredate;
@@ -430,6 +431,7 @@ router.post("/update", async (req, res) => {
       me_gender = ?,
       me_phone = ?,
       me_email = ?,
+      me_civilstatus = ?,
       me_hiredate = ?,
       me_jobstatus = ?,
       me_ercontactname = ?,
@@ -448,6 +450,7 @@ router.post("/update", async (req, res) => {
       gender,
       phone,
       email,
+      civilstatus,
       hiredate,
       jobstatus,
       ercontactname,
@@ -629,6 +632,42 @@ router.post("/getdisciplinary", (req, res) => {
     });
   }
 });
+
+router.get("/totalregular", (req, res) => {
+  try {
+    let sql = `select
+    me_profile_pic as profilePicturePath,
+    me_id as newEmployeeId,
+    concat(me_firstname, "", me_lastname) as firstname,
+    me_phone as contact,
+    me_email as email,
+    md_departmentname as me_department,
+    mp_positionname as me_position
+    from master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    where me_jobstatus = 'regular'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    }).catch((error) => {
+      res.json({
+        msg: "error",
+        error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
 
 module.exports = router;
 
