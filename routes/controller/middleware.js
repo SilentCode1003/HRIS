@@ -3,6 +3,9 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "settingslayout",
+      },
+      {
         layout: "indexlayout",
       },
       {
@@ -86,6 +89,9 @@ var roleacess = [
     role: "Employee",
     routes: [
       {
+        layout: "eportalsettingslayout",
+      },
+      {
         layout: "eportalindexlayout",
       },
       {
@@ -117,6 +123,9 @@ var roleacess = [
   {
     role: "HR",
     routes: [
+      {
+        layout: "settingslayout",
+      },
       {
         layout: "indexlayout",
       },
@@ -194,6 +203,7 @@ exports.Validator = function (req, res, layout) {
   if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
     console.log('hit');
       return res.render(`${layout}`, {
+        image: req.session.image,
         employeeid: req.session.employeeid,
         fullname: req.session.fullname,
         accesstype: req.session.accesstype,
@@ -208,6 +218,7 @@ exports.Validator = function (req, res, layout) {
 
         if (key.role == req.session.accesstype && value.layout == layout) {
           return res.render(`${layout}`, {
+            image: req.session.image,
             employeeid: req.session.employeeid,
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,

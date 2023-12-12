@@ -10,6 +10,7 @@ exports.Master_Employee = (data) => {
             lastname: key.me_lastname,
             birthday: key.me_birthday,
             gender: key.me_gender,
+            civilstatus: key.me_civilstatus,
             phone: key.me_phone,
             email: key.me_email,
             hiredate: key.me_hiredate,

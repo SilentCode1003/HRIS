@@ -1,0 +1,70 @@
+<script>
+     $(document).on("click", "#edituserssavebtn", function () {
+        console.log("Save button clicked");
+        let id = userid
+        let username = $("#editusername").val();
+        let password = $("#editpassword").val();
+        let accesstype = $("#editusersaccesstype").val();
+        let status = $("#editusersstatus").val();
+      
+      var message = "";
+    
+      if (username === "") {
+        message += "departmentname is required. ";
+      }
+    
+      if (password === "") {
+        message += "status is required. ";
+      }
+
+      if (accesstype === "") {
+        message += "departmentname is required. ";
+      }
+    
+      if (status === "") {
+        message += "status is required. ";
+      }
+  
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+    } else {
+      $.ajax({
+        type: "POST",
+        url: "/users/update",
+        data: { 
+            userid: id,
+            username: username,
+            password: password,
+            accesstype: accesstype,
+            status: status, 
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            swal({
+              title: "Update Successfully",
+              text: "You clicked the button!",
+              icon: "success",
+              button: "OK!",
+            })
+              .then(results => {
+                window.location.reload();
+              });
+            LoadTable();
+          } else if (result.msg == "exist") {
+            swal({
+              title: "Exist",
+              text: "Data already exists!",
+              icon: "warning",
+              button: "OK!",
+            });
+          } else {
+            swal("Data already exists!", "You clicked the button!", "warning");
+          }
+        },
+        error: function (err) {
+          swal("Error", "An error occurred while saving data.", "error");
+        },
+      });
+    }
+  });
+</script>

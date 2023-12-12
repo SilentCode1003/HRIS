@@ -18,6 +18,7 @@
       let lastname = $("#employeelname").val();
       let birthday = $("#employeebirthday").val();
       let gender = $("#employeegender").val();
+      let civilstatus = $("#employeecivilstatus").val();
       let phone = $("#employeephone").val();
       let email = $("#employeeemail").val();
       let hiredate = $("#employeehiredate").val();
@@ -48,6 +49,10 @@
       }
 
       if (gender == "") {
+        message += "Gender is required. ";
+      }
+
+      if (civilstatus == "") {
         message += "Gender is required. ";
       }
 
@@ -103,6 +108,7 @@
             lastname: lastname,
             birthday: birthday,
             gender: gender,
+            civilstatus: civilstatus,
             phone: phone,
             email: email,
             hiredate: hiredate,
@@ -277,6 +283,7 @@
               $("#editemployeelname").val(item.lastname);
               $("#editemployeebday").val(item.birthday);
               $("#editemployeegender").val(`${item.gender}`);
+              $("#editemployeecivilstatus").val(`${item.civilstatus}`);
               //$('#editemployeegender').append(`<option selected value="${item.gender}">${item.gender}</option>`);
               $("#editemployeephone").val(item.phone);
               $("#editemployeeemail").val(item.email);
@@ -340,6 +347,7 @@
       let lastname = $("#editemployeelname").val();
       let birthday = $("#editemployeebday").val();
       let gender = $("#editemployeegender").val();
+      let civilstatus = $("#editemployeecivilstatus").val();
       let phone = $("#editemployeephone").val();
       let email = $("#editemployeeemail").val();
       let hiredate = $("#editemployeehiredate").val();
@@ -366,6 +374,10 @@
       }
 
       if (gender === "") {
+        message += "gender is required. ";
+      }
+
+      if (civilstatus === "") {
         message += "gender is required. ";
       }
 
@@ -422,6 +434,7 @@
             lastname: lastname,
             birthday: birthday,
             gender: gender,
+            civilstatus: civilstatus,
             phone: phone,
             email: email,
             hiredate: hiredate,
