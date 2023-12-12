@@ -1,66 +1,24 @@
-<div class="col-xl-11 col-lg-12" style="margin-left: 4%;" id="card-header">
-    <div class="card shadow mb-8">
-        <h3 style="margin-left: 50px; margin-top: 20px;">Attendance</h3>
-        <h7 style="margin-left: 50px; margin-bottom: 20px;">Dashboard > Attendance </h7>
-    </div>
-    </div>
+<h1 class="font-weight-bold text-danger" id="head-title">Attendance</h1>
+<br>
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header py-3">
-    <button type="button" id="applybtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-        Apply Cash Advance
-      </button>
   </div>
   <div class="card-body">
   <table class="table table-striped" id="dataTableapplyleave">
     <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Employee ID</th>
-        <th scope="col">Request Date</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Purpose</th>
-        <th scope="col">Approvel Date</th>
-        <th scope="col">Remaining Amount</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time In</th>
+        <th scope="col">Time Out</th>
+        <th scope="col">Overtime</th>
+        <th scope="col">Total Hours</th>
         <th scope="col">Status</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Employee ID">123</td>
-        <td data-label="Salary">2023-01-01</td>
-        <td data-label="Allowances">5,000</td>
-        <td data-label="Deduction">Loan</td>
-        <td data-label="Payment Date">2023-01-01</td>
-        <td data-label="Remaining Amount">1000</td>
-        <td data-label="Status">Paid</td>
-        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-eye"></i></button></td>
-    </tr>
-    <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Employee ID">123</td>
-        <td data-label="Salary">2023-01-01</td>
-        <td data-label="Allowances">5,000</td>
-        <td data-label="Deduction">Loan</td>
-        <td data-label="Payment Date">2023-01-01</td>
-        <td data-label="Remaining Amount">1000</td>
-        <td data-label="Status">Paid</td>
-        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-print"></i></button></td>
-    </tr>
-    <tr>
-        <td data-label="ID">1</td>
-        <td data-label="Employee ID">123</td>
-        <td data-label="Salary">2023-01-01</td>
-        <td data-label="Allowances">5,000</td>
-        <td data-label="Deduction">Loan</td>
-        <td data-label="Payment Date">2023-01-01</td>
-        <td data-label="Remaining Amount">1000</td>
-        <td data-label="Status">Paid</td>
-        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-print"></i></button></td>
-    </tr>
     </tbody>
   </table>
         </div>
