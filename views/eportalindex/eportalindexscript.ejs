@@ -1,5 +1,5 @@
 <script>
-const OFFICE_LOCATION_LAT = 14.337945;
+    const OFFICE_LOCATION_LAT = 14.337945;
     const OFFICE_LOCATION_LNG = 121.060511;
 
     const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
@@ -8,7 +8,16 @@ const OFFICE_LOCATION_LAT = 14.337945;
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG]).addTo(map);
+    // Custom office icon
+    const officeIcon = L.icon({
+        iconUrl: './images/img/whitelogo.png',  // Replace with the path to your office icon image
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32],
+    });
+
+    // Marker with custom icon
+    const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
     officeMarker.bindPopup('Office Location').openPopup();
 
     const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
@@ -37,12 +46,15 @@ const OFFICE_LOCATION_LAT = 14.337945;
         });
 
         const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
-        userMarker.bindPopup(`Your Location<br>Lat: ${userLocation.lat}<br>Lng: ${userLocation.lng}`).openPopup();
+        userMarker.bindPopup(`My Location`).openPopup();
+        const geofenceButton = document.getElementById('loginbtn');
 
         if (checkGeofence(userLocation)) {
             console.log('User is inside the geofence.');
+            geofenceButton.style.display = 'block';
         } else {
             console.log('User is outside the geofence.');
+            geofenceButton.style.display = 'none';
         }
     }
 
