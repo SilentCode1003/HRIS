@@ -23,7 +23,8 @@ router.post('/login', (req, res) => {
       mu_employeeid as employeeid,
       CONCAT(me_firstname, '', me_lastname) as fullname,
       ma_accessname as accesstype,
-      mu_status as status
+      mu_status as status,
+      me_profile_pic as image
       FROM master_user
       INNER JOIN master_access ON mu_accesstype = ma_accessid
       LEFT JOIN master_employee ON mu_employeeid = me_id
@@ -44,6 +45,7 @@ router.post('/login', (req, res) => {
               req.session.employeeid = user.employeeid;
               req.session.fullname = user.fullname;
               req.session.accesstype = user.accesstype;
+              req.session.image = user.image
             });
 
             return res.json({

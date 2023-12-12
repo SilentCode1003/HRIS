@@ -61,6 +61,8 @@
 
 <!-- Core plugin JavaScript-->
 <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 <!-- Custom scripts for all pages-->
 <!-- <script src="/javascripts/js/sb-admin-2.js"></script> -->
@@ -95,6 +97,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
   $(document).on("click", "#logoutBtn", function () {
     $.ajax({
@@ -102,10 +108,10 @@
       url: "/login/logout",
       success: function (result) {
         swal({
-          title: "success",
-          text: "Log in Successfully",
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
           icon: "success",
-          button: "Lets gooo!!",
+          button: "Ba bye!!",
         }).then((results) => {
           window.location.reload();
           location.replace("/");

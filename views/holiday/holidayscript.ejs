@@ -2,6 +2,8 @@
   $(document).ready(function () {
     LoadTable();
     searchTable();
+    LoadList();
+    activePositions = [];
 
     function LoadTable() {
       $("#dataTableholiday").DataTable({
@@ -150,6 +152,9 @@
           });
       }
     });
+
+
+   
     function LoadList() {
         $.ajax({
             type: 'GET',
@@ -173,6 +178,7 @@
             }
         });
     }
+
 
     function populateCustomDropdown() {
         for (const position of activePositions) {
@@ -233,7 +239,7 @@
 
     setupCustomDropdown("yearInput", "positionDropdown", "dropdown-option");
 
-    LoadList()
+    
     function searchTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInput2");
