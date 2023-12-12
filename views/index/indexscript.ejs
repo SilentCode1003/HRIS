@@ -7,22 +7,168 @@
   $(document).ready(function () {
     console.log('Initialize');
     LoadTable();
-    LoadTableca();
-    loadCard();
+    loadtotalCard();
     LoadBdayFolks();
-    //LoadAnnouncement();
+    loadleaveBadge();
+    loadCashBadge();
+    loadregularCard();
+    loadprobitionaryCard();
+    loadresignedCard();
+    loadreqleaveCard();
+    loadreqCaCard();
 
 
-    function loadCard() {
+    $(document).on("click", "#totalEMP", function () {
+      $(`#dataTableemployees`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
+            $("#dataTableemployees").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("dataTableemployees");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var CONTACT = row.insertCell(2);
+            var EMAIL = row.insertCell(3);
+            var JOB_STATUS = row.insertCell(4);
+            var DEPARTMENT = row.insertCell(5);
+            var POSITION = row.insertCell(6);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            EMAIL.innerHTML = item.email;
+            JOB_STATUS.innerHTML = item.jobstatus;
+            DEPARTMENT.innerHTML = item.department;
+            POSITION.innerHTML = item.position;
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+
+    $(document).on("click", "#totalregularEMP", function () {
+      $(`#regularemloyeetbl`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/totalregular",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#regularemloyeetbl")) {
+            $("#regularemloyeetbl").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("regularemloyeetbl");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var DEPARTMENT = row.insertCell(5);
+            var POSITION = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "50px"; 
+
+            console.log("Base64 Image:", item.profilePicturePath); 
+
+           
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.contact;
+            EMAIL.innerHTML = item.email;
+            DEPARTMENT.innerHTML = item.me_department;
+            POSITION.innerHTML = item.me_position;
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+
+
+
+
+    function loadtotalCard() {
       $.ajax({
         type: "GET",
         url: "/countactive",
         success: function (result) {
+          console.log(result);
           if (result.msg === "success") {
             const totalActive = result.data.activeCount;
+            $("#totalEmployeeCard .h5").text(totalActive);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
 
-            // Update the content of the #totalactive element
-            $("#totalactive").text(totalActive);
+
+    function loadregularCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countregular",
+        success: function (result) {
+          console.log("loadregularCard:", result);
+          if (result.msg === "success") {
+            const totalRegular = result.data.regularCount;
+            $("#regularEmployeeCard .h5").text(totalRegular);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+
+    function loadprobitionaryCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countprobitionary",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalProbitionary = result.data.probitionaryCount;
+
+            // Update the content of the Total Employee card using id
+            $("#probationaryEmployeeCard .h5").text(totalProbitionary);
           } else {
             // Handle error cases if needed
             console.error("Error fetching data:", result.msg);
@@ -30,6 +176,111 @@
         },
         error: function (err) {
           // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+    function loadresignedCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countresigned",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalResigned = result.data.resignedCount;
+
+            // Update the content of the Total Employee card using id
+            $("#resignedEmployeeCard .h5").text(totalResigned);
+          } else {
+            // Handle error cases if needed
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+    function loadreqleaveCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countreqleavebadge",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalLeaveReq = result.data.leavereqCount;
+
+            // Update the content of the Total Employee card using id
+            $("#reqLeaveCard .h5").text(totalLeaveReq);
+          } else {
+            // Handle error cases if needed
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+    function loadreqCaCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countcashreqbadge",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalCa = result.data.CAreqCount;
+            $("#reqCaCard .h5").text(totalCa);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+
+    function loadleaveBadge() {
+      $.ajax({
+        type: "GET",
+        url: "/countreqleavebadge",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalleave = result.data.leavereqCount;
+            $("#loadleaveBadge").text(totalleave);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+
+    function loadCashBadge() {
+      $.ajax({
+        type: "GET",
+        url: "/countcashreqbadge",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalCa = result.data.CAreqCount;
+            $("#loadcaBadge").text(totalCa);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
           console.error("AJAX error:", err.statusText);
         }
       });
@@ -86,27 +337,25 @@
             $.each(announcementData, (key, item) => {
               counter++;
               anouncementdiv += `
-                  <div class="row g-0">
-                    <div class="col-md-4">
-                        <img id="preview${counter}" class="img-fluid rounded-start" src="data:image/jpg;base64,${item.image}" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title" for="announcetitle" id="announcetitle${counter}">${item.title}</h5>
-                            <p class="card-text" for="announcedesc" id="announcedesc${counter}">${item.description}</p>
-                        </div>
-                    </div>
-                </div>`;
-
-            
-
+              <div class="carousel-item active" data-bs-interval="2000">
+                <img id="preview${counter}"  src="data:image/jpg;base64,${item.image}" class="d-block w-100" alt="..."
+                style="height: 470px;">
+              <div class="carousel-caption d-none d-md-block">
+                <h5 id="announcetitle${counter}">${item.title}</h5>
+                <p id="announcedesc${counter}">${item.description}</p>
+              </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>`;
               console.log(anouncementdiv);
-
-
-              // $("#id").text(item.bulletinid);
-              //  $("#preview").attr("src", "data:image/jpg;base64," + item.image);
-              //$("#announcetitle").text(item.title);
-              // $("#announcedesc").text(item.description);
             })
           } else {
             console.error("Error: ", result.message);
@@ -117,7 +366,7 @@
             );
           }
 
-          $('#announcement').html(anouncementdiv);
+          $('#carouselannouncement').html(anouncementdiv);
         },
         error: function (err) {
           console.error("AJAX Error: ", err.responseText);
@@ -148,23 +397,29 @@
             $.each(bdayData, (key, item) => {
               counterbday++;
               bdaydiv += `
-                <div class="row g-0">
-                  <div class="col-md-4">
-                    <img id="preview${counterbday}" style="height: 170px; width: 640px;" class="img-fluid rounded-start" src="data:image/jpg;base64,${item.profilePicturePath}" alt="...">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body">
-                      <h5 class="card-title" id="employeeid${counterbday}">${item.firstname}</h5>
-                      <h6 class="card-text" id="bdaydate${counterbday}">${item.birthday}</h6>
-                      <p class="card-text">Happy Na Birthday Pa</p>
-                    </div>
-                  </div>
-                </div>`;
+              <div class="carousel-item active" data-bs-interval="2000">
+                                        <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
+                                            style="height: 470px;">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5 id="employeeid${counterbday}">${item.firstname}</h5>
+                                            <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>`;
             });
 
             console.log(bdaydiv);
 
-            $('#bdayfolks').html(bdaydiv);
+            $('#carouselbday').html(bdaydiv);
           } else {
             console.error("Error: ", result.message);
             swal(
@@ -336,64 +591,51 @@
     });
 
     <!--//cashadvance section-->
-    function LoadTableca() {
-      $("#dataTablecashrequest").DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        paging: false,
-        searching: false,
-        info: false,
-        scrollY: 400,
-        scrollCollapse: true,
-        serverMethod: "GET",
-        ajax: {
-          url: "/requestcashadvance/load",
-          dataSrc: (json) => {
-            var finalData = [];
-            var data = json.data;
 
-            console.log(data);
-            $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
+    $(document).on("click", "#nav-ca-tab", function () {
+      $(`#dataTablecashrequest`).find("tr:gt(0)").remove();
 
-              action = `
-                        <button id="editcaBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
-                       `;
+      $.ajax({
+        type: "GET",
+        url: "/loadCA",
+        success: function (json) {
+          console.log("API response", json);
 
-              finalData.push({
-                employeeid: item.employeeid,
-                requestdate: item.requestdate,
-                amount: item.amount,
-                purpose: item.purpose,
-                status: item.status,
-                action: action,
-              });
-            });
+          var finalData = [];
+          var data = json.data;
 
-            return finalData;
-          },
+          material_list_tbl = document.getElementById("dataTablecashrequest");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var EMPLOYEE = row.insertCell(0);
+            var REQUEST_DATE = row.insertCell(1);
+            var AMOUNT = row.insertCell(2);
+            var PURPOSE = row.insertCell(3);
+            var STATUS = row.insertCell(4);
+            var actionHtml = `
+            <button id="editcaBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
+            `;
+
+            EMPLOYEE.innerHTML = item.employeeid;
+            REQUEST_DATE.innerHTML = item.requestdate;
+            AMOUNT.innerHTML = item.amount;
+            PURPOSE.innerHTML = item.purpose;
+            STATUS.innerHTML = item.status;
+
+            var actionCell = row.insertCell(5);
+
+
+            actionCell.innerHTML = actionHtml;
+          });
         },
-        columnDefs: [
-          {
-            targets: 1,
-            className: "td-indent",
-          },
-        ],
-        columns: [
-          { data: "employeeid" },
-          { data: "requestdate" },
-          { data: "amount" },
-          { data: "purpose" },
-          { data: "status" },
-          { data: "action" },
-        ],
-        initComplete: function () {
-          console.log('Done');
+        error: function (xhr, status, error) {
+          console.log("API error", error);
         },
       });
-    }
+    });
+
+
 
     $("#dataTablecashrequest tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -456,11 +698,6 @@
         message += "status is required. ";
       }
 
-      // if (approvaldate === "") {
-      //  message += "status is required. ";
-      // }
-
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -510,169 +747,169 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
-  // Define attendance data
-  const attendanceData = {
-    present: 80,
-    absent: 15,
-    late: 5,
-  };
+    // Define attendance data
+    const attendanceData = {
+      present: 80,
+      absent: 15,
+      late: 5,
+    };
 
-  // Get the canvas element for attendance chart
-  const attendanceCanvas = document.getElementById('attendanceChart');
-  const attendanceCtx = attendanceCanvas.getContext('2d');
+    // Get the canvas element for attendance chart
+    const attendanceCanvas = document.getElementById('attendanceChart');
+    const attendanceCtx = attendanceCanvas.getContext('2d');
 
-  // Set up attendance chart
-  const attendanceDataConfig = {
-    labels: ['Present', 'Absent', 'Late'],
-    datasets: [{
-      data: [attendanceData.present, attendanceData.absent, attendanceData.late],
-      backgroundColor: ['#36A2EB', '#F70101', '#FFAA33'],
-    }],
-  };
+    // Set up attendance chart
+    const attendanceDataConfig = {
+      labels: ['Present', 'Absent', 'Late'],
+      datasets: [{
+        data: [attendanceData.present, attendanceData.absent, attendanceData.late],
+        backgroundColor: ['#36A2EB', '#F70101', '#FFAA33'],
+      }],
+    };
 
-  const attendanceOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Attendance Chart',
-        font: {
-          size: 16,
+    const attendanceOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Attendance Chart',
+          font: {
+            size: 16,
+          },
         },
       },
-    },
-    tooltips: {
-      callbacks: {
-        label: function (tooltipItem, data) {
-          const dataset = data.datasets[tooltipItem.datasetIndex];
-          const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
-          const currentValue = dataset.data[tooltipItem.index];
-          const percentage = ((currentValue / total) * 100).toFixed(2) + '%';
-          return data.labels[tooltipItem.index] + ': ' + percentage;
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const dataset = data.datasets[tooltipItem.datasetIndex];
+            const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
+            const currentValue = dataset.data[tooltipItem.index];
+            const percentage = ((currentValue / total) * 100).toFixed(2) + '%';
+            return data.labels[tooltipItem.index] + ': ' + percentage;
+          },
         },
       },
-    },
-  };
+    };
 
-  // Create attendance chart
-  const attendanceChart = new Chart(attendanceCtx, {
-    type: 'doughnut',
-    data: attendanceDataConfig,
-    options: attendanceOptions,
+    // Create attendance chart
+    const attendanceChart = new Chart(attendanceCtx, {
+      type: 'doughnut',
+      data: attendanceDataConfig,
+      options: attendanceOptions,
+    });
+
+    // Define employee data
+    const employeeData = {
+      Active: 70,
+      Resigned: 5,
+      Terminate: 5,
+      EndofContract: 20,
+    };
+
+    // Get the canvas element for employee chart
+    const employeeCanvas = document.getElementById('employeeChart');
+    const employeeCtx = employeeCanvas.getContext('2d');
+
+    // Set up employee chart
+    const employeeDataConfig = {
+      labels: ['Active', 'Resigned', 'Terminate', 'End of Contract'],
+      datasets: [{
+        data: [employeeData.Active, employeeData.Resigned, employeeData.Terminate, employeeData.EndofContract,],
+        backgroundColor: ['#32de84', '#36A2EB', '#F70101', '#FFAA33',],
+      }],
+    };
+
+    const employeeOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Employee',
+          font: {
+            size: 20,
+          },
+        },
+      },
+    };
+
+    // Create employee chart
+    const employeeChart = new Chart(employeeCtx, {
+      type: 'pie',
+      data: employeeDataConfig,
+      options: employeeOptions,
+    });
   });
 
-  // Define employee data
-  const employeeData = {
-    Active: 70,
-    Resigned: 5,
-    Terminate: 5,
-    EndofContract : 20,
-  };
-
-  // Get the canvas element for employee chart
-  const employeeCanvas = document.getElementById('employeeChart');
-  const employeeCtx = employeeCanvas.getContext('2d');
-
-  // Set up employee chart
-  const employeeDataConfig = {
-    labels: ['Active', 'Resigned', 'Terminate', 'End of Contract'],
-    datasets: [{
-      data: [employeeData.Active, employeeData.Resigned, employeeData.Terminate, employeeData.EndofContract,],
-      backgroundColor: ['#32de84', '#36A2EB', '#F70101', '#FFAA33',],
-    }],
-  };
-
-  const employeeOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Employee',
-        font: {
-          size: 20,
-        },
-      },
-    },
-  };
-
-  // Create employee chart
-  const employeeChart = new Chart(employeeCtx, {
-    type: 'pie',
-    data: employeeDataConfig,
-    options: employeeOptions,
-  });
-});
-
- //employee graph
+  //employee graph
 
   // Sample data (replace this with your actual data)
   var jobStatusData = {
-            labels: ['Regular', 'Probationary', 'Project Based'],
-            datasets: [{
-                label: 'Job Status',
-                data: [50, 30, 20], // Replace with actual counts
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 205, 86, 1)',
-                ],
-                borderWidth: 1
-            }]
-        };
+    labels: ['Regular', 'Probationary', 'Project Based'],
+    datasets: [{
+      label: 'Job Status',
+      data: [50, 30, 20], // Replace with actual counts
+      backgroundColor: [
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+      ],
+      borderColor: [
+        'rgba(75, 192, 192, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 205, 86, 1)',
+      ],
+      borderWidth: 1
+    }]
+  };
 
-        var departmentData = {
-            labels: ['Admin', 'IT', 'Cabling'],
-            datasets: [{
-                label: 'Employee Count',
-                data: [100, 75, 50], // Replace with actual counts
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 205, 86, 1)',
-                ],
-                borderWidth: 1
-            }]
-        };
+  var departmentData = {
+    labels: ['Admin', 'IT', 'Cabling'],
+    datasets: [{
+      label: 'Employee Count',
+      data: [100, 75, 50], // Replace with actual counts
+      backgroundColor: [
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+      ],
+      borderColor: [
+        'rgba(75, 192, 192, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(255, 205, 86, 1)',
+      ],
+      borderWidth: 1
+    }]
+  };
 
-        // Get the context of the canvases
-        var jobStatusCtx = document.getElementById('jobstatusChart').getContext('2d');
-        var departmentCtx = document.getElementById('departmentChart').getContext('2d');
+  // Get the context of the canvases
+  var jobStatusCtx = document.getElementById('jobstatusChart').getContext('2d');
+  var departmentCtx = document.getElementById('departmentChart').getContext('2d');
 
-        // Create bar charts
-        var jobStatusChart = new Chart(jobStatusCtx, {
-            type: 'bar',
-            data: jobStatusData,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+  // Create bar charts
+  var jobStatusChart = new Chart(jobStatusCtx, {
+    type: 'bar',
+    data: jobStatusData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 
-        var departmentChart = new Chart(departmentCtx, {
-            type: 'bar',
-            data: departmentData,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+  var departmentChart = new Chart(departmentCtx, {
+    type: 'bar',
+    data: departmentData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 
 </script>

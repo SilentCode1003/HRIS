@@ -9,114 +9,259 @@
     <!-- First Row -->
     <div class="row">
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+        <!-- Total Employee Card -->
+        <div data-toggle="modal" id="totalEMP" data-target="#totalEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="totalEmployeeCard" class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Total Employee</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
-
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Active Employee</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                            <i class="fa fa-users fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+        <!-- Regular Employee Card -->
+        <div data-toggle="modal" id="totalregularEMP" data-target="#regularEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="regularEmployeeCard" class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Department</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Regular Employee</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                            <i class="fa fa-user fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+        <!-- Probationary Employee Card -->
+        <div data-toggle="modal" data-target="#probationaryEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="probationaryEmployeeCard" class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Department</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Probationary </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                            <i class="fa fa-user-plus fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+
+        <!-- Resigned Employee Card -->
+        <div data-toggle="modal" data-target="#resignedEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="resignedEmployeeCard" class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Department</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                                Resigned Employee</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                            <i class="fa fa-user-times fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-danger shadow h-100 py-2">
+
+        <!-- Request Leave Card -->
+        <div data-toggle="modal" data-target="#reqLeaveModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="reqLeaveCard" class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                Department</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Request Leave</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                            <i class="fa fa-suitcase fa-2x text-gray-300"></i>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Cash Advance Card -->
+        <div data-toggle="modal" data-target="#reqCaModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="reqCaCard" class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Cash Advance</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-toggle="modal" data-target="#reqCaModal" class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="reqCaCard" class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Cash Advance</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Total Employee Modal -->
+    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Total Employee</h1>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive" id="table-responsive-id">
+                            <div class="table-responsive" id="table-responsive-id">
+                                <table class="table table-striped" id="dataTableemployees">
+                                    <colgroup>
+                                        <col style="width: 50px;"> 
+                                        <col style="width: 150px;">
+                                        <col style="width: 100px;"> 
+                                        <col style="width: 200px;"> 
+                                        <col style="width: 100px;">
+                                        <col style="width: 150px;"> 
+                                        <col style="width: 150px;"> 
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th>Email</th>
+                                            <th>Job Status</th>
+                                            <th>Department</th>
+                                            <th>Position</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- Add your table body content here -->
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+    <!-- Regular Employee Modal -->
+    <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Regular Employee</h1>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="regularemloyeetbl">
+                            <colgroup>
+                                <col style="width: 150px;">
+                                <col style="width: 50px;"> 
+                                <col style="width: 150px;">
+                                <col style="width: 100px;"> 
+                                <col style="width: 200px;"> 
+                                <col style="width: 150px;"> 
+                                <col style="width: 150px;"> 
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table body content will be added dynamically using JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Probationary Employee Modal -->
+    <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="probationaryEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Add the modal content for Probationary Employee here -->
+        </div>
+    </div>
+
+    <!-- Resigned Employee Modal -->
+    <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="resignedEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Add the modal content for Resigned Employee here -->
+        </div>
+    </div>
+
+    <!-- Request Leave Modal -->
+    <div class="modal fade" id="reqLeaveModal" tabindex="-1" role="dialog" aria-labelledby="reqLeaveModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Add the modal content for Request Leave here -->
+        </div>
+    </div>
+
+    <!-- Request Cash Advance Modal -->
+    <div class="modal fade" id="reqCaModal" tabindex="-1" role="dialog" aria-labelledby="reqCaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Add the modal content for Request Cash Advance here -->
+        </div>
+    </div>
+
 
     <!-- Content Row -->
     <div class="row">
@@ -129,18 +274,18 @@
                                 data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
                                 aria-selected="true">
                                 REQUEST LEAVE
-                                <span class="position-sticky translate-middle badge rounded-pill bg-danger"
+                                <span id="loadleaveBadge"
+                                    class="position-sticky translate-middle badge rounded-pill bg-danger"
                                     style="margin-left: 20px;">
-                                    99+
                                 </span>
                             </button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                            <button class="nav-link" id="nav-ca-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false">
                                 REQUEST CASH ADVANCE
-                                <span class="position-sticky translate-middle badge rounded-pill bg-danger"
+                                <span id="loadcaBadge"
+                                    class="position-sticky translate-middle badge rounded-pill bg-danger"
                                     style="margin-left: 20px;">
-                                    99+
                                 </span>
                             </button>
                             <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
@@ -211,8 +356,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-employee" role="tabpanel"
-                            aria-labelledby="nav-profile-tab">
+                        <div class="tab-pane fade" id="nav-employee" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <div class="row">
                                 <!-- attendance chart -->
                                 <div class="col-xl-6 col-lg-5">
@@ -260,7 +404,7 @@
                             aria-labelledby="nav-home-tab">
                             <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active" data-bs-interval="2000">
+                                    <!-- <div class="carousel-item active" data-bs-interval="2000">
                                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                                             style="height: 470px;">
                                         <div class="carousel-caption d-none d-md-block">
@@ -285,14 +429,14 @@
                                         data-bs-target="#carouselannouncement" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-bday" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active" data-bs-interval="2000">
+                                    <!-- <div class="carousel-item active" data-bs-interval="2000">
                                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                                             style="height: 470px;">
                                         <div class="carousel-caption d-none d-md-block">
@@ -309,7 +453,7 @@
                                         data-bs-target="#carouselannouncement" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
