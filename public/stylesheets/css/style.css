@@ -377,6 +377,66 @@
     height: 400px;
     margin: 0 auto;
   }
+/* CSS for Mobile View - Hide Sidebar */
+@media (max-width: 768px) {
+  #navSidebar {
+      display: none;
+  }
+
+  #wrapper.toggled #navSidebar {
+      display: block;
+  }
+
+  #wrapper.toggled #content {
+      width: 100%;
+  }
+
+  #wrapper.toggled #sidebarToggle {
+      display: none;
+  }
+}
+
+
+/* Small Screen Navigation Styles */
+.small-screen-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60%; /* Adjusted to 3/4 of the screen */
+  height: 100%;
+  background-color: rgba(179, 2, 2);
+  z-index: 1000;
+  overflow-x: hidden; /* Optional: hide horizontal overflow */
+}
+
+.small-screen-nav .sidebar-brand-text {
+  color: #fff; /* Adjust text color */
+}
+
+.small-screen-nav .nav-item {
+  padding: 10px;
+  list-style-type: none; /* Remove the bullet point */
+}
+.small-screen-nav .nav-link:hover {
+  color: #d50f0f; /* Adjust font color for hover state */
+}
+
+
+.small-screen-nav .nav-link {
+  color: #fff; /* Adjust font color */
+}
+
+/* Media Query to show small screen navigation on toggle */
+@media (max-width: 768px) {
+  .small-screen-nav.active {
+      display: block;
+  }
+}
+#geofenceButton {
+  display: none; /* Initially hide the button */
+}
+
   
   
   
