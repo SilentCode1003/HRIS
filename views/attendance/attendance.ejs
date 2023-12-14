@@ -1,43 +1,41 @@
-<body>
-
-    <div class="container mt-5">
-        <h1 class="font-weight-bold text-danger" id="head-title">Attendance</h1>
-        <br>
-        <br>
-        <!-- Table -->
-        <div class="card shadow mb-4" id="tablecard">
-            <div class="card-header py-3">
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#geoFenceModal">
-                    Set Geo-fence
-                </button>
-                <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
-            </div>
-            <div class="card-body">
-                <div class="table-responsive" id="table-responsive-id">
-                    <table class="table table-striped" id="dataTableattendance">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Employee ID</th>
-                                <th>Date</th>
-                                <th>Clock In</th>
-                                <th>Device In</th>
-                                <th>Clock Out</th>
-                                <th>Device Out</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Populate table rows dynamically using JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<h1 class="font-weight-bold text-danger" id="head-title">Attendance</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-3">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+        Set Geo-fence
+      </button>
+        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTableattendance">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Overtime</th>
+                        <th>Time Diff</th>
+                        <th>Time Diff</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
-
+</div>
+</div>
+</div>
     <!-- Geo-fence Modal -->
-    <div class="modal fade" id="geoFenceModal" tabindex="-1" role="dialog" aria-labelledby="geoFenceModalLabel"
+    
+     <div class="modal fade" id="geoFenceModal" tabindex="-1" role="dialog" aria-labelledby="geoFenceModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -64,4 +62,3 @@
             </div>
         </div>
     </div>
-</body>
