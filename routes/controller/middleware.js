@@ -72,6 +72,9 @@ var roleacess = [
         layout: "resignedlayout",
       },
       {
+        layout: "salarylayout",
+      },
+      {
         layout: "shiftlayout",
       },
       {
@@ -82,6 +85,9 @@ var roleacess = [
       },
       {
         layout: "violationlayout",
+      },
+      {
+        layout: "deductionlayout",
       },
     ],
   },
