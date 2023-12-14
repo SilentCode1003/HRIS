@@ -10,7 +10,7 @@
 
     // Custom office icon
     const officeIcon = L.icon({
-        iconUrl: './images/img/whitelogo.png',  // Replace with the path to your office icon image
+        iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
@@ -50,9 +50,11 @@
         const geofenceButton = document.getElementById('loginbtn');
 
         if (checkGeofence(userLocation)) {
+            swal("Nasa office kana!", "You clicked the button!", "success");
             console.log('User is inside the geofence.');
             geofenceButton.style.display = 'block';
         } else {
+            swal("wala kapa!", "You clicked the button!", "success");
             console.log('User is outside the geofence.');
             geofenceButton.style.display = 'none';
         }
