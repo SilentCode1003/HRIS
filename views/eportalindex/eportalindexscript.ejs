@@ -1,74 +1,123 @@
 <script>
-    const OFFICE_LOCATION_LAT = 14.337945;
-    const OFFICE_LOCATION_LNG = 121.060511;
+    $(document).ready(function () {
+        console.log('Initialize');
+        let userLocation; // Declare userLocation in a broader scope
+        let employeeid = "<%= employeeid %>";
 
-    const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
+        // Add this console.log statement
+        console.log('Employee ID:', employeeid);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+        const OFFICE_LOCATION_LAT = 14.337945;
+        const OFFICE_LOCATION_LNG = 121.060511;
 
-    // Custom office icon
-    const officeIcon = L.icon({
-        iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-    });
+        const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
 
-    // Marker with custom icon
-    const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
-    officeMarker.bindPopup('Office Location').openPopup();
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-    const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.3,
-        radius: 100
-    }).addTo(map);
-
-    function checkGeofence(userLocation) {
-        const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
-        return userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
-    }
-
-    function updateLocationOnMap(position) {
-        const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
-
-        // Clear previous markers
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Marker) {
-                layer.remove();
-            }
+        // Custom office icon
+        const officeIcon = L.icon({
+            iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
         });
 
-        const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
-        userMarker.bindPopup(`My Location`).openPopup();
-        const geofenceButton = document.getElementById('loginbtn');
+        // Marker with custom icon
+        const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
+        officeMarker.bindPopup('Office Location').openPopup();
 
-        if (checkGeofence(userLocation)) {
-            swal("Nasa office kana!", "You clicked the button!", "success");
-            console.log('User is inside the geofence.');
-            geofenceButton.style.display = 'block';
-        } else {
-            swal("wala kapa!", "You clicked the button!", "success");
-            console.log('User is outside the geofence.');
-            geofenceButton.style.display = 'none';
+        const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.3,
+            radius: 100
+        }).addTo(map);
+
+        function checkGeofence(userLocation) {
+            const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
+            return userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
         }
-    }
 
-    function handleError(error) {
-        console.error(`Error getting user location: ${error.message}`);
-    }
+        function updateLocationOnMap(position) {
+            userLocation = { // Assign the value to the global variable
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
 
-    // Watch the device's position continuously
-    const watchId = navigator.geolocation.watchPosition(updateLocationOnMap, handleError, {
-        enableHighAccuracy: true,
-        maximumAge: 30000,
-        timeout: 27000
+            // Clear previous markers
+            map.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                    layer.remove();
+                }
+            });
+
+            const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
+            userMarker.bindPopup(`My Location`).openPopup();
+            const geofenceButton = document.getElementById('clockinbtn');
+
+            if (checkGeofence(userLocation)) {
+                swal("Nasa office kana!", "You clicked the button!", "success");
+                console.log('User is inside the geofence.');
+                geofenceButton.style.display = 'block';
+            } else {
+                swal("wala kapa!", "You clicked the button!", "success");
+                console.log('User is outside the geofence.');
+                geofenceButton.style.display = 'block';
+            }
+        }
+
+        function handleError(error) {
+            console.error(`Error getting user location: ${error.message}`, error);
+        }
+
+        // Watch the device's position continuously
+        const watchId = navigator.geolocation.watchPosition(updateLocationOnMap, handleError, {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000
+        });
+
+        // Set up click event for the "Clock In" button
+        $('#clockinbtn').on('click', function () {
+            // AJAX call to clockin API
+            $.ajax({
+                type: "POST",
+                url: "/eportalindex/clockin",
+                data: {
+                    latitude: userLocation.lat,
+                    longitude: userLocation.lng,
+                    employeeid: employeeid  // Include the employeeid in the data
+                },
+                success: function (response) {
+                    console.log("API response", response);
+
+                    if (response.status === "success") {
+                        swal({
+                            title: "Clock-in successful!",
+                            icon: "success",
+                        }).then(() => {
+                            // You can perform additional actions or UI updates here
+                        });
+                    } else {
+                        swal({
+                            title: "Clock-in failed",
+                            text: response.message,
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("API error", error);
+                    swal({
+                        title: "Error",
+                        text: "Unable to clock in. Please try again.",
+                        icon: "error",
+                    });
+                }
+            });
+        });
+
     });
-
 </script>

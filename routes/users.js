@@ -22,10 +22,19 @@ router.post('/save', async (req, res) => {
     let createby = req.session.fullname; 
     const createdate = currentDate.format('YYYY-MM-DD');
 
+    // Validate if the combination of employeeid and accesstype already exists
+    const existingUserQuery = `SELECT * FROM master_user WHERE mu_employeeid = '${employeeid}' AND mu_accesstype = '${accesstype}'`;
+    const existingUserResult = await mysql.mysqlQueryPromise(existingUserQuery, [employeeid, accesstype]);
+
+    if (existingUserResult.length > 0) {
+      // Combination already exists, return an error
+      return res.json({ msg: 'exist' });
+    }
+
     const employeeQuery = `SELECT me_id, me_firstname, me_lastname, me_birthday FROM master_employee WHERE me_id = '${employeeid}'`;
 
     try {
-      const employeeresult = await mysql.mysqlQueryPromise(employeeQuery);
+      const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [employeeid]);
 
       if (employeeresult.length > 0) {
         const employee = employeeresult[0];
@@ -64,6 +73,7 @@ router.post('/save', async (req, res) => {
     res.json({ msg: 'error' });
   }
 });
+
 
 
 

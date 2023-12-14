@@ -260,9 +260,9 @@ router.post('/getbulletin', (req, res) => {
       SELECT 
       COUNT(*) AS Resigned
       FROM 
-      master_employee
+      master_resigned
       WHERE 
-      me_jobstatus = 'resigned'`;
+      mr_status = 'resigned';`;
   
   
       mysql.mysqlQueryPromise(sql)
@@ -375,7 +375,8 @@ router.get('/countadmin', (req, res,) => {
     FROM 
     master_employee
     WHERE 
-    me_department = '1'`;
+    me_department = '1'
+    and  me_jobstatus IN ('regular', 'probitionary')`;
 
 
     mysql.mysqlQueryPromise(sql)
@@ -384,7 +385,9 @@ router.get('/countadmin', (req, res,) => {
       if (result.length > 0) {
         res.status(200).json({
           msg: "success",
-          data: result
+          data: {
+            adminCount: result[0].Admin
+          }
         });
       } else {
         res.status(404).json({
@@ -411,7 +414,8 @@ router.get('/countit', (req, res,) => {
     FROM 
     master_employee
     WHERE 
-    me_department = '2'`;
+    me_department = '2'
+    and  me_jobstatus IN ('regular', 'probitionary')`;
 
 
     mysql.mysqlQueryPromise(sql)
@@ -420,7 +424,9 @@ router.get('/countit', (req, res,) => {
       if (result.length > 0) {
         res.status(200).json({
           msg: "success",
-          data: result
+          data: {
+            ITCount: result[0].IT
+          }
         });
       } else {
         res.status(404).json({
@@ -447,7 +453,8 @@ router.get('/countcabling', (req, res,) => {
     FROM 
     master_employee
     WHERE 
-    me_department = '3'`;
+    me_department = '3'
+    and  me_jobstatus IN ('regular', 'probitionary')`;
 
 
     mysql.mysqlQueryPromise(sql)
@@ -456,7 +463,9 @@ router.get('/countcabling', (req, res,) => {
       if (result.length > 0) {
         res.status(200).json({
           msg: "success",
-          data: result
+          data: {
+            CablingCount: result[0].Cabling
+          }
         });
       } else {
         res.status(404).json({
@@ -474,6 +483,7 @@ router.get('/countcabling', (req, res,) => {
     console.log(error);
   }
 });
+
 
 router.get('/getbday', (req, res) => {
   try {
@@ -510,5 +520,148 @@ router.get('/getbday', (req, res) => {
       });
   } catch (error) {
     console.log(error);
+  }
+});
+
+
+router.get("/totaladmin", (req, res) => {
+  try {
+   let sql = `SELECT
+   me_profile_pic AS profilePicturePath,
+   me_id AS newEmployeeId,
+   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   me_phone AS phone,
+   me_email AS email,
+   mp_positionname AS position,
+   CONCAT(
+       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
+       ' years ',
+       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
+       ' months ',
+       DATEDIFF(CURDATE(), me_hiredate) % 30,
+       ' days'
+   ) AS tenure
+FROM
+   master_employee
+LEFT JOIN
+   master_position ON master_employee.me_position = mp_positionid
+WHERE
+   me_department = '1'
+   and  me_jobstatus IN ('regular', 'probitionary');`;
+  
+  mysql.mysqlQueryPromise(sql)
+  .then((result) => {
+    res.json({
+      msg:"success",
+      data: result,
+    })
+  }).catch((error) => {
+    res.json({
+      msg:"error",
+      error,
+    });
+  });
+
+  } catch (error) {
+    res.json({
+      msg:"error",
+      error,
+    });
+    
+  }
+});
+
+router.get("/totalIT", (req, res) => {
+  try {
+   let sql = `SELECT
+   me_profile_pic AS profilePicturePath,
+   me_id AS newEmployeeId,
+   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   me_phone AS phone,
+   me_email AS email,
+   mp_positionname AS position,
+   CONCAT(
+       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
+       ' years ',
+       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
+       ' months ',
+       DATEDIFF(CURDATE(), me_hiredate) % 30,
+       ' days'
+   ) AS tenure
+FROM
+   master_employee
+LEFT JOIN
+   master_position ON master_employee.me_position = mp_positionid
+WHERE
+   me_department = '2'
+   and  me_jobstatus IN ('regular', 'probitionary');`;
+  
+  mysql.mysqlQueryPromise(sql)
+  .then((result) => {
+    res.json({
+      msg:"success",
+      data: result,
+    })
+  }).catch((error) => {
+    res.json({
+      msg:"error",
+      error,
+    });
+  });
+
+  } catch (error) {
+    res.json({
+      msg:"error",
+      error,
+    });
+    
+  }
+});
+
+
+router.get("/totalcabling", (req, res) => {
+  try {
+   let sql = `SELECT
+   me_profile_pic AS profilePicturePath,
+   me_id AS newEmployeeId,
+   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   me_phone AS phone,
+   me_email AS email,
+   mp_positionname AS position,
+   CONCAT(
+       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
+       ' years ',
+       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
+       ' months ',
+       DATEDIFF(CURDATE(), me_hiredate) % 30,
+       ' days'
+   ) AS tenure
+FROM
+   master_employee
+LEFT JOIN
+   master_position ON master_employee.me_position = mp_positionid
+WHERE
+   me_department = '3'
+   and  me_jobstatus IN ('regular', 'probitionary');`;
+  
+  mysql.mysqlQueryPromise(sql)
+  .then((result) => {
+    res.json({
+      msg:"success",
+      data: result,
+    })
+  }).catch((error) => {
+    res.json({
+      msg:"error",
+      error,
+    });
+  });
+
+  } catch (error) {
+    res.json({
+      msg:"error",
+      error,
+    });
+    
   }
 });
