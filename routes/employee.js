@@ -668,6 +668,122 @@ router.get("/totalregular", (req, res) => {
   }
 });
 
+router.get("/totalactive", (req, res) => {
+  try {
+    let sql = `select
+    me_profile_pic as profilePicturePath,
+    me_id as newEmployeeId,
+    concat(me_firstname, "", me_lastname) as firstname,
+    me_phone as phone,
+    me_email as email,
+    me_jobstatus as jobstatus,
+    md_departmentname as department,
+    mp_positionname as position
+    from master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    where me_jobstatus IN ('regular', 'probitionary')`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    }).catch((error) => {
+      res.json({
+        msg: "error",
+        error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.get("/totalprobi", (req, res) => {
+  try {
+    let sql = `select
+    me_profile_pic as profilePicturePath,
+    me_id as newEmployeeId,
+    concat(me_firstname, "", me_lastname) as firstname,
+    me_phone as phone,
+    me_email as email,
+    md_departmentname as department,
+    mp_positionname as position
+    from master_employee
+    LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN master_position ON master_employee.me_position = mp_positionid
+    where me_jobstatus = 'probitionary'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    }).catch((error) => {
+      res.json({
+        msg: "error",
+        error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.get("/totalresigned", (req, res) => {
+  try {
+    let sql = `   SELECT
+    me.me_profile_pic AS profilePicturePath,
+      me.me_id AS newEmployeeId,
+      CONCAT(me.me_firstname, ' ', me.me_lastname) AS firstname,
+      me.me_phone AS phone,
+      md.md_departmentname AS department,
+      mp.mp_positionname AS position,
+      mr.mr_reason AS reason,
+      mr.mr_dateresigned as dateresigned,
+      mr.mr_createdate as createdate
+  FROM
+      master_resigned mr
+  LEFT JOIN
+      master_employee me ON mr.mr_employeeid = me.me_id
+  LEFT JOIN
+      master_department md ON me.me_department = md.md_departmentid
+  LEFT JOIN
+      master_position mp ON me.me_position = mp.mp_positionid
+  WHERE
+      mr.mr_status = 'resigned'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    }).catch((error) => {
+      res.json({
+        msg: "error",
+        error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+
+
 
 module.exports = router;
 
