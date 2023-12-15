@@ -5,6 +5,7 @@ const router = express.Router();
 const multer = require("multer");
 const XLSX = require("xlsx");
 const { Validator } = require("./controller/middleware");
+const { convertExcelDate } = require("./repository/customhelper");
 
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
@@ -28,6 +29,8 @@ router.post("/upload", (req, res) => {
   dataJson.forEach((key, item) => {
     counter += 1;
 
+    // console.log("Department: ", key.department);
+    console.log("Employee Id: ", key.position);
     GetDepartment(key.department, (err, result) => {
       if (err) console.log("Error: ", err);
       let departmentid = result[0].departmentid;
@@ -35,11 +38,14 @@ router.post("/upload", (req, res) => {
         if (err) console.log("Error: ", err);
         let positionid = result[0].positionid;
 
-        let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
-          "YYYY-MM-DD"
-        );
-        let datehired = moment(key.hiredate, "MM/DD/YYYY").format("YYYY-MM-DD");
-        console.log(key.hiredate);
+        // let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
+        //   "YYYY-MM-DD"
+        // );
+
+        let dateofbirth = convertExcelDate(key.dateofbirth);
+        let datehired = convertExcelDate(key.hiredate);
+        // let datehired = moment(key.hiredate, "MM/DD/YYYY").format("YYYY-MM-DD");
+        console.log("Birth Date", dateofbirth, "Date Hired", datehired);
 
         master_employee = [
           [
@@ -49,6 +55,7 @@ router.post("/upload", (req, res) => {
             key.lastname,
             dateofbirth,
             key.gender,
+            key.civilstatus,
             key.contactno,
             key.email,
             datehired,
@@ -168,7 +175,6 @@ router.post("/getemployee", (req, res) => {
   }
 });
 
-
 router.get("/loadedit", (req, res) => {
   try {
     let sql = ` SELECT
@@ -199,7 +205,6 @@ router.get("/loadedit", (req, res) => {
       .json({ msg: "Internal server error", error: error.message });
   }
 });
-
 
 router.get("/load", (req, res) => {
   try {
@@ -257,8 +262,6 @@ function checkEmployeeExists(firstname, lastname) {
 }
 
 function generateEmployeeId(year, month) {
-
-
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
     mysql
@@ -648,18 +651,20 @@ router.get("/totalregular", (req, res) => {
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     where me_jobstatus = 'regular'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    }).catch((error) => {
-      res.json({
-        msg: "error",
-        error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
       msg: "error",
@@ -684,18 +689,20 @@ router.get("/totalactive", (req, res) => {
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     where me_jobstatus IN ('regular', 'probitionary')`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    }).catch((error) => {
-      res.json({
-        msg: "error",
-        error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
       msg: "error",
@@ -719,18 +726,20 @@ router.get("/totalprobi", (req, res) => {
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     where me_jobstatus = 'probitionary'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    }).catch((error) => {
-      res.json({
-        msg: "error",
-        error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
       msg: "error",
@@ -762,18 +771,20 @@ router.get("/totalresigned", (req, res) => {
   WHERE
       mr.mr_status = 'resigned'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    }).catch((error) => {
-      res.json({
-        msg: "error",
-        error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
       msg: "error",
@@ -781,9 +792,6 @@ router.get("/totalresigned", (req, res) => {
     });
   }
 });
-
-
-
 
 module.exports = router;
 
@@ -804,4 +812,3 @@ function GetPosition(name, callback) {
     callback(null, result);
   });
 }
-
