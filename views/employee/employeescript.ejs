@@ -275,8 +275,10 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
+           
 
             $.each(existingData, (key, item) => {
+              console.log(`${item.jobstatus}`);
               $("#editemployeeid").val(item.employeeid);
               $("#editemployeefname").val(item.firstname);
               $("#editemployeemname").val(item.middlename);
@@ -816,15 +818,16 @@
           lastname: data[3].item,
           dateofbirth: data[4].item,
           gender: data[5].item,
-          contactno: data[6].item,
-          email: data[7].item,
-          hiredate: data[8].item,
-          jobstatus: data[9].item,
-          econtactname: data[10].item,
-          econtactno: data[11].item,
-          department: data[12].item,
-          position: data[13].item,
-          address: data[14].item,
+          civilstatus: data[6].item,
+          contactno: data[7].item,
+          email: data[8].item,
+          hiredate: data[9].item,
+          jobstatus: data[10].item,
+          econtactname: data[11].item,
+          econtactno: data[12].item,
+          department: data[13].item,
+          position: data[14].item,
+          address: data[15].item,
         });
       }
       excelDataSave(dataExcelArr);

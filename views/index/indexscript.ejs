@@ -14,8 +14,16 @@
     loadregularCard();
     loadprobitionaryCard();
     loadresignedCard();
-    loadreqleaveCard();
-    loadreqCaCard();
+    loadtotaladminCard();
+    loadtotalITCard();
+    loadtotalcablingCard();
+    searchEmployeeTable();
+    searchRegularTable();
+    searchprobaTable();
+    searchresignedTable();
+    searchadminTable();
+    searchitTable();
+    searchcablingTable();
 
 
     $(document).on("click", "#totalEMP", function () {
@@ -23,7 +31,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/employee/load",
+        url: "/employee/totalactive",
         success: function (json) {
           console.log("API response", json);
 
@@ -37,13 +45,23 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var ID = row.insertCell(0);
-            var NAME = row.insertCell(1);
-            var CONTACT = row.insertCell(2);
-            var EMAIL = row.insertCell(3);
-            var JOB_STATUS = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(5);
-            var POSITION = row.insertCell(6);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var JOB_STATUS = row.insertCell(5);
+            var DEPARTMENT = row.insertCell(6);
+            var POSITION = row.insertCell(7);
+
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
 
             ID.innerHTML = item.newEmployeeId;
             NAME.innerHTML = item.firstname;
@@ -52,6 +70,11 @@
             JOB_STATUS.innerHTML = item.jobstatus;
             DEPARTMENT.innerHTML = item.department;
             POSITION.innerHTML = item.position;
+
+            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, JOB_STATUS, POSITION], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
           });
         },
         error: function (xhr, status, error) {
@@ -90,13 +113,11 @@
             var POSITION = row.insertCell(6);
 
             var imgElement = document.createElement("img");
-            imgElement.src = item.profilePicturePath;
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
             imgElement.alt = "Profile Image";
-            imgElement.style.width = "50px"; 
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
 
-            console.log("Base64 Image:", item.profilePicturePath); 
-
-           
             IMAGE.appendChild(imgElement);
 
             ID.innerHTML = item.newEmployeeId;
@@ -105,6 +126,11 @@
             EMAIL.innerHTML = item.email;
             DEPARTMENT.innerHTML = item.me_department;
             POSITION.innerHTML = item.me_position;
+
+            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
           });
         },
         error: function (xhr, status, error) {
@@ -114,6 +140,286 @@
     });
 
 
+    $(document).on("click", "#totalprobiEMP", function () {
+      $(`#probiemloyeetbl`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/totalprobi",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#probiemloyeetbl")) {
+            $("#probiemloyeetbl").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("probiemloyeetbl");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var DEPARTMENT = row.insertCell(5);
+            var POSITION = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            EMAIL.innerHTML = item.email;
+            DEPARTMENT.innerHTML = item.department;
+            POSITION.innerHTML = item.position;
+
+            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+
+      });
+    });
+
+
+    $(document).on("click", "#totalresignedEMP", function () {
+      $(`#resignedemployeetbl`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/totalresigned",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#resignedemployeetbl")) {
+            $("#resignedemployeetbl").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("resignedemployeetbl");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            // var EMAIL = row.insertCell(4);
+            var DEPARTMENT = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var REASON = row.insertCell(6);
+            var DATE_RESIGNED = row.insertCell(7);
+            var CREATE_DATE = row.insertCell(8);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            // EMAIL.innerHTML = item.email;
+            DEPARTMENT.innerHTML = item.department;
+            POSITION.innerHTML = item.position;
+            REASON.innerHTML = item.reason;
+            DATE_RESIGNED.innerHTML = item.dateresigned;
+            CREATE_DATE.innerHTML = item.createdate;
+
+            $.each([ID, NAME, CONTACT, DEPARTMENT, POSITION, REASON, DATE_RESIGNED, CREATE_DATE], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+    $(document).on("click", "#totaladminEMP", function () {
+      $(`#totaladmintable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/totaladmin",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#totaladmintable")) {
+            $("#totaladmintable").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("totaladmintable");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var TENURE = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            EMAIL.innerHTML = item.email;
+            POSITION.innerHTML = item.position;
+            TENURE.innerHTML = item.tenure;
+
+            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+    $(document).on("click", "#totalitEMP", function () {
+      $(`#totalittable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/totalIT",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#totalittable")) {
+            $("#totalittable").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("totalittable");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var TENURE = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            EMAIL.innerHTML = item.email;
+            POSITION.innerHTML = item.position;
+            TENURE.innerHTML = item.tenure;
+
+            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+    $(document).on("click", "#totalcablingEMP", function () {
+      $(`#totalcablingtable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/totalcabling",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#totalcablingtable")) {
+            $("#totalcablingtable").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("totalcablingtable");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var CONTACT = row.insertCell(3);
+            var EMAIL = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var TENURE = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            CONTACT.innerHTML = item.phone;
+            EMAIL.innerHTML = item.email;
+            POSITION.innerHTML = item.position;
+            TENURE.innerHTML = item.tenure;
+
+            
+            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
 
 
 
@@ -204,17 +510,17 @@
       });
     }
 
-    function loadreqleaveCard() {
+    function loadtotaladminCard() {
       $.ajax({
         type: "GET",
-        url: "/countreqleavebadge",
+        url: "/countadmin",
         success: function (result) {
           console.log(result);
           if (result.msg === "success") {
-            const totalLeaveReq = result.data.leavereqCount;
+            const totalempadmin = result.data.adminCount;
 
             // Update the content of the Total Employee card using id
-            $("#reqLeaveCard .h5").text(totalLeaveReq);
+            $("#totalADMIN .h5").text(totalempadmin);
           } else {
             // Handle error cases if needed
             console.error("Error fetching data:", result.msg);
@@ -227,15 +533,35 @@
       });
     }
 
-    function loadreqCaCard() {
+    function loadtotalITCard() {
       $.ajax({
         type: "GET",
-        url: "/countcashreqbadge",
+        url: "/countit",
         success: function (result) {
           console.log(result);
           if (result.msg === "success") {
-            const totalCa = result.data.CAreqCount;
-            $("#reqCaCard .h5").text(totalCa);
+            const totalIT = result.data.ITCount;
+            $("#totalIT .h5").text(totalIT);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        }
+      });
+    }
+
+
+    function loadtotalcablingCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countcabling",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalCabling = result.data.CablingCount;
+            $("#totalCABLING .h5").text(totalCabling);
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -911,5 +1237,166 @@
       }
     }
   });
+
+
+  function searchEmployeeTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputtotal");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableemployees");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchRegularTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputRegular");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("regularemloyeetbl");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchprobaTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputproba");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("probiemloyeetbl");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchresignedTable() {
+    var input, filter, table, tr, td, i, j;
+    input = document.getElementById("myInputresigned");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("resignedemployeetbl");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      var found = false;
+
+      for (j = 0; j < td.length; j++) {
+        if (td[j]) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+      }
+
+      if (found) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchadminTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputtotaladmin");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("totaladmintable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchitTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputtotalit");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("totalittable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function searchcablingTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputtotalcabling");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("totalcablingtable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
 
 </script>

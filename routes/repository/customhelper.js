@@ -1,6 +1,7 @@
 const fs = require("fs");
 const moment = require("moment");
 const LINQ = require("node-linq").LINQ;
+const { format } = require('date-fns');
 
 //#region READ & WRITE JSON FILES
 exports.ReadJSONFile = function (filepath) {
@@ -450,3 +451,11 @@ exports.ConvertToJson = (data) => {
   return result;
 };
 //#endregion
+
+exports.convertExcelDate = (serialDate) => {
+  // Excel serial date starts from 1900-01-01
+  const baseDate = new Date("1899-12-30");
+  const offsetInMilliseconds = serialDate * 24 * 60 * 60 * 1000;
+  const resultDate = new Date(baseDate.getTime() + offsetInMilliseconds);
+  return format(resultDate, "yyyy-MM-dd");
+};

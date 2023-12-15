@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
+    "date-fns": "^2.30.0",
     "date-holidays": "^3.23.1",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
@@ -25,6 +27,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
+    "node-linq": "^0.0.5",
     "xlsx": "^0.18.5"
   }
 }
