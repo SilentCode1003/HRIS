@@ -1,468 +1,522 @@
-.home-section .home-content{
-    position: relative;
-    padding-top: 104px;
-  }
-  .home-content .overview-boxes{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 0 20px;
-    margin-bottom: 26px;
-  }
-  .overview-boxes .box{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(100% / 4 - 15px);
-    background: #fff;
-    padding: 15px 14px;
-    border-radius: 12px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-  }
-  .overview-boxes .box-topic{
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .home-content .box .number{
-    display: inline-block;
-    font-size: 35px;
-    margin-top: -6px;
-    font-weight: 500;
-  }
-  .home-content .box .indicator{
-    display: flex;
-    align-items: center;
-  }
-  .home-content .box .indicator i{
-    height: 20px;
-    width: 20px;
-    background: #8FDACB;
-    line-height: 20px;
-    text-align: center;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 20px;
-    margin-right: 5px;
-  }
-  .box .indicator i.down{
-    background: #e87d88;
-  }
-  .home-content .box .indicator .text{
-    font-size: 12px;
-  }
-  .home-content .box .cart{
-    display: inline-block;
-    font-size: 32px;
-    height: 50px;
-    width: 50px;
-    background: #cce5ff;
-    line-height: 50px;
-    text-align: center;
-    color: #66b0ff;
-    border-radius: 12px;
-    margin: -15px 0 0 6px;
-  }
-  .home-content .box .cart.two{
-     color: #2BD47D;
-     background: #C0F2D8;
-   }
-  .home-content .box .cart.three{
-     color: #ffc233;
-     background: #ffe8b3;
-   }
-  .home-content .box .cart.four{
-     color: #e05260;
-     background: #f7d4d7;
-   }
-  .home-content .total-order{
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .home-content .sales-boxes{
-    display: flex;
-    justify-content: space-between;
-    /* padding: 0 20px; */
-  }
-  .img-preview {
-    height:100%;
-    display:flex;
-    align-items:left;
-    justify-content:left;
-  
-  }
-  .form-input {
-    width:350px;
-    padding:20px;
-    background:#fff;
-    box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
-                3px 3px 7px rgba(94, 104, 121, 0.377);
-  }
-  .form-input img {
-    width:100%;
-    display:none;
-    margin-bottom:30px;
-  }
-  #tablecard {
-    width: 85;
-    margin-left: 5%;
-    margin-right: 5%;
-  }
-  #table-responsive-id{
-    overflow: hidden;
-  }
-  #openmodal{
-    margin-top: 10px;
-    margin-left: 110px;
-    height: 60px;
-    width: 150px;
-    font-size: larger;
-  }
-  #myInput{
-    margin-left: 80%;
-    margin-top: -40px;
-    float: right;
-    width: 20%;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputtotal{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputRegular{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputproba{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputresigned{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputtotaladmin{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputtotalit{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInputtotalcabling{
-    margin-left: 700px;
-    margin-right: 30px;
-    margin-top: 5px;
-    float: right;
-    width: 200px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #head-title{
-    margin-left: 110px;
-    margin-top: 50px;
-    margin-bottom: -20px;
-  }
-  #myInput2{
-    margin-left: 80%;
-    float: right;
-    width: 300px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  #myInput3{
-    margin-left: 80%;
-    margin-top: -40px;
-    float: right;
-    width: 300px;
-    height: 40px;
-    border-radius: 8px;
-    border-color: red;
-  }
-  table {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    table-layout: fixed;
-  }
-  
-  table caption {
-    font-size: 1.5em;
-    margin: .5em 0 .75em;
-  }
-  
-  table tr {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: .35em;
-  }
-  
-  table th,
-  table td {
-    padding: .625em;
-    text-align: center;
-  }
-  
-  table th {
-    font-size: .95em;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-  }
-  .bunga{
-    width: 90%;
-    margin-left: 5%;
-  }
-  /* #applybtn{
+.home-section .home-content {
+  position: relative;
+  padding-top: 104px;
+}
+
+.home-content .overview-boxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-bottom: 26px;
+}
+
+.overview-boxes .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 4 - 15px);
+  background: #fff;
+  padding: 15px 14px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.overview-boxes .box-topic {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.home-content .box .number {
+  display: inline-block;
+  font-size: 35px;
+  margin-top: -6px;
+  font-weight: 500;
+}
+
+.home-content .box .indicator {
+  display: flex;
+  align-items: center;
+}
+
+.home-content .box .indicator i {
+  height: 20px;
+  width: 20px;
+  background: #8FDACB;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.box .indicator i.down {
+  background: #e87d88;
+}
+
+.home-content .box .indicator .text {
+  font-size: 12px;
+}
+
+.home-content .box .cart {
+  display: inline-block;
+  font-size: 32px;
+  height: 50px;
+  width: 50px;
+  background: #cce5ff;
+  line-height: 50px;
+  text-align: center;
+  color: #66b0ff;
+  border-radius: 12px;
+  margin: -15px 0 0 6px;
+}
+
+.home-content .box .cart.two {
+  color: #2BD47D;
+  background: #C0F2D8;
+}
+
+.home-content .box .cart.three {
+  color: #ffc233;
+  background: #ffe8b3;
+}
+
+.home-content .box .cart.four {
+  color: #e05260;
+  background: #f7d4d7;
+}
+
+.home-content .total-order {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.home-content .sales-boxes {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 0 20px; */
+}
+
+.img-preview {
+  height: 100%;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+
+}
+
+.form-input {
+  width: 350px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+    3px 3px 7px rgba(94, 104, 121, 0.377);
+}
+
+.form-input img {
+  width: 100%;
+  display: none;
+  margin-bottom: 30px;
+}
+
+#tablecard {
+  width: 85;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#table-responsive-id {
+  overflow: hidden;
+}
+
+#openmodal {
+  margin-top: 10px;
+  margin-left: 110px;
+  height: 60px;
+  width: 150px;
+  font-size: larger;
+}
+
+#myInput {
+  margin-left: 80%;
+  margin-top: -40px;
+  float: right;
+  width: 20%;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputtotal {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputRegular {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputproba {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputresigned {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputtotaladmin {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputtotalit {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInputtotalcabling {
+  margin-left: 700px;
+  margin-right: 30px;
+  margin-top: 5px;
+  float: right;
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#head-title {
+  margin-left: 110px;
+  margin-top: 50px;
+  margin-bottom: -20px;
+}
+
+#myInput2 {
+  margin-left: 80%;
+  float: right;
+  width: 300px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+#myInput3 {
+  margin-left: 80%;
+  margin-top: -40px;
+  float: right;
+  width: 300px;
+  height: 40px;
+  border-radius: 8px;
+  border-color: red;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .95em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.bunga {
+  width: 90%;
+  margin-left: 5%;
+}
+
+/* #applybtn{
     margin-left: 1%;
   } */
-  
-  @media screen and (max-width: 1000px) {
-    table {
-      border: 0;
-    }
-  
-    table caption {
-      font-size: 1.3em;
-    }
-    
-    table thead {
-      border: none;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-    
-    table tr {
-      border-bottom: 3px solid #ddd;
-      display: block;
-      margin-bottom: .625em;
-    }       
-    
-    table td {
-      border-bottom: 1px solid #ddd;
-      display: block;
-      font-size: .8em;
-      text-align: right;
-    }
-    
-    table td::before {
-      /*
+
+@media screen and (max-width: 1000px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+
+  table td::before {
+    /*
       * aria-label has no advantage, it won't be read inside a table
       content: attr(aria-label);
       */
-      content: attr(data-label);
-      float: left;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    
-    table td:last-child {
-      border-bottom: 0;
-    }
-
-    head-title{
-      text-align: center;
-    }
-    #card-header{
-      width: 370px;
-      margin-left: 3%;
-    }
-
-  }
-  
-  /* Load Spinner */
-  .loader-wrapper {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #669999;
-    opacity: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
   }
 
-  .loader {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    position: relative;
-    border: 4px solid #fff;
-    animation: loader 2s infinite ease;
+  table td:last-child {
+    border-bottom: 0;
   }
 
-  .loader-inner {
-    vertical-align: top;
-    display: inline-block;
-    width: 100%;
-    background-color: #fff;
-    animation: loader-inner 2s infinite ease-in;
+  head-title {
+    text-align: center;
   }
 
-  .spinner {
-    height: 120px;
-    width: 120px;
-    border: 6px solid black;
-    border-color: black transparent black transparent;
-    border-radius: 50%;
-    animation: spin 2s linear infinite;
-  }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+  #card-header {
+    width: 370px;
+    margin-left: 3%;
   }
 
-  @keyframes loader {
-    0% {
-      transform: rotate(0deg);
-    }
+}
 
-    25% {
-      transform: rotate(180deg);
-    }
+form label {
+  font-weight: bold;
+}
 
-    50% {
-      transform: rotate(180deg);
-    }
+form input:not(#inputState),
+form select:not(#inputState) {
+  font-weight: bold;
+}
 
-    75% {
-      transform: rotate(360deg);
-    }
+.bold-label {
+  font-weight: bold;
+}
 
-    100% {
-      transform: rotate(360deg);
-    }
+
+
+/* Load Spinner */
+.loader-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #669999;
+  opacity: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border: 4px solid #fff;
+  animation: loader 2s infinite ease;
+}
+
+.loader-inner {
+  vertical-align: top;
+  display: inline-block;
+  width: 100%;
+  background-color: #fff;
+  animation: loader-inner 2s infinite ease-in;
+}
+
+.spinner {
+  height: 120px;
+  width: 120px;
+  border: 6px solid black;
+  border-color: black transparent black transparent;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
   }
 
-  @keyframes loader-inner {
-    0% {
-      height: 0%;
-    }
-
-    25% {
-      height: 0%;
-    }
-
-    50% {
-      height: 100%;
-    }
-
-    75% {
-      height: 100%;
-    }
-
-    100% {
-      height: 0%;
-    }
+  25% {
+    transform: rotate(180deg);
   }
-  /* 
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-inner {
+  0% {
+    height: 0%;
+  }
+
+  25% {
+    height: 0%;
+  }
+
+  50% {
+    height: 100%;
+  }
+
+  75% {
+    height: 100%;
+  }
+
+  100% {
+    height: 0%;
+  }
+}
+
+/* 
   input dropdown */
-  
-  .custom-input {
-    width: 100%;
-  }
-  
-  .categoryDropdown{
-    margin-left: 5.1rem !important;
-  }
-  
-  .hidden{
-    display: none;
-  }
-  
-  .custom-dropdown {
-    display: none;
-    width: 100%;
-    border: 1px solid #ccc;
-    max-height: 100px;
-    overflow-y: auto;
-    position: absolute;
-    background-color: white;
-    width: 36.7vw;
-    z-index: 1000;
-    border-radius: 0.275rem;
-  }
-  
-  .dropdown-option {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .dropdown-option:hover {
-    background-color: var(--clr-6);
-    color: white;
-  }
-  .chart-container {
-    width: 100%;
-    max-width: 400px;
-    height: 400px;
-    margin: 0 auto;
-  }
+
+.custom-input {
+  width: 100%;
+}
+
+.categoryDropdown {
+  margin-left: 5.1rem !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.custom-dropdown {
+  display: none;
+  width: 100%;
+  border: 1px solid #ccc;
+  max-height: 100px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+  width: 36.7vw;
+  z-index: 1000;
+  border-radius: 0.275rem;
+}
+
+.dropdown-option {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background-color: var(--clr-6);
+  color: white;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  margin: 0 auto;
+}
+
 /* CSS for Mobile View - Hide Sidebar */
 @media (max-width: 768px) {
   #navSidebar {
-      display: none;
+    display: none;
   }
 
   #wrapper.toggled #navSidebar {
-      display: block;
+    display: block;
   }
 
   #wrapper.toggled #content {
-      width: 100%;
+    width: 100%;
   }
 
   #wrapper.toggled #sidebarToggle {
-      display: none;
+    display: none;
   }
 }
 
@@ -473,45 +527,45 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 60%; /* Adjusted to 3/4 of the screen */
+  width: 60%;
+  /* Adjusted to 3/4 of the screen */
   height: 100%;
   background-color: rgba(179, 2, 2);
   z-index: 1000;
-  overflow-x: hidden; /* Optional: hide horizontal overflow */
+  overflow-x: hidden;
+  /* Optional: hide horizontal overflow */
 }
 
 .small-screen-nav .sidebar-brand-text {
-  color: #fff; /* Adjust text color */
+  color: #fff;
+  /* Adjust text color */
 }
 
 .small-screen-nav .nav-item {
   padding: 10px;
-  list-style-type: none; /* Remove the bullet point */
+  list-style-type: none;
+  /* Remove the bullet point */
 }
+
 .small-screen-nav .nav-link:hover {
-  color: #d50f0f; /* Adjust font color for hover state */
+  color: #d50f0f;
+  /* Adjust font color for hover state */
 }
 
 
 .small-screen-nav .nav-link {
-  color: #fff; /* Adjust font color */
+  color: #fff;
+  /* Adjust font color */
 }
 
 /* Media Query to show small screen navigation on toggle */
 @media (max-width: 768px) {
   .small-screen-nav.active {
-      display: block;
+    display: block;
   }
 }
+
 #geofenceButton {
-  display: none; /* Initially hide the button */
+  display: none;
+  /* Initially hide the button */
 }
-
-  
-  
-  
-  
-  
-
-  
- 

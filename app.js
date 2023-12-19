@@ -47,6 +47,7 @@ var eportalcoopRouter = require('./routes/eportalcoop');
 var eportalpayslipRouter = require('./routes/eportalpayslip');
 var eportalattendancelayoutRouter = require('./routes/eportalattendance');
 var loginlayoutRouter = require('./routes/login');
+var candidateRouter = require('./routes/candidate');
 
 
 var app = express();
@@ -105,6 +106,7 @@ app.use('/eportalcoop', eportalcoopRouter);
 app.use('/eportalpayslip', eportalpayslipRouter);
 app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);
+app.use('/candidate', candidateRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
