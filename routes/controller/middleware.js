@@ -89,6 +89,9 @@ var roleacess = [
       {
         layout: "deductionlayout",
       },
+      {
+        layout: "candidatelayout",
+      },
     ],
   },
   {

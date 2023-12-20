@@ -4,133 +4,176 @@
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
-        + Add New
-      </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  <div class="card-header py-3">
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addojtmodal">
+      + Add New
+    </button>
+    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTabledepartment">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date started</th>
+            <th>Remaining Time</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-striped" id="dataTabledepartment">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Date started</th>
-                        <th>Remaining Time</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+<div class="modal fade" id="addojtmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">ADD OJT</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;  margin-top: 100px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                    class="rounded rounded-circle" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="border-top pb-3 mb-4 text-center">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
             <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="date" class="form-control" id="holidaydate" name="holidaydate">
-                        <label for="floatingInput">Date</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="holidaydescription" name="holidaydescription" placeholder="Description">
-                        <label for="floatingInput">Description</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="holidaycreatedby" name="holidaycreatedby" placeholder="Created By">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="holidaytstatus" name="holidaytstatus" aria-label="Floating label select example">
-                              <option selected>Status</option>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Holiday</label>
-                          </div>
-                    </div>
-                    <br>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeefname" name="employeefname"
+                      placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeelname" name="employeelname"
+                      placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeemname" name="employeemname"
+                      placeholder="School">
+                    <label for="floatingInput"> School</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="employeegender" name="employeegender"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeaddress" name="employeeaddress"
+                      placeholder="Address">
+                    <label for="floatingInput">Address</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="employeebirthday" name="employeebirthday">
+                    <label for="floatingInput">Total Hours</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="employeephone" name="employeephone"
+                      placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                    <label for="floatingInput">Start Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="employeedepartment" name="employeedepartment"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option>IT</option>
+                      <option>Cabling</option>
+                      <option>Research and Development</option>
+                    </select>
+                    <label for="employeedepartment">Department</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname"
+                      placeholder="Emergency Contact Name">
+                    <label for="floatingInput">Emergency Contact Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone"
+                      placeholder="Emergency Contact Phone">
+                    <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                </div>
+              </div>
+              <br>
             </form>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="holidaysavebtn">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="employeesavebtn">Save</button>
       </div>
     </div>
   </div>
-
-  <!-- Edit Modal -->
-<div class="modal fade" id="editdepartmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Holiday</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="editholidaydate" name="editholidaydate">
-                    <label for="floatingInput">Date</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editholidaydescription" name="editholidaydescription" placeholder="Description">
-                    <label for="floatingInput">Description</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editholidaycreatedby" name="editholidaycreatedby" placeholder="Created By">
-                    <label for="floatingInput">Created By</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editholidaytstatus" name="editholidaytstatus" aria-label="Floating label select example">
-                          <option selected>Status</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Holiday</label>
-                      </div>
-                </div>
-                <br>
-        </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editholidaysavebtn">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
