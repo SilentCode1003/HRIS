@@ -1,13 +1,13 @@
 <script>
-  let leaveid = '';
-  let cashadvanceid = '';
-  let anouncementdiv = '';
-  let bdaydiv = '';
-  //let bulletinid = '';
   $(document).ready(function () {
-    console.log('Initialize');
+    let leaveid = "";
+    let cashadvanceid = "";
+    let anouncementdiv = "";
+    let bdaydiv = "";
+    //let bulletinid = '';
+    console.log("Initialize");
     $("#dataTableemployees tr").removeAttr("style");
-    
+
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -19,6 +19,7 @@
     loadtotaladminCard();
     loadtotalITCard();
     loadtotalcablingCard();
+
     searchEmployeeTable();
     searchRegularTable();
     searchprobaTable();
@@ -26,7 +27,6 @@
     searchadminTable();
     searchitTable();
     searchcablingTable();
-
 
     $(document).on("click", "#totalEMP", function () {
       $(`#dataTableemployees`).find("tr:gt(0)").remove();
@@ -56,7 +56,6 @@
             var DEPARTMENT = row.insertCell(6);
             var POSITION = row.insertCell(7);
 
-
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
             imgElement.alt = "Profile Image";
@@ -73,10 +72,13 @@
             DEPARTMENT.innerHTML = item.department;
             POSITION.innerHTML = item.position;
 
-            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, JOB_STATUS, POSITION], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, JOB_STATUS, POSITION],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -84,8 +86,6 @@
         },
       });
     });
-
-
 
     $(document).on("click", "#totalregularEMP", function () {
       $(`#regularemloyeetbl`).find("tr:gt(0)").remove();
@@ -129,10 +129,13 @@
             DEPARTMENT.innerHTML = item.me_department;
             POSITION.innerHTML = item.me_position;
 
-            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -140,7 +143,6 @@
         },
       });
     });
-
 
     $(document).on("click", "#totalprobiEMP", function () {
       $(`#probiemloyeetbl`).find("tr:gt(0)").remove();
@@ -184,19 +186,20 @@
             DEPARTMENT.innerHTML = item.department;
             POSITION.innerHTML = item.position;
 
-            $.each([ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
         },
-
       });
     });
-
 
     $(document).on("click", "#totalresignedEMP", function () {
       $(`#resignedemployeetbl`).find("tr:gt(0)").remove();
@@ -246,10 +249,22 @@
             DATE_RESIGNED.innerHTML = item.dateresigned;
             CREATE_DATE.innerHTML = item.createdate;
 
-            $.each([ID, NAME, CONTACT, DEPARTMENT, POSITION, REASON, DATE_RESIGNED, CREATE_DATE], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [
+                ID,
+                NAME,
+                CONTACT,
+                DEPARTMENT,
+                POSITION,
+                REASON,
+                DATE_RESIGNED,
+                CREATE_DATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -260,7 +275,6 @@
 
     $(document).on("click", "#totaladminEMP", function () {
       $(`#totaladmintable`).find("tr:gt(0)").remove();
-      
 
       $.ajax({
         type: "GET",
@@ -301,10 +315,13 @@
             POSITION.innerHTML = item.position;
             TENURE.innerHTML = item.tenure;
 
-            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -355,10 +372,13 @@
             POSITION.innerHTML = item.position;
             TENURE.innerHTML = item.tenure;
 
-            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -366,7 +386,6 @@
         },
       });
     });
-
 
     $(document).on("click", "#totalcablingEMP", function () {
       $(`#totalcablingtable`).find("tr:gt(0)").remove();
@@ -410,11 +429,13 @@
             POSITION.innerHTML = item.position;
             TENURE.innerHTML = item.tenure;
 
-            
-            $.each([ID, NAME, CONTACT, EMAIL, POSITION, TENURE], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -422,9 +443,6 @@
         },
       });
     });
-
-
-
 
     function loadtotalCard() {
       $.ajax({
@@ -441,10 +459,9 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
-
 
     function loadregularCard() {
       $.ajax({
@@ -461,10 +478,9 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
-
 
     function loadprobitionaryCard() {
       $.ajax({
@@ -485,7 +501,7 @@
         error: function (err) {
           // Handle AJAX error
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
 
@@ -508,7 +524,7 @@
         error: function (err) {
           // Handle AJAX error
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
 
@@ -531,7 +547,7 @@
         error: function (err) {
           // Handle AJAX error
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
 
@@ -550,10 +566,9 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
-
 
     function loadtotalcablingCard() {
       $.ajax({
@@ -570,10 +585,9 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
-
 
     function loadleaveBadge() {
       $.ajax({
@@ -590,10 +604,9 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
-
 
     function loadCashBadge() {
       $.ajax({
@@ -610,40 +623,39 @@
         },
         error: function (err) {
           console.error("AJAX error:", err.statusText);
-        }
+        },
       });
     }
 
-
     $.ajax({
-      url: '/announcement/load',
-      method: 'GET',
-      dataType: 'json',
+      url: "/announcement/load",
+      method: "GET",
+      dataType: "json",
 
       success: function (data) {
         let details = data.data;
         console.log(data.data);
-        let bulletinid = []
+        let bulletinid = [];
         $.each(details, (key, item) => {
           bulletinid.push({
-            'id': item.bulletinid
+            id: item.bulletinid,
           });
-        })
+        });
         console.log(bulletinid);
         LoadAnnouncement(bulletinid);
       },
       error: function (error) {
         console.error(error);
-      }
+      },
     });
 
     function LoadAnnouncement(bulletinid) {
       console.log("id", bulletinid);
       $.each(bulletinid, (key, item) => {
         let id = item.id;
-        console.log("id2: ", id)
+        console.log("id2: ", id);
         GenerateAnouncement(id);
-      })
+      });
     }
 
     function GenerateAnouncement(id) {
@@ -654,12 +666,9 @@
           bulletinid: id,
         },
         success: function (result) {
-
-
-
           if (result.msg === "success") {
             const announcementData = result.data;
-            let counter = 0
+            let counter = 0;
 
             console.log(announcementData.length);
             $.each(announcementData, (key, item) => {
@@ -683,8 +692,8 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>`;
-              console.log(anouncementdiv);
-            })
+              // console.log(anouncementdiv);
+            });
           } else {
             console.error("Error: ", result.message);
             swal(
@@ -694,7 +703,7 @@
             );
           }
 
-          $('#carouselannouncement').html(anouncementdiv);
+          $("#carouselannouncement").html(anouncementdiv);
         },
         error: function (err) {
           console.error("AJAX Error: ", err.responseText);
@@ -705,12 +714,9 @@
           );
         },
       });
-
-
     }
 
     //<<<<<<<<<<<B DAY FOLKS>>>>>>>>>>>>>>>>>>>>>>>>
-
 
     function LoadBdayFolks() {
       $.ajax({
@@ -745,9 +751,9 @@
                                     </button>`;
             });
 
-            console.log(bdaydiv);
+            // console.log(bdaydiv);
 
-            $('#carouselbday').html(bdaydiv);
+            $("#carouselbday").html(bdaydiv);
           } else {
             console.error("Error: ", result.message);
             swal(
@@ -760,9 +766,6 @@
         // Add a closing bracket here
       });
     }
-
-
-
 
     function LoadTable() {
       $("#dataTableleaverequest").DataTable({
@@ -820,7 +823,7 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
+          console.log("Done");
         },
       });
     }
@@ -871,16 +874,13 @@
       });
     });
 
-
-    
     $(document).on("click", "#pendingleavesavebtn", function () {
       console.log("Save button clicked");
-      let id = leaveid
+      let id = leaveid;
       let status = $("#pendingleaveaction").val();
       let comment = $("#pendingleaveremarks").val();
 
       var message = "";
-
 
       if (status === "") {
         message += "status is required. ";
@@ -889,7 +889,6 @@
       if (comment === "") {
         message += "status is required. ";
       }
-
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -904,10 +903,13 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal("Save Successfully", "You clicked the button!", "success",)
-                .then(results => {
-                  window.location.reload();
-                });
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
             }
           },
@@ -921,7 +923,7 @@
       }
     });
 
-//cashadvance section-->
+    //cashadvance section-->
 
     $(document).on("click", "#nav-ca-tab", function () {
       $(`#dataTablecashrequest`).find("tr:gt(0)").remove();
@@ -956,7 +958,6 @@
 
             var actionCell = row.insertCell(5);
 
-
             actionCell.innerHTML = actionHtml;
           });
         },
@@ -965,8 +966,6 @@
         },
       });
     });
-
-
 
     $("#dataTablecashrequest tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -1014,12 +1013,11 @@
     });
     $(document).on("click", "#pendingcasavebtn", function () {
       console.log("Save button clicked");
-      let id = cashadvanceid
+      let id = cashadvanceid;
       let status = $("#pendingcastatus").val();
       let comment = $("#pendingcaremarks").val();
 
       var message = "";
-
 
       if (status === "") {
         message += "status is required. ";
@@ -1042,10 +1040,13 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal("Save Successfully", "You clicked the button!", "success",)
-                .then(results => {
-                  window.location.reload();
-                });
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
             }
           },
@@ -1058,7 +1059,6 @@
         });
       }
     });
-
 
     $(document).on("change", "#announcementimage", function (e) {
       const input = document.getElementById("announcementimage");
@@ -1075,355 +1075,376 @@
       imageUploaded();
     });
 
-  });
+    document.addEventListener("DOMContentLoaded", function () {
+      // Define attendance data
+      const attendanceData = {
+        present: 80,
+        absent: 15,
+        late: 5,
+      };
 
-  document.addEventListener('DOMContentLoaded', function () {
-    // Define attendance data
-    const attendanceData = {
-      present: 80,
-      absent: 15,
-      late: 5,
-    };
+      // Get the canvas element for attendance chart
+      const attendanceCanvas = document.getElementById("attendanceChart");
+      const attendanceCtx = attendanceCanvas.getContext("2d");
 
-    // Get the canvas element for attendance chart
-    const attendanceCanvas = document.getElementById('attendanceChart');
-    const attendanceCtx = attendanceCanvas.getContext('2d');
+      // Set up attendance chart
+      const attendanceDataConfig = {
+        labels: ["Present", "Absent", "Late"],
+        datasets: [
+          {
+            data: [
+              attendanceData.present,
+              attendanceData.absent,
+              attendanceData.late,
+            ],
+            backgroundColor: ["#36A2EB", "#F70101", "#FFAA33"],
+          },
+        ],
+      };
 
-    // Set up attendance chart
-    const attendanceDataConfig = {
-      labels: ['Present', 'Absent', 'Late'],
-      datasets: [{
-        data: [attendanceData.present, attendanceData.absent, attendanceData.late],
-        backgroundColor: ['#36A2EB', '#F70101', '#FFAA33'],
-      }],
-    };
-
-    const attendanceOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Attendance Chart',
-          font: {
-            size: 16,
+      const attendanceOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Attendance Chart",
+            font: {
+              size: 16,
+            },
           },
         },
-      },
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem, data) {
-            const dataset = data.datasets[tooltipItem.datasetIndex];
-            const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue);
-            const currentValue = dataset.data[tooltipItem.index];
-            const percentage = ((currentValue / total) * 100).toFixed(2) + '%';
-            return data.labels[tooltipItem.index] + ': ' + percentage;
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              const dataset = data.datasets[tooltipItem.datasetIndex];
+              const total = dataset.data.reduce(
+                (previousValue, currentValue) => previousValue + currentValue
+              );
+              const currentValue = dataset.data[tooltipItem.index];
+              const percentage =
+                ((currentValue / total) * 100).toFixed(2) + "%";
+              return data.labels[tooltipItem.index] + ": " + percentage;
+            },
           },
         },
-      },
-    };
+      };
 
-    // Create attendance chart
-    const attendanceChart = new Chart(attendanceCtx, {
-      type: 'doughnut',
-      data: attendanceDataConfig,
-      options: attendanceOptions,
+      // Create attendance chart
+      const attendanceChart = new Chart(attendanceCtx, {
+        type: "doughnut",
+        data: attendanceDataConfig,
+        options: attendanceOptions,
+      });
+
+      // Define employee data
+      const employeeData = {
+        Active: 70,
+        Resigned: 5,
+        Terminate: 5,
+        EndofContract: 20,
+      };
+
+      // Get the canvas element for employee chart
+      const employeeCanvas = document.getElementById("employeeChart");
+      const employeeCtx = employeeCanvas.getContext("2d");
+
+      // Set up employee chart
+      const employeeDataConfig = {
+        labels: ["Active", "Resigned", "Terminate", "End of Contract"],
+        datasets: [
+          {
+            data: [
+              employeeData.Active,
+              employeeData.Resigned,
+              employeeData.Terminate,
+              employeeData.EndofContract,
+            ],
+            backgroundColor: ["#32de84", "#36A2EB", "#F70101", "#FFAA33"],
+          },
+        ],
+      };
+
+      const employeeOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Employee",
+            font: {
+              size: 20,
+            },
+          },
+        },
+      };
+
+      // Create employee chart
+      const employeeChart = new Chart(employeeCtx, {
+        type: "pie",
+        data: employeeDataConfig,
+        options: employeeOptions,
+      });
     });
 
-    // Define employee data
-    const employeeData = {
-      Active: 70,
-      Resigned: 5,
-      Terminate: 5,
-      EndofContract: 20,
+    //employee graph
+
+    // Sample data (replace this with your actual data)
+    var jobStatusData = {
+      labels: ["Regular", "Probationary", "Project Based"],
+      datasets: [
+        {
+          label: "Job Status",
+          data: [50, 30, 20], // Replace with actual counts
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(255, 205, 86, 0.2)",
+          ],
+          borderColor: [
+            "rgba(75, 192, 192, 1)",
+            "rgba(255, 99, 132, 1)",
+            "rgba(255, 205, 86, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
     };
 
-    // Get the canvas element for employee chart
-    const employeeCanvas = document.getElementById('employeeChart');
-    const employeeCtx = employeeCanvas.getContext('2d');
-
-    // Set up employee chart
-    const employeeDataConfig = {
-      labels: ['Active', 'Resigned', 'Terminate', 'End of Contract'],
-      datasets: [{
-        data: [employeeData.Active, employeeData.Resigned, employeeData.Terminate, employeeData.EndofContract,],
-        backgroundColor: ['#32de84', '#36A2EB', '#F70101', '#FFAA33',],
-      }],
+    var departmentData = {
+      labels: ["Admin", "IT", "Cabling"],
+      datasets: [
+        {
+          label: "Employee Count",
+          data: [100, 75, 50], // Replace with actual counts
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(255, 205, 86, 0.2)",
+          ],
+          borderColor: [
+            "rgba(75, 192, 192, 1)",
+            "rgba(255, 99, 132, 1)",
+            "rgba(255, 205, 86, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
     };
 
-    const employeeOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Employee',
-          font: {
-            size: 20,
+    // Get the context of the canvases
+    var jobStatusCtx = document
+      .getElementById("jobstatusChart")
+      .getContext("2d");
+    var departmentCtx = document
+      .getElementById("departmentChart")
+      .getContext("2d");
+
+    // Create bar charts
+    var jobStatusChart = new Chart(jobStatusCtx, {
+      type: "bar",
+      data: jobStatusData,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
           },
         },
       },
-    };
-
-    // Create employee chart
-    const employeeChart = new Chart(employeeCtx, {
-      type: 'pie',
-      data: employeeDataConfig,
-      options: employeeOptions,
     });
-  });
 
-  //employee graph
+    var departmentChart = new Chart(departmentCtx, {
+      type: "bar",
+      data: departmentData,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
 
-  // Sample data (replace this with your actual data)
-  var jobStatusData = {
-    labels: ['Regular', 'Probationary', 'Project Based'],
-    datasets: [{
-      label: 'Job Status',
-      data: [50, 30, 20], // Replace with actual counts
-      backgroundColor: [
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-      ],
-      borderColor: [
-        'rgba(75, 192, 192, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(255, 205, 86, 1)',
-      ],
-      borderWidth: 1
-    }]
-  };
+    function searchEmployeeTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotal");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableemployees");
+      tr = table.getElementsByTagName("tr");
 
-  var departmentData = {
-    labels: ['Admin', 'IT', 'Cabling'],
-    datasets: [{
-      label: 'Employee Count',
-      data: [100, 75, 50], // Replace with actual counts
-      backgroundColor: [
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-      ],
-      borderColor: [
-        'rgba(75, 192, 192, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(255, 205, 86, 1)',
-      ],
-      borderWidth: 1
-    }]
-  };
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
 
-  // Get the context of the canvases
-  var jobStatusCtx = document.getElementById('jobstatusChart').getContext('2d');
-  var departmentCtx = document.getElementById('departmentChart').getContext('2d');
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
 
-  // Create bar charts
-  var jobStatusChart = new Chart(jobStatusCtx, {
-    type: 'bar',
-    data: jobStatusData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchRegularTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputRegular");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("regularemloyeetbl");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchprobaTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputproba");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("probiemloyeetbl");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchresignedTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputresigned");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("resignedemployeetbl");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchadminTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotaladmin");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totaladmintable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchitTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalit");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalittable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchcablingTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalcabling");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalcablingtable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
         }
       }
     }
   });
-
-  var departmentChart = new Chart(departmentCtx, {
-    type: 'bar',
-    data: departmentData,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-
-  function searchEmployeeTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputtotal");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableemployees");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchRegularTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputRegular");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("regularemloyeetbl");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchprobaTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputproba");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("probiemloyeetbl");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchresignedTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputresigned");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("resignedemployeetbl");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchadminTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputtotaladmin");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("totaladmintable");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchitTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputtotalit");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("totalittable");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
-  function searchcablingTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInputtotalcabling");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("totalcablingtable");
-    tr = table.getElementsByTagName("tr");
-    
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        found = false; 
-
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-    }
-  }
-
 </script>
