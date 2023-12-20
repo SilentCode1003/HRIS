@@ -1,23 +1,24 @@
-const mysql = require('./repository/hrmisdb');
+const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 //const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get("/", function (req, res, next) {
   // res.render('indexlayout', { title: 'Express' });
 
-  Validator(req, res, 'indexlayout');
+  Validator(req, res, "indexlayout");
 });
 
 module.exports = router;
 
- //<<<<<<<<<<<<<<<load table dashboard>>>>>>>>>>>>>>>>>>>>
+//<<<<<<<<<<<<<<<load table dashboard>>>>>>>>>>>>>>>>>>>>
 
-router.get('/load', (req, res,) => {try {
-let sql = `select 
+router.get("/load", (req, res) => {
+  try {
+    let sql = `select 
     concat(me_firstname,'',me_lastname) as l_employeeid,
     l_leavestartdate,
     l_leaveenddate,
@@ -28,11 +29,12 @@ let sql = `select
     left join master_employee on leaves.l_employeeid = me_id
     where l_leavestatus = 'Pending'`;
 
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -40,7 +42,7 @@ let sql = `select
   }
 });
 
-router.post('/getleave', (req, res) => {
+router.post("/getleave", (req, res) => {
   try {
     let leaveid = req.body.leaveid;
     let sql = `select 
@@ -58,240 +60,241 @@ router.post('/getleave', (req, res) => {
     right join master_employee on leaves.l_employeeid = me_id
     where l_leaveid = '${leaveid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: result
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: result,
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     res.json({
-      msg:error
-    })
-    
+      msg: error,
+    });
   }
 });
 
-router.get('/loadCA', (req, res) => {
+router.get("/loadCA", (req, res) => {
   try {
     let sql = `SELECT * FROM cash_advance`;
 
-    mysql.Select(sql, 'Cash_Advance', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Cash_Advance", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:error
-    })
-    
+      msg: error,
+    });
   }
 });
 
-
-router.post('/getbulletin', (req, res) => {
+router.post("/getbulletin", (req, res) => {
   try {
-      let bulletinid = req.body.bulletinid;
-      let sql = `
+    let bulletinid = req.body.bulletinid;
+    let sql = `
           SELECT
               mb_image AS image,
               mb_tittle AS title,
               mb_description AS description
           FROM master_bulletin
           WHERE mb_bulletinid = '${bulletinid}'`;
-      console.log(sql);
+    // console.log(sql);
 
-      mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
             msg: "success",
-            data: result
+            data: result,
           });
         } else {
           res.status(404).json({
-            msg: "Department not found"
+            msg: "Department not found",
           });
         }
       })
       .catch((error) => {
         res.status(500).json({
           msg: "Error fetching department data",
-          error: error
+          error: error,
         });
-      });  
-    } catch (error) {
-      res.json({
-        msg:error
-      })
-      
-    }
-  });
+      });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
 
-  //<<<<<<<<<<<<<<<counting dashboard>>>>>>>>>>>>>>>>>>>>
+//<<<<<<<<<<<<<<<counting dashboard>>>>>>>>>>>>>>>>>>>>
 
-  
-  router.get('/countreqleavebadge', (req, res) => {
-    try {
-      let sql = `    
+router.get("/countreqleavebadge", (req, res) => {
+  try {
+    let sql = `    
       SELECT count(*) as pending
       from leaves 
       where 
       l_leavestatus = 'Pending'`;
-  
-      mysql.mysqlQueryPromise(sql)
-        .then((result) => {
-          if (result.length > 0) {
-            res.status(200).json({
-              msg: "success",
-              data: {
-                leavereqCount: result[0].pending
-              }
-            });
-          } else {
-            res.status(404).json({
-              msg: "Data not found"
-            });
-          }
-        })
-        .catch((error) => {
-          res.status(500).json({
-            msg: "Error fetching employee data",
-            error: error
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              leavereqCount: result[0].pending,
+            },
           });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
         });
-    } catch (error) {
-      console.log(error);
-    }
-  });
-  
-  router.get('/countcashreqbadge', (req, res) => {
-    try {
-      let sql = `    
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countcashreqbadge", (req, res) => {
+  try {
+    let sql = `    
       SELECT count(*) as pending
       from cash_advance 
       where 
       ca_status = 'Pending'`;
-  
-      mysql.mysqlQueryPromise(sql)
-        .then((result) => {
-          if (result.length > 0) {
-            res.status(200).json({
-              msg: "success",
-              data: {
-                CAreqCount: result[0].pending
-              }
-            });
-          } else {
-            res.status(404).json({
-              msg: "Data not found"
-            });
-          }
-        })
-        .catch((error) => {
-          res.status(500).json({
-            msg: "Error fetching employee data",
-            error: error
-          });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  });
 
-  router.get('/countactive', (req, res) => {
-    try {
-      let sql = `    
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              CAreqCount: result[0].pending,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countactive", (req, res) => {
+  try {
+    let sql = `    
       SELECT 
         count(*) AS Active
         FROM 
         master_employee
         WHERE 
         me_jobstatus IN ('regular', 'probitionary')`;
-  
-      mysql.mysqlQueryPromise(sql)
-        .then((result) => {
-          if (result.length > 0) {
-            res.status(200).json({
-              msg: "success",
-              data: {
-                activeCount: result[0].Active
-              }
-            });
-          } else {
-            res.status(404).json({
-              msg: "Data not found"
-            });
-          }
-        })
-        .catch((error) => {
-          res.status(500).json({
-            msg: "Error fetching employee data",
-            error: error
-          });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  });
-  
 
-  router.get('/countresigned', (req, res,) => {
-    try {
-      let sql = `    
-      SELECT 
-      COUNT(*) AS Resigned
-      FROM 
-      master_resigned
-      WHERE 
-      mr_status = 'resigned';`;
-  
-  
-      mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
             msg: "success",
             data: {
-              resignedCount: result[0].Resigned
-            }
+              activeCount: result[0].Active,
+            },
           });
         } else {
           res.status(404).json({
-            msg: "Department not found"
+            msg: "Data not found",
           });
         }
       })
       .catch((error) => {
         res.status(500).json({
-          msg: "Error fetching department data",
-          error: error
+          msg: "Error fetching employee data",
+          error: error,
         });
-      });  
-    } catch (error) {
-      console.log(error);
-    }
-  });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.get('/countprobitionary', (req, res,) => {
+router.get("/countresigned", (req, res) => {
+  try {
+    let sql = `    
+      SELECT 
+      COUNT(*) AS Resigned
+      FROM 
+      master_resigned
+      WHERE 
+      mr_status = 'resigned'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              resignedCount: result[0].Resigned,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countprobitionary", (req, res) => {
   try {
     let sql = `    
     SELECT 
@@ -301,35 +304,35 @@ router.get('/countprobitionary', (req, res,) => {
     WHERE 
     me_jobstatus = 'probitionary'`;
 
-
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: {
-            probitionaryCount: result[0].Probitionary
-          }
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              probitionaryCount: result[0].Probitionary,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get('/countregular', (req, res,) => {
+router.get("/countregular", (req, res) => {
   try {
     let sql = `    
     SELECT 
@@ -339,35 +342,35 @@ router.get('/countregular', (req, res,) => {
     WHERE 
     me_jobstatus = 'regular'`;
 
-
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: {
-            regularCount: result[0].Regular
-          }
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              regularCount: result[0].Regular,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get('/countadmin', (req, res,) => {
+router.get("/countadmin", (req, res) => {
   try {
     let sql = `    
     SELECT 
@@ -378,35 +381,35 @@ router.get('/countadmin', (req, res,) => {
     me_department = '1'
     and  me_jobstatus IN ('regular', 'probitionary')`;
 
-
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: {
-            adminCount: result[0].Admin
-          }
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              adminCount: result[0].Admin,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get('/countit', (req, res,) => {
+router.get("/countit", (req, res) => {
   try {
     let sql = `    
     SELECT 
@@ -417,35 +420,35 @@ router.get('/countit', (req, res,) => {
     me_department = '2'
     and  me_jobstatus IN ('regular', 'probitionary')`;
 
-
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: {
-            ITCount: result[0].IT
-          }
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              ITCount: result[0].IT,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     console.log(error);
   }
 });
 
-router.get('/countcabling', (req, res,) => {
+router.get("/countcabling", (req, res) => {
   try {
     let sql = `    
     SELECT 
@@ -456,36 +459,35 @@ router.get('/countcabling', (req, res,) => {
     me_department = '3'
     and  me_jobstatus IN ('regular', 'probitionary')`;
 
-
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: {
-            CablingCount: result[0].Cabling
-          }
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              CablingCount: result[0].Cabling,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     console.log(error);
   }
 });
 
-
-router.get('/getbday', (req, res) => {
+router.get("/getbday", (req, res) => {
   try {
     let sql = ` 
     SELECT 
@@ -499,23 +501,24 @@ router.get('/getbday', (req, res) => {
     ORDER BY 
     me_birthday`;
 
-    mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
             msg: "success",
-            data: result
+            data: result,
           });
         } else {
           res.status(404).json({
-            msg: "Data not found"
+            msg: "Data not found",
           });
         }
       })
       .catch((error) => {
         res.status(500).json({
           msg: "Error fetching employee data",
-          error: error
+          error: error,
         });
       });
   } catch (error) {
@@ -523,10 +526,9 @@ router.get('/getbday', (req, res) => {
   }
 });
 
-
 router.get("/totaladmin", (req, res) => {
   try {
-   let sql = `SELECT
+    let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
@@ -548,32 +550,32 @@ LEFT JOIN
 WHERE
    me_department = '1'
    and  me_jobstatus IN ('regular', 'probitionary');`;
-  
-  mysql.mysqlQueryPromise(sql)
-  .then((result) => {
-    res.json({
-      msg:"success",
-      data: result,
-    })
-  }).catch((error) => {
-    res.json({
-      msg:"error",
-      error,
-    });
-  });
 
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:"error",
+      msg: "error",
       error,
     });
-    
   }
 });
 
 router.get("/totalIT", (req, res) => {
   try {
-   let sql = `SELECT
+    let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
@@ -595,32 +597,32 @@ LEFT JOIN
 WHERE
    me_department = '2'
    and  me_jobstatus IN ('regular', 'probitionary');`;
-  
-  mysql.mysqlQueryPromise(sql)
-  .then((result) => {
-    res.json({
-      msg:"success",
-      data: result,
-    })
-  }).catch((error) => {
-    res.json({
-      msg:"error",
-      error,
-    });
-  });
 
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:"error",
+      msg: "error",
       error,
     });
-    
   }
 });
 
 router.get("/totalcabling", (req, res) => {
   try {
-   let sql = `SELECT
+    let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
@@ -642,26 +644,26 @@ LEFT JOIN
 WHERE
    me_department = '3'
    and  me_jobstatus IN ('regular', 'probitionary');`;
-  
-   mysql.mysqlQueryPromise(sql)
-   .then((result) => {
-    res.json({
-       msg: "success",
-       data: result || [],
-    });
- }) 
-   .catch((error) => {
-      console.error("Error executing SQL query:", error);
-      res.json({
-         msg: "error",
-         error,
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result || [],
+        });
+      })
+      .catch((error) => {
+        console.error("Error executing SQL query:", error);
+        res.json({
+          msg: "error",
+          error,
+        });
       });
-   });
   } catch (error) {
     res.json({
-      msg:"error",
+      msg: "error",
       error,
     });
-    
   }
 });
