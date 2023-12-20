@@ -495,9 +495,9 @@ router.get('/getbday', (req, res) => {
     FROM 
     master_employee
     WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE)
+    MONTH(me_birthday) = MONTH(CURRENT_DATE) and me_jobstatus IN ('regular','probitionary')
     ORDER BY 
-    me_birthday;`;
+    me_birthday`;
 
     mysql.mysqlQueryPromise(sql)
       .then((result) => {
@@ -618,7 +618,6 @@ WHERE
   }
 });
 
-
 router.get("/totalcabling", (req, res) => {
   try {
    let sql = `SELECT
@@ -644,19 +643,20 @@ WHERE
    me_department = '3'
    and  me_jobstatus IN ('regular', 'probitionary');`;
   
-  mysql.mysqlQueryPromise(sql)
-  .then((result) => {
+   mysql.mysqlQueryPromise(sql)
+   .then((result) => {
     res.json({
-      msg:"success",
-      data: result,
-    })
-  }).catch((error) => {
-    res.json({
-      msg:"error",
-      error,
+       msg: "success",
+       data: result || [],
     });
-  });
-
+ }) 
+   .catch((error) => {
+      console.error("Error executing SQL query:", error);
+      res.json({
+         msg: "error",
+         error,
+      });
+   });
   } catch (error) {
     res.json({
       msg:"error",

@@ -10,7 +10,8 @@
     <div class="row">
 
         <!-- Total Employee Card -->
-        <div data-toggle="modal" id="totalEMP" data-target="#totalEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <div data-toggle="modal" id="totalEMP" data-target="#totalEmployeeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="totalEmployeeCard" class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -28,7 +29,8 @@
         </div>
 
         <!-- Regular Employee Card -->
-        <div data-toggle="modal" id="totalregularEMP" data-target="#regularEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <div data-toggle="modal" id="totalregularEMP" data-target="#regularEmployeeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="regularEmployeeCard" class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -46,7 +48,8 @@
         </div>
 
         <!-- Probationary Employee Card -->
-        <div data-toggle="modal" id="totalprobiEMP" data-target="#probationaryEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <div data-toggle="modal" id="totalprobiEMP" data-target="#probationaryEmployeeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="probationaryEmployeeCard" class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -64,7 +67,8 @@
         </div>
 
         <!-- Resigned Employee Card -->
-        <div data-toggle="modal" id="totalresignedEMP" data-target="#resignedEmployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <div data-toggle="modal" id="totalresignedEMP" data-target="#resignedEmployeeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="resignedEmployeeCard" class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -82,7 +86,8 @@
         </div>
 
         <!-- Total Admin Card -->
-        <div data-toggle="modal" id="totaladminEMP" data-target="#totaladminemployeeModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <div data-toggle="modal" id="totaladminEMP" data-target="#totaladminemployeeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="totalADMIN" class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -117,8 +122,9 @@
             </div>
         </div>
 
-         <!-- Total Cabling Department Card -->
-        <div data-toggle="modal" id="totalcablingEMP" data-target="#totalCablingModal" class="card-link col-xl-2 col-md-6 mb-4">
+        <!-- Total Cabling Department Card -->
+        <div data-toggle="modal" id="totalcablingEMP" data-target="#totalCablingModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
             <div id="totalCABLING" class="card border-left-dark shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -138,7 +144,8 @@
     </div>
 
     <!-- Total Employee Modal -->
-    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -147,41 +154,41 @@
                             <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Employee</h1>
                         </div>
                         <br>
-                        <input id='myInputtotal' onkeyup='searchTable()' type='text' placeholder="  Search....">
+                        <input id='myInputtotal' onkeyup='searchEmployeeTable()' type='text' placeholder="  Search....">
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive" id="table-responsive-id">
-                            <div class="table-responsive" id="table-responsive-id">
-                                <table class="table table-striped" id="dataTableemployees">
-                                    <colgroup>
-                                        <col style="width: 50px;">
-                                        <col style="width: 50px;"> 
-                                        <col style="width: 50px;">
-                                        <col style="width: 50px;"> 
-                                        <col style="width: 75px;"> 
-                                        <col style="width: 50px;">
-                                        <col style="width: 50px;"> 
-                                        <col style="width: 50px;"> 
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th>Image</th>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Contact</th>
-                                            <th>Email</th>
-                                            <th>Job Status</th>
-                                            <th>Department</th>
-                                            <th>Position</th>
-                                        </tr>
-                                    </thead>
-                                    <!-- Add your table body content here -->
-                                </table>
-                            </div>
-                            
+                            <table class="table table-striped" id="dataTableemployees">
+                                <colgroup>
+                                    <col style="width: 50px;">
+                                    <col style="width: 50px;">
+                                    <col style="width: 50px;">
+                                    <col style="width: 50px;">
+                                    <col style="width: 75px;">
+                                    <col style="width: 50px;">
+                                    <col style="width: 50px;">
+                                    <col style="width: 50px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td class="no-match-cell" style="display: none;"></td>
+                                        <th>Image</th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Email</th>
+                                        <th>Job Status</th>
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
@@ -193,7 +200,8 @@
 
 
     <!-- Regular Employee Modal -->
-    <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,12 +217,12 @@
                         <table class="table table-striped" id="regularemloyeetbl">
                             <colgroup>
                                 <col style="width: 150px;">
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
                                 <col style="width: 150px;">
-                                <col style="width: 100px;"> 
-                                <col style="width: 200px;"> 
-                                <col style="width: 150px;"> 
-                                <col style="width: 150px;"> 
+                                <col style="width: 100px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -241,7 +249,8 @@
     </div>
 
     <!-- Probationary Employee Modal -->
-    <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -257,12 +266,12 @@
                         <table class="table table-striped" id="probiemloyeetbl">
                             <colgroup>
                                 <col style="width: 150px;">
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
                                 <col style="width: 150px;">
-                                <col style="width: 100px;"> 
-                                <col style="width: 200px;"> 
-                                <col style="width: 150px;"> 
-                                <col style="width: 150px;"> 
+                                <col style="width: 100px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -290,7 +299,8 @@
 
 
     <!-- Resigned Employee Modal -->
-    <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="resignedEmployeeModal" aria-hidden="true">
+    <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="resignedEmployeeModal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -306,15 +316,15 @@
                         <table class="table table-striped" id="resignedemployeetbl">
                             <colgroup>
                                 <col style="width: 100px;">
-                                <col style="width: 30px;"> 
+                                <col style="width: 30px;">
                                 <col style="width: 50px;">
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
                                 <!-- <col style="width: 75px;">  -->
-                                <col style="width: 50px;"> 
-                                <col style="width: 50px;"> 
-                                <col style="width: 50px;"> 
-                                <col style="width: 50px;"> 
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
+                                <col style="width: 50px;">
+                                <col style="width: 50px;">
+                                <col style="width: 50px;">
+                                <col style="width: 50px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -344,12 +354,14 @@
     </div>
 
     <!-- Total Admin Modal -->
-    <div class="modal fade" id="totaladminemployeeModal" tabindex="-1" role="dialog" aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="totaladminemployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
-                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Admin Department</h1>
+                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Admin Department
+                        </h1>
                     </div>
                     <br>
                     <input id='myInputtotaladmin' onkeyup='searchadminTable()' type='text' placeholder="  Search....">
@@ -358,25 +370,13 @@
                 <div class="modal-body">
                     <div class="table-responsive" id="table-responsive-id">
                         <table class="table table-striped" id="totaladmintable">
-                            <colgroup>
-                                <col style="width: 150px;">
-                                <col style="width: 50px;"> 
-                                <col style="width: 150px;">
-                                <col style="width: 100px;"> 
-                                <col style="width: 200px;"> 
-                                <col style="width: 150px;"> 
-                                <col style="width: 150px;"> 
-                            </colgroup>
                             <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Email</th>
-                                    <th>Position</th>
-                                    <th>Tenure</th>
-                                </tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Position</th>
+                                <th>Tenure</th>
                             </thead>
                             <tbody>
                                 <!-- Table body content will be added dynamically using JavaScript -->
@@ -392,7 +392,8 @@
     </div>
 
     <!-- Total IT Department Modal -->
-    <div class="modal fade" id="totalitModal" tabindex="-1" role="dialog" aria-labelledby="totalitModal" aria-hidden="true">
+    <div class="modal fade" id="totalitModal" tabindex="-1" role="dialog" aria-labelledby="totalitModal"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -408,12 +409,12 @@
                         <table class="table table-striped" id="totalittable">
                             <colgroup>
                                 <col style="width: 150px;">
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
                                 <col style="width: 150px;">
-                                <col style="width: 100px;"> 
-                                <col style="width: 200px;"> 
-                                <col style="width: 150px;"> 
-                                <col style="width: 150px;"> 
+                                <col style="width: 100px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -442,15 +443,18 @@
 
 
     <!-- Total Cabling Department Modal -->
-    <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal" aria-hidden="true">
+    <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div>
-                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Cabling Department</h1>
+                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Cabling Department
+                        </h1>
                     </div>
                     <br>
-                    <input id='myInputtotalcabling' onkeyup='searchcablingTable()' type='text' placeholder="  Search....">
+                    <input id='myInputtotalcabling' onkeyup='searchcablingTable()' type='text'
+                        placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -458,12 +462,12 @@
                         <table class="table table-striped" id="totalcablingtable">
                             <colgroup>
                                 <col style="width: 150px;">
-                                <col style="width: 50px;"> 
+                                <col style="width: 50px;">
                                 <col style="width: 150px;">
-                                <col style="width: 100px;"> 
-                                <col style="width: 200px;"> 
-                                <col style="width: 150px;"> 
-                                <col style="width: 150px;"> 
+                                <col style="width: 100px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -524,7 +528,7 @@
                         </div>
                     </nav>
                 </div>
-                <!-- Card Body -->
+                <!-- Leave  Request -->
                 <div class="card-body" style="height: 510px; overflow: auto;">
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-request" role="tabpanel"
@@ -689,6 +693,94 @@
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
+
+        <!--Leave Modal-->
+        <div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="row g-3">
+                      <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid" disabled>
+                    <div class="col">
+                      <label for="pendingleavename" class="form-label">Full Name</label>
+                      <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" disabled>
+                    </div>
+                    <div class="col">
+                      <label for="pendingleaveemail" class="form-label">Email</label>
+                      <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" disabled>
+                    </div>
+                    <div class="col">
+                      <label for="pendingleavegender" class="form-label">Gender</label>
+                      <input type="text" class="form-control" id="pendingleavegender" name="pendingleavegender" disabled>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="pendingleavephone" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" disabled>
+                      </div>
+                      <div class="col">
+                        <label for="pendingleavetype" class="form-label">Leave Type</label>
+                        <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" disabled>
+                      </div>
+                      <div class="col">
+                        <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
+                        <input type="text" class="form-control" id="pendingleaveapplydate" name="pendingleaveapplydate" disabled>
+                      </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
+                          <input type="text" class="form-control" id="pendingleaveapplynodays" name="pendingleaveapplynodays" disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
+                          <input type="text" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleavestart" class="form-label">Leave Start</label>
+                          <input type="text" class="form-control" id="pendingleavestart" name="pendingleavestart"  disabled>
+                        </div>
+                        <div class="col">
+                          <label for="pendingleaveend" class="form-label">Leave End</label>
+                          <input type="text" class="form-control" id="pendingleaveend" name="pendingleaveend" disabled>
+                        </div>
+                        </div>
+                        <div class="row g-3">
+                          <div class="mb-3">
+                            <label for="pendingleavereason" class="col-form-label">Reason:</label>
+                            <textarea class="form-control" id="pendingleavereason" name="pendingleavereason" disabled></textarea>
+                          </div>
+                          <div class="col-md-8">
+                            <label for="pendingleaveremarks" class="form-label">Remarks</label>
+                            <input type="email" class="form-control" id="pendingleaveremarks" name="pendingleaveremarks">
+                          </div>
+                          <div class="col">
+                            <label for="pendingleaveaction" class="form-label">Action</label>
+                            <select class="form-select" id="pendingleaveaction" name="pendingleaveaction">
+                              <option value="Pending">Pending</option>
+                              <option value="Cancel">Cancel</option>
+                              <option value="Approved">Approved</option>
+                              <option value="Rejected">Rejected</option>
+                            </select>
+                          </div>
+                          </div>
+                          <br>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
-    <!-- End of Main Content -->
+    

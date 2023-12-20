@@ -1,0 +1,88 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Candidate For Regularization</h1>
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header py-5">
+      <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#departmentmodal">
+        + Add New
+      </button> -->
+    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped" id="dataTablecandidate">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Department</th>
+                        <th>Hire Date</th>
+                        <th>Tenure</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="candidatemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to Regular this Employee?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="candidatefullname">Employee Name</label>
+                                        <input type="text" class="form-control" id="candidatefullname" placeholder="Employee Name" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidatetenure">Tenure</label>
+                                        <input type="text" class="form-control" id="candidatetenure" placeholder="Tenure" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="candidatehiredate">Hire Date</label>
+                                        <input type="text" class="form-control" id="candidatehiredate" placeholder="Hire Date" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputState">Action</label>
+                                        <select id="inputState" class="form-control">
+                                            <option>Choose...</option>
+                                            <option value="regular">Approve Regularization</option>
+                                            <option value="end_of_contract">End of Contract</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <img id="editpreview" style="width: 200px; height: 200px;" class="rounded rounded-circle" alt="placeholder" disabled>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveregular">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
