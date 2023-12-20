@@ -1,237 +1,240 @@
 <script>
-    let employeeid = "";
+  let employeeid = "";
 
-    $(document).ready(function () {
-        console.log('Initialize');
-        LoadTable();
+  $(document).ready(function () {
+    console.log("Initialize");
+    LoadTable();
 
-        function LoadTable() {
-            $("#dataTablecandidate").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                serverMethod: "GET",
-                ajax: {
-                    url: "/candidate/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
+    function LoadTable() {
+      $("#dataTablecandidate").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/candidate/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
-                        console.log(data);
-                        $.each(data, (key, item) => {
-                            var action = "";
-                            var status = item.status;
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
 
-                            action = `
+              action = `
                         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#candidatemodal"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
-                            var imgElement = document.createElement("img");
-                            imgElement.src = "data:image/jpg;base64," + item.image;
-                            imgElement.alt = "Profile Image";
-                            imgElement.style.width = "150px";
-                            imgElement.style.height = "150px";
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "150px";
+              imgElement.style.height = "150px";
 
-                            finalData.push({
-                                image: imgElement.outerHTML,
-                                id: item.id,
-                                name: item.name,
-                                department: item.me_department,
-                                hiredate: item.hiredate,
-                                tenure: item.tenure,
-                                status: item.status,
-                                action: action,
-                            });
-                        });
-
-                        return finalData;
-                    },
-                },
-                columns: [
-                    { data: "image" },
-                    { data: "id" },
-                    { data: "name" },
-                    { data: "department" },
-                    { data: "hiredate" },
-                    { data: "tenure" },
-                    { data: "status" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                    $('td', row).each(function (index) {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
-                    });
-                },
-                initComplete: function () {
-                    console.log('Done');
-                },
+              finalData.push({
+                image: imgElement.outerHTML,
+                id: item.id,
+                name: item.name,
+                department: item.me_department,
+                hiredate: item.hiredate,
+                tenure: item.tenure,
+                status: item.status,
+                action: action,
+              });
             });
-        }
 
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "image" },
+          { data: "id" },
+          { data: "name" },
+          { data: "department" },
+          { data: "hiredate" },
+          { data: "tenure" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
 
-
-        $("#dataTablecandidate tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-                .find("td:not(:first-child)")
-                .each(function () {
-                    dataRow.push($(this).text());
-                });
-
-            console.log("Clicked Row Data:", dataRow);
-
-            employeeid = dataRow[0];
-            console.log("Employee ID:", employeeid);
+    $("#dataTablecandidate tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .find("td:not(:first-child)")
+        .each(function () {
+          dataRow.push($(this).text());
         });
 
-        $(document).on("click", "#editBtn", function () {
-            console.log("Edit button clicked. Employee ID:", employeeid);
+      console.log("Clicked Row Data:", dataRow);
 
-            $.ajax({
-                type: "POST",
-                url: "/candidate/getcandidate",
-                data: {
-                    employeeid: employeeid,
-                },
-                success: function (result) {
-                    if (result.msg === "success") {
-                        const existingData = result.data;
+      employeeid = dataRow[0];
+      console.log("Employee ID:", employeeid);
+    });
 
-                        console.log("Existing Data:", existingData);
+    $(document).on("click", "#editBtn", function () {
+      console.log("Edit button clicked. Employee ID:", employeeid);
 
-                        $.each(existingData, (key, item) => {
-                            $("#editpreview").attr("src", "data:image/jpg;base64," + item.profilePicturePath);
-                            $("#candidatefullname").val(item.fullname);
-                            $("#candidatehiredate").val(item.hiredate);
-                            $("#candidatetenure").val(item.tenure);
-                        });
-                    } else {
-                        swal("Error fetching employee data", message, "error");
-                    }
-                },
-                error: function (err) {
-                    console.error("An error occurred while fetching employee data", err);
-                    swal("An error occurred while fetching employee data", message, "error");
-                },
+      $.ajax({
+        type: "POST",
+        url: "/candidate/getcandidate",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log("Existing Data:", existingData);
+
+            $.each(existingData, (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.profilePicturePath
+              );
+              $("#candidatefullname").val(item.fullname);
+              $("#candidatehiredate").val(item.hiredate);
+              $("#candidatetenure").val(item.tenure);
             });
-        });
-
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
     });
 
     $(document).on("click", "#saveregular", function () {
-        console.log("Save button clicked");
-        let id = employeeid
-        let action = $("#inputState").val();
+      console.log("Save button clicked");
+      let id = employeeid;
+      let action = $("#inputState").val();
 
-        var message = "";
+      var message = "";
 
-        if (action === "") {
-            message += "Please Provide Action !!! ";
-        }
+      if (action === "") {
+        message += "Please Provide Action !!! ";
+      }
 
-        if (action === "Choose...") {
-            message += "Please Provide Action !!! ";
-        }
+      if (action === "Choose...") {
+        message += "Please Provide Action !!! ";
+      }
 
-        if (message !== "") {
-            swal("Validation Error", message, "error");
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "candidate/update",
-                data: {
-                    employeeid: id,
-                    action: action,
-                },
-                success: function (result) {
-                    if (result.msg == "success") {
-                        swal({
-                            title: "Update Successfully",
-                            text: "You clicked the button!",
-                            icon: "success",
-                            button: "OK!",
-                        })
-                            .then(results => {
-                                window.location.reload();
-                            });
-                        LoadTable();
-                    } else if (result.msg == "exist") {
-                        swal({
-                            title: "Exist",
-                            text: "Data already exists!",
-                            icon: "warning",
-                            button: "OK!",
-                        });
-                    } else {
-                        swal("Data already exists!", "You clicked the button!", "warning");
-                    }
-                },
-                error: function (err) {
-                    swal("Error", "An error occurred while saving data.", "error");
-                },
-            });
-        }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "candidate/update",
+          data: {
+            employeeid: id,
+            action: action,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
     });
 
     $(document).on("change", "#editemployeeprofile", function (e) {
-        const input = document.getElementById("editemployeeprofile");
-        const file = input.files[0];
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
 
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = function () {
-            const preview = document.getElementById("editpreview");
-            preview.src = reader.result;
-        };
-        editimage();
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      editimage();
     });
 
     function editimage() {
-        const input = document.getElementById("editemployeeprofile");
-        const file = input.files[0];
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
 
-        var reader = new FileReader();
-        console.log("next");
+      var reader = new FileReader();
+      console.log("next");
 
-        reader.onload = function () {
-            base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
-            imageBase64Stringsep = base64String;
+        imageBase64Stringsep = base64String;
 
-            console.log(base64String);
-        };
-        reader.readAsDataURL(file);
+        console.log(base64String);
+      };
+      reader.readAsDataURL(file);
     }
 
     function searchTable() {
-        var input, filter, found, table, tr, td, i, j;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("dataTablecandidate");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            for (j = 0; j < td.length; j++) {
-                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                }
-            }
-            if (found) {
-                tr[i].style.display = "";
-                found = false;
-            } else {
-                tr[i].style.display = "none";
-            }
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablecandidate");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
         }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
     }
-
-
-
-
+  });
 </script>
