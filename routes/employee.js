@@ -1,13 +1,14 @@
-const mysql = require("./repository/hrmisdb");
-const moment = require("moment");
 var express = require("express");
 var router = express.Router();
+
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
 const multer = require("multer");
 const XLSX = require("xlsx");
 const { Validator } = require("./controller/middleware");
 const { convertExcelDate } = require("./repository/customhelper");
-const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPasswordforemployee } = require('./helper');
+const { Encrypter } = require("./repository/crytography");
+const { generateUsernameAndPasswordforemployee } = require("./helper");
 
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
@@ -226,19 +227,20 @@ router.get("/load", (req, res) => {
     WHERE
     me_jobstatus IN ('regular', 'probitionary')`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res
       .status(500)
@@ -265,7 +267,7 @@ function generateEmployeeId(year, month) {
   });
 }
 
-router.post('/save', async (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     const {
       firstname,
@@ -289,7 +291,7 @@ router.post('/save', async (req, res) => {
     const employeeExists = await checkEmployeeExists(firstname, lastname);
 
     if (employeeExists) {
-      return res.json({ msg: 'exist' });
+      return res.json({ msg: "exist" });
     }
 
     const employeeId = await generateEmployeeId(currentYear, currentMonth);
@@ -297,51 +299,72 @@ router.post('/save', async (req, res) => {
     // Directly use department and position names for insertion
     const employeeData = [
       [
-        employeeId, firstname, middlename, lastname, birthday, gender, civilstatus,
-        phone, email, hiredate, jobstatus, ercontactname, ercontactphone,
-        departmentName, positionName, address, profilePicturePath
+        employeeId,
+        firstname,
+        middlename,
+        lastname,
+        birthday,
+        gender,
+        civilstatus,
+        phone,
+        email,
+        hiredate,
+        jobstatus,
+        ercontactname,
+        ercontactphone,
+        departmentName,
+        positionName,
+        address,
+        profilePicturePath,
       ],
     ];
 
-    mysql.InsertTable('master_employee', employeeData, async (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error('Error inserting employee record: ', insertErr);
-        return res.json({ msg: 'insert_failed' });
+    mysql.InsertTable(
+      "master_employee",
+      employeeData,
+      async (insertErr, insertResult) => {
+        if (insertErr) {
+          console.error("Error inserting employee record: ", insertErr);
+          return res.json({ msg: "insert_failed" });
+        }
+
+        console.log("Employee record inserted: ", insertResult);
+
+        const { username, password } = generateUsernameAndPasswordforemployee({
+          me_firstname: firstname,
+          me_lastname: lastname,
+          me_id: employeeId,
+          me_birthday: birthday,
+        });
+
+        Encrypter(password, async (encryptErr, encryptedPassword) => {
+          if (encryptErr) {
+            console.error("Error encrypting password: ", encryptErr);
+            return res.json({ msg: "encrypt_error" });
+          }
+
+          // Save user record
+          const userSaveResult = await saveUserRecord(
+            req,
+            employeeId,
+            username,
+            encryptedPassword
+          );
+
+          if (userSaveResult.msg === "success") {
+            return res.json({ msg: "success" });
+          } else {
+            console.error("Error saving user record: ", userSaveResult.msg);
+            return res.json({ msg: "user_save_error" });
+          }
+        });
       }
-
-      console.log('Employee record inserted: ', insertResult);
-
-      const { username, password } = generateUsernameAndPasswordforemployee({
-        me_firstname: firstname,
-        me_lastname: lastname,
-        me_id: employeeId,
-        me_birthday: birthday,
-      });
-
-      Encrypter(password, async (encryptErr, encryptedPassword) => {
-        if (encryptErr) {
-          console.error('Error encrypting password: ', encryptErr);
-          return res.json({ msg: 'encrypt_error' });
-        }
-
-        // Save user record
-        const userSaveResult = await saveUserRecord(req, employeeId, username, encryptedPassword);
-
-        if (userSaveResult.msg === 'success') {
-          return res.json({ msg: 'success' });
-        } else {
-          console.error('Error saving user record: ', userSaveResult.msg);
-          return res.json({ msg: 'user_save_error' });
-        }
-      });
-    });
+    );
   } catch (error) {
-    console.error('Error in /save route: ', error);
-    return res.json({ msg: 'error' });
+    console.error("Error in /save route: ", error);
+    return res.json({ msg: "error" });
   }
 });
-
-
 
 // router.post('/save', async (req, res) => {
 //   try {
@@ -364,16 +387,13 @@ router.post('/save', async (req, res) => {
 //       profilePicturePath,
 //     } = req.body;
 
-  
 //     const employeeExists = await checkEmployeeExists(firstname, lastname);
 
 //     if (employeeExists) {
 //       return res.json({ msg: 'exist' });
 //     }
 
-
 //     const employeeId = await generateEmployeeId(currentYear, currentMonth);
-
 
 //     const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${departmentName}'`;
 
@@ -387,38 +407,36 @@ router.post('/save', async (req, res) => {
 //         const positionIdResult = await mysql.mysqlQueryPromise(positionIdQuery);
 //         const positionId = positionIdResult[0].mp_positionid;
 
- 
 //         const employeeData = [
 //           [employeeId, firstname, middlename, lastname, birthday, gender, civilstatus,
 //             phone, email, hiredate, jobstatus, ercontactname, ercontactphone,
 //             departmentId, positionId, address, profilePicturePath],
 //         ];
-    
+
 //         mysql.InsertTable('master_employee', employeeData, async (insertErr, insertResult) => {
 //           if (insertErr) {
 //             console.error('Error inserting employee record: ', insertErr);
 //             return res.json({ msg: 'insert_failed' });
 //           }
-    
+
 //           console.log('Employee record inserted: ', insertResult);
-    
-    
+
 //           const { username, password } = generateUsernameAndPasswordforemployee({
 //             me_firstname: firstname,
 //             me_lastname: lastname,
 //             me_id: employeeId,
 //             me_birthday: birthday,
 //           });
-    
+
 //           Encrypter(password, async (encryptErr, encryptedPassword) => {
 //             if (encryptErr) {
 //               console.error('Error encrypting password: ', encryptErr);
 //               return res.json({ msg: 'encrypt_error' });
 //             }
-    
+
 //             // Save user record
 //             const userSaveResult = await saveUserRecord(req, employeeId, username, encryptedPassword);
-    
+
 //             if (userSaveResult.msg === 'success') {
 //               return res.json({ msg: 'success' });
 //             } else {
@@ -441,8 +459,6 @@ router.post('/save', async (req, res) => {
 //   }
 // });
 
-
-
 // router.post("/save", async (req, res) => {
 //   try {
 //     let firstname = req.body.firstname;
@@ -457,10 +473,10 @@ router.post('/save', async (req, res) => {
 //     let jobstatus = req.body.jobstatus;
 //     let ercontactname = req.body.ercontactname;
 //     let ercontactphone = req.body.ercontactphone;
-//     let departmentName = req.body.department; 
-//     let positionName = req.body.position; 
+//     let departmentName = req.body.department;
+//     let positionName = req.body.position;
 //     let address = req.body.address;
-//     let profilePicturePath = req.body.profilePicturePath; 
+//     let profilePicturePath = req.body.profilePicturePath;
 //     let data = [];
 
 //     const employeeExists = await checkEmployeeExists(firstname, lastname);
@@ -545,8 +561,6 @@ router.post('/save', async (req, res) => {
 //     res.json({ msg: "error" });
 //   }
 // });
-
-
 
 router.post("/update", async (req, res) => {
   try {
@@ -957,10 +971,6 @@ router.get("/totalresigned", (req, res) => {
   }
 });
 
-module.exports = router;
-
-
-
 //#region functions
 function GetDepartment(name, callback) {
   let sql = `select * from master_department where md_departmentname='${name}'`;
@@ -982,23 +992,31 @@ function GetPosition(name, callback) {
 
 async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
-    const createdate = moment().format('YYYY-MM-DD');
+    const createdate = moment().format("YYYY-MM-DD");
     const createby = req.session ? req.session.fullname : null; // Assuming you have 'fullname' in your session
 
-    console.log('Session:', req.session);
+    console.log("Session:", req.session);
 
     // Set mu_accesstype to the default value of 2 (employee)
     const data = [
-      [employeeId, username, encryptedPassword, 2, createby, createdate, 'Active']
+      [
+        employeeId,
+        username,
+        encryptedPassword,
+        2,
+        createby,
+        createdate,
+        "Active",
+      ],
     ];
 
-    mysql.InsertTable('master_user', data, (inserterr, insertResult) => {
+    mysql.InsertTable("master_user", data, (inserterr, insertResult) => {
       if (inserterr) {
-        console.error('Error inserting user record: ', inserterr);
-        reject({ msg: 'insert_failed' });
+        console.error("Error inserting user record: ", inserterr);
+        reject({ msg: "insert_failed" });
       } else {
-        console.log('User record inserted: ', insertResult);
-        resolve({ msg: 'success' });
+        console.log("User record inserted: ", insertResult);
+        resolve({ msg: "success" });
       }
     });
   });
