@@ -7,7 +7,12 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  // res.render('indexlayout', { title: 'Express' });
+  // res.render("indexlayout", {
+  //   image: req.session.image,
+  //   employeeid: req.session.employeeid,
+  //   fullname: req.session.fullname,
+  //   accesstype: req.session.accesstype,
+  // });
 
   Validator(req, res, "indexlayout");
 });

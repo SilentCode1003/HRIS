@@ -206,26 +206,31 @@ var roleacess = [
 ];
 
 exports.Validator = function (req, res, layout) {
-  console.log(layout);
-  //console.log(roleacess.length);
+  // console.log(layout);
 
+  let ismatch = false;
+  let counter = 0;
+  // //console.log(roleacess.length)
   if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
-    console.log('hit');
-      return res.render(`${layout}`, {
-        image: req.session.image,
-        employeeid: req.session.employeeid,
-        fullname: req.session.fullname,
-        accesstype: req.session.accesstype,
-      });
-    
+    console.log("hit");
+    return res.render(`${layout}`, {
+      image: req.session.image,
+      employeeid: req.session.employeeid,
+      fullname: req.session.fullname,
+      accesstype: req.session.accesstype,
+    });
   } else {
     roleacess.forEach((key, item) => {
+      counter += 1;
       var routes = key.routes;
 
       routes.forEach((value, index) => {
-        console.log(`${key.role} - ${value.layout}`);
+        // console.log(`${key.role} - ${value.layout}`);
 
         if (key.role == req.session.accesstype && value.layout == layout) {
+          console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+          ismatch = true;
+
           return res.render(`${layout}`, {
             image: req.session.image,
             employeeid: req.session.employeeid,
@@ -234,8 +239,12 @@ exports.Validator = function (req, res, layout) {
           });
         }
       });
-    });
 
-    res.redirect("/login");
+      if (counter == roleacess.length) {
+        if (!ismatch) {
+          res.redirect("/login");
+        }
+      }
+    });
   }
 };
