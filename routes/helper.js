@@ -14,6 +14,23 @@ exports.generateUsernameAndPassword = (employee) => {
     }
 }
 
+exports.generateUsernameAndPasswordforemployee = (employee) => {
+    try {
+        const { me_id: newEmployeeId, me_firstname: firstname, me_lastname: lastname, me_birthday: birthday } = employee;
+  
+        // Generate username by combining the first name and the first letter of the last name
+        const username = firstname.toLowerCase() + lastname.charAt(0).toLowerCase();
+      
+        // Generate the password by combining employee id and birthday
+        const password = newEmployeeId + birthday.replace(/-/g, '');
+      
+        return { username, password }; 
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 exports.UserLogin = (result, callback) => {
     try {
         const userData = [];

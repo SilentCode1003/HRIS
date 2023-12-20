@@ -6,6 +6,8 @@
   //let bulletinid = '';
   $(document).ready(function () {
     console.log('Initialize');
+    $("#dataTableemployees tr").removeAttr("style");
+    
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -256,9 +258,9 @@
       });
     });
 
-
     $(document).on("click", "#totaladminEMP", function () {
       $(`#totaladmintable`).find("tr:gt(0)").remove();
+      
 
       $.ajax({
         type: "GET",
@@ -868,6 +870,9 @@
         },
       });
     });
+
+
+    
     $(document).on("click", "#pendingleavesavebtn", function () {
       console.log("Save button clicked");
       let id = leaveid
@@ -916,7 +921,7 @@
       }
     });
 
-    <!--//cashadvance section-->
+//cashadvance section-->
 
     $(document).on("click", "#nav-ca-tab", function () {
       $(`#dataTablecashrequest`).find("tr:gt(0)").remove();
@@ -940,7 +945,7 @@
             var PURPOSE = row.insertCell(3);
             var STATUS = row.insertCell(4);
             var actionHtml = `
-            <button id="editcaBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
+            <button id="editcaBtn" class="btn text-primary" name="editcaBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
             `;
 
             EMPLOYEE.innerHTML = item.employeeid;
@@ -1245,19 +1250,23 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("dataTableemployees");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
@@ -1267,19 +1276,23 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("regularemloyeetbl");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
@@ -1289,47 +1302,49 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("probiemloyeetbl");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
   function searchresignedTable() {
-    var input, filter, table, tr, td, i, j;
+    var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInputresigned");
     filter = input.value.toUpperCase();
     table = document.getElementById("resignedemployeetbl");
     tr = table.getElementsByTagName("tr");
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
 
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      var found = false;
-
-      for (j = 0; j < td.length; j++) {
-        if (td[j]) {
-          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-            found = true;
-            break;
-          }
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
 
-      if (found) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
@@ -1339,19 +1354,23 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("totaladmintable");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
@@ -1361,19 +1380,23 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("totalittable");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 
@@ -1383,19 +1406,23 @@
     filter = input.value.toUpperCase();
     table = document.getElementById("totalcablingtable");
     tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false; 
+
+        for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
+
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
     }
   }
 

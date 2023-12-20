@@ -25,8 +25,8 @@
       let jobstatus = $("#employeejobstatus").val();
       let ercontactname = $("#employeeemergencyname").val();
       let ercontactphone = $("#employeeemergencyphone").val();
-      let department = $("#employeedepartment").val();
-      let position = $("#employeeposition").val();
+      let departmentName = $("#employeedepartment").val();
+      let positionName = $("#employeeposition").val();
       let address = $("#employeeaddress").val();
       let profilePicturePath = base64String;
 
@@ -80,11 +80,11 @@
         message += "Emergency Contact Phone is required. ";
       }
 
-      if (department == "") {
+      if (departmentName == "") {
         message += "Department is required. ";
       }
 
-      if (position == "") {
+      if (positionName == "") {
         message += "Position is required. ";
       }
 
@@ -115,8 +115,8 @@
             jobstatus: jobstatus,
             ercontactname: ercontactname,
             ercontactphone: ercontactphone,
-            department: department,
-            position: position,
+            departmentName: departmentName,
+            positionName: positionName,
             address: address,
             profilePicturePath: profilePicturePath,
           },
@@ -155,7 +155,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.departmentname, item.departmentname);
+            var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#employeedepartment").append(options);
             console.log(item.departmentname);
@@ -176,7 +176,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.positionname, item.positionname);
+            var options = new Option(item.positionid, item.positionid);
             $(options).html(item.positionname);
             $("#employeeposition").append(options);
             console.log(item.positionname);
@@ -216,14 +216,21 @@
                 <button id="edit-btn" class="btn text-primary" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-eye"></i></button>
                `;
 
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "150px";
+              imgElement.style.height = "150px";
+
               finalData.push({
+                image: imgElement.outerHTML,
                 newEmployeeId: item.newEmployeeId,
                 firstname: item.firstname,
                 phone: item.phone,
                 email: item.email,
                 jobstatus: item.jobstatus,
-                department: item.department,
-                position: item.position,
+                me_department: item.me_department,
+                me_position: item.me_position,
                 action: action,
               });
             });
@@ -238,15 +245,22 @@
           },
         ],
         columns: [
+          { data: "image" },
           { data: "newEmployeeId" },
           { data: "firstname" },
           { data: "phone" },
           { data: "email" },
           { data: "jobstatus" },
-          { data: "department" },
-          { data: "position" },
+          { data: "me_department" },
+          { data: "me_position" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          $('td', row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log("Done");
         },
@@ -256,14 +270,17 @@
     $("#dataTableemployees tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
-        .closest("tr")
-        .find("td")
+        .find("td:not(:first-child)")
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
+
+      console.log("Clicked Row Data:", dataRow);
+
       employeeid = dataRow[0];
+      console.log("Employee ID:", employeeid);
     });
+
 
     $(document).on("click", "#edit-btn", function () {
       $.ajax({
@@ -275,7 +292,7 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-           
+
 
             $.each(existingData, (key, item) => {
               console.log(`${item.jobstatus}`);
@@ -475,7 +492,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.departmentname, item.departmentname);
+            var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#editemployeedepartment").append(options);
             console.log(item.departmentname);
@@ -496,7 +513,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.positionname, item.positionname);
+            var options = new Option(item.positionid, item.positionid);
             $(options).html(item.positionname);
             $("#editemployeeposition").append(options);
             console.log(item.positionname);
@@ -896,9 +913,11 @@
     }
   }
 
-function reloadPage() {
+  function reloadPage() {
     location.reload();
   }
+
+
 
 
 </script>
