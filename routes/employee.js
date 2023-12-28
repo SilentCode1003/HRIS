@@ -583,25 +583,25 @@ router.post("/update", async (req, res) => {
     let address = req.body.address;
     let profilePicturePath = req.body.profilePicturePath;
 
-    // Get department ID based on department name
-    const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
-    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [
-      department,
-    ]);
-    if (!departmentIdRow) {
-      return res.status(400).json({ msg: "Department not found" });
-    }
-    const departmentId = departmentIdRow.md_departmentid;
+    // // Get department ID based on department name
+    // const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
+    // const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [
+    //   department,
+    // ]);
+    // if (!departmentIdRow) {
+    //   return res.status(400).json({ msg: "Department not found" });
+    // }
+    // const departmentId = departmentIdRow.md_departmentid;
 
-    // Get position ID based on position name
-    const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
-    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [
-      position,
-    ]);
-    if (!positionIdRow) {
-      return res.status(400).json({ msg: "Position not found" });
-    }
-    const positionId = positionIdRow.mp_positionid;
+    // // Get position ID based on position name
+    // const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
+    // const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [
+    //   position,
+    // ]);
+    // if (!positionIdRow) {
+    //   return res.status(400).json({ msg: "Position not found" });
+    // }
+    // const positionId = positionIdRow.mp_positionid;
 
     // Define the SQL query
     const sql = `UPDATE master_employee SET
@@ -636,12 +636,14 @@ router.post("/update", async (req, res) => {
       jobstatus,
       ercontactname,
       ercontactphone,
-      departmentId,
-      positionId,
+      department,
+      position,
       address,
       profilePicturePath,
       newEmployeeId,
     ];
+
+    console.log(values);
 
     mysql.UpdateMultiple(sql, values, (err, result) => {
       if (err) {
@@ -649,6 +651,8 @@ router.post("/update", async (req, res) => {
         return res.status(500).json({ msg: "Error updating data" });
       }
       const rowsAffected = result && result.affectedRows;
+
+      console.log(result);
 
       if (rowsAffected > 0) {
         return res.json({ msg: "success" });

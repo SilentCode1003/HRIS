@@ -1,40 +1,54 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPassword } = require('./helper');
-const { Validator } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Encrypter } = require("./repository/crytography");
+const { generateUsernameAndPassword } = require("./helper");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  //res.render('userslayout', { title: 'Express' });
+router.get("/", function (req, res, next) {
+  req.session.fullname = "DEV42";
+  req.session.employeeid = "999999";
+  req.session.accesstype = "Admin";
 
-  Validator(req, res, 'userslayout');
+  res.render("userslayout", {
+    image: req.session.image,
+    employeeid: "999999",
+    fullname: "DEV42",
+    accesstype: "Admin",
+  });
+
+  // Validator(req, res, 'userslayout');
 });
 
 module.exports = router;
 
-router.post('/save', async (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     const { employeeid, accesstype, status } = req.body;
-    let createby = req.session.fullname; 
-    const createdate = currentDate.format('YYYY-MM-DD');
+    let createby = req.session.fullname;
+    const createdate = currentDate.format("YYYY-MM-DD");
 
     // Validate if the combination of employeeid and accesstype already exists
     const existingUserQuery = `SELECT * FROM master_user WHERE mu_employeeid = '${employeeid}' AND mu_accesstype = '${accesstype}'`;
-    const existingUserResult = await mysql.mysqlQueryPromise(existingUserQuery, [employeeid, accesstype]);
+    const existingUserResult = await mysql.mysqlQueryPromise(
+      existingUserQuery,
+      [employeeid, accesstype]
+    );
 
     if (existingUserResult.length > 0) {
       // Combination already exists, return an error
-      return res.json({ msg: 'exist' });
+      return res.json({ msg: "exist" });
     }
 
     const employeeQuery = `SELECT me_id, me_firstname, me_lastname, me_birthday FROM master_employee WHERE me_id = '${employeeid}'`;
 
     try {
-      const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [employeeid]);
+      const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [
+        employeeid,
+      ]);
 
       if (employeeresult.length > 0) {
         const employee = employeeresult[0];
@@ -43,41 +57,50 @@ router.post('/save', async (req, res) => {
         Encrypter(password, async (err, encrypted) => {
           if (err) {
             console.error("Error: ", err);
-            res.json({ msg: 'error' });
+            res.json({ msg: "error" });
           } else {
             const data = [
-              [employeeid, username, encrypted, accesstype, createby, createdate, status]
+              [
+                employeeid,
+                username,
+                encrypted,
+                accesstype,
+                createby,
+                createdate,
+                status,
+              ],
             ];
 
-            mysql.InsertTable('master_user', data, (inserterr, insertresult) => {
-              if (inserterr) {
-                console.error('Error inserting record: ', inserterr);
-                res.json({ msg: 'insert failed' });
-              } else {
-                console.log(insertresult);
-                res.json({ msg: 'success' });
+            mysql.InsertTable(
+              "master_user",
+              data,
+              (inserterr, insertresult) => {
+                if (inserterr) {
+                  console.error("Error inserting record: ", inserterr);
+                  res.json({ msg: "insert failed" });
+                } else {
+                  console.log(insertresult);
+                  res.json({ msg: "success" });
+                }
               }
-            });
+            );
           }
         });
       } else {
-        console.error('No employee found with that ID');
-        res.json({ msg: 'No employee found with that ID' });
+        console.error("No employee found with that ID");
+        res.json({ msg: "No employee found with that ID" });
       }
     } catch (employeeerror) {
-      console.error('Error querying employee: ', employeeerror);
-      res.json({ msg: 'error' });
+      console.error("Error querying employee: ", employeeerror);
+      res.json({ msg: "error" });
     }
   } catch (error) {
-    console.error('Error: ', error);
-    res.json({ msg: 'error' });
+    console.error("Error: ", error);
+    res.json({ msg: "error" });
   }
 });
 
-
-
-
-router.get('/load', (req, res) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
     mu_userid,
@@ -91,22 +114,22 @@ router.get('/load', (req, res) => {
       left join master_employee on master_user.mu_employeeid = me_id
     LEFT JOIN master_access ON master_user.mu_accesstype = ma_accessid`;
 
-    mysql.Select(sql, 'Master_User', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Master_User", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:error
-    })
-    
+      msg: error,
+    });
   }
 });
 
-router.post('/update', async (req, res) => {
+router.post("/update", async (req, res) => {
   try {
     let userid = req.body.userid;
     let username = req.body.username;
@@ -137,19 +160,17 @@ router.post('/update', async (req, res) => {
     console.log(updateResult);
 
     res.json({
-      msg: 'success'
+      msg: "success",
     });
   } catch (error) {
     console.error("Error: ", error);
     res.json({
-      msg: 'error'
+      msg: "error",
     });
   }
 });
 
-
-
-router.post('/getusers', (req, res) => {
+router.post("/getusers", (req, res) => {
   try {
     let userid = req.body.userid;
     let sql = `
@@ -161,18 +182,18 @@ router.post('/getusers', (req, res) => {
         from master_user
         where mu_userid = '${userid}'`;
 
-    mysql.Select(sql, 'Master_User', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Master_User", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     res.status(500).json({
       msg: "Internal server error",
-      error: error
+      error: error,
     });
   }
 });
-
