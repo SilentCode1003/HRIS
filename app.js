@@ -50,6 +50,7 @@ var loginlayoutRouter = require('./routes/login');
 var candidateRouter = require('./routes/candidate');
 
 
+
 var app = express();
 
 SetMongo(app);
@@ -107,6 +108,8 @@ app.use('/eportalpayslip', eportalpayslipRouter);
 app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);
 app.use('/candidate', candidateRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
