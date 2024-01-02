@@ -48,6 +48,11 @@ var eportalpayslipRouter = require('./routes/eportalpayslip');
 var eportalattendancelayoutRouter = require('./routes/eportalattendance');
 var loginlayoutRouter = require('./routes/login');
 var candidateRouter = require('./routes/candidate');
+var loanRouter = require('./routes/loan');
+var paymentRouter = require('./routes/payment');
+var interestRouter = require('./routes/interest');
+var depositRouter = require('./routes/deposit');
+var memberRouter = require('./routes/member');
 
 
 
@@ -108,6 +113,11 @@ app.use('/eportalpayslip', eportalpayslipRouter);
 app.use('/eportalattendance', eportalattendancelayoutRouter);
 app.use('/login', loginlayoutRouter);
 app.use('/candidate', candidateRouter);
+app.use('/loan', loanRouter);
+app.use('/payment', paymentRouter);
+app.use('/interest', interestRouter);
+app.use('/deposit', depositRouter);
+app.use('/member', memberRouter);
 
 
 
