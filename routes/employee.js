@@ -621,12 +621,16 @@ router.post("/update", async (req, res) => {
       newEmployeeId,
     ];
 
+    console.log(values);
+
     mysql.UpdateMultiple(sql, values, (err, result) => {
       if (err) {
         console.error("Error: ", err);
         return res.status(500).json({ msg: "Error updating data" });
       }
       const rowsAffected = result && result.affectedRows;
+
+      console.log(result);
 
       if (rowsAffected > 0) {
         return res.json({ msg: "success" });
