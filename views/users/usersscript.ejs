@@ -1,339 +1,344 @@
 <script>
-    let userid = "";
-  
-    $(document).ready(function(){
-      console.log('Initialize');
-      LoadTable();
-      LoadListEmp();
-      LoadAccess();
-      LoadEditAccess();
-  
-      function LoadTable() {
-          $("#dataTableusers").DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            paging: false,
-            searching: false,
-            info: false,
-            scrollY: 400,
-            scrollCollapse: true,
-            serverMethod: "GET",
-            ajax: {
-              url: "/users/load",
-              dataSrc: (json) => {
-                var finalData = [];
-                var data = json.data;
-    
-                console.log(data);
-                $.each(data, (key, item) => {
-                  var action = "";
-                  var status = item.status;
-  
-                  action = `
+  let userid = "";
+
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    LoadListEmp();
+    LoadAccess();
+    LoadEditAccess();
+    searchTable();
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+
+    function LoadTable() {
+      $("#dataTableusers").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/users/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editusersmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
-    
-                  finalData.push({
-                    userid: item.userid,
-                    employeeid: item.employeeid,
-                    username: item.username,
-                    accesstype: item.accesstype,
-                    createby: item.createby,
-                    createdate: item.createdate,
-                    status: item.status,
-                    action: action,
-                  });
-                });
-    
-                return finalData;
-              },
-            },
-            columnDefs: [
-              {
-                targets: 1,
-                className: "td-indent",
-              },
-            ],
-            columns: [
-              { data: "userid" },
-              { data: "employeeid" },
-              { data: "username"},
-              { data: "accesstype" },
-              { data: "createby" },
-              { data: "createdate" },
-              { data: "status" },
-              { data: "action" },
-            ],
-            initComplete: function () {
-              console.log('Done');
-            },
-          });
-        }
-  
-        
-  $(document).on("click", "#userssavebtn", function () {
-    let employeeid = $("#usersname").val();
-    let accesstype = $("#usersaccesstype").val();
-    let status = $("#usersstatus").val();
-  
-    var message = "";
-  
-    if (employeeid == "") {
-      message += "TITTLE ";
-    }
-  
-    if (accesstype == "") {
-      message += "DESCRIPTION ";
-    }
-  
-  
-    if (status == "") {
-      message += "POSITION NAME ";
-    }
-  
-    if (message !== "") {
-      swal("Validation Error", message, "error");
-      } else {
-      $.ajax({
-        type: "POST",
-        url: "/users/save",
-        data: {
-          employeeid: employeeid,
-          accesstype: accesstype,
-          status: status,
-  
-        },
-        success: function (result) {
-          if (result.msg == "success") {
-            swal({
-              title: "Saved Successfully",
-              text: "You clicked the button!",
-              icon: "success",
-              button: "OK!",
-            })
-            .then(results => {
-            window.location.reload();
-            })
-            LoadTable();
-          }
-          else {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
+
+              finalData.push({
+                userid: item.userid,
+                employeeid: item.employeeid,
+                username: item.username,
+                accesstype: item.accesstype,
+                createby: item.createby,
+                createdate: item.createdate,
+                status: item.status,
+                action: action,
+              });
             });
-          }
-        
+
+            return finalData;
+          },
         },
-        error: function (err) {
-          swal("Data already exist!", "You clicked the button!", "warning");
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "userid" },
+          { data: "employeeid" },
+          { data: "username" },
+          { data: "accesstype" },
+          { data: "createby" },
+          { data: "createdate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
         },
       });
     }
-  
-  });
 
-  
- function LoadListEmp() {
-    $.ajax({
-      type: "GET",
-      url: "/employee/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
 
-        $.each(data, function (key, item) {
-          var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.firstname);
-          $("#usersname").append(options);
-          console.log(item.firstname);
-        });
-      },
-      error: function (result) {
-        alert("error: " + result.data);
-      },
-    });
-  }
+    $(document).on("click", "#userssavebtn", function () {
+      let employeeid = $("#usersname").val();
+      let accesstype = $("#usersaccesstype").val();
+      let status = $("#usersstatus").val();
 
-  function LoadAccess() {
-    $.ajax({
-      type: "GET",
-      url: "/access/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
+      var message = "";
 
-        $.each(data, function (key, item) {
-          var options = new Option(item.accessid, item.accessid);
-          $(options).html(item.accessname);
-          $("#usersaccesstype").append(options);
-          console.log(item.accessname);
-        });
-      },
-      error: function (result) {
-        alert("error: " + result.data);
-      },
-    });
-  }
+      if (employeeid == "") {
+        message += "TITTLE ";
+      }
 
-  function LoadEditAccess() {
-    $.ajax({
-      type: "GET",
-      url: "/access/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
+      if (accesstype == "") {
+        message += "DESCRIPTION ";
+      }
 
-        $.each(data, function (key, item) {
-          var options = new Option(item.accessid, item.accessid);
-          $(options).html(item.accessname);
-          $("#editusersaccesstype").append(options);
-          console.log(item.accessname);
-        });
-      },
-      error: function (result) {
-        alert("error: " + result.data);
-      },
-    });
-  }
 
-  
-  $("#dataTableusers tbody").on("click", "tr", function () {
-    var dataRow = [];
-    $(this)
-      .closest("tr")
-      .find("td")
-      .each(function () {
-        dataRow.push($(this).text());
-      });
-    console.log(dataRow);
-    userid = dataRow[0];
-  });
-  
-  $(document).on("click", "#editBtn", function () {
-    console.log('hit');
+      if (status == "") {
+        message += "POSITION NAME ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
         $.ajax({
           type: "POST",
-          url: "/users/getusers",
+          url: "/users/save",
           data: {
-            userid: userid,
+            employeeid: employeeid,
+            accesstype: accesstype,
+            status: status,
+
           },
           success: function (result) {
-            if (result.msg === "success") {
-              const existingData = result.data;
-      
-              $.each(existingData, (key, item) => {
-                $("#editdepartmentid").val(item.userid); 
-                $("#editusername").val(item.username);
-                //$("#editpassword").val(item.password);
-                $("#editusersaccesstype").val(item.accesstype);
-                $("#editusersstatus").val(item.status);
-              });
-            } else {
-              swal("Error fetching employee data", message, "error");
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                })
+              LoadTable();
             }
+            else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+
           },
           error: function (err) {
-            swal("An error occurred while fetching employee data", message, "error");
+            swal("Data already exist!", "You clicked the button!", "warning");
           },
         });
+      }
+
+    });
+
+
+    function LoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#usersname").append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
       });
-      
-      $(document).on("click", "#edituserssavebtn", function () {
-        console.log("Save button clicked");
-        let id = userid
-        let username = $("#editusername").val();
-        //let password = $("#editpassword").val();
-        let accesstype = $("#editusersaccesstype").val();
-        let status = $("#editusersstatus").val();
-      
+    }
+
+    function LoadAccess() {
+      $.ajax({
+        type: "GET",
+        url: "/access/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.accessid, item.accessid);
+            $(options).html(item.accessname);
+            $("#usersaccesstype").append(options);
+            console.log(item.accessname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditAccess() {
+      $.ajax({
+        type: "GET",
+        url: "/access/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.accessid, item.accessid);
+            $(options).html(item.accessname);
+            $("#editusersaccesstype").append(options);
+            console.log(item.accessname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    $("#dataTableusers tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      userid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      console.log('hit');
+      $.ajax({
+        type: "POST",
+        url: "/users/getusers",
+        data: {
+          userid: userid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editdepartmentid").val(item.userid);
+              $("#editusername").val(item.username);
+              //$("#editpassword").val(item.password);
+              $("#editusersaccesstype").val(item.accesstype);
+              $("#editusersstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", message, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#edituserssavebtn", function () {
+      console.log("Save button clicked");
+      let id = userid
+      let username = $("#editusername").val();
+      //let password = $("#editpassword").val();
+      let accesstype = $("#editusersaccesstype").val();
+      let status = $("#editusersstatus").val();
+
       var message = "";
-    
+
       if (username === "") {
         message += "departmentname is required. ";
       }
-    
+
       //if (password === "") {
-        //message += "status is required. ";
+      //message += "status is required. ";
       //}
 
       if (accesstype === "") {
         message += "departmentname is required. ";
       }
-    
+
       if (status === "") {
         message += "status is required. ";
       }
-  
+
       if (message !== "") {
         swal("Validation Error", message, "error");
-    } else {
-      $.ajax({
-        type: "POST",
-        url: "/users/update",
-        data: { 
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/users/update",
+          data: {
             userid: id,
             username: username,
             //password: password,
             accesstype: accesstype,
-            status: status, 
-        },
-        success: function (result) {
-          if (result.msg == "success") {
-            swal({
-              title: "Update Successfully",
-              text: "You clicked the button!",
-              icon: "success",
-              button: "OK!",
-            })
-              .then(results => {
-                window.location.reload();
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
               });
-            LoadTable();
-          } else if (result.msg == "exist") {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
-            });
-          } else {
-            swal("Data already exists!", "You clicked the button!", "warning");
-          }
-        },
-        error: function (err) {
-          swal("Error", "An error occurred while saving data.", "error");
-        },
-      });
-    }
-  });
-                
-  function searchTable() {
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInput");
       filter = input.value.toUpperCase();
-      table = document.getElementById("dataTableaccess");
+      table = document.getElementById("dataTableusers");
       tr = table.getElementsByTagName("tr");
       for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td");
-          for (j = 0; j < td.length; j++) {
-              if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                  found = true;
-              }
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
           }
-          if (found) {
-              tr[i].style.display = "";
-              found = false;
-          } else {
-              tr[i].style.display = "none";
-          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
       }
-  }
-  
-    
+    }
+
+
   });
-  
-  </script>
-      
+
+</script>

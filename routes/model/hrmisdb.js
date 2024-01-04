@@ -448,3 +448,137 @@ exports.Master_User = (data) => {
 
     return dataResult;
 };
+
+exports.Master_Ojt = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            ojtid: key.mo_id,
+            image: key.mo_image,
+            firstname: key.mo_name,
+            lastname: key.mo_lastname,
+            address: key.mo_address,
+            status: key.mo_status,
+            birthday: key.mo_birthday,
+            gender: key.mo_gender,
+            phone: key.mo_cpnumber,
+            ercontact: key.mo_ercontact,
+            ercontactnumber: key.mo_ercontactnumber,
+            school: key.mo_school,
+            department: key.mo_department,
+            startdate: key.mo_startdate,
+            hours: key.mo_hours,
+        });
+    });
+
+    return dataResult;
+};
+
+exports.Ojt_User = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            ojtuserid: key.ou_userid,
+            ojtid: key.ou_ojtid,
+            username: key.ou_username,
+            password: key.ou_password,
+            accesstype: key.ou_accesstype,
+            createby: key.ou_createby,
+            createdate: key.ou_createdate,
+            status: key.ou_status,
+        });
+    });
+
+    return dataResult;
+};
+
+exports.Loan = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            loanid: key.l_id,
+            employeeid: key.l_employeeid,
+            amount: key.l_amount,
+            interest: key.l_interest,
+            amountdue: key.l_amountdue,
+            datedue: key.l_datedue,
+            period: key.l_period,
+            status: key.l_status,
+            approvedby: key.l_approvedby,
+            approveddate: key.l_approveddate,
+            purpose: key.l_purpose,
+        });
+    });
+
+    return dataResult;
+};
+
+
+exports.Loan_Interest = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            interestid: key.li_id,
+            loanid: key.li_loanid,
+            interest: key.li_interest,
+            rebate: key.li_rebate,
+        });
+    });
+
+    return dataResult;
+};
+
+exports.Deposit = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            depositid: key.d_id,
+            employeeid: key.d_employeeid,
+            date: key.d_date,
+            amount: key.d_amount,
+        });
+    });
+
+    return dataResult;
+};
+
+
+exports.Member_Recievable_Record = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            recordid: key.mrb_id,
+            employeeid: key.mrb_employeeid,
+            date: key.mrb_date,
+            totaldeposit: key.mrb_totaldeposit,
+            totalinterest: key.mrb_totalinterest,
+            status: key.mrb_status,
+        });
+    });
+
+    return dataResult;
+};
+
+
+exports.Loan_Payment = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            paymentid: key.lp_id,
+            loanid: key.lp_loanid,
+            date: key.lp_date,
+            loanamount: key.lp_amount,
+            remarks: key.lp_remarks,
+        });
+    });
+
+    return dataResult;
+};
+

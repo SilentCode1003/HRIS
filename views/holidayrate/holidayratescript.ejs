@@ -1,327 +1,333 @@
 <script>
-    let holidayrateid ="";
+  let holidayrateid = "";
 
-    $(document).ready(function(){
-        console.log('Initialize');
-        LoadTable();
-        LoadList();
-        LoadHolidayEdit();
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    LoadList();
+    LoadHolidayEdit();
+    searchTable();
 
-        
-            
-        function LoadTable() {
-            $("#dataTableholidayrate").DataTable({
-              destroy: true,
-              processing: true,
-              serverSide: true,
-              paging: false,
-              searching: false,
-              info: false,
-              scrollY: 400,
-              scrollCollapse: true,
-              serverMethod: "GET",
-              ajax: {
-                url: "/holidayrate/load",
-                dataSrc: (json) => {
-                  var finalData = [];
-                  var data = json.data;
-      
-                  console.log(data);
-                  $.each(data, (key, item) => {
-                    var action = "";
-                    var status = item.status;
-    
-                    action = `
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+
+
+
+    function LoadTable() {
+      $("#dataTableholidayrate").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/holidayrate/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editholidayratemodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
-      
-                    finalData.push({
-                        holidayrateid: item.holidayrateid,
-                        holidaydate: item.holidaydate,
-                        holidayrate: item.holidayrate,
-                        holidaystatus: item.holidaystatus,
-                        createby: item.createby,
-                        createdate: item.createdate,
-                        action: action,
-                    });
-                  });
-      
-                  return finalData;
-                },
-              },
-              columnDefs: [
-                {
-                  targets: 1,
-                  className: "td-indent",
-                },
-              ],
-              columns: [
-                { data: "holidayrateid" },
-                { data: "holidaydate" },
-                { data: "holidayrate" },
-                { data: "holidaystatus"},
-                { data: "createby" },
-                { data: "createdate" },
-                { data: "action" },
-              ],
-              initComplete: function () {
-                console.log('Done');
-              },
+
+              finalData.push({
+                holidayrateid: item.holidayrateid,
+                holidaydate: item.holidaydate,
+                holidayrate: item.holidayrate,
+                holidaystatus: item.holidaystatus,
+                createby: item.createby,
+                createdate: item.createdate,
+                action: action,
+              });
             });
-          }
 
-           
-$(document).on("click", "#holidayratesavebtn", function () {
-  let holidaydate = $("#holidayratedate").val();
-  let holidayrate = $("#holidayraterate").val();
-  let holidaystatus = $("#holidaytratestatus").val();
-  let createby = $("#holidayratecreatedby").val();
-
-  var message = "";
-
-  if (holidaydate == "") {
-    message += "shiftname is required ";
-  }
-
-  if (holidayrate == "") {
-    message += "status is required ";
-  }
-
-  if (holidaystatus == "") {
-    message += "department is required ";
-  }
-
-  if (createby == "") {
-    message += "createby is required ";
-  }
-
-  if (message !== "") {
-    swal("Validation Error", message, "error"); 
-  } else {
-
-    $.ajax({
-      type: "POST",
-      url: "/holidayrate/save",
-      data: {
-        holidaydate: holidaydate,
-        holidayrate: holidayrate,
-        holidaystatus: holidaystatus,
-        createby: createby,
-
-      },
-      success: function (result) {
-        if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
-          window.location.reload();
-          })
-          LoadTable();
-        }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
-        }
-      
-      },
-      error: function (err) {
-        swal("Data already exist!", "You clicked the button!", "warning");
-      },
-    });
-  }
-    
-});
-
-function LoadList() {
-    $.ajax({
-      type: "GET",
-      url: "/holiday/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.date, item.date);
-          $(options).html(item.date);
-          $('#holidayratedate').append(options);
-          console.log(item.date);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
-      }
-    });
-
-
-  }
-
-
-  function LoadHolidayEdit() {
-    $.ajax({
-      type: "GET",
-      url: "/holiday/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.date, item.date);
-          $(options).html(item.date);
-          $('#editholidayratedate').append(options);
-          console.log(item.date);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
-      }
-    });
-
-
-  }
-
-$("#dataTableholidayrate tbody").on("click", "tr", function () {
-  var dataRow = [];
-  $(this)
-  .closest("tr")
-  .find("td")
-  .each(function () {
-    dataRow.push($(this).text());
-  });
-console.log(dataRow);
-holidayrateid = dataRow[0];
-});
-    
-$(document).on("click", "#editBtn", function () {
-  $.ajax({
-    type: "POST",
-    url: "/holidayrate/getholidayrate",
-    data: {
-        holidayrateid: holidayrateid,
-    },
-    success: function (result) {
-      if (result.msg === "success") {
-        const existingData = result.data;
-
-        $.each(existingData, (key, item) => {
-          $("#editshiftid").val(item.holidayrateid); 
-          $("#editholidayratedate").val(item.holidaydate);
-          $("#editholidayraterate").val(item.holidayrate);
-          $("#editholidaytratestatus").val(item.holidaystatus);
-          $("#editholidayratecreatedby").val(item.createby);
-        });
-      } else {
-        swal("Error fetching employee data", "success");
-      }
-    },
-    error: function (err) {
-      swal("An error occurred while fetching employee data", err, "error");
-    },
-  });
-});
-$(document).on("click", "#editholidayratesavebtn", function () {
-  console.log("Save button clicked");
-  let id = holidayrateid
-  let holidaydate = $("#editholidayratedate").val();
-  let holidayrate = $("#editholidayraterate").val();
-  let holidaystatus = $("#editholidaytratestatus").val();
-  let createby = $("#editholidayratecreatedby").val();
-  
-           
-  var message = "";
-      
-  if (holidaydate === "") {
-    message += "departmentname is required. ";
-  }
-
-  if (holidayrate === "") {
-    message += "status is required. ";
-  }
-
-  if (holidaystatus === "") {
-    message += "departmenthead is required. ";
-  }
-
-  if (createby === "") {
-      message += "status is required. ";
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "holidayrateid" },
+          { data: "holidaydate" },
+          { data: "holidayrate" },
+          { data: "holidaystatus" },
+          { data: "createby" },
+          { data: "createdate" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
     }
 
-  if (message !== "") {
-    swal("Validation Error", message, "error");
-} else {
-  $.ajax({
-    type: "POST",
-    url: "holidayrate/update",
-    data: { 
-      holidayrateid: id,
-      holidaydate: holidaydate,
-      holidayrate: holidayrate,
-      holidaystatus: holidaystatus,
-      createby: createby, 
-    },
-    success: function (result) {
-      if (result.msg == "success") {
-        swal({
-          title: "Update Successfully",
-          text: "You clicked the button!",
-          icon: "success",
-          button: "OK!",
-        })
-          .then(results => {
-            window.location.reload();
-          });
-        LoadTable();
-      } else if (result.msg == "exist") {
-        swal({
-          title: "Exist",
-          text: "Data already exists!",
-          icon: "warning",
-          button: "OK!",
-        });
-      } else {
-        swal("Data already exists!", "You clicked the button!", "warning");
+
+    $(document).on("click", "#holidayratesavebtn", function () {
+      let holidaydate = $("#holidayratedate").val();
+      let holidayrate = $("#holidayraterate").val();
+      let holidaystatus = $("#holidaytratestatus").val();
+      let createby = $("#holidayratecreatedby").val();
+
+      var message = "";
+
+      if (holidaydate == "") {
+        message += "shiftname is required ";
       }
-    },
-    error: function (err) {
-      swal("Error", "An error occurred while saving data.", "error");
-    },
-  });
-}
-});
-        
- function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableposition");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
+
+      if (holidayrate == "") {
+        message += "status is required ";
+      }
+
+      if (holidaystatus == "") {
+        message += "department is required ";
+      }
+
+      if (createby == "") {
+        message += "createby is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+
+        $.ajax({
+          type: "POST",
+          url: "/holidayrate/save",
+          data: {
+            holidaydate: holidaydate,
+            holidayrate: holidayrate,
+            holidaystatus: holidaystatus,
+            createby: createby,
+
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                })
+              LoadTable();
+            }
+            else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/holiday/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.date, item.date);
+            $(options).html(item.date);
+            $('#holidayratedate').append(options);
+            console.log(item.date);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+
+    function LoadHolidayEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/holiday/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.date, item.date);
+            $(options).html(item.date);
+            $('#editholidayratedate').append(options);
+            console.log(item.date);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    $("#dataTableholidayrate tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      holidayrateid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/holidayrate/getholidayrate",
+        data: {
+          holidayrateid: holidayrateid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editshiftid").val(item.holidayrateid);
+              $("#editholidayratedate").val(item.holidaydate);
+              $("#editholidayraterate").val(item.holidayrate);
+              $("#editholidaytratestatus").val(item.holidaystatus);
+              $("#editholidayratecreatedby").val(item.createby);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#editholidayratesavebtn", function () {
+      console.log("Save button clicked");
+      let id = holidayrateid
+      let holidaydate = $("#editholidayratedate").val();
+      let holidayrate = $("#editholidayraterate").val();
+      let holidaystatus = $("#editholidaytratestatus").val();
+      let createby = $("#editholidayratecreatedby").val();
+
+
+      var message = "";
+
+      if (holidaydate === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (holidayrate === "") {
+        message += "status is required. ";
+      }
+
+      if (holidaystatus === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (createby === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "holidayrate/update",
+          data: {
+            holidayrateid: id,
+            holidaydate: holidaydate,
+            holidayrate: holidayrate,
+            holidaystatus: holidaystatus,
+            createby: createby,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableholidayrate");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
         for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-            }
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
         }
         if (found) {
-            tr[i].style.display = "";
-            found = false;
+          tr[i].style.display = "";
+          found = false;
         } else {
-            tr[i].style.display = "none";
+          tr[i].style.display = "none";
         }
+      }
     }
-}
 
 
 
 
-});
-   
+  });
+
 
 </script>

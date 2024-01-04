@@ -4,6 +4,11 @@
   $(document).ready(function () {
     console.log("Initialize");
     LoadTable();
+    searchTable();
+
+    $(document).on('keyup','#myInput',function(){
+      searchTable();
+    });
 
     function LoadTable() {
       $("#dataTablecandidate").DataTable({

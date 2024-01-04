@@ -564,7 +564,6 @@ router.post("/save", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    // Retrieve request parameters
     let newEmployeeId = req.body.newEmployeeId;
     let firstname = req.body.firstname;
     let middlename = req.body.middlename;
@@ -583,27 +582,6 @@ router.post("/update", async (req, res) => {
     let address = req.body.address;
     let profilePicturePath = req.body.profilePicturePath;
 
-    // Get department ID based on department name
-    const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
-    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [
-      department,
-    ]);
-    if (!departmentIdRow) {
-      return res.status(400).json({ msg: "Department not found" });
-    }
-    const departmentId = departmentIdRow.md_departmentid;
-
-    // Get position ID based on position name
-    const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
-    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [
-      position,
-    ]);
-    if (!positionIdRow) {
-      return res.status(400).json({ msg: "Position not found" });
-    }
-    const positionId = positionIdRow.mp_positionid;
-
-    // Define the SQL query
     const sql = `UPDATE master_employee SET
       me_firstname = ?,
       me_middlename = ?,
@@ -636,8 +614,8 @@ router.post("/update", async (req, res) => {
       jobstatus,
       ercontactname,
       ercontactphone,
-      departmentId,
-      positionId,
+      department,
+      position,
       address,
       profilePicturePath,
       newEmployeeId,
@@ -662,6 +640,7 @@ router.post("/update", async (req, res) => {
       .json({ msg: "Internal server error", error: error.message });
   }
 });
+
 
 router.post("/getgovid", (req, res) => {
   try {
@@ -992,12 +971,11 @@ function GetPosition(name, callback) {
 
 async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
-    const createdate = moment().format("YYYY-MM-DD");
-    const createby = req.session ? req.session.fullname : null; // Assuming you have 'fullname' in your session
+    const createdate = moment().format('YYYY-MM-DD');
+    const createby = req.session ? req.session.fullname : null; 
 
     console.log("Session:", req.session);
 
-    // Set mu_accesstype to the default value of 2 (employee)
     const data = [
       [
         employeeId,
@@ -1022,7 +1000,6 @@ async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   });
 }
 
-// Function to check if a record with the same firstname and lastname exists
 function checkEmployeeExists(firstname, lastname) {
   return new Promise((resolve, reject) => {
     const checkQuery = `SELECT COUNT(*) AS count FROM master_employee WHERE me_firstname = '${firstname}' AND me_lastname = '${lastname}'`;
