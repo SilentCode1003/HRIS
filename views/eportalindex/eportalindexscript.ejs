@@ -64,7 +64,7 @@
             } else {
                 swal("wala kapa!", "You clicked the button!", "success");
                 console.log('User is outside the geofence.');
-                geofenceButton.style.display = 'none';
+                geofenceButton.style.display = 'block';
             }
         }
 
@@ -84,12 +84,13 @@
             // AJAX call to clockin API
             $.ajax({
                 type: "POST",
-                url: "/eportalindex/clockin",
+                url: "/eportalindex/clockin", // Adjust the URL if needed
                 data: {
                     latitude: userLocation.lat,
                     longitude: userLocation.lng,
-                    employeeid: employeeid  // Include the employeeid in the data
+                    employeeid: employeeid,
                 },
+
                 success: function (response) {
                     console.log("API response", response);
 
@@ -110,6 +111,10 @@
                 },
                 error: function (xhr, status, error) {
                     console.log("API error", error);
+
+                    // Log the response text for better debugging
+                    console.log("API response text:", xhr.responseText);
+
                     swal({
                         title: "Error",
                         text: "Unable to clock in. Please try again.",
@@ -118,6 +123,7 @@
                 }
             });
         });
+
 
     });
 </script>

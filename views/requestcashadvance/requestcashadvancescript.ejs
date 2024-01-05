@@ -1,194 +1,199 @@
 <script>
-    let cashadvanceid = '';
-      $(document).ready(function(){
-          console.log('Initialize');
-          LoadTable();
-      
-          function LoadTable() {
-              $("#dataTablependingca").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                serverMethod: "GET",
-                ajax: {
-                  url: "/requestcashadvance/load",
-                  dataSrc: (json) => {
-                    var finalData = [];
-                    var data = json.data;
-        
-                    console.log(data);
-                    $.each(data, (key, item) => {
-                      var action = "";
-                      var status = item.status;
-                      
-                      action = `
+  let cashadvanceid = '';
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    searchTable();
+
+    $(document).on('keyup', '#myInput2', function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTablependingca").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/requestcashadvance/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                       <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
                      `;
-        
-                      finalData.push({
-                          cashadvanceid: item.cashadvanceid,
-                          employeeid: item.employeeid,
-                          requestdate: item.requestdate,
-                          amount: item.amount,
-                          purpose: item.purpose,
-                          status: item.status,
-                          approvaldate: item.approvaldate,
-                          action: action,
-                      });
-                    });
-        
-                    return finalData;
-                  },
-                },
-                columnDefs: [
-                  {
-                    targets: 1,
-                    className: "td-indent",
-                  },
-                ],
-                columns: [
-                  { data: "cashadvanceid" },
-                  { data: "employeeid" },
-                  { data: "requestdate"},
-                  { data: "amount" },
-                  { data: "purpose" },
-                  { data: "status" },
-                  { data: "approvaldate" },
-                  { data: "action" },
-                ],
-                initComplete: function () {
-                  console.log('Done');
-                },
-              });
-            }
-  
-            $("#dataTablependingca tbody").on("click", "tr", function () {
-              var dataRow = [];
-              $(this)
-              .closest("tr")
-              .find("td")
-              .each(function () {
-                dataRow.push($(this).text());
-              });
-            console.log(dataRow);
-            cashadvanceid = dataRow[0];
-            });
-      
-            $(document).on("click", "#editBtn", function () {
-              $.ajax({
-                type: "POST",
-                url: "/requestcashadvance/getreqca",
-                data: {
-                    cashadvanceid: cashadvanceid,
-                },
-                success: function (result) {
-                  if (result.msg === "success") {
-                    const existingData = result.data;
-            
-                    $.each(existingData, (key, item) => {
-                      $("#id").val(item.cashadvanceid); 
-                      $("#pendingcaname").val(item.employeeid);
-                      $("#pendingcaemail").val(item.email);
-                      $("#pendingcagender").val(item.gender);
-                      $("#pendingcaphone").val(item.phone); 
-                      $("#pendingreqdate").val(item.requestdate);
-                      $("#pendingamount").val(item.amount);
-                      $("#pendingpurpose").val(item.purpose);
-                      $("#pendingcastatus").val(item.status);
-                      $("#pendingcaapprovaldate").val(item.approvaldate);
-                    });
-                  } else {
-                    swal("Error fetching employee data", "success");
-                  }
-                },
-                error: function (err) {
-                  swal("An error occurred while fetching employee data", err, "error");
-                },
-              });
-            });
-            $(document).on("click", "#pendingcasavebtn", function () {
-              console.log("Save button clicked");
-              let id = cashadvanceid
-              let status = $("#pendingcastatus").val();
-              let comment = $("#pendingcaremarks").val();
-               
-              var message = "";
-                  
-            
-              if (status === "") {
-                message += "status is required. ";
-              }
 
-              if (comment === "") {
-                message += "status is required. ";
-              }
-  
-             // if (approvaldate === "") {
-              //  message += "status is required. ";
-             // }
-            
-            
-              if (message !== "") {
-                swal("Validation Error", message, "error");
-            } else {
-              $.ajax({
-                type: "POST",
-                url: "/requestcashadvance/update",
-                data: { 
-                  cashadvanceid: id,
-                  status: status,
-                  comment: comment,
-                },
-                success: function (result) {
-                  if (result.msg == "success") {
-                    swal("Save Successfully","You clicked the button!","success",)
-                      .then(results => {
-                        window.location.reload();
-                      });
-                    LoadTable();
-                  } 
-              },
-              error: function (err) {
-                swal("Error", "An error occurred while saving data.", "error");
-              },
-                error: function (err) {
-                  swal("Error", "An error occurred while saving data.", "error");
-                },
+              finalData.push({
+                cashadvanceid: item.cashadvanceid,
+                employeeid: item.employeeid,
+                requestdate: item.requestdate,
+                amount: item.amount,
+                purpose: item.purpose,
+                status: item.status,
+                approvaldate: item.approvaldate,
+                action: action,
               });
-            }
             });
-        
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "cashadvanceid" },
+          { data: "employeeid" },
+          { data: "requestdate" },
+          { data: "amount" },
+          { data: "purpose" },
+          { data: "status" },
+          { data: "approvaldate" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
       });
-  
-      //search bar
-      
-  function searchTable() {
-      var input, filter, found, table, tr, td, i, j;
-      input = document.getElementById("myInput2");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("dataTableallleave");
-      tr = table.getElementsByTagName("tr");
-      for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td");
-          for (j = 0; j < td.length; j++) {
-              if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                  found = true;
-              }
-          }
-          if (found) {
-              tr[i].style.display = "";
-              found = false;
+    }
+
+    $("#dataTablependingca tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      cashadvanceid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/requestcashadvance/getreqca",
+        data: {
+          cashadvanceid: cashadvanceid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.cashadvanceid);
+              $("#pendingcaname").val(item.employeeid);
+              $("#pendingcaemail").val(item.email);
+              $("#pendingcagender").val(item.gender);
+              $("#pendingcaphone").val(item.phone);
+              $("#pendingreqdate").val(item.requestdate);
+              $("#pendingamount").val(item.amount);
+              $("#pendingpurpose").val(item.purpose);
+              $("#pendingcastatus").val(item.status);
+              $("#pendingcaapprovaldate").val(item.approvaldate);
+            });
           } else {
-              tr[i].style.display = "none";
+            swal("Error fetching employee data", "success");
           }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#pendingcasavebtn", function () {
+      console.log("Save button clicked");
+      let id = cashadvanceid
+      let status = $("#pendingcastatus").val();
+      let comment = $("#pendingcaremarks").val();
+
+      var message = "";
+
+
+      if (status === "") {
+        message += "status is required. ";
       }
+
+      if (comment === "") {
+        message += "status is required. ";
+      }
+
+      // if (approvaldate === "") {
+      //  message += "status is required. ";
+      // }
+
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/requestcashadvance/update",
+          data: {
+            cashadvanceid: id,
+            status: status,
+            comment: comment,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal("Save Successfully", "You clicked the button!", "success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+  });
+
+  //search bar
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput2");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTablependingca");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
   }
-  
-      
-      
-  </script>
+
+
+
+</script>

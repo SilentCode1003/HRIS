@@ -72,6 +72,27 @@ exports.showSweetAlert = (title, text, icon, buttonText) => {
   }
 };
 
+exports.generateUsernameAndPasswordforOjt = (ojt) => {
+  try {
+    const {
+      mo_name: firstname,
+      mo_lastname: lastname,
+      mo_id: ojtID,
+      mo_birthday: birthday,
+    } = ojt;
+
+    // Generate username by combining the first name and the first letter of the last name
+    const username = firstname.toLowerCase() + lastname.charAt(0).toLowerCase();
+
+    // Generate the password by combining employee id and birthday
+    const password = ojtID + birthday.replace(/-/g, "");
+
+    return { username, password };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Example of how to use the custom function:
 // showSweetAlert("success", "Log in Successfully", "success", "Let's go!");
 // showSweetAlert("incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!!");
