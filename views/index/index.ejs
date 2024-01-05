@@ -141,6 +141,50 @@
             </div>
         </div>
 
+        <!-- Total Candidate For Rgular Card -->
+        <div data-toggle="modal" id="totalcandidate" data-target="#totalCandidateModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="totalempcandidate" class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Candidate For Regular </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bagapuro Family Card -->
+        <div data-toggle="modal" id="totalbagapuro" data-target="#totalaBagapuroModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
+            <div class="rotating-line"></div>
+            <div id="totalempbagapuro" class="card border-left-white shadow h-100 py-2 ">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
+                                Bagapuro Family
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-white 800"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
     </div>
 
     <!-- Total Employee Modal -->
@@ -188,7 +232,7 @@
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
@@ -209,7 +253,7 @@
                         <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Regular Employee</h1>
                     </div>
                     <br>
-                    <input id='myInputRegular' onkeyup='searchRegularTable()' type='text' placeholder="  Search....">
+                    <input id='myInputRegular' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -258,7 +302,7 @@
                         <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Probationary Employee</h1>
                     </div>
                     <br>
-                    <input id='myInputproba' onkeyup='searchprobaTable()' type='text' placeholder="  Search....">
+                    <input id='myInputproba' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -308,7 +352,7 @@
                         <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Resigned Employee</h1>
                     </div>
                     <br>
-                    <input id='myInputresigned' onkeyup='searchresignedTable()' type='text' placeholder="  Search....">
+                    <input id='myInputresigned' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -364,7 +408,7 @@
                         </h1>
                     </div>
                     <br>
-                    <input id='myInputtotaladmin' onkeyup='searchadminTable()' type='text' placeholder="  Search....">
+                    <input id='myInputtotaladmin' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -401,7 +445,7 @@
                         <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total IT Department</h1>
                     </div>
                     <br>
-                    <input id='myInputtotalit' onkeyup='searchitTable()' type='text' placeholder="  Search....">
+                    <input id='myInputtotalit' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -453,8 +497,7 @@
                         </h1>
                     </div>
                     <br>
-                    <input id='myInputtotalcabling' onkeyup='searchcablingTable()' type='text'
-                        placeholder="  Search....">
+                    <input id='myInputtotalcabling' type='text' placeholder="  Search....">
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -492,6 +535,106 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Total Candidate for Regular Modal -->
+    <div class="modal fade" id="totalCandidateModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Candidate For
+                            Regular
+                        </h1>
+                    </div>
+                    <br>
+                    <input id='myInputtotalcandidate' type='text' placeholder="  Search....">
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="totalcandidatetable">
+                            <colgroup>
+                                <col style="width: 150px;">
+                                <col style="width: 50px;">
+                                <col style="width: 150px;">
+                                <col style="width: 100px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Hire Date</th>
+                                    <th>Tenure</th>
+                                    <th>Position</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Bagapuro Family Modal -->
+    <div class="modal fade" id="totalaBagapuroModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Total Bagapuro Family
+                        </h1>
+                    </div>
+                    <br>
+                    <input id='myInputtotalbagapuro' type='text' placeholder="  Search....">
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped" id="totalbagapurotable">
+                            <colgroup>
+                                <col style="width: 150px;">
+                                <col style="width: 50px;">
+                                <col style="width: 150px;">
+                                <col style="width: 200px;">
+                                <col style="width: 150px;">
+                                <col style="width: 150px;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Hire Dte</th>
+                                    <th>Position</th>
+                                    <th>Tenure</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Content Row -->
@@ -538,13 +681,14 @@
                                     <table class="table table-striped" id="dataTableleaverequest">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Start</th>
-                                                <th scope="col">End</th>
-                                                <th scope="col">Type</th>
-                                                <th scope="col">Reason</th>
-                                                <th scope="col">Applied</th>
-                                                <th scope="col">Action</th>
+                                                <th>Image</th>
+                                                <th>Name</th>
+                                                <th>Start</th>
+                                                <th>End</th>
+                                                <th>Type</th>
+                                                <th>Reason</th>
+                                                <th>Applied</th>
+                                                <!-- <th scope="col">Action</th> -->
                                             </tr>
                                         </thead>
                                     </table>
@@ -558,12 +702,14 @@
                                     <table class="table table-striped" id="dataTablecashrequest">
                                         <thead>
                                             <tr>
+                                                <th>Image</th>
+                                                <th>ID</th>
                                                 <th scope="col">Employee</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Amount</th>
                                                 <th scope="col">Purpose</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col">Action</th>
+                                                <!-- <th scope="col">Action</th> -->
                                             </tr>
                                         </thead>
                                     </table>
@@ -695,92 +841,106 @@
         </div>
 
         <!--Leave Modal-->
-        <div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row g-3">
+                                <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid"
+                                    disabled>
+                                <div class="col">
+                                    <label for="pendingleavename" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="pendingleavename"
+                                        name="pendingleavename" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleaveemail" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="pendingleaveemail"
+                                        name="pendingleaveemail" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleavegender" class="form-label">Gender</label>
+                                    <input type="text" class="form-control" id="pendingleavegender"
+                                        name="pendingleavegender" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="pendingleavephone" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="pendingleavephone"
+                                        name="pendingleavephone" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleavetype" class="form-label">Leave Type</label>
+                                    <input type="text" class="form-control" id="pendingleavetype"
+                                        name="pendingleavetype" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
+                                    <input type="text" class="form-control" id="pendingleaveapplydate"
+                                        name="pendingleaveapplydate" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
+                                    <input type="text" class="form-control" id="pendingleaveapplynodays"
+                                        name="pendingleaveapplynodays" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleaveavailabledays" class="form-label">Available No. of
+                                        Days</label>
+                                    <input type="text" class="form-control" id="pendingleaveavailabledays"
+                                        name="pendingleaveavailabledays" value="6" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleavestart" class="form-label">Leave Start</label>
+                                    <input type="text" class="form-control" id="pendingleavestart"
+                                        name="pendingleavestart" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleaveend" class="form-label">Leave End</label>
+                                    <input type="text" class="form-control" id="pendingleaveend" name="pendingleaveend"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="mb-3">
+                                    <label for="pendingleavereason" class="col-form-label">Reason:</label>
+                                    <textarea class="form-control" id="pendingleavereason" name="pendingleavereason"
+                                        disabled></textarea>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="pendingleaveremarks" class="form-label">Remarks</label>
+                                    <input type="email" class="form-control" id="pendingleaveremarks"
+                                        name="pendingleaveremarks">
+                                </div>
+                                <div class="col">
+                                    <label for="pendingleaveaction" class="form-label">Action</label>
+                                    <select class="form-select" id="pendingleaveaction" name="pendingleaveaction">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Cancel">Cancel</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="row g-3">
-                      <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid" disabled>
-                    <div class="col">
-                      <label for="pendingleavename" class="form-label">Full Name</label>
-                      <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="pendingleaveemail" class="form-label">Email</label>
-                      <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="pendingleavegender" class="form-label">Gender</label>
-                      <input type="text" class="form-control" id="pendingleavegender" name="pendingleavegender" disabled>
-                    </div>
-                    </div>
-                    <br>
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="pendingleavephone" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" disabled>
-                      </div>
-                      <div class="col">
-                        <label for="pendingleavetype" class="form-label">Leave Type</label>
-                        <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" disabled>
-                      </div>
-                      <div class="col">
-                        <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
-                        <input type="text" class="form-control" id="pendingleaveapplydate" name="pendingleaveapplydate" disabled>
-                      </div>
-                      </div>
-                      <br>
-                      <div class="row g-3">
-                        <div class="col">
-                          <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
-                          <input type="text" class="form-control" id="pendingleaveapplynodays" name="pendingleaveapplynodays" disabled>
-                        </div>
-                        <div class="col">
-                          <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
-                          <input type="text" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
-                        </div>
-                        <div class="col">
-                          <label for="pendingleavestart" class="form-label">Leave Start</label>
-                          <input type="text" class="form-control" id="pendingleavestart" name="pendingleavestart"  disabled>
-                        </div>
-                        <div class="col">
-                          <label for="pendingleaveend" class="form-label">Leave End</label>
-                          <input type="text" class="form-control" id="pendingleaveend" name="pendingleaveend" disabled>
-                        </div>
-                        </div>
-                        <div class="row g-3">
-                          <div class="mb-3">
-                            <label for="pendingleavereason" class="col-form-label">Reason:</label>
-                            <textarea class="form-control" id="pendingleavereason" name="pendingleavereason" disabled></textarea>
-                          </div>
-                          <div class="col-md-8">
-                            <label for="pendingleaveremarks" class="form-label">Remarks</label>
-                            <input type="email" class="form-control" id="pendingleaveremarks" name="pendingleaveremarks">
-                          </div>
-                          <div class="col">
-                            <label for="pendingleaveaction" class="form-label">Action</label>
-                            <select class="form-select" id="pendingleaveaction" name="pendingleaveaction">
-                              <option value="Pending">Pending</option>
-                              <option value="Cancel">Cancel</option>
-                              <option value="Approved">Approved</option>
-                              <option value="Rejected">Rejected</option>
-                            </select>
-                          </div>
-                          </div>
-                          <br>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
-                </div>
-              </div>
             </div>
         </div>
     </div>
-    

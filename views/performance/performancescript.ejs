@@ -1,310 +1,315 @@
 <script>
-    //search bar
-    let performanceid ="";
+  //search bar
+  let performanceid = "";
 
-    $(document).ready(function(){
-        console.log('Initialize');
-        LoadTable();
-        LoadList();
-        LoadPerformanceList();
-    
-        function LoadTable() {
-            $("#dataTableperformance").DataTable({
-              destroy: true,
-              processing: true,
-              serverSide: true,
-              paging: false,
-              searching: false,
-              info: false,
-              scrollY: 400,
-              scrollCollapse: true,
-              serverMethod: "GET",
-              ajax: {
-                url: "/performance/load",
-                dataSrc: (json) => {
-                  var finalData = [];
-                  var data = json.data;
-      
-                  console.log(data);
-                  $.each(data, (key, item) => {
-                    var action = "";
-                    var status = item.status;
-    
-                    action = `
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    LoadList();
+    LoadPerformanceList();
+    searchTable();
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableperformance").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/performance/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editperformancemodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
-      
-                    finalData.push({
-                        performanceid: item.performanceid,
-                        employeeid: item.employeeid,
-                        appraisaldate: item.appraisaldate,
-                        appraisaltype: item.appraisaltype,
-                        rating: item.rating,
-                        comments: item.comments,
-                        action: action,
-                    });
-                  });
-      
-                  return finalData;
-                },
-              },
-              columnDefs: [
-                {
-                  targets: 1,
-                  className: "td-indent",
-                },
-              ],
-              columns: [
-                { data: "performanceid" },
-                { data: "employeeid" },
-                { data: "appraisaldate"},
-                { data: "appraisaltype" },
-                { data: "rating" },
-                { data: "comments" },
-                { data: "action" },
-              ],
-              initComplete: function () {
-                console.log('Done');
-              },
+
+              finalData.push({
+                performanceid: item.performanceid,
+                employeeid: item.employeeid,
+                appraisaldate: item.appraisaldate,
+                appraisaltype: item.appraisaltype,
+                rating: item.rating,
+                comments: item.comments,
+                action: action,
+              });
             });
-          }
 
-           
-$(document).on("click", "#performancesavebtn", function () {
-  let employeeid = $("#performanceemployeeid").val();
-  let appraisaldate = $("#performanceappraisaldate").val();
-  let appraisaltype = $("#performanceappraisaltype").val();
-  let rating = $("#performancerating").val();
-  let comments = $("#performancecomment").val();
-
-  var message = "";
-
-  if (employeeid == "") {
-    message += "TITTLE ";
-  }
-
-  if (appraisaldate == "") {
-    message += "DESCRIPTION ";
-  }
-  if (appraisaltype == "") {
-    message += "POSITION NAME ";
-  }
-
-  
-  if (rating == "") {
-    message += "POSITION NAME ";
-  }
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "performanceid" },
+          { data: "employeeid" },
+          { data: "appraisaldate" },
+          { data: "appraisaltype" },
+          { data: "rating" },
+          { data: "comments" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
+    }
 
 
-  if (comments == "") {
-    message += "POSITION NAME ";
-  }
-  if (message != "") {
-  } else {
-    swal("Validation Error", message, "error");
-    $.ajax({
-      type: "POST",
-      url: "/performance/save",
-      data: {
-        employeeid: employeeid,
-        appraisaldate: appraisaldate,
-        appraisaltype: appraisaltype,
-        rating: rating,
-        comments: comments,
+    $(document).on("click", "#performancesavebtn", function () {
+      let employeeid = $("#performanceemployeeid").val();
+      let appraisaldate = $("#performanceappraisaldate").val();
+      let appraisaltype = $("#performanceappraisaltype").val();
+      let rating = $("#performancerating").val();
+      let comments = $("#performancecomment").val();
 
-      },
-      success: function (result) {
-        if (result.msg == "success") {
-          swal("Save Successfully","You clicked the button!","success",)
-            .then(results => {
-              window.location.reload();
-            });
-          LoadTable();
-        } else if (result.msg == "exist") {
-          swal("Exist","Data already exists!","warning",);
-        }
-    },
-    error: function (err) {
-      swal("Error", "An error occurred while saving data.", "error");
-    },
-    });
-  }
-    
-});
+      var message = "";
 
-function LoadList() {
-    $.ajax({
-      type: "GET",
-      url: "/employee/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.firstname);
-          $('#performanceemployeeid').append(options);
-          console.log(item.firstname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (employeeid == "") {
+        message += "TITTLE ";
       }
-    });
 
-
-  }
-
-  function LoadPerformanceList() {
-    $.ajax({
-      type: "GET",
-      url: "/employee/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.firstname);
-          $('#editperformanceemployeeid').append(options);
-          console.log(item.firstname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (appraisaldate == "") {
+        message += "DESCRIPTION ";
       }
-    });
+      if (appraisaltype == "") {
+        message += "POSITION NAME ";
+      }
 
 
-  }
+      if (rating == "") {
+        message += "POSITION NAME ";
+      }
 
-  
-$("#dataTableperformance tbody").on("click", "tr", function () {
-    var dataRow = [];
-    $(this)
-    .closest("tr")
-    .find("td")
-    .each(function () {
-      dataRow.push($(this).text());
-    });
-  console.log(dataRow);
-  performanceid = dataRow[0];
-  });
-  
-  $(document).on("click", "#editBtn", function () {
-    $.ajax({
-      type: "POST",
-      url: "/performance/getperformance",
-      data: {
-        performanceid: performanceid,
-      },
-      success: function (result) {
-        if (result.msg === "success") {
-          const existingData = result.data;
-  
-          $.each(existingData, (key, item) => {
-            $("#editperformanceid").val(item.performanceid); 
-            $("#editperformanceemployeeid").val(item.employeeid); 
-            $("#editperformanceappraisaldate").val(item.appraisaldate);
-            $("#editperformanceappraisaltype").val(item.appraisaltype);
-            $("#editperformancerating").val(item.rating);
-            $("#editperformancecomment").val(item.comments);
-          });
-        } else {
-          swal("Error fetching employee data", message, "error");
-        }
-      },
-      error: function (err) {
-        swal("An error occurred while fetching employee data", message, "error");
-      },
-    });
-  });
-      
-  $(document).on("click", "#editperformancesavebtn", function () {
-          console.log("Save button clicked");
-          let id = performanceid;
-          let employeeid = $("#editperformanceemployeeid").val();
-          let appraisaldate = $("#editperformanceappraisaldate").val();
-          let appraisaltype = $("#editperformanceappraisaltype").val();
-          let rating = $("#editperformancerating").val();
-          let comments = $("#editperformancecomment").val();
-        
-        var message = "";
-      
-        if (employeeid === "") {
-          message += "departmentname is required. ";
-        }
-      
-        if (appraisaldate === "") {
-          message += "departmenthead is required. ";
-        }
-      
-        if (appraisaltype === "") {
-          message += "status is required. ";
-        }
 
-        if (rating === "") {
-            message += "status is required. ";
-        }
-
-        if (comments === "") {
-            message += "status is required. ";
-        }
-        if (message !== "") {
-          swal("Validation Error", message, "error");
+      if (comments == "") {
+        message += "POSITION NAME ";
+      }
+      if (message != "") {
       } else {
+        swal("Validation Error", message, "error");
         $.ajax({
           type: "POST",
-          url: "performance/update",
-          data: { 
-            performanceid: id,
+          url: "/performance/save",
+          data: {
             employeeid: employeeid,
             appraisaldate: appraisaldate,
             appraisaltype: appraisaltype,
             rating: rating,
-            comments: comments, 
+            comments: comments,
+
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal("Update Successfully","You clicked the button!","success",)
+              swal("Save Successfully", "You clicked the button!", "success",)
                 .then(results => {
                   window.location.reload();
                 });
               LoadTable();
             } else if (result.msg == "exist") {
-              swal("Exist","Data already exists!","warning",);
+              swal("Exist", "Data already exists!", "warning",);
             }
-        },
-        error: function (err) {
-          swal("Error", "An error occurred while saving data.", "error");
-        },
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
         });
       }
- });
-        
-function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableposition");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
+
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $('#performanceemployeeid').append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    function LoadPerformanceList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $('#editperformanceemployeeid').append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+
+    $("#dataTableperformance tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      performanceid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/performance/getperformance",
+        data: {
+          performanceid: performanceid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editperformanceid").val(item.performanceid);
+              $("#editperformanceemployeeid").val(item.employeeid);
+              $("#editperformanceappraisaldate").val(item.appraisaldate);
+              $("#editperformanceappraisaltype").val(item.appraisaltype);
+              $("#editperformancerating").val(item.rating);
+              $("#editperformancecomment").val(item.comments);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", message, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#editperformancesavebtn", function () {
+      console.log("Save button clicked");
+      let id = performanceid;
+      let employeeid = $("#editperformanceemployeeid").val();
+      let appraisaldate = $("#editperformanceappraisaldate").val();
+      let appraisaltype = $("#editperformanceappraisaltype").val();
+      let rating = $("#editperformancerating").val();
+      let comments = $("#editperformancecomment").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (appraisaldate === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (appraisaltype === "") {
+        message += "status is required. ";
+      }
+
+      if (rating === "") {
+        message += "status is required. ";
+      }
+
+      if (comments === "") {
+        message += "status is required. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "performance/update",
+          data: {
+            performanceid: id,
+            employeeid: employeeid,
+            appraisaldate: appraisaldate,
+            appraisaltype: appraisaltype,
+            rating: rating,
+            comments: comments,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal("Update Successfully", "You clicked the button!", "success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning",);
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableperformance");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
         for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-            }
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
         }
         if (found) {
-            tr[i].style.display = "";
-            found = false;
+          tr[i].style.display = "";
+          found = false;
         } else {
-            tr[i].style.display = "none";
+          tr[i].style.display = "none";
         }
+      }
     }
-}
 
 
-});
-   
+  });
+
 </script>

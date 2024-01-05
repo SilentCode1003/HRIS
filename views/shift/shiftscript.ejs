@@ -1,319 +1,324 @@
 <script>
-    let shiftid ="";
+  let shiftid = "";
 
-    $(document).ready(function(){
-        console.log('Initialize');
-        LoadTable();
-        LoadList();
-        LoadEditShift();
-        searchTable();
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    LoadList();
+    LoadEditShift();
+    searchTable();
 
-        
-            
-        function LoadTable() {
-            $("#dataTableshift").DataTable({
-              destroy: true,
-              processing: true,
-              serverSide: true,
-              paging: false,
-              searching: false,
-              info: false,
-              scrollY: 400,
-              scrollCollapse: true,
-              serverMethod: "GET",
-              ajax: {
-                url: "/shift/load",
-                dataSrc: (json) => {
-                  var finalData = [];
-                  var data = json.data;
-      
-                  console.log(data);
-                  $.each(data, (key, item) => {
-                    var action = "";
-                    var status = item.status;
-    
-                    action = `
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+
+
+    function LoadTable() {
+      $("#dataTableshift").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/shift/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshiftmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
-      
-                    finalData.push({
-                        shiftid: item.shiftid,
-                        shiftname: item.shiftname,
-                        status: item.status,
-                        department: item.department,
-                        createby: item.createby,
-                        createdate: item.createdate,
-                        action: action,
-                    });
-                  });
-      
-                  return finalData;
-                },
-              },
-              columnDefs: [
-                {
-                  targets: 1,
-                  className: "td-indent",
-                },
-              ],
-              columns: [
-                { data: "shiftid" },
-                { data: "shiftname" },
-                { data: "status" },
-                { data: "department"},
-                { data: "createby" },
-                { data: "createdate" },
-                { data: "action" },
-              ],
-              initComplete: function () {
-                console.log('Done');
-              },
+
+              finalData.push({
+                shiftid: item.shiftid,
+                shiftname: item.shiftname,
+                status: item.status,
+                department: item.department,
+                createby: item.createby,
+                createdate: item.createdate,
+                action: action,
+              });
             });
-          }
 
-           
-$(document).on("click", "#shiftsavebtn", function () {
-  let shiftname = $("#shifthours").val();
-  let status = $("#shiftstatus").val();
-  let department = $("#shiftdepartment").val();
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "shiftid" },
+          { data: "shiftname" },
+          { data: "status" },
+          { data: "department" },
+          { data: "createby" },
+          { data: "createdate" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
+    }
 
-  console.log(`
+
+    $(document).on("click", "#shiftsavebtn", function () {
+      let shiftname = $("#shifthours").val();
+      let status = $("#shiftstatus").val();
+      let department = $("#shiftdepartment").val();
+
+      console.log(`
   ${shiftname}
   ${status}
   ${department}
   `);
 
-  var message = "";
+      var message = "";
 
-  if (shiftname == "") {
-    message += "shiftname is required ";
-  }
-
-  if (status == "") {
-    message += "status is required ";
-  }
-
-  if (department == "") {
-    message += "department is required ";
-  }
-
-  if (message !== "") {
-    swal("Validation Error", message, "error"); 
-  } else {
-
-    $.ajax({
-      type: "POST",
-      url: "/shift/save",
-      data: {
-        shiftname: shiftname,
-        status: status,
-        department: department,
-
-      },
-      success: function (result) {
-        if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
-          window.location.reload();
-          })
-          LoadTable();
-        }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
-        }
-      
-      },
-      error: function (err) {
-        swal("Data already exist!", "You clicked the button!", "warning");
-      },
-    });
-  }
-    
-});
-
-function LoadList() {
-    $.ajax({
-      type: "GET",
-      url: "/department/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.departmentname, item.departmentname);
-          $(options).html(item.departmentname);
-          $('#shiftdepartment').append(options);
-          console.log(item.departmentname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (shiftname == "") {
+        message += "shiftname is required ";
       }
-    });
 
-
-  }
-
-function LoadEditShift() {
-    $.ajax({
-      type: "GET",
-      url: "/department/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.departmentid, item.departmentid);
-          $(options).html(item.departmentname);
-          $('#editshiftdepartment').append(options);
-          console.log(item.departmentname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (status == "") {
+        message += "status is required ";
       }
-    });
 
+      if (department == "") {
+        message += "department is required ";
+      }
 
-  }
-
-$("#dataTableshift tbody").on("click", "tr", function () {
-  var dataRow = [];
-  $(this)
-  .closest("tr")
-  .find("td")
-  .each(function () {
-    dataRow.push($(this).text());
-  });
-console.log(dataRow);
-shiftid = dataRow[0];
-});
-    
-$(document).on("click", "#editBtn", function () {
-  $.ajax({
-    type: "POST",
-    url: "/shift/getshift",
-    data: {
-      shiftid: shiftid,
-    },
-    success: function (result) {
-      if (result.msg === "success") {
-        const existingData = result.data;
-
-        $.each(existingData, (key, item) => {
-          $("#editshiftid").val(item.shiftid); 
-          $("#editshift").val(item.shiftname);
-          $("#editshiftdepartment").val(item.department);
-          $("#editshiftstatus").val(item.status);
-        });
+      if (message !== "") {
+        swal("Validation Error", message, "error");
       } else {
-        swal("Error fetching employee data", "success");
-      }
-    },
-    error: function (err) {
-      swal("An error occurred while fetching employee data", err, "error");
-    },
-  });
-});
-$(document).on("click", "#editshiftsavebtn", function () {
-  console.log("Save button clicked");
-  let id = shiftid
-  let shiftname = $("#editshift").val();
-  let status = $("#editshiftstatus").val();
-  let department = $("#editshiftdepartment").val();
- 
-           
-  var message = "";
-      
-  if (shiftname === "") {
-    message += "departmentname is required. ";
-  }
 
-  if (status === "") {
-    message += "status is required. ";
-  }
+        $.ajax({
+          type: "POST",
+          url: "/shift/save",
+          data: {
+            shiftname: shiftname,
+            status: status,
+            department: department,
 
-  if (department === "") {
-    message += "departmenthead is required. ";
-  }
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                })
+              LoadTable();
+            }
+            else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
 
- 
-
-  if (message !== "") {
-    swal("Validation Error", message, "error");
-} else {
-  $.ajax({
-    type: "POST",
-    url: "shift/update",
-    data: { 
-      shiftid: id,
-      shiftname: shiftname,
-      status: status,
-      department: department,
-    },
-    success: function (result) {
-      if (result.msg == "success") {
-        swal({
-          title: "Update Successfully",
-          text: "You clicked the button!",
-          icon: "success",
-          button: "OK!",
-        })
-          .then(results => {
-            window.location.reload();
-          });
-        LoadTable();
-      } else if (result.msg == "exist") {
-        swal({
-          title: "Exist",
-          text: "Data already exists!",
-          icon: "warning",
-          button: "OK!",
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
         });
-      } else {
-        swal("Data already exists!", "You clicked the button!", "warning");
       }
-    },
-    error: function (err) {
-      swal("Error", "An error occurred while saving data.", "error");
-    },
-  });
-}
-});
-});
 
-function searchTable() {
-  var input, filter, found, table, tr, td, i, j;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("dataTableshift");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentname, item.departmentname);
+            $(options).html(item.departmentname);
+            $('#shiftdepartment').append(options);
+            console.log(item.departmentname);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    function LoadEditShift() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $('#editshiftdepartment').append(options);
+            console.log(item.departmentname);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    $("#dataTableshift tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      shiftid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/shift/getshift",
+        data: {
+          shiftid: shiftid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editshiftid").val(item.shiftid);
+              $("#editshift").val(item.shiftname);
+              $("#editshiftdepartment").val(item.department);
+              $("#editshiftstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#editshiftsavebtn", function () {
+      console.log("Save button clicked");
+      let id = shiftid
+      let shiftname = $("#editshift").val();
+      let status = $("#editshiftstatus").val();
+      let department = $("#editshiftdepartment").val();
+
+
+      var message = "";
+
+      if (shiftname === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (department === "") {
+        message += "departmenthead is required. ";
+      }
+
+
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "shift/update",
+          data: {
+            shiftid: id,
+            shiftname: shiftname,
+            status: status,
+            department: department,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableshift");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td");
       for (j = 0; j < td.length; j++) {
-          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-              found = true;
-          }
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
       }
       if (found) {
-          tr[i].style.display = "";
-          found = false;
+        tr[i].style.display = "";
+        found = false;
       } else {
-          tr[i].style.display = "none";
+        tr[i].style.display = "none";
       }
+    }
   }
-}
 
-   
+
 
 </script>

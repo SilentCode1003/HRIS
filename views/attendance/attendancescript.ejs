@@ -1,7 +1,14 @@
 <script>
     let map;
 
-    // Initialize the map
+    $(document).ready(function () {
+        searchTable();
+
+        $(document).on('keyup', '#myInput', function () {
+            searchTable();
+        });
+
+         // Initialize the map
     function initMap() {
         map = L.map('map').setView([0, 0], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -47,25 +54,26 @@
         });
     }
 
-    function searchTable() {
-        var input, filter, found, table, tr, td, i, j;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("dataTableattendance");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            for (j = 0; j < td.length; j++) {
-                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                }
-            }
-            if (found) {
-                tr[i].style.display = "";
-                found = false;
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
-    }
+    });
+    // function searchTable() {
+    //     var input, filter, found, table, tr, td, i, j;
+    //     input = document.getElementById("myInput");
+    //     filter = input.value.toUpperCase();
+    //     table = document.getElementById("dataTableattendance");
+    //     tr = table.getElementsByTagName("tr");
+    //     for (i = 0; i < tr.length; i++) {
+    //         td = tr[i].getElementsByTagName("td");
+    //         for (j = 0; j < td.length; j++) {
+    //             if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+    //                 found = true;
+    //             }
+    //         }
+    //         if (found) {
+    //             tr[i].style.display = "";
+    //             found = false;
+    //         } else {
+    //             tr[i].style.display = "none";
+    //         }
+    //     }
+    // }
 </script>

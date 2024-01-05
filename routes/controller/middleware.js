@@ -106,6 +106,8 @@ var roleacess = [
       },
       {
         layout: "memberlayout",
+
+        layout: "ojtuserlayout",
       },
     ],
   },
