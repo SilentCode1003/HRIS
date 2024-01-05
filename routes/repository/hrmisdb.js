@@ -253,15 +253,9 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_employeeid,
         ma_attendancedate,
         ma_clockin,
-        ma_clockout,
-        ma_latitudeIn,
+        ma_latitudein,
         ma_longitudein,
-        ma_latitudeout,
-        ma_geofencelatitude,
-        ma_geofencelongitude,
-        ma_geofenceradius,
-        ma_devicein,
-        ma_deviceout) VALUES ?`;
+        ma_devicein) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

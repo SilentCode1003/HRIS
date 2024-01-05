@@ -1,84 +1,126 @@
 const mysql = require("./repository/hrmisdb");
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
-const bodyParser = require('body-parser');
-const moment = require('moment');
+const bodyParser = require("body-parser");
+const moment = require("moment");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   // res.render('eportalindexlayout', { title: 'Express' });
-  Validator(req, res, 'eportalindexlayout');
+  Validator(req, res, "eportalindexlayout");
 });
 
 module.exports = router;
 
 
-router.post('/clockin', (req, res) => {
-  // Retrieve employee_id from the session
-  const employee_id = req.session.employee_id;
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+}
+
+
+router.post("/clockin", (req, res) => {
+  const employee_id = req.session.employeeid;
 
   if (!employee_id) {
-      return res.status(401).json({ status: 'error', message: 'Unauthorized. Employee not logged in.' });
+    return res.status(401).json({
+      status: "error",
+      message: "Unauthorized. Employee not logged in.",
+    });
   }
 
-  // Check if the employee is within the geofence radius
-  const sql = `SELECT ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius FROM master_attendance WHERE ma_employeeid = ${employee_id}`;
+  const { latitude, longitude } = req.body;
+  const clockinTime = moment().format("HH:mm:ss");
+  const attendancedate = moment().format("YYYY-MM-DD");
+  const devicein = "web"
 
-  mysql.mysqlQueryPromise(sql, [employee_id], (err, result) => {
+  const attendanceData = [
+    [
+      employee_id,
+      attendancedate,
+      clockinTime,
+      latitude,
+      longitude,
+      devicein,
+    ],
+  ];
+
+  mysql.InsertTable("master_attendance", attendanceData, (err, result) => {
     if (err) {
-      console.error(err);
-      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+      console.error("Error inserting record:", err);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to insert attendance.",
+      });
     }
 
-    if (result.length > 0) {
-      const { ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius } = result[0];
-
-      // Assuming you have latitude and longitude from the request body
-      const { latitude, longitude } = req.body;
-
-      // Calculate distance between employee location and geofence center
-      const distance = calculateDistance(latitude, longitude, ma_geofencelatitude, ma_geofencelongitude);
-
-      // Check if the employee is within the geofence radius
-      if (distance <= ma_geofenceradius) {
-        // Employee is within the geofence, allow clock-in
-
-        // Insert attendance record
-        const clockinTime = moment().format('HH:mm:ss');
-        const attendanceData = {
-          ma_employeeid: employee_id,
-          ma_attendancedate: moment().format('YYYY-MM-DD'),
-          ma_clockin: clockinTime,
-          ma_latitudeIn: latitude,
-          ma_longitudein: longitude,
-          ma_geofencelatitude: ma_geofencelatitude,
-          ma_geofencelongitude: ma_geofencelongitude,
-          ma_geofenceradius: ma_geofenceradius,
-          ma_devicein: 'web' // You may adjust this based on the source of the clock-in
-        };
-
-        mysql.InsertTable('master_attendance', attendanceData, (insertErr, insertResult) => {
-          if (insertErr) {
-            console.error('Error inserting record: ', insertErr);
-            return res.status(500).json({ status: 'error', message: 'Failed to insert attendance.' });
-          }
-
-          res.json({ status: 'success', message: 'Clock-in allowed within the geofence.' });
-        });
-      } else {
-        // Employee is outside the geofence, deny clock-in
-        res.status(403).json({ status: 'error', message: 'Clock-in denied. Employee is outside the geofence.' });
-      }
-    } else {
-      // Geofence details not found for the employee
-      res.status(404).json({ status: 'error', message: 'Geofence details not found for the employee.' });
-    }
+    console.log("Insert result:", result);
+    res.json({
+      status: "success",
+      message: "Clock-in allowed.",
+    });
   });
-  req.session.employee_id = user.employee_id;
-
-  // Send a success response or redirect
-  res.json({ status: 'success', message: 'Login successful' });
 });
+
+
+router.post("/clockout", (req, res) => {
+  const employee_id = req.session.employeeid;
+
+  if (!employee_id) {
+    return res.status(401).json({
+      status: "error",
+      message: "Unauthorized. Employee not logged in.",
+    });
+  }
+
+  const { latitude, longitude } = req.body;
+  const clockoutTime = moment().format("HH:mm:ss");
+  const attendancedate = moment().format("YYYY-MM-DD");
+  const deviceout = "web";
+
+  const attendanceData = [
+    [
+      employee_id,
+      attendancedate,
+      null, // Placeholder for clockout time, as it will be updated later
+      null, // Placeholder for latitudeout
+      null, // Placeholder for longitudeout
+      deviceout,
+    ],
+  ];
+
+  mysql.InsertTable("master_attendance", attendanceData, (err, result) => {
+    if (err) {
+      console.error("Error inserting record:", err);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to insert attendance.",
+      });
+    }
+
+    console.log("Insert result:", result);
+    res.json({
+      status: "success",
+      message: "Clock-out allowed.",
+    });
+  });
+});
+
+// ... (remaining code)
 
 module.exports = router;
