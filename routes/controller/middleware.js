@@ -92,6 +92,9 @@ var roleacess = [
       {
         layout: "candidatelayout",
       },
+      {
+        layout: "ojtuserlayout",
+      },
     ],
   },
   {
