@@ -1,10 +1,9 @@
 <script>
     $(document).ready(function () {
         console.log('Initialize');
-        let userLocation; // Declare userLocation in a broader scope
+        let userLocation;
         let employeeid = "<%= employeeid %>";
 
-        // Add this console.log statement
         console.log('Employee ID:', employeeid);
 
         const OFFICE_LOCATION_LAT = 14.337945;
@@ -16,7 +15,6 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Custom office icon
         const officeIcon = L.icon({
             iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
             iconSize: [32, 32],
@@ -24,7 +22,6 @@
             popupAnchor: [0, -32],
         });
 
-        // Marker with custom icon
         const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
         officeMarker.bindPopup('Office Location').openPopup();
 
@@ -70,21 +67,96 @@
 
         function handleError(error) {
             console.error(`Error getting user location: ${error.message}`, error);
+
+            // Show a SweetAlert notification for geolocation error
+            swal({
+                title: "Error",
+                text: "Unable to retrieve your location. Please make sure location services are enabled.",
+                icon: "error",
+            });
+
+            // Check if the error is related to location permission
+            if (error.code === error.PERMISSION_DENIED) {
+                // Notify the user to enable location services
+                notifyUserToEnableLocation();
+            }
         }
 
-        // Watch the device's position continuously
-        const watchId = navigator.geolocation.watchPosition(updateLocationOnMap, handleError, {
-            enableHighAccuracy: true,
-            maximumAge: 30000,
-            timeout: 27000
-        });
+        function notifyUserToEnableLocation() {
+            // Check if the Notification API is supported
+            if ('Notification' in window) {
+                // Check if the user has not denied notifications
+                if (Notification.permission !== 'denied') {
+                    // Request notification permission
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            // Show a notification asking the user to enable location services
+                            new Notification('Enable Location Services', {
+                                body: 'Please enable location services to use this feature.',
+                            });
+                        }
+                    });
+                }
+            }
+        }
 
-        // Set up click event for the "Clock In" button
+        const watchId = navigator.geolocation.watchPosition(
+            updateLocationOnMap,
+            handleError,
+            {
+                enableHighAccuracy: true,
+                maximumAge: 30000,
+                timeout: 27000
+            }
+        );
+
+
+        function updateClockButtonStatus() {
+            // Fetch the latest log entry for the current employee
+            $.ajax({
+                type: "GET",
+                url: "/eportalindex/latestlog",
+                data: {
+                    employeeid: employeeid,
+                },
+                success: function (response) {
+                    console.log("Latest Log API response", response);
+
+                    if (response && response.al_logtype) {
+                        const isClockIn = response.al_logtype === "ClockIn";
+
+                        // Update the button based on the latest log type
+                        $('#clockinbtn').toggle(!isClockIn);
+                        $('#clockoutbtn').toggle(isClockIn);
+                    } else {
+                        // No log entries found, show the default state (Clock In button)
+                        $('#clockinbtn').show();
+                        $('#clockoutbtn').hide();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Latest Log API error", error);
+                    // Handle error as needed
+                }
+            });
+        }
+
+        // Call the function to initially set the button status
+        updateClockButtonStatus();
+
+
+
+
+
+
+
+        //#region clockin/out api
+
+
         $('#clockinbtn').on('click', function () {
-            // AJAX call to clockin API
             $.ajax({
                 type: "POST",
-                url: "/eportalindex/clockin", // Adjust the URL if needed
+                url: "/eportalindex/clockin",
                 data: {
                     latitude: userLocation.lat,
                     longitude: userLocation.lng,
@@ -94,12 +166,17 @@
                 success: function (response) {
                     console.log("API response", response);
 
-                    if (response.status === "success") {
+                    if (response.msg === "exist") {
+                        swal({
+                            title: "Clock-in Warning",
+                            text: "You have already clocked in today.",
+                            icon: "warning",
+                        });
+                    } else if (response.status === "success") {
                         swal({
                             title: "Clock-in successful!",
                             icon: "success",
                         }).then(() => {
-                            // You can perform additional actions or UI updates here
                         });
                     } else {
                         swal({
@@ -112,7 +189,6 @@
                 error: function (xhr, status, error) {
                     console.log("API error", error);
 
-                    // Log the response text for better debugging
                     console.log("API response text:", xhr.responseText);
 
                     swal({
@@ -125,5 +201,58 @@
         });
 
 
+        $('#clockoutbtn').on('click', function () {
+            if (!userLocation || typeof userLocation.lat === 'undefined' || typeof userLocation.lng === 'undefined') {
+                console.error("Error: userLocation is not defined or incomplete.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/eportalindex/clockout",
+                data: {
+                    latitude: userLocation.lat,
+                    longitude: userLocation.lng,
+                    employeeid: employeeid,
+                },
+
+                success: function (response) {
+                    console.log("API response", response);
+
+                    if (response.msg === "success") {
+                        swal({
+                            title: "Clock-out successful!",
+                            icon: "success",
+                        }).then(() => {
+                            // You can perform additional actions or UI updates here
+                        });
+                    } else if (response.msg === "exist") {
+                        swal({
+                            title: "Clock-out failed",
+                            text: "Clock-out not allowed. Employee already clocked out on the same day.",
+                            icon: "error",
+                        });
+                    } else {
+                        swal({
+                            title: "Clock-out failed",
+                            text: response.message || "Unknown error",
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("API error", error);
+                    console.log("API response text:", xhr.responseText);
+
+                    swal({
+                        title: "Error",
+                        text: "Unable to clock out. Please try again.",
+                        icon: "error",
+                    });
+                }
+            });
+        });
+
+        //#endregion
     });
 </script>
