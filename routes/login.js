@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
 
       let sql = `SELECT 
       mu_employeeid as employeeid,
-      CONCAT(me_firstname, '', me_lastname) as fullname,
+      CONCAT(me_firstname, ' ', me_lastname) as fullname,
       ma_accessname as accesstype,
       mu_status as status,
       me_profile_pic as image
@@ -30,7 +30,7 @@ router.post('/login', (req, res) => {
       LEFT JOIN master_employee ON mu_employeeid = me_id
       WHERE mu_username ='${username}'  AND mu_password = '${encrypted}'`;
 
-      console.log(sql);
+      // console.log(sql);
 
       mysqlQueryPromise(sql).then((result) => {
         if (result.length !== 0) {

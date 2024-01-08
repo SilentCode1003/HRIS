@@ -29,17 +29,17 @@ router.post("/upload", (req, res) => {
 
   let counter = 0;
 
+  console.log(dataJson);
   dataJson.forEach((key, item) => {
-    counter += 1;
-
     // console.log("Department: ", key.department);
-    console.log("Employee Id: ", key.position);
+    // console.log("Employee Id: ", key.position);
     GetDepartment(key.department, (err, result) => {
       if (err) console.log("Error: ", err);
       let departmentid = result[0].departmentid;
       GetPosition(key.position, (err, result) => {
         if (err) console.log("Error: ", err);
         let positionid = result[0].positionid;
+        counter += 1;
 
         // let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
         //   "YYYY-MM-DD"
@@ -72,6 +72,7 @@ router.post("/upload", (req, res) => {
           ],
         ];
 
+        console.log(master_employee);
         mysql.InsertTable("master_employee", master_employee, (err, result) => {
           if (err) console.error("Error: ", err);
 
