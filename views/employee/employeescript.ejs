@@ -11,6 +11,11 @@
     LoadModalPosition();
     searchTable();
 
+    $(document).on('keyup','#myInput',function(){
+      searchTable();
+    });
+
+
     $(document).on("click", "#employeesavebtn", function () {
       console.log("Save button clicked");
       let firstname = $("#employeefname").val();

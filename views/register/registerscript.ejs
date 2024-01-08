@@ -1,0 +1,33 @@
+<script>
+    $(document).on("change", "#ojtprofileimage", function (e) {
+      const input = document.getElementById("ojtprofileimage");
+      const file = input.files[0];
+
+      console.log("click");
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("preview");
+        preview.src = reader.result;
+      };
+      imageUploaded();
+    });
+
+    function imageUploaded() {
+      const input = document.getElementById("ojtprofileimage");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+      console.log("next");
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+        console.log(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+</script>

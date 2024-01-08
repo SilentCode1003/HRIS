@@ -8,7 +8,9 @@
     LoadEditEmp();
     searchTable();
 
-
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
 
     function LoadTable() {
       $("#dataTablegovermentid").DataTable({

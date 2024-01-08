@@ -9,7 +9,10 @@
     LoadListEmp();
     LoadListviolation();
     searchTable();
-    // LoadListOffensename();
+
+    $(document).on('keyup','#myInput',function(){
+      searchTable();
+    });
 
     function LoadTable() {
       $("#dataTabledisciplianary").DataTable({
