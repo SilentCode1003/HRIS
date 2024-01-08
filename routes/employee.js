@@ -803,7 +803,7 @@ router.get("/totalregular", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as contact,
     me_email as email,
     md_departmentname as me_department,
@@ -840,7 +840,7 @@ router.get("/totalactive", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     me_jobstatus as jobstatus,
@@ -878,7 +878,7 @@ router.get("/totalprobi", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     md_departmentname as department,
@@ -915,7 +915,7 @@ router.get("/totalresigned", (req, res) => {
     let sql = `   SELECT
     me.me_profile_pic AS profilePicturePath,
       me.me_id AS newEmployeeId,
-      CONCAT(me.me_firstname, ' ', me.me_lastname) AS firstname,
+      CONCAT(me.me_lastname, ' ', me.me_firstname) AS firstname,
       me.me_phone AS phone,
       md.md_departmentname AS department,
       mp.mp_positionname AS position,
