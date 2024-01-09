@@ -55,6 +55,7 @@ var depositRouter = require('./routes/deposit');
 var memberRouter = require('./routes/member');
 var registerRouter = require('./routes/register');
 var ojtuserRouter = require('./routes/ojtuser');
+var geofencesettingsRouter = require('./routes/geofencesettings');
 
 
 
@@ -122,6 +123,7 @@ app.use('/deposit', depositRouter);
 app.use('/member', memberRouter);
 app.use('/register', registerRouter);
 app.use('/ojtuser', ojtuserRouter);
+app.use('/geofencesettings', geofencesettingsRouter);
 
 
 // catch 404 and forward to error handler

@@ -36,8 +36,6 @@ module.exports = router;
 // }
 
 function getLatestLog(employeeId) {
-  // Replace this with your actual database query
-  // In this example, we're using a sample query to filter logs based on the employeeId and sorting by logdatetime
   const query = `
       SELECT *
       FROM attendance_logs
@@ -54,6 +52,18 @@ function getLatestLog(employeeId) {
       throw error;
     });
 }
+
+
+function getDeviceInformation(req) {
+ 
+  if (typeof navigator === 'undefined') {
+    return 'app';
+  } else {
+  
+    return 'web';
+  }
+}
+
 
 // API endpoint for fetching the latest log
 router.get("/latestlog", (req, res) => {
@@ -81,9 +91,8 @@ router.post("/clockin", (req, res) => {
 
   const { latitude, longitude } = req.body;
   const attendancedate = moment().format("YYYY-MM-DD");
-  const devicein = "web";
+  const devicein = getDeviceInformation(req); 
 
-  // Check if there is already a clock-in record for the same day
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -164,7 +173,7 @@ router.post("/clockout", (req, res) => {
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = "web";
+        const deviceout = getDeviceInformation(req); 
 
         // Proceed with the clock-out process using the date of the corresponding clock-in
         const updateQuery = `

@@ -3,6 +3,7 @@
         console.log('Initialize');
         let userLocation;
         let employeeid = "<%= employeeid %>";
+        let devicein;
 
         console.log('Employee ID:', employeeid);
 
@@ -154,50 +155,59 @@
 
 
         $('#clockinbtn').on('click', function () {
-            $.ajax({
-                type: "POST",
-                url: "/eportalindex/clockin",
-                data: {
-                    latitude: userLocation.lat,
-                    longitude: userLocation.lng,
-                    employeeid: employeeid,
-                },
+            getDeviceInformation()
+                .then((devicein) => {
+                    // Use the retrieved devicein value in your AJAX request
+                    $.ajax({
+                        type: "POST",
+                        url: "/eportalindex/clockin",
+                        data: {
+                            latitude: userLocation.lat,
+                            longitude: userLocation.lng,
+                            employeeid: employeeid,
+                            devicein: devicein,
+                        },
+                        success: function (response) {
+                            console.log("API response", response);
 
-                success: function (response) {
-                    console.log("API response", response);
+                            if (response.msg === "exist") {
+                                swal({
+                                    title: "Clock-in Warning",
+                                    text: "You have already clocked in today.",
+                                    icon: "warning",
+                                });
+                            } else if (response.status === "success") {
+                                swal({
+                                    title: "Clock-in successful!",
+                                    icon: "success",
+                                }).then(() => {
+                                    // Handle success
+                                });
+                            } else {
+                                swal({
+                                    title: "Clock-in failed",
+                                    text: response.message,
+                                    icon: "error",
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("API error", error);
 
-                    if (response.msg === "exist") {
-                        swal({
-                            title: "Clock-in Warning",
-                            text: "You have already clocked in today.",
-                            icon: "warning",
-                        });
-                    } else if (response.status === "success") {
-                        swal({
-                            title: "Clock-in successful!",
-                            icon: "success",
-                        }).then(() => {
-                        });
-                    } else {
-                        swal({
-                            title: "Clock-in failed",
-                            text: response.message,
-                            icon: "error",
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("API error", error);
+                            console.log("API response text:", xhr.responseText);
 
-                    console.log("API response text:", xhr.responseText);
-
-                    swal({
-                        title: "Error",
-                        text: "Unable to clock in. Please try again.",
-                        icon: "error",
+                            swal({
+                                title: "Error",
+                                text: "Unable to clock in. Please try again.",
+                                icon: "error",
+                            });
+                        }
                     });
-                }
-            });
+                })
+                .catch((error) => {
+                    console.error("Error getting device information:", error);
+                    // Handle error getting device information
+                });
         });
 
 
@@ -214,6 +224,7 @@
                     latitude: userLocation.lat,
                     longitude: userLocation.lng,
                     employeeid: employeeid,
+                    deviceout: deviceout,
                 },
 
                 success: function (response) {
@@ -224,7 +235,7 @@
                             title: "Clock-out successful!",
                             icon: "success",
                         }).then(() => {
-                            // You can perform additional actions or UI updates here
+                
                         });
                     } else if (response.msg === "exist") {
                         swal({
