@@ -196,10 +196,13 @@
   width: 85;
   margin-left: 5%;
   margin-right: 5%;
+  background-color:  #8ED1AE !important;
+
 }
 
 #table-responsive-id {
   overflow: hidden;
+  
 }
 
 #openmodal {
@@ -217,7 +220,7 @@
   width: 20%;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotal {
@@ -228,7 +231,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputRegular {
@@ -239,7 +242,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputproba {
@@ -250,7 +253,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputresigned {
@@ -261,7 +264,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotaladmin {
@@ -272,7 +275,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotalit {
@@ -283,32 +286,10 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotalcabling {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalcandidate {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalbagapuro {
   margin-left: 700px;
   margin-right: 30px;
   margin-top: 5px;
@@ -331,7 +312,7 @@
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInput3 {
@@ -341,7 +322,7 @@
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 table {
@@ -374,6 +355,15 @@ table th {
   font-size: .95em;
   letter-spacing: .1em;
   text-transform: uppercase;
+  background-color: #0D9488 !important;
+  color: white !important;
+}
+#head-title {
+  color: #168164 !important;
+  margin-left: 75px;
+  margin-top: 5%;
+  margin-bottom: 5px;
+
 }
 
 .bunga {
