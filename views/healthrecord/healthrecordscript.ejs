@@ -1,372 +1,378 @@
 <script>
-    let healthid ="";
+  let healthid = "";
 
-    $(document).ready(function(){
-        console.log('Initialize');
-        LoadTable();
-        LoadList();
-        LoadEditEmp();
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    LoadList();
+    LoadEditEmp();
+    searchTable();
 
-        
-            
-        function LoadTable() {
-            $("#dataTablehealthrecord").DataTable({
-              destroy: true,
-              processing: true,
-              serverSide: true,
-              paging: false,
-              searching: false,
-              info: false,
-              scrollY: 400,
-              scrollCollapse: true,
-              serverMethod: "GET",
-              ajax: {
-                url: "/healthrecord/load",
-                dataSrc: (json) => {
-                  var finalData = [];
-                  var data = json.data;
-      
-                  console.log(data);
-                  $.each(data, (key, item) => {
-                    var action = "";
-                    var status = item.status;
-    
-                    action = `
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+
+
+    function LoadTable() {
+      $("#dataTablehealthrecord").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/healthrecord/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#edithealthrecordmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
-      
-                    finalData.push({
-                        healthid: item.healthid,
-                        employeeid: item.employeeid,
-                        bloodtype: item.bloodtype,
-                        medicalcondition: item.medicalcondition,
-                        prescribemedications: item.prescribemedications,
-                        lastcheckup: item.lastcheckup,
-                        action: action,
-                    });
-                  });
-      
-                  return finalData;
-                },
-              },
-              columnDefs: [
-                {
-                  targets: 1,
-                  className: "td-indent",
-                },
-              ],
-              columns: [ 
-              { data: "healthid" },
-              { data: "employeeid" },
-              { data: "bloodtype" },
-              { data: "medicalcondition"},
-              { data: "prescribemedications" },
-              { data: "lastcheckup" },
-              { data: "action" },
-              ],
-              initComplete: function () {
-                console.log('Done');
-              },
+
+              finalData.push({
+                healthid: item.healthid,
+                employeeid: item.employeeid,
+                bloodtype: item.bloodtype,
+                medicalcondition: item.medicalcondition,
+                prescribemedications: item.prescribemedications,
+                lastcheckup: item.lastcheckup,
+                action: action,
+              });
             });
-          }
 
-           
-$(document).on("click", "#healthsavebtn", function () {
-  let employeeid = $("#healthrecordemployeeid").val();
-  let bloodtype = $("#healthrecordbloodtype").val();
-  let medicalcondition = $("#healthrecordmedicalcondition").val();
-  let prescribemedications = $("#healthrecordprescribemedication").val();
-  let ercontactname = $("#healthrecordemergencycontactname").val();
-  let ercontactphone = $("#healthrecordemergencycontactnumber").val();
-  let lastcheckup = $("#healthrecordlastcheckup").val();
-  let insurance = $("#healthrecordinsurance").val();
-  let insurancenumber = $("#healthrecordinsurancenumber").val();
-
-
-  var message = "";
-
-  if (employeeid == "") {
-    message += "shiftname is required ";
-  }
-
-  if (bloodtype == "") {
-    message += "status is required ";
-  }
-
-  if (medicalcondition == "") {
-    message += "department is required ";
-  }
-
-  if (prescribemedications == "") {
-    message += "createby is required ";
-  }
-
-  if (ercontactname == "") {
-    message += "createby is required ";
-  }
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "healthid" },
+          { data: "employeeid" },
+          { data: "bloodtype" },
+          { data: "medicalcondition" },
+          { data: "prescribemedications" },
+          { data: "lastcheckup" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
+    }
 
 
-  if (ercontactphone == "") {
-    message += "createby is required ";
-  }
-  
-  if (lastcheckup == "") {
-    message += "createby is required ";
-  }
+    $(document).on("click", "#healthsavebtn", function () {
+      let employeeid = $("#healthrecordemployeeid").val();
+      let bloodtype = $("#healthrecordbloodtype").val();
+      let medicalcondition = $("#healthrecordmedicalcondition").val();
+      let prescribemedications = $("#healthrecordprescribemedication").val();
+      let ercontactname = $("#healthrecordemergencycontactname").val();
+      let ercontactphone = $("#healthrecordemergencycontactnumber").val();
+      let lastcheckup = $("#healthrecordlastcheckup").val();
+      let insurance = $("#healthrecordinsurance").val();
+      let insurancenumber = $("#healthrecordinsurancenumber").val();
 
 
-  if (insurance == "") {
-    message += "createby is required ";
-  }
-  
+      var message = "";
 
-  if (insurancenumber == "") {
-    message += "createby is required ";
-  }
-
-  if (message !== "") {
-    swal("Validation Error", message, "error"); 
-  } else {
-
-    $.ajax({
-      type: "POST",
-      url: "/healthrecord/save",
-      data: {
-        employeeid: employeeid,
-        bloodtype: bloodtype,
-        medicalcondition: medicalcondition,
-        prescribemedications: prescribemedications,
-        ercontactname: ercontactname,
-        ercontactphone: ercontactphone,
-        lastcheckup: lastcheckup,
-        insurance: insurance,
-        insurancenumber: insurancenumber,
-      },
-      success: function (result) {
-        if (result.msg == "success") {
-          swal("Update Successfully","You clicked the button!","success",)
-            .then(results => {
-              window.location.reload();
-            });
-          LoadTable();
-        } else if (result.msg == "exist") {
-          swal("Exist","Data already exists!","warning",);
-        }
-    },
-    error: function (err) {
-      swal("Error", "An error occurred while saving data.", "error");
-    },
-    });
-  }
-    
-});
-
-function LoadList() {
-    $.ajax({
-      type: "GET",
-      url: "/employee/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.firstname);
-          $('#healthrecordemployeeid').append(options);
-          console.log(item.firstname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (employeeid == "") {
+        message += "shiftname is required ";
       }
-    });
 
-
-  }
-
-  function LoadEditEmp() {
-    $.ajax({
-      type: "GET",
-      url: "/employee/load",
-      success: function (result) {
-        console.log(result.data);
-        var data = result.data;
-
-        $.each(data, function (key, item) {
-          var options = new Option(item.newEmployeeId, item.newEmployeeId);
-          $(options).html(item.firstname);
-          $('#edithealthrecordemployeeid').append(options);
-          console.log(item.firstname);
-        });
-      },
-      error: function (result) {
-        alert('error: ' + result.data);
+      if (bloodtype == "") {
+        message += "status is required ";
       }
-    });
+
+      if (medicalcondition == "") {
+        message += "department is required ";
+      }
+
+      if (prescribemedications == "") {
+        message += "createby is required ";
+      }
+
+      if (ercontactname == "") {
+        message += "createby is required ";
+      }
 
 
-  }
+      if (ercontactphone == "") {
+        message += "createby is required ";
+      }
 
-$("#dataTablehealthrecord tbody").on("click", "tr", function () {
-  var dataRow = [];
-  $(this)
-  .closest("tr")
-  .find("td")
-  .each(function () {
-    dataRow.push($(this).text());
-  });
-console.log(dataRow);
-healthid = dataRow[0];
-});
-    
-$(document).on("click", "#editBtn", function () {
-  $.ajax({
-    type: "POST",
-    url: "/healthrecord/gethealthrecord",
-    data: {
-        healthid: healthid,
-    },
-    success: function (result) {
-      if (result.msg === "success") {
-        const existingData = result.data;
+      if (lastcheckup == "") {
+        message += "createby is required ";
+      }
 
-        $.each(existingData, (key, item) => {
-          $("#id").val(item.healthid); 
-          $("#edithealthrecordemployeeid").val(item.employeeid);
-          $("#edithealthrecordbloodtype").val(item.bloodtype);
-          $("#edithealthrecordmedicalcondition").val(item.medicalcondition);
-          $("#edithealthrecordprescribemedication").val(item.prescribemedications);
-          $("#edithealthrecordemergencycontactname").val(item.ercontactname);
-          $("#edithealthrecordemergencycontactnumber").val(item.ercontactphone);
-          $("#edithealthrecordlastcheckup").val(item.lastcheckup);
-          $("#edithealthrecordinsurance").val(item.insurance);
-          $("#edithealthrecordinsurancenumber").val(item.insurancenumber);
-        });
+
+      if (insurance == "") {
+        message += "createby is required ";
+      }
+
+
+      if (insurancenumber == "") {
+        message += "createby is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
       } else {
-        swal("Error fetching employee data", "success");
+
+        $.ajax({
+          type: "POST",
+          url: "/healthrecord/save",
+          data: {
+            employeeid: employeeid,
+            bloodtype: bloodtype,
+            medicalcondition: medicalcondition,
+            prescribemedications: prescribemedications,
+            ercontactname: ercontactname,
+            ercontactphone: ercontactphone,
+            lastcheckup: lastcheckup,
+            insurance: insurance,
+            insurancenumber: insurancenumber,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal("Update Successfully", "You clicked the button!", "success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning",);
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
       }
-    },
-    error: function (err) {
-      swal("An error occurred while fetching employee data", err, "error");
-    },
-  });
-});
-$(document).on("click", "#edithealthrecordsavebtn", function () {
-  console.log("Save button clicked");
-  let id = healthid
-  let employeeid = $("#edithealthrecordemployeeid").val();
-  let bloodtype = $("#edithealthrecordbloodtype").val();
-  let medicalcondition = $("#edithealthrecordmedicalcondition").val();
-  let prescribemedications = $("#edithealthrecordprescribemedication").val();
-  let ercontactname = $("#edithealthrecordemergencycontactname").val();
-  let ercontactphone = $("#edithealthrecordemergencycontactnumber").val();
-  let lastcheckup = $("#edithealthrecordlastcheckup").val();
-  let insurance = $("#edithealthrecordinsurance").val();
-  let insurancenumber = $("#edithealthrecordinsurancenumber").val();
-  
-  
-           
-  var message = "";
-      
-  if (employeeid === "") {
-    message += "departmentname is required. ";
-  }
 
-  if (bloodtype === "") {
-    message += "status is required. ";
-  }
+    });
 
-  if (medicalcondition === "") {
-    message += "departmenthead is required. ";
-  }
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
 
-  if (prescribemedications === "") {
-      message += "status is required. ";
-  }
-
-  if (ercontactname === "") {
-    message += "status is required. ";
-  }
-
-  if (ercontactphone === "") {
-    message += "status is required. ";
-  }
-
-  if (lastcheckup === "") {
-    message += "status is required. ";
-  }
-
-  
-  if (insurance === "") {
-    message += "status is required. ";
-  }
-
-  
-  if (insurancenumber === "") {
-    message += "status is required. ";
-  }
-
-  
-
-  if (message !== "") {
-    swal("Validation Error", message, "error");
-} else {
-  $.ajax({
-    type: "POST",
-    url: "healthrecord/update",
-    data: { 
-      healthid: id,
-      employeeid: employeeid,
-      bloodtype: bloodtype,
-      medicalcondition: medicalcondition,
-      prescribemedications: prescribemedications,
-      ercontactname: ercontactname,
-      ercontactphone: ercontactphone,
-      lastcheckup: lastcheckup,
-      insurance: insurance,
-      insurancenumber: insurancenumber,
-    },
-    success: function (result) {
-      if (result.msg == "success") {
-        swal("Update Successfully","You clicked the button!","success",)
-          .then(results => {
-            window.location.reload();
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $('#healthrecordemployeeid').append(options);
+            console.log(item.firstname);
           });
-        LoadTable();
-      } else if (result.msg == "exist") {
-        swal("Exist","Data already exists!","warning",);
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $('#edithealthrecordemployeeid').append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+
+
+    }
+
+    $("#dataTablehealthrecord tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      healthid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/healthrecord/gethealthrecord",
+        data: {
+          healthid: healthid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.healthid);
+              $("#edithealthrecordemployeeid").val(item.employeeid);
+              $("#edithealthrecordbloodtype").val(item.bloodtype);
+              $("#edithealthrecordmedicalcondition").val(item.medicalcondition);
+              $("#edithealthrecordprescribemedication").val(item.prescribemedications);
+              $("#edithealthrecordemergencycontactname").val(item.ercontactname);
+              $("#edithealthrecordemergencycontactnumber").val(item.ercontactphone);
+              $("#edithealthrecordlastcheckup").val(item.lastcheckup);
+              $("#edithealthrecordinsurance").val(item.insurance);
+              $("#edithealthrecordinsurancenumber").val(item.insurancenumber);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#edithealthrecordsavebtn", function () {
+      console.log("Save button clicked");
+      let id = healthid
+      let employeeid = $("#edithealthrecordemployeeid").val();
+      let bloodtype = $("#edithealthrecordbloodtype").val();
+      let medicalcondition = $("#edithealthrecordmedicalcondition").val();
+      let prescribemedications = $("#edithealthrecordprescribemedication").val();
+      let ercontactname = $("#edithealthrecordemergencycontactname").val();
+      let ercontactphone = $("#edithealthrecordemergencycontactnumber").val();
+      let lastcheckup = $("#edithealthrecordlastcheckup").val();
+      let insurance = $("#edithealthrecordinsurance").val();
+      let insurancenumber = $("#edithealthrecordinsurancenumber").val();
+
+
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "departmentname is required. ";
       }
-  },
-  error: function (err) {
-    swal("Error", "An error occurred while saving data.", "error");
-  },
+
+      if (bloodtype === "") {
+        message += "status is required. ";
+      }
+
+      if (medicalcondition === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (prescribemedications === "") {
+        message += "status is required. ";
+      }
+
+      if (ercontactname === "") {
+        message += "status is required. ";
+      }
+
+      if (ercontactphone === "") {
+        message += "status is required. ";
+      }
+
+      if (lastcheckup === "") {
+        message += "status is required. ";
+      }
+
+
+      if (insurance === "") {
+        message += "status is required. ";
+      }
+
+
+      if (insurancenumber === "") {
+        message += "status is required. ";
+      }
+
+
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "healthrecord/update",
+          data: {
+            healthid: id,
+            employeeid: employeeid,
+            bloodtype: bloodtype,
+            medicalcondition: medicalcondition,
+            prescribemedications: prescribemedications,
+            ercontactname: ercontactname,
+            ercontactphone: ercontactphone,
+            lastcheckup: lastcheckup,
+            insurance: insurance,
+            insurancenumber: insurancenumber,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal("Update Successfully", "You clicked the button!", "success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning",);
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
   });
-}
-});
 
-});
-   
 
-    
-function searchTable() {
+
+  function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();
-    table = document.getElementById("govermentidmodal");
+    table = document.getElementById("dataTablehealthrecord");
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-            }
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
         }
-        if (found) {
-            tr[i].style.display = "";
-            found = false;
-        } else {
-            tr[i].style.display = "none";
-        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
     }
-}
+  }
 </script>

@@ -4,10 +4,10 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#shiftmodal">
-        + Add New
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
+        <b>+ Add</b>
       </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+        <input id='myInput'  type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -35,22 +35,25 @@
 <div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-calendar-event' style='color:#f79ab7; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">SHIFT</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="shifthours" name="shifthours" placeholder="Department Name">
+                        <input type="text" class="form-control" id="shifthours" name="shifthours" placeholder="Department Name"
+                        style="border: 2.5px solid #174634 !important;">
                         <label for="floatingInput">Shift Hours</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="shiftstatus" name="shiftstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="shiftstatus" name="shiftstatus" aria-label="Floating label select example"
+                            style="border: 2.5px solid #174634 !important;">
                               <option selected>Status</option>
                               <option value="Active">Active</option>
                               <option value="Inactive">Inactive</option>
@@ -61,7 +64,8 @@
                     <br>
                     <div class="col">
                       <div class="form-floating">
-                          <select class="form-select" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example">
+                          <select class="form-select" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example"
+                          style="border: 2.5px solid #174634 !important;">
                             <option selected>Department</option>
                           </select>
                           <label for="floatingSelectGrid">Department</label>
@@ -70,9 +74,11 @@
                   <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="shiftsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="shiftsavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>

@@ -1,6 +1,10 @@
+const mysql = require('./repository/hrmisdb');
+const moment = require('moment');
 var express = require('express');
 const { Validator } = require('./controller/middleware');
 var router = express.Router();
+const currentDate = moment();
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,4 +50,26 @@ router.post('/set-geofence', async (req, res) => {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+router.get("/load", (req, res) => {
+    try {
+        let sql =``;
+
+        mysql.mysqlQueryPromise(sql)
+        .then((result) => {
+            res.json({
+                msg: 'success',
+                data: result,
+            });
+        })
+        .catch((error) => {
+            res.json({
+                msg:'error',
+                data: error,
+            });
+        })
+    } catch (error) {
+        console.log('error',error)
+    }
 });

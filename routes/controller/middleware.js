@@ -92,6 +92,27 @@ var roleacess = [
       {
         layout: "candidatelayout",
       },
+      {
+        layout: "loanlayout",
+      },
+      {
+        layout: "paymentlayout",
+      },
+      {
+        layout: "interestlayout",
+      },
+      {
+        layout: "depositlayout",
+      },
+      {
+        layout: "memberlayout",
+      },
+      {
+        layout: "ojtuserlayout",
+      },
+      {
+        layout: "geofencesettingslayout",
+      },
     ],
   },
   {
@@ -200,6 +221,21 @@ var roleacess = [
       },
       {
         layout: "resignedlayout",
+      },
+      {
+        layout: "loanlayout",
+      },
+      {
+        layout: "paymentlayout",
+      },
+      {
+        layout: "interestlayout",
+      },
+      {
+        layout: "depositlayout",
+      },
+      {
+        layout: "memberlayout",
       },
     ],
   },

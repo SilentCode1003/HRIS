@@ -4,10 +4,10 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
-        Set Geo-fence
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+        <b>Set Geo-fence</b>
       </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+        <input id='myInput'  type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive"  id="table-responsive-id">
@@ -39,25 +39,29 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="geoFenceModalLabel">Geo-fence Settings</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-header" id="modal-header">
+                    <i class='bx bxs-component' style='color:#1ff143; font-size: 50px; margin: 3px;'></i>
+                    <h3 class="modal-title" id="geoFenceModalLabel">GEO-FENCE SETTINGS</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body">
                     <label for="latitude">Latitude:</label>
-                    <input type="text" id="latitude" class="form-control" placeholder="Enter latitude">
+                    <input type="text" id="latitude" class="form-control" placeholder="Enter latitude"
+                    style="border: 2.5px solid #174634 !important;">
 
                     <label for="longitude">Longitude:</label>
-                    <input type="text" id="longitude" class="form-control" placeholder="Enter longitude">
+                    <input type="text" id="longitude" class="form-control" placeholder="Enter longitude"
+                    style="border: 2.5px solid #174634 !important;">
 
                     <label for="radius">Radius:</label>
-                    <input type="text" id="radius" class="form-control" placeholder="Enter radius">
+                    <input type="text" id="radius" class="form-control" placeholder="Enter radius"
+                    style="border: 2.5px solid #174634 !important;">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="setGeoFence()">Set Geo-fence</button>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="background-color: red !important;
+          border: 2px solid white !important;" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="setGeoFence()"
+                    style="background-color: green !important; border: 2px solid white !important;">Set Geo-fence</button>
                 </div>
             </div>
         </div>

@@ -1,84 +1,225 @@
 const mysql = require("./repository/hrmisdb");
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
-const bodyParser = require('body-parser');
-const moment = require('moment');
+const bodyParser = require("body-parser");
+const moment = require("moment");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   // res.render('eportalindexlayout', { title: 'Express' });
-  Validator(req, res, 'eportalindexlayout');
+  Validator(req, res, "eportalindexlayout");
 });
 
 module.exports = router;
 
+// function calculateDistance(lat1, lon1, lat2, lon2) {
+//   const R = 6371; // Radius of the Earth in kilometers
+//   const dLat = deg2rad(lat2 - lat1);
+//   const dLon = deg2rad(lon2 - lon1);
 
-router.post('/clockin', (req, res) => {
-  // Retrieve employee_id from the session
-  const employee_id = req.session.employee_id;
+//   const a =
+//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//     Math.cos(deg2rad(lat1)) *
+//       Math.cos(deg2rad(lat2)) *
+//       Math.sin(dLon / 2) *
+//       Math.sin(dLon / 2);
+
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+//   const distance = R * c; // Distance in kilometers
+//   return distance;
+// }
+
+// function deg2rad(deg) {
+//   return deg * (Math.PI / 180);
+// }
+
+function getLatestLog(employeeId) {
+  const query = `
+      SELECT *
+      FROM attendance_logs
+      WHERE al_employeeid = '${employeeId}'
+      ORDER BY al_logdatetime DESC
+      LIMIT 1;
+  `;
+
+  return mysql
+    .mysqlQueryPromise(query)
+    .then((result) => (result.length > 0 ? result[0] : null))
+    .catch((error) => {
+      console.error("Error fetching latest log:", error);
+      throw error;
+    });
+}
+
+
+function getDeviceInformation(req) {
+ 
+  if (typeof navigator === 'undefined') {
+    return 'app';
+  } else {
+  
+    return 'web';
+  }
+}
+
+
+// API endpoint for fetching the latest log
+router.get("/latestlog", (req, res) => {
+  const employeeId = req.query.employeeid;
+
+  // Fetch the latest log using the function
+  getLatestLog(employeeId)
+    .then((latestLog) => res.json(latestLog))
+    .catch(() =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Failed to fetch latest log." })
+    );
+});
+
+router.post("/clockin", (req, res) => {
+  const employee_id = req.session.employeeid;
 
   if (!employee_id) {
-      return res.status(401).json({ status: 'error', message: 'Unauthorized. Employee not logged in.' });
+    return res.status(401).json({
+      status: "error",
+      message: "Unauthorized. Employee not logged in.",
+    });
   }
 
-  // Check if the employee is within the geofence radius
-  const sql = `SELECT ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius FROM master_attendance WHERE ma_employeeid = ${employee_id}`;
+  const { latitude, longitude } = req.body;
+  const attendancedate = moment().format("YYYY-MM-DD");
+  const devicein = getDeviceInformation(req); 
 
-  mysql.mysqlQueryPromise(sql, [employee_id], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
-    }
+  const checkExistingClockInQuery = `
+    SELECT ma_employeeid
+    FROM master_attendance
+    WHERE ma_employeeid = '${employee_id}'
+      AND ma_attendancedate = '${attendancedate}'
+      AND ma_clockin IS NOT NULL
+  `;
 
-    if (result.length > 0) {
-      const { ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius } = result[0];
-
-      // Assuming you have latitude and longitude from the request body
-      const { latitude, longitude } = req.body;
-
-      // Calculate distance between employee location and geofence center
-      const distance = calculateDistance(latitude, longitude, ma_geofencelatitude, ma_geofencelongitude);
-
-      // Check if the employee is within the geofence radius
-      if (distance <= ma_geofenceradius) {
-        // Employee is within the geofence, allow clock-in
-
-        // Insert attendance record
-        const clockinTime = moment().format('HH:mm:ss');
-        const attendanceData = {
-          ma_employeeid: employee_id,
-          ma_attendancedate: moment().format('YYYY-MM-DD'),
-          ma_clockin: clockinTime,
-          ma_latitudeIn: latitude,
-          ma_longitudein: longitude,
-          ma_geofencelatitude: ma_geofencelatitude,
-          ma_geofencelongitude: ma_geofencelongitude,
-          ma_geofenceradius: ma_geofenceradius,
-          ma_devicein: 'web' // You may adjust this based on the source of the clock-in
-        };
-
-        mysql.InsertTable('master_attendance', attendanceData, (insertErr, insertResult) => {
-          if (insertErr) {
-            console.error('Error inserting record: ', insertErr);
-            return res.status(500).json({ status: 'error', message: 'Failed to insert attendance.' });
-          }
-
-          res.json({ status: 'success', message: 'Clock-in allowed within the geofence.' });
+  mysql
+    .mysqlQueryPromise(checkExistingClockInQuery)
+    .then((result) => {
+      if (result.length > 0) {
+        res.json({
+          status: "exist",
+          data: result,
         });
       } else {
-        // Employee is outside the geofence, deny clock-in
-        res.status(403).json({ status: 'error', message: 'Clock-in denied. Employee is outside the geofence.' });
-      }
-    } else {
-      // Geofence details not found for the employee
-      res.status(404).json({ status: 'error', message: 'Geofence details not found for the employee.' });
-    }
-  });
-  req.session.employee_id = user.employee_id;
+        const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+        const attendanceData = [
+          [
+            employee_id,
+            attendancedate,
+            clockinDateTime,
+            latitude,
+            longitude,
+            devicein,
+          ],
+        ];
 
-  // Send a success response or redirect
-  res.json({ status: 'success', message: 'Login successful' });
+        mysql.InsertTable(
+          "master_attendance",
+          attendanceData,
+          (err, result) => {
+            if (err) {
+              console.error("Error inserting record:", err);
+              return res.status(500).json({
+                status: "error",
+                message: "Failed to insert attendance.",
+              });
+            }
+
+            console.log("Insert result:", result);
+            res.json({
+              status: "success",
+              message: "Clock-in allowed.",
+            });
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      res.json({
+        status: "error",
+        message: "Error checking existing clock-in records.",
+        data: error,
+      });
+    });
 });
 
-module.exports = router;
+router.post("/clockout", (req, res) => {
+  const employee_id = req.session.employeeid;
+  const { latitude, longitude } = req.body;
+  const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
+
+  // Check if there is a clock-in record for the same day
+  const checkExistingClockInQuery = `
+    SELECT ma_employeeid, ma_attendancedate
+    FROM master_attendance
+    WHERE ma_employeeid = '${employee_id}'
+      AND ma_clockin IS NOT NULL
+      AND ma_clockout IS NULL
+    ORDER BY ma_attendancedate DESC
+    LIMIT 1
+  `;
+
+  mysql
+    .mysqlQueryPromise(checkExistingClockInQuery)
+    .then((resultClockIn) => {
+      if (resultClockIn.length > 0) {
+        const { ma_attendancedate } = resultClockIn[0];
+        const deviceout = getDeviceInformation(req); 
+
+        // Proceed with the clock-out process using the date of the corresponding clock-in
+        const updateQuery = `
+          UPDATE master_attendance
+          SET
+            ma_clockout = '${clockoutTime}',
+            ma_latitudeout = '${latitude}',
+            ma_longitudeout = '${longitude}',
+            ma_deviceout = '${deviceout}'
+          WHERE
+            ma_employeeid = '${employee_id}'
+            AND ma_attendancedate = '${ma_attendancedate}'
+        `;
+
+        mysql
+          .Update(updateQuery)
+          .then((updateResult) => {
+            console.log(updateResult);
+            res.json({
+              status: "success",
+              message: "Clock-out successful.",
+            });
+          })
+          .catch((updateError) => {
+            console.log(updateError);
+            res.json({
+              status: "error",
+              message: "Error updating clock-out record.",
+              data: updateError,
+            });
+          });
+      } else {
+        // No matching clock-in record found
+        res.json({
+          status: "error",
+          message:
+            "Clock-out not allowed. No matching clock-in record found for the employee.",
+        });
+      }
+    })
+    .catch((errorClockIn) => {
+      console.log(errorClockIn);
+      res.json({
+        status: "error",
+        message: "Error checking existing clock-in records.",
+        data: errorClockIn,
+      });
+    });
+});

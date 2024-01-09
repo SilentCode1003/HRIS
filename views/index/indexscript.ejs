@@ -1,13 +1,12 @@
 <script>
   $(document).ready(function () {
-    let leaveid = "";
+
+    //#region declaration
+    let leaveid = '';
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
-    //let bulletinid = '';
     console.log("Initialize");
-    $("#dataTableemployees tr").removeAttr("style");
-
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -19,7 +18,8 @@
     loadtotaladminCard();
     loadtotalITCard();
     loadtotalcablingCard();
-
+    loadtotalcandidateCard();
+    loadtotalbagapuroCard();
     searchEmployeeTable();
     searchRegularTable();
     searchprobaTable();
@@ -27,11 +27,55 @@
     searchadminTable();
     searchitTable();
     searchcablingTable();
+    searchcandidateTable();
+    searchbagapuroTable();
 
-    $(document).on('keyup','#myInputtotal',function(){
+    //#endregion
+
+
+    //#region search key up
+
+    $(document).on('keyup', '#myInputtotal', function () {
       searchEmployeeTable();
-    })
+    });
 
+    $(document).on('keyup', '#myInputRegular', function () {
+      searchRegularTable();
+    });
+
+    $(document).on('keyup', '#myInputproba', function () {
+      searchprobaTable();
+    });
+
+    $(document).on('keyup', '#myInputresigned', function () {
+      searchresignedTable();
+    });
+
+    $(document).on('keyup', '#myInputtotaladmin', function () {
+      searchadminTable();
+    });
+
+    $(document).on('keyup', '#myInputtotalit', function () {
+      searchitTable();
+    });
+
+    $(document).on('keyup', '#myInputtotalcabling', function () {
+      searchcablingTable();
+    });
+
+    $(document).on('keyup', '#myInputtotalcandidate', function () {
+      searchcandidateTable();
+    });
+
+    $(document).on('keyup', '#myInputtotalbagapuro', function () {
+      searchbagapuroTable();
+    });
+
+
+    //#endregion    
+
+
+    //#region Load Modal Table
     $(document).on("click", "#totalEMP", function () {
       $(`#dataTableemployees`).find("tr:gt(0)").remove();
 
@@ -448,6 +492,125 @@
       });
     });
 
+
+    $(document).on("click", "#totalcandidate", function () {
+      $(`#totalcandidatetable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/totalcandidate",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#totalcandidatetable")) {
+            $("#totalcandidatetable").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("totalcandidatetable");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var DEPARTMENT = row.insertCell(3);
+            var HIRE_DATE = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var TENURE = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            DEPARTMENT.innerHTML = item.department;
+            HIRE_DATE.innerHTML = item.hiredate;
+            POSITION.innerHTML = item.position;
+            TENURE.innerHTML = item.tenure;
+            $.each(
+              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+    $(document).on("click", "#totalbagapuro", function () {
+      $(`#totalbagapurotable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/totalbagapuroapi",
+        success: function (json) {
+          console.log("API response", json);
+
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#totalbagapurotable")) {
+            $("#totalbagapurotable").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("totalbagapurotable");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var DEPARTMENT = row.insertCell(3);
+            var HIRE_DATE = row.insertCell(4);
+            var POSITION = row.insertCell(5);
+            var TENURE = row.insertCell(6);
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "150px";
+            imgElement.style.height = "150px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.newEmployeeId;
+            NAME.innerHTML = item.firstname;
+            DEPARTMENT.innerHTML = item.department;
+            HIRE_DATE.innerHTML = item.hiredate;
+            POSITION.innerHTML = item.position;
+            TENURE.innerHTML = item.tenure;
+            $.each(
+              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+          console.log("API error", error);
+        },
+      });
+    });
+
+
+    //#endregion
+
+
+    //#region Load Card 
     function loadtotalCard() {
       $.ajax({
         type: "GET",
@@ -593,6 +756,47 @@
       });
     }
 
+    function loadtotalcandidateCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countcandidate",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalCandidate = result.data.CandidateCount;
+            $("#totalempcandidate .h5").text(totalCandidate);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    function loadtotalbagapuroCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countbagapuro",
+        success: function (result) {
+          console.log(result);
+          if (result.msg === "success") {
+            const totalBagapuro = result.data.BagapuroCount;
+            $("#totalempbagapuro .h5").text(totalBagapuro);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+    //#endregion
+
+
+    //#region Load Badge Notif
     function loadleaveBadge() {
       $.ajax({
         type: "GET",
@@ -631,6 +835,10 @@
       });
     }
 
+    //#endregion
+
+
+    //#region Announcement and Bday Folks
     $.ajax({
       url: "/announcement/load",
       method: "GET",
@@ -771,6 +979,10 @@
       });
     }
 
+    //#endregion
+
+
+    //#region Load All Requset Table 
     function LoadTable() {
       $("#dataTableleaverequest").DataTable({
         destroy: true,
@@ -790,21 +1002,29 @@
 
             console.log(data);
             $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
+              // var action = "";
+              // var status = item.status;
 
-              action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-                     `;
+              // action = `
+              //         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
+              //        `;
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
+
 
               finalData.push({
-                employeeid: item.employeeid,
+                image: imgElement.outerHTML,
+                firstname: item.firstname,
                 leavestartdate: item.leavestartdate,
                 leaveenddate: item.leaveenddate,
                 leavetype: item.leavetype,
                 reason: item.reason,
                 applieddate: item.applieddate,
-                action: action,
+                // action: action,
               });
             });
 
@@ -818,114 +1038,123 @@
           },
         ],
         columns: [
-          { data: "employeeid" },
+          { data: "image" },
+          { data: "firstname" },
           { data: "leavestartdate" },
           { data: "leaveenddate" },
           { data: "leavetype" },
           { data: "reason" },
           { data: "applieddate" },
-          { data: "action" },
+          // { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          $('td', row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log("Done");
         },
       });
     }
 
-    $("#dataTableleaverequest tbody").on("click", "tr", function () {
-      var dataRow = [];
-      $(this)
-        .closest("tr")
-        .find("td")
-        .each(function () {
-          dataRow.push($(this).text());
-        });
-      console.log(dataRow);
-      leaveid = dataRow[0];
-    });
+    // $("#dataTableleaverequest tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .closest("tr")
+    //     .find("td")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+    //   console.log(dataRow);
+    //   leaveid = dataRow[0];
+    // });
 
-    $(document).on("click", "#editBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/getleave",
-        data: {
-          leaveid: leaveid,
-        },
-        success: function (result) {
-          if (result.msg === "success") {
-            const existingData = result.data;
+    // $(document).on("click", "#editBtn", function () {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "http://localhost:3005/getleave",
+    //     data: {
+    //       leaveid: leaveid,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
 
-            $.each(existingData, (key, item) => {
-              $("#id").val(item.leaveid);
-              $("#pendingleavename").val(item.employeeid);
-              $("#pendingleaveemail").val(item.email);
-              $("#pendingleavegender").val(item.gender);
-              $("#pendingleavephone").val(item.phone);
-              $("#pendingleavetype").val(item.leavetype);
-              $("#pendingleaveapplydate").val(item.applieddate);
-              $("#pendingleavestart").val(item.leavestartdate);
-              $("#pendingleaveend").val(item.leaveenddate);
-              $("#pendingleavereason").val(item.reason);
-              $("#pendingleaveaction").val(item.status);
-            });
-          } else {
-            swal("Error fetching employee data", "success");
-          }
-        },
-        error: function (err) {
-          swal("An error occurred while fetching employee data", err, "error");
-        },
-      });
-    });
+    //         $.each(existingData, (key, item) => {
+    //           $("#pendingleaveid").val(item.leaveid);
+    //           $("#pendingleavename").val(item.employeeid);
+    //           $("#pendingleaveemail").val(item.email);
+    //           $("#pendingleavegender").val(item.gender);
+    //           $("#pendingleavephone").val(item.phone);
+    //           $("#pendingleavetype").val(item.leavetype);
+    //           $("#pendingleaveapplydate").val(item.applieddate);
+    //           $("#pendingleavestart").val(item.leavestartdate);
+    //           $("#pendingleaveend").val(item.leaveenddate);
+    //           $("#pendingleavereason").val(item.reason);
+    //           $("#pendingleaveaction").val(item.status);
+    //           $("#pendingleaveremarks").val(item.comment);
 
-    $(document).on("click", "#pendingleavesavebtn", function () {
-      console.log("Save button clicked");
-      let id = leaveid;
-      let status = $("#pendingleaveaction").val();
-      let comment = $("#pendingleaveremarks").val();
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", "success");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", err, "error");
+    //     },
+    //   });
+    // });
 
-      var message = "";
+    // $(document).on("click", "#pendingleavesavebtn", function () {
+    //   console.log("Save button clicked");
+    //   let id = leaveid;
+    //   let status = $("#pendingleaveaction").val();
+    //   let comment = $("#pendingleaveremarks").val();
 
-      if (status === "") {
-        message += "status is required. ";
-      }
+    //   var message = "";
 
-      if (comment === "") {
-        message += "status is required. ";
-      }
+    //   if (status === "") {
+    //     message += "status is required. ";
+    //   }
 
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "/allleave/update",
-          data: {
-            leaveid: id,
-            status: status,
-            comment: comment,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
-      }
-    });
+    //   if (comment === "") {
+    //     message += "status is required. ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/allleave/update",
+    //       data: {
+    //         leaveid: id,
+    //         status: status,
+    //         comment: comment,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success") {
+    //           swal(
+    //             "Save Successfully",
+    //             "You clicked the button!",
+    //             "success"
+    //           ).then((results) => {
+    //             window.location.reload();
+    //           });
+    //           LoadTable();
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //     });
+    //   }
+    // });
 
     //cashadvance section-->
 
@@ -945,24 +1174,35 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var EMPLOYEE = row.insertCell(0);
-            var REQUEST_DATE = row.insertCell(1);
-            var AMOUNT = row.insertCell(2);
-            var PURPOSE = row.insertCell(3);
-            var STATUS = row.insertCell(4);
-            var actionHtml = `
-            <button id="editcaBtn" class="btn text-primary" name="editcaBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-eye"></i></button>
-            `;
+            var IMAGE = row.insertCell(0);
+            var ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var REQUEST_DATE = row.insertCell(3);
+            var AMOUNT = row.insertCell(4);
+            var PURPOSE = row.insertCell(5);
+            var STATUS = row.insertCell(6);
 
-            EMPLOYEE.innerHTML = item.employeeid;
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.image;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "100px";
+            imgElement.style.height = "100px";
+
+            IMAGE.appendChild(imgElement);
+
+            ID.innerHTML = item.employeeid;
+            NAME.innerHTML = item.firstname;
             REQUEST_DATE.innerHTML = item.requestdate;
             AMOUNT.innerHTML = item.amount;
             PURPOSE.innerHTML = item.purpose;
             STATUS.innerHTML = item.status;
-
-            var actionCell = row.insertCell(5);
-
-            actionCell.innerHTML = actionHtml;
+            $.each(
+              [ID, NAME, REQUEST_DATE, AMOUNT, PURPOSE, STATUS],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
         error: function (xhr, status, error) {
@@ -971,99 +1211,103 @@
       });
     });
 
-    $("#dataTablecashrequest tbody").on("click", "tr", function () {
-      var dataRow = [];
-      $(this)
-        .closest("tr")
-        .find("td")
-        .each(function () {
-          dataRow.push($(this).text());
-        });
-      console.log(dataRow);
-      cashadvanceid = dataRow[0];
-    });
+    // $("#dataTablecashrequest tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .closest("tr")
+    //     .find("td")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+    //   console.log(dataRow);
+    //   cashadvanceid = dataRow[0];
+    // });
 
-    $(document).on("click", "#editcaBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/requestcashadvance/getreqca",
-        data: {
-          cashadvanceid: cashadvanceid,
-        },
-        success: function (result) {
-          if (result.msg === "success") {
-            const existingData = result.data;
+    // $(document).on("click", "#editcaBtn", function () {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/requestcashadvance/getreqca",
+    //     data: {
+    //       cashadvanceid: cashadvanceid,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
 
-            $.each(existingData, (key, item) => {
-              $("#id").val(item.cashadvanceid);
-              $("#pendingcaname").val(item.employeeid);
-              $("#pendingcaemail").val(item.email);
-              $("#pendingcagender").val(item.gender);
-              $("#pendingcaphone").val(item.phone);
-              $("#pendingreqdate").val(item.requestdate);
-              $("#pendingamount").val(item.amount);
-              $("#pendingpurpose").val(item.purpose);
-              $("#pendingcastatus").val(item.status);
-              $("#pendingcaapprovaldate").val(item.approvaldate);
-            });
-          } else {
-            swal("Error fetching employee data", "success");
-          }
-        },
-        error: function (err) {
-          swal("An error occurred while fetching employee data", err, "error");
-        },
-      });
-    });
-    $(document).on("click", "#pendingcasavebtn", function () {
-      console.log("Save button clicked");
-      let id = cashadvanceid;
-      let status = $("#pendingcastatus").val();
-      let comment = $("#pendingcaremarks").val();
+    //         $.each(existingData, (key, item) => {
+    //           $("#id").val(item.cashadvanceid);
+    //           $("#pendingcaname").val(item.employeeid);
+    //           $("#pendingcaemail").val(item.email);
+    //           $("#pendingcagender").val(item.gender);
+    //           $("#pendingcaphone").val(item.phone);
+    //           $("#pendingreqdate").val(item.requestdate);
+    //           $("#pendingamount").val(item.amount);
+    //           $("#pendingpurpose").val(item.purpose);
+    //           $("#pendingcastatus").val(item.status);
+    //           $("#pendingcaapprovaldate").val(item.approvaldate);
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", "success");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", err, "error");
+    //     },
+    //   });
+    // });
+    // $(document).on("click", "#pendingcasavebtn", function () {
+    //   console.log("Save button clicked");
+    //   let id = cashadvanceid;
+    //   let status = $("#pendingcastatus").val();
+    //   let comment = $("#pendingcaremarks").val();
 
-      var message = "";
+    //   var message = "";
 
-      if (status === "") {
-        message += "status is required. ";
-      }
+    //   if (status === "") {
+    //     message += "status is required. ";
+    //   }
 
-      if (comment === "") {
-        message += "status is required. ";
-      }
+    //   if (comment === "") {
+    //     message += "status is required. ";
+    //   }
 
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "/requestcashadvance/update",
-          data: {
-            cashadvanceid: id,
-            status: status,
-            comment: comment,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
-      }
-    });
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/requestcashadvance/update",
+    //       data: {
+    //         cashadvanceid: id,
+    //         status: status,
+    //         comment: comment,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success") {
+    //           swal(
+    //             "Save Successfully",
+    //             "You clicked the button!",
+    //             "success"
+    //           ).then((results) => {
+    //             window.location.reload();
+    //           });
+    //           LoadTable();
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //     });
+    //   }
+    // });
 
+    //#endregion
+
+
+    //#region Graph Functions
     $(document).on("change", "#announcementimage", function (e) {
       const input = document.getElementById("announcementimage");
       const file = input.files[0];
@@ -1269,6 +1513,10 @@
       },
     });
 
+    //#endregion
+
+
+    //#region Search Functions
     function searchEmployeeTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInputtotal");
@@ -1450,5 +1698,59 @@
         }
       }
     }
+
+    function searchcandidateTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalcandidate");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalcandidatetable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchbagapuroTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalbagapuro");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalbagapurotable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+    //#endregion
+
   });
 </script>

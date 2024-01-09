@@ -5,6 +5,10 @@
     LoadList();
     activePositions = [];
 
+    $(document).on('keyup','#myInput2',function(){
+      searchTable();
+    });
+
     function LoadTable() {
       $("#dataTableholiday").DataTable({
         destroy: true,

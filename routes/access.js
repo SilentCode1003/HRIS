@@ -16,39 +16,28 @@ module.exports = router;
 router.post("/getaccess", (req, res) => {
   try {
     let accessid = req.body.accessid;
-    let sql = `select 
-    ma_accessid as accessid,
+    let sql =  ` select 
     ma_accessname as accessname,
-    ma_createby as createby,
-    ma_createdate as createdate,f
     ma_status as status 
     from master_access
     where ma_accessid = '${accessid}'`;
-
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Department not found",
-          });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching department data",
-          error: error,
-        });
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
       });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error
+      });
+    });
   } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-      error: error,
+    res.json({
+      msg: "error",
+      data: error
     });
   }
 });
