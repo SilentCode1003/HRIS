@@ -174,6 +174,10 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Member_Recievable_Record(results));
       }
 
+      if (table == "Master_Geofence_Settings") {
+        callback(null, model.Master_Geofence_Settings(results));
+      }
+
 
 
     });
@@ -695,6 +699,24 @@ exports.InsertTable = (tablename, data, callback) => {
         lp_date,
         lp_amount,
         lp_remarks) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_geofence_settings") {
+    let sql = `INSERT INTO master_geofence_settings(
+        mgs_geofencename,
+        mgs_departmentid,
+        mgs_latitude,
+        mgs_longitude,
+        mgs_radius,
+        mgs_location,
+        mgs_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
