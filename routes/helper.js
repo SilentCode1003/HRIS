@@ -50,6 +50,7 @@ exports.UserLogin = (result, callback) => {
         employeeid: row.employeeid,
         fullname: row.fullname,
         accesstype: row.accesstype,
+        department: row.department,
       });
     });
 
