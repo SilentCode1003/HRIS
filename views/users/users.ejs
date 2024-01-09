@@ -4,8 +4,8 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#usersmodal">
-        + Add New
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
+        <b>+ Add</b>
       </button>
         <input id='myInput' type='text' placeholder="  Search....">
     </div>
@@ -36,15 +36,17 @@
 <div class="modal fade" id="usersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-user-circle' style='color:#0bd9f1; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">USERS</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
               <div class="col">
                 <div class="form-floating">
-                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
+                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example"
+                  style="border: 2.5px solid #174634 !important;">
                     <option selected>Choose....</option>
                   </select>
                   <label for="floatingSelectGrid">Employee ID</label>
@@ -53,7 +55,8 @@
               <br>
               <div class="col">
                   <div class="form-floating">
-                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
+                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example"
+                      style=" border: 2.5px solid #174634 !important;">
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
@@ -62,7 +65,8 @@
               <br>
               <div class="col">
                   <div class="form-floating">
-                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
+                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example"
+                      style=" border: 2.5px solid #174634 !important;">
                         <option selected>Choose....</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
@@ -73,9 +77,11 @@
               <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="userssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="userssavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>

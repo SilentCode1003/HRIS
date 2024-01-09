@@ -1,4 +1,4 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Employees</h1>
+<h1 class="font-weight-bold" id="head-title">Employees</h1>
 <div id="loading" class="loading"></div>
 <br>
 <br>
@@ -6,11 +6,11 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header py-3">
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
-      + Add New
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
+      <b>+ Add</b>
     </button>
-    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#openModalButton">
-      Upload
+    <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+      <b>Upload</b>
     </button>
 
     <!-- Upload Modal -->
@@ -18,20 +18,23 @@
     <div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Batch Upload</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header" id="modal-header">
+            <i class='bx bxs-data' style='color:#daf106; font-size: 50px; margin: 3px;'></i>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">BATCH UPLOAD</h1>
+            <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" id="modal-body">
             <form>
               <div class="modal-content">
                 <input type="file" class="form-control-file" id="excelFileInput" accept=".xls, .xlsx" />
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" id="uploadButton">Upload</button>
+          <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+            border: 2px solid white !important;">Close</button>
+            <button type="button" class="btn btn-danger" id="uploadButton" style="background-color: green !important;
+            border: 2px solid white !important;">Upload</button>
           </div>
         </div>
       </div>
@@ -68,11 +71,12 @@
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">ADD Employee</h5>
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-user-rectangle' style='color:#78f889; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">EMPLOYEE</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <br>
         <br>
         <div class="row">
@@ -80,7 +84,8 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;
+                   height: 250px; border: 2.5px solid #174634 !important;;"
                     class="rounded rounded-circle" alt="placeholder">
                 </div>
                 <br>
@@ -101,21 +106,21 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeefname" name="employeefname"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeefname" name="employeefname"
                       placeholder="First Name">
                     <label for="floatingInput">First Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeelname" name="employeelname"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeelname" name="employeelname"
                       placeholder="Last Name">
                     <label for="floatingInput">Last Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeemname" name="employeemname"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeemname" name="employeemname"
                       placeholder="Middle Name">
                     <label for="floatingInput">Middle Name</label>
                   </div>
@@ -125,7 +130,7 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeegender" name="employeegender"
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeegender" name="employeegender"
                       aria-label="Floating label select example">
                       <option selected>Choose</option>
                       <option value="Male">Male</option>
@@ -136,7 +141,7 @@
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeecivilstatus" name="employeecivilstatus"
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeecivilstatus" name="employeecivilstatus"
                       aria-label="Floating label select example">
                       <option selected>Choose</option>
                       <option value="Single">Single</option>
@@ -149,7 +154,7 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeaddress" name="employeeaddress"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeaddress" name="employeeaddress"
                       placeholder="Address">
                     <label for="floatingInput">Address</label>
                   </div>
@@ -159,20 +164,20 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="employeebirthday" name="employeebirthday">
+                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeebirthday" name="employeebirthday">
                     <label for="floatingInput">Birthday</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="employeephone" name="employeephone"
+                    <input type="number" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeephone" name="employeephone"
                       placeholder="Phone Number">
                     <label for="floatingInput">Phone Number</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="email" class="form-control" id="employeeemail" name="employeeemail"
+                    <input type="email" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemail" name="employeeemail"
                       placeholder="Email">
                     <label for="floatingInput">Email</label>
                   </div>
@@ -182,13 +187,13 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeehiredate" name="employeehiredate">
                     <label for="floatingInput">Hire Date</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeedepartment" name="employeedepartment"
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeedepartment" name="employeedepartment"
                       aria-label="Floating label select example">
                     </select>
                     <label for="employeedepartment">Department</label>
@@ -196,7 +201,7 @@
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeeposition" name="employeeposition"
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeeposition" name="employeeposition"
                       aria-label="Floating label select example">
                     </select>
                     <label for="floatingSelectGrid">Position</label>
@@ -208,7 +213,7 @@
 
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeejobstatus" name="employeejobstatus"
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeejobstatus" name="employeejobstatus"
                       aria-label="Floating label select example">
                       <option selected>Choose...</option>
                       <option value="regular">Regular</option>
@@ -221,14 +226,14 @@
                 <br>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemergencyname" name="employeeemergencyname"
                       placeholder="Emergency Contact Name">
                     <label for="floatingInput">Emergency Contact Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone"
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemergencyphone" name="employeeemergencyphone"
                       placeholder="Emergency Contact Phone">
                     <label for="floatingInput">Emergency Contact Phone</label>
                   </div>
@@ -239,9 +244,11 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn">Save</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+         border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="employeesavebtn" style="background-color: green !important;
+        border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>
