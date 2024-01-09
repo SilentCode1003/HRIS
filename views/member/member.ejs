@@ -1,15 +1,13 @@
 <div class="container container-content">
-    <!-- Button trigger modal -->
-  <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Add +
-  </button>
+  <h1 class="font-weight-bold text-danger" id="h-title">Member Records</h1>
   
   <!-- Modal -->
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">MEMBER RECORDS</h5>
+          <i class='bx bxs-receipt' style='color:#b3ee67; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="staticBackdropLabel">MEMBER RECORDS</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!--- Modal Body -->
@@ -57,55 +55,66 @@
   </div>
   
   
-  <!---- Searchbar ----->
-  <div class="search-container" id="searchbar">
+ 
+  
+  <!------ Table ------>
+  <div class="card card-style">
+    <div class="card-body c-body">
+      <div class="card-header c-header">
+          <!-- Button trigger modal -->
+  <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <b>+ Add</b>
+  </button>
+   <!---- Searchbar ----->
+   <div class="search-container" id="searchbar">
     <form>
       <input type="text" placeholder="Search.." name="search" id="searchInput">
       <button type="submit" class="btn-search"><i class="bi bi-search-heart"></i></button>
     </form>
   </div>
-  
-  <!------ Table ------>
-  <div class="scrollable-table">
-  <table id="table">
-    <thead>
-      <tr class="header">
-        <th scope="col">ID</th>
-        <th scope="col">Employee ID</th>
-        <th scope="col">Date</th>
-        <th scope="col">Total Deposit</th>
-        <th scope="col">Total Interest</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-label="ID"><b>1</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Total Deposit">1,000</td>
-        <td data-label="Total Interest">10%</td>
-        <td data-label="Status">Unpaid</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>2</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Total Deposit">1,000</td>
-        <td data-label="Total Interest">10%</td>
-        <td data-label="Status">Unpaid</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>3</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Total Deposit">1,000</td>
-        <td data-label="Total Interest">10%</td>
-        <td data-label="Status">Unpaid</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
+      </div>
+      <div class="table-responsive">
+        <table id="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Employee ID</th>
+              <th scope="col">Date</th>
+              <th scope="col">Total Deposit</th>
+              <th scope="col">Total Interest</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="ID"><b>1</b></td>
+              <td data-label="Employee ID">2014536</td>
+              <td data-label="Date">12/25/2024</td>
+              <td data-label="Total Deposit">1,000</td>
+              <td data-label="Total Interest">10%</td>
+              <td data-label="Status">Unpaid</td>
+            </tr>
+            <tr>
+              <td data-label="ID"><b>2</b></td>
+              <td data-label="Employee ID">2014536</td>
+              <td data-label="Date">12/25/2024</td>
+              <td data-label="Total Deposit">1,000</td>
+              <td data-label="Total Interest">10%</td>
+              <td data-label="Status">Unpaid</td>
+            </tr>
+            <tr>
+              <td data-label="ID"><b>3</b></td>
+              <td data-label="Employee ID">2014536</td>
+              <td data-label="Date">12/25/2024</td>
+              <td data-label="Total Deposit">1,000</td>
+              <td data-label="Total Interest">10%</td>
+              <td data-label="Status">Unpaid</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
   
   </div>
   

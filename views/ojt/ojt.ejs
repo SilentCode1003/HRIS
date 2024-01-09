@@ -5,8 +5,8 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header py-3">
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addojtmodal">
-      + Add New
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addojtmodal">
+      <b>+ Add</b>
     </button>
     <input id='myInput' type='text' placeholder="  Search....">
   </div>
@@ -39,11 +39,12 @@
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">ADD OJT</h5>
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-user-detail' style='color:#4c60f7; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">ADD OJT</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <br>
         <br>
         <div class="row">
@@ -51,7 +52,8 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;
+                  border: 2.5px solid #174634 !important;"
                     class="rounded rounded-circle" alt="placeholder">
                 </div>
                 <br>
@@ -72,19 +74,22 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="ojtfname" name="ojtfname" placeholder="First Name">
+                    <input type="text" class="form-control" id="ojtfname" name="ojtfname"
+                      placeholder="First Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">First Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="ojtlname" name="ojtlname" placeholder="Last Name">
+                    <input type="text" class="form-control" id="ojtlname" name="ojtlname"
+                      placeholder="Last Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Last Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="ojtschool" name="ojtschool" placeholder="School">
+                    <input type="text" class="form-control" id="ojtschool" name="ojtschool"
+                      placeholder="School" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput"> School</label>
                   </div>
                 </div>
@@ -94,7 +99,7 @@
                 <div class="col">
                   <div class="form-floating">
                     <select class="form-select" id="ojtgender" name="ojtgender"
-                      aria-label="Floating label select example">
+                      aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
                       <option selected>Choose</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -105,6 +110,8 @@
                 <div class="col-md-8">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="ojtaddress" name="ojtaddress" placeholder="Address">
+                    <input type="text" class="form-control" id="employeeaddress" name="employeeaddress"
+                      placeholder="Address" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Address</label>
                   </div>
                 </div>
@@ -113,7 +120,8 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="ojthours" name="ojthours">
+                    <input type="number" class="form-control" id="ojthours" name="ojthours" 
+                    style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Total Hours</label>
                   </div>
                 </div>
@@ -130,7 +138,8 @@
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="ojtphone" name="ojtphone" placeholder="Phone Number">
+                    <input type="number" class="form-control" id="ojtphone" name="ojtphone"
+                      placeholder="Phone Number" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Phone Number</label>
                   </div>
                 </div>
@@ -139,7 +148,8 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate">
+                    <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate"
+                    style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Start Date</label>
                   </div>
                 </div>
@@ -152,7 +162,7 @@
                 <div class="col">
                   <div class="form-floating">
                     <select class="form-select" id="ojtdepartment" name="ojtdepartment"
-                      aria-label="Floating label select example">
+                      aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
                       <option selected>Choose...</option>
                     </select>
                     <label for="employeedepartment">Department</label>
@@ -165,14 +175,14 @@
                 <div class="col">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="ojtecname" name="ojtecname"
-                      placeholder="Emergency Contact Name">
+                      placeholder="Emergency Contact Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Emergency Contact Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="ojtecphone" name="ojtecphone"
-                      placeholder="Emergency Contact Phone">
+                      placeholder="Emergency Contact Phone" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Emergency Contact Phone</label>
                   </div>
                 </div>
@@ -183,9 +193,11 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="ojtsavebtn">Save</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+        border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="ojtsavebtn" style="background-color: green !important;
+        border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>
