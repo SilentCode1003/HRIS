@@ -582,3 +582,23 @@ exports.Loan_Payment = (data) => {
     return dataResult;
 };
 
+
+exports.Master_Geofence_Settings = (data) => {
+    let dataResult = [];
+
+    data.forEach((key, item) => {
+        dataResult.push({
+            geofenceid: key.mgs_id,
+            geofencename: key.mgs_geofencename,
+            departmentid: key.mgs_departmentid,
+            latitude: key.mgs_latitude,
+            longitude: key.mgs_longitude,
+            radius: key.mgs_radius,
+            location: key.mgs_location,
+            status: key.mgs_status,
+        });
+    });
+
+    return dataResult;
+};
+

@@ -106,8 +106,12 @@ var roleacess = [
       },
       {
         layout: "memberlayout",
-
+      },
+      {
         layout: "ojtuserlayout",
+      },
+      {
+        layout: "geofencesettingslayout",
       },
     ],
   },
