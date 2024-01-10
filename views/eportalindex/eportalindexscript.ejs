@@ -5,6 +5,9 @@
         let employeeid = "<%= employeeid %>";
         let devicein = '';
         let deviceout = '';
+        let geofenceChecked = false; // Flag to track geofence check
+        let logStatusChecked = false; // Flag to track log status check
+
 
         console.log('Employee ID:', employeeid);
 
@@ -36,11 +39,13 @@
 
         function checkGeofence(userLocation) {
             const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
-            return userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
+            const isInside = userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
+            console.log('User is inside the geofence:', isInside);
+            return isInside;
         }
 
         function updateLocationOnMap(position) {
-            userLocation = { // Assign the value to the global variable
+            userLocation = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
@@ -54,14 +59,12 @@
 
             const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
             userMarker.bindPopup(`My Location`).openPopup();
-            const geofenceButton = document.getElementById('clockinbtn');
 
+            const geofenceButton = document.getElementById('clockinbtn');
             if (checkGeofence(userLocation)) {
-                swal("Nasa office kana!", "You clicked the button!", "success");
                 console.log('User is inside the geofence.');
                 geofenceButton.style.display = 'block';
             } else {
-                swal("wala kapa!", "You clicked the button!", "success");
                 console.log('User is outside the geofence.');
                 geofenceButton.style.display = 'block';
             }
@@ -70,29 +73,16 @@
         function handleError(error) {
             console.error(`Error getting user location: ${error.message}`, error);
 
-            // Show a SweetAlert notification for geolocation error
-            swal({
-                title: "Error",
-                text: "Unable to retrieve your location. Please make sure location services are enabled.",
-                icon: "error",
-            });
-
-            // Check if the error is related to location permission
             if (error.code === error.PERMISSION_DENIED) {
-                // Notify the user to enable location services
                 notifyUserToEnableLocation();
             }
         }
 
         function notifyUserToEnableLocation() {
-            // Check if the Notification API is supported
             if ('Notification' in window) {
-                // Check if the user has not denied notifications
                 if (Notification.permission !== 'denied') {
-                    // Request notification permission
                     Notification.requestPermission().then(permission => {
                         if (permission === 'granted') {
-                            // Show a notification asking the user to enable location services
                             new Notification('Enable Location Services', {
                                 body: 'Please enable location services to use this feature.',
                             });
@@ -112,9 +102,7 @@
             }
         );
 
-
         function updateClockButtonStatus() {
-            // Fetch the latest log entry for the current employee
             $.ajax({
                 type: "GET",
                 url: "/eportalindex/latestlog",
@@ -127,29 +115,20 @@
                     if (response && response.al_logtype) {
                         const isClockIn = response.al_logtype === "ClockIn";
 
-                        // Update the button based on the latest log type
                         $('#clockinbtn').toggle(!isClockIn);
                         $('#clockoutbtn').toggle(isClockIn);
                     } else {
-                        // No log entries found, show the default state (Clock In button)
                         $('#clockinbtn').show();
                         $('#clockoutbtn').hide();
                     }
                 },
                 error: function (xhr, status, error) {
                     console.log("Latest Log API error", error);
-                    // Handle error as needed
                 }
             });
         }
 
-        // Call the function to initially set the button status
         updateClockButtonStatus();
-
-
-
-
-
 
 
         //#region clockin/out api
@@ -236,7 +215,7 @@
                             title: "Clock-out successful!",
                             icon: "success",
                         }).then(() => {
-                
+
                         });
                     } else if (response.msg === "exist") {
                         swal({

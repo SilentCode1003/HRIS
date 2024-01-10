@@ -149,3 +149,50 @@ router.post("/update", (req, res) => {
     });
   }
 });
+
+// router.post('/getnotif', (req,res) => {
+//   try {
+//     let employeeid = req.body.employeeid;
+
+//     let sql = ``;
+//     mysql.mysqlQueryPromise(sql)
+//     .then((result) => {
+//       res.json({
+//         msg: 'success',
+//         data: result,
+//       });
+//     })
+//     .catch((error) => {
+//       res.json({
+//         msg: 'error',
+//         data: error,
+//       });
+//     })
+//   } catch (error) {
+//     res.json({
+//       msg: error,
+//     });
+//   }
+// });
+
+router.post('/getnotif', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.GetNotification('${employeeid}')`;
+
+    mysql.StoredProcedure(sql ,(err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    });
+    
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+  }
+});

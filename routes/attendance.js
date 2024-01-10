@@ -19,8 +19,6 @@ router.post('/set-geofence', async (req, res) => {
   const { geofenceLatitude, geofenceLongitude, geofenceRadius } = req.body;
 
   try {
-      // Replace with your actual logic to update geo-fence parameters in MongoDB
-      // For example, if you have a Mongoose model for geo-fence settings
       const GeoFenceSettings = mongoose.model('GeoFenceSettings', {
           latitude: Number,
           longitude: Number,
@@ -30,13 +28,11 @@ router.post('/set-geofence', async (req, res) => {
       const existingSettings = await GeoFenceSettings.findOne();
 
       if (existingSettings) {
-          // Update existing settings
           existingSettings.latitude = geofenceLatitude;
           existingSettings.longitude = geofenceLongitude;
           existingSettings.radius = geofenceRadius;
           await existingSettings.save();
       } else {
-          // Create new settings if they don't exist
           const newSettings = new GeoFenceSettings({
               latitude: geofenceLatitude,
               longitude: geofenceLongitude,
@@ -68,6 +64,44 @@ router.get("/load", (req, res) => {
         FROM master_attendance
         LEFT JOIN master_employee ON ma_employeeid = me_id
         ORDER BY ma_attendanceid DESC`;
+
+        mysql.mysqlQueryPromise(sql)
+        .then((result) => {
+            res.json({
+                msg: 'success',
+                data: result,
+            });
+        })
+        .catch((error) => {
+            res.json({
+                msg:'error',
+                data: error,
+            });
+        })
+    } catch (error) {
+        console.log('error',error)
+    }
+});
+
+
+router.post("/getloadforapp", (req, res) => {
+    try {
+        let employeeid = req.body.employeeid;
+        let sql =`SELECT
+        CONCAT(me_lastname, " ", me_firstname) as employeeid,
+        ma_attendancedate as attendancedate,
+        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+        ma_devicein as devicein,
+        ma_deviceout as deviceout,
+        CONCAT(
+            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+        ) AS totalhours
+        FROM master_attendance
+        LEFT JOIN master_employee ON ma_employeeid = me_id
+         where ma_employeeid = '${employeeid}'
+        ORDER BY ma_attendanceid DESC;`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -123,3 +157,4 @@ router.post('/logs', (req, res) => {
         
     }
 });
+
