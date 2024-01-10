@@ -34,7 +34,8 @@ router.get("/load", (req, res) => {
     l_leaveapplieddate as applieddate
     from leaves
     left join master_employee on leaves.l_employeeid = me_id
-    where l_leavestatus = 'Pending'`;
+    where l_leavestatus = 'Pending'
+    order by l_leaveid desc`;
     
 
     mysql.mysqlQueryPromise(sql)
@@ -163,7 +164,8 @@ router.get("/loadCA", (req, res) => {
     ca_status as status
     from cash_advance
     left join master_employee on cash_advance.ca_employeeid = me_id
-    where ca_status = 'Pending'`;
+    where ca_status = 'Pending'
+    order by ca_cashadvanceid desc`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {

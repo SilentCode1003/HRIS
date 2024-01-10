@@ -49,17 +49,17 @@ router.post('/getgeofencesettings', (req, res) => {
 
 router.get('/load', (req, res) => {
     try {
-      let sql = `  SELECT 
+      let sql = `SELECT 
       mgs_id,
       mgs_geofencename,
-      mgs_departmentid,
+      md_departmentname as mgs_departmentid,
       mgs_latitude,
       mgs_longitude,
       mgs_radius,
       mgs_location,
       mgs_status
       FROM master_geofence_settings
-      LEFT JOIN master_department ON  mgs_departmentid = md_departmentid;`;
+      LEFT JOIN master_department md ON master_geofence_settings.mgs_departmentid = md_departmentid`;
   
       mysql.Select(sql, 'Master_Geofence_Settings', (err, result) => {
         if (err) console.error('Error: ', err);
@@ -126,3 +126,30 @@ router.get('/load', (req, res) => {
         });
     }
   });
+
+  
+router.post('/selectgeofence', (req, res) => {
+  try {
+    let department = req.body.department;
+    let sql = `select * from master_geofence_settings
+    where mgs_departmentid = ${department}`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'error',
+        data: error,  
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});

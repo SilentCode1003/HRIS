@@ -137,9 +137,11 @@
                                 text: "You clicked the button!",
                                 icon: "success",
                                 button: "OK!",
-                            })
-                        }
-                        else {
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                            LoadTable();
+                        } else {
                             swal({
                                 title: "Exist",
                                 text: "Data already exists!",

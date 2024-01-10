@@ -19,17 +19,20 @@ router.post('/login', (req, res) => {
 
       console.log(encrypted);
 
-      let sql = `SELECT 
-        mu_employeeid as employeeid,
-        CONCAT(me_firstname, ' ', me_lastname) as fullname,
-        ma_accessname as accesstype,
-        mu_status as status,
-        me_profile_pic as image,
-        me_jobstatus as jobstatus
-        FROM master_user
-        INNER JOIN master_access ON mu_accesstype = ma_accessid
-        LEFT JOIN master_employee ON mu_employeeid = me_id
-        WHERE mu_username ='${username}'  AND mu_password = '${encrypted}'`;
+      let sql = `
+      SELECT 
+          mu_employeeid AS employeeid,
+          CONCAT(me_firstname, ' ', me_lastname) AS fullname,
+          ma_accessname AS accesstype,
+          mu_status AS status,
+          me_profile_pic AS image,
+          me_jobstatus AS jobstatus,
+          md_departmentid AS department
+      FROM master_user
+      INNER JOIN master_access ON mu_accesstype = ma_accessid
+      LEFT JOIN master_employee ON mu_employeeid = me_id
+      LEFT JOIN master_department ON md_departmentid = me_department  -- Replace with the correct column name
+      WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
       // console.log(sql);
 
@@ -48,6 +51,7 @@ router.post('/login', (req, res) => {
                 req.session.fullname = user.fullname;
                 req.session.accesstype = user.accesstype;
                 req.session.image = user.image;
+                req.session.department = user.department;
               });
 
               return res.json({

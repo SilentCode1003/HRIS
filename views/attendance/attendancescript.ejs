@@ -1,79 +1,250 @@
 <script>
     let map;
+    let logid = '';
 
     $(document).ready(function () {
         searchTable();
+        LoadTable();
+
 
         $(document).on('keyup', '#myInput', function () {
             searchTable();
         });
 
-         // Initialize the map
-    function initMap() {
-        map = L.map('map').setView([0, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
 
-        // Add a marker to the map
-        const marker = L.marker([0, 0]).addTo(map);
 
-        // Listen for map click events
-        map.on('click', function (e) {
-            const { lat, lng } = e.latlng;
-            marker.setLatLng([lat, lng]);
-            $('#latitude').val(lat.toFixed(6));
-            $('#longitude').val(lng.toFixed(6));
+
+        function LoadTable() {
+            $("#dataTableattendance").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/attendance/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+                            var action = "";
+                            var status = item.status;
+
+                            action = `
+                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+               `;
+
+                            finalData.push({
+                                employeeid: item.employeeid,
+                                attendancedate: item.attendancedate,
+                                clockin: item.clockin,
+                                clockout: item.clockout,
+                                devicein: item.devicein,
+                                deviceout: item.deviceout,
+                                totalhours: item.totalhours,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "employeeid" },
+                    { data: "attendancedate" },
+                    { data: "clockin" },
+                    { data: "clockout" },
+                    { data: "devicein" },
+                    { data: "deviceout" },
+                    { data: "totalhours" },
+                    { data: "action" },
+                ],
+                initComplete: function () {
+                    console.log('Done');
+                },
+            });
+        }
+
+
+        $("#dataTableattendance tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            console.log(dataRow);
+            logid = dataRow[0];
         });
-    }
 
-    // Call initMap on modal show
-    $('#geoFenceModal').on('shown.bs.modal', function () {
-        initMap();
+        $(document).on("click", "#editBtn", function () {        
+            $.ajax({
+                type: "POST",
+                url: "/attendance/logs",
+                data: {
+                    logid: logid,
+                },
+                success: function (json) {
+                    console.log("API response", json);
+
+                    var finalData = [];
+                    var data = json.data;
+
+                    if ($.fn.DataTable.isDataTable("#dataTableattendancelogs")) {
+                        $("#dataTableattendancelogs").DataTable().destroy();
+                    }
+                    material_list_tbl = document.getElementById("dataTableattendance");
+
+                    $.each(data, function (key, item) {
+                        var row = material_list_tbl.insertRow(1);
+                        var FULLNAME = row.insertCell(0);
+                        var LOGDATETIME = row.insertCell(1);
+                        var LOGTYPE = row.insertCell(2);
+                        var LATITUDE = row.insertCell(3);
+                        var LONGITUDE = row.insertCell(4);
+                        var DEVICE = row.insertCell(5);
+                        var LOCATION = row.insertCell(6);
+
+                        FULLNAME.innerHTML = item.fullname;
+                        LOGDATETIME.innerHTML = item.logdatetime;
+                        LOGTYPE.innerHTML = item.logtype;
+                        LATITUDE.innerHTML = item.latitude;
+                        LONGITUDE.innerHTML = item.longitude;
+                        DEVICE.innerHTML = item.device;
+                        LOCATION.innerHTML = item.location;
+
+                        $.each(
+                            [FULLNAME, LOGDATETIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
+                            function (_, cell) {
+                                cell.style.textAlign = "center";
+                                cell.style.verticalAlign = "middle";
+                            }
+                        );
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log("API error", error);
+                },
+            });
+        });
+
+        // $(document).on("click", "#editBtn", function () {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/attendance/logs",
+        //         data: {
+        //             logid: logid,
+        //         },
+        //         success: function (result) {
+        //             if (result.msg === "success") {
+        //                 const existingData = result.data;
+
+        //                 $.each(existingData, (key, item) => {
+        //                     $("#editdepartmentid").val(item.fullname);
+        //                     $("#editdepartmentname").val(item.logdatetime);
+        //                     $("#editdepartmenthead").val(item.logtype);
+        //                     $("#editdepartmentstatus").val(item.latitude);
+        //                     $("#editdepartmentid").val(item.longitude);
+        //                     $("#editdepartmentname").val(item.device);
+        //                     $("#editdepartmenthead").val(item.location);
+        //                 });
+        //             } else {
+        //                 swal("Error fetching employee data", message, "error");
+        //             }
+        //         },
+        //         error: function (err) {
+        //             swal("An error occurred while fetching employee data", message, "error");
+        //         },
+        //     });
+        // });
+
+
+
+
+        // Initialize the map
+        function initMap() {
+            map = L.map('map').setView([0, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add a marker to the map
+            const marker = L.marker([0, 0]).addTo(map);
+
+            // Listen for map click events
+            map.on('click', function (e) {
+                const { lat, lng } = e.latlng;
+                marker.setLatLng([lat, lng]);
+                $('#latitude').val(lat.toFixed(6));
+                $('#longitude').val(lng.toFixed(6));
+            });
+        }
+
+        // Call initMap on modal show
+        $('#geoFenceModal').on('shown.bs.modal', function () {
+            initMap();
+        });
+
+        function setGeoFence() {
+            const latitude = $('#latitude').val();
+            const longitude = $('#longitude').val();
+            const radius = $('#radius').val();
+
+            // Make an AJAX request to the server
+            $.ajax({
+                type: 'POST',
+                url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log(data.message);
+                    // Handle success or show a message to the user
+                    $('#geoFenceModal').modal('hide'); // Close the modal
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                    // Handle errors or show an error message to the user
+                }
+            });
+        }
+
     });
 
-    function setGeoFence() {
-        const latitude = $('#latitude').val();
-        const longitude = $('#longitude').val();
-        const radius = $('#radius').val();
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableattendance");
+        tr = table.getElementsByTagName("tr");
 
-        // Make an AJAX request to the server
-        $.ajax({
-            type: 'POST',
-            url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
-            contentType: 'application/json',
-            success: function (data) {
-                console.log(data.message);
-                // Handle success or show a message to the user
-                $('#geoFenceModal').modal('hide'); // Close the modal
-            },
-            error: function (error) {
-                console.error('Error:', error);
-                // Handle errors or show an error message to the user
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            found = false;
+
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
             }
-        });
-    }
 
-    });
-    // function searchTable() {
-    //     var input, filter, found, table, tr, td, i, j;
-    //     input = document.getElementById("myInput");
-    //     filter = input.value.toUpperCase();
-    //     table = document.getElementById("dataTableattendance");
-    //     tr = table.getElementsByTagName("tr");
-    //     for (i = 0; i < tr.length; i++) {
-    //         td = tr[i].getElementsByTagName("td");
-    //         for (j = 0; j < td.length; j++) {
-    //             if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-    //                 found = true;
-    //             }
-    //         }
-    //         if (found) {
-    //             tr[i].style.display = "";
-    //             found = false;
-    //         } else {
-    //             tr[i].style.display = "none";
-    //         }
-    //     }
-    // }
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
 </script>

@@ -118,55 +118,77 @@
     });
     $(document).on("click", "#pendingcasavebtn", function () {
       console.log("Save button clicked");
-      let id = cashadvanceid
+
+      let id = cashadvanceid;
       let status = $("#pendingcastatus").val();
       let comment = $("#pendingcaremarks").val();
 
-      var message = "";
-
+      let message = "";
 
       if (status === "") {
-        message += "status is required. ";
+        message += "Status is required. ";
       }
 
       if (comment === "") {
-        message += "status is required. ";
+        message += "Comment is required. ";
       }
-
-      // if (approvaldate === "") {
-      //  message += "status is required. ";
-      // }
-
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        $.ajax({
-          type: "POST",
-          url: "/requestcashadvance/update",
-          data: {
-            cashadvanceid: id,
-            status: status,
-            comment: comment,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal("Save Successfully", "You clicked the button!", "success",)
-                .then(results => {
-                  window.location.reload();
-                });
-              LoadTable();
+        // Ask for confirmation before proceeding
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willApprove) => {
+            if (willApprove) {
+              $.ajax({
+                type: "POST",
+                url: "/requestcashadvance/update",
+                data: {
+                  cashadvanceid: id,
+                  status: status,
+                  comment: comment,
+                },
+                success: function (result) {
+                  if (result.msg === "success") {
+                    swal({
+                      title: "Save Successfully",
+                      text: "You clicked the button!",
+                      icon: "success",
+                    }).then(() => {
+                      window.location.reload();
+                    });
+                    LoadTable();
+                  } else {
+                    swal("Error", "An error occurred while saving data.", "error");
+                  }
+                },
+                error: function (xhr, status, error) {
+                  swal({
+                    title: "Error",
+                    text: "An error occurred while saving data.",
+                    icon: "error",
+                  });
+                  console.error("AJAX error:", error);
+                },
+              });
+            } else {
+              // User clicked "Cancel"
+              swal("Action Canceled", "", "info");
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
+          });
       }
     });
+
+
+
+
+
 
   });
 
