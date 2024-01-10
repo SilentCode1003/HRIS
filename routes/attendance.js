@@ -54,7 +54,20 @@ router.post('/set-geofence', async (req, res) => {
 
 router.get("/load", (req, res) => {
     try {
-        let sql =``;
+        let sql =`SELECT
+        CONCAT(me_lastname, " ", me_firstname) as employeeid,
+        ma_attendancedate as attendancedate,
+        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+        ma_devicein as devicein,
+        ma_deviceout as deviceout,
+        CONCAT(
+            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+        ) AS totalhours
+        FROM master_attendance
+        LEFT JOIN master_employee ON ma_employeeid = me_id
+        ORDER BY ma_attendanceid DESC`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -71,5 +84,41 @@ router.get("/load", (req, res) => {
         })
     } catch (error) {
         console.log('error',error)
+    }
+});
+
+router.post('/logs', (req, res) => {
+    try {
+        let logid = req.body.logid;
+        let sql =  `select
+        al_employeeid as fullname,
+        TIME_FORMAT(al_logdatetime, '%H:%i:%s') as logdatetime,
+        al_logtype as logtype,
+        al_latitude as latitude,
+        al_longitude as longitude,
+        al_device as device,
+        mgs_location as location
+        from master_employee
+        inner join attendance_logs on me_id = al_employeeid
+        left join master_geofence_settings on me_department = mgs_departmentid
+        where al_attendanceid = '${logid}'`;
+
+        mysql.mysqlQueryPromise(sql)
+        .then((result) => {
+            res.json({
+                msg:'success',
+                data: result,
+            });
+        })
+        .catch((error) => {
+            res.json({
+                msg:error,
+            });
+        })
+    } catch (error) {
+        res.json({
+            msg:error,
+        });
+        
     }
 });

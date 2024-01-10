@@ -13,28 +13,6 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-// function calculateDistance(lat1, lon1, lat2, lon2) {
-//   const R = 6371; // Radius of the Earth in kilometers
-//   const dLat = deg2rad(lat2 - lat1);
-//   const dLon = deg2rad(lon2 - lon1);
-
-//   const a =
-//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-//     Math.cos(deg2rad(lat1)) *
-//       Math.cos(deg2rad(lat2)) *
-//       Math.sin(dLon / 2) *
-//       Math.sin(dLon / 2);
-
-//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-//   const distance = R * c; // Distance in kilometers
-//   return distance;
-// }
-
-// function deg2rad(deg) {
-//   return deg * (Math.PI / 180);
-// }
-
 function getLatestLog(employeeId) {
   const query = `
       SELECT *
@@ -55,21 +33,17 @@ function getLatestLog(employeeId) {
 
 
 function getDeviceInformation(req) {
- 
   if (typeof navigator === 'undefined') {
     return 'app';
   } else {
-  
     return 'web';
   }
 }
 
 
-// API endpoint for fetching the latest log
 router.get("/latestlog", (req, res) => {
   const employeeId = req.query.employeeid;
 
-  // Fetch the latest log using the function
   getLatestLog(employeeId)
     .then((latestLog) => res.json(latestLog))
     .catch(() =>
@@ -157,7 +131,7 @@ router.post("/clockout", (req, res) => {
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
-  // Check if there is a clock-in record for the same day
+  
   const checkExistingClockInQuery = `
     SELECT ma_employeeid, ma_attendancedate
     FROM master_attendance
@@ -175,7 +149,7 @@ router.post("/clockout", (req, res) => {
         const { ma_attendancedate } = resultClockIn[0];
         const deviceout = getDeviceInformation(req); 
 
-        // Proceed with the clock-out process using the date of the corresponding clock-in
+        
         const updateQuery = `
           UPDATE master_attendance
           SET
@@ -206,7 +180,7 @@ router.post("/clockout", (req, res) => {
             });
           });
       } else {
-        // No matching clock-in record found
+       
         res.json({
           status: "error",
           message:
@@ -223,3 +197,4 @@ router.post("/clockout", (req, res) => {
       });
     });
 });
+

@@ -70,6 +70,32 @@ router.get('/load',(req , res) => {
   }
 })
 
+
+router.post('/getleave',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT *
+    FROM leaves
+    WHERE l_employeeid = '${employeeid}'
+    ORDER BY l_leaveid DESC;`;
+    console.log(employeeid);
+
+    mysql.Select(sql, 'Leaves', (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+});
+
 router.post('/cancelLeave', async (req, res) => {
   try {
     const leaveid = req.body.leaveid;
