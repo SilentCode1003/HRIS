@@ -4,6 +4,7 @@ const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const bodyParser = require("body-parser");
 const moment = require("moment");
+const { Attendance_Logs } = require("./model/hrmisdb");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -14,7 +15,8 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 function getLatestLog(employeeId) {
-  const query = `
+  return new Promise((resolve, reject) => {
+    const query = `
       SELECT *
       FROM attendance_logs
       WHERE al_employeeid = '${employeeId}'
@@ -22,30 +24,33 @@ function getLatestLog(employeeId) {
       LIMIT 1;
   `;
 
-  return mysql
-    .mysqlQueryPromise(query)
-    .then((result) => (result.length > 0 ? result[0] : null))
-    .catch((error) => {
-      console.error("Error fetching latest log:", error);
-      throw error;
+    mysql.Select(query, "Attendance_Logs", (err, result) => {
+      if (err) reject(err);
+      resolve(result);
     });
+  });
 }
 
-
 function getDeviceInformation(req) {
-  if (typeof navigator === 'undefined') {
-    return 'app';
+  if (typeof navigator === "undefined") {
+    return "app";
   } else {
-    return 'web';
+    return "web";
   }
 }
 
+router.post("/latestlog", (req, res) => {
+  const employeeid = req.body.employeeid;
 
-router.get("/latestlog", (req, res) => {
-  const employeeId = req.query.employeeid;
+  console.log(employeeid);
 
-  getLatestLog(employeeId)
-    .then((latestLog) => res.json(latestLog))
+  getLatestLog(employeeid)
+    .then((latestLog) => {
+      res.json({
+        message: "success",
+        data: latestLog,
+      });
+    })
     .catch(() =>
       res
         .status(500)
@@ -68,7 +73,7 @@ router.post("/latestlogforapp", (req, res) => {
 
 
 router.post("/clockin", (req, res) => {
-  const employee_id = req.session.employeeid;
+  const employee_id = req.body.employeeid;
 
   if (!employee_id) {
     return res.status(401).json({
@@ -172,11 +177,10 @@ router.post("/clockin", (req, res) => {
 
 
 router.post("/clockout", (req, res) => {
-  const employee_id = req.session.employeeid;
+  const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
-  
   const checkExistingClockInQuery = `
     SELECT ma_employeeid, ma_attendancedate
     FROM master_attendance
@@ -192,9 +196,8 @@ router.post("/clockout", (req, res) => {
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = getDeviceInformation(req); 
+        const deviceout = getDeviceInformation(req);
 
-        
         const updateQuery = `
           UPDATE master_attendance
           SET
@@ -225,7 +228,6 @@ router.post("/clockout", (req, res) => {
             });
           });
       } else {
-       
         res.json({
           status: "error",
           message:
@@ -242,4 +244,3 @@ router.post("/clockout", (req, res) => {
       });
     });
 });
-
