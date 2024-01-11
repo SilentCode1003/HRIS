@@ -142,6 +142,7 @@
                         type: "POST",
                         url: "/eportalindex/clockin",
                         data: {
+                            employeeid: employeeid,
                             latitude: userLocation.lat,
                             longitude: userLocation.lng,
                             employeeid: employeeid,
@@ -201,6 +202,7 @@
                 type: "POST",
                 url: "/eportalindex/clockout",
                 data: {
+                    employeeid: employeeid,
                     latitude: userLocation.lat,
                     longitude: userLocation.lng,
                     employeeid: employeeid,

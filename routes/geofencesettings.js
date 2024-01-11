@@ -2,6 +2,7 @@ const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 var express = require('express');
 const { Validator } = require('./controller/middleware');
+const { Master_Geofence_Settings } = require('./model/hrmisdb');
 var router = express.Router();
 const currentDate = moment();
 
@@ -136,9 +137,10 @@ router.post('/selectgeofence', (req, res) => {
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
+      let data = Master_Geofence_Settings(result);
       res.json({
         msg: 'success',
-        data: result,
+        data: data,
       });
     })
     .catch((error) => {
