@@ -51,8 +51,10 @@ router.post('/set-geofence', async (req, res) => {
 router.get("/load", (req, res) => {
     try {
         let sql =`SELECT
+        me_profile_pic as image,
+        ma_attendanceid as attendanceid,
         CONCAT(me_lastname, " ", me_firstname) as employeeid,
-        ma_attendancedate as attendancedate,
+        DATE_FORMAT(ma_attendancedate, '%W, %M %e, %Y') as attendancedate,
         TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
         TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
         ma_devicein as devicein,
@@ -63,7 +65,7 @@ router.get("/load", (req, res) => {
         ) AS totalhours
         FROM master_attendance
         LEFT JOIN master_employee ON ma_employeeid = me_id
-        ORDER BY ma_attendanceid DESC`;
+        ORDER BY ma_attendancedate DESC`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -101,7 +103,7 @@ router.post("/getloadforapp", (req, res) => {
         FROM master_attendance
         LEFT JOIN master_employee ON ma_employeeid = me_id
          where ma_employeeid = '${employeeid}'
-        ORDER BY ma_attendanceid DESC;`;
+        ORDER BY ma_attendancedate DESC`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -123,10 +125,10 @@ router.post("/getloadforapp", (req, res) => {
 
 router.post('/logs', (req, res) => {
     try {
-        let logid = req.body.logid;
+        let attendanceid = req.body.attendanceid;
         let sql =  `select
-        al_attendanceid as attendanceid,
-        al_employeeid as fullname,
+        me_profile_pic as image,
+        concat(me_lastname,' ',me_firstname) fullname,
         TIME_FORMAT(al_logdatetime, '%H:%i:%s') as logdatetime,
         al_logtype as logtype,
         al_latitude as latitude,
@@ -136,7 +138,7 @@ router.post('/logs', (req, res) => {
         from master_employee
         inner join attendance_logs on me_id = al_employeeid
         left join master_geofence_settings on me_department = mgs_departmentid
-        where al_attendanceid = '${logid}'`;
+        where al_attendanceid = '${attendanceid}'`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {

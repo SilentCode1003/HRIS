@@ -16,6 +16,7 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = ` SELECT 
+    me_profile_pic,
     oda_disciplinaryid,
     concat(me_firstname,' ',me_lastname) as oda_employeeid,
     mo_offensename as oda_offenseid,

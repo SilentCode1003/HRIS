@@ -102,7 +102,8 @@ router.post("/save", async (req, res) => {
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `SELECT 
+    let sql = `  SELECT 
+    me_profile_pic,
     mu_userid,
     concat(me_firstname,' ',me_lastname) as mu_employeeid,
     mu_username,
@@ -111,7 +112,7 @@ router.get("/load", (req, res) => {
     mu_createdate,
     mu_status
     from master_user
-      left join master_employee on master_user.mu_employeeid = me_id
+    left join master_employee on master_user.mu_employeeid = me_id
     LEFT JOIN master_access ON master_user.mu_accesstype = ma_accessid`;
 
     mysql.Select(sql, "Master_User", (err, result) => {
