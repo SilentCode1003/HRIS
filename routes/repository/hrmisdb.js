@@ -770,3 +770,16 @@ exports.mysqlQueryPromise = (sql) => {
     });
   });
 }
+
+exports.StoredProcedure = (sql, callback) => {
+  try {
+    connection.query(sql, (error, results, fields) => {
+      if (error) {
+        callback(error.message, null);
+      }
+      callback(null, results[0]);
+    });
+  } catch (error) {
+    callback(error, null);
+  }
+};
