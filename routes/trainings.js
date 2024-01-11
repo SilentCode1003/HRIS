@@ -14,6 +14,7 @@ module.exports = router;
 router.get('/load', (req, res) => {
   try {
     let sql = ` SELECT 
+    me_profile_pic,
     mt_trainingid,
     mt_name,
     me_id, concat(me_firstname, ' ', me_lastname) AS mt_employeeid,
@@ -23,6 +24,7 @@ router.get('/load', (req, res) => {
     mt_status
    FROM master_training
     LEFT JOIN master_employee ON master_training.mt_employeeid = me_id`;
+
 
     mysql.Select(sql, 'Master_Training', (err, result) => {
       if (err) console.error('Error: ', err);

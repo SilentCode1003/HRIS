@@ -340,6 +340,7 @@ exports.Master_Training = (data) => {
 
     data.forEach((key, item) => {
         dataResult.push({
+            image: key.me_profile_pic,
             trainingid: key.mt_trainingid,
             name: key.mt_name,
             employeeid: key.mt_employeeid,
@@ -375,6 +376,7 @@ exports.Offense_Disciplinary_Actions = (data) => {
 
     data.forEach((key, item) => {
         dataResult.push({
+            image: key.me_profile_pic,
             disciplinaryid: key.oda_disciplinaryid,
             employeeid: key.oda_employeeid,
             offenseid: key.oda_offenseid,
@@ -435,6 +437,7 @@ exports.Master_User = (data) => {
 
     data.forEach((key, item) => {
         dataResult.push({
+            image: key.me_profile_pic,
             userid: key.mu_userid,
             employeeid: key.mu_employeeid,
             username: key.mu_username,
