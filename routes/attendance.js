@@ -91,6 +91,7 @@ router.post('/logs', (req, res) => {
     try {
         let logid = req.body.logid;
         let sql =  `select
+        al_attendanceid as attendanceid,
         al_employeeid as fullname,
         TIME_FORMAT(al_logdatetime, '%H:%i:%s') as logdatetime,
         al_logtype as logtype,
