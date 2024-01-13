@@ -90,7 +90,7 @@ router.post('/save', async (req, res) => {
     let description = req.body.description;
     let createdate = currentDate.format('YYYY-MM-DD');
     let createby = req.session.fullname; 
-    let status = req.body.status;
+    let status = 'Active';
     console.log('Received department name:', offenseid);
 
     let offenseIdQuery = `SELECT mo_offenseid FROM master_offense WHERE mo_offensename = '${offenseid}'`;
@@ -129,7 +129,7 @@ router.post('/update', (req, res) => {
     let actioncode = req.body.actioncode;
     let offenseid = req.body.offenseid;
     let description = req.body.description;
-    let createby = req.body.createby;
+    let createby = req.session.fullname;
     let status = req.body.status;
     
     let sqlupdate = `UPDATE master_disciplinary_action SET   

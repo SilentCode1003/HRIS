@@ -96,7 +96,6 @@
     $(document).on("click", "#userssavebtn", function () {
       let employeeid = $("#usersname").val();
       let accesstype = $("#usersaccesstype").val();
-      let status = $("#usersstatus").val();
 
       var message = "";
 
@@ -108,11 +107,6 @@
         message += "DESCRIPTION ";
       }
 
-
-      if (status == "") {
-        message += "POSITION NAME ";
-      }
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -122,7 +116,6 @@
           data: {
             employeeid: employeeid,
             accesstype: accesstype,
-            status: status,
 
           },
           success: function (result) {
@@ -230,7 +223,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      userid = dataRow[0];
+      userid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {

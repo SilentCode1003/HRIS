@@ -81,7 +81,7 @@ router.get('/load', (req, res) => {
 router.post('/save', async (req, res) => {
   try {
     let shiftname = req.body.shiftname;
-    let status = req.body.status;
+    let status = 'Active';
     let department = req.body.department; 
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
@@ -115,6 +115,7 @@ router.post('/save', async (req, res) => {
     res.json({ msg: 'error' });
   }
 });
+
 
 router.post('/update', (req, res) => {
   try {

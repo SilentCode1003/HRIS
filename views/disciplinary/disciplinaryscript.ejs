@@ -37,7 +37,7 @@
               var status = item.status;
 
               action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshiftmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdisciplinarymodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
 
               var imgElement = document.createElement("img");
@@ -101,8 +101,6 @@
       let actionid = $("#disciplinaryactionid").val();
       let violation = $("#disciplinaryviolationid").val();
       let date = $("#disciplinarydate").val();
-      let createby = $("#disciplinarycreatedby").val();
-      let status = $("#disciplinarystatus").val();
 
       var message = "";
 
@@ -126,16 +124,6 @@
         message += "shiftname is required ";
       }
 
-      if (createby == "") {
-        message += "status is required ";
-      }
-
-
-      if (status == "") {
-        message += "createby is required ";
-      }
-
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -148,8 +136,6 @@
             actionid: actionid,
             violation: violation,
             date: date,
-            createby: createby,
-            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -382,13 +368,13 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      disciplinaryid = dataRow[0];
+      disciplinaryid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/disciplinary/getdisciplinarytbl",
+        url: "/disciplinary/getdisciplinary",
         data: {
           disciplinaryid: disciplinaryid,
         },
@@ -397,14 +383,16 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#editshiftid").val(item.disciplinaryid);
-              $("#editshift").val(item.employeeid);
-              $("#editshiftdepartment").val(item.offenseid);
-              $("#editshiftstatus").val(item.actionid);
-              $("#editshiftcreateby").val(item.violation);
-              $("#editshift").val(item.date);
-              $("#editshiftdepartment").val(item.createby);
-              $("#editshiftstatus").val(item.status);
+              $("#daid").val(item.disciplinaryid);
+              $("#daimage").val(item.image);
+              $("#dafname").val(item.employeeid);
+              $("#daoffense").val(item.offenseid);
+              $("#daaction").val(item.actionid);
+              $("#daviolation").val(item.violation);
+              $("#dadate").val(item.date);
+              $("#dacreateby").val(item.createby);
+              $("#dacreatedate").val(item.createdate);
+              $("#dastatus").val(item.status);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -423,9 +411,6 @@
       let actionid = $("#editshiftdepartment").val();
       let violation = $("#editshiftcreateby").val();
       let date = $("#editshiftstatus").val();
-      let createby = $("#editshiftdepartment").val();
-      let status = $("#editshiftcreateby").val();
-
 
 
       var message = "";
@@ -450,14 +435,6 @@
         message += "status is required. ";
       }
 
-      if (createby === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (status === "") {
-        message += "status is required. ";
-      }
-
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -472,8 +449,6 @@
             actionid: actionid,
             violation: violation,
             date: date,
-            createby: createby,
-            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {

@@ -38,7 +38,7 @@ router.post('/save', (req, res) => {
     let offensename = req.body.offensename;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
+    let status = 'Active';
 
   
     let data = [];

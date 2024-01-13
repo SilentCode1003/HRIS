@@ -79,23 +79,12 @@
 
     $(document).on("click", "#shiftsavebtn", function () {
       let shiftname = $("#shifthours").val();
-      let status = $("#shiftstatus").val();
       let department = $("#shiftdepartment").val();
-
-      console.log(`
-  ${shiftname}
-  ${status}
-  ${department}
-  `);
 
       var message = "";
 
       if (shiftname == "") {
         message += "shiftname is required ";
-      }
-
-      if (status == "") {
-        message += "status is required ";
       }
 
       if (department == "") {
@@ -111,7 +100,6 @@
           url: "/shift/save",
           data: {
             shiftname: shiftname,
-            status: status,
             department: department,
 
           },

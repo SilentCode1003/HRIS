@@ -64,7 +64,7 @@ router.post('/save', async (req, res) => {
     let expirydate = req.body.expirydate;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
+    let status = 'Active';
     let data = [];
 
     // Check if a record with the same employeeid and idtype exists

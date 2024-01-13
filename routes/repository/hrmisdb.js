@@ -265,6 +265,8 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_bulletin(
         mb_image,
         mb_tittle,
+        mb_type,
+        mb_targetdate,
         mb_description,
         mb_createby,
         mb_createdate,

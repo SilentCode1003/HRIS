@@ -212,7 +212,7 @@ router.post('/save', async (req, res) => {
     let date = req.body.date;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
+    let status = 'Active';
     let data = [];
     console.log('Received department name:', offenseid);
     console.log('Received department name:', actionid);
@@ -283,6 +283,48 @@ router.post('/save', async (req, res) => {
     console.log(error);
     console.error('Error: ', error);
     res.json({ msg: 'error' });
+  }
+});
+
+router.post('/getdisciplinary', (req ,res) => {
+  try {
+    let disciplinaryid = req.body.disciplinaryid;
+    let sql = `        
+    select 
+    me_profile_pic AS image,
+    oda_disciplinaryid as disciplinaryid,
+    oda_employeeid as employeeid,
+    oda_offenseid as offenseid,
+    oda_actionid as actionid,
+    mv_description as violation,
+    oda_date as date,
+    oda_createby as createby,
+    oda_createdate as createdate,
+    oda_status as status
+    from offense_disciplinary_actions
+    inner join master_employee on offense_disciplinary_actions.oda_employeeid = me_id
+    inner join master_violation on offense_disciplinary_actions.oda_violation = oda_violation
+    where oda_disciplinaryid = '${disciplinaryid}'
+    limit 1`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'success',
+        data : error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
   }
 });
 

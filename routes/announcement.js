@@ -14,42 +14,37 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.post("/getannouncement", (req, res) => {
+router.post('/getannouncement', (req ,res) => {
   try {
     let bulletinid = req.body.bulletinid;
     let sql = `SELECT
-      mb_image as image,
-      mb_tittle as tittle,
-      mb_description as description,
-      mb_createby as createby,
-      mb_status as status
-      FROM master_bulletin
-      WHERE mb_bulletinid = '${bulletinid}'`;
+    mb_image as image,
+    mb_tittle as tittle,
+    mb_type as type,
+    mb_description as description,
+    mb_targetdate as targetdate,
+    mb_createby as createby,
+    mb_status as status
+    FROM master_bulletin
+    WHERE mb_bulletinid = '${bulletinid}'`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Department not found",
-          });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching department data",
-          error: error,
-        });
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
       });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'error',
+        data: error,
+      });
+    })
   } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-      error: error,
+    res.json({
+      msg: 'error',
+      data: error,
     });
   }
 });
@@ -73,18 +68,21 @@ router.get("/load", (req, res) => {
   }
 });
 
+
 router.post("/save", (req, res) => {
   try {
     let image = req.body.image;
     let tittle = req.body.tittle;
+    let type = req.body.type;
+    let targetdate = req.body.targetdate;
     let description = req.body.description;
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD");
-    let status = req.body.status;
+    let status = 'Active';
 
     let data = [];
 
-    data.push([image, tittle, description, createby, createdate, status]);
+    data.push([image, tittle, type, targetdate, description, createby, createdate, status]);
     let query = `SELECT * FROM master_bulletin WHERE mb_description = '${description}'`;
     mysql.Select(query, "Master_Bulletin", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -117,17 +115,21 @@ router.post("/update", (req, res) => {
     let bulletinid = req.body.bulletinid;
     let image = req.body.image;
     let tittle = req.body.tittle;
+    let type = req.body.type;
+    let targetdate = req.body.targetdate;
     let description = req.body.description;
     let createby = req.session.fullname;
     let status = req.body.status;
 
     let sqlupdate = `UPDATE master_bulletin SET   
-      mb_description ='${description}', 
-      mb_image ='${image}',
-      mb_tittle = '${tittle}',
-      mb_createby ='${createby}', 
-      mb_status ='${status}'
-      WHERE mb_bulletinid ='${bulletinid}'`;
+    mb_description ='${description}', 
+    mb_image ='${image}',
+    mb_tittle = '${tittle}',
+    mb_type = '${type}',
+    mb_targetdate = '${targetdate}',
+    mb_createby ='${createby}', 
+    mb_status ='${status}'
+    WHERE mb_bulletinid ='${bulletinid}'`;
 
     mysql
       .Update(sqlupdate)
@@ -150,30 +152,39 @@ router.post("/update", (req, res) => {
   }
 });
 
-// router.post('/getnotif', (req,res) => {
-//   try {
-//     let employeeid = req.body.employeeid;
+router.post('/loadannouncements' , (req, res) => {
+  try {
+    let sql = `SELECT 
+    mb_image,
+    mb_tittle,
+    mb_description,
+    mb_targetdate,
+    mb_type,
+    mb_status
+    FROM master_bulletin
+    WHERE mb_status = 'Active' 
+    AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
-//     let sql = ``;
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg: 'success',
-//         data: result,
-//       });
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg: 'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg: error,
-//     });
-//   }
-// });
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+  }
+});
 
 router.post('/getnotif', (req, res) => {
   try {
