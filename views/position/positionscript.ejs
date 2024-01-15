@@ -72,22 +72,11 @@
 
     $(document).on("click", "#positionsavebtn", function () {
       let positionname = $("#savepositionname").val();
-      let createdby = $("#savepositioncreatedby").val();
-      let createdate = $("#savedpostcreatedate").val();
-      let status = $("#savepositionstatus").val();
 
       var message = "";
 
       if (positionname == "") {
         message += "TITTLE ";
-      }
-
-      if (createdby == "") {
-        message += "DESCRIPTION ";
-      }
-
-      if (status == "") {
-        message += "POSITION NAME ";
       }
 
       if (message != "") {
@@ -98,9 +87,6 @@
           url: "/position/save",
           data: {
             positionname: positionname,
-            createdby: createdby,
-            createdate: createdate,
-            status: status,
 
           },
           success: function (result) {
@@ -160,7 +146,6 @@
             $.each(existingData, (key, item) => {
               $("#editpostid").val(item.positionid);
               $("#editpostname").val(item.positionname);
-              $("#editpositioncreatedby").val(item.createdby);
               $("#editpositionstatus").val(item.status);
             });
           } else {
@@ -177,17 +162,12 @@
       console.log("Save button clicked");
       let id = positionid;
       let positionname = $("#editpostname").val();
-      let createdby = $("#editpositioncreatedby").val();
       let status = $("#editpositionstatus").val();
 
       var message = "";
 
       if (positionname === "") {
         message += "departmentname is required. ";
-      }
-
-      if (createdby === "") {
-        message += "departmenthead is required. ";
       }
 
       if (status === "") {
@@ -203,7 +183,6 @@
           data: {
             positionid: id,
             positionname: positionname,
-            createdby: createdby,
             status: status,
           },
           success: function (result) {

@@ -246,41 +246,41 @@
                 },
             });
         });
-        $(document).on("click", "#editgovermentidsavebtn", function () {
+        $(document).on("click", "#editGeoFenceSaveButton", function () {
             console.log("Save button clicked");
-            let id = governmentid
-            let employeeid = $("#editgovermentidemployeeid").val();
-            let idtype = $("#editgovermentidtype").val();
-            let idnumber = $("#editgovermentidnumber").val();
-            let issuedate = $("#editgovermentidissuedate").val();
-            let expirydate = $("#editgovermentidexpirydate").val();
-            let createby = $("#editgovermentidcreatedby").val();
-            let status = $("#editgovermentidstatus").val();
+            let id = geofenceid
+            let geofencename = $("#editGeofenceName").val();
+            let departmentid = $("#editGeofenceDepartment").val();
+            let latitude = $("#editLatitude").val();
+            let longitude = $("#editLongitude").val();
+            let radius = $("#editRadius").val();
+            let location = $("#editLocation").val();
+            let status = $("#editstatus").val();
 
 
             var message = "";
 
-            if (employeeid === "") {
+            if (geofencename === "") {
                 message += "departmentname is required. ";
             }
 
-            if (idtype === "") {
+            if (departmentid === "") {
+                message += "departmentname is required. ";
+            }
+
+            if (latitude === "") {
                 message += "status is required. ";
             }
 
-            if (idnumber === "") {
+            if (longitude === "") {
                 message += "departmenthead is required. ";
             }
 
-            if (issuedate === "") {
+            if (radius === "") {
                 message += "status is required. ";
             }
 
-            if (expirydate === "") {
-                message += "status is required. ";
-            }
-
-            if (createby === "") {
+            if (location === "") {
                 message += "status is required. ";
             }
 
@@ -293,15 +293,15 @@
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "govermentid/update",
+                    url: "geofencesettings/update",
                     data: {
-                        governmentid: id,
-                        employeeid: employeeid,
-                        idtype: idtype,
-                        idnumber: idnumber,
-                        issuedate: issuedate,
-                        expirydate: expirydate,
-                        createby: createby,
+                        geofenceid: id,
+                        geofencename: geofencename,
+                        departmentid: departmentid,
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: radius,
+                        location: location,
                         status: status,
                     },
                     success: function (result) {

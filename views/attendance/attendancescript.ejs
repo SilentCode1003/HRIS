@@ -130,12 +130,13 @@
                         var row = material_list_tbl.insertRow(1);
                         var IMAGE = row.insertCell(0);
                         var FULLNAME = row.insertCell(1);
-                        var LOGDATETIME = row.insertCell(2);
-                        var LOGTYPE = row.insertCell(3);
-                        var LATITUDE = row.insertCell(4);
-                        var LONGITUDE = row.insertCell(5);
-                        var DEVICE = row.insertCell(6);
-                        var LOCATION = row.insertCell(7);
+                        var LOGDATE = row.insertCell(2);
+                        var LOGTIME = row.insertCell(3);
+                        var LOGTYPE = row.insertCell(4);
+                        var LATITUDE = row.insertCell(5);
+                        var LONGITUDE = row.insertCell(6);
+                        var DEVICE = row.insertCell(7);
+                        var LOCATION = row.insertCell(8);
 
                         var imgElement = document.createElement("img");
                         imgElement.src = "data:image/jpg;base64," + item.image;
@@ -146,7 +147,8 @@
                         IMAGE.appendChild(imgElement);
 
                         FULLNAME.innerHTML = item.fullname;
-                        LOGDATETIME.innerHTML = item.logdatetime;
+                        LOGDATE.innerHTML = item.logdate;
+                        LOGTIME.innerHTML = item.logtime;
                         LOGTYPE.innerHTML = item.logtype;
                         LATITUDE.innerHTML = item.latitude;
                         LONGITUDE.innerHTML = item.longitude;
@@ -154,7 +156,7 @@
                         LOCATION.innerHTML = item.location;
 
                         $.each(
-                            [FULLNAME, LOGDATETIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
+                            [FULLNAME, LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
                             function (_, cell) {
                                 cell.style.textAlign = "center";
                                 cell.style.verticalAlign = "middle";

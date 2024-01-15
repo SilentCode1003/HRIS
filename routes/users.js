@@ -27,7 +27,8 @@ module.exports = router;
 
 router.post("/save", async (req, res) => {
   try {
-    const { employeeid, accesstype, status } = req.body;
+    const { employeeid, accesstype,} = req.body;
+    let status = 'Active';
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
 

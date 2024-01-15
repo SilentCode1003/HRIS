@@ -1,6 +1,6 @@
 <script>
     let map;
-    let logid = '';
+    let attendanceid = '';
 
     $(document).ready(function () {
         searchTable();
@@ -41,7 +41,7 @@
                `;
 
                             finalData.push({
-                                employeeid: item.employeeid,
+                                attendanceid: item.attendanceid,
                                 attendancedate: item.attendancedate,
                                 clockin: item.clockin,
                                 clockout: item.clockout,
@@ -62,7 +62,7 @@
                     },
                 ],
                 columns: [
-                    { data: "employeeid" },
+                    { data: "attendanceid" },
                     { data: "attendancedate" },
                     { data: "clockin" },
                     { data: "clockout" },
@@ -87,18 +87,20 @@
                     dataRow.push($(this).text());
                 });
             console.log(dataRow);
-            logid = dataRow[0];
+            attendanceid = dataRow[0];
         });
 
-        $(document).on("click", "#editBtn", function () {        
+        $(document).on("click", "#editBtn", function () {
+            $(`#dataTableattendancelogs`).find("tr:gt(0)").remove();        
             $.ajax({
                 type: "POST",
-                url: "/attendance/logs",
+                url: "/eportalattendance/logs",
                 data: {
-                    logid: logid,
+                    attendanceid: attendanceid,
                 },
                 success: function (json) {
                     console.log("API response", json);
+                    console.log('id', attendanceid);
 
                     var finalData = [];
                     var data = json.data;
@@ -106,20 +108,20 @@
                     if ($.fn.DataTable.isDataTable("#dataTableattendancelogs")) {
                         $("#dataTableattendancelogs").DataTable().destroy();
                     }
-                    material_list_tbl = document.getElementById("dataTableattendance");
+                    material_list_tbl = document.getElementById("dataTableattendancelogs");
 
                     $.each(data, function (key, item) {
                         var row = material_list_tbl.insertRow(1);
-                        var FULLNAME = row.insertCell(0);
-                        var LOGDATETIME = row.insertCell(1);
+                        var LOGDATE = row.insertCell(0);
+                        var LOGTIME = row.insertCell(1);
                         var LOGTYPE = row.insertCell(2);
                         var LATITUDE = row.insertCell(3);
                         var LONGITUDE = row.insertCell(4);
                         var DEVICE = row.insertCell(5);
                         var LOCATION = row.insertCell(6);
 
-                        FULLNAME.innerHTML = item.fullname;
-                        LOGDATETIME.innerHTML = item.logdatetime;
+                        LOGDATE.innerHTML = item.logdate;
+                        LOGTIME.innerHTML = item.logtime;
                         LOGTYPE.innerHTML = item.logtype;
                         LATITUDE.innerHTML = item.latitude;
                         LONGITUDE.innerHTML = item.longitude;
@@ -127,7 +129,7 @@
                         LOCATION.innerHTML = item.location;
 
                         $.each(
-                            [FULLNAME, LOGDATETIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
+                            [LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
                             function (_, cell) {
                                 cell.style.textAlign = "center";
                                 cell.style.verticalAlign = "middle";

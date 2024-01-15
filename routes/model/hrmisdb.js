@@ -163,8 +163,11 @@ exports.Master_Bulletin = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
+      image: key.mb_image,
       bulletinid: key.mb_bulletinid,
       tittle: key.mb_tittle,
+      type: key.mb_type,
+      targetdate: key.mb_targetdate,
       description: key.mb_description,
       createby: key.mb_createby,
       createdate: key.mb_createdate,

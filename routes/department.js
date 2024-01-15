@@ -76,7 +76,7 @@ router.post('/save', (req, res) => {
     let departmenthead = req.body.departmenthead;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
+    let status = 'Active';
 
   
     let data = [];

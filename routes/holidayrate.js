@@ -17,12 +17,12 @@ router.post('/getholidayrate', (req, res) => {
   try {
     let holidayrateid = req.body.holidayrateid;
     let sql = `SELECT
-      mhr_holidaydate as holidaydate,
-      mhr_holidayrate as holidayrate,
-      mhr_holidaystatus as holidaystatus,
-      mhr_createby as createby
-      FROM master_holidayrate
-      WHERE mhr_holidayrateid = '${holidayrateid}'`;
+    mhr_holidaydate as holidaydate,
+    mhr_holidayrate as holidayrate,
+    mhr_holidaystatus as holidaystatus
+    FROM master_holidayrate
+    inner join master_holiday on master_holidayrate.mhr_holidaydate = mh_holidayid
+    WHERE mhr_holidayrateid = '${holidayrateid}'`;
 
     mysql.mysqlQueryPromise(sql)
       .then((result) => {
@@ -83,10 +83,9 @@ router.post('/save', async (req, res) => {
   try {
     let holidaydate = req.body.holidaydate;
     let holidayrate = req.body.holidayrate;
-    let holidaystatus = req.body.holidaystatus; 
+    let holidaystatus = 'Active'; 
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    console.log('Received department name:', holidaydate);
 
     const holidaydateIdQuery = `SELECT mh_holidayid FROM master_holiday WHERE mh_date = '${holidaydate}'`;
 
@@ -124,7 +123,9 @@ router.post('/update', (req, res) => {
     let holidaydate = req.body.holidaydate;
     let holidayrate = req.body.holidayrate;
     let holidaystatus = req.body.holidaystatus;
-    let createby = req.session.fullname; 
+    let createby = req.session.fullname;
+
+    console.log(`${holidaydate}`,`${holidayrate}`);
     
     let sqlupdate = `UPDATE master_holidayrate SET   
     mhr_holidaydate ='${holidaydate}', 
@@ -135,21 +136,22 @@ router.post('/update', (req, res) => {
 
     mysql.Update(sqlupdate)
     .then((result) =>{
-      console.log(result);
-  
       res.json({
-        msg: 'success'
-      })
+        msg: 'success',
+        data : result,
+      });
     })
     .catch((error) =>{
       res.json({
-        msg:error
+        msg:'error',
+        data: error,
       })
       
     });
   } catch (error) {
     res.json({
-      msg: 'error'
+      msg: 'error',
+      data: error,
     })
   }
 });

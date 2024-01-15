@@ -126,19 +126,24 @@ router.post("/getloadforapp", (req, res) => {
 router.post('/logs', (req, res) => {
     try {
         let attendanceid = req.body.attendanceid;
-        let sql =  `select
-        me_profile_pic as image,
-        concat(me_lastname,' ',me_firstname) fullname,
-        TIME_FORMAT(al_logdatetime, '%H:%i:%s') as logdatetime,
-        al_logtype as logtype,
-        al_latitude as latitude,
-        al_longitude as longitude,
-        al_device as device,
-        mgs_location as location
-        from master_employee
-        inner join attendance_logs on me_id = al_employeeid
-        left join master_geofence_settings on me_department = mgs_departmentid
-        where al_attendanceid = '${attendanceid}'`;
+        let sql =  `SELECT
+        me_profile_pic AS image,
+        CONCAT(me_lastname, ' ', me_firstname) AS fullname,
+        DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
+        TIME(al_logdatetime) AS logtime,
+        al_logtype AS logtype,
+        al_latitude AS latitude,
+        al_longitude AS longitude,
+        al_device AS device,
+        mgs_location AS location
+        FROM
+        master_employee
+        INNER JOIN
+        attendance_logs ON me_id = al_employeeid
+        LEFT JOIN
+        master_geofence_settings ON me_department = mgs_departmentid
+        WHERE
+        al_attendanceid = '${attendanceid}'`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -157,6 +162,70 @@ router.post('/logs', (req, res) => {
             msg:error,
         });
         
+    }
+});
+
+// router.post('/gethomestatus', (req, res) => {
+//     try {
+//        //let attendancedate = req.body.attendancedate;
+//         let employeeid = req.body.employeeid;
+//         let sql = `SELECT 
+//         DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS formatted_clockin,
+//         DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS formatted_clockout
+//         FROM master_attendance
+//         WHERE ma_employeeid = '${employeeid}'
+//         LIMIT 1`;
+      
+
+//         mysql.mysqlQueryPromise(sql)
+//         .then((result) => {
+//             res.json({
+//                 msg: 'success',
+//                 data: result,
+//             });
+//         })
+//         .catch((error) => {
+//             res.json({
+//                 msg: 'error',
+//                 data: error,
+//             });
+//         });
+//     } catch (error) {
+//         console.log('error', error);
+//     }
+// });
+
+
+router.post('/gethomestatus2', (req, res) => {
+    try {
+        let employeeid = req.body.employeeid;
+        let attendancedate = req.body.attendancedate;
+        let sql = `select 
+		DATE_FORMAT(ma_clockin, '%W, %M %e, %Y') AS logdatein,
+        TIME(ma_clockin) AS logtimein,
+        DATE_FORMAT(ma_clockout, '%W, %M %e, %Y') AS logdateout,
+        TIME(ma_clockout) AS logtimeout
+        from master_attendance
+        where ma_employeeid = '${employeeid}' and ma_attendancedate = '${attendancedate}'
+        order by ma_attendancedate desc 
+        limit 1`;
+        console.log(sql);
+
+        mysql.mysqlQueryPromise(sql)
+        .then((result) => {
+            res.json({
+                msg: 'success',
+                data: result,
+            });
+        })
+        .catch((error) => {
+            res.json({
+                msg: 'error',
+                data: error,
+            });
+        });
+    } catch (error) {
+        console.log('error', error);
     }
 });
 

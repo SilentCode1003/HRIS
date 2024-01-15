@@ -77,9 +77,6 @@
     $(document).on("click", "#violationsavebtn", function () {
       let description = $("#violationdescription").val();
       let actionid = $("#violationactionid").val();
-      let createby = $("#violationcreatedby").val();
-      let status = $("#vatiolationstatus").val();
-
 
       var message = "";
 
@@ -89,14 +86,6 @@
 
       if (actionid == "") {
         message += "status is required ";
-      }
-
-      if (createby == "") {
-        message += "department is required ";
-      }
-
-      if (status == "") {
-        message += "createby is required ";
       }
 
       if (message !== "") {
@@ -109,9 +98,6 @@
           data: {
             description: description,
             actionid: actionid,
-            createby: createby,
-            status: status,
-
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -217,7 +203,6 @@
               $("#editshiftid").val(item.violationid);
               $("#editviolationdescription").val(item.description);
               $("#editviolationactionid").val(item.actionid);
-              $("#editviolationcreatedby").val(item.createby);
               $("#editvatiolationstatus").val(item.status);
             });
           } else {
@@ -234,7 +219,6 @@
       let id = violationid
       let description = $("#editviolationdescription").val();
       let actionid = $("#editviolationactionid").val();
-      let createby = $("#editviolationcreatedby").val();
       let status = $("#editvatiolationstatus").val();
 
 
@@ -246,10 +230,6 @@
 
       if (actionid === "") {
         message += "status is required. ";
-      }
-
-      if (createby === "") {
-        message += "departmenthead is required. ";
       }
 
       if (status === "") {
@@ -266,7 +246,6 @@
             violationid: id,
             description: description,
             actionid: actionid,
-            createby: createby,
             status: status,
           },
           success: function (result) {

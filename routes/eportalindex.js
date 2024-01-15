@@ -244,3 +244,35 @@ router.post("/clockout", (req, res) => {
       });
     });
 });
+
+
+router.post('/emplogs', (req, res) => {
+  try {
+    let = employeeid = req.body.employeeid;
+    let sql = `SELECT
+    DATE_FORMAT(al_logdatetime, '%Y-%m-%d') AS logdate,
+    al_logtype as logtype,
+    TIME(al_logdatetime) AS logtime
+    FROM attendance_logs
+    WHERE al_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});

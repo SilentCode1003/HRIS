@@ -48,7 +48,7 @@ router.post('/save', async (req, res) => {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
     let location = req.body.location;
-    let status = req.body.status;
+    let status = 'Active';
     let data = [];
     console.log('Recieved employee name:',employeeid);
 

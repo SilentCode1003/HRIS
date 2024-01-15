@@ -5,8 +5,15 @@
         let employeeid = "<%= employeeid %>";
         let devicein = '';
         let deviceout = '';
-        let geofenceChecked = false; // Flag to track geofence check
-        let logStatusChecked = false; // Flag to track log status check
+        let geofenceChecked = false; 
+        let logStatusChecked = false; 
+        let bdaydiv = "";
+        let anouncementdiv = "";
+        LoadTable();
+        LoadBdayFolks();
+        loadAnnouncements();
+
+        //#region maps
 
 
         console.log('Employee ID:', employeeid);
@@ -131,7 +138,12 @@
         updateClockButtonStatus();
 
 
+        //#endregion
+
+
         //#region clockin/out api
+
+
 
 
         $('#clockinbtn').on('click', function () {
@@ -247,5 +259,162 @@
         });
 
         //#endregion
+
+
+        //#region load employee dashboard
+
+
+        function LoadTable() {
+            $("#attendanceTable").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                serverMethod: "POST",
+                ajax: {
+                    url: "/eportalindex/emplogs",
+                    data: {
+                        employeeid: employeeid,
+                    },
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+
+                            finalData.push({
+                                logdate: item.logdate,
+                                logtype: item.logtype,
+                                logtime: item.logtime,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "logdate" },
+                    { data: "logtype" },
+                    { data: "logtime" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $('td', row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
+                initComplete: function () {
+                    console.log("Done");
+                },
+            });
+        }
+
+
+        function LoadBdayFolks() {
+            $.ajax({
+                type: "GET",
+                url: "/getbday",
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const bdayData = result.data;
+                        let counterbday = 0;
+
+                        console.log(bdayData.length);
+                        $.each(bdayData, (key, item) => {
+                            counterbday++;
+                            bdaydiv += `
+              <div class="carousel-item active" data-bs-interval="2000">
+                                        <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
+                                            style="height: 470px;">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5 id="employeeid${counterbday}">${item.firstname}</h5>
+                                            <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>`;
+                        });
+
+                    
+
+                        $("#carouselbday").html(bdaydiv);
+                    } else {
+                        console.error("Error: ", result.message);
+                        swal(
+                            "An error occurred while fetching announcement data",
+                            "Please try again later.",
+                            "error"
+                        );
+                    }
+                },
+            
+            });
+        }
+
+
+        function loadAnnouncements() {
+            $.ajax({
+                type: "POST",
+                url: "/announcement/loadannouncements",
+                dataType: "json", 
+                success: function (data) {
+                    if (data.msg === 'success') {
+                        const carouselInner = $('#carouselannouncement .carousel-inner');
+
+                  
+                        carouselInner.empty();
+
+ 
+                        $.each(data.data, function (index, announcement) {
+                            const activeClass = index === 0 ? 'active' : '';
+
+                            const carouselItem = $('<div>', {
+                                class: `carousel-item ${activeClass}`
+                            });
+
+        
+                            carouselItem.html(`
+                        <img src="${announcement.mb_image}" class="d-block w-100" alt="Announcement Image" style="height: 470px;">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${announcement.mb_tittle}</h5>
+                            <p>${announcement.mb_description}</p>
+                            <p>${announcement.mb_targetdate}</p>
+                        </div>
+                    `);
+
+
+                            carouselInner.append(carouselItem);
+                        });
+                    } else {
+                        console.error('Error:', data.data);
+                    }
+                },
+                error: function (error) {
+                    console.error('Ajax error:', error);
+                }
+            });
+        }
+
+        //#region 
+
     });
 </script>
