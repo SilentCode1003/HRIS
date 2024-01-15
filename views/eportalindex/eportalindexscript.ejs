@@ -5,13 +5,13 @@
         let employeeid = "<%= employeeid %>";
         let devicein = '';
         let deviceout = '';
-        let geofenceChecked = false; 
-        let logStatusChecked = false; 
+        let geofenceChecked = false;
+        let logStatusChecked = false;
         let bdaydiv = "";
         let anouncementdiv = "";
         LoadTable();
         LoadBdayFolks();
-        loadAnnouncements();
+        GenerateAnouncement();
 
         //#region maps
 
@@ -354,7 +354,7 @@
                                     </button>`;
                         });
 
-                    
+
 
                         $("#carouselbday").html(bdaydiv);
                     } else {
@@ -366,51 +366,67 @@
                         );
                     }
                 },
-            
+
             });
         }
 
 
-        function loadAnnouncements() {
+        function GenerateAnouncement() {
             $.ajax({
-                type: "POST",
-                url: "/announcement/loadannouncements",
-                dataType: "json", 
-                success: function (data) {
-                    if (data.msg === 'success') {
-                        const carouselInner = $('#carouselannouncement .carousel-inner');
+                type: "GET",
+                url: "/getbulletin",
+                // data: {
+                //   bulletinid: id,
+                // },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const announcementData = result.data;
+                        let counter = 0;
 
-                  
-                        carouselInner.empty();
-
- 
-                        $.each(data.data, function (index, announcement) {
-                            const activeClass = index === 0 ? 'active' : '';
-
-                            const carouselItem = $('<div>', {
-                                class: `carousel-item ${activeClass}`
-                            });
-
-        
-                            carouselItem.html(`
-                        <img src="${announcement.mb_image}" class="d-block w-100" alt="Announcement Image" style="height: 470px;">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>${announcement.mb_tittle}</h5>
-                            <p>${announcement.mb_description}</p>
-                            <p>${announcement.mb_targetdate}</p>
-                        </div>
-                    `);
-
-
-                            carouselInner.append(carouselItem);
+                        console.log(announcementData.length);
+                        $.each(announcementData, (key, item) => {
+                            counter++;
+                            anouncementdiv += `
+              <div class="carousel-item active" data-bs-interval="2000">
+                <img id="preview${counter}"  src="data:image/jpg;base64,${item.image}" class="d-block w-100" alt="..."
+                style="height: 470px;">
+              <div class="carousel-caption d-none d-md-block">
+                <h5 id="announcetitle${counter}">${item.title}</h5>
+                <p id="announcedesc${counter}">${item.description}</p>
+                <p id="announcedate${counter}">${item.targetdate}</p>
+              </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>`;
+                            // console.log(anouncementdiv);
                         });
                     } else {
-                        console.error('Error:', data.data);
+                        console.error("Error: ", result.message);
+                        swal(
+                            "An error occurred while fetching announcement data",
+                            "Please try again later.",
+                            "error"
+                        );
                     }
+
+                    $("#carouselannouncement").html(anouncementdiv);
                 },
-                error: function (error) {
-                    console.error('Ajax error:', error);
-                }
+                error: function (err) {
+                    console.error("AJAX Error: ", err.responseText);
+                    swal(
+                        "An error occurred while fetching announcement data",
+                        "Please try again later.",
+                        "error"
+                    );
+                },
             });
         }
 

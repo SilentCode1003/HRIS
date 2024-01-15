@@ -175,6 +175,10 @@ exports.Select = (sql, table, callback) => {
       if (table == "Attendance_Logs") {
         callback(null, model.Attendance_Logs(results));
       }
+
+      if (table == "Master_Salary") {
+        callback(null, model.Master_Salary(results));
+      }
     });
   } catch (error) {}
 };
@@ -712,6 +716,20 @@ exports.InsertTable = (tablename, data, callback) => {
         mgs_radius,
         mgs_location,
         mgs_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_salary") {
+    let sql = `INSERT INTO master_salary(
+      ms_employeeid,
+      ms_monthly,
+      ms_allowances) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

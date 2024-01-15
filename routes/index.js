@@ -139,9 +139,9 @@ router.get("/loadCA", (req, res) => {
   }
 });
 
-router.post("/getbulletin", (req, res) => {
+router.get("/getbulletin", (req, res) => {
   try {
-    let bulletinid = req.body.bulletinid;
+    // let bulletinid = req.body.bulletinid;
     let sql = `
     SELECT
     mb_image AS image,
@@ -150,8 +150,7 @@ router.post("/getbulletin", (req, res) => {
     mb_targetdate as targetdate,
     mb_description AS description
     FROM master_bulletin
-    WHERE mb_bulletinid = '${bulletinid}' 
-    AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
+    WHERE (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -599,26 +598,20 @@ router.get("/getbday", (req, res) => {
   ORDER BY 
     me_birthday`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Data not found",
-          });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching employee data",
-          error: error,
-        });
-      });
+   mysql.mysqlQueryPromise(sql)
+   .then((result) => {
+    res.json({
+      msg: 'success',
+      data: result,
+    });
+   })
+   .catch((error) => {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+   })
+    
   } catch (error) {
     console.log(error);
   }

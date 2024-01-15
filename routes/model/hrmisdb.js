@@ -621,3 +621,18 @@ exports.Attendance_Logs = (data) => {
 
   return dataResult;
 };
+
+exports.Master_Salary = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      salaryid: key.ms_id,
+      employeeid: key.ms_employeeid,
+      monthly: key.ms_monthly,
+      allowances: key.ms_allowances,
+    });
+  });
+
+  return dataResult;
+};
