@@ -5,20 +5,23 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header py-3">
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addojtmodal">
-      + Add New
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addojtmodal">
+      <b>+ Add</b>
     </button>
-    <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+    <input id='myInput' type='text' placeholder="  Search....">
   </div>
   <div class="card-body">
     <div class="table-responsive" id="table-responsive-id">
-      <table class="table table-striped" id="dataTabledepartment">
+      <table class="table table-striped" id="dataTableOjt">
         <thead>
           <tr>
+            <th>Image</th>
             <th>ID</th>
             <th>Name</th>
             <th>Date started</th>
-            <th>Remaining Time</th>
+            <th>Total Hours</th>
+            <th>Remaining Hours</th>
+            <th>End Date</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -36,11 +39,12 @@
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">ADD OJT</h5>
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-user-detail' style='color:#4c60f7; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">ADD OJT</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <br>
         <br>
         <div class="row">
@@ -48,13 +52,14 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;
+                  border: 2.5px solid #174634 !important;"
                     class="rounded rounded-circle" alt="placeholder">
                 </div>
                 <br>
                 <div class="col">
                   <div class="col g-6">
-                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control"
+                    <input type="file" name="ojtprofileimage" id="ojtprofileimage" class="form-control"
                       accept="image/*">
                   </div>
                 </div>
@@ -69,22 +74,22 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeefname" name="employeefname"
-                      placeholder="First Name">
+                    <input type="text" class="form-control" id="ojtfname" name="ojtfname"
+                      placeholder="First Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">First Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeelname" name="employeelname"
-                      placeholder="Last Name">
+                    <input type="text" class="form-control" id="ojtlname" name="ojtlname"
+                      placeholder="Last Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Last Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeemname" name="employeemname"
-                      placeholder="School">
+                    <input type="text" class="form-control" id="ojtschool" name="ojtschool"
+                      placeholder="School" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput"> School</label>
                   </div>
                 </div>
@@ -93,8 +98,8 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeegender" name="employeegender"
-                      aria-label="Floating label select example">
+                    <select class="form-select" id="ojtgender" name="ojtgender"
+                      aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
                       <option selected>Choose</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -104,8 +109,9 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-floating">
+                    <input type="text" class="form-control" id="ojtaddress" name="ojtaddress" placeholder="Address">
                     <input type="text" class="form-control" id="employeeaddress" name="employeeaddress"
-                      placeholder="Address">
+                      placeholder="Address" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Address</label>
                   </div>
                 </div>
@@ -114,14 +120,26 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="employeebirthday" name="employeebirthday">
+                    <input type="number" class="form-control" id="ojthours" name="ojthours" 
+                    style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Total Hours</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="employeephone" name="employeephone"
-                      placeholder="Phone Number">
+                    <select class="form-select" id="ojtstatus" name="ojtstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <label for="ojtstatus">Status</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control" id="ojtphone" name="ojtphone"
+                      placeholder="Phone Number" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Phone Number</label>
                   </div>
                 </div>
@@ -130,18 +148,22 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="employeehiredate" name="employeehiredate">
+                    <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate"
+                    style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Start Date</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" id="employeedepartment" name="employeedepartment"
-                      aria-label="Floating label select example">
+                    <input type="date" class="form-control" id="ojtbirthday" name="ojtbirthday">
+                    <label for="floatingInput">Birthday</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select" id="ojtdepartment" name="ojtdepartment"
+                      aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
                       <option selected>Choose...</option>
-                      <option>IT</option>
-                      <option>Cabling</option>
-                      <option>Research and Development</option>
                     </select>
                     <label for="employeedepartment">Department</label>
                   </div>
@@ -152,27 +174,30 @@
                 <br>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeemergencyname" name="employeeemergencyname"
-                      placeholder="Emergency Contact Name">
+                    <input type="text" class="form-control" id="ojtecname" name="ojtecname"
+                      placeholder="Emergency Contact Name" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Emergency Contact Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="employeeemergencyphone" name="employeeemergencyphone"
-                      placeholder="Emergency Contact Phone">
+                    <input type="text" class="form-control" id="ojtecphone" name="ojtecphone"
+                      placeholder="Emergency Contact Phone" style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Emergency Contact Phone</label>
                   </div>
                 </div>
               </div>
               <br>
+              <br>
             </form>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn">Save</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+        border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="ojtsavebtn" style="background-color: green !important;
+        border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>

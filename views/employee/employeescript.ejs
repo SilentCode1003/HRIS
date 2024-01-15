@@ -11,6 +11,11 @@
     LoadModalPosition();
     searchTable();
 
+    $(document).on('keyup','#myInput',function(){
+      searchTable();
+    });
+
+
     $(document).on("click", "#employeesavebtn", function () {
       console.log("Save button clicked");
       let firstname = $("#employeefname").val();
@@ -256,7 +261,7 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          $('td', row).each(function (index) {
+          $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
@@ -281,7 +286,6 @@
       console.log("Employee ID:", employeeid);
     });
 
-
     $(document).on("click", "#edit-btn", function () {
       $.ajax({
         type: "POST",
@@ -292,7 +296,6 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-
 
             $.each(existingData, (key, item) => {
               console.log(`${item.jobstatus}`);
@@ -339,7 +342,6 @@
                     $("#employeeprofileposition").text(item.position);
                     $("#employeeprofilephone").text(item.contact);
                     $("#employeework").text(item.tenure);
-
                   });
                 }
               },
@@ -467,11 +469,18 @@
           },
           success: function (result) {
             if (result.msg === "success") {
-              swal("Success", "Employee information updated successfully.", "success");
+              swal(
+                "Success",
+                "Employee information updated successfully.",
+                "success"
+              );
             } else if (result.msg === "exists") {
-              swal("Validation Error", "Employee with the same firstname and lastname already exists.", "error");
+              swal(
+                "Validation Error",
+                "Employee with the same firstname and lastname already exists.",
+                "error"
+              );
             } else {
-
             }
           },
           error: function (err) {
@@ -480,8 +489,6 @@
         });
       }
     });
-
-
 
     function LoadModal() {
       $.ajax({
@@ -852,6 +859,7 @@
 
     function excelDataSave(data) {
       var dataraw = JSON.stringify(data, null, 2);
+      console.log(dataraw);
       $.ajax({
         type: "POST",
         url: "/employee/upload",
@@ -916,8 +924,4 @@
   function reloadPage() {
     location.reload();
   }
-
-
-
-
 </script>

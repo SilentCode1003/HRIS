@@ -1,14 +1,14 @@
-const model = require('../model/hrmisdb')
-const mysql = require('mysql');
-const { Encrypter, Decrypter } = require('./crytography');
+const model = require("../model/hrmisdb");
+const mysql = require("mysql");
+const { Encrypter, Decrypter } = require("./crytography");
 require("dotenv").config();
 
-let password = '';
+let password = "";
 Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
   password = encrypted;
-})
+});
 
 // Decrypter('3f4380ddee5398218f6da93ec7d53ec9620d9655174e986656635aa6852a3d27', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
@@ -60,7 +60,6 @@ exports.Select = (sql, table, callback) => {
       if (table == "Eportal_Leaves") {
         callback(null, model.Eportal_Leaves(results));
       }
-
 
       if (table == "Cash_Advance") {
         callback(null, model.Cash_Advance(results));
@@ -142,11 +141,46 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Master_Resigned(results));
       }
 
+      if (table == "Master_Ojt") {
+        callback(null, model.Master_Ojt(results));
+      }
 
+      if (table == "Ojt_User") {
+        callback(null, model.Ojt_User(results));
+      }
+
+      if (table == "Loan") {
+        callback(null, model.Loan(results));
+      }
+
+      if (table == "Loan_Payment") {
+        callback(null, model.Loan_Payment(results));
+      }
+
+      if (table == "Loan_Interest") {
+        callback(null, model.Loan_Interest(results));
+      }
+
+      if (table == "Deposit") {
+        callback(null, model.Deposit(results));
+      }
+
+      if (table == "Member_Recievable_Record") {
+        callback(null, model.Member_Recievable_Record(results));
+      }
+
+      if (table == "Master_Geofence_Settings") {
+        callback(null, model.Master_Geofence_Settings(results));
+      }
+      if (table == "Attendance_Logs") {
+        callback(null, model.Attendance_Logs(results));
+      }
+
+      if (table == "Master_Salary") {
+        callback(null, model.Master_Salary(results));
+      }
     });
-  } catch (error) {
-
-  }
+  } catch (error) {}
 };
 
 exports.Insert = (stmt, todos, callback) => {
@@ -220,15 +254,9 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_employeeid,
         ma_attendancedate,
         ma_clockin,
-        ma_clockout,
-        ma_latitudeIn,
+        ma_latitudein,
         ma_longitudein,
-        ma_latitudeout,
-        ma_geofencelatitude,
-        ma_geofencelongitude,
-        ma_geofenceradius,
-        ma_devicein,
-        ma_deviceout) VALUES ?`;
+        ma_devicein) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -241,6 +269,8 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_bulletin(
         mb_image,
         mb_tittle,
+        mb_type,
+        mb_targetdate,
         mb_description,
         mb_createby,
         mb_createdate,
@@ -554,8 +584,161 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
-};
+  if (tablename == "master_ojt") {
+    let sql = `INSERT INTO master_ojt(
+        mo_id,
+        mo_name,
+        mo_lastname,
+        mo_address,
+        mo_status,
+        mo_birthday,
+        mo_gender,
+        mo_cpnumber,
+        mo_ercontact,
+        mo_ercontactnumber,
+        mo_school,
+        mo_department,
+        mo_startdate,
+        mo_hours,
+        mo_image) VALUES ?`;
 
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "ojt_user") {
+    let sql = `INSERT INTO ojt_user(
+        ou_ojtid,
+        ou_username,
+        ou_password,
+        ou_accesstype,
+        ou_createby,
+        ou_createdate,
+        ou_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "loan") {
+    let sql = `INSERT INTO loan(
+        l_employeeid,
+        l_amount,
+        l_interest,
+        l_amountdue,
+        l_datedue,
+        l_period,
+        l_status,
+        l_approvedby,
+        l_approveddate,
+        l_purpose) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "loan_interest") {
+    let sql = `INSERT INTO loan_interest(
+        li_loanid,
+        li_interest,
+        li_rebate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "deposit") {
+    let sql = `INSERT INTO deposit(
+        d_employeeid,
+        d_date,
+        d_amount) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "member_recievable_record") {
+    let sql = `INSERT INTO member_recievable_record(
+        mrb_employeeid,
+        mrb_date,
+        mrb_totaldeposit,
+        mrb_totalinterest,
+        mrb_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "loan_payment") {
+    let sql = `INSERT INTO loan_payment(
+        lp_loanid,
+        lp_date,
+        lp_amount,
+        lp_remarks) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_geofence_settings") {
+    let sql = `INSERT INTO master_geofence_settings(
+        mgs_geofencename,
+        mgs_departmentid,
+        mgs_latitude,
+        mgs_longitude,
+        mgs_radius,
+        mgs_location,
+        mgs_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_salary") {
+    let sql = `INSERT INTO master_salary(
+      ms_employeeid,
+      ms_monthly,
+      ms_allowances) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+};
 
 exports.Update = async (sql) => {
   return new Promise((resolve, reject) => {
@@ -568,7 +751,6 @@ exports.Update = async (sql) => {
     });
   });
 };
-
 
 exports.UpdateMultiple = async (sql, data, callback) => {
   try {
@@ -596,4 +778,17 @@ exports.mysqlQueryPromise = (sql) => {
       }
     });
   });
-}
+};
+
+exports.StoredProcedure = (sql, callback) => {
+  try {
+    connection.query(sql, (error, results, fields) => {
+      if (error) {
+        callback(error.message, null);
+      }
+      callback(null, results[0]);
+    });
+  } catch (error) {
+    callback(error, null);
+  }
+};

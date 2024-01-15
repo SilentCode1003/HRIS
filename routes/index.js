@@ -24,28 +24,38 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `select 
-    concat(me_firstname,'',me_lastname) as l_employeeid,
-    l_leavestartdate,
-    l_leaveenddate,
-    l_leavetype,
-    l_leavereason,
-    l_leaveapplieddate
+    me_profile_pic as image,
+    me_id as newEmployeeId,
+    concat(me_lastname,' ',me_firstname) as firstname,
+    l_leavestartdate as leavestartdate,
+    l_leaveenddate as leaveenddate,
+    l_leavetype as leavetype,
+    l_leavereason reason,
+    l_leaveapplieddate as applieddate
     from leaves
     left join master_employee on leaves.l_employeeid = me_id
-    where l_leavestatus = 'Pending'`;
+    where l_leavestatus = 'Pending'
+    order by l_leaveid desc`;
+    
 
-    mysql.Select(sql, "Leaves", (err, result) => {
-      if (err) console.error("Error: ", err);
-
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
       res.json({
-        msg: "success",
+        msg: 'success',
         data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'error',
+        data: error
       });
     });
   } catch (error) {
     console.log(error);
   }
 });
+
 
 router.post("/getleave", (req, res) => {
   try {
@@ -60,14 +70,14 @@ router.post("/getleave", (req, res) => {
     l_leavestartdate as leavestartdate,
     l_leaveenddate as leaveenddate,
     l_leavereason as reason,
-    l_leavestatus as status
+    l_leavestatus as status,
+    l_comment as comment
     from leaves
     right join master_employee on leaves.l_employeeid = me_id
     where l_leaveid = '${leaveid}'`;
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -93,16 +103,33 @@ router.post("/getleave", (req, res) => {
   }
 });
 
+
 router.get("/loadCA", (req, res) => {
   try {
-    let sql = `SELECT * FROM cash_advance`;
+    let sql = `   
+    select
+	  me_profile_pic as image,
+    me_id as employeeid,
+    concat(me_lastname,' ',me_firstname) as firstname,
+    ca_requestdate as requestdate,
+    ca_amount as amount,
+    ca_purpose as purpose,
+    ca_status as status
+    from cash_advance
+    left join master_employee on cash_advance.ca_employeeid = me_id
+    where ca_status = 'Pending'
+    order by ca_cashadvanceid desc`;
 
-    mysql.Select(sql, "Cash_Advance", (err, result) => {
-      if (err) console.error("Error: ", err);
-
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
       res.json({
-        msg: "success",
-        data: result,
+        msg:'success',
+        data: result
+      });
+    }).catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
       });
     });
   } catch (error) {
@@ -112,21 +139,21 @@ router.get("/loadCA", (req, res) => {
   }
 });
 
-router.post("/getbulletin", (req, res) => {
+router.get("/getbulletin", (req, res) => {
   try {
-    let bulletinid = req.body.bulletinid;
+    // let bulletinid = req.body.bulletinid;
     let sql = `
-          SELECT
-              mb_image AS image,
-              mb_tittle AS title,
-              mb_description AS description
-          FROM master_bulletin
-          WHERE mb_bulletinid = '${bulletinid}'`;
-    // console.log(sql);
+    SELECT
+    mb_image AS image,
+    mb_tittle AS title,
+    mb_type as type,
+    mb_targetdate as targetdate,
+    mb_description AS description
+    FROM master_bulletin
+    WHERE (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -492,40 +519,99 @@ router.get("/countcabling", (req, res) => {
   }
 });
 
-router.get("/getbday", (req, res) => {
+router.get("/countcandidate", (req, res) => {
   try {
-    let sql = ` 
-    SELECT 
-    me_profile_pic as profilePicturePath,
-    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-    DATE_FORMAT(me_birthday, '%M %e') AS birthday
-    FROM 
-    master_employee
-    WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE) and me_jobstatus IN ('regular','probitionary')
-    ORDER BY 
-    me_birthday`;
+    let sql = `SELECT 
+    COUNT(*) AS Candidate
+    FROM master_employee
+    WHERE me_jobstatus = 'probitionary'
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
 
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Data not found",
-          });
-        }
+        res.json({
+          msg: "success",
+          data: {
+            CandidateCount: result[0].Candidate,
+          },
+        });
       })
       .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching employee data",
-          error: error,
+        res.json({
+          msg: "error",
+          data: error,
         });
       });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.get("/countbagapuro", (req, res) => {
+  try {
+    let sql = `    
+    SELECT COUNT(*) AS Bagapuro
+    FROM master_employee
+    WHERE UPPER(me_firstname) = 'BAGAPURO' OR UPPER(me_lastname) = 'BAGAPURO'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: {
+            BagapuroCount: result[0].Bagapuro,
+          },
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.get("/getbday", (req, res) => {
+  try {
+    let sql = ` 
+    SELECT 
+    me_profile_pic AS profilePicturePath,
+    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS birthday
+  FROM 
+    master_employee
+  WHERE 
+    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
+    AND DAY(me_birthday) = DAY(CURRENT_DATE)
+    AND me_jobstatus IN ('regular','probitionary')
+  ORDER BY 
+    me_birthday`;
+
+   mysql.mysqlQueryPromise(sql)
+   .then((result) => {
+    res.json({
+      msg: 'success',
+      data: result,
+    });
+   })
+   .catch((error) => {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+   })
+    
   } catch (error) {
     console.log(error);
   }
@@ -536,7 +622,7 @@ router.get("/totaladmin", (req, res) => {
     let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
-   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   CONCAT(me_lastname, ' ', me_firstname) AS firstname,
    me_phone AS phone,
    me_email AS email,
    mp_positionname AS position,
@@ -595,11 +681,11 @@ router.get("/totalIT", (req, res) => {
        DATEDIFF(CURDATE(), me_hiredate) % 30,
        ' days'
    ) AS tenure
-FROM
+   FROM
    master_employee
-LEFT JOIN
+   LEFT JOIN
    master_position ON master_employee.me_position = mp_positionid
-WHERE
+   WHERE
    me_department = '2'
    and  me_jobstatus IN ('regular', 'probitionary');`;
 
@@ -630,7 +716,7 @@ router.get("/totalcabling", (req, res) => {
     let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
-   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   CONCAT(me_lastname, ' ', me_firstname) AS firstname,
    me_phone AS phone,
    me_email AS email,
    mp_positionname AS position,
@@ -642,13 +728,13 @@ router.get("/totalcabling", (req, res) => {
        DATEDIFF(CURDATE(), me_hiredate) % 30,
        ' days'
    ) AS tenure
-FROM
+   FROM
    master_employee
-LEFT JOIN
+   LEFT JOIN
    master_position ON master_employee.me_position = mp_positionid
-WHERE
+   WHERE
    me_department = '3'
-   and  me_jobstatus IN ('regular', 'probitionary');`;
+   and  me_jobstatus IN ('regular', 'probitionary')`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -669,6 +755,104 @@ WHERE
     res.json({
       msg: "error",
       error,
+    });
+  }
+});
+
+router.get("/totalcandidate", (req, res) => {
+  try {
+    let sql = ` SELECT
+    me_profile_pic as profilePicturePath,
+    me_id as newEmployeeId,
+    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
+    md_departmentname AS department,
+    me_hiredate as hiredate,
+    mp_positionname AS position,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
+        ' years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
+        ' months ',
+        DATEDIFF(CURDATE(), me_hiredate) % 30,
+        ' days'
+    ) AS tenure
+FROM
+    master_employee
+LEFT JOIN
+    master_department md ON master_employee.me_department = md_departmentid
+LEFT JOIN
+    master_position ON master_employee.me_position = mp_positionid
+WHERE
+    me_jobstatus = 'probitionary'
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.get("/totalbagapuroapi", (req, res) => {
+  try {
+    let sql = ` SELECT
+    me_profile_pic as profilePicturePath,
+    me_id as newEmployeeId,
+    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
+    md_departmentname AS department,
+    me_hiredate as hiredate,
+    mp_positionname AS position,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
+        ' years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
+        ' months ',
+        DATEDIFF(CURDATE(), me_hiredate) % 30,
+        ' days'
+    ) AS tenure
+FROM
+    master_employee
+LEFT JOIN
+    master_department md ON master_employee.me_department = md_departmentid
+LEFT JOIN
+    master_position ON master_employee.me_position = mp_positionid
+WHERE
+     UPPER(me_firstname) = 'BAGAPURO' OR UPPER(me_lastname) = 'BAGAPURO'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
     });
   }
 });

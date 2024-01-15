@@ -3,148 +3,187 @@
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#announcementmodal">
-        + Add New
-      </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+  <div class="card-header py-3">
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#announcementmodal">
+      <b>+ Add</b>
+    </button>
+    <input id='myInput' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTableannouncement">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>ID</th>
+            <th>Tittle</th>
+            <th>Type</th>
+            <th>Target Date</th>
+            <th>Description</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableannouncement">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tittle</th>
-                        <th>Description</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Announcement</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="announcementtittle" name="announcementtittle" placeholder="Department Name">
-                        <label for="floatingInput">Tittle</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                      <div class="form-floating">
-                      <input type="text" class="form-control" id="announcementdescription" name="announcementdescription" placeholder="Department Name">
-                      <label for="floatingInput">Description</label>
-                      </div>
-                  </div>
-                  <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="announcementstatus" name="announcementstatus" aria-label="Floating label select example">
-                              <option selected>Choose...</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Announcement</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                      <div class="form-floating">
-                        <label class="form-label" for="customFile"></label>
-                        <input type="file" name="announcementimage" id="announcementimage" class="form-control" accept="image/*">
-                        <br>
-                        <div class="text-center">
-                          <img id="preview" 
-                               src="https://via.placeholder.com/250"
-                               style="width: 250px;; height: 250px;;"
-                               class="rounded" alt="placeholder">
-                      </div>
-                      </div>
-                    </div>
-                    <br>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="announcementsavebtn">Save</button>
-        </div>
+<div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-comment-dots' style='color:#f54d69; font-size: 50px; margin-top: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">ANNOUNCEMENT</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
-  </div>
-
-  <!-- Edit Modal -->
-<div class="modal fade" id="editannouncementmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Announcement</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-              <div class="col">
-                <div class="form-floating">
-                <input type="text" class="form-control" id="editannouncementtittle" name="editannouncementtittle" placeholder="Department Name">
-                <label for="floatingInput">Tittle</label>
-                </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="announcementtittle" name="announcementtittle"
+                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Tittle</label>
             </div>
-            <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editannouncementdescription" name="editannouncementdescription" placeholder="Department Name">
-                    <label for="floatingInput">Description</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editannouncementstatus" name="editannouncementstatus" aria-label="Floating label select example">
-                          <option selected>Choose...</option>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Announcement</label>
-                      </div>
-                </div>
-                <br>
-                <div class="col">
-                  <div class="form-floating">
-                    <label class="form-label" for="customFile"></label>
-                    <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control" accept="image/*">
-                    <br>
-                    <div class="text-center">
-                      <img id="editpreview" 
-                           src="https://via.placeholder.com/250"
-                           style="width: 250px;; height: 250px;;"
-                           class="rounded" alt="placeholder">
-                  </div>
-                  </div>
-                </div>
-                <br>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-control" id="announcementtype" name="announcementtype"
+                style="border: 2.5px solid #174634 !important;">
+                <option value="Event">Event</option>
+                <option value="Announcement">Announcement</option>
+              </select>
+              <label for="announcementtype">Announcement Type</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="announcementdescription" name="announcementdescription"
+                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Description</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="targetdate" name="targetdate"
+                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Target Date</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <label class="form-label" for="customFile"></label>
+              <input type="file" name="announcementimage" id="announcementimage" class="form-control" accept="image/*"
+                style="border: 2.5px solid #174634 !important;">
+              <br>
+              <div class="text-center">
+                <img id="preview" src="https://via.placeholder.com/250"
+                  style="width: 250px;; height: 250px; border: 2.5px solid #174634 !important;" class="rounded"
+                  alt="placeholder">
+              </div>
+            </div>
+          </div>
+          <br>
         </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editannouncementsavebtn">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="announcementsavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editannouncementmodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Announcement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="editannouncementtittle" name="editannouncementtittle"
+                placeholder="Department Name">
+              <label for="floatingInput">Tittle</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-control" id="editannouncementtype" name="editannouncementtype"
+                style="border: 2.5px solid #174634 !important;">
+                <option value="Event">Event</option>
+                <option value="Announcement">Announcement</option>
+              </select>
+              <label for="announcementtype">Announcement Type</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="editannouncementdescription"
+                name="editannouncementdescription" placeholder="Department Name">
+              <label for="floatingInput">Description</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="edittargetdate" name="edittargetdate"
+                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Target Date</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="editannouncementstatus" name="editannouncementstatus"
+                aria-label="Floating label select example">
+                <option selected>Choose...</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingSelectGrid">Announcement</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <label class="form-label" for="customFile"></label>
+              <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control"
+                accept="image/*">
+              <br>
+              <div class="text-center">
+                <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                  class="rounded" alt="placeholder">
+              </div>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="editannouncementsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

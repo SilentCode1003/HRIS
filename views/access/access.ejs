@@ -4,10 +4,10 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#accessmodal">
-        + Add New
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#accessmodal">
+        <b>+ Add</b>
       </button>
-        <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+        <input id='myInput' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive"  id="table-responsive-id">
@@ -34,22 +34,23 @@
 <div class="modal fade" id="accessmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Access Type</h5>
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-shield-alt-2' style='color:#f1ec09; font-size: 50px; margin-top: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">ACCESS TYPE</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                     <div class="col">
                       <div class="form-floating">
-                        <input type="text" class="form-control" id="accessname" name="accessname" placeholder="First Name">
+                        <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="accessname" name="accessname" placeholder="First Name">
                         <label for="floatingInput">Access Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="accessstatus" name="accessstatus" aria-label="Floating label select example">
+                            <select class="form-select" id="accessstatus"  style="border: 2.5px solid #174634 !important;" name="accessstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="Active">Active</option>
                               <option value="Inactive">Inactive</option>
@@ -60,9 +61,11 @@
                     <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="accesssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" style="background-color: red !important;
+          border: 2px solid white !important;" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="accesssavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>

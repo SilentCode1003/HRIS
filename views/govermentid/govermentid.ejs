@@ -5,10 +5,10 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header py-3">
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#govermentidmodal">
-            + Add New
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#govermentidmodal">
+            <b>+ Add</b>
           </button>
-            <input id='myInput' onkeyup='searchTable()' type='text' placeholder="  Search....">
+            <input id='myInput'  type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -39,16 +39,18 @@
 <div class="modal fade" id="govermentidmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Goverment ID</h5>
+        <div class="modal-header" id="modal-header">
+            <i class='bx bxs-id-card' style='color:#ecb62a; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">GOVERNMENT ID</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                 <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="govermentidemployeeid" name="govermentidemployeeid" aria-label="Floating label select example">
+                            <select class="form-select" id="govermentidemployeeid" name="govermentidemployeeid" aria-label="Floating label select example"
+                            style=" border: 2.5px solid #174634 !important;">
                             </select>
                             <label for="floatingSelectGrid">Employee ID</label>
                           </div>
@@ -56,7 +58,8 @@
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="govermentidtype" name="govermentidtype" aria-label="Floating label select example">
+                            <select class="form-select" id="govermentidtype" name="govermentidtype" aria-label="Floating label select example"
+                            style=" border: 2.5px solid #174634 !important;">
                                 <option value="Passport">Passport</option>
                                 <option value="Drivers License">Drivers License</option>
                                 <option value="UMID">UMID</option>
@@ -77,7 +80,8 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="govermentidnumber" name="healthrecordmedicalcondition" placeholder="First Name">
+                        <input type="text" class="form-control" id="govermentidnumber" name="healthrecordmedicalcondition" placeholder="First Name"
+                        style=" border: 2.5px solid #174634 !important;">
                         <label for="floatingInput">ID Number</label>
                         </div>
                     </div>
@@ -86,43 +90,27 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="govermentidissuedate" name="govermentidissuedate" placeholder="First Name">
+                        <input type="date" class="form-control" id="govermentidissuedate" name="govermentidissuedate" placeholder="First Name"
+                        style=" border: 2.5px solid #174634 !important;">
                         <label for="floatingInput">Issue Date</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="govermentidexpirydate" name="govermentidexpirydate" placeholder="First Name">
+                        <input type="date" class="form-control" id="govermentidexpirydate" name="govermentidexpirydate" placeholder="First Name"
+                        style=" border: 2.5px solid #174634 !important;">
                         <label for="floatingInput">Expiry Date</label>
                         </div>
                     </div>
                 </div>
-                    <br>
-                    <div class="row g-3">
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="govermentidcreatedby" name="govermentidcreatedby" placeholder="First Name">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="govermentidstatus" name="govermentidstatus" aria-label="Floating label select example">
-                               <option value="Active">Active</option>
-                               <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Status</label>
-                          </div>
-                    </div>
-                    </div>
-                    <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="govermentidsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="govermentidsavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>
@@ -193,13 +181,6 @@
                 </div>
                     <br>
                     <div class="row g-3">
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="editgovermentidcreatedby" name="editgovermentidcreatedby" placeholder="First Name">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select" id="editgovermentidstatus" name="editgovermentidstatus" aria-label="Floating label select example">

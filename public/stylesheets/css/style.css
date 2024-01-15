@@ -1,3 +1,74 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.text-container {
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+}
+
+.text-light {
+  color: white; /* Light color */
+}
+
+
+.card-registration {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.card-registration .col-xl-6 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-registration .card {
+  height: 100%;
+}
+
+.card-registration .card img {
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the entire container */
+  border-top-left-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+}
+
+.card-registration .card-body {
+  flex: 1;
+}
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+@keyframes waveAnimation {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+#totalempbagapuro {
+  animation: waveAnimation 3s infinite;
+  background: linear-gradient(744deg,#af40ff,#5b42f3 60%,#00ddeb); 
+  background-size: 500% 500%;
+}
+
+/* bagapuro card */
+
 .home-section .home-content {
   position: relative;
   padding-top: 104px;
@@ -125,10 +196,13 @@
   width: 85;
   margin-left: 5%;
   margin-right: 5%;
+  background-color:  #8ED1AE !important;
+
 }
 
 #table-responsive-id {
   overflow: hidden;
+  
 }
 
 #openmodal {
@@ -146,7 +220,7 @@
   width: 20%;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotal {
@@ -157,7 +231,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputRegular {
@@ -168,7 +242,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputproba {
@@ -179,7 +253,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputresigned {
@@ -190,7 +264,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotaladmin {
@@ -201,7 +275,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotalit {
@@ -212,7 +286,7 @@
   width: 200px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInputtotalcabling {
@@ -238,7 +312,7 @@
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInput3 {
@@ -248,7 +322,7 @@
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 table {
@@ -281,6 +355,15 @@ table th {
   font-size: .95em;
   letter-spacing: .1em;
   text-transform: uppercase;
+  background-color: #0D9488 !important;
+  color: white !important;
+}
+#head-title {
+  color: #168164 !important;
+  margin-left: 75px;
+  margin-top: 5%;
+  margin-bottom: 5px;
+
 }
 
 .bunga {

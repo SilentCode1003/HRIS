@@ -75,7 +75,7 @@ router.post('/save', (req, res) => {
     let positionname = req.body.positionname;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
+    let status = 'Active';
 
   
     let data = [];
@@ -117,12 +117,12 @@ router.post('/update', (req, res) => {
   try {
     let positionid = req.body.positionid;
     let positionname = req.body.positionname;
-    let createdby = req.body.createdby;
+    let createby = req.session.fullname; 
     let status = req.body.status;
     
     let sqlupdate = `UPDATE master_position SET   
     mp_positionname ='${positionname}', 
-    mp_createdby ='${createdby}', 
+    mp_createdby ='${createby}', 
     mp_status ='${status}' 
     WHERE mp_positionid ='${positionid}'`;
 

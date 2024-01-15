@@ -1,0 +1,442 @@
+<script>
+    let geofenceid = '';
+    $(document).ready(function () {
+        console.log('Initialize');
+        LoadTable();
+        LoadList();
+        LoadEditEmp();
+        searchTable();
+
+        $(document).on('keyup', '#myInput', function () {
+            searchTable();
+        });
+
+        function LoadTable() {
+            $("#dataTablegeofence").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/geofencesettings/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+                            var action = "";
+                            var status = item.status;
+
+                            action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editGeoFenceModal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+                            finalData.push({
+                                geofenceid: item.geofenceid,
+                                geofencename: item.geofencename,
+                                departmentid: item.departmentid,
+                                latitude: item.latitude,
+                                longitude: item.longitude,
+                                radius: item.radius,
+                                location: item.location,
+                                status: item.status,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "geofenceid" },
+                    { data: "geofencename" },
+                    { data: "departmentid" },
+                    { data: "latitude" },
+                    { data: "longitude" },
+                    { data: "radius" },
+                    { data: "location" },
+                    { data: "status" },
+                    { data: "action" },
+                ],
+                initComplete: function () {
+                    console.log('Done');
+                },
+            });
+        }
+
+
+        $(document).on("click", "#geofencesavebutton", function () {
+            console.log('hit');
+            let geofencename = $("#geofencename").val();
+            let departmentid = $("#geofencedepartment").val();
+            let latitude = $("#latitude").val();
+            let longitude = $("#longitude").val();
+            let radius = $("#radius").val();
+            let location = $("#location").val();
+
+
+            var message = "";
+
+            if (geofencename == "") {
+                message += "geofencename is required ";
+            }
+
+            if (departmentid == "") {
+                message += "department is required ";
+            }
+
+            if (latitude == "") {
+                message += "latitude is required ";
+            }
+
+            if (longitude == "") {
+                message += "longitude is required ";
+            }
+
+            if (radius == "") {
+                message += "radius is required ";
+            }
+
+
+            if (location == "") {
+                message += "location is required ";
+            }
+
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/geofencesettings/save",
+                    data: {
+                        geofencename: geofencename,
+                        departmentid: departmentid,
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: radius,
+                        location: location,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            swal({
+                                title: "Saved Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                            LoadTable();
+                        } else {
+                            swal({
+                                title: "Exist",
+                                text: "Data already exists!",
+                                icon: "warning",
+                                button: "OK!",
+                            });
+                        }
+
+                    },
+                    error: function (err) {
+                        swal("Data already exist!", "You clicked the button!", "warning");
+                    },
+                });
+            }
+
+        });
+
+        function LoadList() {
+            $.ajax({
+                type: "GET",
+                url: "/department/load",
+                success: function (result) {
+                    console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.departmentid, item.departmentid);
+                        $(options).html(item.departmentname);
+                        $('#geofencedepartment').append(options);
+                        console.log(item.departmentname);
+                    });
+                },
+                error: function (result) {
+                    alert('error: ' + result.data);
+                }
+            });
+
+
+        }
+
+        function LoadEditEmp() {
+            $.ajax({
+                type: "GET",
+                url: "/department/load",
+                success: function (result) {
+                    console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.departmentid, item.departmentid);
+                        $(options).html(item.departmentname);
+                        $('#editGeofenceDepartment').append(options);
+                        console.log(item.departmentname);
+                    });
+                },
+                error: function (result) {
+                    alert('error: ' + result.data);
+                }
+            });
+
+
+        }
+
+        $("#dataTablegeofence tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            console.log(dataRow);
+            geofenceid = dataRow[0];
+        });
+
+        $(document).on("click", "#editBtn", function () {
+            $.ajax({
+                type: "POST",
+                url: "/geofencesettings/getgeofencesettings",
+                data: {
+                    geofenceid: geofenceid,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        $.each(existingData, (key, item) => {
+                            $("#editGeofenceName").val(item.geofencename);
+                            $("#editGeofenceDepartment").val(item.departmentid);
+                            $("#editLatitude").val(item.latitude);
+                            $("#editLongitude").val(item.longitude);
+                            $("#editRadius").val(item.radius);
+                            $("#editLocation").val(item.location);
+                            $("#editstatus").val(item.status);
+                        });
+                    } else {
+                        swal("Error fetching employee data", "success");
+                    }
+                },
+                error: function (err) {
+                    swal("An error occurred while fetching employee data", err, "error");
+                },
+            });
+        });
+        $(document).on("click", "#editGeoFenceSaveButton", function () {
+            console.log("Save button clicked");
+            let id = geofenceid
+            let geofencename = $("#editGeofenceName").val();
+            let departmentid = $("#editGeofenceDepartment").val();
+            let latitude = $("#editLatitude").val();
+            let longitude = $("#editLongitude").val();
+            let radius = $("#editRadius").val();
+            let location = $("#editLocation").val();
+            let status = $("#editstatus").val();
+
+
+            var message = "";
+
+            if (geofencename === "") {
+                message += "departmentname is required. ";
+            }
+
+            if (departmentid === "") {
+                message += "departmentname is required. ";
+            }
+
+            if (latitude === "") {
+                message += "status is required. ";
+            }
+
+            if (longitude === "") {
+                message += "departmenthead is required. ";
+            }
+
+            if (radius === "") {
+                message += "status is required. ";
+            }
+
+            if (location === "") {
+                message += "status is required. ";
+            }
+
+            if (status === "") {
+                message += "status is required. ";
+            }
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "geofencesettings/update",
+                    data: {
+                        geofenceid: id,
+                        geofencename: geofencename,
+                        departmentid: departmentid,
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: radius,
+                        location: location,
+                        status: status,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            swal({
+                                title: "Update Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            })
+                                .then(results => {
+                                    window.location.reload();
+                                });
+                            LoadTable();
+                        } else if (result.msg == "exist") {
+                            swal({
+                                title: "Exist",
+                                text: "Data already exists!",
+                                icon: "warning",
+                                button: "OK!",
+                            });
+                        } else {
+                            swal("Data already exists!", "You clicked the button!", "warning");
+                        }
+                    },
+                    error: function (err) {
+                        swal("Error", "An error occurred while saving data.", "error");
+                    },
+                });
+            }
+        });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([0, 0], { draggable: true }).addTo(map);
+        var circle;
+
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+        var radiusInput = document.getElementById('radius');
+
+        latitudeInput.addEventListener('input', updateMap);
+        longitudeInput.addEventListener('input', updateMap);
+        radiusInput.addEventListener('input', updateMap);
+
+        function updateMap() {
+            var latitude = parseFloat(latitudeInput.value) || 0;
+            var longitude = parseFloat(longitudeInput.value) || 0;
+            var radius = parseFloat(radiusInput.value) || 0;
+
+            marker.setLatLng([latitude, longitude]).addTo(map).update();
+
+            map.setView([latitude, longitude], 14);
+
+            if (circle) {
+                map.removeLayer(circle);
+            }
+
+            circle = L.circle([latitude, longitude], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.1,
+                radius: radius
+            }).addTo(map);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var editMap = L.map('editMap').setView([0, 0], 2); // Use 'editMap' instead of 'map'
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(editMap);
+
+        var editMarker = L.marker([0, 0], { draggable: true }).addTo(editMap);
+        var editCircle;
+
+        var editLatitudeInput = document.getElementById('editLatitude'); // Use 'editLatitude' instead of 'latitude'
+        var editLongitudeInput = document.getElementById('editLongitude'); // Use 'editLongitude' instead of 'longitude'
+        var editRadiusInput = document.getElementById('editRadius'); // Use 'editRadius' instead of 'radius'
+
+        editLatitudeInput.addEventListener('input', updateEditMap);
+        editLongitudeInput.addEventListener('input', updateEditMap);
+        editRadiusInput.addEventListener('input', updateEditMap);
+
+        function updateEditMap() {
+            var latitude = parseFloat(editLatitudeInput.value) || 0;
+            var longitude = parseFloat(editLongitudeInput.value) || 0;
+            var radius = parseFloat(editRadiusInput.value) || 0;
+
+            editMarker.setLatLng([latitude, longitude]).addTo(editMap).update();
+
+            editMap.setView([latitude, longitude], 14);
+
+            if (editCircle) {
+                editMap.removeLayer(editCircle);
+            }
+
+            editCircle = L.circle([latitude, longitude], {
+                color: 'red', // Change the color for the edit preview
+                fillColor: '#f03', // Change the fill color for the edit preview
+                fillOpacity: 0.1,
+                radius: radius
+            }).addTo(editMap);
+        }
+    });
+
+
+
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTablegeofence");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>

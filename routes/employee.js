@@ -29,17 +29,17 @@ router.post("/upload", (req, res) => {
 
   let counter = 0;
 
+  console.log(dataJson);
   dataJson.forEach((key, item) => {
-    counter += 1;
-
     // console.log("Department: ", key.department);
-    console.log("Employee Id: ", key.position);
+    // console.log("Employee Id: ", key.position);
     GetDepartment(key.department, (err, result) => {
       if (err) console.log("Error: ", err);
       let departmentid = result[0].departmentid;
       GetPosition(key.position, (err, result) => {
         if (err) console.log("Error: ", err);
         let positionid = result[0].positionid;
+        counter += 1;
 
         // let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
         //   "YYYY-MM-DD"
@@ -72,6 +72,7 @@ router.post("/upload", (req, res) => {
           ],
         ];
 
+        console.log(master_employee);
         mysql.InsertTable("master_employee", master_employee, (err, result) => {
           if (err) console.error("Error: ", err);
 
@@ -564,7 +565,6 @@ router.post("/save", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    // Retrieve request parameters
     let newEmployeeId = req.body.newEmployeeId;
     let firstname = req.body.firstname;
     let middlename = req.body.middlename;
@@ -583,27 +583,6 @@ router.post("/update", async (req, res) => {
     let address = req.body.address;
     let profilePicturePath = req.body.profilePicturePath;
 
-    // Get department ID based on department name
-    const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
-    const [departmentIdRow] = await mysql.mysqlQueryPromise(departmentIdQuery, [
-      department,
-    ]);
-    if (!departmentIdRow) {
-      return res.status(400).json({ msg: "Department not found" });
-    }
-    const departmentId = departmentIdRow.md_departmentid;
-
-    // Get position ID based on position name
-    const positionIdQuery = `SELECT mp_positionid FROM master_position WHERE mp_positionname = '${position}'`;
-    const [positionIdRow] = await mysql.mysqlQueryPromise(positionIdQuery, [
-      position,
-    ]);
-    if (!positionIdRow) {
-      return res.status(400).json({ msg: "Position not found" });
-    }
-    const positionId = positionIdRow.mp_positionid;
-
-    // Define the SQL query
     const sql = `UPDATE master_employee SET
       me_firstname = ?,
       me_middlename = ?,
@@ -636,12 +615,14 @@ router.post("/update", async (req, res) => {
       jobstatus,
       ercontactname,
       ercontactphone,
-      departmentId,
-      positionId,
+      department,
+      position,
       address,
       profilePicturePath,
       newEmployeeId,
     ];
+
+    console.log(values);
 
     mysql.UpdateMultiple(sql, values, (err, result) => {
       if (err) {
@@ -649,6 +630,8 @@ router.post("/update", async (req, res) => {
         return res.status(500).json({ msg: "Error updating data" });
       }
       const rowsAffected = result && result.affectedRows;
+
+      console.log(result);
 
       if (rowsAffected > 0) {
         return res.json({ msg: "success" });
@@ -662,6 +645,7 @@ router.post("/update", async (req, res) => {
       .json({ msg: "Internal server error", error: error.message });
   }
 });
+
 
 router.post("/getgovid", (req, res) => {
   try {
@@ -819,7 +803,7 @@ router.get("/totalregular", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as contact,
     me_email as email,
     md_departmentname as me_department,
@@ -856,7 +840,7 @@ router.get("/totalactive", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     me_jobstatus as jobstatus,
@@ -894,7 +878,7 @@ router.get("/totalprobi", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     md_departmentname as department,
@@ -931,7 +915,7 @@ router.get("/totalresigned", (req, res) => {
     let sql = `   SELECT
     me.me_profile_pic AS profilePicturePath,
       me.me_id AS newEmployeeId,
-      CONCAT(me.me_firstname, ' ', me.me_lastname) AS firstname,
+      CONCAT(me.me_lastname, ' ', me.me_firstname) AS firstname,
       me.me_phone AS phone,
       md.md_departmentname AS department,
       mp.mp_positionname AS position,
@@ -992,12 +976,11 @@ function GetPosition(name, callback) {
 
 async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
-    const createdate = moment().format("YYYY-MM-DD");
-    const createby = req.session ? req.session.fullname : null; // Assuming you have 'fullname' in your session
+    const createdate = moment().format('YYYY-MM-DD');
+    const createby = req.session ? req.session.fullname : null; 
 
     console.log("Session:", req.session);
 
-    // Set mu_accesstype to the default value of 2 (employee)
     const data = [
       [
         employeeId,
@@ -1022,7 +1005,6 @@ async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   });
 }
 
-// Function to check if a record with the same firstname and lastname exists
 function checkEmployeeExists(firstname, lastname) {
   return new Promise((resolve, reject) => {
     const checkQuery = `SELECT COUNT(*) AS count FROM master_employee WHERE me_firstname = '${firstname}' AND me_lastname = '${lastname}'`;

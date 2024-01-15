@@ -1,205 +1,189 @@
 <script>
-    let positionid ="";
+  let positionid = "";
 
-    $(document).ready(function(){
-        console.log('Initialize');
-        LoadTable();
-    
-        function LoadTable() {
-            $("#dataTableposition").DataTable({
-              destroy: true,
-              processing: true,
-              serverSide: true,
-              paging: false,
-              searching: false,
-              info: false,
-              scrollY: 400,
-              scrollCollapse: true,
-              serverMethod: "GET",
-              ajax: {
-                url: "/position/load",
-                dataSrc: (json) => {
-                  var finalData = [];
-                  var data = json.data;
-      
-                  console.log(data);
-                  $.each(data, (key, item) => {
-                    var action = "";
-                    var status = item.status;
-    
-                    action = `
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+    searchTable();
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableposition").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/position/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editpositionmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
-      
-                    finalData.push({
-                      positionid: item.positionid,
-                      positionname: item.positionname,
-                      createdby: item.createdby,
-                      createdate: item.createdate,
-                      status: item.status,
-                      action: action,
-                    });
-                  });
-      
-                  return finalData;
-                },
-              },
-              columnDefs: [
-                {
-                  targets: 1,
-                  className: "td-indent",
-                },
-              ],
-              columns: [
-                { data: "positionid" },
-                { data: "positionname" },
-                { data: "createdby"},
-                { data: "createdate" },
-                { data: "status" },
-                { data: "action" },
-              ],
-              initComplete: function () {
-                console.log('Done');
-              },
+
+              finalData.push({
+                positionid: item.positionid,
+                positionname: item.positionname,
+                createdby: item.createdby,
+                createdate: item.createdate,
+                status: item.status,
+                action: action,
+              });
             });
-          }
 
-           
-$(document).on("click", "#positionsavebtn", function () {
-  let positionname = $("#savepositionname").val();
-  let createdby = $("#savepositioncreatedby").val();
-  let createdate = $("#savedpostcreatedate").val();
-  let status = $("#savepositionstatus").val();
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "positionid" },
+          { data: "positionname" },
+          { data: "createdby" },
+          { data: "createdate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
+    }
 
-  var message = "";
 
-  if (positionname == "") {
-    message += "TITTLE ";
-  }
+    $(document).on("click", "#positionsavebtn", function () {
+      let positionname = $("#savepositionname").val();
 
-  if (createdby == "") {
-    message += "DESCRIPTION ";
-  }
+      var message = "";
 
-  if (status == "") {
-    message += "POSITION NAME ";
-  }
-
-  if (message != "") {
-  } else {
-    swal("Validation Error", message, "error");
-    $.ajax({
-      type: "POST",
-      url: "/position/save",
-      data: {
-        positionname: positionname,
-        createdby: createdby,
-        createdate: createdate,
-        status: status,
-
-      },
-      success: function (result) {
-        if (result.msg == "success") {
-          swal({
-            title: "Saved Successfully",
-            text: "You clicked the button!",
-            icon: "success",
-            button: "OK!",
-          })
-          .then(results => {
-          window.location.reload();
-          })
-          LoadTable();
-        }
-        else {
-          swal({
-            title: "Exist",
-            text: "Data already exists!",
-            icon: "warning",
-            button: "OK!",
-          });
-        }
-      
-      },
-      error: function (err) {
-        swal("Data already exist!", "You clicked the button!", "warning");
-      },
-    });
-  }
-    
-});
-
-$("#dataTableposition tbody").on("click", "tr", function () {
-  var dataRow = [];
-  $(this)
-  .closest("tr")
-  .find("td")
-  .each(function () {
-    dataRow.push($(this).text());
-  });
-console.log(dataRow);
-positionid = dataRow[0];
-});
-    
-$(document).on("click", "#editBtn", function () {
-  $.ajax({
-    type: "POST",
-    url: "/position/getposition",
-    data: {
-      positionid: positionid,
-    },
-    success: function (result) {
-      if (result.msg === "success") {
-        const existingData = result.data;
-
-        $.each(existingData, (key, item) => {
-          $("#editpostid").val(item.positionid); 
-          $("#editpostname").val(item.positionname); 
-          $("#editpositioncreatedby").val(item.createdby);
-          $("#editpositionstatus").val(item.status);
-        });
-      } else {
-        swal("Error fetching employee data", message, "error");
+      if (positionname == "") {
+        message += "TITTLE ";
       }
-    },
-    error: function (err) {
-      swal("An error occurred while fetching employee data", message, "error");
-    },
-  });
-});
-        
-  $(document).on("click", "#editpositionsavebtn", function () {
-          console.log("Save button clicked");
-          let id = positionid;
-          let positionname = $("#editpostname").val();
-          let createdby = $("#editpositioncreatedby").val();
-          let status = $("#editpositionstatus").val();
-        
-        var message = "";
-      
-        if (positionname === "") {
-          message += "departmentname is required. ";
-        }
-      
-        if (createdby === "") {
-          message += "departmenthead is required. ";
-        }
-      
-        if (status === "") {
-          message += "status is required. ";
-        }
-    
-        if (message !== "") {
-          swal("Validation Error", message, "error");
+
+      if (message != "") {
+      } else {
+        swal("Validation Error", message, "error");
+        $.ajax({
+          type: "POST",
+          url: "/position/save",
+          data: {
+            positionname: positionname,
+
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                })
+              LoadTable();
+            }
+            else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+
+    });
+
+    $("#dataTableposition tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      positionid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/position/getposition",
+        data: {
+          positionid: positionid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editpostid").val(item.positionid);
+              $("#editpostname").val(item.positionname);
+              $("#editpositionstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", message, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#editpositionsavebtn", function () {
+      console.log("Save button clicked");
+      let id = positionid;
+      let positionname = $("#editpostname").val();
+      let status = $("#editpositionstatus").val();
+
+      var message = "";
+
+      if (positionname === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
       } else {
         $.ajax({
           type: "POST",
           url: "position/update",
-          data: { 
+          data: {
             positionid: id,
             positionname: positionname,
-            createdby: createdby,
-            status: status, 
+            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -229,32 +213,32 @@ $(document).on("click", "#editBtn", function () {
           },
         });
       }
- });
-        
-function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput3");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableposition");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableposition");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
         for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                found = true;
-            }
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
         }
         if (found) {
-            tr[i].style.display = "";
-            found = false;
+          tr[i].style.display = "";
+          found = false;
         } else {
-            tr[i].style.display = "none";
+          tr[i].style.display = "none";
         }
+      }
     }
-}
 
 
-});
-   
+  });
+
 
 </script>

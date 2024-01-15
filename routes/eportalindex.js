@@ -1,84 +1,278 @@
 const mysql = require("./repository/hrmisdb");
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
-const bodyParser = require('body-parser');
-const moment = require('moment');
+const bodyParser = require("body-parser");
+const moment = require("moment");
+const { Attendance_Logs } = require("./model/hrmisdb");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   // res.render('eportalindexlayout', { title: 'Express' });
-  Validator(req, res, 'eportalindexlayout');
+  Validator(req, res, "eportalindexlayout");
 });
 
 module.exports = router;
 
+function getLatestLog(employeeId) {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT *
+      FROM attendance_logs
+      WHERE al_employeeid = '${employeeId}'
+      ORDER BY al_logdatetime DESC
+      LIMIT 1;
+  `;
 
-router.post('/clockin', (req, res) => {
-  // Retrieve employee_id from the session
-  const employee_id = req.session.employee_id;
+    mysql.Select(query, "Attendance_Logs", (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+}
+
+function getDeviceInformation(req) {
+  if (typeof navigator === "undefined") {
+    return "app";
+  } else {
+    return "web";
+  }
+}
+
+router.post("/latestlog", (req, res) => {
+  const employeeid = req.body.employeeid;
+
+  console.log(employeeid);
+
+  getLatestLog(employeeid)
+    .then((latestLog) => {
+      res.json({
+        message: "success",
+        data: latestLog,
+      });
+    })
+    .catch(() =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Failed to fetch latest log." })
+    );
+});
+
+
+router.post("/latestlogforapp", (req, res) => {
+  const employeeId = req.body.employeeid;
+
+  getLatestLog(employeeId)
+    .then((latestLog) => res.json(latestLog))
+    .catch(() =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Failed to fetch latest log." })
+    );
+});
+
+
+router.post("/clockin", (req, res) => {
+  const employee_id = req.body.employeeid;
 
   if (!employee_id) {
-      return res.status(401).json({ status: 'error', message: 'Unauthorized. Employee not logged in.' });
+    return res.status(401).json({
+      status: "error",
+      message: "Unauthorized. Employee not logged in.",
+    });
   }
 
-  // Check if the employee is within the geofence radius
-  const sql = `SELECT ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius FROM master_attendance WHERE ma_employeeid = ${employee_id}`;
+  const { latitude, longitude } = req.body;
+  const attendancedate = moment().format("YYYY-MM-DD");
+  const devicein = getDeviceInformation(req);
 
-  mysql.mysqlQueryPromise(sql, [employee_id], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
-    }
+  // Check if there's a clock-in record for the current day
+  const checkExistingClockInQuery = `
+    SELECT ma_employeeid
+    FROM master_attendance
+    WHERE ma_employeeid = '${employee_id}'
+      AND ma_attendancedate = '${attendancedate}'
+      AND ma_clockin IS NOT NULL
+  `;
 
-    if (result.length > 0) {
-      const { ma_geofencelatitude, ma_geofencelongitude, ma_geofenceradius } = result[0];
+  // Check if there's a missing clock-out on the previous day
+  const checkMissingClockOutQuery = `
+    SELECT ma_employeeid
+    FROM master_attendance
+    WHERE ma_employeeid = '${employee_id}'
+      AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
+      AND ma_clockout IS NULL
+  `;
 
-      // Assuming you have latitude and longitude from the request body
-      const { latitude, longitude } = req.body;
+  // Promisified function to execute multiple queries sequentially
+  const executeSequentialQueries = (queries) =>
+    queries.reduce(
+      (promise, query) =>
+        promise.then((result) =>
+          mysql
+            .mysqlQueryPromise(query)
+            .then((queryResult) => [...result, queryResult])
+        ),
+      Promise.resolve([])
+    );
 
-      // Calculate distance between employee location and geofence center
-      const distance = calculateDistance(latitude, longitude, ma_geofencelatitude, ma_geofencelongitude);
-
-      // Check if the employee is within the geofence radius
-      if (distance <= ma_geofenceradius) {
-        // Employee is within the geofence, allow clock-in
-
-        // Insert attendance record
-        const clockinTime = moment().format('HH:mm:ss');
-        const attendanceData = {
-          ma_employeeid: employee_id,
-          ma_attendancedate: moment().format('YYYY-MM-DD'),
-          ma_clockin: clockinTime,
-          ma_latitudeIn: latitude,
-          ma_longitudein: longitude,
-          ma_geofencelatitude: ma_geofencelatitude,
-          ma_geofencelongitude: ma_geofencelongitude,
-          ma_geofenceradius: ma_geofenceradius,
-          ma_devicein: 'web' // You may adjust this based on the source of the clock-in
-        };
-
-        mysql.InsertTable('master_attendance', attendanceData, (insertErr, insertResult) => {
-          if (insertErr) {
-            console.error('Error inserting record: ', insertErr);
-            return res.status(500).json({ status: 'error', message: 'Failed to insert attendance.' });
-          }
-
-          res.json({ status: 'success', message: 'Clock-in allowed within the geofence.' });
+  executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
+    .then(([resultClockIn, resultMissingClockOut]) => {
+      if (resultClockIn.length > 0) {
+        // Employee has already clocked in on the same day
+        res.json({
+          status: "exist",
+          message: "Clock-in not allowed. Employee already clocked in on the same day.",
+        });
+      } else if (resultMissingClockOut.length > 0) {
+        // Employee has a missing clock-out on the previous day
+        res.json({
+          status: "disabled",
+          message: "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else {
-        // Employee is outside the geofence, deny clock-in
-        res.status(403).json({ status: 'error', message: 'Clock-in denied. Employee is outside the geofence.' });
-      }
-    } else {
-      // Geofence details not found for the employee
-      res.status(404).json({ status: 'error', message: 'Geofence details not found for the employee.' });
-    }
-  });
-  req.session.employee_id = user.employee_id;
+        // Proceed with the clock-in process
+        const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+        const attendanceData = [
+          [
+            employee_id,
+            attendancedate,
+            clockinDateTime,
+            latitude,
+            longitude,
+            devicein,
+          ],
+        ];
 
-  // Send a success response or redirect
-  res.json({ status: 'success', message: 'Login successful' });
+        mysql.InsertTable(
+          "master_attendance",
+          attendanceData,
+          (err, result) => {
+            if (err) {
+              console.error("Error inserting record:", err);
+              return res.status(500).json({
+                status: "error",
+                message: "Failed to insert attendance. Please try again.",
+              });
+            }
+
+            console.log("Insert result:", result);
+            res.json({
+              status: "success",
+              message: "Clock-in successful.",
+            });
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      console.error("Error during clock-in process:", error);
+      res.status(500).json({
+        status: "error",
+        message: "Internal server error. Please try again.",
+        data: error,
+      });
+    });
 });
 
-module.exports = router;
+
+router.post("/clockout", (req, res) => {
+  const employee_id = req.body.employeeid;
+  const { latitude, longitude } = req.body;
+  const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
+
+  const checkExistingClockInQuery = `
+    SELECT ma_employeeid, ma_attendancedate
+    FROM master_attendance
+    WHERE ma_employeeid = '${employee_id}'
+      AND ma_clockin IS NOT NULL
+      AND ma_clockout IS NULL
+    ORDER BY ma_attendancedate DESC
+    LIMIT 1
+  `;
+
+  mysql
+    .mysqlQueryPromise(checkExistingClockInQuery)
+    .then((resultClockIn) => {
+      if (resultClockIn.length > 0) {
+        const { ma_attendancedate } = resultClockIn[0];
+        const deviceout = getDeviceInformation(req);
+
+        const updateQuery = `
+          UPDATE master_attendance
+          SET
+            ma_clockout = '${clockoutTime}',
+            ma_latitudeout = '${latitude}',
+            ma_longitudeout = '${longitude}',
+            ma_deviceout = '${deviceout}'
+          WHERE
+            ma_employeeid = '${employee_id}'
+            AND ma_attendancedate = '${ma_attendancedate}'
+        `;
+
+        mysql
+          .Update(updateQuery)
+          .then((updateResult) => {
+            console.log(updateResult);
+            res.json({
+              status: "success",
+              message: "Clock-out successful.",
+            });
+          })
+          .catch((updateError) => {
+            console.log(updateError);
+            res.json({
+              status: "error",
+              message: "Error updating clock-out record.",
+              data: updateError,
+            });
+          });
+      } else {
+        res.json({
+          status: "error",
+          message:
+            "Clock-out not allowed. No matching clock-in record found for the employee.",
+        });
+      }
+    })
+    .catch((errorClockIn) => {
+      console.log(errorClockIn);
+      res.json({
+        status: "error",
+        message: "Error checking existing clock-in records.",
+        data: errorClockIn,
+      });
+    });
+});
+
+
+router.post('/emplogs', (req, res) => {
+  try {
+    let = employeeid = req.body.employeeid;
+    let sql = `SELECT
+    DATE_FORMAT(al_logdatetime, '%Y-%m-%d') AS logdate,
+    al_logtype as logtype,
+    TIME(al_logdatetime) AS logtime
+    FROM attendance_logs
+    WHERE al_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});

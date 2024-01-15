@@ -92,6 +92,27 @@ var roleacess = [
       {
         layout: "candidatelayout",
       },
+      {
+        layout: "loanlayout",
+      },
+      {
+        layout: "paymentlayout",
+      },
+      {
+        layout: "interestlayout",
+      },
+      {
+        layout: "depositlayout",
+      },
+      {
+        layout: "memberlayout",
+      },
+      {
+        layout: "ojtuserlayout",
+      },
+      {
+        layout: "geofencesettingslayout",
+      },
     ],
   },
   {
@@ -201,6 +222,21 @@ var roleacess = [
       {
         layout: "resignedlayout",
       },
+      {
+        layout: "loanlayout",
+      },
+      {
+        layout: "paymentlayout",
+      },
+      {
+        layout: "interestlayout",
+      },
+      {
+        layout: "depositlayout",
+      },
+      {
+        layout: "memberlayout",
+      },
     ],
   },
 ];
@@ -236,6 +272,7 @@ exports.Validator = function (req, res, layout) {
             employeeid: req.session.employeeid,
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
+            department: req.session.department,
           });
         }
       });

@@ -1,0 +1,107 @@
+<div class="container container-content">
+  <h1 class="font-weight-bold text-danger" id="h-title">Payments</h1> 
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-dollar-circle' style='color:#75f755; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="staticBackdropLabel">PAYMENT</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!--- Modal Body -->
+        <div class="modal-body" id="modal-body">
+          <select class="form-select" id="loanid" aria-label="Default select example">
+            <option selected>Loan ID</option>
+             <option value="1">One</option>
+            <option value="2">Two</option>
+             <option value="3">Three</option>
+             </select>
+  
+             <div class="row g-3">
+              <div class="col-auto">
+                <div class="form-floating" id="date">
+                  <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
+                  <label for="floatingInputGrid">Date</label>
+                </div>
+              </div>
+             </div>
+              <div class="row g-3">
+            <div class="col-auto">
+              <label for="exampleFormControlInput1" class="form-label" id="amount">Amount</label>
+              <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+          </div>
+          </div>
+           <div>
+            <label for="exampleFormControlInput" id="remarks">Remarks</label>
+            <textarea class="form-control" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
+          </div>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn-submit">Submit</button>
+        </div>
+      </div>   
+    </div>
+  </div>
+  
+  <!------ Table ------>
+<div class="card card-style">
+  <div class="card-body c-body">
+    <div class="card-header c-header">
+      <!-- Button trigger modal -->
+  <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <b>+ Add</b>
+  </button>
+  <!---- Searchbar ----->
+  <div class="search-container" id="searchbar">
+    <form>
+      <input type="text" placeholder="Search.." name="search" id="searchInput">
+      <button type="submit" class="btn-search"><i class="bi bi-search-heart"></i></button>
+    </form>
+  </div>
+    </div>
+    <div class="table-responsive">
+      <table id="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Loan ID</th>
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Remarks</th>
+          </tr>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="ID"><b>1</b></td>
+            <td data-label="Loan ID">2014536</td>
+            <td data-label="Date">12/25/2024</td>
+            <td data-label="Amount">1,000</td>
+            <td data-label="Remarks">Lorem Ipsum is simply dummy text of the printing
+               and typesetting industry.</td>
+          </tr>
+          <tr>
+            <td data-label="ID"><b>2</b></td>
+            <td data-label="Loan ID">2014536</td>
+            <td data-label="Date">12/25/2024</td>
+            <td data-label="Amount">1,000</td>
+            <td data-label="Remarks">Pang mcdooooo</td>
+          </tr>
+          <tr>
+            <td data-label="ID"><b>3</b></td>
+            <td data-label="Loan ID">2014536</td>
+            <td data-label="Date">12/25/2024</td>
+            <td data-label="Amount">1,000</td>
+            <td data-label="Remarks">Pang mcdooooo</td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  </div>
+  
+  
+  
