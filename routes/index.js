@@ -149,8 +149,8 @@ router.post("/getbulletin", (req, res) => {
     mb_type as type,
     mb_targetdate as targetdate,
     mb_description AS description
-  FROM master_bulletin
-  WHERE mb_bulletinid = '${bulletinid}' 
+    FROM master_bulletin
+    WHERE mb_bulletinid = '${bulletinid}' 
     AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
     mysql

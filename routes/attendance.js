@@ -199,15 +199,17 @@ router.post('/logs', (req, res) => {
 router.post('/gethomestatus2', (req, res) => {
     try {
         let employeeid = req.body.employeeid;
+        let attendancedate = req.body.attendancedate;
         let sql = `select 
 		DATE_FORMAT(ma_clockin, '%W, %M %e, %Y') AS logdatein,
         TIME(ma_clockin) AS logtimein,
         DATE_FORMAT(ma_clockout, '%W, %M %e, %Y') AS logdateout,
         TIME(ma_clockout) AS logtimeout
         from master_attendance
-        where ma_employeeid = '${employeeid}'
+        where ma_employeeid = '${employeeid}' and ma_attendancedate = '${attendancedate}'
         order by ma_attendancedate desc 
         limit 1`;
+        console.log(sql);
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
