@@ -72,7 +72,6 @@
 
     $(document).on("click", "#offensessavebtn", function () {
       let offensename = $("#offensesname").val();
-      let status = $("#offensesstatus").val();
 
       var message = "";
 
@@ -80,9 +79,6 @@
         message += "TITTLE ";
       }
 
-      if (status == "") {
-        message += "DESCRIPTION ";
-      }
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -91,8 +87,6 @@
           url: "/offenses/save",
           data: {
             offensename: offensename,
-            status: status,
-
           },
           success: function (result) {
             if (result.msg == "success") {

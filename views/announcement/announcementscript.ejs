@@ -1,5 +1,6 @@
 <script>
   let bulletinid = "";
+  let base64String = "";
 
   $(document).ready(function () {
     console.log('Initialize');
@@ -36,9 +37,20 @@
                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editannouncementmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
 
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
+
+
               finalData.push({
+                image: imgElement.outerHTML,
                 bulletinid: item.bulletinid,
                 tittle: item.tittle,
+                type: item.type,
+                targetdate: item.targetdate,
                 description: item.description,
                 createby: item.createby,
                 createdate: item.createdate,
@@ -57,14 +69,23 @@
           },
         ],
         columns: [
+          { data: "image" },
           { data: "bulletinid" },
           { data: "tittle" },
+          { data: "type" },
+          { data: "targetdate" },
           { data: "description" },
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log('Done');
         },
@@ -75,8 +96,9 @@
     $(document).on("click", "#announcementsavebtn", function () {
       let image = base64String;
       let tittle = $('#announcementtittle').val();
+      let type = $("#announcementtype").val();
+      let targetdate = $("#targetdate").val();
       let description = $("#announcementdescription").val();
-      let status = $("#announcementstatus").val();
 
       var message = "";
 
@@ -89,14 +111,21 @@
       }
 
 
-      if (description == "") {
+      if (type == "") {
         message += "TITTLE ";
       }
 
 
-      if (status == "") {
-        message += "POSITION NAME ";
+      if (targetdate == "") {
+        message += "TITTLE ";
       }
+
+
+
+      if (description == "") {
+        message += "TITTLE ";
+      }
+
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -107,9 +136,9 @@
           data: {
             image: image,
             tittle: tittle,
+            type: type,
+            targetdate: targetdate,
             description: description,
-            status: status,
-
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -151,7 +180,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      bulletinid = dataRow[0];
+      bulletinid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -171,6 +200,8 @@
               $("#editpreview").attr("src", "data:image/jpg;base64," + item.image);
               $("#editannouncementdescription").val(item.description);
               $("#editannouncementstatus").val(item.status);
+              $("#editannouncementtype").val(item.type);
+              $("#edittargetdate").val(item.targetdate);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -184,30 +215,43 @@
 
     $(document).on("click", "#editannouncementsavebtn", function () {
       console.log("Save button clicked");
-      let id = bulletinid
+      let id = bulletinid;
       let image = base64String;
       let tittle = $("#editannouncementtittle").val();
       let description = $("#editannouncementdescription").val();
       let status = $("#editannouncementstatus").val();
+      let type = $("#editannouncementtype").val();
+      let targetdate = $("#edittargetdate").val();
+
+      console.log('hit', `${image}`);
 
       var message = "";
 
       if (image === "") {
-        message += "departmenthead is required. ";
+        message += "image is required. ";
       }
 
       if (tittle === "") {
-        message += "departmenthead is required. ";
+        message += "tittle is required. ";
       }
 
 
       if (description === "") {
-        message += "departmenthead is required. ";
+        message += "description is required. ";
       }
 
       if (status === "") {
         message += "status is required. ";
       }
+
+      if (type === "") {
+        message += "type is required. ";
+      }
+
+      if (targetdate === "") {
+        message += "targetdate is required. ";
+      }
+
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -219,6 +263,8 @@
             bulletinid: id,
             image: image,
             tittle: tittle,
+            type: type,
+            targetdate: targetdate,
             description: description,
             status: status,
           },

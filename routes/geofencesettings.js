@@ -2,6 +2,7 @@ const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 var express = require('express');
 const { Validator } = require('./controller/middleware');
+const { Master_Geofence_Settings } = require('./model/hrmisdb');
 var router = express.Router();
 const currentDate = moment();
 
@@ -49,17 +50,17 @@ router.post('/getgeofencesettings', (req, res) => {
 
 router.get('/load', (req, res) => {
     try {
-      let sql = `  SELECT 
+      let sql = `SELECT 
       mgs_id,
       mgs_geofencename,
-      mgs_departmentid,
+      md_departmentname as mgs_departmentid,
       mgs_latitude,
       mgs_longitude,
       mgs_radius,
       mgs_location,
       mgs_status
       FROM master_geofence_settings
-      LEFT JOIN master_department ON  mgs_departmentid = md_departmentid;`;
+      LEFT JOIN master_department md ON master_geofence_settings.mgs_departmentid = md_departmentid`;
   
       mysql.Select(sql, 'Master_Geofence_Settings', (err, result) => {
         if (err) console.error('Error: ', err);
@@ -82,7 +83,11 @@ router.get('/load', (req, res) => {
         let departmentid = req.body.departmentid;
         let latitude = req.body.latitude;
         let longitude = req.body.longitude;
-        let radius = req.body.radius;
+        let radiusInput = req.body.radius;
+        let radius = parseFloat(radiusInput) || 0;
+        if (!isNaN(radius) && Number.isInteger(radius)) {
+            radius = parseFloat(radiusInput + '.01');
+        }
         let location = req.body.location;
         let data = [];
 
@@ -126,3 +131,74 @@ router.get('/load', (req, res) => {
         });
     }
   });
+
+  
+router.post('/selectgeofence', (req, res) => {
+  try {
+    let department = req.body.department;
+    let sql = `select * from master_geofence_settings
+    where mgs_departmentid ='${department}' and mgs_status = 'Active'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      let data = Master_Geofence_Settings(result);
+      res.json({
+        msg: 'success',
+        data: data,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'error',
+        data: error,  
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
+router.post('/update', (req, res) => {
+  try {
+    let geofenceid = req.body.geofenceid;
+    let geofencename = req.body.geofencename;
+    let departmentid = req.body.departmentid;
+    let latitude = req.body.latitude;
+    let longitude = req.body.longitude;
+    let radius = req.body.radius;
+    let location = req.body.location;
+    let status = req.body.status; 
+
+    let sqlupdate = `UPDATE master_geofence_settings SET   
+    mgs_geofencename ='${geofencename}', 
+    mgs_departmentid ='${departmentid}', 
+    mgs_latitude ='${latitude}',
+    mgs_longitude ='${longitude}',
+    mgs_radius ='${radius}', 
+    mgs_location ='${location}', 
+    mgs_status ='${status}'
+    WHERE mgs_id ='${geofenceid}'`;
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      console.log(result);
+  
+      res.json({
+        msg: 'success'
+      })
+    })
+    .catch((error) =>{
+      res.json({
+        msg:error
+      })
+      
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
+  }
+});

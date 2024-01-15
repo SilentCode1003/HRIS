@@ -86,8 +86,7 @@ router.post('/save', async (req, res) => {
     let actionid = req.body.actionid;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
-    let status = req.body.status;
-    console.log('Received department name:', actionid);
+    let status = 'Active';
 
     const actionIdQuery = `SELECT mda_actionid FROM master_disciplinary_action WHERE mda_actioncode = '${actionid}'`;
 

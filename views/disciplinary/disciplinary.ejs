@@ -3,196 +3,227 @@
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
-        <b>+ Add</b>
-      </button>
-        <input id='myInput'  type='text' placeholder="  Search....">
+  <div class="card-header py-3">
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
+      <b>+ Add</b>
+    </button>
+    <input id='myInput' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTabledisciplianary">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Offense ID</th>
+            <th>Action Code</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTabledisciplianary">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Employee ID</th>
-                        <th>Offense ID</th>
-                        <th>Action Code</th>             
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="disciplinarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <i class='bx bxs-brain' style='color:#fb7d8e; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">DISCIPLINARY</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-              <div class="col">
-                <div class="form-floating">
-                    <select class="form-select" id="disciplinaryemployeeid" name="disciplinaryemployeeid" aria-label="Floating label select example"
-                    style="border: 2.5px solid #174634 !important;">
-                      <option selected></option>
-                    </select>
-                    <label for="floatingSelectGrid">Employee ID</label>
-                  </div>
-            </div>
-            <br>
-            <div class="col">
-                <div class="form-floating">
-                    <select class="form-select" id="disciplinaryviolationid" name="disciplinaryviolationid" aria-label="Floating label select example"
-                    style="border: 2.5px solid #174634 !important;">
-                      <option selected></option>
-                    </select>
-                    <label for="floatingSelectGrid">Violation</label>
-                  </div>
-            </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="disciplinaryoffenseid" name="disciplinaryoffenseid" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
-                              <option selected></option>
-                            </select>
-                            <label for="floatingSelectGrid">Offense ID</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="disciplinaryactionid" name="disciplinaryactionid" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
-                              <option selected></option>
-                            </select>
-                            <label for="floatingSelectGrid">Action ID</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                      <div class="form-floating">
-                      <input type="date" class="form-control" id="disciplinarydate" name="disciplinarydate" placeholder="Created By"
-                      style="border: 2.5px solid #174634 !important;">
-                      <label for="floatingInput">Date</label>
-                      </div>
-                  </div>
-                  <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="disciplinarycreatedby" name="disciplinarycreatedby" placeholder="Created By"
-                        style="border: 2.5px solid #174634 !important;">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select" id="disciplinarystatus" name="disciplinarystatus" aria-label="Floating label select example"
-                          style="border: 2.5px solid #174634 !important;">
-                            <option selected>Status...</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                          </select>
-                          <label for="floatingSelectGrid">Status</label>
-                        </div>
-                  </div>
-                  <br>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="disciplinarysavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
-        </div>
+<div class="modal fade" id="disciplinarymodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-brain' style='color:#fb7d8e; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">DISCIPLINARY</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
-  </div>
-
-  <!-- Edit Modal -->
-<div class="modal fade" id="editdisciplinarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="col">
-              <div class="form-floating">
-                  <select class="form-select" id="editdisciplinaryemployeeid" name="editdisciplinaryemployeeid" aria-label="Floating label select example">
-                    <option selected></option>
-                  </select>
-                  <label for="floatingSelectGrid">Employee ID</label>
-                </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="disciplinaryemployeeid" name="disciplinaryemployeeid"
+                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+                <option selected></option>
+              </select>
+              <label for="floatingSelectGrid">Employee ID</label>
+            </div>
           </div>
-                  <br>
-                  <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select" id="editdisciplinaryoffenseid" name="editdisciplinaryoffenseid" aria-label="Floating label select example">
-                            <option selected></option>
-                          </select>
-                          <label for="floatingSelectGrid">Offense ID</label>
-                        </div>
-                  </div>
-                  <br>
-                  <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select" id="editdisciplinaryactionid" name="editdisciplinaryactionid" aria-label="Floating label select example">
-                            <option selected></option>
-                          </select>
-                          <label for="floatingSelectGrid">Action ID</label>
-                        </div>
-                  </div>
-                  <br>
-                  <div class="col">
-                    <div class="form-floating">
-                    <input type="date" class="form-control" id="editdisciplinarydate" name="editdisciplinarydate" placeholder="Created By">
-                    <label for="floatingInput">Date</label>
-                    </div>
-                </div>
-                <br>
-                  <div class="col">
-                      <div class="form-floating">
-                      <input type="text" class="form-control" id="editdisciplinarycreatedby" name="editdisciplinarycreatedby" placeholder="Created By">
-                      <label for="floatingInput">Created By</label>
-                      </div>
-                  </div>
-                  <br>
-                  <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editdisciplinarystatus" name="editdisciplinarystatus" aria-label="Floating label select example">
-                          <option selected>Status...</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Status</label>
-                      </div>
-                </div>
-                <br>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editdisciplinarysavebtn">Save</button>
-        </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="disciplinaryviolationid" name="disciplinaryviolationid"
+                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+                <option selected></option>
+              </select>
+              <label for="floatingSelectGrid">Violation</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="disciplinaryoffenseid" name="disciplinaryoffenseid"
+                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+                <option selected></option>
+              </select>
+              <label for="floatingSelectGrid">Offense ID</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="disciplinaryactionid" name="disciplinaryactionid"
+                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+                <option selected></option>
+              </select>
+              <label for="floatingSelectGrid">Action ID</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="disciplinarydate" name="disciplinarydate"
+                placeholder="Created By" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Date</label>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="disciplinarysavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>
+</div>
+
+
+<!--Edit Modal-->
+
+<div class="modal fade" id="editdisciplinarymodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-user-rectangle' style='color:#78f889; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">Disciplinary Action</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;  margin-top: 100px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;
+                   height: 250px; border: 2.5px solid #174634 !important;;" class="rounded rounded-circle"
+                    alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="daimage" id="daimage" class="form-control"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="border-top pb-3 mb-4 text-center">First Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="dafname"
+                      name="dafname" placeholder="First Name">
+                    <label for="floatingInput">Full Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="daoffense" name="daoffense" placeholder="Last Name">
+                    <label for="floatingInput">Offense</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="daaction" name="daaction" placeholder="Last Name">
+                    <label for="floatingInput">Disciplinary Action</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="daviolation" name="daviolation" placeholder="Address">
+                    <label for="floatingInput">Violation</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="dacreatedate" name="dacreatedate" placeholder="Phone Number">
+                    <label for="floatingInput">Create Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="email" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="dastatus" name="dastatus" placeholder="Email">
+                    <label for="floatingInput">Status</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="dacreateby" name="dacreateby" placeholder="Address">
+                    <label for="floatingInput">Create By</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;"
+                      id="dadate" name="dadate" placeholder="Address">
+                    <label for="floatingInput">Subject Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+         border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="employeesavebtn" style="background-color: green !important;
+        border: 2px solid white !important;">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

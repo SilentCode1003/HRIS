@@ -3,76 +3,72 @@
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-  <div class="card-header py-3">
-  </div>
-  <div class="card-body">
-  <table class="table table-striped" id="dataTableapplyleave">
-    <thead>
-      <tr>
-        <th scope="col">Date</th>
-        <th scope="col">Time In</th>
-        <th scope="col">Time Out</th>
-        <th scope="col">Overtime</th>
-        <th scope="col">Total Hours</th>
-        <th scope="col">Status</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+    <div class="card-header py-3">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+            <b>Export Attendance</b>
+        </button>
+        <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTableattendance">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Device In</th>
+                        <th>Device Out</th>
+                        <th>Total Hours</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
-      </div>
+    </div>
+</div>
+</div>
+</div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Apply Cash Advance</h5>
+<!--MODAL-->
+
+<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">
+                       Logs
+                    </h1>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form>
-                  <div class="row g-3">
-                  <div class="col">
-                    <label for="editfname" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" value="Wendell" disabled>
-                  </div>
-                  <div class="col">
-                    <label for="editlname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" value="Blanco" disabled>
-                  </div>
-                  </div>
-                  <br>
-                  <div class="row g-3">
-                    <div class="col">
-                      <label for="editfname" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" value="09205844276" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="editlname" class="form-label">Email</label>
-                      <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" value="Blanco@gmail.com" disabled>
-                    </div>
-                    
-                    </div>
-                    <br>
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="editemail" class="form-label">Amount</label>
-                        <input type="number" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays">
-                      </div>
-                      <div class="col">
-                        <label for="editpassword" class="form-label">Purpose</label>
-                        <input type="text" class="form-control" id="pendingleaveaperiod" name="pendingleaveaperiod">
-                      </div>
-                      </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
-              </div>
             </div>
-          </div>
+            <div class="modal-body">
+                <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-striped" id="dataTableattendancelogs">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Log Type</th>
+                                <th>Latitude</th>
+                                <th>Lonitude</th>
+                                <th>Device</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+            </div>
         </div>
+    </div>
+</div>

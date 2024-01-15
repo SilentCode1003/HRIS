@@ -34,7 +34,8 @@ router.get("/load", (req, res) => {
     l_leaveapplieddate as applieddate
     from leaves
     left join master_employee on leaves.l_employeeid = me_id
-    where l_leavestatus = 'Pending'`;
+    where l_leavestatus = 'Pending'
+    order by l_leaveid desc`;
     
 
     mysql.mysqlQueryPromise(sql)
@@ -77,7 +78,6 @@ router.post("/getleave", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -103,52 +103,6 @@ router.post("/getleave", (req, res) => {
   }
 });
 
-// router.post("/getleave", (req, res) => {
-//   try {
-//     let leaveid = req.body.leaveid;
-//     let sql = `select 
-//     concat(me_firstname,' ',me_lastname) as employeeid,
-//     me_email as email,
-//     me_gender as gender,
-//     me_phone as phone,
-//     l_leavetype as leavetype,
-//     l_leaveapplieddate as applieddate,
-//     l_leavestartdate as leavestartdate,
-//     l_leaveenddate as leaveenddate,
-//     l_leavereason as reason,
-//     l_leavestatus as status
-//     from leaves
-//     right join master_employee on leaves.l_employeeid = me_id
-//     where l_leaveid = '${leaveid}'`;
-
-//     mysql
-//       .mysqlQueryPromise(sql)
-//       //console.log(sql)
-//       .then((result) => {
-//         if (result.length > 0) {
-//           res.status(200).json({
-//             msg: "success",
-//             data: result,
-//           });
-//         } else {
-//           res.status(404).json({
-//             msg: "Department not found",
-//           });
-//         }
-//       })
-//       .catch((error) => {
-//         res.status(500).json({
-//           msg: "Error fetching department data",
-//           error: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: error,
-//     });
-//   }
-// });
-
 
 router.get("/loadCA", (req, res) => {
   try {
@@ -163,7 +117,8 @@ router.get("/loadCA", (req, res) => {
     ca_status as status
     from cash_advance
     left join master_employee on cash_advance.ca_employeeid = me_id
-    where ca_status = 'Pending'`;
+    where ca_status = 'Pending'
+    order by ca_cashadvanceid desc`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
@@ -188,17 +143,18 @@ router.post("/getbulletin", (req, res) => {
   try {
     let bulletinid = req.body.bulletinid;
     let sql = `
-          SELECT
-              mb_image AS image,
-              mb_tittle AS title,
-              mb_description AS description
-          FROM master_bulletin
-          WHERE mb_bulletinid = '${bulletinid}'`;
-    // console.log(sql);
+    SELECT
+    mb_image AS image,
+    mb_tittle AS title,
+    mb_type as type,
+    mb_targetdate as targetdate,
+    mb_description AS description
+    FROM master_bulletin
+    WHERE mb_bulletinid = '${bulletinid}' 
+    AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -631,14 +587,16 @@ router.get("/getbday", (req, res) => {
   try {
     let sql = ` 
     SELECT 
-    me_profile_pic as profilePicturePath,
+    me_profile_pic AS profilePicturePath,
     CONCAT(me_firstname, ' ', me_lastname) AS firstname,
     DATE_FORMAT(me_birthday, '%M %e') AS birthday
-    FROM 
+  FROM 
     master_employee
-    WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE) and me_jobstatus IN ('regular','probitionary')
-    ORDER BY 
+  WHERE 
+    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
+    AND DAY(me_birthday) = DAY(CURRENT_DATE)
+    AND me_jobstatus IN ('regular','probitionary')
+  ORDER BY 
     me_birthday`;
 
     mysql
