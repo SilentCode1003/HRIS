@@ -17,6 +17,7 @@ module.exports = router;
 router.get('/load', (req, res,) => {
   try {
     let sql = `select 
+    l_leaveid,
     concat(me_firstname,'',me_lastname) as l_employeeid,
     l_leavestartdate,
     l_leaveenddate,
