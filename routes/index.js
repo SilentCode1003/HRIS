@@ -36,26 +36,25 @@ router.get("/load", (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     where l_leavestatus = 'Pending'
     order by l_leaveid desc`;
-    
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error
-      });
-    });
   } catch (error) {
     console.log(error);
   }
 });
-
 
 router.post("/getleave", (req, res) => {
   try {
@@ -103,7 +102,6 @@ router.post("/getleave", (req, res) => {
   }
 });
 
-
 router.get("/loadCA", (req, res) => {
   try {
     let sql = `   
@@ -120,18 +118,20 @@ router.get("/loadCA", (req, res) => {
     where ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    }).catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: error,
@@ -139,9 +139,9 @@ router.get("/loadCA", (req, res) => {
   }
 });
 
-router.post("/getbulletin", (req, res) => {
+router.get("/getbulletin", (req, res) => {
   try {
-    let bulletinid = req.body.bulletinid;
+    // let bulletinid = req.body.bulletinid;
     let sql = `
     SELECT
     mb_image AS image,
@@ -150,8 +150,7 @@ router.post("/getbulletin", (req, res) => {
     mb_targetdate as targetdate,
     mb_description AS description
     FROM master_bulletin
-    WHERE mb_bulletinid = '${bulletinid}' 
-    AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
+    WHERE (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -594,7 +593,6 @@ router.get("/getbday", (req, res) => {
     master_employee
   WHERE 
     MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND DAY(me_birthday) = DAY(CURRENT_DATE)
     AND me_jobstatus IN ('regular','probitionary')
   ORDER BY 
     me_birthday`;
@@ -602,21 +600,16 @@ router.get("/getbday", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Data not found",
-          });
-        }
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
       .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching employee data",
-          error: error,
+        res.json({
+          msg: "error",
+          data: error,
         });
       });
   } catch (error) {
@@ -814,7 +807,6 @@ WHERE
     });
   }
 });
-
 
 router.get("/totalbagapuroapi", (req, res) => {
   try {
