@@ -89,22 +89,25 @@ router.get("/load", (req, res) => {
 router.post("/getloadforapp", (req, res) => {
     try {
         let employeeid = req.body.employeeid;
-        let sql =`SELECT
+        let sql =`       
+        SELECT
         CONCAT(me_lastname, " ", me_firstname) as employeeid,
-        ma_attendancedate as attendancedate,
+        ma_attendancedate as attendancedatein,
+        DATE_FORMAT(al_logdatetime, '%Y-%m-%d') as attendancedateout,
         TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
         TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
         ma_devicein as devicein,
         ma_deviceout as deviceout,
         CONCAT(
-            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
-            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+        FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+        FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
         ) AS totalhours
         FROM master_attendance
-        LEFT JOIN master_employee ON ma_employeeid = me_id
-         where ma_employeeid = '${employeeid}'
+        INNER JOIN master_employee ON ma_employeeid = me_id
+        INNER JOIN attendance_logs ON al_attendanceid = ma_attendanceid AND al_logtype='ClockOut'
+        where ma_employeeid = '${employeeid}'
         ORDER BY ma_attendancedate DESC`;
-
+  
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
             res.json({
