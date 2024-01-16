@@ -637,3 +637,22 @@ exports.Master_Salary = (data) => {
 
   return dataResult;
 };
+
+exports.Master_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      deductionsid: key.mds_id,
+      employeeid: key.mds_employeeid,
+      type: key.mds_type,
+      amount: key.mds_amount,
+      period: key.mds_period,
+      cutoff: key.mds_cutoff,
+    });
+  });
+
+  return dataResult;
+};
+

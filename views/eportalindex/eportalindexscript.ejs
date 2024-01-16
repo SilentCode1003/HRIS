@@ -147,60 +147,75 @@
 
 
         $('#clockinbtn').on('click', function () {
-            getDeviceInformation()
-                .then((devicein) => {
-                    // Use the retrieved devicein value in your AJAX request
-                    $.ajax({
-                        type: "POST",
-                        url: "/eportalindex/clockin",
-                        data: {
-                            employeeid: employeeid,
-                            latitude: userLocation.lat,
-                            longitude: userLocation.lng,
-                            employeeid: employeeid,
-                            devicein: devicein,
-                        },
-                        success: function (response) {
-                            console.log("API response", response);
+            // Use SweetAlert to confirm before proceeding with clock-in
+            swal({
+                title: "Confirm Clock-in",
+                text: "Are you sure you want to clock in?",
+                icon: "info",
+                buttons: ["Cancel", "Yes, Clock In"],
+                dangerMode: false,
+            }).then((proceed) => {
+                if (proceed) {
+                    // User clicked "Yes, Clock In"
+                    getDeviceInformation()
+                        .then((devicein) => {
+                            // Use the retrieved devicein value in your AJAX request
+                            $.ajax({
+                                type: "POST",
+                                url: "/eportalindex/clockin",
+                                data: {
+                                    employeeid: employeeid,
+                                    latitude: userLocation.lat,
+                                    longitude: userLocation.lng,
+                                    employeeid: employeeid,
+                                    devicein: devicein,
+                                },
+                                success: function (response) {
+                                    console.log("API response", response);
 
-                            if (response.msg === "exist") {
-                                swal({
-                                    title: "Clock-in Warning",
-                                    text: "You have already clocked in today.",
-                                    icon: "warning",
-                                });
-                            } else if (response.status === "success") {
-                                swal({
-                                    title: "Clock-in successful!",
-                                    icon: "success",
-                                }).then(() => {
-                                    // Handle success
-                                });
-                            } else {
-                                swal({
-                                    title: "Clock-in failed",
-                                    text: response.message,
-                                    icon: "error",
-                                });
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.log("API error", error);
+                                    if (response.msg === "exist") {
+                                        swal({
+                                            title: "Clock-in Warning",
+                                            text: "You have already clocked in today.",
+                                            icon: "warning",
+                                        });
+                                    } else if (response.status === "success") {
+                                        swal({
+                                            title: "Clock-in successful!",
+                                            icon: "success",
+                                        }).then(() => {
+                                            // Handle success
+                                        });
+                                    } else {
+                                        swal({
+                                            title: "Clock-in failed",
+                                            text: response.message,
+                                            icon: "error",
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log("API error", error);
 
-                            console.log("API response text:", xhr.responseText);
+                                    console.log("API response text:", xhr.responseText);
 
-                            swal({
-                                title: "Error",
-                                text: "Unable to clock in. Please try again.",
-                                icon: "error",
+                                    swal({
+                                        title: "Error",
+                                        text: "Unable to clock in. Please try again.",
+                                        icon: "error",
+                                    });
+                                }
                             });
-                        }
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error getting device information:", error);
-                    // Handle error getting device information
-                });
+                        })
+                        .catch((error) => {
+                            console.error("Error getting device information:", error);
+                            // Handle error getting device information
+                        });
+                } else {
+                    // User clicked "Cancel" or closed the modal
+                    swal("Clock-in Canceled", "", "info");
+                }
+            });
         });
 
 
@@ -210,53 +225,68 @@
                 return;
             }
 
-            $.ajax({
-                type: "POST",
-                url: "/eportalindex/clockout",
-                data: {
-                    employeeid: employeeid,
-                    latitude: userLocation.lat,
-                    longitude: userLocation.lng,
-                    employeeid: employeeid,
-                    deviceout: deviceout,
-                },
+            // Use SweetAlert to confirm before proceeding with clock-out
+            swal({
+                title: "Confirm Clock-out",
+                text: "Are you sure you want to clock out?",
+                icon: "info",
+                buttons: ["Cancel", "Yes, Clock Out"],
+                dangerMode: false,
+            }).then((proceed) => {
+                if (proceed) {
+                    // User clicked "Yes, Clock Out"
+                    $.ajax({
+                        type: "POST",
+                        url: "/eportalindex/clockout",
+                        data: {
+                            employeeid: employeeid,
+                            latitude: userLocation.lat,
+                            longitude: userLocation.lng,
+                            employeeid: employeeid,
+                            deviceout: deviceout,
+                        },
 
-                success: function (response) {
-                    console.log("API response", response);
+                        success: function (response) {
+                            console.log("API response", response);
 
-                    if (response.msg === "success") {
-                        swal({
-                            title: "Clock-out successful!",
-                            icon: "success",
-                        }).then(() => {
+                            if (response.msg === "success") {
+                                swal({
+                                    title: "Clock-out successful!",
+                                    icon: "success",
+                                }).then(() => {
+                                    // Handle success
+                                });
+                            } else if (response.msg === "exist") {
+                                swal({
+                                    title: "Clock-out failed",
+                                    text: "Clock-out not allowed. Employee already clocked out on the same day.",
+                                    icon: "error",
+                                });
+                            } else {
+                                swal({
+                                    title: "Clock-out failed",
+                                    text: response.message || "Unknown error",
+                                    icon: "error",
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("API error", error);
+                            console.log("API response text:", xhr.responseText);
 
-                        });
-                    } else if (response.msg === "exist") {
-                        swal({
-                            title: "Clock-out failed",
-                            text: "Clock-out not allowed. Employee already clocked out on the same day.",
-                            icon: "error",
-                        });
-                    } else {
-                        swal({
-                            title: "Clock-out failed",
-                            text: response.message || "Unknown error",
-                            icon: "error",
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("API error", error);
-                    console.log("API response text:", xhr.responseText);
-
-                    swal({
-                        title: "Error",
-                        text: "Unable to clock out. Please try again.",
-                        icon: "error",
+                            swal({
+                                title: "Error",
+                                text: "Unable to clock out. Please try again.",
+                                icon: "error",
+                            });
+                        }
                     });
+                } else {
+                    swal("Clock-out Canceled", "", "info");
                 }
             });
         });
+
 
         //#endregion
 
@@ -324,37 +354,45 @@
         function LoadBdayFolks() {
             $.ajax({
                 type: "GET",
-                url: "/getbday",
+                url: "/getbdaytoday",
                 success: function (result) {
                     if (result.msg === "success") {
                         const bdayData = result.data;
                         let counterbday = 0;
+                        let bdaydiv = "";
 
-                        console.log(bdayData.length);
-                        $.each(bdayData, (key, item) => {
-                            counterbday++;
-                            bdaydiv += `
-              <div class="carousel-item active" data-bs-interval="2000">
-                                        <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
-                                            style="height: 470px;">
-                                        <div class="carousel-caption d-none d-md-block">
-                                            <h5 id="employeeid${counterbday}">${item.firstname}</h5>
-                                            <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
-                                        </div>
+                        if (bdayData.length === 0) {
+                            bdaydiv = `<div class="carousel-item active" data-bs-interval="2000">
+                                    <img src="/images/img/bday.jpg" class="d-block w-100" alt="Default Image"
+                                        style="height: 470px;">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>No Birthdays Today</h5>
                                     </div>
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>`;
-                        });
-
-
+                                </div>`;
+                        } else {
+                            $.each(bdayData, (key, item) => {
+                                counterbday++;
+                                bdaydiv += `
+                            <div class="carousel-item active" data-bs-interval="2000">
+                                <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
+                                    style="height: 470px;">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5 id="employeeid${counterbday}">${item.firstname}</h5>
+                                    <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>`;
+                            });
+                        }
 
                         $("#carouselbday").html(bdaydiv);
                     } else {
@@ -366,9 +404,10 @@
                         );
                     }
                 },
-
             });
         }
+
+
 
 
         function GenerateAnouncement() {

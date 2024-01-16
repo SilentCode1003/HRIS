@@ -179,6 +179,10 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_Salary") {
         callback(null, model.Master_Salary(results));
       }
+
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
     });
   } catch (error) {}
 };
@@ -730,6 +734,22 @@ exports.InsertTable = (tablename, data, callback) => {
       ms_employeeid,
       ms_monthly,
       ms_allowances) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+      mds_employeeid,
+      mds_type,
+      mds_amount,
+      mds_period,
+      mds_cutoff) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
