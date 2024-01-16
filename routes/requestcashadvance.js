@@ -86,7 +86,7 @@ router.post('/update', (req, res) => {
 router.post('/getreqca', (req, res) => {
   try {
     let cashadvanceid = req.body.cashadvanceid;
-    let sql = `  select 
+    let sql = ` select 
     concat(me_firstname,' ',me_lastname) as employeeid,
     me_email as email,
     me_gender as gender,
@@ -102,6 +102,7 @@ router.post('/getreqca', (req, res) => {
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
+      console.log(cashadvanceid);
       res.json({
         msg: 'success',
         data: result,

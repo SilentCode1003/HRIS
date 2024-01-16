@@ -23,8 +23,9 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `select 
+    let sql = `select
     me_profile_pic as image,
+    l_leaveid as leaveid ,
     me_id as newEmployeeId,
     concat(me_lastname,' ',me_firstname) as firstname,
     l_leavestartdate as leavestartdate,
@@ -36,26 +37,25 @@ router.get("/load", (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     where l_leavestatus = 'Pending'
     order by l_leaveid desc`;
-    
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error
-      });
-    });
   } catch (error) {
     console.log(error);
   }
 });
-
 
 router.post("/getleave", (req, res) => {
   try {
@@ -103,13 +103,12 @@ router.post("/getleave", (req, res) => {
   }
 });
 
-
 router.get("/loadCA", (req, res) => {
   try {
     let sql = `   
     select
 	  me_profile_pic as image,
-    me_id as employeeid,
+    ca_cashadvanceid as employeeid,
     concat(me_lastname,' ',me_firstname) as firstname,
     ca_requestdate as requestdate,
     ca_amount as amount,
@@ -120,24 +119,27 @@ router.get("/loadCA", (req, res) => {
     where ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    }).catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: error,
     });
   }
 });
+
 
 router.get("/getbulletin", (req, res) => {
   try {
@@ -593,7 +595,6 @@ router.get("/getbday", (req, res) => {
     master_employee
   WHERE 
     MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND DAY(me_birthday) = DAY(CURRENT_DATE)
     AND me_jobstatus IN ('regular','probitionary')
   ORDER BY 
     me_birthday`;
@@ -612,6 +613,41 @@ router.get("/getbday", (req, res) => {
     });
    })
     
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/getbdaytoday", (req, res) => {
+  try {
+    let sql = ` 
+    SELECT 
+    me_profile_pic AS profilePicturePath,
+    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS birthday
+  FROM 
+    master_employee
+  WHERE 
+    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
+    AND me_jobstatus IN ('regular','probitionary')
+  ORDER BY 
+    me_birthday`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     console.log(error);
   }
@@ -807,7 +843,6 @@ WHERE
     });
   }
 });
-
 
 router.get("/totalbagapuroapi", (req, res) => {
   try {

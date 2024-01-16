@@ -249,12 +249,13 @@ router.post("/clockout", (req, res) => {
 router.post('/emplogs', (req, res) => {
   try {
     let = employeeid = req.body.employeeid;
-    let sql = `SELECT
+    let sql = `   SELECT
     DATE_FORMAT(al_logdatetime, '%Y-%m-%d') AS logdate,
     al_logtype as logtype,
     TIME(al_logdatetime) AS logtime
     FROM attendance_logs
-    WHERE al_employeeid = '${employeeid}'`;
+    WHERE al_employeeid = '${employeeid}'
+    order by al_logdatetime desc`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
