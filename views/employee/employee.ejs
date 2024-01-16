@@ -1,11 +1,9 @@
-<h1 class="font-weight-bold" id="head-title">Employees</h1>
-<div id="loading" class="loading"></div>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Employee</h1>
 
-<!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-  <div class="card-header py-3">
+<!-- Table --> <!--- hehe-->
+<div class="card" id="tablecard">
+  <div class="card-header">
     <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
       <b>+ Add</b>
     </button>
@@ -50,11 +48,11 @@
             <th>ID</th>
             <th>Name</th>
             <th>Contact</th>
-            <th>Email</th>
+            <th class="col-25">Email</th>
             <th>Job Status</th>
             <th>Department</th>
             <th>Position</th>
-            <th>Action</th>
+            <th class="col-sm-1">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -64,8 +62,7 @@
   </div>
 
 </div>
-</div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade" id="addemployeemodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">

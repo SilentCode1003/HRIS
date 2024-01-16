@@ -1,11 +1,11 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Geo-fence Settings</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Geo-fence Settings</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
-            Add Geo-fence
+<div class="card" id="tablecard">
+    <div class="card-header">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+           <b>Add Geo-fence</b> 
         </button>
         <input id='myInput' type='text' placeholder="  Search....">
     </div>
@@ -14,15 +14,15 @@
             <table class="table table-striped" id="dataTablegeofence">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Name </th>
                         <th>Department</th>
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th>Radius</th>
-                        <th>Location</th>
+                        <th class="col-25">Location</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>

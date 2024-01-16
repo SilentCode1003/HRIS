@@ -90,24 +90,21 @@ router.post("/getloadforapp", (req, res) => {
     try {
         let employeeid = req.body.employeeid;
         let sql =`SELECT
-        CONCAT(me_lastname, " ", me_firstname) AS employeeid,
-        DATE_FORMAT(ma.ma_attendancedate, '%Y-%m-%d') AS attendancedateIn,
-        DATE_FORMAT(MAX(al.al_logdatetime), '%Y-%m-%d') AS attendancedateOut,
-        TIME_FORMAT(ma.ma_clockin, '%H:%i:%s') AS clockin,
-        TIME_FORMAT(MAX(al.al_logdatetime), '%H:%i:%s') AS clockout,
-        ma.ma_devicein AS devicein,
-        al.al_device AS deviceout,
+        CONCAT(me_lastname, " ", me_firstname) as employeeid,
+        ma_attendancedate as attendancedate,
+        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+        ma_devicein as devicein,
+        ma_deviceout as deviceout,
         CONCAT(
-            FLOOR(TIMESTAMPDIFF(SECOND, ma.ma_clockin, MAX(al.al_logdatetime)) / 3600), 'h ',
-            FLOOR((TIMESTAMPDIFF(SECOND, ma.ma_clockin, MAX(al.al_logdatetime)) % 3600) / 60), 'm'
+            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
         ) AS totalhours
-    FROM master_attendance ma
-    LEFT JOIN master_employee me ON ma.ma_employeeid = me.me_id
-    LEFT JOIN attendance_logs al ON ma.ma_attendanceid = al.al_attendanceid AND al.al_logtype = 'ClockOut'
-    WHERE ma.ma_employeeid = '${employeeid}'
-    GROUP BY me.me_id, ma.ma_attendancedate
-    ORDER BY ma.ma_attendancedate DESC`;
- 
+        FROM master_attendance
+        LEFT JOIN master_employee ON ma_employeeid = me_id
+         where ma_employeeid = '${employeeid}'
+        ORDER BY ma_attendancedate DESC`;
+
         mysql.mysqlQueryPromise(sql)
         .then((result) => {
             res.json({
