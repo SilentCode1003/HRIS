@@ -627,6 +627,7 @@ exports.Master_Salary = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
+      image: key.me_profile_pic,
       salaryid: key.ms_id,
       employeeid: key.ms_employeeid,
       monthly: key.ms_monthly,
