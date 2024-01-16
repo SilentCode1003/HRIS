@@ -76,8 +76,8 @@
 
 
     //#region Load Modal Table
+     //#Employee Modal
     $(document).on("click", "#totalEMP", function () {
-      $(`#dataTableemployees`).find("tr:gt(0)").remove();
 
       $.ajax({
         type: "GET",
@@ -85,49 +85,10 @@
         success: function (json) {
           console.log("API response", json);
 
-          var finalData = [];
           var data = json.data;
 
-          if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
-            $("#dataTableemployees").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("dataTableemployees");
+          populatedatatable(data)
 
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var JOB_STATUS = row.insertCell(5);
-            var DEPARTMENT = row.insertCell(6);
-            var POSITION = row.insertCell(7);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            JOB_STATUS.innerHTML = item.jobstatus;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, JOB_STATUS, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -135,6 +96,44 @@
       });
     });
 
+    function populatedatatable(data) {
+      console.log(data);
+      const tableBody = $('#dataTableemployees tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.jobstatus, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Regular Employee Modal
     $(document).on("click", "#totalregularEMP", function () {
       $(`#regularemloyeetbl`).find("tr:gt(0)").remove();
 
@@ -146,45 +145,8 @@
 
           var finalData = [];
           var data = json.data;
-
-          if ($.fn.DataTable.isDataTable("#regularemloyeetbl")) {
-            $("#regularemloyeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("regularemloyeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(5);
-            var POSITION = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.contact;
-            EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.me_department;
-            POSITION.innerHTML = item.me_position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
+          populateregularemloyeetbl(data);
+        
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -192,6 +154,43 @@
       });
     });
 
+    function populateregularemloyeetbl(data) {
+      console.log(data);
+      const tableBody = $('#regularemloyeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.contact, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.me_department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.me_position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Probationary Employee Modal
     $(document).on("click", "#totalprobiEMP", function () {
       $(`#probiemloyeetbl`).find("tr:gt(0)").remove();
 
@@ -203,45 +202,8 @@
 
           var finalData = [];
           var data = json.data;
+          populateprobiemloyeetbl(data);
 
-          if ($.fn.DataTable.isDataTable("#probiemloyeetbl")) {
-            $("#probiemloyeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("probiemloyeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(5);
-            var POSITION = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -249,6 +211,43 @@
       });
     });
 
+    function populateprobiemloyeetbl(data) {
+      console.log(data);
+      const tableBody = $('#probiemloyeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Resigned Employee
     $(document).on("click", "#totalresignedEMP", function () {
       $(`#resignedemployeetbl`).find("tr:gt(0)").remove();
 
@@ -260,60 +259,8 @@
 
           var finalData = [];
           var data = json.data;
+          populateresignedemployeetbl(data);
 
-          if ($.fn.DataTable.isDataTable("#resignedemployeetbl")) {
-            $("#resignedemployeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("resignedemployeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            // var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var REASON = row.insertCell(6);
-            var DATE_RESIGNED = row.insertCell(7);
-            var CREATE_DATE = row.insertCell(8);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            // EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-            REASON.innerHTML = item.reason;
-            DATE_RESIGNED.innerHTML = item.dateresigned;
-            CREATE_DATE.innerHTML = item.createdate;
-
-            $.each(
-              [
-                ID,
-                NAME,
-                CONTACT,
-                DEPARTMENT,
-                POSITION,
-                REASON,
-                DATE_RESIGNED,
-                CREATE_DATE,
-              ],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -321,6 +268,45 @@
       });
     });
 
+    function populateresignedemployeetbl(data) {
+      console.log(data);
+      const tableBody = $('#resignedemployeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 9,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.reason, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.dateresigned, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.createdate, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Admin
     $(document).on("click", "#totaladminEMP", function () {
       $(`#totaladmintable`).find("tr:gt(0)").remove();
 
@@ -332,45 +318,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotaladmintable(data);
 
-          if ($.fn.DataTable.isDataTable("#totaladmintable")) {
-            $("#totaladmintable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totaladmintable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -378,6 +327,43 @@
       });
     });
 
+    function populatetotaladmintable(data) {
+      console.log(data);
+      const tableBody = $('#totaladmintable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total IT Department
     $(document).on("click", "#totalitEMP", function () {
       $(`#totalittable`).find("tr:gt(0)").remove();
 
@@ -389,45 +375,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalittable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalittable")) {
-            $("#totalittable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalittable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -435,6 +384,43 @@
       });
     });
 
+    function populatetotalittable(data) {
+      console.log(data);
+      const tableBody = $('#totalittable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Cabling Department
     $(document).on("click", "#totalcablingEMP", function () {
       $(`#totalcablingtable`).find("tr:gt(0)").remove();
 
@@ -446,45 +432,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalcablingtable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalcablingtable")) {
-            $("#totalcablingtable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalcablingtable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -492,7 +441,43 @@
       });
     });
 
+    function populatetotalcablingtable(data) {
+      console.log(data);
+      const tableBody = $('#totalcablingtable tbody');
+      tableBody.empty();
 
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Candidate for Regular
     $(document).on("click", "#totalcandidate", function () {
       $(`#totalcandidatetable`).find("tr:gt(0)").remove();
 
@@ -504,44 +489,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalcandidatetable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalcandidatetable")) {
-            $("#totalcandidatetable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalcandidatetable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var DEPARTMENT = row.insertCell(3);
-            var HIRE_DATE = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            DEPARTMENT.innerHTML = item.department;
-            HIRE_DATE.innerHTML = item.hiredate;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-            $.each(
-              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -549,7 +498,43 @@
       });
     });
 
+    function populatetotalcandidatetable(data) {
+      console.log(data);
+      const tableBody = $('#totalcandidatetable tbody');
+      tableBody.empty();
 
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Bagapuro Family
     $(document).on("click", "#totalbagapuro", function () {
       $(`#totalbagapurotable`).find("tr:gt(0)").remove();
 
@@ -561,50 +546,50 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalbagapurotable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalbagapurotable")) {
-            $("#totalbagapurotable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalbagapurotable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var DEPARTMENT = row.insertCell(3);
-            var HIRE_DATE = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            DEPARTMENT.innerHTML = item.department;
-            HIRE_DATE.innerHTML = item.hiredate;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-            $.each(
-              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
         },
       });
     });
+
+    function populatetotalbagapurotable(data) {
+      console.log(data);
+      const tableBody = $('#totalbagapurotable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
 
 
     //#endregion

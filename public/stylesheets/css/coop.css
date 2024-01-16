@@ -1,12 +1,12 @@
 /*--------Top bar-------*/
 .navbar {
-  background-color: #168164 !important;
-  box-shadow: 0 4px 8px #174634 !important;
+  background-color: #7a1818 !important;
+  box-shadow: 0 4px 8px #3b3939 !important;
   border-radius: 15px;
   margin: 15px;
 }
 #dp-header {
-    background-color: #168164 !important;
+    background-color: #7a1818 !important;
     border: 1px solid #174634 !important;
 }
 .dropdown-item {
@@ -28,53 +28,18 @@
     width: 36px;
     padding-left: 8px;
     border: 2px solid #8ED1AE  !important;
-    background-color: #168164 !important;
+    background-color: #7a1818 !important;
     color: white !important;
 }
 .btn-search-topbar:hover {
   background-color: #8ED1AE !important;
-  color: #168164 !important;
+  color: #7a1818 !important;
 }
 
 
 /*---- Sidebar ---*/
 #accordionSidebar {
-        -webkit-animation: accordionSidebar 8s linear infinite alternate both;
-                animation: accordionSidebar 8s linear infinite alternate both;               
-}
-@-webkit-keyframes accordionSidebar {
-    0% {
-      background: #19dcea;
-    }
-    25% {
-      background: #b22cff;
-    }
-    50% {
-      background: #ea2222;
-    }
-    75% {
-      background: #f5be10;
-    }
-    100% {
-      background: #3bd80d;
-    }
-  }
-  @keyframes accordionSidebar {
-    0% {
-      background: #174634;
-    }
-    25% {
-      background: #1b8a5f;
-    }
-    50% {
-      background: #174634;
-    }
-    75% {
-      background: #1b8a5f;
-    }
-    100% {
-      background: #174634;
-    }
+  background-color: #7a1818 !important;
   }
 #boxshadow-sidebar {
     background-color: #174634 !important;
@@ -115,7 +80,7 @@
 
 /*--- Dashboard/Content -----*/
 #content-wrapper {
-    background-color: #CCF7F7 !important;
+    background-color: rgb(252, 245, 245) !important;
 }
 .c-body {
   background-color: #9BD9B2 !important;
@@ -124,7 +89,7 @@
   margin: 25px;
 }
 .sticky-footer {
-    background-color: #168164 !important;
+    background-color: #7a1818 !important;
     box-shadow: 0 -5px 10px #8ED1AE !important;
     margin-top: 50px;
     color: white !important;
@@ -134,7 +99,7 @@
     font-weight: 600;
 }
 .container-content {
-    padding-top: 3%;
+    padding-top: 2%;
 }
 .btn-add {
     background-color: #1D77C3 !important;
@@ -211,7 +176,7 @@
 }
 .btn-add:hover {
     background-color: #8ED1AE !important;
-    color: #168164 !important;
+    color: #7a1818 !important;
 }
 
 
@@ -222,7 +187,7 @@
 #employeeid, #loanid {
     height: 36px;
     width: 30%;
-    background-color: #168164 !important;
+    background-color: #7a1818 !important;
     color: white !important;
     border-radius: 5px;
     border: 2.5px solid #8ED1AE !important;
@@ -261,10 +226,10 @@
     border: 2.5px solid #174634 !important;
 }
 #modal-footer {
-  background-color: #168164 !important ;
+  background-color: #7a1818 !important ;
 }
 #modal-header {
-    background-color: #168164 !important ;
+    background-color: #7a1818 !important ;
     color: white !important;
     height: 100px;
 }
@@ -293,7 +258,7 @@
 .btn-search {
     height: 36px;
     border: 2.5px solid #8ED1AE !important;
-    background-color: #168164 !important;
+    background-color: #7a1818 !important;
     color: white !important;
     padding-right: 5px;
     border-radius: 5px;
@@ -302,50 +267,38 @@
 }
 .btn-search:hover {
   background-color: #8ED1AE !important;
-  color: #168164 !important;
+  color: #7a1818 !important;
 }
 
 /*----- Modules Table --- */
 .c-header {
-  background-color: #168164  !important;
+  background-color: #7a1818  !important;
 }
 #h-title {
-  color: #168164 !important;
-  margin-left: 55px;
-  margin-bottom: 5px;
+  color: #7a1818 !important;
+  margin-left: 30px;
+  margin-bottom: 4%;
 }
-#table {
+/*
+table {
   border-collapse: collapse;
-  width: 165%;
-  table-layout: fixed;
-  overflow-x: auto;
-  font-size: medium;
+  width: 100%;
 }
-#table td {
-  text-align: center;
-  padding: 8px;   
-  color: black;
-  border: 1px solid #8ED1AE !important;
+th, td {
+  padding: 15px;
 }
-#table th {
-  color: white !important;
-  text-align: center;
-  padding: 8px;
+th {
   position: sticky;
   top: 0;
   overflow: hidden;
   background-color: #0D9488 !important;
+  color: white !important;
 }
-#table tr:hover {
+tr:hover {
   background-color: #CCF7F7 !important;
   color: black !important;
-  font-weight: 600;
+  border: none;
 }
-.table-responsive {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
 
 /* Media query for smaller screens Modules Table*/
 @media screen and (max-width: 1000px) {
@@ -401,12 +354,11 @@
 .btn-color {
     background-color: #0ad655 !important;
     color: white !important;
-    font-weight: 600;
-    height: 40px;
-    width: 100px;
+    float: left;
     margin-left: 5px;
-    border-radius: 15px;
-    border: 2px solid #8ED1AE !important;
+    border-radius: 8px;
+    height: 33px;
+    border: 1px solid #8ED1AE !important;
     -webkit-animation: btn-color 0.9s both;
 	        animation: btn-color 0.9s both;
 }
@@ -472,25 +424,31 @@
 }
 .btn-color:hover {
     background-color: #8ED1AE !important;
-    color: #168164 !important;
+    color: #7a1818 !important;
 }
 .btn-generate-holiday {
+  height: 33px;
   background-color: #0ad655 !important;
   border: 2px solid #8ED1AE !important;
   color: white !important;
 }
 .btn-add-holiday {
+  height: 33px;
   background-color: #1D77C3 !important;
   border: 2px solid #8ED1AE !important;
   color: white !important;
 }
 #yearInput {
   border: 2px solid #8ED1AE !important;
-  margin: 2px;
+  height: 33px;
 }
 .btn-add-color {
+  float: left;
+  margin-left: 5px;
+  border-radius: 8px;
+  height: 33px;
   background-color: #1D77C3 !important;
-  border: 2px solid #8ED1AE !important;
+  border: 1px solid #8ED1AE !important;
   color: white !important;
   -webkit-animation: btn-add-color 0.9s both;
 	        animation: btn-add-color 0.9s both;
@@ -557,34 +515,90 @@
 }
 .btn-add-color:hover {
   background-color: #8ED1AE !important;
-    color: #168164 !important;
+    color: #7a1818 !important;
 }
 .card-header {
-  background-color: #168164 !important;
+  background-color: #7a1818 !important;
 }
 .circle-img {
-  border: #168164 !important;
+  border: #7a1818 !important;
 }
 /*--- Dashboard ----*/
 #nav-home-tab, #nav-ca-tab, #nav-profile-tab {
-  background-color: #168164 !important;
+  background-color: #7a1818 !important;
   color: white !important;
   border-bottom: 1px solid white !important;
 }
 #nav-home-tab:hover, #nav-ca-tab:hover, #nav-profile-tab:hover {
   background-color: #8ED1AE !important;
   border: 2px solid white !important;
-  color: #168164 !important;
+  color: #7a1818 !important;
 }
-#totalEmployeeCard {
+#totalEmployeeCard,#regularEmployeeCard, #resignedEmployeeCard, #probationaryEmployeeCard,
+#totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro {
   background-image: url(/images/img/employee.jpg);
-}
-#regularEmployeeCard {
-  background-image: url(/images/img/person.jpg);
-}
-#probationaryEmployeeCard {
-  background-image: url(/images/img/probitionary.jpg);
+  box-shadow: 0 5px 8px #3d0404 !important;
 }
 
+/*---- Tables --- */
 
 
+.col-25 {
+  width: 15%;
+}
+.col-26 {
+  width: 20%;
+}
+
+/*--- card-dashboard --- */
+.header-card {
+  font-size: small;
+  word-wrap: break-word;
+}
+#loadleaveBadge, #loadcaBadge {
+  margin-left: 8px;
+}
+/*---- Modal Table ---*/
+
+.scrollable-table-container {
+  max-height: 545px !important; 
+  overflow-y: auto !important;
+}
+
+.table-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+@media (max-width: 767px){
+  .custom-mobile-table thead{
+    display: none;
+  }
+
+  .custom-mobile-table, .custom-mobile-table tbody, .custom-mobile-table tr, .custom-mobile-table td{
+    display: block;
+    width: 100%;
+  }
+  .custom-mobile-table tr{
+    margin-bottom:15px;
+  }
+  .custom-mobile-table .custom-mobile-align{
+    padding-left: 50% !important;
+    position: relative;
+  }
+  .custom-mobile-table .custom-mobile-align::before{
+    content: attr(data-label)": ";
+    position: absolute;
+    left:0;
+    width: 50%;
+    padding-left:15px;
+    font-size:15px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .custom-mobile-table tbody tr:nth-child(even){
+      background-color: var(--grey-50) !important;
+      /* color: var(--sidebar-text-active); */
+  }
+}
