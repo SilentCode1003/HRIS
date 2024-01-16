@@ -1,11 +1,11 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Users</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Users</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#usersmodal">
-        + Add New
+<div class="card" id="tablecard">
+    <div class="card-header">
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
+        <b>+ Add</b>
       </button>
         <input id='myInput' type='text' placeholder="  Search....">
     </div>
@@ -14,14 +14,14 @@
             <table class="table table-striped" id="dataTableusers">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Employee ID</th>
-                        <th>Username</th>
+                        <th class="col-25">Username</th>
                         <th>Access Type</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,15 +36,17 @@
 <div class="modal fade" id="usersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-user-circle' style='color:#0bd9f1; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">USERS</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
               <div class="col">
                 <div class="form-floating">
-                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
+                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example"
+                  style="border: 2.5px solid #174634 !important;">
                     <option selected>Choose....</option>
                   </select>
                   <label for="floatingSelectGrid">Employee ID</label>
@@ -53,29 +55,21 @@
               <br>
               <div class="col">
                   <div class="form-floating">
-                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
+                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example"
+                      style=" border: 2.5px solid #174634 !important;">
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
                     </div>
               </div>
               <br>
-              <div class="col">
-                  <div class="form-floating">
-                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
-                        <option selected>Choose....</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                      </select>
-                      <label for="floatingSelectGrid">Status</label>
-                    </div>
-              </div>
-              <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="userssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="userssavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>

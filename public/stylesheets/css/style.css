@@ -192,16 +192,6 @@
   margin-bottom: 30px;
 }
 
-#tablecard {
-  width: 85;
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-#table-responsive-id {
-  overflow: hidden;
-}
-
 #openmodal {
   margin-top: 10px;
   margin-left: 110px;
@@ -211,127 +201,33 @@
 }
 
 #myInput {
-  margin-left: 80%;
-  margin-top: -40px;
   float: right;
-  width: 20%;
-  height: 40px;
+  border: none;
+  height: 33px;
+  margin-right: 5px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
-#myInputtotal {
-  margin-left: 700px;
-  margin-right: 30px;
+#myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
+#myInputRegular, #myInputtotal, #myInputtotalcandidate, #myInputtotalbagapuro   {
+  margin-left:700px;
+  margin-right: 5px;
   margin-top: 5px;
   float: right;
-  width: 200px;
+  width: 150px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
-}
-
-#myInputRegular {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputproba {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputresigned {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotaladmin {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalit {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalcabling {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalcandidate {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#myInputtotalbagapuro {
-  margin-left: 700px;
-  margin-right: 30px;
-  margin-top: 5px;
-  float: right;
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
-  border-color: red;
-}
-
-#head-title {
-  margin-left: 110px;
-  margin-top: 50px;
-  margin-bottom: -20px;
 }
 
 #myInput2 {
-  margin-left: 80%;
   float: right;
+  border: none;
+  height: 33px;
   width: 300px;
-  height: 40px;
+  margin-right: 5px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
 #myInput3 {
@@ -341,15 +237,22 @@
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border-color: red;
+  border: 2px solid #8ED1AE !important;
 }
 
+/*--- table ---*/
+#tablecard {
+  width: 100;
+  margin-left: 2%;
+  margin-right: 2%;
+  background-color:  #8ED1AE !important;
+}
+
+#table-responsive-id {
+  overflow: hidden; 
+}
 table {
-  border: 1px solid #ccc;
   border-collapse: collapse;
-  margin: 0;
-  padding: 0;
-  width: 100%;
   table-layout: fixed;
 }
 
@@ -361,19 +264,25 @@ table caption {
 table tr {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
-  padding: .35em;
 }
 
-table th,
 table td {
-  padding: .625em;
   text-align: center;
+  padding: 8px;
+  border: 1px solid rgb(226, 223, 223) !important;
+  word-wrap: break-word;
 }
 
 table th {
-  font-size: .95em;
-  letter-spacing: .1em;
+  text-align: center;
+  font-size: 12px;
   text-transform: uppercase;
+  border: 2px solid #168164 !important;
+  background-color: #0D9488 !important;
+  color: white !important;
+}
+.card .card-header {
+  height: 50px;
 }
 
 .bunga {
@@ -433,7 +342,7 @@ table th {
     border-bottom: 0;
   }
 
-  head-title {
+  .head-title {
     text-align: center;
   }
 

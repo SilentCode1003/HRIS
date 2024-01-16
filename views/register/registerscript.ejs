@@ -1,4 +1,151 @@
 <script>
+
+$(document).ready(function () {
+    console.log('Initialize');
+    LoadList();
+
+    $(document).on("click", "#ojtsavebtn", function () {
+      let image = base64String;
+      let firstname = $("#ojtfname").val();
+      let lastname = $("#ojtlname").val();
+      let address = $("#ojtaddress").val();
+      let birthday = $("#ojtbirthday").val();
+      let gender = $("#ojtgender").val();
+      let phone = $("#ojtphone").val();
+      let ercontact = $("#ojtecname").val();
+      let ercontactnumber = $("#ojtecphone").val();
+      let school = $("#ojtschool").val();
+      let department = $("#ojtdepartment").val();
+      let startdate = $("#ojtstartdate").val();
+      let hours = $("#ojthours").val();
+
+      var message = "";
+
+      if (image == "") {
+        message += "TITTLE ";
+      }
+
+      if (firstname == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (lastname == "") {
+        message += "TITTLE ";
+      }
+
+      if (address == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (birthday == "") {
+        message += "TITTLE ";
+      }
+
+      if (gender == "") {
+        message += "TITTLE ";
+      }
+
+      if (phone == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (ercontact == "") {
+        message += "TITTLE ";
+      }
+
+      if (ercontactnumber == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (school == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (department == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (startdate == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (hours == "") {
+        message += "DESCRIPTION ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/register/save",
+          data: {
+            image: image,
+            firstname: firstname,
+            lastname: lastname,
+            address: address,
+            status: status,
+            birthday: birthday,
+            gender: gender,
+            phone: phone,
+            ercontact: ercontact,
+            ercontactnumber: ercontactnumber,
+            school: school,
+            department: department,
+            startdate: startdate,
+            hours: hours,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(results => {
+                  window.location.reload();
+                })
+              LoadTable();
+            }
+            else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#ojtdepartment").append(options);
+            console.log(item.departmentname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
     $(document).on("change", "#ojtprofileimage", function (e) {
       const input = document.getElementById("ojtprofileimage");
       const file = input.files[0];
@@ -30,4 +177,6 @@
       };
       reader.readAsDataURL(file);
     }
+
+  });
 </script>

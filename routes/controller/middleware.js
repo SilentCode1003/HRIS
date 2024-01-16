@@ -106,8 +106,12 @@ var roleacess = [
       },
       {
         layout: "memberlayout",
-
+      },
+      {
         layout: "ojtuserlayout",
+      },
+      {
+        layout: "geofencesettingslayout",
       },
     ],
   },
@@ -268,6 +272,7 @@ exports.Validator = function (req, res, layout) {
             employeeid: req.session.employeeid,
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
+            department: req.session.department,
           });
         }
       });

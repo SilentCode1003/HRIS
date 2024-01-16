@@ -29,17 +29,17 @@ router.post("/upload", (req, res) => {
 
   let counter = 0;
 
+  console.log(dataJson);
   dataJson.forEach((key, item) => {
-    counter += 1;
-
     // console.log("Department: ", key.department);
-    console.log("Employee Id: ", key.position);
+    // console.log("Employee Id: ", key.position);
     GetDepartment(key.department, (err, result) => {
       if (err) console.log("Error: ", err);
       let departmentid = result[0].departmentid;
       GetPosition(key.position, (err, result) => {
         if (err) console.log("Error: ", err);
         let positionid = result[0].positionid;
+        counter += 1;
 
         // let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
         //   "YYYY-MM-DD"
@@ -72,6 +72,7 @@ router.post("/upload", (req, res) => {
           ],
         ];
 
+        console.log(master_employee);
         mysql.InsertTable("master_employee", master_employee, (err, result) => {
           if (err) console.error("Error: ", err);
 
@@ -802,7 +803,7 @@ router.get("/totalregular", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as contact,
     me_email as email,
     md_departmentname as me_department,
@@ -839,7 +840,7 @@ router.get("/totalactive", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     me_jobstatus as jobstatus,
@@ -877,7 +878,7 @@ router.get("/totalprobi", (req, res) => {
     let sql = `select
     me_profile_pic as profilePicturePath,
     me_id as newEmployeeId,
-    concat(me_firstname, "", me_lastname) as firstname,
+    concat(me_lastname, " ", me_firstname) as firstname,
     me_phone as phone,
     me_email as email,
     md_departmentname as department,
@@ -914,7 +915,7 @@ router.get("/totalresigned", (req, res) => {
     let sql = `   SELECT
     me.me_profile_pic AS profilePicturePath,
       me.me_id AS newEmployeeId,
-      CONCAT(me.me_firstname, ' ', me.me_lastname) AS firstname,
+      CONCAT(me.me_lastname, ' ', me.me_firstname) AS firstname,
       me.me_phone AS phone,
       md.md_departmentname AS department,
       mp.mp_positionname AS position,

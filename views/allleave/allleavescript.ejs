@@ -5,7 +5,7 @@
     LoadTable();
     searchTable();
 
-    $(document).on('keyup','#myInput2',function(){
+    $(document).on('keyup', '#myInput2', function () {
       searchTable();
     });
 
@@ -134,38 +134,59 @@
         message += "status is required. ";
       }
 
-      if (comment === "") {
+      if (status === "Pending") {
         message += "status is required. ";
+      }
+
+      if (status === "Cancel") {
+        message += "Youre not Allowed to Cancel The Employee Request";
+      }
+
+      if (comment === "") {
+        message += "comment is required. ";
       }
 
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        $.ajax({
-          type: "POST",
-          url: "/allleave/update",
-          data: {
-            leaveid: id,
-            status: status,
-            comment: comment,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal("Save Successfully", "You clicked the button!", "success",)
-                .then(results => {
-                  window.location.reload();
-                });
-              LoadTable();
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willApprove) => {
+            if (willApprove) {
+              $.ajax({
+                type: "POST", 
+                url: "/allleave/update",
+                data: {
+                  leaveid: id,
+                  status: status,
+                  comment: comment,
+                },
+                success: function (result) {
+                  if (result.msg == "success") {
+                    swal("Save Successfully", "You clicked the button!", "success",)
+                      .then(results => {
+                        window.location.reload();
+                      });
+                    LoadTable();
+                  }
+                },
+                error: function (err) {
+                  swal("Error", "An error occurred while saving data.", "error");
+                },
+                error: function (err) {
+                  swal("Error", "An error occurred while saving data.", "error");
+                },
+              });
+            } else {
+              swal("Action Canceled", "", "info");
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
+          });
       }
     });
 

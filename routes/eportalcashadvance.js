@@ -51,7 +51,30 @@ router.post('/submit', async (req, res) => {
 router.get('/load',(req , res) => {
   try {
     let employeeid = req.session.employeeid;
-    let sql = `SELECT * FROM cash_advance WHERE ca_employeeid = '${employeeid}'`;
+    let sql = `SELECT * FROM cash_advance WHERE ca_employeeid = '${employeeid}'
+    order by ca_cashadvanceid desc`;
+
+    mysql.Select(sql, 'Cash_Advance', (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: 'error', error
+    })
+    
+  }
+});
+
+router.post('/getload',(req , res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT * FROM cash_advance WHERE ca_employeeid = '${employeeid}'
+    order by ca_cashadvanceid desc`;
 
     mysql.Select(sql, 'Cash_Advance', (err, result) => {
       if (err) console.error('Error: ', err);

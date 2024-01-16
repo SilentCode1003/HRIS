@@ -40,7 +40,14 @@
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#edittrainingmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
 
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
+
               finalData.push({
+                image: imgElement.outerHTML,
                 trainingid: item.trainingid,
                 name: item.name,
                 employeeid: item.employeeid,
@@ -62,6 +69,7 @@
           },
         ],
         columns: [
+          { data: "image" },
           { data: "trainingid" },
           { data: "name" },
           { data: "employeeid" },
@@ -71,6 +79,12 @@
           { data: "status" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log('Done');
         },
@@ -84,14 +98,12 @@
       let startdate = $("#trainingdatestarted").val();
       let enddate = $("#trainingdatefinished").val();
       let location = $("#traininglocation").val();
-      let status = $("#trainingstatus").val();
 
       var message = "";
 
       if (name == "") {
         message += "status is required ";
       }
-
 
       if (employeeid == "") {
         message += "shiftname is required ";
@@ -109,11 +121,6 @@
         message += "createby is required ";
       }
 
-
-      if (status == "") {
-        message += "createby is required ";
-      }
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -127,7 +134,6 @@
             startdate: startdate,
             enddate: enddate,
             location: location,
-            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -214,7 +220,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      trainingid = dataRow[0];
+      trainingid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -330,26 +336,26 @@
     });
 
     function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTabletraining");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTabletraining");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
         }
       }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
     }
-  }
 
   });
 

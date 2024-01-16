@@ -40,7 +40,15 @@
                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editusersmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
 
+                 var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
+
+
               finalData.push({
+                image: imgElement.outerHTML,
                 userid: item.userid,
                 employeeid: item.employeeid,
                 username: item.username,
@@ -62,6 +70,7 @@
           },
         ],
         columns: [
+          { data: "image" },
           { data: "userid" },
           { data: "employeeid" },
           { data: "username" },
@@ -71,6 +80,12 @@
           { data: "status" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log('Done');
         },
@@ -81,7 +96,6 @@
     $(document).on("click", "#userssavebtn", function () {
       let employeeid = $("#usersname").val();
       let accesstype = $("#usersaccesstype").val();
-      let status = $("#usersstatus").val();
 
       var message = "";
 
@@ -93,11 +107,6 @@
         message += "DESCRIPTION ";
       }
 
-
-      if (status == "") {
-        message += "POSITION NAME ";
-      }
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -107,7 +116,6 @@
           data: {
             employeeid: employeeid,
             accesstype: accesstype,
-            status: status,
 
           },
           success: function (result) {
@@ -215,7 +223,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      userid = dataRow[0];
+      userid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {

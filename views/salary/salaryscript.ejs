@@ -1,0 +1,331 @@
+<script>
+    let salaryid = "";
+
+    $(document).ready(function () {
+        console.log('Initialize');
+        LoadTable();
+        LoadListEmp();
+        //searchTable();
+        LoadeditListEmp();
+
+        //   $(document).on('keyup', '#myInput', function () {
+        //     searchTable();
+        //   });
+
+
+        function LoadTable() {
+            $("#dataTablesalary").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/salary/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        console.log(data);
+                        $.each(data, (key, item) => {
+                            var action = "";
+                            var status = item.status;
+
+                            action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editsalarymodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+
+                            var imgElement = document.createElement("img");
+                            imgElement.src = "data:image/jpg;base64," + item.image;
+                            imgElement.alt = "Profile Image";
+                            imgElement.style.width = "100px";
+                            imgElement.style.height = "100px";
+
+                            finalData.push({
+                                image: imgElement.outerHTML,
+                                salaryid: item.salaryid,
+                                employeeid: item.employeeid,
+                                monthly: item.monthly,
+                                allowances: item.allowances,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    { data: "image" },
+                    { data: "salaryid" },
+                    { data: "employeeid" },
+                    { data: "monthly" },
+                    { data: "allowances" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $("td", row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
+                initComplete: function () {
+                    console.log('Done');
+                },
+            });
+        }
+
+
+
+        $(document).on("click", "#salarysavebtn", function () {
+            let employeeid = $("#salaryemp").val();
+            let monthly = $("#msemp").val();
+            let allowances = $("#allowances").val();
+
+            var message = "";
+
+            if (employeeid == "") {
+                message += "employeeid is required ";
+            }
+
+            if (monthly == "") {
+                message += "monthly is required ";
+            }
+
+            if (allowances == "") {
+                message += "allowances is required ";
+            }
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/salary/save",
+                    data: {
+                        employeeid: employeeid,
+                        monthly: monthly,
+                        allowances: allowances,
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            swal({
+                                title: "Saved Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            })
+                                .then(result => {
+                                    window.location.reload();
+                                })
+                            LoadTable();
+                        }
+                        else {
+                            swal({
+                                title: "Exist",
+                                text: "Data already exists!",
+                                icon: "warning",
+                                button: "OK!",
+                            })
+                                .then(result => {
+                                    window.location.reload();
+                                })
+                            LoadTable();
+                        }
+
+                    },
+                    error: function (err) {
+                        swal("Data already exist!", "You clicked the button!", "warning");
+                    },
+                });
+            }
+
+        });
+
+
+        function LoadListEmp() {
+            $.ajax({
+                type: "GET",
+                url: "/employee/load",
+                success: function (result) {
+                    console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.newEmployeeId, item.newEmployeeId);
+                        $(options).html(item.firstname);
+                        $("#salaryemp").append(options);
+                        console.log(item.firstname);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+        function LoadeditListEmp() {
+            $.ajax({
+                type: "GET",
+                url: "/employee/loadedit",
+                success: function (result) {
+                    console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.newEmployeeId, item.newEmployeeId);
+                        $(options).html(item.firstname);
+                        $("#editsalaryemp").append(options);
+                        console.log(item.firstname);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+
+        $("#dataTablesalary tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            console.log(dataRow);
+            salaryid = dataRow[1];
+        });
+
+        $(document).on("click", "#editBtn", function () {
+            console.log('hit');
+            $.ajax({
+                type: "POST",
+                url: "/salary/getsalary",
+                data: {
+                    salaryid: salaryid,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        $.each(existingData, (key, item) => {
+                            $("#editdepartmentid").val(item.salaryid);
+                            $("#editsalaryemp").val(item.employeeid);
+                            $("#editmsemp").val(item.monthly);
+                            $("#editallowances").val(item.allowances);
+                        });
+                    } else {
+                        swal("Error fetching employee data", message, "error");
+                    }
+                },
+                error: function (err) {
+                    swal("An error occurred while fetching employee data", message, "error");
+                },
+            });
+        });
+
+        $(document).on("click", "#editsalarysavebtsn", function () {
+            console.log("Save button clicked");
+            let id = salaryid
+            let employeeid = $("#editsalaryemp").val();
+            let monthly = $("#editmsemp").val();
+            let allowances = $("#editallowances").val();
+
+            var message = "";
+
+            if (employeeid === "") {
+                message += "employeeid is required. ";
+            }
+
+            if (monthly === "") {
+                message += "monthly is required. ";
+            }
+
+            
+            if (allowances === "") {
+                message += "allowances is required. ";
+            }
+
+            if (message !== "") {
+                swal("Validation Error", message, "error");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/salary/update",
+                    data: {
+                        salaryid: id,
+                        employeeid: employeeid,
+                        monthly: monthly,
+                        allowances: allowances,
+
+                    },
+                    success: function (result) {
+                        if (result.msg == "success") {
+                            swal({
+                                title: "Update Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            })
+                                .then(results => {
+                                    window.location.reload();
+                                });
+                            LoadTable();
+                        } else if (result.msg == "exist") {
+                            swal({
+                                title: "Exist",
+                                text: "Data already exists!",
+                                icon: "warning",
+                                button: "OK!",
+                            });
+                        } else {
+                            swal("Data already exists!", "You clicked the button!", "warning");
+                        }
+                    },
+                    error: function (err) {
+                        swal("Error", "An error occurred while saving data.", "error");
+                    },
+                });
+            }
+        });
+
+
+    });
+
+    // function searchTable() {
+    //   var input, filter, found, table, tr, td, i, j;
+    //   input = document.getElementById("myInput");
+    //   filter = input.value.toUpperCase();
+    //   table = document.getElementById("dataTableresigned");
+    //   tr = table.getElementsByTagName("tr");
+    //   for (i = 0; i < tr.length; i++) {
+    //     td = tr[i].getElementsByTagName("td");
+    //     for (j = 0; j < td.length; j++) {
+    //       if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+    //         found = true;
+    //       }
+    //     }
+    //     if (found) {
+    //       tr[i].style.display = "";
+    //       found = false;
+    //     } else {
+    //       tr[i].style.display = "none";
+    //     }
+    //   }
+    // }
+
+
+</script>

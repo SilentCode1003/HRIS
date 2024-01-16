@@ -1,217 +1,110 @@
-<div class="container container-content">
-    <!-- Button trigger modal -->
-  <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Add +
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">LOAN</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <!--- Modal Body -->
-        <div class="modal-body" id="modal-body">
-          <select class="form-select" id="employeeid" aria-label="Default select example">
-            <option selected>Employee ID</option>
-             <option value="1">One</option>
-            <option value="2">Two</option>
-             <option value="3">Three</option>
-             </select>
-  
-             <div class="row g-2">
-              <div class="col-md">
-                <div class="form-floating" id="requestdate">
-                  <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
-                  <label for="floatingInputGrid">Request Date</label>
-                </div>
-              </div>
-              <div class="col-md">
-                <div class="form-floating" id="datedue">
-                  <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
-                  <label for="floatingInputGrid">Date Due</label>
-                </div>
-              </div>
-           </div>
-  
+<div id="loading" class="loading"></div>
+<br>
+<h1 class="font-weight-bold" id="h-title">Loan</h1>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-wallet' style='color:#e7f755; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="staticBackdropLabel">LOAN</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!--- Modal Body -->
+      <div class="modal-body" id="modal-body">
+        <select class="form-select" id="employeeid" aria-label="Default select example">
+          <option selected>Employee ID</option>
+           <option value="1">One</option>
+          <option value="2">Two</option>
+           <option value="3">Three</option>
+           </select>
+
            <div class="row g-2">
             <div class="col-md">
-              <label for="exampleFormControlInput1" class="form-label" id="amount">Amount</label>
-              <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
-          </div>
-            <div class="col-md">
-                <label for="21" class="form-label" id="interest">Interest</label>
-                <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="0%"> 
+              <div class="form-floating" id="requestdate">
+                <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
+                <label for="floatingInputGrid">Request Date</label>
+              </div>
             </div>
-                <div class="col-md">
-                        <label for="exampleFormControlInput1" class="form-label" id="amountdue">Amount Due</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
-                </div>
-                <div class="col-md">
-                    <label for="quantity" class="form-label" id="period">Period</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" placeholder="0"> 
-                </div>
-           </div>
-           <div>
-            <label for="exampleFormControlInput" id="purpose">Purpose</label>
-            <textarea class="form-control" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
+            <div class="col-md">
+              <div class="form-floating" id="datedue">
+                <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
+                <label for="floatingInputGrid">Date Due</label>
+              </div>
+            </div>
+         </div>
+
+         <div class="row g-2">
+          <div class="col-md">
+            <label for="exampleFormControlInput1" class="form-label" id="amount">Amount</label>
+            <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+        </div>
+          <div class="col-md">
+              <label for="21" class="form-label" id="interest">Interest</label>
+              <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="0%"> 
           </div>
+              <div class="col-md">
+                      <label for="exampleFormControlInput1" class="form-label" id="amountdue">Amount Due</label>
+                      <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+              </div>
+              <div class="col-md">
+                  <label for="quantity" class="form-label" id="period">Period</label>
+                  <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" placeholder="0"> 
+              </div>
+         </div>
+         <div>
+          <label for="exampleFormControlInput" id="purpose">Purpose</label>
+          <textarea class="form-control" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn-submit">Submit</button>
-        </div>
-      </div>   
-    </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn-submit">Submit</button>
+      </div>
+    </div>   
   </div>
-  
-  
-  <!---- Searchbar ----->
-  <div class="search-container" id="searchbar">
-    <form>
-      <input type="text" placeholder="Search.." name="search" id="searchInput">
-      <button type="submit" class="btn-search"><i class="bi bi-search-heart"></i></button>
-    </form>
+</div>
+
+
+
+
+<!------ Table ------>
+<div class="card" id="tablecard">
+  <div class="card-header">
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <b>+ Add</b>
+    </button>
+<!---- Searchbar ----->
+<input id='myInput' type='text' placeholder="  Search....">
+</div>
+
+<div class="card-body">
+  <div class="table-responsive" id="table-responsive-id">
+    <table class="table table-striped" id="dataTableemployees">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th class="col-sm-1">Employee ID</th>
+            <th>Request Date</th>
+            <th>Amount</th>
+            <th>Interest</th>
+            <th>Amount Due</th>
+            <th>Date Due</th>
+            <th>Period</th>
+            <th>Status</th>
+            <th class="col-sm-1">Approved By</th>
+            <th class="col-sm-1">Approved Date</th>
+            <th class="col-25">Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
   </div>
-  
-  <!------ Table ------>
-  <div class="scrollable-table">
-  <table id="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Employee ID</th>
-        <th scope="col">Request Date</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Interest</th>
-        <th scope="col">Amount Due</th>
-        <th scope="col">Date Due</th>
-        <th scope="col">Period</th>
-        <th scope="col">Status</th>
-        <th scope="col">Approved By</th>
-        <th scope="col">Approved Date</th>
-        <th scope="col">Purpose</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-label="ID"><b>1</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Paid</td>
-        <td data-label="Approved By">Earl</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Breaking columns lalalaalalalalallalaallaalalalla hahahahahah and so hihihi</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>2</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>3</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>4</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>5</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>6</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>7</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>8</b></td>
-        <td data-label="Employee ID">2014536</td>
-        <td data-label="Request Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Interest">10%</td>
-        <td data-label="Amount Due">20,000</td>
-        <td data-label="Date Due">12/24/2025</td>
-        <td data-label="Period">3</td>
-        <td data-label="Status">Unpaid</td>
-        <td data-label="Approved By">Mark</td>
-        <td data-label="Approved Date">12/20/2023</td>
-        <td data-label="Purpose">Pang mcdooooo</td>
-      </tr>
-    </tbody>
-  </table>
   </div>
-  
-  </div>
-  
-  
-  
+</div>
+
+
+
+
+

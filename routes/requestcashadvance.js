@@ -17,7 +17,7 @@ router.get('/load', (req, res) => {
   try {
     let sql = `SELECT
     ca_cashadvanceid,
-     concat(me_firstname,' ',me_lastname) as ca_employeeid,
+     concat(me_lastname,' ',me_firstname) as ca_employeeid,
      ca_requestdate,
      ca_amount,
      ca_purpose,
@@ -42,37 +42,43 @@ router.get('/load', (req, res) => {
 
 router.post('/update', (req, res) => {
   try {
-    let leaveid = req.body.leaveid;
-    let status = req.body.status; 
+    let cashadvanceid = req.body.cashadvanceid;
+    let status = req.body.status;
     let comment = req.body.comment;
 
-    let sqlupdate =  `UPDATE 
-    leaves SET l_leavestatus = '${status}', 
-    l_comment = '${comment}'  
-    WHERE l_leaveid = '${leaveid}'`;
-
+    let sqlupdate = `
+      UPDATE cash_advance
+      SET
+        ca_status = '${status}',
+        ca_comment = '${comment}',
+        ca_approvaldate = IF('${status}' = 'approved', NOW(), 'Rejected')
+      WHERE ca_cashadvanceid = '${cashadvanceid}'
+    `;
 
     mysql.Update(sqlupdate)
-    .then((result) =>{
-      console.log(sqlupdate);
-  
-      res.json({
-        msg: 'success',
-        data: result
+      .then((result) => {
+        console.log(sqlupdate);
+        res.json({
+          msg: 'success',
+          data: result
+        })
       })
-    })
-    .catch((error) =>{
-      res.json({
-        msg:error
-      })
-      
-    });
+      .catch((error) => {
+        res.status(500).json({
+          msg: 'error',
+          error: error.message
+        });
+      });
   } catch (error) {
-    res.json({
-      msg: 'error'
-    })
+    res.status(500).json({
+      msg: 'error',
+      error: error.message
+    });
   }
 });
+
+
+
 
 
 
@@ -95,26 +101,18 @@ router.post('/getreqca', (req, res) => {
     where ca_cashadvanceid = '${cashadvanceid}'`;
 
     mysql.mysqlQueryPromise(sql)
-    console.log(sql)
     .then((result) => {
-      console.log(result)
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: result,
-        });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
+      res.json({
+        msg: 'success',
+        data: result,
+      });
     })
     .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
+      res.json({
+        msg: 'error',
+        data: error,
       });
-    });  
+    });
   } catch (error) {
     res.json({
       msg:error

@@ -1,11 +1,11 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Training</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Training</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#trainingmodal">
-        + Add New
+<div class="card" id="tablecard">
+    <div class="card-header">
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#trainingmodal">
+        <b>+ Add</b>
       </button>
         <input id='myInput'  type='text' placeholder="  Search....">
     </div>
@@ -14,14 +14,14 @@
             <table class="table table-striped" id="dataTabletraining">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Training Name</th>
-                        <th>Employee Name</th>
+                        <th class="col-25">Employee Name</th>
                         <th>Date Started</th>
                         <th>Date Finished</th>
                         <th>Location</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,18 +36,20 @@
 <div class="modal fade" id="trainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Training</h5>
+        <div class="modal-header" id="modal-header">
+          <i class='bx bxs-cog' style='color:#758df5; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">TRAINING</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                     <div class="col">
                       <div class="form-floating">
-                        <select class="form-select" id="trainingname" name="trainingname" aria-label="Floating label select example">
+                        <select class="form-select" id="trainingname" name="trainingname" aria-label="Floating label select example"
+                        style="border: 2.5px solid #174634 !important;">
                           <option selected>Choose....</option>
-                          <option value="">Web dev</option>
-                          <option value="">Field</option>
+                          <option value="Web dev">Web dev</option>
+                          <option value="Field">Field</option>
                         </select>
                         <label for="floatingSelectGrid">Training Name</label>
                       </div>
@@ -55,7 +57,8 @@
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example">
+                            <select class="form-select" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example"
+                            style="border: 2.5px solid #174634 !important;">
                               <option selected>Choose....</option>
                             </select>
                             <label for="floatingSelectGrid">Employee name</label>
@@ -64,21 +67,24 @@
                     <br>
                     <div class="col">
                       <div class="form-floating">
-                      <input type="date" class="form-control" id="trainingdatestarted" name="trainingdatestarted">
+                      <input type="date" class="form-control" id="trainingdatestarted" name="trainingdatestarted"
+                      style="border: 2.5px solid #174634 !important;">
                       <label for="floatingInput">Date Started</label>
                       </div>
                   </div>
                   <br>
                   <div class="col">
                     <div class="form-floating">
-                    <input type="date" class="form-control" id="trainingdatefinished" name="trainingdatefinished">
+                    <input type="date" class="form-control" id="trainingdatefinished" name="trainingdatefinished"
+                    style="border: 2.5px solid #174634 !important;">
                     <label for="floatingInput">Date Finished</label>
                     </div>
                 </div>
                 <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="traininglocation" name="traininglocation" aria-label="Floating label select example">
+                            <select class="form-select" id="traininglocation" name="traininglocation" aria-label="Floating label select example"
+                            style="border: 2.5px solid #174634 !important;">
                               <option selected>Location</option>
                               <option value="South">South</option>
                               <option value="NCR">NCR</option>
@@ -87,22 +93,13 @@
                           </div>
                     </div>
                     <br>
-                    <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select" id="trainingstatus" name="trainingstatus" aria-label="Floating label select example">
-                            <option selected>Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                          </select>
-                          <label for="floatingSelectGrid">Status</label>
-                        </div>
-                  </div>
-                  <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="trainingsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="trainingsavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
         </div>
       </div>
     </div>

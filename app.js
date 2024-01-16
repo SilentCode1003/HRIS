@@ -28,7 +28,7 @@ var performanceRouter = require('./routes/performance');
 var holidayRouter = require('./routes/holiday');
 var holidayrateRouter = require('./routes/holidayrate');
 var ojtRouter = require('./routes/ojt');
-var overtimeRouter = require('./routes/ovetime');
+var ovetimeRouter = require('./routes/ovetime');
 var announcementRouter = require('./routes/announcement');
 var settingsRouter = require('./routes/settings');
 var eportalsettingsRouter = require('./routes/eportalsettings');
@@ -55,6 +55,7 @@ var depositRouter = require('./routes/deposit');
 var memberRouter = require('./routes/member');
 var registerRouter = require('./routes/register');
 var ojtuserRouter = require('./routes/ojtuser');
+var geofencesettingsRouter = require('./routes/geofencesettings');
 
 
 
@@ -95,7 +96,7 @@ app.use('/performance', performanceRouter);
 app.use('/holiday', holidayRouter);
 app.use('/holidayrate', holidayrateRouter);
 app.use('/ojt', ojtRouter);
-app.use('/overtime', overtimeRouter);
+app.use('/ovetime', ovetimeRouter);
 app.use('/announcement', announcementRouter);
 app.use('/settings', settingsRouter);
 app.use('/eportalsettings', eportalsettingsRouter);
@@ -122,6 +123,7 @@ app.use('/deposit', depositRouter);
 app.use('/member', memberRouter);
 app.use('/register', registerRouter);
 app.use('/ojtuser', ojtuserRouter);
+app.use('/geofencesettings', geofencesettingsRouter);
 
 
 // catch 404 and forward to error handler

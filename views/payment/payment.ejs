@@ -1,15 +1,14 @@
-<div class="container container-content">
-    <!-- Button trigger modal -->
-  <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Add +
-  </button>
-  
+<div id="loading" class="loading"></div>
+<br>
+<h1 class="font-weight-bold text-danger" id="h-title">Payments</h1> 
+
   <!-- Modal -->
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">PAYMENT</h5>
+          <i class='bx bxs-dollar-circle' style='color:#75f755; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="staticBackdropLabel">PAYMENT</h3>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!--- Modal Body -->
@@ -47,55 +46,37 @@
     </div>
   </div>
   
-  
-  <!---- Searchbar ----->
-  <div class="search-container" id="searchbar">
-    <form>
-      <input type="text" placeholder="Search.." name="search" id="searchInput">
-      <button type="submit" class="btn-search"><i class="bi bi-search-heart"></i></button>
-    </form>
-  </div>
-  
   <!------ Table ------>
-  <div class="scrollable-table">
-  <table id="table">
-    <thead>
-      <tr class="header">
-        <th scope="col">ID</th>
-        <th scope="col">Loan ID</th>
-        <th scope="col">Date</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Remarks</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-label="ID"><b>1</b></td>
-        <td data-label="Loan ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Remarks">Lorem Ipsum is simply dummy text of the printing
-           and typesetting industry.</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>2</b></td>
-        <td data-label="Loan ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Remarks">Pang mcdooooo</td>
-      </tr>
-      <tr>
-        <td data-label="ID"><b>3</b></td>
-        <td data-label="Loan ID">2014536</td>
-        <td data-label="Date">12/25/2024</td>
-        <td data-label="Amount">1,000</td>
-        <td data-label="Remarks">Pang mcdooooo</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="card"  id="tablecard"> 
+    <div class="card-header">
+      <!-- Button trigger modal -->
+  <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    <b>+ Add</b>
+  </button>
+  <!---- Searchbar ----->
+  <input id='myInput' type='text' placeholder="  Search....">
   </div>
-  
-</div>
+
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTableemployees">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th>Loan ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Remarks</th>
+          </tr>
+          </tr>
+        </thead>
+        <tbody>
+          </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
   
   
   
