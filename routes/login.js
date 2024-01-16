@@ -31,7 +31,7 @@ router.post('/login', (req, res) => {
       FROM master_user
       INNER JOIN master_access ON mu_accesstype = ma_accessid
       LEFT JOIN master_employee ON mu_employeeid = me_id
-      LEFT JOIN master_department ON md_departmentid = me_department  -- Replace with the correct column name
+      LEFT JOIN master_department ON md_departmentid = me_department
       WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
       // console.log(sql);

@@ -1,11 +1,11 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Users For Ojt</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Users for OJT</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
-      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#usersmodal">
-        + Add New
+<div class="card" id="tablecard">
+    <div class="card-header">
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
+        <b>+ Add</b>
       </button>
         <input id='myInput' type='text' placeholder="  Search....">
     </div>
@@ -14,12 +14,12 @@
             <table class="table table-striped" id="dataTableusersojt">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Ojt ID</th>
-                        <th>Username</th>
+                        <th class="col-25">Username</th>
                         <th>Access Type</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,17 +55,6 @@
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
-                    </div>
-              </div>
-              <br>
-              <div class="col">
-                  <div class="form-floating">
-                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example">
-                        <option selected>Choose....</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                      </select>
-                      <label for="floatingSelectGrid">Status</label>
                     </div>
               </div>
               <br>

@@ -29,6 +29,7 @@
     searchcablingTable();
     searchcandidateTable();
     searchbagapuroTable();
+    GenerateAnouncement();
 
     //#endregion
 
@@ -76,8 +77,8 @@
 
 
     //#region Load Modal Table
+    //#Employee Modal
     $(document).on("click", "#totalEMP", function () {
-      $(`#dataTableemployees`).find("tr:gt(0)").remove();
 
       $.ajax({
         type: "GET",
@@ -85,49 +86,10 @@
         success: function (json) {
           console.log("API response", json);
 
-          var finalData = [];
           var data = json.data;
 
-          if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
-            $("#dataTableemployees").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("dataTableemployees");
+          populatedatatable(data)
 
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var JOB_STATUS = row.insertCell(5);
-            var DEPARTMENT = row.insertCell(6);
-            var POSITION = row.insertCell(7);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            JOB_STATUS.innerHTML = item.jobstatus;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, JOB_STATUS, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -135,6 +97,44 @@
       });
     });
 
+    function populatedatatable(data) {
+      console.log(data);
+      const tableBody = $('#dataTableemployees tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.jobstatus, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Regular Employee Modal
     $(document).on("click", "#totalregularEMP", function () {
       $(`#regularemloyeetbl`).find("tr:gt(0)").remove();
 
@@ -146,45 +146,8 @@
 
           var finalData = [];
           var data = json.data;
+          populateregularemloyeetbl(data);
 
-          if ($.fn.DataTable.isDataTable("#regularemloyeetbl")) {
-            $("#regularemloyeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("regularemloyeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(5);
-            var POSITION = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.contact;
-            EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.me_department;
-            POSITION.innerHTML = item.me_position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -192,6 +155,43 @@
       });
     });
 
+    function populateregularemloyeetbl(data) {
+      console.log(data);
+      const tableBody = $('#regularemloyeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.contact, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.me_department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.me_position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Probationary Employee Modal
     $(document).on("click", "#totalprobiEMP", function () {
       $(`#probiemloyeetbl`).find("tr:gt(0)").remove();
 
@@ -203,45 +203,8 @@
 
           var finalData = [];
           var data = json.data;
+          populateprobiemloyeetbl(data);
 
-          if ($.fn.DataTable.isDataTable("#probiemloyeetbl")) {
-            $("#probiemloyeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("probiemloyeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(5);
-            var POSITION = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, DEPARTMENT, POSITION],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -249,6 +212,43 @@
       });
     });
 
+    function populateprobiemloyeetbl(data) {
+      console.log(data);
+      const tableBody = $('#probiemloyeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Resigned Employee
     $(document).on("click", "#totalresignedEMP", function () {
       $(`#resignedemployeetbl`).find("tr:gt(0)").remove();
 
@@ -260,60 +260,8 @@
 
           var finalData = [];
           var data = json.data;
+          populateresignedemployeetbl(data);
 
-          if ($.fn.DataTable.isDataTable("#resignedemployeetbl")) {
-            $("#resignedemployeetbl").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("resignedemployeetbl");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            // var EMAIL = row.insertCell(4);
-            var DEPARTMENT = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var REASON = row.insertCell(6);
-            var DATE_RESIGNED = row.insertCell(7);
-            var CREATE_DATE = row.insertCell(8);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            // EMAIL.innerHTML = item.email;
-            DEPARTMENT.innerHTML = item.department;
-            POSITION.innerHTML = item.position;
-            REASON.innerHTML = item.reason;
-            DATE_RESIGNED.innerHTML = item.dateresigned;
-            CREATE_DATE.innerHTML = item.createdate;
-
-            $.each(
-              [
-                ID,
-                NAME,
-                CONTACT,
-                DEPARTMENT,
-                POSITION,
-                REASON,
-                DATE_RESIGNED,
-                CREATE_DATE,
-              ],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -321,6 +269,45 @@
       });
     });
 
+    function populateresignedemployeetbl(data) {
+      console.log(data);
+      const tableBody = $('#resignedemployeetbl tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 9,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.reason, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.dateresigned, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.createdate, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Admin
     $(document).on("click", "#totaladminEMP", function () {
       $(`#totaladmintable`).find("tr:gt(0)").remove();
 
@@ -332,45 +319,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotaladmintable(data);
 
-          if ($.fn.DataTable.isDataTable("#totaladmintable")) {
-            $("#totaladmintable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totaladmintable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -378,6 +328,43 @@
       });
     });
 
+    function populatetotaladmintable(data) {
+      console.log(data);
+      const tableBody = $('#totaladmintable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total IT Department
     $(document).on("click", "#totalitEMP", function () {
       $(`#totalittable`).find("tr:gt(0)").remove();
 
@@ -389,45 +376,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalittable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalittable")) {
-            $("#totalittable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalittable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -435,6 +385,43 @@
       });
     });
 
+    function populatetotalittable(data) {
+      console.log(data);
+      const tableBody = $('#totalittable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Cabling Department
     $(document).on("click", "#totalcablingEMP", function () {
       $(`#totalcablingtable`).find("tr:gt(0)").remove();
 
@@ -446,45 +433,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalcablingtable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalcablingtable")) {
-            $("#totalcablingtable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalcablingtable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var CONTACT = row.insertCell(3);
-            var EMAIL = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            CONTACT.innerHTML = item.phone;
-            EMAIL.innerHTML = item.email;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-
-            $.each(
-              [ID, NAME, CONTACT, EMAIL, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -492,7 +442,43 @@
       });
     });
 
+    function populatetotalcablingtable(data) {
+      console.log(data);
+      const tableBody = $('#totalcablingtable tbody');
+      tableBody.empty();
 
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Total Candidate for Regular
     $(document).on("click", "#totalcandidate", function () {
       $(`#totalcandidatetable`).find("tr:gt(0)").remove();
 
@@ -504,44 +490,8 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalcandidatetable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalcandidatetable")) {
-            $("#totalcandidatetable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalcandidatetable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var DEPARTMENT = row.insertCell(3);
-            var HIRE_DATE = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            DEPARTMENT.innerHTML = item.department;
-            HIRE_DATE.innerHTML = item.hiredate;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-            $.each(
-              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
@@ -549,7 +499,43 @@
       });
     });
 
+    function populatetotalcandidatetable(data) {
+      console.log(data);
+      const tableBody = $('#totalcandidatetable tbody');
+      tableBody.empty();
 
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#Bagapuro Family
     $(document).on("click", "#totalbagapuro", function () {
       $(`#totalbagapurotable`).find("tr:gt(0)").remove();
 
@@ -561,50 +547,50 @@
 
           var finalData = [];
           var data = json.data;
+          populatetotalbagapurotable(data);
 
-          if ($.fn.DataTable.isDataTable("#totalbagapurotable")) {
-            $("#totalbagapurotable").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById("totalbagapurotable");
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var DEPARTMENT = row.insertCell(3);
-            var HIRE_DATE = row.insertCell(4);
-            var POSITION = row.insertCell(5);
-            var TENURE = row.insertCell(6);
-
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "150px";
-            imgElement.style.height = "150px";
-
-            IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.newEmployeeId;
-            NAME.innerHTML = item.firstname;
-            DEPARTMENT.innerHTML = item.department;
-            HIRE_DATE.innerHTML = item.hiredate;
-            POSITION.innerHTML = item.position;
-            TENURE.innerHTML = item.tenure;
-            $.each(
-              [ID, NAME, DEPARTMENT, HIRE_DATE, POSITION, TENURE],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
         },
         error: function (xhr, status, error) {
           console.log("API error", error);
         },
       });
     });
+
+    function populatetotalbagapurotable(data) {
+      console.log(data);
+      const tableBody = $('#totalbagapurotable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 7,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          console.log("data img", item.profilePicturePath);
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
 
 
     //#endregion
@@ -839,44 +825,44 @@
 
 
     //#region Announcement and Bday Folks
-    $.ajax({
-      url: "/announcement/load",
-      method: "GET",
-      dataType: "json",
+    // $.ajax({
+    //   url: "/announcement/load",
+    //   method: "GET",
+    //   dataType: "json",
 
-      success: function (data) {
-        let details = data.data;
-        console.log(data.data);
-        let bulletinid = [];
-        $.each(details, (key, item) => {
-          bulletinid.push({
-            id: item.bulletinid,
-          });
-        });
-        console.log(bulletinid);
-        LoadAnnouncement(bulletinid);
-      },
-      error: function (error) {
-        console.error(error);
-      },
-    });
+    //   success: function (data) {
+    //     let details = data.data;
+    //     console.log(data.data);
+    //     let bulletinid = [];
+    //     $.each(details, (key, item) => {
+    //       bulletinid.push({
+    //         id: item.bulletinid,
+    //       });
+    //     });
+    //     console.log(bulletinid);
+    //     LoadAnnouncement(bulletinid);
+    //   },
+    //   error: function (error) {
+    //     console.error(error);
+    //   },
+    // });
 
-    function LoadAnnouncement(bulletinid) {
-      console.log("id", bulletinid);
-      $.each(bulletinid, (key, item) => {
-        let id = item.id;
-        console.log("id2: ", id);
-        GenerateAnouncement(id);
-      });
-    }
+    // function LoadAnnouncement(bulletinid) {
+    //   console.log("id", bulletinid);
+    //   $.each(bulletinid, (key, item) => {
+    //     let id = item.id;
+    //     console.log("id2: ", id);
+    //     GenerateAnouncement();
+    //   });
+    // }
 
-    function GenerateAnouncement(id) {
+    function GenerateAnouncement() {
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/getbulletin",
-        data: {
-          bulletinid: id,
-        },
+        // data: {
+        //   bulletinid: id,
+        // },
         success: function (result) {
           if (result.msg === "success") {
             const announcementData = result.data;
@@ -892,6 +878,7 @@
               <div class="carousel-caption d-none d-md-block">
                 <h5 id="announcetitle${counter}">${item.title}</h5>
                 <p id="announcedesc${counter}">${item.description}</p>
+                <p id="announcedate${counter}">${item.targetdate}</p>
               </div>
                                     </div>
                                     <button class="carousel-control-prev" type="button"
@@ -1002,12 +989,12 @@
 
             console.log(data);
             $.each(data, (key, item) => {
-              // var action = "";
-              // var status = item.status;
+              var action = "";
+              var status = item.status;
 
-              // action = `
-              //         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-              //        `;
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
+                     `;
 
               var imgElement = document.createElement("img");
               imgElement.src = "data:image/jpg;base64," + item.image;
@@ -1018,13 +1005,14 @@
 
               finalData.push({
                 image: imgElement.outerHTML,
+                leaveid: item.leaveid,
                 firstname: item.firstname,
                 leavestartdate: item.leavestartdate,
                 leaveenddate: item.leaveenddate,
                 leavetype: item.leavetype,
                 reason: item.reason,
                 applieddate: item.applieddate,
-                // action: action,
+                action: action,
               });
             });
 
@@ -1039,13 +1027,14 @@
         ],
         columns: [
           { data: "image" },
+          { data: "leaveid" },
           { data: "firstname" },
           { data: "leavestartdate" },
           { data: "leaveenddate" },
           { data: "leavetype" },
           { data: "reason" },
           { data: "applieddate" },
-          // { data: "action" },
+          { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
           $('td', row).each(function (index) {
@@ -1059,107 +1048,126 @@
       });
     }
 
-    // $("#dataTableleaverequest tbody").on("click", "tr", function () {
-    //   var dataRow = [];
-    //   $(this)
-    //     .closest("tr")
-    //     .find("td")
-    //     .each(function () {
-    //       dataRow.push($(this).text());
-    //     });
-    //   console.log(dataRow);
-    //   leaveid = dataRow[0];
-    // });
+    $("#dataTableleaverequest tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      leaveid = dataRow[1];
+    });
 
-    // $(document).on("click", "#editBtn", function () {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "http://localhost:3005/getleave",
-    //     data: {
-    //       leaveid: leaveid,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         const existingData = result.data;
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:3005/getleave",
+        data: {
+          leaveid: leaveid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
 
-    //         $.each(existingData, (key, item) => {
-    //           $("#pendingleaveid").val(item.leaveid);
-    //           $("#pendingleavename").val(item.employeeid);
-    //           $("#pendingleaveemail").val(item.email);
-    //           $("#pendingleavegender").val(item.gender);
-    //           $("#pendingleavephone").val(item.phone);
-    //           $("#pendingleavetype").val(item.leavetype);
-    //           $("#pendingleaveapplydate").val(item.applieddate);
-    //           $("#pendingleavestart").val(item.leavestartdate);
-    //           $("#pendingleaveend").val(item.leaveenddate);
-    //           $("#pendingleavereason").val(item.reason);
-    //           $("#pendingleaveaction").val(item.status);
-    //           $("#pendingleaveremarks").val(item.comment);
+            $.each(existingData, (key, item) => {
+              $("#pendingleaveid").val(item.leaveid);
+              $("#pendingleavename").val(item.employeeid);
+              $("#pendingleaveemail").val(item.email);
+              $("#pendingleavegender").val(item.gender);
+              $("#pendingleavephone").val(item.phone);
+              $("#pendingleavetype").val(item.leavetype);
+              $("#pendingleaveapplydate").val(item.applieddate);
+              $("#pendingleavestart").val(item.leavestartdate);
+              $("#pendingleaveend").val(item.leaveenddate);
+              $("#pendingleavereason").val(item.reason);
+              $("#pendingleaveaction").val(item.status);
+              $("#pendingleaveremarks").val(item.comment);
 
-    //         });
-    //       } else {
-    //         swal("Error fetching employee data", "success");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       swal("An error occurred while fetching employee data", err, "error");
-    //     },
-    //   });
-    // });
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
 
-    // $(document).on("click", "#pendingleavesavebtn", function () {
-    //   console.log("Save button clicked");
-    //   let id = leaveid;
-    //   let status = $("#pendingleaveaction").val();
-    //   let comment = $("#pendingleaveremarks").val();
+    $(document).on("click", "#pendingleavesavebtn", function () {
+      console.log("Save button clicked");
+      let id = leaveid
+      let status = $("#pendingleaveaction").val();
+      let comment = $("#pendingleaveremarks").val();
 
-    //   var message = "";
+      var message = "";
 
-    //   if (status === "") {
-    //     message += "status is required. ";
-    //   }
 
-    //   if (comment === "") {
-    //     message += "status is required. ";
-    //   }
+      if (status === "") {
+        message += "status is required. ";
+      }
 
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/allleave/update",
-    //       data: {
-    //         leaveid: id,
-    //         status: status,
-    //         comment: comment,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success") {
-    //           swal(
-    //             "Save Successfully",
-    //             "You clicked the button!",
-    //             "success"
-    //           ).then((results) => {
-    //             window.location.reload();
-    //           });
-    //           LoadTable();
-    //         }
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //     });
-    //   }
-    // });
+      if (status === "Pending") {
+        message += "status is required. ";
+      }
+
+      if (status === "Cancel") {
+        message += "Youre not Allowed to Cancel The Employee Request";
+      }
+
+      if (comment === "") {
+        message += "comment is required. ";
+      }
+
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willApprove) => {
+            if (willApprove) {
+              $.ajax({
+                type: "POST", 
+                url: "/allleave/update",
+                data: {
+                  leaveid: id,
+                  status: status,
+                  comment: comment,
+                },
+                success: function (result) {
+                  if (result.msg == "success") {
+                    swal("Save Successfully", "You clicked the button!", "success",)
+                      .then(results => {
+                        window.location.reload();
+                      });
+                    LoadTable();
+                  }
+                },
+                error: function (err) {
+                  swal("Error", "An error occurred while saving data.", "error");
+                },
+                error: function (err) {
+                  swal("Error", "An error occurred while saving data.", "error");
+                },
+              });
+            } else {
+              swal("Action Canceled", "", "info");
+            }
+          });
+      }
+    });
 
     //cashadvance section-->
-
     $(document).on("click", "#nav-ca-tab", function () {
-      $(`#dataTablecashrequest`).find("tr:gt(0)").remove();
+      $("#dataTablecashrequest").find("tr:gt(0)").remove();
 
       $.ajax({
         type: "GET",
@@ -1175,12 +1183,28 @@
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
             var IMAGE = row.insertCell(0);
-            var ID = row.insertCell(1);
+            var CASHADVANCE_ID = row.insertCell(1);
             var NAME = row.insertCell(2);
             var REQUEST_DATE = row.insertCell(3);
             var AMOUNT = row.insertCell(4);
             var PURPOSE = row.insertCell(5);
             var STATUS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            var action = document.createElement("button");
+            action.id = "editCABtn"; 
+            action.className = "btn text-primary view-btn"; // Use a class
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#pendingcamodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this).closest("tr").find("td").each(function () {
+                dataRow.push($(this).text());
+              });
+              console.log(dataRow);
+              cashadvanceid = dataRow[1];
+            };
 
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.image;
@@ -1189,20 +1213,18 @@
             imgElement.style.height = "100px";
 
             IMAGE.appendChild(imgElement);
-
-            ID.innerHTML = item.employeeid;
+            CASHADVANCE_ID.innerHTML = item.employeeid;
             NAME.innerHTML = item.firstname;
             REQUEST_DATE.innerHTML = item.requestdate;
             AMOUNT.innerHTML = item.amount;
             PURPOSE.innerHTML = item.purpose;
             STATUS.innerHTML = item.status;
-            $.each(
-              [ID, NAME, REQUEST_DATE, AMOUNT, PURPOSE, STATUS],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
+            ACTION.appendChild(action);
+
+            $.each([CASHADVANCE_ID, NAME, REQUEST_DATE, AMOUNT, PURPOSE, STATUS, ACTION], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
           });
         },
         error: function (xhr, status, error) {
@@ -1211,98 +1233,106 @@
       });
     });
 
-    // $("#dataTablecashrequest tbody").on("click", "tr", function () {
-    //   var dataRow = [];
-    //   $(this)
-    //     .closest("tr")
-    //     .find("td")
-    //     .each(function () {
-    //       dataRow.push($(this).text());
-    //     });
-    //   console.log(dataRow);
-    //   cashadvanceid = dataRow[0];
-    // });
+    $(document).on("click", "#editCABtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/requestcashadvance/getreqca",
+        data: {
+          cashadvanceid: cashadvanceid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
 
-    // $(document).on("click", "#editcaBtn", function () {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/requestcashadvance/getreqca",
-    //     data: {
-    //       cashadvanceid: cashadvanceid,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         const existingData = result.data;
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.cashadvanceid);
+              $("#pendingcaname").val(item.employeeid);
+              $("#pendingcaemail").val(item.email);
+              $("#pendingcagender").val(item.gender);
+              $("#pendingcaphone").val(item.phone);
+              $("#pendingreqdate").val(item.requestdate);
+              $("#pendingamount").val(item.amount);
+              $("#pendingpurpose").val(item.purpose);
+              $("#pendingcastatus").val(item.status);
+              $("#pendingcaapprovaldate").val(item.approvaldate);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#pendingcasavebtn", function () {
+      console.log("Save button clicked");
 
-    //         $.each(existingData, (key, item) => {
-    //           $("#id").val(item.cashadvanceid);
-    //           $("#pendingcaname").val(item.employeeid);
-    //           $("#pendingcaemail").val(item.email);
-    //           $("#pendingcagender").val(item.gender);
-    //           $("#pendingcaphone").val(item.phone);
-    //           $("#pendingreqdate").val(item.requestdate);
-    //           $("#pendingamount").val(item.amount);
-    //           $("#pendingpurpose").val(item.purpose);
-    //           $("#pendingcastatus").val(item.status);
-    //           $("#pendingcaapprovaldate").val(item.approvaldate);
-    //         });
-    //       } else {
-    //         swal("Error fetching employee data", "success");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       swal("An error occurred while fetching employee data", err, "error");
-    //     },
-    //   });
-    // });
-    // $(document).on("click", "#pendingcasavebtn", function () {
-    //   console.log("Save button clicked");
-    //   let id = cashadvanceid;
-    //   let status = $("#pendingcastatus").val();
-    //   let comment = $("#pendingcaremarks").val();
+      let id = cashadvanceid;
+      let status = $("#pendingcastatus").val();
+      let comment = $("#pendingcaremarks").val();
 
-    //   var message = "";
+      let message = "";
 
-    //   if (status === "") {
-    //     message += "status is required. ";
-    //   }
+      if (status === "") {
+        message += "Status is required. ";
+      }
 
-    //   if (comment === "") {
-    //     message += "status is required. ";
-    //   }
+      if (comment === "") {
+        message += "Comment is required. ";
+      }
 
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/requestcashadvance/update",
-    //       data: {
-    //         cashadvanceid: id,
-    //         status: status,
-    //         comment: comment,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success") {
-    //           swal(
-    //             "Save Successfully",
-    //             "You clicked the button!",
-    //             "success"
-    //           ).then((results) => {
-    //             window.location.reload();
-    //           });
-    //           LoadTable();
-    //         }
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //     });
-    //   }
-    // });
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        // Ask for confirmation before proceeding
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willApprove) => {
+            if (willApprove) {
+              $.ajax({
+                type: "POST",
+                url: "/requestcashadvance/update",
+                data: {
+                  cashadvanceid: id,
+                  status: status,
+                  comment: comment,
+                },
+                success: function (result) {
+                  if (result.msg === "success") {
+                    swal({
+                      title: "Save Successfully",
+                      text: "You clicked the button!",
+                      icon: "success",
+                    }).then(() => {
+                      window.location.reload();
+                    });
+                    LoadTable();
+                  } else {
+                    swal("Error", "An error occurred while saving data.", "error");
+                  }
+                },
+                error: function (xhr, status, error) {
+                  swal({
+                    title: "Error",
+                    text: "An error occurred while saving data.",
+                    icon: "error",
+                  });
+                  console.error("AJAX error:", error);
+                },
+              });
+            } else {
+              // User clicked "Cancel"
+              swal("Action Canceled", "", "info");
+            }
+          });
+      }
+    });
 
     //#endregion
 

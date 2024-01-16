@@ -2,6 +2,7 @@ const mysql = require('./repository/hrmisdb');
 const moment = require('moment');
 var express = require('express');
 const { Validator } = require('./controller/middleware');
+const { Master_Geofence_Settings } = require('./model/hrmisdb');
 var router = express.Router();
 const currentDate = moment();
 
@@ -82,7 +83,11 @@ router.get('/load', (req, res) => {
         let departmentid = req.body.departmentid;
         let latitude = req.body.latitude;
         let longitude = req.body.longitude;
-        let radius = req.body.radius;
+        let radiusInput = req.body.radius;
+        let radius = parseFloat(radiusInput) || 0;
+        if (!isNaN(radius) && Number.isInteger(radius)) {
+            radius = parseFloat(radiusInput + '.01');
+        }
         let location = req.body.location;
         let data = [];
 
@@ -132,13 +137,14 @@ router.post('/selectgeofence', (req, res) => {
   try {
     let department = req.body.department;
     let sql = `select * from master_geofence_settings
-    where mgs_departmentid = ${department}`;
+    where mgs_departmentid ='${department}' and mgs_status = 'Active'`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
+      let data = Master_Geofence_Settings(result);
       res.json({
         msg: 'success',
-        data: result,
+        data: data,
       });
     })
     .catch((error) => {
@@ -151,5 +157,48 @@ router.post('/selectgeofence', (req, res) => {
     res.json({
       msg: error,
     });
+  }
+});
+
+
+router.post('/update', (req, res) => {
+  try {
+    let geofenceid = req.body.geofenceid;
+    let geofencename = req.body.geofencename;
+    let departmentid = req.body.departmentid;
+    let latitude = req.body.latitude;
+    let longitude = req.body.longitude;
+    let radius = req.body.radius;
+    let location = req.body.location;
+    let status = req.body.status; 
+
+    let sqlupdate = `UPDATE master_geofence_settings SET   
+    mgs_geofencename ='${geofencename}', 
+    mgs_departmentid ='${departmentid}', 
+    mgs_latitude ='${latitude}',
+    mgs_longitude ='${longitude}',
+    mgs_radius ='${radius}', 
+    mgs_location ='${location}', 
+    mgs_status ='${status}'
+    WHERE mgs_id ='${geofenceid}'`;
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      console.log(result);
+  
+      res.json({
+        msg: 'success'
+      })
+    })
+    .catch((error) =>{
+      res.json({
+        msg:error
+      })
+      
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
   }
 });

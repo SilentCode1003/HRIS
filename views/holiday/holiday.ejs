@@ -1,36 +1,34 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Holiday</h1>
-
+<div id="loading" class="loading"></div>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Holiday</h1>
 
-
-<div class="card shadow mb-4" id="tablecard">
-  <div class="card-header py-3">
+<div class="card" id="tablecard">
+  <div class="card-header">
+    <input id='myInput2'  type='text' placeholder="  Search....">
     <div class="col-md-6 mmb">
       <div class="input-group">
           <div class="input-group-prepend">
               <span class="input-group-text btn-add-holiday"><b>Add Holidays</b></span>
           </div>
           <input class="form-control text-center custom-input" placeholder="Select/Input Year" name="yearInput" id="yearInput"/>
-          <button type="button" class="btn btn-generate-holiday" id="generateHolidaysBtn"><b>Generate Holidays</b></button>
+          <span class="input-group-text btn-generate-holiday" id="generateHolidaysBtn"><b>Generate Holidays</b></span>
       </div>
       <div class="custom-dropdown employees-position" id="positionDropdown">
       </div>
   </div>
-    <input id='myInput2'  type='text' placeholder="  Search....">
   </div>
   <div class="card-body">
     <div class="table-responsive" id="table-responsive-id">
       <table class="table table-striped" id="dataTableholiday">
         <thead>
           <tr>
-            <th>ID</th>
+            <th class="col-sm-1">ID</th>
             <th>Day</th>
-            <th>Name</th>
+            <th class="col-25">Name</th>
             <th>Date</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Action</th>
+            <th class="col-sm-1">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -39,8 +37,7 @@
     </div>
   </div>
 </div>
-</div>
-</div>
+
 
 <!--Modal-->
 <!-- <div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"

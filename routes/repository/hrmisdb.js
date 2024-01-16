@@ -1,14 +1,14 @@
-const model = require('../model/hrmisdb')
-const mysql = require('mysql');
-const { Encrypter, Decrypter } = require('./crytography');
+const model = require("../model/hrmisdb");
+const mysql = require("mysql");
+const { Encrypter, Decrypter } = require("./crytography");
 require("dotenv").config();
 
-let password = '';
+let password = "";
 Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
   password = encrypted;
-})
+});
 
 // Decrypter('3f4380ddee5398218f6da93ec7d53ec9620d9655174e986656635aa6852a3d27', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
@@ -60,7 +60,6 @@ exports.Select = (sql, table, callback) => {
       if (table == "Eportal_Leaves") {
         callback(null, model.Eportal_Leaves(results));
       }
-
 
       if (table == "Cash_Advance") {
         callback(null, model.Cash_Advance(results));
@@ -154,21 +153,17 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Loan(results));
       }
 
-
       if (table == "Loan_Payment") {
         callback(null, model.Loan_Payment(results));
       }
-
 
       if (table == "Loan_Interest") {
         callback(null, model.Loan_Interest(results));
       }
 
-
       if (table == "Deposit") {
         callback(null, model.Deposit(results));
       }
-
 
       if (table == "Member_Recievable_Record") {
         callback(null, model.Member_Recievable_Record(results));
@@ -177,13 +172,19 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_Geofence_Settings") {
         callback(null, model.Master_Geofence_Settings(results));
       }
+      if (table == "Attendance_Logs") {
+        callback(null, model.Attendance_Logs(results));
+      }
 
+      if (table == "Master_Salary") {
+        callback(null, model.Master_Salary(results));
+      }
 
-
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
     });
-  } catch (error) {
-
-  }
+  } catch (error) {}
 };
 
 exports.Insert = (stmt, todos, callback) => {
@@ -272,6 +273,8 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_bulletin(
         mb_image,
         mb_tittle,
+        mb_type,
+        mb_targetdate,
         mb_description,
         mb_createby,
         mb_createdate,
@@ -726,9 +729,36 @@ exports.InsertTable = (tablename, data, callback) => {
     });
   }
 
+  if (tablename == "master_salary") {
+    let sql = `INSERT INTO master_salary(
+      ms_employeeid,
+      ms_monthly,
+      ms_allowances) VALUES ?`;
 
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+      mds_employeeid,
+      mds_type,
+      mds_amount,
+      mds_period,
+      mds_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
 };
-
 
 exports.Update = async (sql) => {
   return new Promise((resolve, reject) => {
@@ -741,7 +771,6 @@ exports.Update = async (sql) => {
     });
   });
 };
-
 
 exports.UpdateMultiple = async (sql, data, callback) => {
   try {
@@ -769,4 +798,17 @@ exports.mysqlQueryPromise = (sql) => {
       }
     });
   });
-}
+};
+
+exports.StoredProcedure = (sql, callback) => {
+  try {
+    connection.query(sql, (error, results, fields) => {
+      if (error) {
+        callback(error.message, null);
+      }
+      callback(null, results[0]);
+    });
+  } catch (error) {
+    callback(error, null);
+  }
+};

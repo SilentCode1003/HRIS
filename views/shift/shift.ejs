@@ -1,9 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Shift</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Shift</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
+<div class="card" id="tablecard">
+    <div class="card-header">
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
         <b>+ Add</b>
       </button>
@@ -14,13 +14,13 @@
             <table class="table table-striped" id="dataTableshift">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Shift Hours</th>
                         <th>Status</th>
                         <th>Department</th>
                         <th>Created By</th>
                         <th>Created Date</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,18 +48,6 @@
                         style="border: 2.5px solid #174634 !important;">
                         <label for="floatingInput">Shift Hours</label>
                         </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="shiftstatus" name="shiftstatus" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
-                              <option selected>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Shift</label>
-                          </div>
                     </div>
                     <br>
                     <div class="col">

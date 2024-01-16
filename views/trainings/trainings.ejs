@@ -1,9 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Training</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Training</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
+<div class="card" id="tablecard">
+    <div class="card-header">
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#trainingmodal">
         <b>+ Add</b>
       </button>
@@ -14,14 +14,14 @@
             <table class="table table-striped" id="dataTabletraining">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Training Name</th>
-                        <th>Employee Name</th>
+                        <th class="col-25">Employee Name</th>
                         <th>Date Started</th>
                         <th>Date Finished</th>
                         <th>Location</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,8 +48,8 @@
                         <select class="form-select" id="trainingname" name="trainingname" aria-label="Floating label select example"
                         style="border: 2.5px solid #174634 !important;">
                           <option selected>Choose....</option>
-                          <option value="">Web dev</option>
-                          <option value="">Field</option>
+                          <option value="Web dev">Web dev</option>
+                          <option value="Field">Field</option>
                         </select>
                         <label for="floatingSelectGrid">Training Name</label>
                       </div>
@@ -93,18 +93,6 @@
                           </div>
                     </div>
                     <br>
-                    <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select" id="trainingstatus" name="trainingstatus" aria-label="Floating label select example"
-                          style="border: 2.5px solid #174634 !important;">
-                            <option selected>Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                          </select>
-                          <label for="floatingSelectGrid">Status</label>
-                        </div>
-                  </div>
-                  <br>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">

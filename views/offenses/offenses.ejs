@@ -1,10 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Offense</h1>
+<br>
+<h1 class="font-weight-bold" id="h-title">Offenses</h1>
 
-<br>
-<br>
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-  <div class="card-header py-3">
+<div class="card" id="tablecard">
+  <div class="card-header">
     <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#offensesmodal">
       <b>+ Add</b>
     </button>
@@ -15,12 +14,12 @@
       <table class="table table-striped" id="dataTabloeffenses">
         <thead>
           <tr>
-            <th>ID</th>
+            <th class="col-sm-1">ID</th>
             <th>Offense Name</th>
             <th>Created By</th>
             <th>Created Date</th>
             <th>Status</th>
-            <th>Action</th>
+            <th class="col-sm-1">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -29,8 +28,7 @@
     </div>
   </div>
 </div>
-</div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade" id="offensesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -48,18 +46,6 @@
               <input type="text" class="form-control" id="offensesname" name="offensesname"
                 placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
               <label for="floatingInput">Offense Name</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <select class="form-select" id="offensesstatus" name="offensesstatus"
-                aria-label="Floating label select example" style="   border: 2.5px solid #174634 !important;">
-                <option selected>Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-              <label for="floatingSelectGrid">Shift</label>
             </div>
           </div>
           <br>

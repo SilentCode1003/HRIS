@@ -1,9 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Users</h1>
 <br>
-<br>
+<h1 class="font-weight-bold" id="h-title">Users</h1>
+
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
+<div class="card" id="tablecard">
+    <div class="card-header">
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
         <b>+ Add</b>
       </button>
@@ -14,14 +14,14 @@
             <table class="table table-striped" id="dataTableusers">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th>Employee ID</th>
-                        <th>Username</th>
+                        <th class="col-25">Username</th>
                         <th>Access Type</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,18 +60,6 @@
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
-                    </div>
-              </div>
-              <br>
-              <div class="col">
-                  <div class="form-floating">
-                      <select class="form-select" id="usersstatus" name="usersstatus" aria-label="Floating label select example"
-                      style=" border: 2.5px solid #174634 !important;">
-                        <option selected>Choose....</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                      </select>
-                      <label for="floatingSelectGrid">Status</label>
                     </div>
               </div>
               <br>

@@ -1,10 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Violation</h1>
+<br>
+<h1 class="font-weight-bold" id="h-title">Violation</h1>
 
-<br>
-<br>
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
+<div class="card" id="tablecard">
+    <div class="card-header">
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#violationmodal">
         <b>+ Add</b>
       </button>
@@ -15,13 +14,13 @@
             <table class="table table-striped" id="dataTableviolation">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Description</th>
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-25">Description</th>
                         <th>Action ID</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,120 +28,105 @@
             </table>
         </div>
     </div>
-</div>
-</div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="violationmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <i class='bx bxs-error-alt' style='color:#e2d504; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">VIOLATION</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="violationdescription" name="violationdescription" placeholder="Department Name"
-                        style="border: 2.5px solid #174634 !important;">
-                        <label for="floatingInput">Description</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="violationactionid" name="violationactionid" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
-                              <option selected>Action ID</option>
-                            </select>
-                            <label for="floatingSelectGrid">Action ID</label>
-                          </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control" id="violationcreatedby" name="violationcreatedby" placeholder="Created By"
-                        style="border: 2.5px solid #174634 !important;">
-                        <label for="floatingInput">Created By</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select" id="vatiolationstatus" name="vatiolationstatus" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
-                              <option selected>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Violation</label>
-                          </div>
-                    </div>
-                    <br>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="violationsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
-        </div>
-      </div>
-    </div>
   </div>
+</div>
 
-  <!-- Edit Modal -->
-<div class="modal fade" id="editviolationmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Violation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editviolationdescription" name="editviolationdescription" placeholder="Department Name">
-                    <label for="floatingInput">Description</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editviolationactionid" name="editviolationactionid" aria-label="Floating label select example">
-                          <option selected>Action ID</option>
-                        </select>
-                        <label for="floatingSelectGrid">Action ID</label>
-                      </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                    <input type="text" class="form-control" id="editviolationcreatedby" name="editviolationcreatedby" placeholder="Created By">
-                    <label for="floatingInput">Created By</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select" id="editvatiolationstatus" name="editvatiolationstatus" aria-label="Floating label select example">
-                          <option selected>Status</option>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Violation</label>
-                      </div>
-                </div>
-                <br>
+<!-- Modal -->
+<div class="modal fade" id="violationmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <i class='bx bxs-error-alt' style='color:#e2d504; font-size: 50px; margin: 3px;'></i>
+        <h3 class="modal-title" id="exampleModalLabel">VIOLATION</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="violationdescription" name="violationdescription"
+                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <label for="floatingInput">Description</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="violationactionid" name="violationactionid"
+                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+                <option selected>Action ID</option>
+              </select>
+              <label for="floatingSelectGrid">Action ID</label>
+            </div>
+          </div>
+          <br>
         </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="violationeditbtn">Save</button>
-        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+        <button type="button" class="btn btn-primary" id="violationsavebtn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editviolationmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Violation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="editviolationdescription" name="editviolationdescription"
+                placeholder="Department Name">
+              <label for="floatingInput">Description</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="editviolationactionid" name="editviolationactionid"
+                aria-label="Floating label select example">
+                <option selected>Action ID</option>
+              </select>
+              <label for="floatingSelectGrid">Action ID</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="editviolationcreatedby" name="editviolationcreatedby"
+                placeholder="Created By">
+              <label for="floatingInput">Created By</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select" id="editvatiolationstatus" name="editvatiolationstatus"
+                aria-label="Floating label select example">
+                <option selected>Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingSelectGrid">Violation</label>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="violationeditbtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

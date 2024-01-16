@@ -80,15 +80,7 @@
       let actioncode = $("#disciplinaryactionactioncode").val();
       let offenseid = $("#disciplinaryactionoffenseid").val();
       let description = $("#disciplinaryactiondescription").val();
-      let createby = $("#disciplinaryactioncreatedby").val();
-      let status = $("#disciplinaryactionstatus").val();
-
-      console.log(`${actioncode},
-  ${offenseid},
-  ${description},
-  ${createby},
-  ${status},`)
-
+    
       var message = "";
 
       if (actioncode == "") {
@@ -103,13 +95,6 @@
         message += "department is required ";
       }
 
-      if (createby == "") {
-        message += "createby is required ";
-      }
-
-      if (status == "") {
-        message += "createby is required ";
-      }
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -121,8 +106,6 @@
             actioncode: actioncode,
             offenseid: offenseid,
             description: description,
-            createby: createby,
-            status: status,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -217,7 +200,6 @@
               $("#editdisciplinaryactionactioncode").val(item.actioncode);
               $("#editdisciplinaryactionoffenseid").val(item.offenseid);
               $("#editdisciplinaryactiondescription").val(item.description);
-              $("#editdisciplinaryactioncreatedby").val(item.createby);
               $("#editdisciplinaryactionstatus").val(item.status);
             });
           } else {
@@ -235,7 +217,6 @@
       let actioncode = $("#editdisciplinaryactionactioncode").val();
       let offenseid = $("#editdisciplinaryactionoffenseid").val();
       let description = $("#editdisciplinaryactiondescription").val();
-      let createby = $("#editdisciplinaryactioncreatedby").val();
       let status = $("#editdisciplinaryactionstatus").val();
 
       var message = "";
@@ -252,11 +233,6 @@
         message += "departmenthead is required. ";
       }
 
-      if (createby === "") {
-        message += "departmenthead is required. ";
-      }
-
-
       if (status === "") {
         message += "status is required. ";
       }
@@ -272,7 +248,6 @@
             actioncode: actioncode,
             offenseid: offenseid,
             description: description,
-            createby: createby,
             status: status,
           },
           success: function (result) {
