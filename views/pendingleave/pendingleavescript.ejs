@@ -36,6 +36,7 @@
                    `;
 
               finalData.push({
+                leaveid: item.leaveid,
                 employeeid: item.employeeid,
                 leavetype: item.leavetype,
                 leavestartdate: item.leavestartdate,
@@ -56,6 +57,7 @@
           },
         ],
         columns: [
+          { data: "leaveid" },
           { data: "employeeid" },
           { data: "leavetype" },
           { data: "leavestartdate" },
