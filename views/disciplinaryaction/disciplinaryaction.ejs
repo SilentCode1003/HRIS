@@ -1,38 +1,37 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Disciplinary Action</h1>
+<br>
+<h1 class="font-weight-bold" id="h-title">Disciplinary Action</h1>
 
-<br>
-<br>
 <!-- Table -->
-<div class="card shadow mb-4" id="tablecard">
-  <div class="card-header py-3">
-    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinaryactionmodal">
-      <b>+ Add</b>
-    </button>
-    <input id='myInput' type='text' placeholder="  Search....">
-  </div>
-  <div class="card-body">
-    <div class="table-responsive" id="table-responsive-id">
-      <table class="table table-striped" id="dataTabledisciplinaryaction">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Action Code</th>
-            <th>Offense ID</th>
-            <th>Description</th>
-            <th>Created By</th>
-            <th>Created Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+<div class="card" id="tablecard">
+    <div class="card-header">
+      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinaryactionmodal">
+        <b>+ Add</b>
+      </button>
+        <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTabledisciplinaryaction">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Action Code</th>
+                        <th>Offense ID</th>
+                        <th>Description</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
   </div>
 </div>
-</div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade" id="disciplinaryactionmodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
