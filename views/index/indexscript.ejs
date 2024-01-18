@@ -29,6 +29,7 @@
     searchcablingTable();
     searchcandidateTable();
     searchbagapuroTable();
+    GenerateAnouncement();
 
     //#endregion
 
@@ -839,44 +840,44 @@
 
 
     //#region Announcement and Bday Folks
-    $.ajax({
-      url: "/announcement/load",
-      method: "GET",
-      dataType: "json",
+    // $.ajax({
+    //   url: "/announcement/load",
+    //   method: "GET",
+    //   dataType: "json",
 
-      success: function (data) {
-        let details = data.data;
-        console.log(data.data);
-        let bulletinid = [];
-        $.each(details, (key, item) => {
-          bulletinid.push({
-            id: item.bulletinid,
-          });
-        });
-        console.log(bulletinid);
-        LoadAnnouncement(bulletinid);
-      },
-      error: function (error) {
-        console.error(error);
-      },
-    });
+    //   success: function (data) {
+    //     let details = data.data;
+    //     console.log(data.data);
+    //     let bulletinid = [];
+    //     $.each(details, (key, item) => {
+    //       bulletinid.push({
+    //         id: item.bulletinid,
+    //       });
+    //     });
+    //     console.log(bulletinid);
+    //     LoadAnnouncement(bulletinid);
+    //   },
+    //   error: function (error) {
+    //     console.error(error);
+    //   },
+    // });
 
-    function LoadAnnouncement(bulletinid) {
-      console.log("id", bulletinid);
-      $.each(bulletinid, (key, item) => {
-        let id = item.id;
-        console.log("id2: ", id);
-        GenerateAnouncement(id);
-      });
-    }
+    // function LoadAnnouncement(bulletinid) {
+    //   console.log("id", bulletinid);
+    //   $.each(bulletinid, (key, item) => {
+    //     let id = item.id;
+    //     console.log("id2: ", id);
+    //     GenerateAnouncement();
+    //   });
+    // }
 
-    function GenerateAnouncement(id) {
+    function GenerateAnouncement() {
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/getbulletin",
-        data: {
-          bulletinid: id,
-        },
+        // data: {
+        //   bulletinid: id,
+        // },
         success: function (result) {
           if (result.msg === "success") {
             const announcementData = result.data;
