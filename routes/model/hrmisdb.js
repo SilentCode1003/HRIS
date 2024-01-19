@@ -638,21 +638,40 @@ exports.Master_Salary = (data) => {
   return dataResult;
 };
 
-exports.Master_Deductions = (data) => {
+exports.Government_Deductions = (data) => {
   let dataResult = [];
 
   data.forEach((key, item) => {
     dataResult.push({
       image: key.me_profile_pic,
-      deductionsid: key.mds_id,
-      employeeid: key.mds_employeeid,
-      type: key.mds_type,
-      amount: key.mds_amount,
-      period: key.mds_period,
-      cutoff: key.mds_cutoff,
+      govdeduct: key.gd_id,
+      employeeid: key.gd_employeeid,
+      type: key.gd_idtype,
+      amount: key.gd_amount,
+      period: key.gd_period,
+      cutoff: key.gd_cutoff,
     });
   });
 
   return dataResult;
 };
+
+exports.Salary_History = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      historyid: key.sh_id,
+      date: key.sh_date,
+      salaryid: key.sh_salaryid,
+      employeeid: key.sh_employeeid,
+      monthly: key.sh_monthly,
+      allowances: key.sh_allowances,
+    });
+  });
+
+  return dataResult;
+};
+
 

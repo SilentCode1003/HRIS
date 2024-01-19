@@ -51,6 +51,8 @@ exports.UserLogin = (result, callback) => {
         fullname: row.fullname,
         accesstype: row.accesstype,
         department: row.department,
+        departmentname: row.departmentname,
+        position: row.position,
       });
     });
 
