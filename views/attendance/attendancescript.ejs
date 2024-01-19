@@ -137,6 +137,7 @@
                         var LONGITUDE = row.insertCell(6);
                         var DEVICE = row.insertCell(7);
                         var LOCATION = row.insertCell(8);
+                        var DISTANCE = row.insertCell(9);
 
                         var imgElement = document.createElement("img");
                         imgElement.src = "data:image/jpg;base64," + item.image;
@@ -154,9 +155,10 @@
                         LONGITUDE.innerHTML = item.longitude;
                         DEVICE.innerHTML = item.device;
                         LOCATION.innerHTML = item.location;
+                        DISTANCE.innerHTML = item.distance;
 
                         $.each(
-                            [FULLNAME, LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
+                            [FULLNAME, LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION, DISTANCE],
                             function (_, cell) {
                                 cell.style.textAlign = "center";
                                 cell.style.verticalAlign = "middle";

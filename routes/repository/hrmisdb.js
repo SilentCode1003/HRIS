@@ -180,8 +180,12 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Master_Salary(results));
       }
 
-      if (table == "Master_Deductions") {
-        callback(null, model.Master_Deductions(results));
+      if (table == "Government_Deductions") {
+        callback(null, model.Government_Deductions(results));
+      }
+
+      if (table == "Salary_History") {
+        callback(null, model.Salary_History(results));
       }
     });
   } catch (error) {}
@@ -743,13 +747,29 @@ exports.InsertTable = (tablename, data, callback) => {
     });
   }
 
-  if (tablename == "master_deductions") {
-    let sql = `INSERT INTO master_deductions(
-      mds_employeeid,
-      mds_type,
-      mds_amount,
-      mds_period,
-      mds_cutoff) VALUES ?`;
+  if (tablename == "government_deductions") {
+    let sql = `INSERT INTO government_deductions(
+      gd_employeeid,
+      gd_idtype,
+      gd_amount,
+      gd_period,
+      gd_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "government_deductions") {
+    let sql = `INSERT INTO government_deductions(
+      gd_employeeid,
+      gd_idtype,
+      gd_amount,
+      gd_period,
+      gd_cutoff) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

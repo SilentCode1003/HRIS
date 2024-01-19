@@ -133,6 +133,51 @@ router.post("/getemployeeprofile", (req, res) => {
   }
 });
 
+router.post("/getemployeeprofileforappbasicinformation", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
+    me_id AS employeeid,
+    md_departmentname AS department,
+    mp_positionname AS position,
+    md_departmenthead AS departmenthead,
+    me_jobstatus AS jobstatus,
+    me_hiredate AS hiredate,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+        DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+    ) AS tenure
+    FROM 
+    master_employee
+    LEFT JOIN 
+    master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN 
+    master_position ON master_employee.me_position = mp_positionid
+    where me_id = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 router.post("/getemployee", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -642,7 +687,9 @@ router.post("/update", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ msg: "Internal server error", error: error.message });
+      .json({ msg: "Internal server error", 
+      error: error.message 
+    });
   }
 });
 
@@ -650,7 +697,9 @@ router.post("/update", async (req, res) => {
 router.post("/getgovid", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `select 
+    let sql = `select
+    mg_governmentid as governmentid,
+    mg_employeeid as employeeid,
     mg_idtype as idtype,
     mg_idnumber as idnumber,
     mg_issuedate as issuedate,
@@ -662,8 +711,6 @@ router.post("/getgovid", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-        console.log("SQL query:", sql);
 
         res.json({
           msg: "success",

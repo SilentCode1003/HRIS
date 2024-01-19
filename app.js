@@ -56,6 +56,7 @@ var memberRouter = require('./routes/member');
 var registerRouter = require('./routes/register');
 var ojtuserRouter = require('./routes/ojtuser');
 var geofencesettingsRouter = require('./routes/geofencesettings');
+var salaryhistoryRouter = require('./routes/salaryhistory');
 
 
 
@@ -124,6 +125,7 @@ app.use('/member', memberRouter);
 app.use('/register', registerRouter);
 app.use('/ojtuser', ojtuserRouter);
 app.use('/geofencesettings', geofencesettingsRouter);
+app.use('/salaryhistory', salaryhistoryRouter);
 
 
 // catch 404 and forward to error handler
