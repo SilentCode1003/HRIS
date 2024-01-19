@@ -119,6 +119,7 @@
                         var LONGITUDE = row.insertCell(4);
                         var DEVICE = row.insertCell(5);
                         var LOCATION = row.insertCell(6);
+                        var DISTANCE = row.insertCell(7);
 
                         LOGDATE.innerHTML = item.logdate;
                         LOGTIME.innerHTML = item.logtime;
@@ -127,9 +128,10 @@
                         LONGITUDE.innerHTML = item.longitude;
                         DEVICE.innerHTML = item.device;
                         LOCATION.innerHTML = item.location;
+                        DISTANCE.innerHTML = item.distance;
 
                         $.each(
-                            [LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION],
+                            [LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION, DISTANCE],
                             function (_, cell) {
                                 cell.style.textAlign = "center";
                                 cell.style.verticalAlign = "middle";
