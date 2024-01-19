@@ -156,7 +156,7 @@ router.post("/save", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Error in try-catch block:", error); // Log the error for debugging
+    console.error("Error in try-catch block:", error); 
     res.json({
       msg: 'error',
       data: error,
@@ -165,6 +165,92 @@ router.post("/save", async (req, res) => {
 });
 
 
+router.post('/getojt', (req, res)=>{
+  try {
+    let ojtid = req.body.ojtid;
+    let sql =  `SELECT * FROM master_ojt WHERE mo_id = '${ojtid}'`;
+
+    mysql.Select(sql, "Master_Ojt", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      console.log(result);
+
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      dat: error,
+    })
+  }
+});
+
+router.post("/update", async (req, res) => {
+  try {
+    let ojtid = req.body.ojtid;
+    let image = req.body.image;
+    let firstname = req.body.firstname;
+    let lastname = req.body.lastname;
+    let address = req.body.address;
+    let status = req.body.status;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let phone = req.body.phone;
+    let ercontact = req.body.ercontact;
+    let ercontactnumber = req.body.ercontactnumber;
+    let school = req.body.school;
+    let department = req.body.department;
+    let startdate = req.body.startdate;
+    let hours = req.body.hours;
+
+    console.log(ojtid);
+
+    let sql = `UPDATE master_ojt SET
+      mo_image = '${image}',
+      mo_name = '${firstname}',
+      mo_lastname = '${lastname}',
+      mo_address = '${address}',
+      mo_status = '${status}',
+      mo_birthday = '${birthday}',
+      mo_gender = '${gender}',
+      mo_cpnumber = '${phone}',
+      mo_ercontact = '${ercontact}',
+      mo_ercontactnumber = '${ercontactnumber}',
+      mo_school = '${school}',
+      mo_department = '${department}',
+      mo_startdate = '${startdate}',
+      mo_hours = '${hours}'
+      WHERE mo_id = '${ojtid}'`;
+
+      mysql.Update(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: 'error',
+          data: error,
+        });
+      })
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Internal server error", 
+      error: error.message 
+    });
+  }
+});
+
+
+
+//#region function
 
 function checkojtExist(firstname, lastname) {
   return new Promise((resolve, reject) => {
@@ -237,3 +323,4 @@ async function saveOjtRecord(req, ojtID, username, encryptedPassword) {
   });
 }
 
+//#endregion

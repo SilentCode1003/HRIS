@@ -113,6 +113,9 @@ var roleacess = [
       {
         layout: "geofencesettingslayout",
       },
+      {
+        layout: "salaryhistorylayout",
+      },
     ],
   },
   {
@@ -273,6 +276,8 @@ exports.Validator = function (req, res, layout) {
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
             department: req.session.department,
+            departmentname: req.session.departmentname,
+            position: req.session.position,
           });
         }
       });
