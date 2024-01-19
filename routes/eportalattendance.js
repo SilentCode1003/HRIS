@@ -55,14 +55,15 @@ router.get("/load", (req, res) => {
 router.post('/logs', (req, res) => {
     try {
         let attendanceid = req.body.attendanceid;
-        let sql =  `SELECT
+        let sql =  ` SELECT
         DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
         TIME(al_logdatetime) AS logtime,
         al_logtype AS logtype,
         al_latitude AS latitude,
         al_longitude AS longitude,
         al_device AS device,
-        mgs_location AS location
+        mgs_location AS location,
+        SQRT(POW(mgs_latitude - al_latitude, 2) + POW(mgs_longitude - al_longitude, 2)) * 111.32 AS distance
         FROM
         master_employee
         INNER JOIN
@@ -70,7 +71,9 @@ router.post('/logs', (req, res) => {
         LEFT JOIN
         master_geofence_settings ON me_department = mgs_departmentid
         WHERE
-        al_attendanceid = '${attendanceid}'`;
+        al_attendanceid = '${attendanceid}'
+        HAVING
+        distance <= 0.1`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {

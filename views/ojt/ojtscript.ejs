@@ -3,7 +3,6 @@
   let ojtid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadModal();
     LoadEditModal();
@@ -30,7 +29,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -86,7 +84,6 @@
           });
         },
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -224,14 +221,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#ojtdepartment").append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -245,14 +240,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#editojtdepartment").append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -269,7 +262,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       ojtid = dataRow[1];
     });
 
@@ -283,8 +275,6 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-
-            console.log(existingData);
 
             $.each(existingData, (key, item) => {
               $("#editdepartmentid").val(item.ojtid);
@@ -450,8 +440,6 @@
       const input = document.getElementById("ojtprofileimage");
       const file = input.files[0];
 
-      console.log("click");
-
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = function () {
@@ -466,14 +454,11 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
-
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -481,8 +466,6 @@
     $(document).on("change", "#editojtprofileimage", function (e) {
       const input = document.getElementById("editojtprofileimage");
       const file = input.files[0];
-
-      console.log("click");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -498,14 +481,12 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
 
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
