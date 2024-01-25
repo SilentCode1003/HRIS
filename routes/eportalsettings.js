@@ -2,10 +2,10 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-// const { decrypt } = require("dotenv");
-const { Decrypter, Encrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/crytography");
 var router = express.Router();
 const currentDate = moment();
+const bcrypt = require('bcrypt');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -58,44 +58,77 @@ router.post('/getsettingsaccount', (req, res) => {
   }
 });
 
+
+
 router.post('/updatepassword', async (req, res) => {
   try {
-    // Check if the user is authenticated (using a session)
-    const employeeIdFromSession = req.session.employeeid;
+    let employeeid = req.body.employeeid;
+    let currentPass = req.body.currentPass;
+    let newPass = req.body.newPass;
+    let confirmPass = req.body.confirmPass;
 
-    if (!employeeIdFromSession) {
-      return res.status(401).json({ message: "Not authenticated" });
+    console.log(employeeid, currentPass, newPass, confirmPass);
+
+    if (newPass !== confirmPass) {
+      return res.json({
+        msg: 'error',
+        description: 'New password and confirm password do not match',
+      });
     }
 
-    // Retrieve the current password and new password from the request
-    const { currentPass, newPass } = req.body;
+    const userData = await mysql.mysqlQueryPromise(`SELECT mu_password FROM master_user WHERE mu_employeeid = '${employeeid}'`);
 
-    // Retrieve user data based on the session employee_id
-    const user = Object.values(masterUserData).find(user => user.mu_employeeid === employeeIdFromSession);
-
-    if (!user) {
-      return res.status(404).json({ message: "Employee not found" });
+    if (userData.length !== 1) {
+      return res.json({
+        msg: 'error',
+        description: 'Employee not found',
+      });
     }
 
-    // Check if the current password is correct
-    const decryptedCurrentPass = await Decrypter(user.mu_password);
+    const encryptedStoredPassword = userData[0].mu_password;
 
-    if (decryptedCurrentPass !== currentPass) {
-      return res.status(401).json({ message: "Current password is incorrect" });
-    }
+    Decrypter(encryptedStoredPassword, async (decryptError, decryptedStoredPassword) => {
+      if (decryptError) {
+        return res.json({
+          msg: 'error',
+          description: 'Error decrypting the stored password',
+        });
+      }
 
-    // Encrypt the new password before updating
-    const encryptedNewPass = await Encrypter(newPass);
+      
+      if (currentPass !== decryptedStoredPassword) {
+        return res.json({
+          msg: 'error',
+          description: 'Current password is incorrect',
+        });
+      }
 
-    // Update the password in the mock data (you should update it in your database)
-    user.mu_password = encryptedNewPass;
 
-    // Simulate a successful response
-    return res.json({ message: "Password updated successfully", employeeid: employeeIdFromSession });
+      Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
+        if (encryptError) {
+          return res.json({
+            msg: 'error',
+            description: 'Error encrypting the new password',
+          });
+        }
+
+        await mysql.Update(`UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}'`);
+
+        return res.json({
+          msg: 'success',
+          description: 'Password updated successfully',
+        });
+      });
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.json({
+      msg: 'error',
+      description: error.message || 'Internal server error',
+    });
   }
 });
 
-module.exports = router;
+
+
+

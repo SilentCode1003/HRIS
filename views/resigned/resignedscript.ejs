@@ -2,7 +2,6 @@
   let resignedid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadListEmp();
     searchTable();
@@ -30,7 +29,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -71,7 +69,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -83,8 +80,6 @@
       let reason = $("#resignedreason").val();
       let dateresigned = $("#dateresigned").val();
       let status = $("#resignedstatus").val();
-
-      console.log(`${newEmployeeId}`, `${reason}`, `${dateresigned}`, `${status}`)
 
 
       var message = "";
@@ -156,14 +151,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $("#resignedemployee").append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -177,14 +170,12 @@
         type: "GET",
         url: "/employee/loadedit",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $("#editresignedemployee").append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -202,12 +193,10 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       resignedid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
-      console.log('hit');
       $.ajax({
         type: "POST",
         url: "/resigned/getresigned",
@@ -236,7 +225,6 @@
     });
 
     $(document).on("click", "#editresignedsavebtn", function () {
-      console.log("Save button clicked");
       let id = resignedid
       let reason = $("#editresignedreason").val();
       let status = $("#editresignedstatus").val();

@@ -116,6 +116,18 @@ var roleacess = [
       {
         layout: "salaryhistorylayout",
       },
+      {
+        layout: "timelogslayout",
+      },
+      {
+        layout: "generatepayrolllayout",
+      },
+      {
+        layout: "paysliplayout",
+      },
+      {
+        layout: "apprenticelayout",
+      },
     ],
   },
   {
