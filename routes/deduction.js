@@ -59,22 +59,32 @@ router.post('/save', (req, res) => {
     let period = req.body.period;
     let cutoff = req.body.cutoff;
 
-    let data = [];
+    let data = [employeeid, type, amount, period, cutoff];
 
-    data.push([employeeid, type, amount, period, cutoff]);
-
-    let sql = `SELECT * FROM government_deductions WHERE gd_employeeid = '${employeeid}'`;
+    let sql = `SELECT * FROM government_deductions WHERE gd_employeeid = '${employeeid}' AND gd_idtype = '${type}' AND gd_amount = '${amount}' AND gd_period = '${period}' AND gd_cutoff = '${cutoff}'`;
 
     mysql.Select(sql, "Government_Deductions", (err, result) => {
-      if (err) console.error("Error: ", err);
+      if (err) {
+        console.error("Error: ", err);
+        res.json({
+          msg: "error",
+        });
+        return;
+      }
 
-      if (result.length != 0) {
+      if (result.length !== 0) {
         res.json({
           msg: "exist",
         });
       } else {
-        mysql.InsertTable("government_deductions", data, (err, result) => {
-          if (err) console.error("Error: ", err);
+        mysql.InsertTable("government_deductions", [data], (err, result) => {
+          if (err) {
+            console.error("Error: ", err);
+            res.json({
+              msg: "error",
+            });
+            return;
+          }
 
           console.log(result);
 
@@ -85,11 +95,10 @@ router.post('/save', (req, res) => {
         });
       }
     });
-
   } catch (error) {
+    console.error("Error: ", error);
     res.json({
-      msg: 'error',
-      data: error,
+      msg: "error",
     });
   }
 });

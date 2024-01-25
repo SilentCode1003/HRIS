@@ -1,0 +1,316 @@
+<script>
+    let employeeid = "";
+
+    $(document).ready(function () {
+        LoadTable();
+        LoadList();
+        searchTable();
+
+        $(document).on('keyup', '#myInput', function () {
+            searchTable();
+        });
+
+        function LoadTable() {
+            $("#dataTableapprentice").DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                paging: false,
+                searching: false,
+                info: false,
+                scrollY: 400,
+                scrollCollapse: true,
+                serverMethod: "GET",
+                ajax: {
+                    url: "/apprentice/load",
+                    dataSrc: (json) => {
+                        var finalData = [];
+                        var data = json.data;
+
+                        $.each(data, (key, item) => {
+                            var action = "";
+                            var status = item.status;
+
+                            action = `
+                          <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#apprenticemodal"><i class="fas fa-fw fa-pen"></i></button>
+                      `;
+
+                            var imgElement = document.createElement("img");
+                            imgElement.src = "data:image/jpg;base64," + item.profilePicturePath;
+                            imgElement.alt = "Profile Image";
+                            imgElement.style.width = "100px";
+                            imgElement.style.height = "100px";
+
+                            finalData.push({
+                                profilePicturePath: imgElement.outerHTML,
+                                newEmployeeId: item.newEmployeeId,
+                                firstname: item.firstname,
+                                department: item.department,
+                                hiredate: item.hiredate,
+                                jobstatus: item.jobstatus,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columns: [
+                    { data: "profilePicturePath" },
+                    { data: "newEmployeeId" },
+                    { data: "firstname" },
+                    { data: "department" },
+                    { data: "hiredate" },
+                    { data: "jobstatus" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $("td", row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
+                initComplete: function () {
+                },
+            });
+        }
+
+        function LoadList() {
+            $.ajax({
+                type: "GET",
+                url: "/department/load",
+                success: function (result) {
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.departmentid, item.departmentid);
+                        $(options).html(item.departmentname);
+                        $("#apprenticedepartment").append(options);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+        $("#dataTableapprentice tbody").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+                .find("td:not(:first-child)")
+                .each(function () {
+                    dataRow.push($(this).text());
+                });
+            employeeid = dataRow[0];
+        });
+
+        $(document).on("click", "#editBtn", function () {
+            $.ajax({
+                type: "POST",
+                url: "/apprentice/getapprentice",
+                data: {
+                    employeeid: employeeid,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        $.each(existingData, (key, item) => {
+                            $("#editpreview").attr(
+                                "src",
+                                "data:image/jpg;base64," + item.profilePicturePath
+                            );
+                            $("#apprenticefullname").val(item.firstname);
+                            $("#apprenticedepartment").val(item.department);
+                            $("#apprenticestart").val(item.hiredate);
+                        });
+                    } else {
+                        swal("Error fetching employee data", message, "error");
+                    }
+                },
+                error: function (err) {
+                    console.error("An error occurred while fetching employee data", err);
+                    swal(
+                        "An error occurred while fetching employee data",
+                        message,
+                        "error"
+                    );
+                },
+            });
+        });
+
+        $(document).on("click", "#saveprobi", function () {
+            console.log('hit');
+            let id = employeeid; // Replace with the actual employee id
+            let jobstatus = $("#inputState").val();
+
+            console.log(employeeid);
+
+            // Check if the selected action is 'probitionary'
+            if (jobstatus === "probitionary") {
+                $.ajax({
+                    type: "POST",
+                    url: "/apprentice/update",
+                    data: {
+                        employeeid: employeeid,
+                        jobstatus: jobstatus,
+                    },
+                    success: function (result) {
+                        if (result.msg === "success") {
+                            swal({
+                                title: "Update Successfully",
+                                text: "You clicked the button!",
+                                icon: "success",
+                                button: "OK!",
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        } else if (result.msg === "error") {
+                            swal("Error", "An error occurred while updating data.", "error");
+                        } else {
+                        }
+                    },
+                    error: function (err) {
+                        swal("Error", "An error occurred while making the request.", "error");
+                    },
+                });
+            } else {
+                // Notify the user that 'end_of_contract' status cannot be updated
+                swal({
+                    title: "Invalid Selection",
+                    text: "Cannot update for 'End of Contract' action.",
+                    icon: "warning",
+                    button: "OK!",
+                }).then((result) => {
+                    window.location.reload();
+                });
+            }
+        });
+
+
+
+        // $(document).on("click", "#saveprobi", function () {
+        //     let id = employeeid; // Assuming apprenticeIdToUpdate is defined somewhere
+        //     let action = $("#inputState").val();
+        //     console.log('hit',employeeid);
+
+        //     if (action === "end_of_contract") {
+        //         // Display a message or perform any necessary actions for "end_of_contract" action
+        //         swal({
+        //             title: "Update Not Allowed",
+        //             text: "Cannot update to 'end_of_contract'.",
+        //             icon: "warning",
+        //             button: "OK!",
+        //         });
+        //         return; // Stop execution if the action is "end_of_contract"
+        //     }
+
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/apprentice/update", // Update the URL to the correct endpoint
+        //         data: {
+        //             employeeid: employeeid, // Use employeeid instead of apprenticeId
+        //             action: action,
+        //         },
+        //         success: function (result) {
+        //             if (result.msg == "success") {
+        //                 swal({
+        //                     title: "Update Successfully",
+        //                     text: "You clicked the button!",
+        //                     icon: "success",
+        //                     button: "OK!",
+        //                 }).then((results) => {
+        //                     window.location.reload();
+        //                 });
+        //                 // Optionally, you can call LoadTable() here if needed
+        //             } else if (result.msg == "apprentice_not_found") {
+        //                 swal({
+        //                     title: "Apprentice Not Found",
+        //                     text: "The apprentice record was not found!",
+        //                     icon: "error",
+        //                     button: "OK!",
+        //                 });
+        //             } else if (result.msg == "insert_failed") {
+        //                 swal({
+        //                     title: "Insert Failed",
+        //                     text: "An error occurred while inserting the new employee record!",
+        //                     icon: "error",
+        //                     button: "OK!",
+        //                 });
+        //             } else if (result.msg == "encrypt_error") {
+        //                 swal({
+        //                     title: "Encrypt Error",
+        //                     text: "An error occurred while encrypting the password!",
+        //                     icon: "error",
+        //                     button: "OK!",
+        //                 });
+        //             } else if (result.msg == "user_save_error") {
+        //                 swal({
+        //                     title: "User Save Error",
+        //                     text: "An error occurred while saving the user record!",
+        //                     icon: "error",
+        //                     button: "OK!",
+        //                 });
+        //             } else {
+        //                 swal("Unknown Error", "An unknown error occurred!", "error");
+        //             }
+        //         },
+        //         error: function (err) {
+        //             swal("Error", "An error occurred while updating data.", "error");
+        //         },
+        //     });
+        // });
+
+
+
+        $(document).on("change", "#editemployeeprofile", function (e) {
+            const input = document.getElementById("editemployeeprofile");
+            const file = input.files[0];
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const preview = document.getElementById("editpreview");
+                preview.src = reader.result;
+            };
+            editimage();
+        });
+
+        function editimage() {
+            const input = document.getElementById("editemployeeprofile");
+            const file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                imageBase64Stringsep = base64String;
+
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function searchTable() {
+            var input, filter, found, table, tr, td, i, j;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTableapprentice");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {
+                    if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                    }
+                }
+                if (found) {
+                    tr[i].style.display = "";
+                    found = false;
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    });
+</script>

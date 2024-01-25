@@ -1,6 +1,5 @@
 <script>
     $(document).ready(function () {
-        console.log('Initialize');
         let userLocation;
         let employeeid = "<%= employeeid %>";
         let devicein = '';
@@ -14,9 +13,6 @@
         GenerateAnouncement();
 
         //#region maps
-
-
-        console.log('Employee ID:', employeeid);
 
         const OFFICE_LOCATION_LAT = 14.337945;
         const OFFICE_LOCATION_LNG = 121.060511;
@@ -47,7 +43,7 @@
         function checkGeofence(userLocation) {
             const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
             const isInside = userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
-            console.log('User is inside the geofence:', isInside);
+            //console.log('User is inside the geofence:', isInside);
             return isInside;
         }
 
@@ -69,10 +65,10 @@
 
             const geofenceButton = document.getElementById('clockinbtn');
             if (checkGeofence(userLocation)) {
-                console.log('User is inside the geofence.');
+               // console.log('User is inside the geofence.');
                 geofenceButton.style.display = 'block';
             } else {
-                console.log('User is outside the geofence.');
+                //console.log('User is outside the geofence.');
                 geofenceButton.style.display = 'block';
             }
         }
@@ -117,7 +113,6 @@
                     employeeid: employeeid,
                 },
                 success: function (response) {
-                    console.log("Latest Log API response", response);
 
                     if (response && response.al_logtype) {
                         const isClockIn = response.al_logtype === "ClockIn";
@@ -130,7 +125,6 @@
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log("Latest Log API error", error);
                 }
             });
         }
@@ -171,7 +165,6 @@
                                     devicein: devicein,
                                 },
                                 success: function (response) {
-                                    console.log("API response", response);
 
                                     if (response.msg === "exist") {
                                         swal({
@@ -195,9 +188,6 @@
                                     }
                                 },
                                 error: function (xhr, status, error) {
-                                    console.log("API error", error);
-
-                                    console.log("API response text:", xhr.responseText);
 
                                     swal({
                                         title: "Error",
@@ -247,7 +237,6 @@
                         },
 
                         success: function (response) {
-                            console.log("API response", response);
 
                             if (response.msg === "success") {
                                 swal({
@@ -271,8 +260,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            console.log("API error", error);
-                            console.log("API response text:", xhr.responseText);
+
 
                             swal({
                                 title: "Error",
@@ -313,8 +301,6 @@
                     dataSrc: (json) => {
                         var finalData = [];
                         var data = json.data;
-
-                        console.log(data);
                         $.each(data, (key, item) => {
 
                             finalData.push({
@@ -345,7 +331,6 @@
                     });
                 },
                 initComplete: function () {
-                    console.log("Done");
                 },
             });
         }
@@ -421,8 +406,6 @@
                     if (result.msg === "success") {
                         const announcementData = result.data;
                         let counter = 0;
-
-                        console.log(announcementData.length);
                         $.each(announcementData, (key, item) => {
                             counter++;
                             anouncementdiv += `
@@ -445,7 +428,6 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>`;
-                            // console.log(anouncementdiv);
                         });
                     } else {
                         console.error("Error: ", result.message);

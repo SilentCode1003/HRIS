@@ -206,7 +206,6 @@ exports.Master_GovId = (data) => {
       idtype: key.mg_idtype,
       idnumber: key.mg_idnumber,
       issuedate: key.mg_issuedate,
-      expirydate: key.mg_expirydate,
       createby: key.mg_createby,
       createdate: key.mg_createdate,
       status: key.mg_status,
@@ -415,24 +414,6 @@ exports.Payslip = (data) => {
   return dataResult;
 };
 
-exports.Salary = (data) => {
-  let dataResult = [];
-
-  data.forEach((key, item) => {
-    dataResult.push({
-      salaryid: key.s_salaryid,
-      employeeid: key.s_employeeid,
-      salarymonth: key.s_salarymonth,
-      allowances: key.s_allowances,
-      deductions: key.s_deductions,
-      netsalary: key.s_netsalary,
-      paymentdate: key.s_paymentdate,
-      status: key.s_status,
-    });
-  });
-
-  return dataResult;
-};
 
 exports.Master_User = (data) => {
   let dataResult = [];
@@ -674,4 +655,29 @@ exports.Salary_History = (data) => {
   return dataResult;
 };
 
+
+exports.Salary = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      salaryid: key.s_salaryid,
+      employeeid: key.s_employeeid,
+      salarymonth: key.s_mssalaryid,
+      cutoff: key.s_cutoff,
+      netpay: key.s_netpay,
+      totalhours: key.s_totalhours,
+      totaldeductions: key.s_totaldeductions,
+      payrolldate: key.s_payrolldate,
+      allowances: key.s_allowances,
+      adjustnent: key.s_adjustment,
+      spholiday: key.s_spholiday,
+      restdayot: key.s_restdayot,
+      legalholiday: key.s_legalholiday,
+    });
+  });
+
+  return dataResult;
+};
 

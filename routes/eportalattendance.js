@@ -73,7 +73,7 @@ router.post('/logs', (req, res) => {
         WHERE
         al_attendanceid = '${attendanceid}'
         HAVING
-        distance <= 0.1`;
+        distance <= 1`;
 
         mysql.mysqlQueryPromise(sql)
         .then((result) => {

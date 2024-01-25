@@ -6,7 +6,6 @@
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
-    console.log("Initialize");
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -84,21 +83,17 @@
         type: "GET",
         url: "/employee/totalactive",
         success: function (json) {
-          console.log("API response", json);
-
           var data = json.data;
 
           populatedatatable(data)
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatedatatable(data) {
-      console.log(data);
       const tableBody = $('#dataTableemployees tbody');
       tableBody.empty();
 
@@ -111,7 +106,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -142,7 +136,6 @@
         type: "GET",
         url: "/employee/totalregular",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -150,13 +143,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateregularemloyeetbl(data) {
-      console.log(data);
       const tableBody = $('#regularemloyeetbl tbody');
       tableBody.empty();
 
@@ -169,7 +160,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -199,7 +189,6 @@
         type: "GET",
         url: "/employee/totalprobi",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -207,13 +196,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateprobiemloyeetbl(data) {
-      console.log(data);
       const tableBody = $('#probiemloyeetbl tbody');
       tableBody.empty();
 
@@ -226,7 +213,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -256,21 +242,17 @@
         type: "GET",
         url: "/employee/totalresigned",
         success: function (json) {
-          console.log("API response", json);
-
           var finalData = [];
           var data = json.data;
           populateresignedemployeetbl(data);
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateresignedemployeetbl(data) {
-      console.log(data);
       const tableBody = $('#resignedemployeetbl tbody');
       tableBody.empty();
 
@@ -283,7 +265,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -315,7 +296,6 @@
         type: "GET",
         url: "/totaladmin",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -323,13 +303,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotaladmintable(data) {
-      console.log(data);
       const tableBody = $('#totaladmintable tbody');
       tableBody.empty();
 
@@ -342,7 +320,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -372,7 +349,6 @@
         type: "GET",
         url: "/totalIT",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -380,13 +356,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalittable(data) {
-      console.log(data);
       const tableBody = $('#totalittable tbody');
       tableBody.empty();
 
@@ -399,7 +373,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -429,7 +402,6 @@
         type: "GET",
         url: "/totalcabling",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -437,13 +409,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalcablingtable(data) {
-      console.log(data);
       const tableBody = $('#totalcablingtable tbody');
       tableBody.empty();
 
@@ -456,7 +426,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -486,7 +455,6 @@
         type: "GET",
         url: "/totalcandidate",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -494,13 +462,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalcandidatetable(data) {
-      console.log(data);
       const tableBody = $('#totalcandidatetable tbody');
       tableBody.empty();
 
@@ -513,7 +479,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -543,7 +508,6 @@
         type: "GET",
         url: "/totalbagapuroapi",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -551,13 +515,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalbagapurotable(data) {
-      console.log(data);
       const tableBody = $('#totalbagapurotable tbody');
       tableBody.empty();
 
@@ -570,7 +532,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -602,7 +563,6 @@
         type: "GET",
         url: "/countactive",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalActive = result.data.activeCount;
             $("#totalEmployeeCard .h5").text(totalActive);
@@ -621,7 +581,6 @@
         type: "GET",
         url: "/countregular",
         success: function (result) {
-          console.log("loadregularCard:", result);
           if (result.msg === "success") {
             const totalRegular = result.data.regularCount;
             $("#regularEmployeeCard .h5").text(totalRegular);
@@ -640,7 +599,6 @@
         type: "GET",
         url: "/countprobitionary",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalProbitionary = result.data.probitionaryCount;
 
@@ -663,7 +621,6 @@
         type: "GET",
         url: "/countresigned",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalResigned = result.data.resignedCount;
 
@@ -686,7 +643,6 @@
         type: "GET",
         url: "/countadmin",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalempadmin = result.data.adminCount;
 
@@ -709,7 +665,6 @@
         type: "GET",
         url: "/countit",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalIT = result.data.ITCount;
             $("#totalIT .h5").text(totalIT);
@@ -728,7 +683,6 @@
         type: "GET",
         url: "/countcabling",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCabling = result.data.CablingCount;
             $("#totalCABLING .h5").text(totalCabling);
@@ -747,7 +701,6 @@
         type: "GET",
         url: "/countcandidate",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCandidate = result.data.CandidateCount;
             $("#totalempcandidate .h5").text(totalCandidate);
@@ -766,7 +719,6 @@
         type: "GET",
         url: "/countbagapuro",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalBagapuro = result.data.BagapuroCount;
             $("#totalempbagapuro .h5").text(totalBagapuro);
@@ -788,7 +740,6 @@
         type: "GET",
         url: "/countreqleavebadge",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalleave = result.data.leavereqCount;
             $("#loadleaveBadge").text(totalleave);
@@ -807,7 +758,6 @@
         type: "GET",
         url: "/countcashreqbadge",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCa = result.data.CAreqCount;
             $("#loadcaBadge").text(totalCa);
@@ -832,14 +782,12 @@
 
     //   success: function (data) {
     //     let details = data.data;
-    //     console.log(data.data);
     //     let bulletinid = [];
     //     $.each(details, (key, item) => {
     //       bulletinid.push({
     //         id: item.bulletinid,
     //       });
     //     });
-    //     console.log(bulletinid);
     //     LoadAnnouncement(bulletinid);
     //   },
     //   error: function (error) {
@@ -848,10 +796,8 @@
     // });
 
     // function LoadAnnouncement(bulletinid) {
-    //   console.log("id", bulletinid);
     //   $.each(bulletinid, (key, item) => {
     //     let id = item.id;
-    //     console.log("id2: ", id);
     //     GenerateAnouncement();
     //   });
     // }
@@ -868,7 +814,6 @@
             const announcementData = result.data;
             let counter = 0;
 
-            console.log(announcementData.length);
             $.each(announcementData, (key, item) => {
               counter++;
               anouncementdiv += `
@@ -891,7 +836,6 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>`;
-              // console.log(anouncementdiv);
             });
           } else {
             console.error("Error: ", result.message);
@@ -926,7 +870,6 @@
             const bdayData = result.data;
             let counterbday = 0;
 
-            console.log(bdayData.length);
             $.each(bdayData, (key, item) => {
               counterbday++;
               bdaydiv += `
@@ -950,7 +893,6 @@
                                     </button>`;
             });
 
-            // console.log(bdaydiv);
 
             $("#carouselbday").html(bdaydiv);
           } else {
@@ -987,7 +929,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -1043,7 +984,6 @@
           });
         },
         initComplete: function () {
-          console.log("Done");
         },
       });
     }
@@ -1056,7 +996,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       leaveid = dataRow[1];
     });
 
@@ -1097,7 +1036,6 @@
     });
 
     $(document).on("click", "#pendingleavesavebtn", function () {
-      console.log("Save button clicked");
       let id = leaveid
       let status = $("#pendingleaveaction").val();
       let comment = $("#pendingleaveremarks").val();
@@ -1173,7 +1111,6 @@
         type: "GET",
         url: "/loadCA",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -1202,7 +1139,6 @@
               $(this).closest("tr").find("td").each(function () {
                 dataRow.push($(this).text());
               });
-              console.log(dataRow);
               cashadvanceid = dataRow[1];
             };
 
@@ -1228,7 +1164,6 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
@@ -1266,7 +1201,6 @@
       });
     });
     $(document).on("click", "#pendingcasavebtn", function () {
-      console.log("Save button clicked");
 
       let id = cashadvanceid;
       let status = $("#pendingcastatus").val();
@@ -1342,7 +1276,6 @@
       const input = document.getElementById("announcementimage");
       const file = input.files[0];
 
-      console.log("click");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);

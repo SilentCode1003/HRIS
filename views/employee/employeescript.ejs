@@ -3,7 +3,6 @@
   let base64String = "";
   let employeeid = "";
   $(document).ready(function () {
-    console.log("Initialize");
     LoadTable();
     LoadList();
     LoadPosition();
@@ -17,7 +16,6 @@
 
 
     $(document).on("click", "#employeesavebtn", function () {
-      console.log("Save button clicked");
       let firstname = $("#employeefname").val();
       let middlename = $("#employeemname").val();
       let lastname = $("#employeelname").val();
@@ -156,14 +154,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#employeedepartment").append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -177,14 +173,12 @@
         type: "GET",
         url: "/position/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.positionid, item.positionid);
             $(options).html(item.positionname);
             $("#employeeposition").append(options);
-            console.log(item.positionname);
           });
         },
         error: function (result) {
@@ -210,9 +204,7 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
-
-            console.log(data);
+           
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -267,7 +259,6 @@
           });
         },
         initComplete: function () {
-          console.log("Done");
         },
       });
     }
@@ -280,10 +271,7 @@
           dataRow.push($(this).text());
         });
 
-      console.log("Clicked Row Data:", dataRow);
-
       employeeid = dataRow[0];
-      console.log("Employee ID:", employeeid);
     });
 
     $(document).on("click", "#edit-btn", function () {
@@ -298,7 +286,6 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              console.log(`${item.jobstatus}`);
               $("#editemployeeid").val(item.employeeid);
               $("#editemployeefname").val(item.firstname);
               $("#editemployeemname").val(item.middlename);
@@ -361,7 +348,6 @@
     });
 
     $(document).on("click", "#editsavebtn", function () {
-      console.log("Save button clicked");
       let newEmployeeId = employeeid;
       let firstname = $("#editemployeefname").val();
       let middlename = $("#editemployeemname").val();
@@ -495,14 +481,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#editemployeedepartment").append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -516,14 +500,12 @@
         type: "GET",
         url: "/position/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.positionid, item.positionid);
             $(options).html(item.positionname);
             $("#editemployeeposition").append(options);
-            console.log(item.positionname);
           });
         },
         error: function (result) {
@@ -535,8 +517,6 @@
     $(document).on("change", "#employeeprofile", function (e) {
       const input = document.getElementById("employeeprofile");
       const file = input.files[0];
-
-      console.log("click");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -552,14 +532,11 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
-
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -582,14 +559,10 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
-
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
-
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -604,7 +577,6 @@
           employeeid: employeeid,
         },
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -628,7 +600,6 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
@@ -643,7 +614,6 @@
           employeeid: employeeid,
         },
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -671,7 +641,6 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
@@ -686,7 +655,6 @@
           employeeid: employeeid,
         },
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -712,7 +680,6 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
@@ -727,7 +694,6 @@
           employeeid: employeeid,
         },
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -753,35 +719,28 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     $(document).on("click", "#uploadButton", function () {
-      //   console.log("clicked!");
       showspinner();
       UploadProcess();
     });
 
     function UploadProcess() {
-      //Reference the FileUpload element.
       var fileUpload = document.getElementById("excelFileInput");
-
-      //Validate whether File is valid Excel file.
       var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
       if (regex.test(fileUpload.value.toLowerCase())) {
         if (typeof FileReader != "undefined") {
           var reader = new FileReader();
 
-          //For Browsers other than IE.
           if (reader.readAsBinaryString) {
             reader.onload = function (e) {
               GetTableFromExcel(e.target.result);
             };
             reader.readAsBinaryString(fileUpload.files[0]);
           } else {
-            //For IE Browser.
             reader.onload = function (e) {
               var data = "";
               var bytes = new Uint8Array(e.target.result);
@@ -801,31 +760,25 @@
     }
 
     function GetTableFromExcel(data) {
-      //Read the Excel File data in binary
       var workbook = XLSX.read(data, {
         type: "binary",
       });
 
-      //get the name of First Sheet.
       var Sheet = workbook.SheetNames[0];
-
-      //Read all rows from First Sheet into an JSON array.
       var excelRows = XLSX.utils.sheet_to_row_object_array(
         workbook.Sheets[Sheet]
       );
       var columns = Object.keys(excelRows[0]);
 
-      //Create a HTML Table element.
       var myTable = document.createElement("table");
       myTable.border = "1";
 
-      //Add the header row.
+     
       var row = myTable.insertRow(-1);
 
       var dataExcelArr = [];
-      //Add the data rows from Excel file.
+     
       for (var i = 0; i < excelRows.length; i++) {
-        //Add the data row.
         var data = [];
         var row = myTable.insertRow(-1);
         for (var j = 0; j < columns.length; j++) {
@@ -859,7 +812,6 @@
 
     function excelDataSave(data) {
       var dataraw = JSON.stringify(data, null, 2);
-      console.log(dataraw);
       $.ajax({
         type: "POST",
         url: "/employee/upload",

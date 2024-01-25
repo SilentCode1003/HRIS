@@ -1,7 +1,6 @@
 <script>
   let leaveid = '';
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     searchTable();
 
@@ -26,7 +25,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -69,7 +67,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -82,7 +79,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       leaveid = dataRow[0];
     });
 
@@ -122,7 +118,6 @@
       });
     });
     $(document).on("click", "#pendingleavesavebtn", function () {
-      console.log("Save button clicked");
       let id = leaveid
       let status = $("#pendingleaveaction").val();
       let comment = $("#pendingleaveremarks").val();
