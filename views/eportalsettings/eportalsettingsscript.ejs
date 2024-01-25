@@ -46,49 +46,72 @@
         };
 
 
-        $(document).on("click", "#saveBtn", function () {
+
+
+
+        $(document).on("click", "#saveBtn", function (event) {
+            event.preventDefault(); 
+
             const currentPassword = $('#inputPasswordCurrent').val();
             const newPassword = $('#inputPasswordNew').val();
             const confirmPassword = $('#inputPasswordNew2').val();
 
-            // Validate that new password and confirm password match
             if (newPassword !== confirmPassword) {
-                // Use SweetAlert for a nicer alert
-                Swal.fire({
+                swal({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'New password and confirm password do not match',
                 });
                 return;
             }
-
-            // Make an AJAX request
-            $.ajax({
-                type: 'POST',
-                url: '/eportalsettings/updatepassword', // Replace with your actual update password route
-                data: {
-                    currentpass: currentPass,
-                    newpass: newPass,
-                },
-                success: function (response) {
-                    // Use SweetAlert for a success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message,
+            swal({
+                title: 'Are you sure you want to update your password?',
+                icon: 'warning',
+                text: 'update',
+                buttons: ['Cancel', 'OK'],
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/eportalsettings/updatepassword',
+                        data: {
+                            employeeid: employeeid, 
+                            currentPass: currentPassword,
+                            newPass: newPassword,
+                            confirmPass: confirmPassword,
+                        },
+                        success: function (response) {
+                            if (response.msg === 'success') {
+                                swal({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.description, 
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                swal({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.description,
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.error(error);
+                            swal({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            });
+                        },
                     });
-
-                    // Optionally, redirect or perform additional actions after a successful update
-                },
-                error: function (error) {
-                    console.error(error);
-                    // Use SweetAlert for an error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!',
+                } else {
+                    swal('Action canceled.', {
+                        icon: 'info',
                     });
-                },
+                }
             });
         });
 

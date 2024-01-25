@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
         if (result.length !== 0) {
           const user = result[0];
 
-          if (user.jobstatus === 'probitionary' || user.jobstatus === 'regular') {
+          if (user.jobstatus === 'probitionary' || user.jobstatus === 'regular' || user.jobstatus === 'apprentice') {
             if (user.status === 'Active') {
               let data = UserLogin(result);
 
@@ -57,6 +57,7 @@ router.post('/login', (req, res) => {
                 req.session.department = user.department;
                 req.session.departmentname = user.departmentname;
                 req.session.position = user.position;
+                req.session.jobstatus = user.jobstatus;
               });
 
               return res.json({

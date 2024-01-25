@@ -57,6 +57,10 @@ var registerRouter = require('./routes/register');
 var ojtuserRouter = require('./routes/ojtuser');
 var geofencesettingsRouter = require('./routes/geofencesettings');
 var salaryhistoryRouter = require('./routes/salaryhistory');
+var timelogsRouter = require('./routes/timelogs');
+var payslipRouter = require('./routes/payslip');
+var generatepayrollRouter = require('./routes/generatepayroll');
+var apprenticeRouter = require('./routes/apprentice');
 
 
 
@@ -126,7 +130,10 @@ app.use('/register', registerRouter);
 app.use('/ojtuser', ojtuserRouter);
 app.use('/geofencesettings', geofencesettingsRouter);
 app.use('/salaryhistory', salaryhistoryRouter);
-
+app.use('/timelogs',timelogsRouter);
+app.use('/payslip', payslipRouter);
+app.use('/generatepayroll', generatepayrollRouter);
+app.use('/apprentice', apprenticeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

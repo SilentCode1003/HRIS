@@ -2,7 +2,6 @@
   let governmentid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadEditEmp();
@@ -29,7 +28,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -44,7 +42,6 @@
                 idtype: item.idtype,
                 idnumber: item.idnumber,
                 issuedate: item.issuedate,
-                expirydate: item.expirydate,
                 createby: item.createby,
                 createdate: item.createdate,
                 status: item.status,
@@ -67,14 +64,12 @@
           { data: "idtype" },
           { data: "idnumber" },
           { data: "issuedate" },
-          { data: "expirydate" },
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -85,7 +80,6 @@
       let idtype = $("#govermentidtype").val();
       let idnumber = $("#govermentidnumber").val();
       let issuedate = $("#govermentidissuedate").val();
-      let expirydate = $("#govermentidexpirydate").val();
 
       var message = "";
 
@@ -105,10 +99,6 @@
         message += "createby is required ";
       }
 
-      if (expirydate == "") {
-        message += "createby is required ";
-      }
-
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -122,7 +112,6 @@
             idtype: idtype,
             idnumber: idnumber,
             issuedate: issuedate,
-            expirydate: expirydate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -160,14 +149,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#govermentidemployeeid').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -183,14 +170,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#editgovermentidemployeeid').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -209,7 +194,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       governmentid = dataRow[0];
     });
 
@@ -229,7 +213,6 @@
               $("#editgovermentidtype").val(item.idtype);
               $("#editgovermentidnumber").val(item.idnumber);
               $("#editgovermentidissuedate").val(item.issuedate);
-              $("#editgovermentidexpirydate").val(item.expirydate);
               $("#editgovermentidstatus").val(item.status);
             });
           } else {
@@ -242,13 +225,11 @@
       });
     });
     $(document).on("click", "#editgovermentidsavebtn", function () {
-      console.log("Save button clicked");
       let id = governmentid
       let employeeid = $("#editgovermentidemployeeid").val();
       let idtype = $("#editgovermentidtype").val();
       let idnumber = $("#editgovermentidnumber").val();
       let issuedate = $("#editgovermentidissuedate").val();
-      let expirydate = $("#editgovermentidexpirydate").val();
       let status = $("#editgovermentidstatus").val();
 
 
@@ -270,9 +251,6 @@
         message += "status is required. ";
       }
 
-      if (expirydate === "") {
-        message += "status is required. ";
-      }
 
       if (status === "") {
         message += "status is required. ";
@@ -290,7 +268,6 @@
             idtype: idtype,
             idnumber: idnumber,
             issuedate: issuedate,
-            expirydate: expirydate,
             status: status,
           },
           success: function (result) {

@@ -2,7 +2,6 @@
   let healthid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadEditEmp();
@@ -32,7 +31,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -71,7 +69,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -172,14 +169,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#healthrecordemployeeid').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -195,14 +190,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#edithealthrecordemployeeid').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -221,7 +214,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       healthid = dataRow[0];
     });
 
@@ -258,7 +250,6 @@
       });
     });
     $(document).on("click", "#edithealthrecordsavebtn", function () {
-      console.log("Save button clicked");
       let id = healthid
       let employeeid = $("#edithealthrecordemployeeid").val();
       let bloodtype = $("#edithealthrecordbloodtype").val();

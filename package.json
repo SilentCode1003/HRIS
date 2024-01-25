@@ -9,6 +9,8 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "bootstrap": "^5.3.2",
+    "bootstrap-datepicker": "^1.10.0",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
@@ -19,8 +21,10 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.1",
+    "express-handlebars": "^7.1.2",
     "express-session": "^1.17.3",
     "http-errors": "~1.6.3",
+    "jquery": "^3.7.1",
     "moment": "^2.29.4",
     "mongoose": "^7.6.3",
     "morgan": "~1.9.1",
@@ -28,6 +32,7 @@
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
     "node-linq": "^0.0.5",
+    "popper.js": "^1.16.1",
     "xlsx": "^0.18.5"
   }
 }

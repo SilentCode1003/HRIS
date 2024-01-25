@@ -3,36 +3,36 @@
 
 <!-- Table -->
 <div class="card" id="tablecard">
-    <div class="card-header">
-      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
-        <b>+ Add</b>
-      </button>
-        <input id='myInput'  type='text' placeholder="  Search....">
-    </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTabledisciplianary">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee ID</th>
-                        <th>Offense ID</th>
-                        <th>Action Code</th>             
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
-                        <th>Status</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+  <div class="card-header">
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
+      <b>+ Add</b>
+    </button>
+    <input id='myInput' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTabledisciplianary">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th class="col-sm-1">ID</th>
+            <th>Employee ID</th>
+            <th>Offense ID</th>
+            <th>Action Code</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Status</th>
+            <th class="col-sm-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
 </div>
 </div>
 </div>
@@ -128,15 +128,14 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;
+                  <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;
                    height: 250px; border: 2.5px solid #174634 !important;;" class="rounded rounded-circle"
                     alt="placeholder">
                 </div>
                 <br>
                 <div class="col">
                   <div class="col g-6">
-                    <input type="file" name="daimage" id="daimage" class="form-control"
-                      accept="image/*">
+                    <input type="file" name="editdaimage" id="editdaimage" class="form-control" accept="image/*">
                   </div>
                 </div>
                 <br>
@@ -150,16 +149,22 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="dafname"
-                      name="dafname" placeholder="First Name">
-                    <label for="floatingInput">Full Name</label>
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="editdafname"
+                      name="editdafname">
+                      <option value="" disabled selected>Select First Name</option>
+                      <!-- Add options here for Full Name -->
+                    </select>
+                    <label for="editdafname">Full Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="daoffense" name="daoffense" placeholder="Last Name">
-                    <label for="floatingInput">Offense</label>
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="editdaoffense"
+                      name="editdaoffense">
+                      <option value="" disabled selected>Select Offense</option>
+                      <!-- Add options here for Offense -->
+                    </select>
+                    <label for="editdaoffense">Offense</label>
                   </div>
                 </div>
               </div>
@@ -167,16 +172,20 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="daaction" name="daaction" placeholder="Last Name">
-                    <label for="floatingInput">Disciplinary Action</label>
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="editdaaction"
+                      name="editdaaction">
+                      <option value="" disabled selected>Select Disciplinary Action</option>
+                    </select>
+                    <label for="editdaaction">Disciplinary Action</label>
                   </div>
                 </div>
                 <div class="col-md-8">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="daviolation" name="daviolation" placeholder="Address">
-                    <label for="floatingInput">Violation</label>
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="editdaviolation"
+                      name="editdaviolation">
+                      <option value="" disabled selected>Select Violation</option>
+                    </select>
+                    <label for="editdaviolation">Violation</label>
                   </div>
                 </div>
               </div>
@@ -184,16 +193,20 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="dacreatedate" name="dacreatedate" placeholder="Phone Number">
-                    <label for="floatingInput">Create Date</label>
+                    <input type="date" class="form-select" style="border: 2.5px solid #174634 !important;" id="editdacreatedate" disabled
+                      name="editdacreatedate">
+                    <label for="editdacreatedate">Create Date</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="email" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="dastatus" name="dastatus" placeholder="Email">
-                    <label for="floatingInput">Status</label>
+                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="editdastatus"
+                      name="editdastatus">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                      <option value="Ongoing">Ongoing</option>
+                    </select>
+                    <label for="editdastatus">Status</label>
                   </div>
                 </div>
               </div>
@@ -201,28 +214,29 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="dacreateby" name="dacreateby" placeholder="Address">
-                    <label for="floatingInput">Create By</label>
+                    <input class="form-select" style="border: 2.5px solid #174634 !important;" id="editdacreateby" disabled
+                      name="editdacreateby">
+                    <label for="editdacreateby">Create By</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;"
-                      id="dadate" name="dadate" placeholder="Address">
-                    <label for="floatingInput">Subject Date</label>
+                    <input type="date" class="form-select" style="border: 2.5px solid #174634 !important;" id="editdadate"
+                      name="editdadate">
+                    <label for="editdadate">Subject Date</label>
                   </div>
                 </div>
               </div>
               <br>
             </form>
+
           </div>
         </div>
       </div>
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
          border: 2px solid white !important;">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn" style="background-color: green !important;
+        <button type="button" class="btn btn-primary" id="editdasavebtn" style="background-color: green !important;
         border: 2px solid white !important;">Save</button>
       </div>
     </div>

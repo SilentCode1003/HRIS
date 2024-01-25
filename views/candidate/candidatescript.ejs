@@ -2,7 +2,6 @@
   let employeeid = "";
 
   $(document).ready(function () {
-    console.log("Initialize");
     LoadTable();
     searchTable();
 
@@ -27,7 +26,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -74,7 +72,6 @@
           });
         },
         initComplete: function () {
-          console.log("Done");
         },
       });
     }
@@ -86,16 +83,10 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-
-      console.log("Clicked Row Data:", dataRow);
-
       employeeid = dataRow[0];
-      console.log("Employee ID:", employeeid);
     });
 
     $(document).on("click", "#editBtn", function () {
-      console.log("Edit button clicked. Employee ID:", employeeid);
-
       $.ajax({
         type: "POST",
         url: "/candidate/getcandidate",
@@ -105,8 +96,6 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-
-            console.log("Existing Data:", existingData);
 
             $.each(existingData, (key, item) => {
               $("#editpreview").attr(
@@ -133,7 +122,6 @@
     });
 
     $(document).on("click", "#saveregular", function () {
-      console.log("Save button clicked");
       let id = employeeid;
       let action = $("#inputState").val();
 
@@ -190,7 +178,7 @@
       }
     });
 
-    $(document).on("change", "#editemployeeprofile", function (e) {
+    $(document).on("change", "#c", function (e) {
       const input = document.getElementById("editemployeeprofile");
       const file = input.files[0];
 
@@ -208,14 +196,12 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
 
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
