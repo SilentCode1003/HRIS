@@ -206,7 +206,6 @@ exports.Master_GovId = (data) => {
       idtype: key.mg_idtype,
       idnumber: key.mg_idnumber,
       issuedate: key.mg_issuedate,
-      expirydate: key.mg_expirydate,
       createby: key.mg_createby,
       createdate: key.mg_createdate,
       status: key.mg_status,
@@ -415,24 +414,6 @@ exports.Payslip = (data) => {
   return dataResult;
 };
 
-exports.Salary = (data) => {
-  let dataResult = [];
-
-  data.forEach((key, item) => {
-    dataResult.push({
-      salaryid: key.s_salaryid,
-      employeeid: key.s_employeeid,
-      salarymonth: key.s_salarymonth,
-      allowances: key.s_allowances,
-      deductions: key.s_deductions,
-      netsalary: key.s_netsalary,
-      paymentdate: key.s_paymentdate,
-      status: key.s_status,
-    });
-  });
-
-  return dataResult;
-};
 
 exports.Master_User = (data) => {
   let dataResult = [];
@@ -638,18 +619,62 @@ exports.Master_Salary = (data) => {
   return dataResult;
 };
 
-exports.Master_Deductions = (data) => {
+exports.Government_Deductions = (data) => {
   let dataResult = [];
 
   data.forEach((key, item) => {
     dataResult.push({
       image: key.me_profile_pic,
-      deductionsid: key.mds_id,
-      employeeid: key.mds_employeeid,
-      type: key.mds_type,
-      amount: key.mds_amount,
-      period: key.mds_period,
-      cutoff: key.mds_cutoff,
+      govdeduct: key.gd_id,
+      employeeid: key.gd_employeeid,
+      type: key.gd_idtype,
+      amount: key.gd_amount,
+      period: key.gd_period,
+      cutoff: key.gd_cutoff,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Salary_History = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      historyid: key.sh_id,
+      date: key.sh_date,
+      salaryid: key.sh_salaryid,
+      employeeid: key.sh_employeeid,
+      monthly: key.sh_monthly,
+      allowances: key.sh_allowances,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Salary = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      salaryid: key.s_salaryid,
+      employeeid: key.s_employeeid,
+      salarymonth: key.s_mssalaryid,
+      cutoff: key.s_cutoff,
+      netpay: key.s_netpay,
+      totalhours: key.s_totalhours,
+      totaldeductions: key.s_totaldeductions,
+      payrolldate: key.s_payrolldate,
+      allowances: key.s_allowances,
+      adjustnent: key.s_adjustment,
+      spholiday: key.s_spholiday,
+      restdayot: key.s_restdayot,
+      legalholiday: key.s_legalholiday,
     });
   });
 

@@ -1,19 +1,17 @@
 <div id="loading" class="loading"></div>
 <br>
-<h1 class="font-weight-bold text-danger" id="h-title">Payments</h1> 
 
   <!-- Modal -->
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
+      <div class="modal-content content-payment-modal">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-dollar-circle' style='color:#75f755; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="staticBackdropLabel">PAYMENT</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">PAYMENT</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <!--- Modal Body -->
         <div class="modal-body" id="modal-body">
-          <select class="form-select" id="loanid" aria-label="Default select example">
+          <select class="form-select border-form-modal" id="loanid" aria-label="Default select example">
             <option selected>Loan ID</option>
              <option value="1">One</option>
             <option value="2">Two</option>
@@ -23,7 +21,7 @@
              <div class="row g-3">
               <div class="col-auto">
                 <div class="form-floating" id="date">
-                  <input type="date" class="form-control" id="floatingInputGrid" placeholder="" value="">
+                  <input type="date" class="form-control border-form-modal" id="floatingInputGrid" placeholder="" value="">
                   <label for="floatingInputGrid">Date</label>
                 </div>
               </div>
@@ -31,16 +29,16 @@
               <div class="row g-3">
             <div class="col-auto">
               <label for="exampleFormControlInput1" class="form-label" id="amount">Amount</label>
-              <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+              <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
           </div>
           </div>
            <div>
             <label for="exampleFormControlInput" id="remarks">Remarks</label>
-            <textarea class="form-control" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
+            <textarea class="form-control border-form-modal" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
           </div>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn-submit">Submit</button>
+          <button type="button" class="btn btn-modal-save">Submit</button>
         </div>
       </div>   
     </div>
@@ -49,6 +47,7 @@
   <!------ Table ------>
 <div class="card"  id="tablecard"> 
     <div class="card-header">
+      <h3 class="title-card-table">Payments</h3>
       <!-- Button trigger modal -->
   <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     <b>+ Add</b>

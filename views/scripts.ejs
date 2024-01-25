@@ -88,6 +88,15 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+
+<!--Date Picker-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
+
+
+
 <script>
   $(document).on("click", "#logoutBtn", function () {
     $.ajax({
@@ -146,3 +155,19 @@
     });
 }
 </script>
+
+
+  <!---Java Script for Topbar-->
+  <script>
+    const topbar = document.getElementById('topbar');
+
+    window.addEventListener('scroll', () =>{
+        if(window.scrollY > 0) {
+            
+            topbar.classList.add('light-bg');
+        }else{
+
+            topbar.classList.remove('light-bg');
+        }
+    })
+</script> 

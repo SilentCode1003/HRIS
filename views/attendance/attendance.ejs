@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Attendance</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+        <h3 class="title-card-table">Attendance</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#">
         <b>Export Attendance</b>
       </button>
@@ -14,14 +14,14 @@
             <table class="table table-striped" id="dataTableattendance">
                 <thead>
                         <th>Image</th>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th class="col-25">Name</th>
                         <th>Date</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
+                        <th class="col-sm-1">Time In</th>
+                        <th class="col-sm-1">Time Out</th>
                         <th>Device In</th>
                         <th>Device Out</th>
-                        <th>Total Hours</th>
+                        <th class="col-sm-1">Total Hours</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
@@ -40,15 +40,15 @@
     aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" id="modal-header">
                 <div>
-                    <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
                        Logs
                     </h1>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <div class="table-responsive" id="table-responsive-id">
                     <table class="table table-striped" id="dataTableattendancelogs">
                         <thead>
@@ -62,6 +62,7 @@
                                 <th>Lonitude</th>
                                 <th>Device</th>
                                 <th>Location</th>
+                                <th>Distance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,8 +71,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-                border: 2px solid white !important;">Close</button>
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

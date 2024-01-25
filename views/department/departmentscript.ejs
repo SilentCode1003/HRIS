@@ -2,7 +2,6 @@
   let departmentid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     searchTable();
     LoadList();
@@ -28,8 +27,6 @@
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
-
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -68,7 +65,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -140,14 +136,12 @@
         type: "GET",
         url: "/totalbagapuroapi",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.firstname, item.firstname);
             $(options).html(item.firstname);
             $("#departhead").append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -161,14 +155,12 @@
         type: "GET",
         url: "/totalbagapuroapi",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.firstname, item.firstname);
             $(options).html(item.firstname);
             $("#editdepartmenthead").append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -186,7 +178,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       departmentid = dataRow[0];
     });
 
@@ -218,7 +209,6 @@
     });
 
     $(document).on("click", "#editdepartmentsavebtn", function () {
-      console.log("Save button clicked");
       let id = departmentid
       let departmentname = $("#editdepartmentname").val();
       let departmenthead = $("#editdepartmenthead").val();

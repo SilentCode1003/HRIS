@@ -2,7 +2,6 @@
   let trainingid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadEditEmp();
@@ -31,7 +30,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -86,7 +84,6 @@
           });
         },
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -171,14 +168,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#trainingemployeename').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -193,14 +188,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $('#edittrainingemployeename').append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -219,7 +212,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       trainingid = dataRow[1];
     });
 
@@ -253,7 +245,6 @@
       });
     });
     $(document).on("click", "#edittrainingsavebtn", function () {
-      console.log("Save button clicked");
       let id = trainingid
       let name = $("#edittrainingname").val();
       let employeeid = $("#edittrainingemployeename").val();

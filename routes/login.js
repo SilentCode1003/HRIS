@@ -21,18 +21,21 @@ router.post('/login', (req, res) => {
 
       let sql = `
       SELECT 
-          mu_employeeid AS employeeid,
-          CONCAT(me_firstname, ' ', me_lastname) AS fullname,
-          ma_accessname AS accesstype,
-          mu_status AS status,
-          me_profile_pic AS image,
-          me_jobstatus AS jobstatus,
-          md_departmentid AS department
-      FROM master_user
-      INNER JOIN master_access ON mu_accesstype = ma_accessid
-      LEFT JOIN master_employee ON mu_employeeid = me_id
-      LEFT JOIN master_department ON md_departmentid = me_department
-      WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
+      mu_employeeid AS employeeid,
+      CONCAT(me_firstname, ' ', me_lastname) AS fullname,
+      ma_accessname AS accesstype,
+      mu_status AS status,
+      me_profile_pic AS image,
+      me_jobstatus AS jobstatus,
+      md_departmentid AS department,
+      md_departmentname AS departmentname,
+      mp_positionname AS position
+  FROM master_user
+  INNER JOIN master_access ON mu_accesstype = ma_accessid
+  LEFT JOIN master_employee ON mu_employeeid = me_id
+  LEFT JOIN master_department ON md_departmentid = me_department
+  LEFT JOIN master_position ON mp_positionid = me_position
+  WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
       // console.log(sql);
 
@@ -40,7 +43,7 @@ router.post('/login', (req, res) => {
         if (result.length !== 0) {
           const user = result[0];
 
-          if (user.jobstatus === 'probitionary' || user.jobstatus === 'regular') {
+          if (user.jobstatus === 'probitionary' || user.jobstatus === 'regular' || user.jobstatus === 'apprentice') {
             if (user.status === 'Active') {
               let data = UserLogin(result);
 
@@ -52,6 +55,9 @@ router.post('/login', (req, res) => {
                 req.session.accesstype = user.accesstype;
                 req.session.image = user.image;
                 req.session.department = user.department;
+                req.session.departmentname = user.departmentname;
+                req.session.position = user.position;
+                req.session.jobstatus = user.jobstatus;
               });
 
               return res.json({

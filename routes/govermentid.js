@@ -22,7 +22,6 @@ router.post('/getgovermentid', (req, res) => {
       mg_idtype as idtype,
       mg_idnumber as idnumber,
       mg_issuedate as issuedate,
-      mg_expirydate as expirydate,
       mg_createby as createby,
       mg_status as status
       FROM master_govid
@@ -61,7 +60,6 @@ router.post('/save', async (req, res) => {
     let idtype = req.body.idtype;
     let idnumber = req.body.idnumber;
     let issuedate = req.body.issuedate;
-    let expirydate = req.body.expirydate;
     let createby = req.session.fullname; 
     let createdate = currentDate.format('YYYY-MM-DD');
     let status = 'Active';
@@ -84,7 +82,6 @@ router.post('/save', async (req, res) => {
       idtype,
       idnumber,
       issuedate,
-      expirydate,
       createby,
       createdate,
       status
@@ -115,7 +112,6 @@ concat(me_firstname, ' ', me_lastname) AS mg_employeeid,
 mg_idtype,
 mg_idnumber,
 mg_issuedate,
-mg_expirydate,
 mg_createby,
 mg_createdate,
 mg_status
@@ -144,7 +140,6 @@ router.post('/update', (req, res) => {
     let idtype = req.body.idtype;
     let idnumber = req.body.idnumber;
     let issuedate = req.body.issuedate;
-    let expirydate = req.body.expirydate;
     let createby = req.session.fullname; 
     let status = req.body.status; 
 
@@ -152,8 +147,7 @@ router.post('/update', (req, res) => {
     mg_employeeid ='${employeeid}', 
     mg_idtype ='${idtype}', 
     mg_idnumber ='${idnumber}',
-    mg_issuedate ='${issuedate}',
-    mg_expirydate ='${expirydate}', 
+    mg_issuedate ='${issuedate}', 
     mg_createby ='${createby}', 
     mg_status ='${status}'
     WHERE mg_governmentid ='${governmentid}'`;

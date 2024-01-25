@@ -113,6 +113,21 @@ var roleacess = [
       {
         layout: "geofencesettingslayout",
       },
+      {
+        layout: "salaryhistorylayout",
+      },
+      {
+        layout: "timelogslayout",
+      },
+      {
+        layout: "generatepayrolllayout",
+      },
+      {
+        layout: "paysliplayout",
+      },
+      {
+        layout: "apprenticelayout",
+      },
     ],
   },
   {
@@ -273,6 +288,8 @@ exports.Validator = function (req, res, layout) {
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
             department: req.session.department,
+            departmentname: req.session.departmentname,
+            position: req.session.position,
           });
         }
       });

@@ -2,7 +2,6 @@
   let offenseid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     searchTable();
 
@@ -27,7 +26,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -64,7 +62,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -127,7 +124,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       offenseid = dataRow[0];
     });
 
@@ -158,7 +154,6 @@
     });
 
     $(document).on("click", "#offenseseditbtn", function () {
-      console.log("Save button clicked");
       let id = offenseid
       let offensename = $("#editoffensesname").val();
       let status = $("#editoffensesstatus").val();

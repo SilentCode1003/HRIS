@@ -2,7 +2,6 @@
   let holidayrateid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadHolidayEdit();
@@ -32,7 +31,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -71,7 +69,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -139,14 +136,12 @@
         type: "GET",
         url: "/holiday/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.date, item.date);
             $(options).html(item.date);
             $('#holidayratedate').append(options);
-            console.log(item.date);
           });
         },
         error: function (result) {
@@ -163,14 +158,12 @@
         type: "GET",
         url: "/holiday/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.holidayid, item.holidayid);
             $(options).html(item.date);
             $('#editholidayratedate').append(options);
-            console.log(item.date);
           });
         },
         error: function (result) {
@@ -189,7 +182,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       holidayrateid = dataRow[0];
     });
 
@@ -220,7 +212,6 @@
       });
     });
     $(document).on("click", "#editholidayratesavebtn", function () {
-      console.log("Save button clicked");
       let id = holidayrateid
       let holidaydate = $("#editholidayratedate").val();
       let holidayrate = $("#editholidayraterate").val();
