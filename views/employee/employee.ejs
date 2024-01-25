@@ -1,14 +1,14 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Employee</h1>
 
 <!-- Table --> <!--- hehe-->
 <div class="card" id="tablecard">
   <div class="card-header">
-    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
-      <b>+ Add</b>
-    </button>
+    <h3 class="title-card-table">Employee</h3>
     <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
       <b>Upload</b>
+    </button>
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
+      <b>+ Add</b>
     </button>
 
     <!-- Upload Modal -->
@@ -17,11 +17,10 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header" id="modal-header">
-            <i class='bx bxs-data' style='color:#daf106; font-size: 50px; margin: 3px;'></i>
             <h1 class="modal-title fs-5" id="exampleModalLabel">BATCH UPLOAD</h1>
-            <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
           </div>
-          <div class="modal-body" id="modal-body">
+          <div class="modal-body modal-batch-body" id="modal-body">
             <form>
               <div class="modal-content">
                 <input type="file" class="form-control-file" id="excelFileInput" accept=".xls, .xlsx" />
@@ -29,10 +28,8 @@
             </form>
           </div>
           <div class="modal-footer" id="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-            border: 2px solid white !important;">Close</button>
-            <button type="button" class="btn btn-danger" id="uploadButton" style="background-color: green !important;
-            border: 2px solid white !important;">Upload</button>
+            <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-modal-upload" id="uploadButton">Upload</button>
           </div>
         </div>
       </div>
@@ -67,11 +64,10 @@
 <div class="modal fade" id="addemployeemodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
+    <div class="modal-content content-size-modal">
       <div class="modal-header" id="modal-header">
-        <i class='bx bxs-user-rectangle' style='color:#78f889; font-size: 50px; margin: 3px;'></i>
         <h3 class="modal-title" id="exampleModalLabel">EMPLOYEE</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
         <br>
@@ -81,19 +77,17 @@
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;
-                   height: 250px; border: 2.5px solid #174634 !important;;"
-                    class="rounded rounded-circle" alt="placeholder">
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
                 </div>
                 <br>
                 <div class="col">
                   <div class="col g-6">
-                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control"
+                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control border-form-modal"
                       accept="image/*">
                   </div>
                 </div>
                 <br>
-                <h2 class="border-top pb-3 mb-4 text-center">Avatar Preview</h2>
+                <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
               </div>
             </div>
           </div>
@@ -103,21 +97,21 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeefname" name="employeefname"
+                    <input type="text" class="form-control border-form-modal" id="employeefname" name="employeefname"
                       placeholder="First Name">
                     <label for="floatingInput">First Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeelname" name="employeelname"
+                    <input type="text" class="form-control border-form-modal" id="employeelname" name="employeelname"
                       placeholder="Last Name">
                     <label for="floatingInput">Last Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeemname" name="employeemname"
+                    <input type="text" class="form-control border-form-modal" id="employeemname" name="employeemname"
                       placeholder="Middle Name">
                     <label for="floatingInput">Middle Name</label>
                   </div>
@@ -127,7 +121,7 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeegender" name="employeegender"
+                    <select class="form-select border-form-modal" id="employeegender" name="employeegender"
                       aria-label="Floating label select example">
                       <option selected>Choose</option>
                       <option value="Male">Male</option>
@@ -138,7 +132,7 @@
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeecivilstatus" name="employeecivilstatus"
+                    <select class="form-select border-form-modal" id="employeecivilstatus" name="employeecivilstatus"
                       aria-label="Floating label select example">
                       <option selected>Choose</option>
                       <option value="Single">Single</option>
@@ -151,7 +145,7 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeaddress" name="employeeaddress"
+                    <input type="text" class="form-control border-form-modal" id="employeeaddress" name="employeeaddress"
                       placeholder="Address">
                     <label for="floatingInput">Address</label>
                   </div>
@@ -161,20 +155,20 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeebirthday" name="employeebirthday">
+                    <input type="date" class="form-control border-form-modal" id="employeebirthday" name="employeebirthday">
                     <label for="floatingInput">Birthday</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeephone" name="employeephone"
+                    <input type="number" class="form-control border-form-modal" id="employeephone" name="employeephone"
                       placeholder="Phone Number">
                     <label for="floatingInput">Phone Number</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="email" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemail" name="employeeemail"
+                    <input type="email" class="form-control border-form-modal" id="employeeemail" name="employeeemail"
                       placeholder="Email">
                     <label for="floatingInput">Email</label>
                   </div>
@@ -184,13 +178,13 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeehiredate" name="employeehiredate">
+                    <input type="date" class="form-control border-form-modal" id="employeehiredate" name="employeehiredate">
                     <label for="floatingInput">Hire Date</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeedepartment" name="employeedepartment"
+                    <select class="form-select border-form-modal" id="employeedepartment" name="employeedepartment"
                       aria-label="Floating label select example">
                     </select>
                     <label for="employeedepartment">Department</label>
@@ -198,7 +192,7 @@
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeeposition" name="employeeposition"
+                    <select class="form-select border-form-modal" id="employeeposition" name="employeeposition"
                       aria-label="Floating label select example">
                     </select>
                     <label for="floatingSelectGrid">Position</label>
@@ -210,7 +204,7 @@
 
                 <div class="col">
                   <div class="form-floating">
-                    <select class="form-select" style="border: 2.5px solid #174634 !important;" id="employeejobstatus" name="employeejobstatus"
+                    <select class="form-select border-form-modal" id="employeejobstatus" name="employeejobstatus"
                       aria-label="Floating label select example">
                       <option selected>Choose...</option>
                       <option value="regular">Regular</option>
@@ -224,14 +218,14 @@
                 <br>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemergencyname" name="employeeemergencyname"
+                    <input type="text" class="form-control border-form-modal" id="employeeemergencyname" name="employeeemergencyname"
                       placeholder="Emergency Contact Name">
                     <label for="floatingInput">Emergency Contact Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="employeeemergencyphone" name="employeeemergencyphone"
+                    <input type="text" class="form-control border-form-modal" id="employeeemergencyphone" name="employeeemergencyphone"
                       placeholder="Emergency Contact Phone">
                     <label for="floatingInput">Emergency Contact Phone</label>
                   </div>
@@ -243,10 +237,8 @@
         </div>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-         border: 2px solid white !important;">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn" style="background-color: green !important;
-        border: 2px solid white !important;">Save</button>
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="employeesavebtn">Save</button>
       </div>
     </div>
   </div>
