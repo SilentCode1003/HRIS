@@ -6,7 +6,7 @@
 
     </div>
 
-    <!-- First Row -->
+    <!-- First Card Row -->
     <div class="row">
 
         <!-- Total Employee Card -->
@@ -206,6 +206,31 @@
                             <div class="text-xs font-weight-bold text-uppercase mb-1"
                                 style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
                                 Bagapuro Family
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold"
+                                style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Total Apprentice Card -->
+        <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="totalempapprentice" class="card h-100 py-2" style="border-left: 4px solid #751a1a !important;
+                border-radius: 8px;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1"
+                                style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
+                                Apprentice Sheet
                             </div>
                             <div class="h5 mb-0 font-weight-bold"
                                 style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
@@ -611,6 +636,50 @@
                                         <th>Hire Dte</th>
                                         <th>Position</th>
                                         <th>Tenure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        style="background-color: red !important; border: 2px solid white !important;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Total Apprentice  Modal -->
+    <div class="modal fade" id="totalaApprenticeModal" tabindex="-1" role="dialog" aria-labelledby="totalaApprenticeModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div>
+                        <h3 class="modal-title fs-6" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
+                    </div>
+                    <br>
+                    <input id='myInputtotalapprentice' type='text' placeholder="  Search...."
+                        style="  border: 2.5px solid #174634 !important;">
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-striped" id="totalapprenticetable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Department</th>
+                                        <th>Hire Dte</th>
+                                        <th>Position</th>
                                     </tr>
                                 </thead>
                                 <tbody>

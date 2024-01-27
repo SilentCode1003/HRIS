@@ -35,6 +35,26 @@ router.post('/load', (req, res) =>{
   }
 });
 
+router.post('/generatepayroll', (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql = ``;
+
+    
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+  }
+});
+
+
+
+
+
+
 
 // router.post('generatepayroll', (req, res) => {
 //   try {
@@ -61,12 +81,6 @@ router.post('/load', (req, res) =>{
 //     });
 //   }
 // });
-
-
-
-
-
-
 
 
 

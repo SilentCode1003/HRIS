@@ -96,159 +96,271 @@ router.post("/getapprentice", (req, res) => {
   }
 });
 
-
 router.post("/update", async (req, res) => {
-    try {
-        let employeeid = req.body.employeeid;
-        let jobstatus = req.body.jobstatus;
-        let hiredate = currentDate.format('YYYY-MM-DD');
+  try {
+    let employeeid = req.body.employeeid;
+    let jobstatus = req.body.jobstatus;
+    let hiredate = currentDate.format("YYYY-MM-DD");
 
-        console.log("Employee ID:", employeeid);
+    let newEmployeeId = await generateEmployeeId(currentYear, currentMonth);
+    console.log("New Employee ID:", newEmployeeId);
 
-        let newEmployeeId = await generateEmployeeId(currentYear, currentMonth);
-        console.log("New Employee ID:", newEmployeeId);
+    const existingEmployeeData = await fetchEmployeeData(employeeid);
 
-        // Fetch the existing employee data before the update
-        const existingEmployeeData = await fetchEmployeeData(employeeid);
+    if (!existingEmployeeData) {
+      return res.json({
+        msg: "error",
+        data: existingEmployeeData,
+      });
+    }
 
-        if (!existingEmployeeData) {
-            return res.json({
-                msg: "error",
-                data: "Employee data not found for the provided employeeId",
-            });
-        }
+    let insertEmployeeQuery = `INSERT INTO master_employee (me_id, me_firstname, me_middlename, me_lastname, me_birthday, me_gender, me_civilstatus, me_phone, me_email, me_hiredate, me_jobstatus, me_ercontactname, me_ercontactphone, me_department, me_position, me_address, me_profile_pic) VALUES (
+          '${newEmployeeId}',
+          '${existingEmployeeData.firstname}',
+          '${existingEmployeeData.middlename}',
+          '${existingEmployeeData.lastname}',
+          '${existingEmployeeData.birthday}',
+          '${existingEmployeeData.gender}',
+          '${existingEmployeeData.civilstatus}',
+          '${existingEmployeeData.phone}',
+          '${existingEmployeeData.email}',
+          '${hiredate}',
+          '${jobstatus}',
+          '${existingEmployeeData.ercontactname}',
+          '${existingEmployeeData.ercontactphone}',
+          '${existingEmployeeData.departmentName}',
+          '${existingEmployeeData.positionName}',
+          '${existingEmployeeData.address}',
+          '${existingEmployeeData.profilePicturePath}'
+      )`;
 
-        // Insert a new record into master_employee
-        let insertEmployeeQuery = `INSERT INTO master_employee (me_id, me_firstname, me_middlename, me_lastname, me_birthday, me_gender, me_civilstatus, me_phone, me_email, me_hiredate, me_jobstatus, me_ercontactname, me_ercontactphone, me_department, me_position, me_address, me_profile_pic) VALUES (
-            '${newEmployeeId}',
-            '${existingEmployeeData.firstname}',
-            '${existingEmployeeData.middlename}',
-            '${existingEmployeeData.lastname}',
-            '${existingEmployeeData.birthday}',
-            '${existingEmployeeData.gender}',
-            '${existingEmployeeData.civilstatus}',
-            '${existingEmployeeData.phone}',
-            '${existingEmployeeData.email}',
-            '${hiredate}',
-            '${jobstatus}',
-            '${existingEmployeeData.ercontactname}',
-            '${existingEmployeeData.ercontactphone}',
-            '${existingEmployeeData.departmentName}',
-            '${existingEmployeeData.positionName}',
-            '${existingEmployeeData.address}',
-            '${existingEmployeeData.profilePicturePath}'
-        )`;
+    console.log("Insert Employee Query:", insertEmployeeQuery);
 
-        console.log("Insert Employee Query:", insertEmployeeQuery);
+    mysql
+      .mysqlQueryPromise(insertEmployeeQuery)
+      .then(async (result) => {
+        console.log("Insert Employee Result:", result);
 
-        // Insert new record into master_employee
-        mysql.mysqlQueryPromise(insertEmployeeQuery)
-            .then(async (result) => {
-                console.log("Insert Employee Result:", result);
+        const { username, password } = generateUsernameAndPasswordforemployee({
+          me_firstname: existingEmployeeData.firstname,
+          me_lastname: existingEmployeeData.lastname,
+          me_id: newEmployeeId,
+          me_birthday: existingEmployeeData.birthday,
+        });
 
-                // Generate new username and password for the employee
-                const { username, password } = generateUsernameAndPasswordforemployee({
-                    me_firstname: existingEmployeeData.firstname,
-                    me_lastname: existingEmployeeData.lastname,
-                    me_id: newEmployeeId,
-                    me_birthday: existingEmployeeData.birthday,
-                });
+        Encrypter(password, async (encryptErr, encryptedPassword) => {
+          if (encryptErr) {
+            console.error("Error encrypting password: ", encryptErr);
+            return res.json({ msg: "encrypt_error" });
+          }
 
-                Encrypter(password, async (encryptErr, encryptedPassword) => {
-                    if (encryptErr) {
-                        console.error("Error encrypting password: ", encryptErr);
-                        return res.json({ msg: "encrypt_error" });
-                    }
+          const createBy = req.session.fullname; 
+          const createdate = currentDate.format("YYYY-MM-DD");
+          const accessType = 2; 
 
-                    const createBy = req.session.fullname; // Assuming user information is stored in session
-                    const currentDate = currentDate.format('YYYY-MM-DD');
-                    const accessType = 2; // Default access type
+          let insertUserQuery = `INSERT INTO master_user (
+                      mu_employeeid, 
+                      mu_username, 
+                      mu_password, 
+                      mu_accesstype, 
+                      mu_createby, 
+                      mu_createdate, 
+                      mu_status) VALUES (
+                      '${newEmployeeId}', '${username}', '${encryptedPassword}', '${accessType}', '${createBy}', '${createdate}', 'Active')`;
 
-                    // Save user record with encrypted password
-                    let insertUserQuery = `INSERT INTO master_user (
-                        mu_employeeid, 
-                        mu_username, 
-                        mu_password, 
-                        mu_accesstype, 
-                        mu_createby, 
-                        mu_createdate, 
-                        mu_status) VALUES (
-                        '${newEmployeeId}', '${username}', '${encryptedPassword}', '${accessType}', '${createBy}', '${currentDate}', 'Active')`;
+          console.log("Insert User Query:", insertUserQuery);
 
-                    console.log("Insert User Query:", insertUserQuery);
-
-                    mysql.mysqlQueryPromise(insertUserQuery)
-                        .then((result) => {
-                            console.log("Insert User Result:", result);
-
-                            res.json({
-                                msg: "success",
-                                data: result,
-                            });
-                        })
-                        .catch((error) => {
-                            console.error("Insert User Error:", error);
-                            res.json({
-                                msg: "error",
-                                data: error,
-                            });
-                        });
-                });
+          mysql
+            .mysqlQueryPromise(insertUserQuery)
+            .then((result) => {
+              console.log("Insert User Result:", result);
             })
             .catch((error) => {
-                console.error("Insert Employee Error:", error);
-                res.json({
-                    msg: "error",
-                    data: error,
-                });
+              console.error("Insert User Error:", error);
             });
-    } catch (error) {
-        console.error("Overall Error:", error);
-        res.json({
-            msg: "error",
-            data: error,
         });
-    }
+
+        let updateOldEmployeeQuery = `UPDATE master_employee SET me_jobstatus = 'Done Apprentice' WHERE me_id = '${employeeid}'`;
+
+        console.log("Update Old Employee Query:", updateOldEmployeeQuery);
+
+        mysql.mysqlQueryPromise(updateOldEmployeeQuery)
+        .then((result) => {
+          res.json({
+            msg: 'success',
+            data: result,
+          });
+        })
+        .catch((error) => {
+          res.json({
+            msg: 'error',
+            data: error,
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("Insert Employee Error:", error);
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    console.error("Overall Error:", error);
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
 });
 
 
-  async function saveUserRecord(req, res, newEmployeeId, username, encryptedPassword) {
-    try {
-      let createBy = req.session.fullname;
-      let currentDate = moment().format('YYYY-MM-DD');
-  
-      let insertUserData = [
-        newEmployeeId,
-        username,
-        encryptedPassword,
-        2,
-        createBy,
-        currentDate,
-        "Active", // Assuming 'active' is the default status
-      ];
-  
-      mysql.InsertTable("master_user", insertUserData, (err, result) => {
-        if (err) {
-          console.error("Error", err);
-          return res.json({ msg: 'insert_failed' });
-        }
-  
-        console.log(result);
+// router.post("/update", async (req, res) => {
+//     try {
+//         let employeeid = req.body.employeeid;
+//         let jobstatus = req.body.jobstatus;
+//         let hiredate = currentDate.format('YYYY-MM-DD');
 
-      });
-    } catch (error) {
-      console.error("Error saving user record: ", error);
-  
-      // Send the error response only once
-      if (!res.headersSent) {
-        res.json({ msg: "error", data: error });
-      }
-    }
-  }
-  
-  
+//         console.log("Employee ID:", employeeid);
 
+//         let newEmployeeId = await generateEmployeeId(currentYear, currentMonth);
+//         console.log("New Employee ID:", newEmployeeId);
 
+//         // Fetch the existing employee data before the update
+//         const existingEmployeeData = await fetchEmployeeData(employeeid);
+
+//         if (!existingEmployeeData) {
+//             return res.json({
+//                 msg: "error",
+//                 data: "Employee data not found for the provided employeeId",
+//             });
+//         }
+
+//         // Insert a new record into master_employee
+//         let insertEmployeeQuery = `INSERT INTO master_employee (me_id, me_firstname, me_middlename, me_lastname, me_birthday, me_gender, me_civilstatus, me_phone, me_email, me_hiredate, me_jobstatus, me_ercontactname, me_ercontactphone, me_department, me_position, me_address, me_profile_pic) VALUES (
+//             '${newEmployeeId}',
+//             '${existingEmployeeData.firstname}',
+//             '${existingEmployeeData.middlename}',
+//             '${existingEmployeeData.lastname}',
+//             '${existingEmployeeData.birthday}',
+//             '${existingEmployeeData.gender}',
+//             '${existingEmployeeData.civilstatus}',
+//             '${existingEmployeeData.phone}',
+//             '${existingEmployeeData.email}',
+//             '${hiredate}',
+//             '${jobstatus}',
+//             '${existingEmployeeData.ercontactname}',
+//             '${existingEmployeeData.ercontactphone}',
+//             '${existingEmployeeData.departmentName}',
+//             '${existingEmployeeData.positionName}',
+//             '${existingEmployeeData.address}',
+//             '${existingEmployeeData.profilePicturePath}'
+//         )`;
+
+//         console.log("Insert Employee Query:", insertEmployeeQuery);
+
+//         mysql.mysqlQueryPromise(insertEmployeeQuery)
+//             .then(async (result) => {
+//                 console.log("Insert Employee Result:", result);
+
+//                 // Generate new username and password for the employee
+//                 const { username, password } = generateUsernameAndPasswordforemployee({
+//                     me_firstname: existingEmployeeData.firstname,
+//                     me_lastname: existingEmployeeData.lastname,
+//                     me_id: newEmployeeId,
+//                     me_birthday: existingEmployeeData.birthday,
+//                 });
+
+//                 Encrypter(password, async (encryptErr, encryptedPassword) => {
+//                     if (encryptErr) {
+//                         console.error("Error encrypting password: ", encryptErr);
+//                         return res.json({ msg: "encrypt_error" });
+//                     }
+
+//                     const createBy = req.session.fullname; // Assuming user information is stored in session
+//                     const currentDate = currentDate.format('YYYY-MM-DD');
+//                     const accessType = 2; // Default access type
+
+//                     // Save user record with encrypted password
+//                     let insertUserQuery = `INSERT INTO master_user (
+//                         mu_employeeid,
+//                         mu_username,
+//                         mu_password,
+//                         mu_accesstype,
+//                         mu_createby,
+//                         mu_createdate,
+//                         mu_status) VALUES (
+//                         '${newEmployeeId}', '${username}', '${encryptedPassword}', '${accessType}', '${createBy}', '${currentDate}', 'Active')`;
+
+//                     console.log("Insert User Query:", insertUserQuery);
+
+//                     mysql.mysqlQueryPromise(insertUserQuery)
+//                         .then((result) => {
+//                             console.log("Insert User Result:", result);
+
+//                             res.json({
+//                                 msg: "success",
+//                                 data: result,
+//                             });
+//                         })
+//                         .catch((error) => {
+//                             console.error("Insert User Error:", error);
+//                             res.json({
+//                                 msg: "error",
+//                                 data: error,
+//                             });
+//                         });
+//                 });
+//             })
+//             .catch((error) => {
+//                 console.error("Insert Employee Error:", error);
+//                 res.json({
+//                     msg: "error",
+//                     data: error,
+//                 });
+//             });
+//     } catch (error) {
+//         console.error("Overall Error:", error);
+//         res.json({
+//             msg: "error",
+//             data: error,
+//         });
+//     }
+// });
+
+// async function saveUserRecord(req, res, newEmployeeId, username, encryptedPassword) {
+//   try {
+//     let createBy = req.session.fullname;
+//     let currentDate = moment().format('YYYY-MM-DD');
+
+//     let insertUserData = [
+//       newEmployeeId,
+//       username,
+//       encryptedPassword,
+//       2,
+//       createBy,
+//       currentDate,
+//       "Active", // Assuming 'active' is the default status
+//     ];
+
+//     mysql.InsertTable("master_user", insertUserData, (err, result) => {
+//       if (err) {
+//         console.error("Error", err);
+//         return res.json({ msg: 'insert_failed' });
+//       }
+
+//       console.log(result);
+
+//     });
+//   } catch (error) {
+//     console.error("Error saving user record: ", error);
+
+//     // Send the error response only once
+//     if (!res.headersSent) {
+//       res.json({ msg: "error", data: error });
+//     }
+//   }
+// }
 
 // router.post("/update", async (req, res) => {
 //   try {
@@ -345,8 +457,6 @@ router.post("/update", async (req, res) => {
 //     });
 //   }
 // });
-
-  
 
 // router.post("/update", async (req, res) => {
 //     try {

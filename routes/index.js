@@ -261,7 +261,7 @@ router.get("/countactive", (req, res) => {
         FROM 
         master_employee
         WHERE 
-        me_jobstatus IN ('regular', 'probitionary')`;
+        me_jobstatus IN ('regular', 'probitionary', 'apprentice')`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -584,6 +584,38 @@ router.get("/countbagapuro", (req, res) => {
   }
 });
 
+
+router.get("/countapprentice", (req, res) => {
+  try {
+    let sql = `    
+    SELECT COUNT(*) AS Apprentice
+    FROM master_employee
+    WHERE me_jobstatus = 'apprentice'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: {
+            ApprenticeCount: result[0].Apprentice,
+          },
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
 router.get("/getbday", (req, res) => {
   try {
     let sql = ` 
@@ -888,6 +920,36 @@ WHERE
     res.json({
       msg: "error",
       data: error,
+    });
+  }
+});
+
+router.get('/apprenticemodal', (req, res) => {
+  try {
+    let sql = `select
+    me_id, 
+    me_profile_pic,
+    concat(me_lastname,' ',me_firstname) as me_firstname,
+    md_departmentname as me_department,
+    me_hiredate,
+    mp_positionname as me_position
+    from master_employee
+    inner join master_department on master_employee.me_department = md_departmentid
+    inner join master_position on master_employee.me_position = mp_positionid
+    where me_jobstatus = 'apprentice'`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.error("Error :", err);
+      
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data:error,
     });
   }
 });

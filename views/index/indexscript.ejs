@@ -19,6 +19,7 @@
     loadtotalcablingCard();
     loadtotalcandidateCard();
     loadtotalbagapuroCard();
+    loadtotalapprenticeCard();
     searchEmployeeTable();
     searchRegularTable();
     searchprobaTable();
@@ -28,6 +29,7 @@
     searchcablingTable();
     searchcandidateTable();
     searchbagapuroTable();
+    searchapprenticeTable();
     GenerateAnouncement();
 
     //#endregion
@@ -69,6 +71,10 @@
 
     $(document).on('keyup', '#myInputtotalbagapuro', function () {
       searchbagapuroTable();
+    });
+
+    $(document).on('keyup', '#myInputtotalapprentice', function () {
+      searchapprenticeTable();
     });
 
 
@@ -553,6 +559,58 @@
       }
     }
 
+    //#Apprentice Modal
+    $(document).on("click", "#totalapprentice", function () {
+      $(`#totalapprenticetable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/apprenticemodal",
+        success: function (json) {
+
+          var finalData = [];
+          var data = json.data;
+          populatetotalapprenticetable(data);
+
+        },
+        error: function (xhr, status, error) {
+        },
+      });
+    });
+
+    function populatetotalapprenticetable(data) {
+      const tableBody = $('#totalapprenticetable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 6,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
 
     //#endregion
 
@@ -722,6 +780,24 @@
           if (result.msg === "success") {
             const totalBagapuro = result.data.BagapuroCount;
             $("#totalempbagapuro .h5").text(totalBagapuro);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    function loadtotalapprenticeCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countapprentice",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalApprentice = result.data.ApprenticeCount;
+            $("#totalempapprentice .h5").text(totalApprentice);
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -1693,6 +1769,33 @@
       input = document.getElementById("myInputtotalbagapuro");
       filter = input.value.toUpperCase();
       table = document.getElementById("totalbagapurotable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+
+    function searchapprenticeTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalapprentice");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalapprenticetable");
       tr = table.getElementsByTagName("tr");
 
       for (i = 1; i < tr.length; i++) {
