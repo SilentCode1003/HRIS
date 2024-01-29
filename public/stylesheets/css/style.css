@@ -209,6 +209,17 @@
   border: 2px solid #F5E0B3 !important;
 }
 
+#myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
+#myInputRegular, #myInputtotal, #myInputtotalcandidate, #myInputtotalbagapuro, #myInputtotalapprentice   {
+  margin-left:700px;
+  margin-right: 5px;
+  margin-top: 5px;
+  float: right;
+  width: 150px;
+  height: 40px;
+  border-radius: 8px;
+}
+
 
 #myInput2 {
   float: left;

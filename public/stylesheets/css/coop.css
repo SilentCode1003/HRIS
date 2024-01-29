@@ -467,7 +467,7 @@ tr:hover {
   color: #7a1818 !important;
 }
 #totalEmployeeCard,#regularEmployeeCard, #resignedEmployeeCard, #probationaryEmployeeCard,
-#totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro {
+#totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro, #totalempapprentice {
   background-image: url(/images/img/employee.jpg);
   box-shadow: 0 5px 8px #3d0404 !important;
 }

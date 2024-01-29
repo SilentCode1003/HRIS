@@ -91,7 +91,7 @@ router.post('/save', async (req, res) => {
     let ercontactname = req.body.ercontactname;
     let ercontactphone = req.body.ercontactphone;
     let lastcheckup = req.body.lastcheckup;
-    let incsurance = req.body.incsurance;
+    let insurance = req.body.insurance;
     let insurancenumber = req.body.insurancenumber;
     let data = [];
 
@@ -114,7 +114,7 @@ router.post('/save', async (req, res) => {
         ercontactname,
         ercontactphone,
         lastcheckup,
-        incsurance,
+        insurance,
         insurancenumber
       ]);
 

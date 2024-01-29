@@ -20,7 +20,7 @@ router.get("/", function (req, res, next) {
     accesstype: "Admin",
   });
 
-  // Validator(req, res, 'userslayout');
+  //Validator(req, res, 'userslayout');
 });
 
 module.exports = router;
