@@ -671,7 +671,7 @@ router.get("/totaladmin", (req, res) => {
     let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
-   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   CONCAT(me_lastname, ' ', me_firstname) AS firstname,
    me_phone AS phone,
    me_email AS email,
    mp_positionname AS position,
@@ -765,7 +765,7 @@ router.get("/totalcabling", (req, res) => {
     let sql = `SELECT
    me_profile_pic AS profilePicturePath,
    me_id AS newEmployeeId,
-   CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+   CONCAT(me_lastname, ' ', me_firstname) AS firstname,
    me_phone AS phone,
    me_email AS email,
    mp_positionname AS position,
