@@ -12,6 +12,8 @@
         LoadBdayFolks();
         GenerateAnouncement();
 
+        console.log('ID', employeeid);
+
         //#region maps
 
         const OFFICE_LOCATION_LAT = 14.337945;
@@ -23,22 +25,64 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        const officeIcon = L.icon({
-            iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32],
+        // const officeIcon = L.icon({
+        //     iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
+        //     iconSize: [32, 32],
+        //     iconAnchor: [16, 32],
+        //     popupAnchor: [0, -32],
+        // });
+
+        // const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
+        // officeMarker.bindPopup('Office Location').openPopup();
+
+        // let geofence;
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/geofencesettings/selectgeofence",
+        //     data: {
+        //         departmentid: departmentid,
+        //     },
+        //     success: function (result) {
+        //         let data = result.data;
+        //         $.each(data, (key, item) => {
+        //             geofence = +L.circle([item.latitude, item.longitude], {
+        //                 color: "red",
+        //                 fillColor: "#f03",
+        //                 fillOpacity: 0.3,
+        //                 radius: item.radius,
+        //                 departmentid: item.departmentid,
+        //             }).addTo(map);
+        //         });
+        //         //console.log(radius);
+        //     },
+        //     error: function (error) { },
+        // });
+
+        let geofence;
+        $.ajax({
+            type: "GET",
+            url: "/geofencesettings/load",
+            success: function (result) {
+                let data = result.data;
+                $.each(data, (key, item) => {
+                    geofence = +L.circle([item.latitude, item.longitude], {
+                        color: "red",
+                        fillColor: "#f03",
+                        fillOpacity: 0.3,
+                        radius: item.radius,
+                    }).addTo(map);
+                });
+            },
+            error: function (error) { },
         });
 
-        const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
-        officeMarker.bindPopup('Office Location').openPopup();
 
-        const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.3,
-            radius: 100
-        }).addTo(map);
+        // const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
+        //     color: 'red',
+        //     fillColor: '#f03',
+        //     fillOpacity: 0.3,
+        //     radius: 100
+        // }).addTo(map);
 
         function checkGeofence(userLocation) {
             const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
@@ -65,7 +109,7 @@
 
             const geofenceButton = document.getElementById('clockinbtn');
             if (checkGeofence(userLocation)) {
-               // console.log('User is inside the geofence.');
+                // console.log('User is inside the geofence.');
                 geofenceButton.style.display = 'block';
             } else {
                 //console.log('User is outside the geofence.');
