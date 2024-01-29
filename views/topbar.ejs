@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand topbar mb-4 static-top">
+<nav class="navbar navbar-expand topbar mb-4 static-top" id="topbar">
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -6,9 +6,9 @@
     </button>
 
     <!-- Topbar Search --> 
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
         <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+            <input type="text" class="form-control" placeholder="Search for..."
                 aria-label="Search" aria-describedby="basic-addon2">
                 <form>
                     <button class="btn-search-topbar" type="button">
@@ -48,7 +48,7 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <i class='bx bxs-bell-ring bx-tada bx-flip-horizontal' style='color:#ffd300'></i>
+                <i class='bx bxs-bell-ring bx-tada bx-flip-horizontal bell'></i>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter">3+</span>
             </a>
@@ -66,7 +66,7 @@
                     </div>
                     <div>
                         <div class="dropdown-text-item">December 12, 2019</div>
-                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                        <div class="text-truncate font-weight-bold">A new monthly report is ready to download!</div>
                     </div>
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -99,7 +99,7 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <i class='bx bxs-envelope bx-tada' style='color:#36c9ee' ></i>
+                <i class='bx bxs-envelope bx-tada envelope'></i>
                 <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter">7</span>
             </a>
@@ -163,33 +163,33 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small user-topbar">
                     <%= fullname%>
                 </span>
                 <img class="img-profile rounded-circle" src="data:image/jpg;base64,<%= image%>">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in profile-divider-db" aria-labelledby="userDropdown" >
+                <a class="dropdown-item profile-box-db" href="#">
+                    <i class='bx bxs-user mr-2 user-prof' style='color:#3bc00a'></i>
                     Profile
                 </a>
-                <a class="dropdown-item" href="/settings">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                <a class="dropdown-item profile-box-db" href="/settings">
+                    <i class='bx bx-cog mr-2' style='color:#59abf7'  ></i>
                     Settings
                 </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                <a class="dropdown-item profile-box-db" href="#">
+                    <i class='bx bx-notepad mr-2' style='color:#fb8524'  ></i>
                     Activity Log
                 </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                <div class="dropdown-divider profile-box-db"></div>
+                <a class="dropdown-item profile-box-db" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class='bx bx-log-out mr-2' style='color:#0f899e'  ></i>
                     Logout
                 </a>
             </div>
         </li>
 
-    </ul>
+    </ul>     
 
 </nav>

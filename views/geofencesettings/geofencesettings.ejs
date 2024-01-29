@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Geo-fence Settings</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+        <h3 class="title-card-table">Geo-fence Settings</h3>
         <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
            <b>Add Geo-fence</b> 
         </button>
@@ -39,17 +39,17 @@
     aria-hidden="true">
     <div class="modal-dialog modal-lg"> 
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Geo-Fence</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Geo-Fence</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <div class="row">
                     <div class="col-md-6">
                         <form>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="geofencename" name="geofencename"
+                                    <input type="text" class="form-control border-form-modal" id="geofencename" name="geofencename"
                                         placeholder="Geo-Fence Name">
                                     <label for="floatingInput">Geo-Fence Name</label>
                                 </div>
@@ -57,7 +57,7 @@
                             <br>
                             <div class="col">
                                 <div class="form-floating">
-                                    <select class="form-select" id="geofencedepartment" name="geofencedepartment"
+                                    <select class="form-select border-form-modal" id="geofencedepartment" name="geofencedepartment"
                                         aria-label="Floating label select example">
                                     </select>
                                     <label for="geofencedepartment">Department</label>
@@ -66,14 +66,14 @@
                             <br>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="number" class="form-control" id="radius" name="radius" placeholder="Radius">
+                                    <input type="number" class="form-control border-form-modal" id="radius" name="radius" placeholder="Radius">
                                     <label for="floatingInput">Radius</label>
                                 </div>
                             </div>
                             <br>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="number" class="form-control" id="longitude" name="longitude"
+                                    <input type="number" class="form-control border-form-modal" id="longitude" name="longitude"
                                         placeholder="Longitude">
                                     <label for="floatingInput">Longitude</label>
                                 </div>
@@ -81,7 +81,7 @@
                             <br>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="number" class="form-control" id="latitude" name="latitude"
+                                    <input type="number" class="form-control border-form-modal" id="latitude" name="latitude"
                                         placeholder="Latitude">
                                     <label for="floatingInput">Latitude</label>
                                 </div>
@@ -89,7 +89,7 @@
                             <br>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="location" name="location"
+                                    <input type="text" class="form-control border-form-modal" id="location" name="location"
                                         placeholder="Location">
                                     <label for="floatingInput">Location</label>
                                 </div>
@@ -103,9 +103,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="geofencesavebutton" name="geofencesavebutton">Save</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="geofencesavebutton" name="geofencesavebutton">Save</button>
             </div>
         </div>
     </div>

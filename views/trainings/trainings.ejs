@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Training</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Training</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#trainingmodal">
         <b>+ Add</b>
       </button>
@@ -38,9 +38,8 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-cog' style='color:#758df5; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">TRAINING</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">TRAINING</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
@@ -54,8 +53,7 @@
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
+                            <select class="form-select border-form-modal" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example">
                               <option selected>Choose....</option>
                             </select>
                             <label for="floatingSelectGrid">Employee name</label>
@@ -64,16 +62,14 @@
                     <br>
                     <div class="col">
                       <div class="form-floating">
-                      <input type="date" class="form-control" id="trainingdatestarted" name="trainingdatestarted"
-                      style="border: 2.5px solid #174634 !important;">
+                      <input type="date" class="form-control border-form-modal" id="trainingdatestarted" name="trainingdatestarted">
                       <label for="floatingInput">Date Started</label>
                       </div>
                   </div>
                   <br>
                   <div class="col">
                     <div class="form-floating">
-                    <input type="date" class="form-control" id="trainingdatefinished" name="trainingdatefinished"
-                    style="border: 2.5px solid #174634 !important;">
+                    <input type="date" class="form-control border-form-modal" id="trainingdatefinished" name="trainingdatefinished">
                     <label for="floatingInput">Date Finished</label>
                     </div>
                 </div>
@@ -89,10 +85,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="trainingsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="trainingsavebtn">Save</button>
         </div>
       </div>
     </div>

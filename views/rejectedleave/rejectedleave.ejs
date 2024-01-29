@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Rejected Leave</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Rejected Leave</h3>
       <input id='myInput2' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
@@ -15,7 +15,7 @@
                       <th>Leave Type</th>
                       <th>Date Started</th>
                       <th>Date Finished</th>
-                      <th>Reason</th>
+                      <th class="col-26">Reason</th>
                       <th>Applied Date</th>
                       <th class="col-sm-1">Action</th>
                     </tr>
@@ -27,24 +27,24 @@
     </div>
 </div>
 
-<!--Modal-->
+<!-- Rejected Action Modal-->
 <div class="modal fade" id="rejectedleavemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Leave</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-1" id="exampleModalLabel">Leave</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body">
         <form>
           <div class="row g-3">
           <div class="col">
             <label for="editfname" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="rejectedleavename" name="rejectedleavename" value="Wendell Blanco" disabled>
+            <input type="text" class="form-control border-form-modal" id="rejectedleavename" name="rejectedleavename" value="Wendell Blanco" disabled>
           </div>
           <div class="col">
             <label for="editlname" class="form-label">Email</label>
-            <input type="text" class="form-control" id="approvedleaveemail" name="approvedleaveemail" value="Blanco@gmail.com" disabled>
+            <input type="text" class="form-control border-form-modal" id="approvedleaveemail" name="approvedleaveemail" value="Blanco@gmail.com" disabled>
           </div>
           <div class="col">
             <label for="editbday" class="form-label">Gender</label>

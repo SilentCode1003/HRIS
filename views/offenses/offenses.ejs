@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Offenses</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
   <div class="card-header">
+    <h3 class="title-card-table">Offenses</h3>
     <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#offensesmodal">
       <b>+ Add</b>
     </button>
@@ -35,16 +35,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <i class='bx bxs-hand' style='color:#f51a1e; font-size: 50px; margin: 3px;'></i>
-        <h3 class="modal-title" id="exampleModalLabel">OFFENSES</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3 class="modal-title fs-5" id="exampleModalLabel">OFFENSES</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
         <form>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="offensesname" name="offensesname"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <input type="text" class="form-control border-form-modal" id="offensesname" name="offensesname"
+                placeholder="Department Name">
               <label for="floatingInput">Offense Name</label>
             </div>
           </div>
@@ -52,10 +51,8 @@
         </form>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-        border: 2px solid white !important;">Close</button>
-        <button type="button" class="btn btn-primary" id="offensessavebtn" style="background-color: green !important;
-        border: 2px solid white !important;">Save</button>
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="offensessavebtn">Save</button>
       </div>
     </div>
   </div>

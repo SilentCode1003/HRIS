@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Health Records</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+        <h3 class="title-card-table">Health Records</h3>
         <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#healthrecordmodal">
             <b>+ Add</b>
           </button>
@@ -36,17 +36,15 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-            <i class='bx bxs-donate-heart' style='color:#f85858; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">HEALTH RECORD</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">HEALTH RECORD</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
                 <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="healthrecordemployeeid" name="healthrecordemployeeid" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
+                            <select class="form-select border-form-modal" id="healthrecordemployeeid" name="healthrecordemployeeid" aria-label="Floating label select example">
                             </select>
                             <label for="floatingSelectGrid">Employee ID</label>
                           </div>
@@ -69,8 +67,7 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="healthrecordmedicalcondition" name="healthrecordmedicalcondition" placeholder="First Name"
-                        style=" border: 2.5px solid #174634 !important;">
+                        <input type="text" class="form-control border-form-modal" id="healthrecordmedicalcondition" name="healthrecordmedicalcondition" placeholder="First Name">
                         <label for="floatingInput">Medical Condition</label>
                         </div>
                     </div>
@@ -79,16 +76,14 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="healthrecordprescribemedication" name="healthrecordprescribemedication" placeholder="First Name"
-                        style=" border: 2.5px solid #174634 !important;">
+                        <input type="text" class="form-control border-form-modal" id="healthrecordprescribemedication" name="healthrecordprescribemedication" placeholder="First Name">
                         <label for="floatingInput">Prescribe Medication</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="healthrecordlastcheckup" name="healthrecordlastcheckup" placeholder="First Name"
-                        style=" border: 2.5px solid #174634 !important;">
+                        <input type="date" class="form-control border-form-modal" id="healthrecordlastcheckup" name="healthrecordlastcheckup" placeholder="First Name">
                         <label for="floatingInput">Last Check Up</label>
                         </div>
                     </div>
@@ -97,16 +92,14 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="healthrecordinsurance" name="healthrecordinsurance" placeholder="First Name"
-                        style=" border: 2.5px solid #174634 !important;">
+                        <input type="text" class="form-control border-form-modal" id="healthrecordinsurance" name="healthrecordinsurance" placeholder="First Name">
                         <label for="floatingInput">Insurance</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="healthrecordinsurancenumber" name="healthrecordinsurancenumber" placeholder="First Name"
-                        style=" border: 2.5px solid #174634 !important;">
+                        <input type="text" class="form-control border-form-modal" id="healthrecordinsurancenumber" name="healthrecordinsurancenumber" placeholder="First Name">
                         <label for="floatingInput">Insurance Number</label>
                         </div>
                     </div>
@@ -115,16 +108,14 @@
                     <div class="row g-3">
                         <div class="col">
                             <div class="form-floating">
-                            <input type="text" class="form-control" id="healthrecordemergencycontactname" name="healthrecordemergencycontactname" placeholder="First Name"
-                            style=" border: 2.5px solid #174634 !important;">
+                            <input type="text" class="form-control border-form-modal" id="healthrecordemergencycontactname" name="healthrecordemergencycontactname" placeholder="First Name">
                             <label for="floatingInput">Emergency Contact Name</label>
                             </div>
                         </div>
                         <br>
                         <div class="col">
                             <div class="form-floating">
-                            <input type="text" class="form-control" id="healthrecordemergencycontactnumber" name="healthrecordemergencycontactnumber" placeholder="First Name"
-                            style=" border: 2.5px solid #174634 !important;">
+                            <input type="text" class="form-control border-form-modal" id="healthrecordemergencycontactnumber" name="healthrecordemergencycontactnumber" placeholder="First Name">
                             <label for="floatingInput">Emergency Contact Number</label>
                             </div>
                         </div>
@@ -133,10 +124,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="healthsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="healthsavebtn">Save</button>
         </div>
       </div>
     </div>
