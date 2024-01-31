@@ -1149,7 +1149,7 @@
           .then((willApprove) => {
             if (willApprove) {
               $.ajax({
-                type: "POST", 
+                type: "POST",
                 url: "/allleave/update",
                 data: {
                   leaveid: id,
@@ -1205,7 +1205,7 @@
             var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
-            action.id = "editCABtn"; 
+            action.id = "editCABtn";
             action.className = "btn text-primary view-btn"; // Use a class
             action.setAttribute("data-bs-toggle", "modal");
             action.setAttribute("data-bs-target", "#pendingcamodal");
@@ -1816,6 +1816,167 @@
         }
       }
     }
+    //#endregion
+
+    //#region geofence map
+
+    const OFFICE_LOCATION_LAT = 14.337945;
+    const OFFICE_LOCATION_LNG = 121.060511;
+
+    const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // const officeIcon = L.icon({
+    //     iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
+    //     iconSize: [32, 32],
+    //     iconAnchor: [16, 32],
+    //     popupAnchor: [0, -32],
+    // });
+
+    // const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
+    // officeMarker.bindPopup('Office Location').openPopup();
+
+    // let geofence;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/geofencesettings/selectgeofence",
+    //     data: {
+    //         departmentid: departmentid,
+    //     },
+    //     success: function (result) {
+    //         let data = result.data;
+    //         $.each(data, (key, item) => {
+    //             geofence = +L.circle([item.latitude, item.longitude], {
+    //                 color: "red",
+    //                 fillColor: "#f03",
+    //                 fillOpacity: 0.3,
+    //                 radius: item.radius,
+    //                 departmentid: item.departmentid,
+    //             }).addTo(map);
+    //         });
+    //         //console.log(radius);
+    //     },
+    //     error: function (error) { },
+    // });
+
+    let geofence;
+    $.ajax({
+      type: "GET",
+      url: "/geofencesettings/load",
+      success: function (result) {
+        let data = result.data;
+        $.each(data, (key, item) => {
+          geofence = +L.circle([item.latitude, item.longitude], {
+            color: "red",
+            fillColor: "#f03",
+            fillOpacity: 0.3,
+            radius: item.radius,
+          }).addTo(map);
+        });
+        console.log('data',data);
+      },
+      error: function (error) { },
+    });
+
+    // let geofence;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/geofencesettings/selectgeofence",
+    //     data: {
+    //         departmentid: departmentid,
+    //     },
+    //     success: function (result) {
+    //         let data = result.data;
+    //         $.each(data, (key, item) => {
+    //             geofence = +L.circle([item.latitude, item.longitude], {
+    //                 color: "red",
+    //                 fillColor: "#f03",
+    //                 fillOpacity: 0.3,
+    //                 radius: item.radius,
+    //                 departmentid: item.departmentid,
+    //             }).addTo(map);
+    //         });
+    //         //console.log(radius);
+    //     },
+    //     error: function (error) { },
+    // });
+
+
+    // const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
+    //     color: 'red',
+    //     fillColor: '#f03',
+    //     fillOpacity: 0.3,
+    //     radius: 100
+    // }).addTo(map);
+
+    // function checkGeofence(userLocation) {
+    //   const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
+    //   const isInside = userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
+    //   //console.log('User is inside the geofence:', isInside);
+    //   return isInside;
+    // }
+
+    // function updateLocationOnMap(position) {
+    //   userLocation = {
+    //     lat: position.coords.latitude,
+    //     lng: position.coords.longitude
+    //   };
+
+    //   // Clear previous markers
+    //   map.eachLayer((layer) => {
+    //     if (layer instanceof L.Marker) {
+    //       layer.remove();
+    //     }
+    //   });
+
+    //   const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
+    //   userMarker.bindPopup(`My Location`).openPopup();
+
+    //   const geofenceButton = document.getElementById('clockinbtn');
+    //   if (checkGeofence(userLocation)) {
+    //     // console.log('User is inside the geofence.');
+    //     geofenceButton.style.display = 'block';
+    //   } else {
+    //     //console.log('User is outside the geofence.');
+    //     geofenceButton.style.display = 'block';
+    //   }
+    // }
+
+    // function handleError(error) {
+    //   console.error(`Error getting user location: ${error.message}`, error);
+
+    //   if (error.code === error.PERMISSION_DENIED) {
+    //     notifyUserToEnableLocation();
+    //   }
+    // }
+
+    // function notifyUserToEnableLocation() {
+    //   if ('Notification' in window) {
+    //     if (Notification.permission !== 'denied') {
+    //       Notification.requestPermission().then(permission => {
+    //         if (permission === 'granted') {
+    //           new Notification('Enable Location Services', {
+    //             body: 'Please enable location services to use this feature.',
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
+    // }
+
+    // const watchId = navigator.geolocation.watchPosition(
+    //   updateLocationOnMap,
+    //   handleError,
+    //   {
+    //     enableHighAccuracy: true,
+    //     maximumAge: 30000,
+    //     timeout: 27000
+    //   }
+    // );
+
     //#endregion
 
   });

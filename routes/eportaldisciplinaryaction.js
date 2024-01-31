@@ -67,7 +67,8 @@ router.post('/loadforapp',(req , res) => {
      LEFT JOIN master_offense ON offense_disciplinary_actions.oda_offenseid = mo_offenseid
      LEFT JOIN master_disciplinary_action ON offense_disciplinary_actions.oda_actionid = mda_actionid
      LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid
-   WHERE oda_employeeid = '${employeeid}'`;
+   WHERE oda_employeeid = '${employeeid}'
+   order by oda_disciplinaryid desc`;
 
     mysql.Select(sql, 'Offense_Disciplinary_Actions', (err, result) => {
       if (err) console.error('Error: ', err);
