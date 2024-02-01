@@ -76,12 +76,12 @@ router.post('/generatepayroll', (req, res) => {
                 (SELECT 0 AS a UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
         ) dates
     CROSS JOIN
-        (SELECT DISTINCT me_id FROM master_employee) e
+        (select * from master_employee where me_jobstatus not in ('end_of_contract','resigned','terminated')) e
     LEFT JOIN
         master_attendance ma ON dates.date_value = ma.ma_attendancedate AND e.me_id = ma.ma_employeeid
     WHERE
         dates.date_value BETWEEN '${startdate}' AND '${enddate}'
-    ORDER BY gp_attendancedate DESC;
+    ORDER BY gp_attendancedate DESC
     `;
 
     mysql.mysqlQueryPromise(sql)
@@ -98,7 +98,7 @@ router.post('/generatepayroll', (req, res) => {
       });
     })
   } catch (error) {
-    res.json({
+    res.json({ 
       msg: 'error',
       data: error,
     });

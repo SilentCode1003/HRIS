@@ -725,13 +725,13 @@ tr:hover {
 }
 #totalEMP, #totalregularEMP, #totalprobiEMP, #totalresignedEMP,
  #totaladminEMP, #totalitEMP, #totalcablingEMP,
-#totalcandidate, #totalbagapuro {
+#totalcandidate, #totalbagapuro, #totalapprentice {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }
 #totalEMP:hover, #totalregularEMP:hover, #totalprobiEMP:hover, #totalresignedEMP:hover,
  #totaladminEMP:hover, #totalitEMP:hover, #totalcablingEMP:hover,
-  #totalcandidate:hover, #totalbagapuro:hover {
+  #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover {
   transform: scale(1.1);
 }
 .db-wholecard {

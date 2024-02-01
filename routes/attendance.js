@@ -92,23 +92,25 @@ router.post("/getloadforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `       
-        SELECT
-        CONCAT(me_lastname, " ", me_firstname) as employeeid,
-        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
-        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
-        DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
-        DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
-        ma_devicein as devicein,
-        ma_deviceout as deviceout,
-        CONCAT(
-        FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
-        FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
-        ) AS totalhours
-        FROM master_attendance
-        INNER JOIN master_employee ON ma_employeeid = me_id
-        where ma_employeeid='${employeeid}'
-        ORDER BY ma_attendancedate DESC
-        LIMIT 2`;
+    SELECT
+    CONCAT(me_lastname, " ", me_firstname) as employeeid,
+    TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+    TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
+    ma_devicein as devicein,
+    ma_deviceout as deviceout,
+    mgs_geofencename as geofencename,
+    CONCAT(
+    FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+    FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+    ) AS totalhours
+    FROM master_attendance
+    INNER JOIN master_employee ON ma_employeeid = me_id
+    LEFT JOIN master_geofence_settings ON me_department = mgs_id
+    where ma_employeeid='${employeeid}'
+    ORDER BY ma_attendancedate DESC
+    limit 2`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -134,22 +136,24 @@ router.post("/filterforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `       
-        SELECT
-        CONCAT(me_lastname, " ", me_firstname) as employeeid,
-        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
-        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
-        DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
-        DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
-        ma_devicein as devicein,
-        ma_deviceout as deviceout,
-        CONCAT(
-        FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
-        FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
-        ) AS totalhours
-        FROM master_attendance
-        INNER JOIN master_employee ON ma_employeeid = me_id
-        where ma_employeeid='${employeeid}'
-        ORDER BY ma_attendancedate DESC`;
+    SELECT
+    CONCAT(me_lastname, " ", me_firstname) as employeeid,
+    TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+    TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
+    ma_devicein as devicein,
+    ma_deviceout as deviceout,
+    mgs_geofencename as geofencename,
+    CONCAT(
+    FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+    FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+    ) AS totalhours
+    FROM master_attendance
+    INNER JOIN master_employee ON ma_employeeid = me_id
+    LEFT JOIN master_geofence_settings ON me_department = mgs_id
+    where ma_employeeid='${employeeid}'
+    ORDER BY ma_attendancedate DESC`;
 
     mysql
       .mysqlQueryPromise(sql)

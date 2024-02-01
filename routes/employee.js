@@ -947,6 +947,45 @@ router.post("/gettraining", (req, res) => {
   }
 });
 
+router.post("/gettrainingforapp", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = ` select
+    me_id as employeeid,
+    mt_trainingid as trainingid, 
+    mt_name as name,
+    mt_startdate as startdate,
+    mt_enddate as enddate,
+    mt_location as location,
+    mt_status as status
+    from master_training 
+    inner join master_employee on mt_employeeid = me_id
+    where mt_employeeid = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
+
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
 router.post("/getdisciplinary", (req, res) => {
   try {
     let employeeid = req.body.employeeid;

@@ -616,72 +616,64 @@ router.get("/countapprentice", (req, res) => {
   }
 });
 
-router.get("/getbday", (req, res) => {
+
+router.get('/getbday' , (req, res)=> {
   try {
-    let sql = ` 
-    SELECT 
-    me_profile_pic AS profilePicturePath,
-    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-    DATE_FORMAT(me_birthday, '%M %e') AS birthday
+    let sql =  ` SELECT 
+    me_profile_pic,
+    CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
   FROM 
     master_employee
   WHERE 
     MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND me_jobstatus IN ('regular','probitionary')
+    AND me_jobstatus IN ('regular','probitionary','apprentice')
   ORDER BY 
     me_birthday`;
 
-   mysql.mysqlQueryPromise(sql)
-   .then((result) => {
-    res.json({
-      msg: 'success',
-      data: result,
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.log("Error" , err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
     });
-   })
-   .catch((error) => {
+  } catch (error) {
     res.json({
-      msg: 'error',
+      msg:'error',
       data: error,
     });
-   })
-    
-  } catch (error) {
-    console.log(error);
   }
 });
 
-router.get("/getbdaytoday", (req, res) => {
+router.get('/getbdaytoday' , (req, res)=> {
   try {
-    let sql = ` 
-    SELECT 
-    me_profile_pic AS profilePicturePath,
-    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-    DATE_FORMAT(me_birthday, '%M %e') AS birthday
-  FROM 
+    let sql =`SELECT 
+    me_profile_pic,
+    CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
+FROM 
     master_employee
-  WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND me_jobstatus IN ('regular','probitionary')
-  ORDER BY 
+WHERE 
+    DAY(me_birthday) = DAY(CURRENT_DATE) 
+    AND me_jobstatus IN ('regular', 'probitionary', 'apprentice')
+ORDER BY 
     me_birthday`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        console.log(result);
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.log("Error" , err);
+
+      res.json({
+        msg:'success',
+        data: result,
       });
+    });
   } catch (error) {
-    console.log(error);
+    res.json({
+      msg:'error',
+      data: error,
+    });
   }
 });
 
