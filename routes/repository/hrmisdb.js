@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('1aeea9d26494285ed1421cbaa8f13131', (err, encrypted) => {
+Decrypter('def0bfa8157a1400cf18027a613bdb4295969612d4cd5585f885ab1d7f76c1fa', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 })
@@ -191,6 +191,14 @@ exports.Select = (sql, table, callback) => {
 
       if (table == "Salary_History") {
         callback(null, model.Salary_History(results));
+      }
+
+      if (table == "Ojt_Attendance_Logs") {
+        callback(null, model.Ojt_Attendance_Logs(results));
+      }
+
+      if (table == "Ojt_Attendance") {
+        callback(null, model.Ojt_Attendance(results));
       }
     });
   } catch (error) {}
@@ -768,6 +776,22 @@ exports.InsertTable = (tablename, data, callback) => {
       gd_amount,
       gd_period,
       gd_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "ojt_attendance") {
+    let sql = `INSERT INTO ojt_attendance(
+        oa_ojtid,
+        oa_attendancedate,
+        oa_clockin,
+        oa_latitudein,
+        oa_longitudein,
+        oa_devicein) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

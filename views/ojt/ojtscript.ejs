@@ -40,8 +40,8 @@
               var imgElement = document.createElement("img");
               imgElement.src = "data:image/jpg;base64," + item.image;
               imgElement.alt = "Profile Image";
-              imgElement.style.width = "150px";
-              imgElement.style.height = "150px";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
 
 
               finalData.push({
@@ -50,7 +50,9 @@
                 Name: item.Name,
                 DateStarted: item.DateStarted,
                 TotalHours: item.TotalHours,
+                AcumulatedHours: item.AcumulatedHours,
                 RemainingHours: item.RemainingHours,
+                // EndDate: item.EndDate,
                 EndDate: new Date(item.EndDate).toLocaleDateString(),
                 Status: item.Status,
                 action: action,
@@ -72,6 +74,7 @@
           { data: "Name" },
           { data: "DateStarted" },
           { data: "TotalHours" },
+          { data: "AcumulatedHours" },
           { data: "RemainingHours" },
           { data: "EndDate" },
           { data: "Status" },
@@ -159,8 +162,8 @@
         message += "DESCRIPTION ";
       }
 
-      if (hours == "") {
-        message += "DESCRIPTION ";
+      if (hours != "") {
+        hours = convertToHoursFormat(hours);
       }
 
       if (message !== "") {
@@ -379,8 +382,8 @@
         message += "startdate is required. ";
       }
 
-      if (hours === "") {
-        message += "hours is required. ";
+      if (hours !== "") {
+        hours = convertToHoursFormat(hours);
       }
 
       if (message !== "") {
@@ -435,6 +438,27 @@
         });
       }
     });
+
+    function convertToHoursFormat(hours) {
+    if (isNaN(hours)) {
+        return 'Invalid input';
+    }
+
+    // Convert the number to an integer
+    hours = parseInt(hours);
+
+    // Calculate hours and minutes
+    const formattedHours = Math.floor(hours);
+    const minutes = Math.round((hours - formattedHours) * 60);
+
+    // Format the result as HH:mm
+    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+    return formattedTime;
+    }
+
+    const formattedTime = convertToHoursFormat(inputHours);
+    console.log(formattedTime); 
 
     $(document).on("change", "#ojtprofileimage", function (e) {
       const input = document.getElementById("ojtprofileimage");

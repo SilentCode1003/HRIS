@@ -1,30 +1,34 @@
-const mysql = require("./repository/hrmisdb");
-var express = require("express");
-const { Validator } = require("./controller/middleware");
+const mysql = require('./repository/hrmisdb');
+const moment = require('moment');
+var express = require('express');
+const { ValidatorforOjt } = require('./controller/middleware');
+const { Encrypter } = require('./repository/crytography');
+const { generateUsernameAndPasswordforOjt } = require("./helper");
 var router = express.Router();
-const bodyParser = require("body-parser");
-const moment = require("moment");
-const { Attendance_Logs } = require("./model/hrmisdb");
+const currentDate = moment();
+
+const currentYear = moment().format("YYYY");
+const currentMonth = moment().format("MM");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  // res.render('eportalindexlayout', { title: 'Express' });
-  Validator(req, res, "eportalindexlayout");
+router.get('/', function(req, res, next) {
+  //res.render('ojtindexlayout', { title: 'Express' });
+  ValidatorforOjt(req, res, 'ojtindexlayout');
 });
 
 module.exports = router;
 
-function getLatestLog(employeeId) {
+function getLatestLog(ojtid) {
   return new Promise((resolve, reject) => {
     const query = `
-      SELECT *
-      FROM attendance_logs
-      WHERE al_employeeid = '${employeeId}'
-      ORDER BY al_logdatetime DESC
-      LIMIT 1;
+    SELECT *
+    FROM ojt_attendance_logs
+    WHERE oal_ojtid = '${ojtid}'
+    ORDER BY oal_logdatetime DESC
+    LIMIT 1;
   `;
 
-    mysql.Select(query, "Attendance_Logs", (err, result) => {
+    mysql.Select(query, "Ojt_Attendance_Logs", (err, result) => {
       if (err) reject(err);
       resolve(result);
     });
@@ -40,11 +44,11 @@ function getDeviceInformation(req) {
 }
 
 router.post("/latestlog", (req, res) => {
-  const employeeid = req.body.employeeid;
+  const ojtid = req.body.ojtid;
 
-  console.log(employeeid);
+  console.log(ojtid);
 
-  getLatestLog(employeeid)
+  getLatestLog(ojtid)
     .then((latestLog) => {
       res.json({
         message: "success",
@@ -58,24 +62,12 @@ router.post("/latestlog", (req, res) => {
     );
 });
 
-
-router.post("/latestlogforapp", (req, res) => {
-  const employeeId = req.body.employeeid;
-
-  getLatestLog(employeeId)
-    .then((latestLog) => res.json(latestLog))
-    .catch(() =>
-      res
-        .status(500)
-        .json({ status: "error", message: "Failed to fetch latest log." })
-    );
-});
-
-
 router.post("/clockin", (req, res) => {
-  const employee_id = req.body.employeeid;
+  const ojt_id = req.body.ojtid;
 
-  if (!employee_id) {
+  console.log('id', ojt_id);
+
+  if (!ojt_id) {
     return res.status(401).json({
       status: "error",
       message: "Unauthorized. Employee not logged in.",
@@ -86,21 +78,23 @@ router.post("/clockin", (req, res) => {
   const attendancedate = moment().format("YYYY-MM-DD");
   const devicein = getDeviceInformation(req);
 
+  console.log(latitude,longitude);
+
   const checkExistingClockInQuery = `
-    SELECT ma_employeeid
-    FROM master_attendance
-    WHERE ma_employeeid = '${employee_id}'
-      AND ma_attendancedate = '${attendancedate}'
-      AND ma_clockin IS NOT NULL
-  `;
+  SELECT oa_ojtid
+  FROM ojt_attendance
+  WHERE oa_ojtid = '${ojt_id}'
+  AND oa_attendancedate = '${attendancedate}'
+  AND oa_clockin IS NOT NULL`;
+
+  console.log('sql', checkExistingClockInQuery);
 
   const checkMissingClockOutQuery = `
-    SELECT ma_employeeid
-    FROM master_attendance
-    WHERE ma_employeeid = '${employee_id}'
-      AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
-      AND ma_clockout IS NULL
-  `;
+  SELECT oa_ojtid
+  FROM ojt_attendance
+  WHERE oa_ojtid = '${ojt_id}'
+  AND oa_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
+  AND oa_clockin IS NULL`;
 
 
   const executeSequentialQueries = (queries) =>
@@ -130,7 +124,7 @@ router.post("/clockin", (req, res) => {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const attendanceData = [
           [
-            employee_id,
+            ojt_id,
             attendancedate,
             clockinDateTime,
             latitude,
@@ -139,8 +133,10 @@ router.post("/clockin", (req, res) => {
           ],
         ];
 
+        //console.log('data',attendanceData);
+
         mysql.InsertTable(
-          "master_attendance",
+          "ojt_attendance",
           attendanceData,
           (err, result) => {
             if (err) {
@@ -172,38 +168,40 @@ router.post("/clockin", (req, res) => {
 
 
 router.post("/clockout", (req, res) => {
-  const employee_id = req.body.employeeid;
+  const ojt_id = req.body.ojtid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
+  console.log(ojt_id);
+
   const checkExistingClockInQuery = `
-    SELECT ma_employeeid, ma_attendancedate
-    FROM master_attendance
-    WHERE ma_employeeid = '${employee_id}'
-      AND ma_clockin IS NOT NULL
-      AND ma_clockout IS NULL
-    ORDER BY ma_attendancedate DESC
-    LIMIT 1
+  SELECT oa_ojtid, oa_attendancedate
+  FROM ojt_attendance
+  WHERE oa_ojtid = '${ojt_id}'
+    AND oa_clockin IS NOT NULL
+    AND oa_clockout IS NULL
+  ORDER BY oa_attendancedate DESC
+  LIMIT 1
+    
   `;
 
   mysql
     .mysqlQueryPromise(checkExistingClockInQuery)
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
-        const { ma_attendancedate } = resultClockIn[0];
+        const { oa_attendancedate } = resultClockIn[0];
         const deviceout = getDeviceInformation(req);
 
         const updateQuery = `
-          UPDATE master_attendance
-          SET
-            ma_clockout = '${clockoutTime}',
-            ma_latitudeout = '${latitude}',
-            ma_longitudeout = '${longitude}',
-            ma_deviceout = '${deviceout}'
-          WHERE
-            ma_employeeid = '${employee_id}'
-            AND ma_attendancedate = '${ma_attendancedate}'
-        `;
+        UPDATE ojt_attendance
+        SET
+          oa_clockout = '${clockoutTime}',
+          oa_latitudeout = '${latitude}',
+          oa_longitudeout = '${longitude}',
+          oa_deviceout = '${deviceout}'
+        WHERE
+          oa_ojtid = '${ojt_id}'
+          AND oa_attendancedate = '${oa_attendancedate}'`;
 
         mysql
           .Update(updateQuery)
@@ -240,17 +238,17 @@ router.post("/clockout", (req, res) => {
     });
 });
 
-
 router.post('/emplogs', (req, res) => {
   try {
-    let = employeeid = req.body.employeeid;
-    let sql = `   SELECT
-    DATE_FORMAT(al_logdatetime, '%Y-%m-%d') AS logdate,
-    al_logtype as logtype,
-    TIME(al_logdatetime) AS logtime
-    FROM attendance_logs
-    WHERE al_employeeid = '${employeeid}'
-    order by al_logdatetime desc`;
+    let = ojtid = req.body.ojtid;
+    let sql = `        
+    SELECT
+ DATE_FORMAT(oal_logdatetime, '%Y-%m-%d') AS logdate,
+ oal_logtype as logtype,
+ TIME(oal_logdatetime) AS logtime
+ FROM ojt_attendance_logs
+ WHERE oal_ojtid = '${ojtid}'
+ order by oal_logdatetime desc`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
@@ -272,3 +270,4 @@ router.post('/emplogs', (req, res) => {
     });
   }
 });
+

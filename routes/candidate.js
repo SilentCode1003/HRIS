@@ -19,7 +19,7 @@ router.get('/load', (req , res) => {
     let sql = `SELECT
     me_profile_pic AS image,
     me_id AS id,
-    CONCAT(me_lastname, '', me_firstname) AS name,
+    CONCAT(me_lastname, ' ', me_firstname) AS name,
     md_departmentname AS me_department,
     me_hiredate AS hiredate,
     CONCAT(
@@ -34,7 +34,7 @@ router.get('/load', (req , res) => {
     FROM master_employee
     left join master_department md ON master_employee.me_department = md_departmentid
     WHERE me_jobstatus = 'probitionary'
-    AND DATEDIFF(CURDATE(), me_hiredate) >= 180`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
