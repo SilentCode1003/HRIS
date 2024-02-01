@@ -1,5 +1,6 @@
 <script>
   let base64String = "";
+  let imageBase64Stringsep = "";
   let ojtid = "";
 
   $(document).ready(function () {
@@ -107,6 +108,8 @@
       let department = $("#ojtdepartment").val();
       let startdate = $("#ojtstartdate").val();
       let hours = $("#ojthours").val();
+
+  
 
       var message = "";
 
@@ -298,7 +301,7 @@
               $("#editojtschool").val(item.school);
               $("#editojtdepartment").val(item.department);
               $("#editojtstartdate").val(item.startdate);
-              $("#editojthours").val(item.hours);
+              $("#editojthours").val(item.hours.split(':')[0]);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -321,7 +324,7 @@
       let birthday = $("#editojtbirthday").val();
       let gender = $("#edditojtgender").val();
       let phone = $("#editojtphone").val();
-      let ercontact = $("#editojtecname").val();
+      let ercontact = $("#editojtecname").val(); 
       let ercontactnumber = $("#editojtecphone").val();
       let school = $("#editojtschool").val();
       let department = $("#editojtdepartment").val();
@@ -457,8 +460,8 @@
     return formattedTime;
     }
 
-    const formattedTime = convertToHoursFormat(inputHours);
-    console.log(formattedTime); 
+    // const formattedTime = convertToHoursFormat(input);
+    // console.log(formattedTime); 
 
     $(document).on("change", "#ojtprofileimage", function (e) {
       const input = document.getElementById("ojtprofileimage");
@@ -497,10 +500,10 @@
         const preview = document.getElementById("editpreview");
         preview.src = reader.result;
       };
-      imageUploaded();
+      imageUploadededit();
     });
 
-    function imageUploaded() {
+    function imageUploadededit() {
       const input = document.getElementById("editojtprofileimage");
       const file = input.files[0];
 
@@ -510,10 +513,23 @@
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
-
       };
       reader.readAsDataURL(file);
     }
+    // function imageUploaded() {
+    //   const input = document.getElementById("editojtprofileimage");
+    //   const file = input.files[0];
+
+    //   var reader = new FileReader();
+
+    //   reader.onload = function () {
+    //     base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+    //     imageBase64Stringsep = base64String;
+
+    //   };
+    //   // reader.readAsDataURL(file);
+    // }
 
   });
 
