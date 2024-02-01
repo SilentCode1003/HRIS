@@ -681,3 +681,23 @@ exports.Salary = (data) => {
   return dataResult;
 };
 
+
+exports.Ojt_Attendance_Logs = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      logid: key.oal_logid,
+      attendanceid: key.oal_attendanceid,
+      ojtid: key.oal_ojtid,
+      longdatetime: key.oal_logdatetime,
+      logtype: key.oal_logtype,
+      latitude: key.oal_latitude,
+      longitude: key.oal_longitude,
+      device: key.oal_device,
+    });
+  });
+
+  return dataResult;
+};
+

@@ -86,7 +86,6 @@ router.post("/clockin", (req, res) => {
   const attendancedate = moment().format("YYYY-MM-DD");
   const devicein = getDeviceInformation(req);
 
-  // Check if there's a clock-in record for the current day
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -95,7 +94,6 @@ router.post("/clockin", (req, res) => {
       AND ma_clockin IS NOT NULL
   `;
 
-  // Check if there's a missing clock-out on the previous day
   const checkMissingClockOutQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -104,7 +102,7 @@ router.post("/clockin", (req, res) => {
       AND ma_clockout IS NULL
   `;
 
-  // Promisified function to execute multiple queries sequentially
+
   const executeSequentialQueries = (queries) =>
     queries.reduce(
       (promise, query) =>
@@ -119,19 +117,16 @@ router.post("/clockin", (req, res) => {
   executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
     .then(([resultClockIn, resultMissingClockOut]) => {
       if (resultClockIn.length > 0) {
-        // Employee has already clocked in on the same day
         res.json({
           status: "exist",
           message: "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (resultMissingClockOut.length > 0) {
-        // Employee has a missing clock-out on the previous day
         res.json({
           status: "disabled",
           message: "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else {
-        // Proceed with the clock-in process
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const attendanceData = [
           [

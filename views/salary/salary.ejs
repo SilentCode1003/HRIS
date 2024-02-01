@@ -97,20 +97,69 @@
                 </div>
                  <br>
                  <div class="col">
-                  <div class="form-floating">
-                      <input type="text" class="form-control" id="editmsemp" name="editmsemp"
-                          placeholder="Monthly Salary" style="border: 2.5px solid #174634 !important;">
-                      <label for="editmsemp">Monthly Salary</label>
-                  </div>
-              </div>                                       
-              <br>
-              <div class="col">
-                  <div class="form-floating">
-                      <input type="text" class="form-control" id="editallowances" name="editallowances"
-                          placeholder="Monthly Allowances" style="border: 2.5px solid #174634 !important;">
-                      <label for="editallowances">Monthly Allowances</label>
-                  </div>
-              </div> 
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control" id="msemp" name="msemp"
+                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Salary">
+                    </div>
+                </div>                            
+                <br>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control" id="allowances" name="allowances"
+                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Allowances">
+                    </div>
+                </div>     
+                <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
+          border: 2px solid white !important;">Close</button>
+          <button type="button" class="btn btn-primary" id="editsalarysavebtsn" style="background-color: green !important;
+          border: 2px solid white !important;">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <i class='fas fa-money-bill' style='color:#0ebb39; font-size: 50px; margin: 3px;'></i>
+          <h3 class="modal-title" id="exampleModalLabel">Edit Salary of Employee </h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example"
+                        style="border: 2.5px solid #174634 !important;">
+                          <option selected>Choose..</option>
+                        </select>
+                        <label for="floatingSelectGrid">Employee</label>
+                    </div>
+                </div>
+                 <br>
+                 <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control" id="editmsemp" name="editmsemp"
+                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Salary">
+                    </div>
+                </div>                            
+                <br>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control" id="editallowances" name="editallowances"
+                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Allowances">
+                    </div>
+                </div>     
                 <br>
             </form>
         </div>

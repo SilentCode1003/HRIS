@@ -61,6 +61,12 @@ var timelogsRouter = require('./routes/timelogs');
 var payslipRouter = require('./routes/payslip');
 var generatepayrollRouter = require('./routes/generatepayroll');
 var apprenticeRouter = require('./routes/apprentice');
+var ojtindexRouter = require('./routes/ojtindex');
+var ojtloginRouter = require('./routes/ojtlogin');
+var ojtattendanceRouter = require('./routes/ojtattendance');
+var ojtprofileRouter = require('./routes/ojtprofile');
+var ojtreqabsentRouter = require('./routes/ojtreqabsent');
+var attendanceojtRouter = require('./routes/attendanceojt');
 
 
 
@@ -74,7 +80,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -134,6 +140,12 @@ app.use('/timelogs',timelogsRouter);
 app.use('/payslip', payslipRouter);
 app.use('/generatepayroll', generatepayrollRouter);
 app.use('/apprentice', apprenticeRouter);
+app.use('/ojtindex', ojtindexRouter);
+app.use('/ojtlogin', ojtloginRouter);
+app.use('/ojtattendance', ojtattendanceRouter);
+app.use('/ojtprofile', ojtprofileRouter);
+app.use('/ojtreqabsent', ojtreqabsentRouter);
+app.use('/attendanceojt', attendanceojtRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

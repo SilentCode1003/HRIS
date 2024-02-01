@@ -69,8 +69,8 @@ $(document).ready(function () {
         message += "DESCRIPTION ";
       }
 
-      if (hours == "") {
-        message += "DESCRIPTION ";
+      if (hours != "") {
+        hours = convertToHoursFormat(hours);
       }
 
       if (message !== "") {
@@ -108,15 +108,14 @@ $(document).ready(function () {
                 })
               LoadTable();
             }
-            else {
+            if (result.msg === "exist") {
               swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "Exist",
                 button: "OK!",
               });
             }
-
           },
           error: function (err) {
             swal("Data already exist!", "You clicked the button!", "warning");
@@ -146,6 +145,25 @@ $(document).ready(function () {
         },
       });
     }
+
+    function convertToHoursFormat(hours) {
+    if (isNaN(hours)) {
+        return 'Invalid input';
+    }
+
+    // Convert the number to an integer
+    hours = parseInt(hours);
+
+    // Calculate hours and minutes
+    const formattedHours = Math.floor(hours);
+    const minutes = Math.round((hours - formattedHours) * 60);
+
+    // Format the result as HH:mm
+    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+    return formattedTime;
+    }
+
     $(document).on("change", "#ojtprofileimage", function (e) {
       const input = document.getElementById("ojtprofileimage");
       const file = input.files[0];

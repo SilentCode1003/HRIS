@@ -19,6 +19,7 @@
             <th class="col-25">Name</th>
             <th>Date started</th>
             <th>Total Hours</th>
+            <th>Acumulated Hours</th>
             <th>Remaining Hours</th>
             <th>End Date</th>
             <th>Status</th>
@@ -115,8 +116,7 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control border-form-modal id="ojthours" name="ojthours" 
-                   >
+                    <input type="number" class="form-control border-form-modal" id="ojthours" name="ojthours" >
                     <label for="floatingInput">Total Hours</label>
                   </div>
                 </div>
@@ -282,11 +282,11 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="number" class="form-control" id="editojthours" name="editojthours" 
-                    style="border: 2.5px solid #174634 !important;">
-                    <label for="floatingInput">Total Hours</label>
+                      <input type="number" class="form-control" id="editojthours" name="editojthours" 
+                             style="border: 2.5px solid #174634 !important;" step="3600">
+                      <label for="floatingInput">Total Hours</label>
                   </div>
-                </div>
+                </div>              
                 <div class="col">
                   <div class="form-floating">
                     <select class="form-select" id="editojtstatus" name="editojtstatus"
