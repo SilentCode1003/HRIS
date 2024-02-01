@@ -1,11 +1,11 @@
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav sidebar bg-danger sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center bg-danger justify-content-center" href="/">
         <div class="sidebar-brand-text mx-3">
             <img class="img-profile rounded-circle"
             src="/images/img/whitelogo.png" style="width: 100px; margin-left: -60px;">
-            HRMIS
+            OJT PORTAL
         </div>
     </a>
 
@@ -14,7 +14,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="/ojtindex">
             <i class='bx bxs-dashboard bx-tada db-icon'></i>
            <span><b>Dashboard</b></span></a>
     </li>
@@ -24,8 +24,26 @@
         Interface
     </div>
 
+    <li class="nav-item bg-danger">
+        <a class="nav-link" href="/ojtattendance">
+            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+            <span><b>Attendance</b></span></a>
+    </li>
+
+    <li class="nav-item bg-danger">
+        <a class="nav-link" href="/ojtprofile">
+            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+            <span><b>Profile</b></span></a>
+    </li>
+
+    <li class="nav-item bg-danger">
+        <a class="nav-link" href="/ojtreqabsent">
+            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+            <span><b>Request Absent</b></span></a>
+    </li>
+
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
+    <!-- <li class="nav-item bg-danger">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseemployee"
             aria-expanded="true" aria-controls="collapseemployee">
             <i class='bx bxs-user-rectangle bx-tada employee-icon'></i>
@@ -45,10 +63,10 @@
                 <a class="collapse-item" href="/resigned">Resigned Employee</a>
             </div>
         </div>
-    </li>
+    </li> -->
     <!--- hahahha-->
-    <%if (accesstype == 'Admin') {%>
-    <li class="nav-item">
+    <!-- <%if (accesstype == 'Admin') {%>
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsemasteraccess"
             aria-expanded="true" aria-controls="collapsemasteraccess">
             <i class='bx bxs-shield-alt-2 bx-tada access-icon'></i>
@@ -60,21 +78,7 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseojt"
-            aria-expanded="true" aria-controls="collapseojt">
-            <i class='bx bxs-user-rectangle bx-tada employee-icon'></i>
-            <span><b>OJT</b></span></a>
-
-        <div id="collapseojt" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
-                <a class="collapse-item" href="/ojt">List Of Ojt</a>
-                <a class="collapse-item" href="/ojtuser">Users For Ojt</a>
-                <a class="collapse-item" href="/attendanceojt">Attendance For Ojt</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseusercontrol"
             aria-expanded="true" aria-controls="collapseusercontrol">
             <i class='bx bxs-user-circle bx-tada usercontrol-icon'></i>
@@ -83,10 +87,11 @@
         <div id="collapseusercontrol" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded" id="boxshadow-sidebar">
                 <a class="collapse-item" href="/users">Users</a>
+                <a class="collapse-item" href="/ojtuser">Users For Ojt</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedepartment"
             aria-expanded="true" aria-controls="collapsedepartment">
             <i class='bx bxs-buildings bx-tada dep-icon'></i>
@@ -99,10 +104,10 @@
             </div>
         </div>
     </li>   
-    <% }%>
+    <% }%> -->
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
+    <!-- <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseattendance "
             aria-expanded="true" aria-controls="collapseattendance">
             <i class='bx bxs-spreadsheet bx-tada attendance-icon'></i>
@@ -114,10 +119,11 @@
                 <a class="collapse-item" href="/geofencesettings">Geo Fences</a>
                 <a class="collapse-item" href="/timelogs">Logs For Approval</a>
                 <a class="collapse-item" href="/overtime">Overtime</a>
+                <a class="collapse-item" href="/ojt">OJT</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsepayroll"
             aria-expanded="true" aria-controls="collapsepayroll">
             <i class='bx bxs-badge-dollar bx-tada payroll-icon'></i>
@@ -134,9 +140,9 @@
                 <a class="collapse-item" href="/deduction">Deduction</a>
             </div>
         </div>
-    </li>
+    </li> -->
     <!----Coop ---->
-    <li class="nav-item">
+    <!-- <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsecoop"
             aria-expanded="true" aria-controls="collapsecoop">
             <i class='bx bxs-landmark bx-tada coop-icon'></i>
@@ -153,7 +159,7 @@
             </div>
         </div>
     </li> 
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseleave"
             aria-expanded="true" aria-controls="collapseleave">
             <i class='bx bxs-door-open bx-tada leave-icon'></i>
@@ -168,7 +174,7 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedeviation"
             aria-expanded="true" aria-controls="collapsedeviation">
             <i class='bx bxs-notification bx-tada dn-icon'></i>
@@ -182,7 +188,7 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseholiday"
             aria-expanded="true" aria-controls="collapseholiday">
             <i class='bx bxs-tree bx-tada holiday-icon'></i>
@@ -196,18 +202,18 @@
         </div>
     </li>
      
-    <li class="nav-item">
+    <li class="nav-item bg-danger">
         <a class="nav-link" href="/announcement">
             <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
             <span><b>Announcement</b></span></a>
-    </li>
+    </li> -->
    
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+    <hr class="sidebar-divider d-none d-md-block bg-danger">
 
     <!--Sidebar Toggler (Sidebar)-->
-    <div class="text-center d-none d-md-inline">
+    <div class="text-center d-none d-md-inline bg-danger">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
     

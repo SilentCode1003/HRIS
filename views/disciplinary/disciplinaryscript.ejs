@@ -535,6 +535,7 @@
           dataRow.push($(this).text());
         });
       disciplinaryid = dataRow[1];
+      console.log(dataRow);
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -547,6 +548,8 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
+
+            console.log(existingData);
 
             $.each(existingData, (key, item) => {
               $("#editpreview").attr(

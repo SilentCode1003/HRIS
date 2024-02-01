@@ -82,6 +82,29 @@ exports.UserLogin = (result, callback) => {
     callback(error);
   }
 };
+
+exports.OjtLogin = (result, callback) => {
+  try {
+    const ojtData = [];
+
+    result.forEach((row) => {
+      ojtData.push({
+        image: row.image,
+        ojtid: row.ojtid,
+        fullname: row.fullname,
+        accesstype: row.accesstype,
+        departmentid: row.departmentid,
+        status: row.status,
+      });
+    });
+
+    return ojtData;
+  } catch (error) {
+    console.log(error);
+    callback(error);
+  }
+};
+
 exports.showSweetAlert = (title, text, icon, buttonText) => {
   try {
     swal({
