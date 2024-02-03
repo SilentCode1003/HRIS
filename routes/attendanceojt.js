@@ -170,6 +170,9 @@ router.post("/upload", (req, res) => {
 //#region FUNCTIONS
 function Insert_OJTAttendance(data) {
   return new Promise((resolve, reject) => {
+    if (data != 1) {
+      return resolve("success");
+    }
     mysql.InsertTable("ojt_attendance", data, (err, result) => {
       if (err) {
         console.error(err);
