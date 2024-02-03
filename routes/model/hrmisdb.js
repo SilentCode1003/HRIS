@@ -1,3 +1,5 @@
+const { OJTAttendanceModel } = require("./model");
+
 exports.Master_Employee = (data) => {
   let dataResult = [];
 
@@ -414,7 +416,6 @@ exports.Payslip = (data) => {
   return dataResult;
 };
 
-
 exports.Master_User = (data) => {
   let dataResult = [];
 
@@ -655,7 +656,6 @@ exports.Salary_History = (data) => {
   return dataResult;
 };
 
-
 exports.Salary = (data) => {
   let dataResult = [];
 
@@ -681,7 +681,6 @@ exports.Salary = (data) => {
   return dataResult;
 };
 
-
 exports.Ojt_Attendance_Logs = (data) => {
   let dataResult = [];
 
@@ -701,3 +700,32 @@ exports.Ojt_Attendance_Logs = (data) => {
   return dataResult;
 };
 
+//#region Remodeling
+
+exports.OJTAttendance = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      id: key.id,
+      date: key.date,
+      time: key.time,
+      latitude: key.latitude,
+      longitude: key.longitude,
+      device: key.device,
+    });
+  });
+
+  return dataResult.map(
+    (key) =>
+      new OJTAttendanceModel(
+        key["id"],
+        key["date"],
+        key["time"],
+        key["latitude"],
+        key["longitude"],
+        key["device"]
+      )
+  );
+};
+//#endregion
