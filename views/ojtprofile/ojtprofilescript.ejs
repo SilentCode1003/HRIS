@@ -1,0 +1,173 @@
+<script>
+    let ojtid = '';
+    $(document).ready(function () {
+        console.log('Initialize');
+        let ojtid = "<%= ojtid %>";
+        loadAccount();
+
+        function loadAccount() {
+            $.ajax({
+                type: "POST",
+                url: '/ojtprofile/load',
+                data: {
+                    ojtid: ojtid,
+                },
+                success: function (result) {
+                    if (result.msg === "success") {
+                        const existingData = result.data;
+
+                        console.log(existingData);
+
+                        $.each(existingData, (key, item) => {
+                            $("#editpreview").attr(
+                                "src",
+                                "data:image/jpg;base64," + item.image
+                            );
+                            $("#ojtid").val(item.id);
+                            $("#fullname").val(item.fullname);
+                            $("#department").val(item.department);
+                            $("#school").val(item.school);
+                            $("#datestart").val(item.DateStarted);
+                            $("#totalhours").val(item.TotalHours);
+                            $("#totaltime").val(item.AcumulatedHours);
+                            $("#remaining").val(item.RemainingHours);
+                            const endDateString = new Date(item.EndDate).toLocaleDateString(undefined, {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+
+                            $("#endddate").val(endDateString);
+                            base64String = item.image;
+                        });
+                    } else {
+                        swal("Error fetching employee data", "error");
+                    }
+                },
+                error: function (error) {
+                    swal(
+                        "An error occurred while fetching employee data",
+                        msg,
+                        "error"
+                    );
+                },
+            });
+        };
+
+
+
+
+
+        $(document).on("click", "#saveBtn", function (event) {
+            event.preventDefault();
+
+            const currentPassword = $('#inputPasswordCurrent').val();
+            const newPassword = $('#inputPasswordNew').val();
+            const confirmPassword = $('#inputPasswordNew2').val();
+
+            if (newPassword !== confirmPassword) {
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'New password and confirm password do not match',
+                });
+                return;
+            }
+            swal({
+                title: 'Are you sure you want to update your password?',
+                icon: 'warning',
+                text: 'update',
+                buttons: ['Cancel', 'OK'],
+                dangerMode: true,
+            }).then((result) => {
+                if (result) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/ojtprofile/updatepassword',
+                        data: {
+                            ojtid: ojtid,
+                            currentPass: currentPassword,
+                            newPass: newPassword,
+                            confirmPass: confirmPassword,
+                        },
+                        success: function (response) {
+                            if (response.msg === 'success') {
+                                swal({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.description,
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                swal({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.description,
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.error(error);
+                            swal({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            });
+                        },
+                    });
+                } else {
+                    swal('Action canceled.', {
+                        icon: 'info',
+                    });
+                }
+            });
+        });
+
+        $(".toggle-password").on("click", function () {
+            const passwordInput = $(this).closest('.form-group').find('input[type="password"]');
+            const passwordFieldType = passwordInput.attr("type");
+
+            // Toggle password visibility
+            if (passwordFieldType === "password") {
+                passwordInput.attr("type", "text");
+                $(this).find('i').removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                $(this).find('i').removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
+
+    });
+
+    $(document).on("change", "#editemployeeprofile", function (e) {
+        const input = document.getElementById("editemployeeprofile");
+        const file = input.files[0];
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function () {
+            const preview = document.getElementById("editpreview");
+            preview.src = reader.result;
+        };
+        editimage();
+    });
+
+    function editimage() {
+        const input = document.getElementById("editemployeeprofile");
+        const file = input.files[0];
+
+        var reader = new FileReader();
+        console.log("next");
+
+        reader.onload = function () {
+            base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+            imageBase64Stringsep = base64String;
+
+            console.log(base64String);
+        };
+        reader.readAsDataURL(file);
+    }
+</script>

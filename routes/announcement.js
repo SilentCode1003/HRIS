@@ -68,6 +68,27 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.post("/loadforapp", (req, res) => {
+  try {
+    let sql = `select * from master_bulletin
+    order by mb_bulletinid desc`;
+
+    mysql.Select(sql, "Master_Bulletin", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 
 router.post("/save", (req, res) => {
   try {

@@ -48,6 +48,44 @@ router.post('/submit', async (req, res) => {
 });
 
 
+
+router.post('/submitforapp', async (req, res) => {
+  try {
+    const employeeid = req.body.employeeid; 
+    const { amount, purpose,} = req.body;
+    const requestdate = currentDate.format('YYYY-MM-DD');
+    const status = 'Pending';
+    const approvaldate = 'On Process';
+   
+    const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
+    const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
+
+    if (employeeResult.length === 0) {
+      return res.json({ msg: 'Invalid employee ID' });
+    }
+
+    const data = [
+      [employeeid, requestdate, amount, purpose, status, approvaldate]
+    ];
+
+   
+    mysql.InsertTable('cash_advance', data, (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error('Error inserting leave record: ', insertErr);
+        res.json({ msg: 'insert_failed' });
+      } else {
+        console.log(insertResult);
+        res.json({ msg: 'success' });
+      }
+    });
+  } catch (error) {
+    console.error('Error in /submit route: ', error);
+    res.json({ msg: 'error' });
+  }
+});
+
+
+
 router.get('/load',(req , res) => {
   try {
     let employeeid = req.session.employeeid;

@@ -3,7 +3,6 @@
   let base64String = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     searchTable();
 
@@ -28,7 +27,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -41,8 +39,8 @@
               var imgElement = document.createElement("img");
               imgElement.src = "data:image/jpg;base64," + item.image;
               imgElement.alt = "Profile Image";
-              imgElement.style.width = "100px";
-              imgElement.style.height = "100px";
+              imgElement.style.width = "80px";
+              imgElement.style.height = "80px";
 
 
               finalData.push({
@@ -87,7 +85,6 @@
           });
         },
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -179,7 +176,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       bulletinid = dataRow[1];
     });
 
@@ -214,7 +210,6 @@
     });
 
     $(document).on("click", "#editannouncementsavebtn", function () {
-      console.log("Save button clicked");
       let id = bulletinid;
       let image = base64String;
       let tittle = $("#editannouncementtittle").val();
@@ -223,7 +218,6 @@
       let type = $("#editannouncementtype").val();
       let targetdate = $("#edittargetdate").val();
 
-      console.log('hit', `${image}`);
 
       var message = "";
 
@@ -302,7 +296,6 @@
       const input = document.getElementById("announcementimage");
       const file = input.files[0];
 
-      console.log("click");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -319,7 +312,6 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
@@ -327,7 +319,6 @@
         imageBase64Stringsep = base64String;
 
 
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -353,7 +344,6 @@
       const file = input.files[0];
 
       var reader = new FileReader();
-      console.log("next");
 
       reader.onload = function () {
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
@@ -361,7 +351,6 @@
         imageBase64Stringsep = base64String;
 
 
-        console.log(base64String);
       };
       reader.readAsDataURL(file);
     }

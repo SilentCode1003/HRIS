@@ -10,10 +10,15 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-// Decrypter('3f4380ddee5398218f6da93ec7d53ec9620d9655174e986656635aa6852a3d27', (err, encrypted) => {
+Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+})
+
+// Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
-//   password = encrypted;
+
 // })
 
 const connection = mysql.createConnection({
@@ -180,8 +185,20 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Master_Salary(results));
       }
 
-      if (table == "Master_Deductions") {
-        callback(null, model.Master_Deductions(results));
+      if (table == "Government_Deductions") {
+        callback(null, model.Government_Deductions(results));
+      }
+
+      if (table == "Salary_History") {
+        callback(null, model.Salary_History(results));
+      }
+
+      if (table == "Ojt_Attendance_Logs") {
+        callback(null, model.Ojt_Attendance_Logs(results));
+      }
+
+      if (table == "Ojt_Attendance") {
+        callback(null, model.Ojt_Attendance(results));
       }
     });
   } catch (error) {}
@@ -260,7 +277,8 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_clockin,
         ma_latitudein,
         ma_longitudein,
-        ma_devicein) VALUES ?`;
+        ma_devicein,
+        ma_gefenceidIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -351,7 +369,6 @@ exports.InsertTable = (tablename, data, callback) => {
         mg_idtype,
         mg_idnumber,
         mg_issuedate,
-        mg_expirydate,
         mg_createby,
         mg_createdate,
         mg_status) VALUES ?`;
@@ -555,15 +572,23 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+
   if (tablename == "salary") {
     let sql = `INSERT INTO salary(
         s_employeeid,
         s_salarymonth,
+        s_mssalaryid,
+        s_cutoff,
+        s_netpay,
+        s_totalhours,
+        s_totaldeductions,
+        s_payrolldate,
         s_allowances,
-        s_deductions,
-        s_netsalary,
-        s_paymentdate,
-        s_status) VALUES ?`;
+        s_adjustment,
+        s_spholiday,
+        s_restdayot,
+        s_legalholiday) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -572,6 +597,8 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+
   if (tablename == "master_resigned") {
     let sql = `INSERT INTO master_resigned(
         mr_employeeid,
@@ -743,13 +770,30 @@ exports.InsertTable = (tablename, data, callback) => {
     });
   }
 
-  if (tablename == "master_deductions") {
-    let sql = `INSERT INTO master_deductions(
-      mds_employeeid,
-      mds_type,
-      mds_amount,
-      mds_period,
-      mds_cutoff) VALUES ?`;
+  if (tablename == "government_deductions") {
+    let sql = `INSERT INTO government_deductions(
+      gd_employeeid,
+      gd_idtype,
+      gd_amount,
+      gd_period,
+      gd_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "ojt_attendance") {
+    let sql = `INSERT INTO ojt_attendance(
+        oa_ojtid,
+        oa_attendancedate,
+        oa_clockin,
+        oa_latitudein,
+        oa_longitudein,
+        oa_devicein,
+        oa_gefenceidIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

@@ -261,7 +261,7 @@ router.get("/countactive", (req, res) => {
         FROM 
         master_employee
         WHERE 
-        me_jobstatus IN ('regular', 'probitionary')`;
+        me_jobstatus IN ('regular', 'probitionary', 'apprentice')`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -584,62 +584,22 @@ router.get("/countbagapuro", (req, res) => {
   }
 });
 
-router.get("/getbday", (req, res) => {
-  try {
-    let sql = ` 
-    SELECT 
-    me_profile_pic AS profilePicturePath,
-    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-    DATE_FORMAT(me_birthday, '%M %e') AS birthday
-  FROM 
-    master_employee
-  WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND me_jobstatus IN ('regular','probitionary')
-  ORDER BY 
-    me_birthday`;
 
-   mysql.mysqlQueryPromise(sql)
-   .then((result) => {
-    res.json({
-      msg: 'success',
-      data: result,
-    });
-   })
-   .catch((error) => {
-    res.json({
-      msg: 'error',
-      data: error,
-    });
-   })
-    
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.get("/getbdaytoday", (req, res) => {
+router.get("/countapprentice", (req, res) => {
   try {
-    let sql = ` 
-    SELECT 
-    me_profile_pic AS profilePicturePath,
-    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-    DATE_FORMAT(me_birthday, '%M %e') AS birthday
-  FROM 
-    master_employee
-  WHERE 
-    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
-    AND me_jobstatus IN ('regular','probitionary')
-  ORDER BY 
-    me_birthday`;
+    let sql = `    
+    SELECT COUNT(*) AS Apprentice
+    FROM master_employee
+    WHERE me_jobstatus = 'apprentice'`;
 
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         res.json({
           msg: "success",
-          data: result,
+          data: {
+            ApprenticeCount: result[0].Apprentice,
+          },
         });
       })
       .catch((error) => {
@@ -649,7 +609,71 @@ router.get("/getbdaytoday", (req, res) => {
         });
       });
   } catch (error) {
-    console.log(error);
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.get('/getbday' , (req, res)=> {
+  try {
+    let sql =  ` SELECT 
+    me_profile_pic,
+    CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
+  FROM 
+    master_employee
+  WHERE 
+    MONTH(me_birthday) = MONTH(CURRENT_DATE) 
+    AND me_jobstatus IN ('regular','probitionary','apprentice')
+  ORDER BY 
+    me_birthday`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.log("Error" , err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+router.get('/getbdaytoday' , (req, res)=> {
+  try {
+    let sql =`SELECT 
+    me_profile_pic,
+    CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
+    DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
+FROM 
+    master_employee
+WHERE 
+    DAY(me_birthday) = DAY(CURRENT_DATE) 
+    AND me_jobstatus IN ('regular', 'probitionary', 'apprentice')
+ORDER BY 
+    me_birthday`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.log("Error" , err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
   }
 });
 
@@ -888,6 +912,36 @@ WHERE
     res.json({
       msg: "error",
       data: error,
+    });
+  }
+});
+
+router.get('/apprenticemodal', (req, res) => {
+  try {
+    let sql = `select
+    me_id, 
+    me_profile_pic,
+    concat(me_lastname,' ',me_firstname) as me_firstname,
+    md_departmentname as me_department,
+    me_hiredate,
+    mp_positionname as me_position
+    from master_employee
+    inner join master_department on master_employee.me_department = md_departmentid
+    inner join master_position on master_employee.me_position = mp_positionid
+    where me_jobstatus = 'apprentice'`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.error("Error :", err);
+      
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data:error,
     });
   }
 });

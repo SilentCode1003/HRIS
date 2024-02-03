@@ -3,6 +3,9 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "attendanceojtlayout",
+      },
+      {
         layout: "settingslayout",
       },
       {
@@ -113,6 +116,21 @@ var roleacess = [
       {
         layout: "geofencesettingslayout",
       },
+      {
+        layout: "salaryhistorylayout",
+      },
+      {
+        layout: "timelogslayout",
+      },
+      {
+        layout: "generatepayrolllayout",
+      },
+      {
+        layout: "paysliplayout",
+      },
+      {
+        layout: "apprenticelayout",
+      },
     ],
   },
   {
@@ -147,6 +165,23 @@ var roleacess = [
       },
       {
         layout: "eportalsalarylayout",
+      },
+    ],
+  },
+  {
+    role: "OJT",
+    routes: [
+      {
+        layout: "ojtindexlayout",
+      },
+      {
+        layout: "ojtattendancelayout",
+      },
+      {
+        layout: "ojtreqabsentlayout",
+      },
+      {
+        layout: "ojtprofilelayout",
       },
     ],
   },
@@ -254,6 +289,8 @@ exports.Validator = function (req, res, layout) {
       employeeid: req.session.employeeid,
       fullname: req.session.fullname,
       accesstype: req.session.accesstype,
+      geofenceid: req.session.geofenceid,
+      departmentid: req.session.departmentid,
     });
   } else {
     roleacess.forEach((key, item) => {
@@ -273,6 +310,9 @@ exports.Validator = function (req, res, layout) {
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
             department: req.session.department,
+            departmentname: req.session.departmentname,
+            position: req.session.position,
+            geofenceid: req.session.geofenceid,
           });
         }
       });
@@ -280,6 +320,54 @@ exports.Validator = function (req, res, layout) {
       if (counter == roleacess.length) {
         if (!ismatch) {
           res.redirect("/login");
+        }
+      }
+    });
+  }
+};
+
+exports.ValidatorforOjt = function (req, res, layout) {
+  // console.log(layout);
+
+  let ismatch = false;
+  let counter = 0;
+  // //console.log(roleacess.length)
+  if (req.session.accesstype == "OJT" && layout == "ojtindexlayout") {
+    console.log("hit");
+    return res.render(`${layout}`, {
+      image: req.session.image,
+      ojtid: req.session.ojtid,
+      fullname: req.session.fullname,
+      accesstype: req.session.accesstype,
+      departmentid: req.session.departmentid,
+    });
+  } else {
+    roleacess.forEach((key, item) => {
+      counter += 1;
+      var routes = key.routes;
+
+      routes.forEach((value, index) => {
+        // console.log(`${key.role} - ${value.layout}`);
+
+        if (key.role == req.session.accesstype && value.layout == layout) {
+          console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+          ismatch = true;
+
+          return res.render(`${layout}`, {
+            image: req.session.image,
+            ojtid: req.session.ojtid,
+            fullname: req.session.fullname,
+            accesstype: req.session.accesstype,
+            department: req.session.department,
+            status: req.session.status,
+            geofenceid: req.session.geofenceid,
+          });
+        }
+      });
+
+      if (counter == roleacess.length) {
+        if (!ismatch) {
+          res.redirect("/ojtlogin");
         }
       }
     });

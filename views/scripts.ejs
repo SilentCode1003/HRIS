@@ -88,11 +88,41 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+
+<!--Date Picker-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
+
+
+
 <script>
   $(document).on("click", "#logoutBtn", function () {
     $.ajax({
       type: "POST",
       url: "/login/logout",
+      success: function (result) {
+        swal({
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
+          icon: "success",
+          button: "Ba bye!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
+    });
+  });
+
+  $(document).on("click", "#logoutBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/ojtlogin/logout",
       success: function (result) {
         swal({
           title: "Ba Bye!!!",
@@ -146,3 +176,19 @@
     });
 }
 </script>
+
+
+  <!---Java Script for Topbar-->
+  <script>
+    const topbar = document.getElementById('topbar');
+
+    window.addEventListener('scroll', () =>{
+        if(window.scrollY > 0) {
+            
+            topbar.classList.add('light-bg');
+        }else{
+
+            topbar.classList.remove('light-bg');
+        }
+    })
+</script> 

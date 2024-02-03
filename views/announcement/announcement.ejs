@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Announcement</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Announcement</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#announcementmodal">
         <b>+ Add</b>
       </button>
@@ -16,13 +16,13 @@
                     <tr>
                         <th>Image</th>
                         <th class="col-sm-1">ID</th>
-                        <th>Tittle</th>
+                        <th>Title</th>
                         <th>Type</th>
                         <th>Target Date</th>
                         <th class="col-25">Description</th>
                         <th>Created By</th>
                         <th>Created Date</th>
-                        <th>Status</th>
+                        <th class="col-sm-1">Status</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
@@ -40,24 +40,22 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <i class='bx bxs-comment-dots' style='color:#f54d69; font-size: 50px; margin-top: 3px;'></i>
-        <h3 class="modal-title" id="exampleModalLabel">ANNOUNCEMENT</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">ANNOUNCEMENT</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
         <form>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="announcementtittle" name="announcementtittle"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
-              <label for="floatingInput">Tittle</label>
+              <input type="text" class="form-control border-form-modal" id="announcementtittle" name="announcementtittle"
+                placeholder="Department Name">
+              <label for="floatingInput">Title</label>
             </div>
           </div>
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-control" id="announcementtype" name="announcementtype"
-                style="border: 2.5px solid #174634 !important;">
+              <select class="form-control border-form-modal" id="announcementtype" name="announcementtype">
                 <option value="Event">Event</option>
                 <option value="Announcement">Announcement</option>
               </select>
@@ -67,16 +65,15 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="announcementdescription" name="announcementdescription"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
-              <label for="floatingInput">Description</label>
+              <textarea class="form-control border-form-modal custom-width-textarea" id="announcementdescription" name="announcementdescription" placeholder="Department Name"></textarea>
+              <label for="announcementdescription">Description</label>
             </div>
-          </div>
+          </div>                  
           <br>
           <div class="col">
             <div class="form-floating">
-              <input type="date" class="form-control" id="targetdate" name="targetdate"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <input type="date" class="form-control border-form-modal" id="targetdate" name="targetdate"
+                placeholder="Department Name">
               <label for="floatingInput">Target Date</label>
             </div>
           </div>
@@ -84,13 +81,10 @@
           <div class="col">
             <div class="form-floating">
               <label class="form-label" for="customFile"></label>
-              <input type="file" name="announcementimage" id="announcementimage" class="form-control" accept="image/*"
-                style="border: 2.5px solid #174634 !important;">
+              <input type="file" name="announcementimage" id="announcementimage" class="form-control border-form-modal" accept="image/*">
               <br>
               <div class="text-center">
-                <img id="preview" src="https://via.placeholder.com/250"
-                  style="width: 250px;; height: 250px; border: 2.5px solid #174634 !important;" class="rounded"
-                  alt="placeholder">
+                <img id="preview" src="https://via.placeholder.com/250" class="rounded preview2" alt="placeholder">
               </div>
             </div>
           </div>
@@ -98,10 +92,8 @@
         </form>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-        <button type="button" class="btn btn-primary" id="announcementsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="announcementsavebtn">Save</button>
       </div>
     </div>
   </div>

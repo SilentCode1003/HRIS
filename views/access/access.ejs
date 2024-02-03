@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Access</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Access</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#accessmodal">
         <b>+ Add</b>
       </button>
@@ -35,22 +35,21 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-shield-alt-2' style='color:#f1ec09; font-size: 50px; margin-top: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">ACCESS TYPE</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">ACCESS TYPE</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
                     <div class="col">
                       <div class="form-floating">
-                        <input type="text" class="form-control" style="border: 2.5px solid #174634 !important;" id="accessname" name="accessname" placeholder="First Name">
+                        <input type="text" class="form-control border-form-modal" id="accessname" name="accessname" placeholder="First Name">
                         <label for="floatingInput">Access Name</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="accessstatus"  style="border: 2.5px solid #174634 !important;" name="accessstatus" aria-label="Floating label select example">
+                            <select class="form-select border-form-modal" id="accessstatus" name="accessstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="Active">Active</option>
                               <option value="Inactive">Inactive</option>
@@ -62,10 +61,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" style="background-color: red !important;
-          border: 2px solid white !important;" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="accesssavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="accesssavebtn">Save</button>
         </div>
       </div>
     </div>
