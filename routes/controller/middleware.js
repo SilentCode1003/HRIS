@@ -289,6 +289,8 @@ exports.Validator = function (req, res, layout) {
       employeeid: req.session.employeeid,
       fullname: req.session.fullname,
       accesstype: req.session.accesstype,
+      geofenceid: req.session.geofenceid,
+      departmentid: req.session.departmentid,
     });
   } else {
     roleacess.forEach((key, item) => {
@@ -310,6 +312,7 @@ exports.Validator = function (req, res, layout) {
             department: req.session.department,
             departmentname: req.session.departmentname,
             position: req.session.position,
+            geofenceid: req.session.geofenceid,
           });
         }
       });
@@ -357,6 +360,7 @@ exports.ValidatorforOjt = function (req, res, layout) {
             accesstype: req.session.accesstype,
             department: req.session.department,
             status: req.session.status,
+            geofenceid: req.session.geofenceid,
           });
         }
       });

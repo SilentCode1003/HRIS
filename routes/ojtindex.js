@@ -64,8 +64,7 @@ router.post("/latestlog", (req, res) => {
 
 router.post("/clockin", (req, res) => {
   const ojt_id = req.body.ojtid;
-
-  console.log('id', ojt_id);
+  const geofenceid = req.body.geofenceid;
 
   if (!ojt_id) {
     return res.status(401).json({
@@ -78,23 +77,23 @@ router.post("/clockin", (req, res) => {
   const attendancedate = moment().format("YYYY-MM-DD");
   const devicein = getDeviceInformation(req);
 
-  console.log(latitude,longitude);
-
   const checkExistingClockInQuery = `
-  SELECT oa_ojtid
-  FROM ojt_attendance
-  WHERE oa_ojtid = '${ojt_id}'
-  AND oa_attendancedate = '${attendancedate}'
-  AND oa_clockin IS NOT NULL`;
-
-  console.log('sql', checkExistingClockInQuery);
+    SELECT oa_ojtid
+    FROM ojt_attendance
+    WHERE oa_ojtid = '${ojt_id}'
+      AND oa_attendancedate = '${attendancedate}'
+      AND oa_clockin IS NOT NULL
+  `;
 
   const checkMissingClockOutQuery = `
-  SELECT oa_ojtid
-  FROM ojt_attendance
-  WHERE oa_ojtid = '${ojt_id}'
-  AND oa_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
-  AND oa_clockin IS NULL`;
+    SELECT oa_ojtid
+    FROM ojt_attendance
+    WHERE oa_ojtid = '${ojt_id}'
+      AND oa_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
+      AND oa_clockout IS NULL
+  `;
+
+  console.log(checkMissingClockOutQuery);
 
 
   const executeSequentialQueries = (queries) =>
@@ -130,10 +129,9 @@ router.post("/clockin", (req, res) => {
             latitude,
             longitude,
             devicein,
+            geofenceid,
           ],
         ];
-
-        //console.log('data',attendanceData);
 
         mysql.InsertTable(
           "ojt_attendance",
@@ -171,6 +169,7 @@ router.post("/clockout", (req, res) => {
   const ojt_id = req.body.ojtid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
+  const geofenceid = req.body.geofenceid;
 
   console.log(ojt_id);
 
@@ -198,7 +197,8 @@ router.post("/clockout", (req, res) => {
           oa_clockout = '${clockoutTime}',
           oa_latitudeout = '${latitude}',
           oa_longitudeout = '${longitude}',
-          oa_deviceout = '${deviceout}'
+          oa_deviceout = '${deviceout}',
+          oa_geofenceidOut = '${geofenceid}'
         WHERE
           oa_ojtid = '${ojt_id}'
           AND oa_attendancedate = '${oa_attendancedate}'`;
