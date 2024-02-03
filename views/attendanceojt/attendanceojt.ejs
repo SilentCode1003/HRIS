@@ -7,6 +7,10 @@
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#">
         <b>Export Attendance</b>
       </button>
+
+      <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+        <b>Import Attendance</b>
+      </button>
         <input id='myInput'  type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
@@ -78,6 +82,29 @@
 </div>
 
 
+<!-- Upload Modal -->
+
+<div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">BATCH UPLOAD</h1>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body modal-batch-body" id="modal-body">
+            <form>
+            <div class="modal-content">
+                <input type="file" class="form-control-file" id="excelFileInput" accept=".xls, .xlsx" />
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-modal-upload" id="uploadButton">Upload</button>
+        </div>
+        </div>
+    </div>
+</div>
 
 
 

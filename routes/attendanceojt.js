@@ -3,6 +3,12 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const e = require("express");
+const {
+  convertExcelDate,
+  convertExcelDatetime,
+} = require("./repository/customhelper");
+const { OJTAttendanceModel } = require("./model/model");
+const { OJTAttendance } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -12,7 +18,6 @@ router.get("/", function (req, res, next) {
 
   Validator(req, res, "attendanceojtlayout");
 });
-
 
 module.exports = router;
 
@@ -98,3 +103,117 @@ router.post("/logs", (req, res) => {
     });
   }
 });
+
+router.post("/upload", (req, res) => {
+  try {
+    const { data } = req.body;
+    let dataJson = JSON.parse(data);
+    let ojt_attendance = [];
+    let ojt_attendance_update = [];
+
+    dataJson.forEach((key, item) => {
+      let date = convertExcelDate(key.date);
+
+      console.log(key.type);
+
+      if (key.type == "IN") {
+        ojt_attendance.push([
+          key.id,
+          date,
+          `${date} ${key.time}`,
+          key.latitude,
+          key.longitude,
+          key.device,
+        ]);
+      } else {
+        ojt_attendance_update.push({
+          id: key.id,
+          date: date,
+          time: `${date} ${key.time}`,
+          latitude: key.latitude,
+          longitude: key.longitude,
+          device: key.device,
+        });
+      }
+    });
+
+    Insert_OJTAttendance(ojt_attendance)
+      .then((result) => {
+        console.log(result);
+        Update_OJTAttendance(ojt_attendance_update)
+          .then((result) => {
+            res.json({
+              msg: "success",
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            return res.json({
+              msg: error,
+            });
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.json({
+          msg: error,
+        });
+      });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+//#region FUNCTIONS
+function Insert_OJTAttendance(data) {
+  return new Promise((resolve, reject) => {
+    mysql.InsertTable("ojt_attendance", data, (err, result) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      console.log(result);
+
+      resolve(result);
+    });
+  });
+}
+
+function Update_OJTAttendance(data) {
+  return new Promise((resolve, result) => {
+    let model = OJTAttendance(data);
+    let sql =
+      "update ojt_attendance set oa_clockout = ?, oa_latitudeout = ?, oa_longitudeout = ?, oa_deviceout = ? where oa_ojtid=? and oa_attendancedate=?";
+    let counter = 0;
+
+    model.forEach((item) => {
+      let ojt_attendance = [
+        item.time,
+        item.latitude,
+        item.longitude,
+        item.device,
+        item.id,
+        item.date,
+      ];
+
+      mysql.UpdateMultiple(sql, ojt_attendance, (err, result) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+
+        console.log(result);
+        counter += 1;
+
+        if (counter == model.length) {
+          console.log("Data: ", counter);
+          resolve(result);
+        }
+      });
+    });
+  });
+}
+//#endregion
