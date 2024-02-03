@@ -77,7 +77,7 @@ router.get('/load', (req, res) => {
     }
   });
 
-  router.post('/ojt', (req, res) => {
+  router.post('/departmentgefence', (req, res) => {
     try {
       let departmentid = req.body.departmentid;
       let sql = `SELECT 
@@ -168,9 +168,11 @@ router.get('/load', (req, res) => {
   
 router.post('/selectgeofence', (req, res) => {
   try {
-    let department = req.body.department;
+    let departmentid = req.body.departmentid;
     let sql = `select * from master_geofence_settings
-    where mgs_departmentid ='${department}' and mgs_status = 'Active'`;
+    where mgs_departmentid ='${departmentid}' and mgs_status = 'Active'`;
+
+    console.log(departmentid);
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
