@@ -656,10 +656,12 @@ router.get('/getbdaytoday' , (req, res)=> {
 FROM 
     master_employee
 WHERE 
-    DAY(me_birthday) = DAY(CURRENT_DATE) 
+    DAY(me_birthday) = DAY(CURRENT_DATE)
+    AND MONTH(me_birthday) = MONTH(CURRENT_DATE)
     AND me_jobstatus IN ('regular', 'probitionary', 'apprentice')
 ORDER BY 
     me_birthday`;
+
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
       if (err) console.log("Error" , err);
