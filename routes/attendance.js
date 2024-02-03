@@ -178,27 +178,20 @@ router.post("/filterforapp", (req, res) => {
 router.post("/logs", (req, res) => {
   try {
     let attendanceid = req.body.attendanceid;
-    let sql = `SELECT
-    me_profile_pic AS image,
-    CONCAT(me_lastname, ' ', me_firstname) AS fullname,
-    DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
-    TIME(al_logdatetime) AS logtime,
+    let sql = `select 
+    me_profile_pic as image,
+    concat(me_lastname,' ',me_firstname) as fullname,
+	  DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
+	  TIME(al_logdatetime) AS logtime,
     al_logtype AS logtype,
-    al_latitude AS latitude,
+	  al_latitude AS latitude,
     al_longitude AS longitude,
-    al_device AS device,
-    mgs_location AS location,
-    SQRT(POW(mgs_latitude - al_latitude, 2) + POW(mgs_longitude - al_longitude, 2)) * 111.32 AS distance
-    FROM
-    master_employee
-    INNER JOIN
-    attendance_logs ON me_id = al_employeeid
-    LEFT JOIN
-    master_geofence_settings ON me_department = mgs_departmentid
-    WHERE
-    al_attendanceid = '${attendanceid}'
-    HAVING
-    distance <= 1`;
+	  al_device AS device,
+    mgs_geofencename as location
+    from attendance_logs
+    inner join master_employee on attendance_logs.al_employeeid = me_id
+    inner join master_geofence_settings on attendance_logs.al_geofenceid = mgs_id
+    where al_attendanceid = '${attendanceid}'`;
 
     mysql
       .mysqlQueryPromise(sql)

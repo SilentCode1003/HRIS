@@ -115,6 +115,20 @@
             });
         });
 
+        $(".toggle-password").on("click", function () {
+            const passwordInput = $(this).closest('.form-group').find('input[type="password"]');
+            const passwordFieldType = passwordInput.attr("type");
+
+            // Toggle password visibility
+            if (passwordFieldType === "password") {
+                passwordInput.attr("type", "text");
+                $(this).find('i').removeClass("fa-eye").addClass("fa-eye-slash");
+            } else {
+                passwordInput.attr("type", "password");
+                $(this).find('i').removeClass("fa-eye-slash").addClass("fa-eye");
+            }
+        });
+
     });
 
     $(document).on("change", "#editemployeeprofile", function (e) {
