@@ -69,7 +69,7 @@ exports.UserLogin = (result, callback) => {
         employeeid: row.employeeid,
         fullname: row.fullname,
         accesstype: row.accesstype,
-        department: row.department,
+        departmentid: row.departmentid,
         departmentname: row.departmentname,
         position: row.position,
         jobstatus: row.jobstatus,

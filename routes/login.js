@@ -28,7 +28,7 @@ ma_accessname AS accesstype,
 mu_status AS status,
 me_profile_pic AS image,
 me_jobstatus AS jobstatus,
-md_departmentid AS department,
+md_departmentid AS departmentid,
 md_departmentname AS departmentname,
 mp_positionname AS position,
 mgs_id AS geofenceid
@@ -62,7 +62,7 @@ WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
                   req.session.image = user.image;
-                  req.session.department = user.department;
+                  req.session.departmentid = user.departmentid;
                   req.session.departmentname = user.departmentname;
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
