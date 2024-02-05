@@ -73,6 +73,7 @@ exports.UserLogin = (result, callback) => {
         departmentname: row.departmentname,
         position: row.position,
         jobstatus: row.jobstatus,
+        geofenceid: row.geofenceid,
       });
     });
 

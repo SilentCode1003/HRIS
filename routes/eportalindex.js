@@ -74,6 +74,8 @@ router.post("/latestlogforapp", (req, res) => {
 
 router.post("/clockin", (req, res) => {
   const employee_id = req.body.employeeid;
+  const geofenceid = req.body.geofenceid;
+
 
   if (!employee_id) {
     return res.status(401).json({
@@ -101,6 +103,8 @@ router.post("/clockin", (req, res) => {
       AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
       AND ma_clockout IS NULL
   `;
+
+  console.log(checkMissingClockOutQuery);
 
 
   const executeSequentialQueries = (queries) =>
@@ -136,6 +140,7 @@ router.post("/clockin", (req, res) => {
             latitude,
             longitude,
             devicein,
+            geofenceid,
           ],
         ];
 
@@ -175,6 +180,7 @@ router.post("/clockout", (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
+  const geofenceid = req.body.geofenceid;
 
   const checkExistingClockInQuery = `
     SELECT ma_employeeid, ma_attendancedate
@@ -194,17 +200,16 @@ router.post("/clockout", (req, res) => {
         const deviceout = getDeviceInformation(req);
 
         const updateQuery = `
-          UPDATE master_attendance
-          SET
-            ma_clockout = '${clockoutTime}',
-            ma_latitudeout = '${latitude}',
-            ma_longitudeout = '${longitude}',
-            ma_deviceout = '${deviceout}'
-          WHERE
-            ma_employeeid = '${employee_id}'
-            AND ma_attendancedate = '${ma_attendancedate}'
-        `;
-
+        UPDATE master_attendance
+        SET
+          ma_clockout = '${clockoutTime}',
+          ma_latitudeout = '${latitude}',
+          ma_longitudeout = '${longitude}',
+          ma_deviceout = '${deviceout}',
+          ma_geofenceidOut = '${geofenceid}'
+        WHERE
+          ma_employeeid = '${employee_id}'
+          AND ma_attendancedate = '${ma_attendancedate}'`;
         mysql
           .Update(updateQuery)
           .then((updateResult) => {
