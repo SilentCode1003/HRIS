@@ -111,16 +111,16 @@
 <div class="modal fade" id="editgovermentidmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Goverment ID</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Goverment ID</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                 <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="editgovermentidemployeeid" name="editgovermentidemployeeid" aria-label="Floating label select example">
+                            <select class="form-select border-form-modal" id="editgovermentidemployeeid" name="editgovermentidemployeeid" aria-label="Floating label select example">
                             </select>
                             <label for="floatingSelectGrid">Employee ID</label>
                           </div>
@@ -128,7 +128,7 @@
                     <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="editgovermentidtype" name="editgovermentidtype" aria-label="Floating label select example">
+                            <select class="form-select border-form-modal" id="editgovermentidtype" name="editgovermentidtype" aria-label="Floating label select example">
                                 <option value="SSS">SSS</option>
                                 <option value="PhilHealth">PhilHealth</option>
                                 <option value="PagIbig">PagIbig</option>
@@ -150,7 +150,7 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="editgovermentidnumber" name="edithealthrecordmedicalcondition" placeholder="First Name">
+                        <input type="text" class="form-control border-form-modal" id="editgovermentidnumber" name="edithealthrecordmedicalcondition" placeholder="First Name">
                         <label for="floatingInput">ID Number</label>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                        <input type="date" class="form-control" id="editgovermentidissuedate" name="editgovermentidissuedate" placeholder="First Name">
+                        <input type="date" class="form-control border-form-modal" id="editgovermentidissuedate" name="editgovermentidissuedate" placeholder="First Name">
                         <label for="floatingInput">Issue Date</label>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                     <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="editgovermentidstatus" name="editgovermentidstatus" aria-label="Floating label select example">
+                            <select class="form-select border-form-modal" id="editgovermentidstatus" name="editgovermentidstatus" aria-label="Floating label select example">
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
@@ -180,9 +180,9 @@
                     <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editgovermentidsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editgovermentidsavebtn">Save</button>
         </div>
       </div>
     </div>

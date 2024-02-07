@@ -242,12 +242,7 @@
 }
 
 /*--- table ---*/
-#tablecard {
-  width: 100;
-  margin-left: 2%;
-  margin-right: 2%;
-  background-color:  #F5E0B3 !important;
-}
+
 
 #table-responsive-id {
   overflow: hidden; 

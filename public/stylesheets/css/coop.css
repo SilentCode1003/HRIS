@@ -1,26 +1,60 @@
-/*--------Top bar-------*/
-#topbar {
+/*---- Content/Dashborad -----*/
+.geofence-db, .requestcash-db, .attendance-db, .employee-db, .requestleave-db {
+  margin-top: 5px;
+  margin-left: 2px;
+  font-size: smaller !important;
+}
+.bx-flashing {
+  color: #f9f4f4 !important; 
+}
+.font-tb {
+  font-size: x-small;
+}
+.map{
+  color: white !important;
+}
+#nav-tabContent {
+  margin-top: 2%;
+}
+#map {
+  height: 400px;
+  z-index: 1;
+}
+#content-wrapper {
+  background-color: white !important;
+}
+
+.card-style {
+  margin: 25px;
+}
+
+.sticky-footer {
+  height: 40px !important;
   background-color: #8b2525 !important;
-  box-shadow: 0 4px 8px #3b3939 !important;
-  width: 166vh;
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  transition: background-color 0.3s ease;
+  margin-top: 50px;
+  color: white !important;
 }
-.light-bg {
-  background-color: #3b3939 !important;
-}
+
+
+
+/*--------Top bar-------*/
+
+
 .user-topbar {
   margin-left: 0% !important;
+  color: white !important;
+  font-weight: bold;
 }
+
 .img-profile {
   margin-top: 10% !important;
 }
+
 #dp-header {
     background-color: #7a1818 !important;
     border: 3px solid #F5E0B3 !important;
 }
+
 .dropdown-item {
   background-color: white !important;
   color: black !important;
@@ -30,15 +64,19 @@
     border: 2.5px solid #F5E0B3 !important;
     border-radius: 8px;
 }
+
 .bx-tada {
   font-size: 28px;
 }
+
 .bell {
   color: yellow !important;
 }
+
 .envelope {
   color: #0EA5E9 !important;
 }
+
 .btn-search-topbar {
     height: 38px;
     width: 40px;
@@ -48,6 +86,7 @@
     background-color: #E41717 !important;
     color: white !important;
 }
+
 .btn-search-topbar:hover {
   background-color: #F5E0B3 !important;
   color: white !important;
@@ -57,73 +96,60 @@
 /*---- Sidebar ---*/
 #accordionSidebar {
   background-color: #7a1818 !important;
-  }
-#boxshadow-sidebar {
+}
+
+.boxshadow-sidebar {
     background-color: #510A0A !important;
 }
+
 .collapse .collapse-item {
     font-weight: 600;
     color: white !important;
 }
+
 .collapse .collapse-item:hover {
   background-color: white !important;
   color: black !important;
 }
+
 #brandtext-sidebar {
     font-weight: 600;
     color: white !important;
 }
+
 .fa-tachometer-alt, .bxs-user-account, .bx-hive  {
   color: white !important;
 }
-.nav-item span{
+
+.sidebar-item span{
   color: white !important;
 }
-.nav-item:hover {
-    font-weight: bold;
-    background-color: #F5E0B3 !important;
-    color: black !important;
+.sidebar-item {
+  transition: background-color 0.1s ease;
 }
-.nav-item:hover span {
+
+.sidebar-item:hover {
+  background-color: #F5E0B3 !important;
+  font-weight: bold;
+}
+
+.sidebar-item:hover span {
   color: #7a1818 !important;
 }
 .sidebar-divider {
     border-bottom: 3px solid white !important;
 }
-#sidebarToggle {
-  margin-top: 50px;
-}
-.rounded-circle {
-  margin-top: 25%;
-  margin-bottom: 10%;
+
+
+
+/*---- Modal/Table -----*/
+#tablecard {
+  width: 100;
+  margin-left: 2%;
+  margin-right: 2%;
+  background-color:  #F5E0B3 !important;
 }
 
-/*--- Dashboard/Content -----*/
-#content-wrapper {
-    background-color: white !important;
-    margin-top: 80px;
-}
-.c-body {
-  background-color: #9BD9B2 !important;
-}
-.card-style {
-  margin: 25px;
-}
-.sticky-footer {
-  height: 40px !important;
-  background-color: #8b2525 !important;
-  margin-top: 50px;
-  color: white !important;
-}
-#footer-label {
-    color: #000 !important;
-    font-weight: 600;
-}
-.container-content {
-    padding-top: 2%;
-}
-
-/*---- Modal -----*/
 .modal-dialog #modal-body {
     background-color: #F5E0B3 !important;
 }
@@ -249,7 +275,7 @@ tr:hover {
       color: black !important;
       padding: 0;
       position:absolute;
-      width: 1px;
+      width: 1%;
       font-weight: 600;
   }
   #table tr {
@@ -465,6 +491,7 @@ tr:hover {
   background-color: #F5E0B3 !important;
   border: 2px solid white !important;
   color: #7a1818 !important;
+  font-weight: bold;
 }
 #totalEmployeeCard,#regularEmployeeCard, #resignedEmployeeCard, #probationaryEmployeeCard,
 #totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro, #totalempapprentice {
@@ -676,14 +703,10 @@ tr:hover {
 }
 
 /*Attendance*/
-#map {
-  border: 2.5px solid #7a1818 !important;
-}
-
 #preview {
+  margin-top: 100px;
   width: 250px;
   height: 250px;
-  border: 2.5px solid #7a1818 !important;
 }
 .modal-content-title {
   font-family: Georgia;
@@ -705,11 +728,10 @@ tr:hover {
 .holiday-card-btn {
   float: right;
 }
-.preview2 {
+/* .preview2 {
   width: 250px;
   height: 250px;
-  border: 2.5px solid #7a1818 !important;
-}
+} */
 .profile-divider-db {
   background-color: #751a1a !important;
 }
@@ -736,32 +758,199 @@ tr:hover {
 }
 .db-wholecard {
   margin-top: 3% !important;
+
 }
-.db-custom-cards {
+.db-custom-cards  {
+  background-color: #F5E0B3 !important;
   height: 510px;
   overflow: auto;
-  width: 700px;
+  width: 100%;
 }
+
+
+/*-- Topbar Icons ----*/
+.user-prof-icon {
+  color: #3bc00a !important
+}
+.settings-icon {
+  color: #59abf7 !important
+}
+.log-icon {
+  color: #fb8524 !important;
+}
+.logout-icon {
+  color: #0f899e !important;
+}
+
+/*-- Sidebar ---
 .sidebar {
-  width: 260px !important;
-  height: 100vh;
-  position: sticky;
+  height: 100%;
+  width: 200px;
+  position: fixed;
   top: 0;
+  left: 0;
+  z-index: 1;
   overflow-y: auto;
   overflow-x: hidden;
-
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  overflow: -moz-scrollbars-none;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-  }
-
-  -ms-overflow-style: none;
-
 }
+*/
+/*--- Card body of edit --- */
+.card-profile-edit {
+  height: 600px;
+  width: 350px;
+  background-color: #baecfc !important;
+  border-radius: 10px;
+  border: 3px solid #3e6e7e !important;
+  margin-right: none !important;
+  margin-left: 8%;
+  margin-top: 5% !important;
+  margin-bottom: 5% !important;
+}
+.border-form-prof {
+  border: 2px solid #3e6e7e  !important;
+}
+
+#editpreview {
+  width: 100px;
+  height: 100px;
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+}
+
+.card-prof {
+  border-radius: 10px;
+  height: 601px !important;
+  width: 720px;
+  margin-top: 3% !important;
+  margin-left: none !important;
+  margin-top: 5%;
+  background-color: white !important;
+  border: 3px solid #3e6e7e  !important;
+}
+
+.border-form-tab {
+  color: #3e6e7e  !important;
+  font-weight: bold !important;
+}
+
+.nav-link.active {
+  background-color: #baecfc !important;
+  border: white !important;
+}
+
+.candidate-prof {
+  background-color: #baecfc !important;
+  border: 3px solid #3e6e7e !important;
+  border-radius: 10px;
+}
+.content {
+  margin-top: 80px;
+  margin-left: 220px;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+}
+::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+:root{
+  --minus-15rem: calc(100% - 15rem);
+  --minus-6rem: calc(100% - 8rem);
+}
+
+.navbar {
+  background-color: #8b2525 !important;
+  box-shadow: 0 4px 8px #3b3939 !important;
+  border-radius: 12px;
+  margin-left: 14.5rem;
+  position: fixed !important;
+  width: var(--minus-15rem);
+  z-index: 2;
+  margin-bottom: 10px;
+  margin-top: 13px;
+}
+
+/* sidebar toggled*/
+@media (min-width: 768px) {
+
+  .content-toggled {
+    margin-left: 6.5rem !important;
+    /* margin-left: 0 !important; */
+  }
+
+  .navbar-toggled {
+    margin-left: 7rem !important;
+    margin-right: 8rem;
+    width: var(--minus-6rem);
+  }
+
+  .footer-toggled{
+    margin-left: 0 !important;
+  }
+  .sidebar{
+   height: 100vh;
+   overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+}
+
+/*default state*/
+@media (max-width: 768px){
+
+  .table td {
+    padding: 1rem !important;
+  }
+  
+  .content{
+    margin-left: 0px !important;
+  }
+  
+  .sticky-footer{
+    margin-left: 0px !important;
+  }  
+
+  .navbar{
+    margin-left: 26.5%;
+    width: var(--minus-6rem);
+    border-radius: 0px;
+    margin-top: 0px;
+    width: 100% !important;
+  }
+
+  .content-toggled {
+    margin-left: 0!important;
+  }
+  .navbar-toggled {
+    margin-left: 0!important;
+    width: 100%;
+  }
+  .footer-toggled{
+    margin-left: 0 !important;
+  }
+}
+.bars {
+  margin-top: 30%;
+  margin-bottom: 30%;
+  margin-left: 5%;
+}
+.topbar-profile-img {
+  margin-top: 1px !important;
+}
+/*--- Mobile View ---*/ 
+/* @media screen and (max-width: 768px) {
+  .sidebar .nav-item .collapse {
+      display: block;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+    }
+} */
+
+
+
+
