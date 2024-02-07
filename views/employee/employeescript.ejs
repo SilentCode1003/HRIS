@@ -256,7 +256,7 @@
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () {},
+        initComplete: function () { },
       });
     }
 
@@ -269,6 +269,7 @@
         });
 
       employeeid = dataRow[0];
+      console.log(dataRow);
     });
 
     $(document).on("click", "#edit-btn", function () {
@@ -363,6 +364,8 @@
       let address = $("#editemployeeaddress").val();
       let profilePicturePath = base64String;
 
+      console.log(newEmployeeId);
+
       var message = "";
 
       if (firstname === "") {
@@ -382,7 +385,7 @@
       }
 
       if (civilstatus === "") {
-        message += "gender is required. ";
+        message += "civilstatus is required. ";
       }
 
       if (phone === "") {
@@ -451,19 +454,29 @@
             profilePicturePath: profilePicturePath,
           },
           success: function (result) {
-            if (result.msg === "success") {
-              swal(
-                "Success",
-                "Employee information updated successfully.",
-                "success"
-              );
-            } else if (result.msg === "exists") {
-              swal(
-                "Validation Error",
-                "Employee with the same firstname and lastname already exists.",
-                "error"
-              );
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
             } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
             }
           },
           error: function (err) {
@@ -643,7 +656,7 @@
             EXPIRY_DATE.innerHTML = item.expirydate;
           });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) { },
       });
     });
 
@@ -682,7 +695,7 @@
             INSURANCE_NUMBER.innerHTML = item.insurancenumber;
           });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) { },
       });
     });
 
@@ -719,7 +732,7 @@
             STATUS.innerHTML = item.status;
           });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) { },
       });
     });
 
@@ -756,7 +769,7 @@
             STATUS.innerHTML = item.status;
           });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) { },
       });
     });
 
