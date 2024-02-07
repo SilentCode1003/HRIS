@@ -326,12 +326,16 @@ exports.Master_Shift = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
-      shiftid: key.ms_shiftid,
-      shiftname: key.ms_shiftname,
-      status: key.ms_status,
+      shiftid: key.ms_id,
+      employeeid: key.ms_employeeid,
       department: key.ms_department,
-      createby: key.ms_createby,
-      createdate: key.ms_createdate,
+      monday: key.ms_monday,
+      tuesday: key.ms_tuesday,
+      wednesday: key.ms_wednesday,
+      thursday: key.ms_thursday,
+      friday: key.ms_friday,
+      saturday: key.ms_saturday,
+      sunday: key.ms_sunday,
     });
   });
 
