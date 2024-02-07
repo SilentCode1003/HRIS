@@ -1,15 +1,13 @@
 <div id="loading" class="loading"></div>
 <br>
-<h1 class="font-weight-bold" id="h-title">Interest</h1>  
   
   <!-- Modal -->
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
+      <div class="modal-content content-interest-modal">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-spa' style='color:#e26af1; font-size: 50px; margin: 3px;'></i>
           <h3 class="modal-title" id="staticBackdropLabel">INTEREST</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <!--- Modal Body -->
         <div class="modal-body" id="modal-body">
@@ -23,18 +21,18 @@
            <div class="row g-2">
             <div class="col-auto">
               <label for="exampleFormControlInput1" class="form-label" id="interest">Interest</label>
-              <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="0%"> 
+              <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="0%"> 
           </div>
           <div class="row g-3">
             <div class="col-auto">
                 <label for="21" class="form-label" id="rebate">Rebate</label>
-                <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="Enter Rebate here.."> 
+                <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="Enter rebate here.."> 
             </div>
           </div>
            </div>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn-submit">Submit</button>
+          <button type="button" class="btn btn-modal-save">Submit</button>
         </div>
       </div>   
     </div>
@@ -46,6 +44,7 @@
   <!------ Table ------>
   <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Interest</h3>
     <!-- Button trigger modal -->
   <button type="button" class="btn-add-color" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     <b>+ Add</b>

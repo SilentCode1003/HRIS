@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Violation</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Violation</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#violationmodal">
         <b>+ Add</b>
       </button>
@@ -16,7 +16,7 @@
                     <tr>
                         <th class="col-sm-1">ID</th>
                         <th class="col-25">Description</th>
-                        <th>Action ID</th>
+                        <th class="col-sm-1">Action ID</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Status</th>
@@ -37,24 +37,23 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <i class='bx bxs-error-alt' style='color:#e2d504; font-size: 50px; margin: 3px;'></i>
-        <h3 class="modal-title" id="exampleModalLabel">VIOLATION</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">VIOLATION</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
         <form>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="violationdescription" name="violationdescription"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <input type="text" class="form-control border-form-modal" id="violationdescription" name="violationdescription"
+                placeholder="Department Name">
               <label for="floatingInput">Description</label>
             </div>
           </div>
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="violationactionid" name="violationactionid"
-                aria-label="Floating label select example" style="border: 2.5px solid #174634 !important;">
+              <select class="form-select border-form-modal" id="violationactionid" name="violationactionid"
+                aria-label="Floating label select example">
                 <option selected>Action ID</option>
               </select>
               <label for="floatingSelectGrid">Action ID</label>
@@ -64,10 +63,8 @@
         </form>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-        <button type="button" class="btn btn-primary" id="violationsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="violationsavebtn">Save</button>
       </div>
     </div>
   </div>
@@ -77,15 +74,15 @@
 <div class="modal fade" id="editviolationmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Violation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Violation</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <form>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="editviolationdescription" name="editviolationdescription"
+              <input type="text" class="form-control border-form-modal" id="editviolationdescription" name="editviolationdescription"
                 placeholder="Department Name">
               <label for="floatingInput">Description</label>
             </div>
@@ -93,7 +90,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="editviolationactionid" name="editviolationactionid"
+              <select class="form-select border-form-modal" id="editviolationactionid" name="editviolationactionid"
                 aria-label="Floating label select example">
                 <option selected>Action ID</option>
               </select>
@@ -103,7 +100,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="editviolationcreatedby" name="editviolationcreatedby"
+              <input type="text" class="form-control border-form-modal" id="editviolationcreatedby" name="editviolationcreatedby"
                 placeholder="Created By">
               <label for="floatingInput">Created By</label>
             </div>
@@ -111,7 +108,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="editvatiolationstatus" name="editvatiolationstatus"
+              <select class="form-select border-form-modal" id="editvatiolationstatus" name="editvatiolationstatus"
                 aria-label="Floating label select example">
                 <option selected>Status</option>
                 <option value="Active">Active</option>
@@ -123,9 +120,9 @@
           <br>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="violationeditbtn">Save</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="violationeditbtn">Save</button>
       </div>
     </div>
   </div>

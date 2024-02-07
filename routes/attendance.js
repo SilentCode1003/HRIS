@@ -92,22 +92,75 @@ router.post("/getloadforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `       
-        SELECT
-        CONCAT(me_lastname, " ", me_firstname) as employeeid,
-        TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
-        TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
-        DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
-        DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
-        ma_devicein as devicein,
-        ma_deviceout as deviceout,
-        CONCAT(
-        FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
-        FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
-        ) AS totalhours
-        FROM master_attendance
-        INNER JOIN master_employee ON ma_employeeid = me_id
-        where ma_employeeid='${employeeid}'
-        ORDER BY ma_attendancedate DESC`;
+  SELECT
+  CONCAT(me_lastname, " ", me_firstname) as employeeid,
+  TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+  TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+  DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
+  DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
+  ma_devicein as devicein,
+  ma_deviceout as deviceout,
+  CONCAT(
+  FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+  FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+  ) AS totalhours,
+  mgsIn.mgs_geofencename AS geofencenameIn,
+  mgsOut.mgs_geofencename AS geofencenameOut
+  FROM master_attendance
+  INNER JOIN master_employee ON ma_employeeid = me_id
+  LEFT JOIN
+  master_geofence_settings mgsIn ON ma_gefenceidIn = mgsIn.mgs_id
+  LEFT JOIN
+  master_geofence_settings mgsOut ON ma_geofenceidOut = mgsOut.mgs_id
+  where ma_employeeid='${employeeid}'
+  ORDER BY ma_attendancedate DESC
+  limit 2`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    console.log("error", error);
+  }
+});
+
+router.post("/filterforapp", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `       
+    SELECT
+    CONCAT(me_lastname, " ", me_firstname) as employeeid,
+    TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
+    TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
+    ma_devicein as devicein,
+    ma_deviceout as deviceout,
+    mgsIn.mgs_geofencename AS geofencenameIn,
+    mgsOut.mgs_geofencename AS geofencenameOut,
+    CONCAT(
+    FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+    FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+    ) AS totalhours
+    FROM master_attendance
+    INNER JOIN master_employee ON ma_employeeid = me_id
+    LEFT JOIN
+    master_geofence_settings mgsIn ON ma_gefenceidIn = mgsIn.mgs_id
+    LEFT JOIN
+    master_geofence_settings mgsOut ON ma_geofenceidOut = mgsOut.mgs_id
+    where ma_employeeid='${employeeid}'
+    ORDER BY ma_attendancedate DESC`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -131,24 +184,20 @@ router.post("/getloadforapp", (req, res) => {
 router.post("/logs", (req, res) => {
   try {
     let attendanceid = req.body.attendanceid;
-    let sql = `SELECT
-        me_profile_pic AS image,
-        CONCAT(me_lastname, ' ', me_firstname) AS fullname,
-        DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
-        TIME(al_logdatetime) AS logtime,
-        al_logtype AS logtype,
-        al_latitude AS latitude,
-        al_longitude AS longitude,
-        al_device AS device,
-        mgs_location AS location
-        FROM
-        master_employee
-        INNER JOIN
-        attendance_logs ON me_id = al_employeeid
-        LEFT JOIN
-        master_geofence_settings ON me_department = mgs_departmentid
-        WHERE
-        al_attendanceid = '${attendanceid}'`;
+    let sql = `select 
+    me_profile_pic as image,
+    concat(me_lastname,' ',me_firstname) as fullname,
+	  DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
+	  TIME(al_logdatetime) AS logtime,
+    al_logtype AS logtype,
+	  al_latitude AS latitude,
+    al_longitude AS longitude,
+	  al_device AS device,
+    mgs_geofencename as location
+    from attendance_logs
+    inner join master_employee on attendance_logs.al_employeeid = me_id
+    inner join master_geofence_settings on attendance_logs.al_geofenceid = mgs_id
+    where al_attendanceid = '${attendanceid}'`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -233,30 +282,30 @@ router.post("/gethomestatus2", (req, res) => {
   }
 });
 
-router.post('/filterforapp', (req, res) => {
-  try {
-    let startdate = req.body.startdate;
-    let enddate = req.body.enddate;
-    let sql = `SELECT ma_attendancedate as attendancedate
-    FROM master_attendance
-    WHERE ma_attendancedate BETWEEN '${startdate}' AND '${enddate}';`;
+// router.post('/filterforapp', (req, res) => {
+//   try {
+//     let startdate = req.body.startdate;
+//     let enddate = req.body.enddate;
+//     let sql = `SELECT ma_attendancedate as attendancedate
+//     FROM master_attendance
+//     WHERE ma_attendancedate BETWEEN '${startdate}' AND '${enddate}';`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    })
-  } catch (error) {
-    res.json({
-      msg: error,
-    });
-  }
-});
+//     mysql.mysqlQueryPromise(sql)
+//     .then((result) => {
+//       res.json({
+//         msg: 'success',
+//         data: result,
+//       });
+//     })
+//     .catch((error) => {
+//       res.json({
+//         msg: 'error',
+//         data: error,
+//       });
+//     })
+//   } catch (error) {
+//     res.json({
+//       msg: error,
+//     });
+//   }
+// });

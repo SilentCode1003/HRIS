@@ -31,7 +31,6 @@
                         var finalData = [];
                         var data = json.data;
 
-                        console.log(data);
                         $.each(data, (key, item) => {
                             var action = "";
                             var status = item.status;
@@ -43,8 +42,8 @@
                             var imgElement = document.createElement("img");
                             imgElement.src = "data:image/jpg;base64," + item.image;
                             imgElement.alt = "Profile Image";
-                            imgElement.style.width = "100px";
-                            imgElement.style.height = "100px";
+                            imgElement.style.width = "80px";
+                            imgElement.style.height = "80px";
 
                             finalData.push({
                                 image: imgElement.outerHTML,
@@ -88,7 +87,6 @@
                     });
                 },
                 initComplete: function () {
-                    console.log('Done');
                 },
             });
         }
@@ -102,7 +100,6 @@
                 .each(function () {
                     dataRow.push($(this).text());
                 });
-            console.log(dataRow);
             attendanceid = dataRow[1];
         });
 
@@ -115,8 +112,6 @@
                     attendanceid: attendanceid,
                 },
                 success: function (json) {
-                    console.log("API response", json);
-                    console.log("id", attendanceid);
 
                     var finalData = [];
                     var data = json.data;
@@ -141,8 +136,8 @@
                         var imgElement = document.createElement("img");
                         imgElement.src = "data:image/jpg;base64," + item.image;
                         imgElement.alt = "Profile Image";
-                        imgElement.style.width = "100px";
-                        imgElement.style.height = "100px";
+                        imgElement.style.width = "80px";
+                        imgElement.style.height = "80px";
 
                         IMAGE.appendChild(imgElement);
 
@@ -165,7 +160,6 @@
                     });
                 },
                 error: function (xhr, status, error) {
-                    console.log("API error", error);
                 },
             });
         });
@@ -191,7 +185,6 @@
         //                 var finalData = [];
         //                 var data = json.data;
 
-        //                 console.log(data);
         //                 $.each(data, (key, item) => {
         //             //         var action = `
         //             //     <button class="btn text-primary editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal" 
@@ -230,7 +223,6 @@
         //             { data: "location" },
         //         ],
         //         initComplete: function () {
-        //             console.log('DataTable initialized');
         //         },
         //     });
         // });
@@ -304,7 +296,6 @@
                 url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
                 contentType: 'application/json',
                 success: function (data) {
-                    console.log(data.message);
                     // Handle success or show a message to the user
                     $('#geoFenceModal').modal('hide'); // Close the modal
                 },

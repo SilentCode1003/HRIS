@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Resigned Employee</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Resigned Employee</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#resignedmodal">
         <b>+ Add</b>
       </button>
@@ -37,16 +37,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-user-x' style='color:#f9181d; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">RESIGNED EMPLOYEE</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">RESIGNED EMPLOYEE</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="resignedemployee" name="resignedemployee" aria-label="Floating label select example"
-                        style="border: 2.5px solid #174634 !important;">
+                        <select class="form-select border-form-modal" id="resignedemployee" name="resignedemployee" aria-label="Floating label select example">
                           <option selected>Choose..</option>
                         </select>
                         <label for="floatingSelectGrid">Employee</label>
@@ -55,24 +53,21 @@
                  <br>
                   <div class="col">
                     <div class="form-floating">
-                    <input type="text" class="form-control" id="resignedreason" name="resignedreason"
-                    style="border: 2.5px solid #174634 !important;">
+                    <input type="text" class="form-control border-form-modal" id="resignedreason" name="resignedreason">
                     <label for="floatingInput">Reason</label>
                     </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                    <input type="date" class="form-control" id="dateresigned" name="dateresigned"
-                    style="border: 2.5px solid #174634 !important;">
+                    <input type="date" class="form-control border-form-modal" id="dateresigned" name="dateresigned">
                     <label for="floatingInput">Date Resigned</label>
                     </div>
                 </div>
                 <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="resignedstatus" name="resignedstatus" aria-label="Floating label select example"
-                            style="border: 2.5px solid #174634 !important;">
+                            <select class="form-select border-form-modal" id="resignedstatus" name="resignedstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="resigned">Resigned</option>
                               <option value="terminated">Terminate</option>
@@ -86,10 +81,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="resignedsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="resignedsavebtn">Save</button>
         </div>
       </div>
     </div>
@@ -99,15 +92,15 @@
   <div class="modal fade" id="editresignedmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Resigned Employee</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Resigned Employee</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editresignedemployee" name="editresignedemployee" aria-label="Floating label select example" disabled>
+                        <select class="form-select border-form-modal" id="editresignedemployee" name="editresignedemployee" aria-label="Floating label select example" disabled>
                           <option selected>Choose..</option>
                         </select>
                         <label for="floatingSelectGrid">Employee</label>
@@ -116,21 +109,21 @@
                  <br>
                   <div class="col">
                     <div class="form-floating">
-                    <input type="text" class="form-control" id="editresignedreason" name="editresignedreason">
+                    <input type="text" class="form-control border-form-modal" id="editresignedreason" name="editresignedreason">
                     <label for="floatingInput">Reason</label>
                     </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                    <input type="date" class="form-control" id="editdateresigned" name="editdateresigned">
+                    <input type="date" class="form-control border-form-modal" id="editdateresigned" name="editdateresigned">
                     <label for="floatingInput">Date Resigned</label>
                     </div>
                 </div>
                 <br>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="editresignedstatus" name="editresignedstatus" aria-label="Floating label select example">
+                            <select class="form-select border-form-modal" id="editresignedstatus" name="editresignedstatus" aria-label="Floating label select example">
                               <option selected>Status</option>
                               <option value="resigned">Resigned</option>
                               <option value="terminated">Terminate</option>
@@ -143,9 +136,9 @@
                     <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editresignedsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editresignedsavebtn">Save</button>
         </div>
       </div>
     </div>

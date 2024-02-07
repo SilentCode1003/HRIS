@@ -54,17 +54,23 @@ router.post('/getshift', (req, res) => {
 router.get('/load', (req, res) => {
   try {
     let sql = `SELECT 
-    ms_shiftid,
-    ms_shiftname,
-    ms_status,
+    ms_id,
+    ms_employeeid,
     md_departmentname as ms_department,
-    ms_createby,
-    ms_createdate
+    ms_monday,
+    ms_tuesday,
+    ms_wednesday,
+    ms_thursday,
+    ms_friday,
+    ms_saturday,
+    ms_sunday
     from master_shift
     LEFT JOIN master_department ON master_shift.ms_department = md_departmentid`;
 
     mysql.Select(sql, 'Master_Shift', (err, result) => {
       if (err) console.error('Error: ', err);
+
+      console.log(result);
 
       res.json({
         msg: 'success', data: result
@@ -72,7 +78,8 @@ router.get('/load', (req, res) => {
     });
   } catch (error) {
     res.json({
-      msg:error
+      msg:'error',
+      data:error,
     })
     
   }

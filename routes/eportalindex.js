@@ -74,6 +74,8 @@ router.post("/latestlogforapp", (req, res) => {
 
 router.post("/clockin", (req, res) => {
   const employee_id = req.body.employeeid;
+  const geofenceid = req.body.geofenceid;
+
 
   if (!employee_id) {
     return res.status(401).json({
@@ -86,7 +88,6 @@ router.post("/clockin", (req, res) => {
   const attendancedate = moment().format("YYYY-MM-DD");
   const devicein = getDeviceInformation(req);
 
-  // Check if there's a clock-in record for the current day
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -95,7 +96,6 @@ router.post("/clockin", (req, res) => {
       AND ma_clockin IS NOT NULL
   `;
 
-  // Check if there's a missing clock-out on the previous day
   const checkMissingClockOutQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -104,7 +104,9 @@ router.post("/clockin", (req, res) => {
       AND ma_clockout IS NULL
   `;
 
-  // Promisified function to execute multiple queries sequentially
+  console.log(checkMissingClockOutQuery);
+
+
   const executeSequentialQueries = (queries) =>
     queries.reduce(
       (promise, query) =>
@@ -119,19 +121,16 @@ router.post("/clockin", (req, res) => {
   executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
     .then(([resultClockIn, resultMissingClockOut]) => {
       if (resultClockIn.length > 0) {
-        // Employee has already clocked in on the same day
         res.json({
           status: "exist",
           message: "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (resultMissingClockOut.length > 0) {
-        // Employee has a missing clock-out on the previous day
         res.json({
           status: "disabled",
           message: "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else {
-        // Proceed with the clock-in process
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const attendanceData = [
           [
@@ -141,6 +140,7 @@ router.post("/clockin", (req, res) => {
             latitude,
             longitude,
             devicein,
+            geofenceid,
           ],
         ];
 
@@ -180,6 +180,7 @@ router.post("/clockout", (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
+  const geofenceid = req.body.geofenceid;
 
   const checkExistingClockInQuery = `
     SELECT ma_employeeid, ma_attendancedate
@@ -199,17 +200,16 @@ router.post("/clockout", (req, res) => {
         const deviceout = getDeviceInformation(req);
 
         const updateQuery = `
-          UPDATE master_attendance
-          SET
-            ma_clockout = '${clockoutTime}',
-            ma_latitudeout = '${latitude}',
-            ma_longitudeout = '${longitude}',
-            ma_deviceout = '${deviceout}'
-          WHERE
-            ma_employeeid = '${employee_id}'
-            AND ma_attendancedate = '${ma_attendancedate}'
-        `;
-
+        UPDATE master_attendance
+        SET
+          ma_clockout = '${clockoutTime}',
+          ma_latitudeout = '${latitude}',
+          ma_longitudeout = '${longitude}',
+          ma_deviceout = '${deviceout}',
+          ma_geofenceidOut = '${geofenceid}'
+        WHERE
+          ma_employeeid = '${employee_id}'
+          AND ma_attendancedate = '${ma_attendancedate}'`;
         mysql
           .Update(updateQuery)
           .then((updateResult) => {

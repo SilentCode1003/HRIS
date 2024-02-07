@@ -296,7 +296,7 @@ router.post('/getdisciplinary', (req ,res) => {
     oda_employeeid as employeeid,
     oda_offenseid as offenseid,
     oda_actionid as actionid,
-    mv_description as violation,
+    mv_violationid as violation,
     oda_date as date,
     oda_createby as createby,
     oda_createdate as createdate,
@@ -307,10 +307,12 @@ router.post('/getdisciplinary', (req ,res) => {
     where oda_disciplinaryid = '${disciplinaryid}'
     limit 1`;
 
+    console.log(sql);
+
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     })

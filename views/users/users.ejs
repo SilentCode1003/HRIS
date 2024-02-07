@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Users</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Users</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
         <b>+ Add</b>
       </button>
@@ -14,6 +14,7 @@
             <table class="table table-striped" id="dataTableusers">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th class="col-sm-1">ID</th>
                         <th>Employee ID</th>
                         <th class="col-25">Username</th>
@@ -37,16 +38,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-user-circle' style='color:#0bd9f1; font-size: 50px; margin: 3px;'></i>
           <h3 class="modal-title" id="exampleModalLabel">USERS</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
               <div class="col">
                 <div class="form-floating">
-                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example"
-                  style="border: 2.5px solid #174634 !important;">
+                  <select class="form-select border-form-modal" id="usersname" name="usersname" aria-label="Floating label select example">
                     <option selected>Choose....</option>
                   </select>
                   <label for="floatingSelectGrid">Employee ID</label>
@@ -55,8 +54,7 @@
               <br>
               <div class="col">
                   <div class="form-floating">
-                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example"
-                      style=" border: 2.5px solid #174634 !important;">
+                      <select class="form-select border-form-modal" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
@@ -66,10 +64,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="userssavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="userssavebtn">Save</button>
         </div>
       </div>
     </div>
@@ -79,16 +75,16 @@
 <div class="modal fade" id="editusersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Users</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
               <br>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="editusername" name="editusername" placeholder="Created By">
+                    <input type="text" class="form-control border-form-modal" id="editusername" name="editusername" placeholder="Created By">
                     <label for="floatingInput">Username</label>
                   </div>
                 </div>
@@ -102,7 +98,7 @@
                 <br> -->
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
@@ -110,7 +106,7 @@
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
                           <option selected>Choose....</option>
                           <option value="Active">Active</option>
                           <option value="Inactive">Inactive</option>
@@ -121,9 +117,9 @@
                 <br>
         </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="edituserssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="edituserssavebtn">Save</button>
         </div>
       </div>
     </div>

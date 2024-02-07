@@ -2,7 +2,6 @@
   let disciplinaryactionid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadEditoffenses();
@@ -29,7 +28,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -70,7 +68,6 @@
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -130,14 +127,12 @@
         type: "GET",
         url: "/offenses/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.offensename, item.offensename);
             $(options).html(item.offensename);
             $('#disciplinaryactionoffenseid').append(options);
-            console.log(item.offensename);
           });
         },
         error: function (result) {
@@ -153,14 +148,12 @@
         type: "GET",
         url: "/offenses/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.offenseid, item.offenseid);
             $(options).html(item.offensename);
             $('#editdisciplinaryactionoffenseid').append(options);
-            console.log(item.offensename);
           });
         },
         error: function (result) {
@@ -180,7 +173,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       disciplinaryactionid = dataRow[0];
     });
 
@@ -212,7 +204,6 @@
       });
     });
     $(document).on("click", "#disciplinaryactioneditbtn", function () {
-      console.log("Save button clicked");
       let id = disciplinaryactionid
       let actioncode = $("#editdisciplinaryactionactioncode").val();
       let offenseid = $("#editdisciplinaryactionoffenseid").val();

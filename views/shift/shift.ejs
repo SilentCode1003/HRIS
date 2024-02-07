@@ -1,9 +1,8 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Shift</h1>
-
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Shift</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
         <b>+ Add</b>
       </button>
@@ -15,11 +14,15 @@
                 <thead>
                     <tr>
                         <th class="col-sm-1">ID</th>
-                        <th>Shift Hours</th>
-                        <th>Status</th>
+                        <th>Employee</th>
                         <th>Department</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                        <th>Sunday</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
@@ -31,29 +34,27 @@
 </div>
 </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='bx bxs-calendar-event' style='color:#f79ab7; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">SHIFT</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">SHIFT</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
                     <div class="col">
                         <div class="form-floating">
-                        <input type="text" class="form-control" id="shifthours" name="shifthours" placeholder="Department Name"
-                        style="border: 2.5px solid #174634 !important;">
+                        <input type="text" class="form-control border-form-modal" id="shifthours" name="shifthours" placeholder="Department Name">
                         <label for="floatingInput">Shift Hours</label>
                         </div>
                     </div>
                     <br>
                     <div class="col">
                       <div class="form-floating">
-                          <select class="form-select" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example"
-                          style="border: 2.5px solid #174634 !important;">
+                          <select class="form-select border-form-modal" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example">
                             <option selected>Department</option>
                           </select>
                           <label for="floatingSelectGrid">Department</label>
@@ -63,10 +64,8 @@
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="shiftsavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="shiftsavebtn">Save</button>
         </div>
       </div>
     </div>
@@ -76,23 +75,23 @@
 <div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" id="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                 <div class="col">
                     <input type="hidden" id="editshiftid" name="editshiftid">
                     <div class="form-floating">
-                    <input type="text" class="form-control" id="editshift" name="editshift" value="8:00:00 - 17:00:00">
+                    <input type="text" class="form-control border-form-modal" id="editshift" name="editshift" value="8:00:00 - 17:00:00">
                     <label for="floatingInput">Shift Hours</label>
                     </div>
                 </div>
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editshiftdepartment" name="editshiftdepartment" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editshiftdepartment" name="editshiftdepartment" aria-label="Floating label select example">
                           <option>Department</option>
                         </select>
                         <label for="floatingSelectGrid">Department</label>
@@ -101,7 +100,7 @@
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
                           <option>Status</option>
                           <option value="Active"selected>Active</option>
                           <option value="Inactive">Inactive</option>
@@ -112,9 +111,9 @@
                 <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="editshiftsavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editshiftsavebtn">Save</button>
         </div>
       </div>
     </div>

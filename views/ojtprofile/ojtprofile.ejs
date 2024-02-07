@@ -1,0 +1,128 @@
+<h1 class="font-weight-bold text-danger" id="head-title">Profile</h1>
+<br>
+<div class="container p-0">
+        <div class="col-md-9 col-xl-12">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="account" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                      <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Account</button>
+                                      <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Password</button>
+                                  </nav>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="ojtid">Ojt ID</label>
+                                                    <input type="text" class="form-control" id="ojtid" placeholder="Ojt ID" disabled>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="fullname">Full Name</label>
+                                                        <input type="text" class="form-control" id="fullname" placeholder="Full Name" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="department">Department</label>
+                                                        <input type="text" class="form-control" id="department" placeholder="Department" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="school">School</label>
+                                                        <input type="text" class="form-control" id="school" placeholder="School" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="datestart">Date Started</label>
+                                                        <input type="text" class="form-control" id="datestart" placeholder="Date Started" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="totalhours">Total Hours</label>
+                                                    <input type="text" class="form-control" id="totalhours" placeholder="Total Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="totaltime">Accumulated Hours</label>
+                                                    <input type="text" class="form-control" id="totaltime" placeholder="Accumulated Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="remaining">Remaining Hours</label>
+                                                    <input type="text" class="form-control" id="remaining" placeholder="Remaining Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="endddate">End Date</label>
+                                                    <input type="text" class="form-control" id="endddate" placeholder="End Date" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="text-center">
+                                                    <img id="editpreview" style="width:200px; height:200px;" class="rounded rounded-circle"
+                                                      alt="placeholder" disabled>
+                                                  </div>
+                                                  <br>
+                                                  <center>
+                                                    <div class="col">
+                                                      <div class="col g-6" style="width: 200px;">
+                                                      </div>
+                                                    </div>
+                                                  </center>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="inputPasswordCurrent">Current password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="inputPasswordCurrent">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- <small><a href="#">Forgot your password?</a></small> -->
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew">New password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="inputPasswordNew">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew2">Confirm password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="inputPasswordNew2">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                        <button type="submit" id="saveBtn" class="btn btn-danger">Save changes</button>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
+                                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+                              </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+</div>

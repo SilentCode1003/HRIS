@@ -77,6 +77,39 @@ router.get('/load', (req, res) => {
     }
   });
 
+  router.post('/departmentgefence', (req, res) => {
+    try {
+      let departmentid = req.body.departmentid;
+      let sql = `SELECT 
+      mgs_id,
+      mgs_geofencename,
+      md_departmentname as mgs_departmentid,
+      mgs_latitude,
+      mgs_longitude,
+      mgs_radius,
+      mgs_location,
+      mgs_status
+      FROM master_geofence_settings
+      LEFT JOIN master_department md ON master_geofence_settings.mgs_departmentid = md_departmentid
+      where mgs_status = 'Active' and mgs_departmentid = '${departmentid}'`;
+
+      console.log('department', departmentid);
+  
+      mysql.Select(sql, 'Master_Geofence_Settings', (err, result) => {
+        if (err) console.error('Error: ', err);
+  
+        res.json({
+          msg: 'success', data: result
+        });
+      });
+    } catch (error) {
+      res.json({
+        msg:error
+      })
+      
+    }
+  });
+
   router.post('/save', async (req,res) => {
     try {
         let geofencename = req.body.geofencename;
@@ -135,9 +168,11 @@ router.get('/load', (req, res) => {
   
 router.post('/selectgeofence', (req, res) => {
   try {
-    let department = req.body.department;
+    let departmentid = req.body.departmentid;
     let sql = `select * from master_geofence_settings
-    where mgs_departmentid ='${department}' and mgs_status = 'Active'`;
+    where mgs_departmentid ='${departmentid}' and mgs_status = 'Active'`;
+
+    console.log(departmentid);
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {

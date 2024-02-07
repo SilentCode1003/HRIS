@@ -8,8 +8,10 @@ const XLSX = require("xlsx");
 const { Validator } = require("./controller/middleware");
 const { convertExcelDate } = require("./repository/customhelper");
 const { Encrypter } = require("./repository/crytography");
+const { generateUsernameAndPasswordForApprentice } = require("./helper");
 const { generateUsernameAndPasswordforemployee } = require("./helper");
 
+const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
 
@@ -133,6 +135,51 @@ router.post("/getemployeeprofile", (req, res) => {
   }
 });
 
+router.post("/getemployeeprofileforappbasicinformation", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
+    me_id AS employeeid,
+    md_departmentname AS department,
+    mp_positionname AS position,
+    md_departmenthead AS departmenthead,
+    me_jobstatus AS jobstatus,
+    me_hiredate AS hiredate,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+        DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+    ) AS tenure
+    FROM 
+    master_employee
+    LEFT JOIN 
+    master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN 
+    master_position ON master_employee.me_position = mp_positionid
+    where me_id = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 router.post("/getemployee", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -226,7 +273,7 @@ router.get("/load", (req, res) => {
     LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     WHERE
-    me_jobstatus IN ('regular', 'probitionary')`;
+    me_jobstatus IN ('regular', 'probitionary','apprentice')`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -268,6 +315,29 @@ function generateEmployeeId(year, month) {
   });
 }
 
+function generateApprenticeId(year, month) {
+  return new Promise((resolve, reject) => {
+    const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
+    // Replace 'apprentice_table' with the actual table name where apprentice IDs are stored
+
+    mysql
+      .mysqlQueryPromise(maxIdQuery)
+      .then((result) => {
+        let currentCount = parseInt(result[0].count) + 1;
+        const paddedNumericPart = String(currentCount).padStart(2, "0");
+
+        let newApprenticeID = `${year}${month}${paddedNumericPart}`;
+
+        resolve(newApprenticeID);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+
+
 router.post("/save", async (req, res) => {
   try {
     const {
@@ -295,7 +365,31 @@ router.post("/save", async (req, res) => {
       return res.json({ msg: "exist" });
     }
 
-    const employeeId = await generateEmployeeId(currentYear, currentMonth);
+    let employeeId, username, password;
+
+    if (jobstatus === "apprentice") {
+      // If jobstatus is apprentice, generate apprentice ID
+      employeeId = await generateApprenticeId(apprenticecurrentYear, currentMonth);
+      
+      // Generate username and password for apprentice
+      ({ username, password } = generateUsernameAndPasswordForApprentice({
+        apprentice_firstname: firstname,
+        apprentice_lastname: lastname,
+        apprentice_id: employeeId,
+        apprentice_birthday: birthday,
+      }));
+    } else {
+      // If jobstatus is not apprentice, generate employee ID
+      employeeId = await generateEmployeeId(currentYear, currentMonth);
+
+      // Generate username and password for employee
+      ({ username, password } = generateUsernameAndPasswordforemployee({
+        me_firstname: firstname,
+        me_lastname: lastname,
+        me_id: employeeId,
+        me_birthday: birthday,
+      }));
+    }
 
     // Directly use department and position names for insertion
     const employeeData = [
@@ -331,13 +425,6 @@ router.post("/save", async (req, res) => {
 
         console.log("Employee record inserted: ", insertResult);
 
-        const { username, password } = generateUsernameAndPasswordforemployee({
-          me_firstname: firstname,
-          me_lastname: lastname,
-          me_id: employeeId,
-          me_birthday: birthday,
-        });
-
         Encrypter(password, async (encryptErr, encryptedPassword) => {
           if (encryptErr) {
             console.error("Error encrypting password: ", encryptErr);
@@ -366,6 +453,107 @@ router.post("/save", async (req, res) => {
     return res.json({ msg: "error" });
   }
 });
+
+
+
+// router.post("/save", async (req, res) => {
+//   try {
+//     const {
+//       firstname,
+//       middlename,
+//       lastname,
+//       birthday,
+//       gender,
+//       civilstatus,
+//       phone,
+//       email,
+//       hiredate,
+//       jobstatus,
+//       ercontactname,
+//       ercontactphone,
+//       departmentName,
+//       positionName,
+//       address,
+//       profilePicturePath,
+//     } = req.body;
+
+//     const employeeExists = await checkEmployeeExists(firstname, lastname);
+
+//     if (employeeExists) {
+//       return res.json({ msg: "exist" });
+//     }
+
+//     const employeeId = await generateEmployeeId(currentYear, currentMonth);
+
+//     // Directly use department and position names for insertion
+//     const employeeData = [
+//       [
+//         employeeId,
+//         firstname,
+//         middlename,
+//         lastname,
+//         birthday,
+//         gender,
+//         civilstatus,
+//         phone,
+//         email,
+//         hiredate,
+//         jobstatus,
+//         ercontactname,
+//         ercontactphone,
+//         departmentName,
+//         positionName,
+//         address,
+//         profilePicturePath,
+//       ],
+//     ];
+
+//     mysql.InsertTable(
+//       "master_employee",
+//       employeeData,
+//       async (insertErr, insertResult) => {
+//         if (insertErr) {
+//           console.error("Error inserting employee record: ", insertErr);
+//           return res.json({ msg: "insert_failed" });
+//         }
+
+//         console.log("Employee record inserted: ", insertResult);
+
+//         const { username, password } = generateUsernameAndPasswordforemployee({
+//           me_firstname: firstname,
+//           me_lastname: lastname,
+//           me_id: employeeId,
+//           me_birthday: birthday,
+//         });
+
+//         Encrypter(password, async (encryptErr, encryptedPassword) => {
+//           if (encryptErr) {
+//             console.error("Error encrypting password: ", encryptErr);
+//             return res.json({ msg: "encrypt_error" });
+//           }
+
+//           // Save user record
+//           const userSaveResult = await saveUserRecord(
+//             req,
+//             employeeId,
+//             username,
+//             encryptedPassword
+//           );
+
+//           if (userSaveResult.msg === "success") {
+//             return res.json({ msg: "success" });
+//           } else {
+//             console.error("Error saving user record: ", userSaveResult.msg);
+//             return res.json({ msg: "user_save_error" });
+//           }
+//         });
+//       }
+//     );
+//   } catch (error) {
+//     console.error("Error in /save route: ", error);
+//     return res.json({ msg: "error" });
+//   }
+// });
 
 // router.post('/save', async (req, res) => {
 //   try {
@@ -642,7 +830,9 @@ router.post("/update", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ msg: "Internal server error", error: error.message });
+      .json({ msg: "Internal server error", 
+      error: error.message 
+    });
   }
 });
 
@@ -650,11 +840,12 @@ router.post("/update", async (req, res) => {
 router.post("/getgovid", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `select 
+    let sql = `select
+    mg_governmentid as governmentid,
+    mg_employeeid as employeeid,
     mg_idtype as idtype,
     mg_idnumber as idnumber,
-    mg_issuedate as issuedate,
-    mg_expirydate as expirydate
+    mg_issuedate as issuedate
     from master_govid
     inner join master_employee on mg_employeeid = me_id
     where mg_employeeid = '${employeeid}'`;
@@ -662,8 +853,6 @@ router.post("/getgovid", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-        console.log("SQL query:", sql);
 
         res.json({
           msg: "success",
@@ -725,6 +914,45 @@ router.post("/gettraining", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = ` select 
+    mt_name as name,
+    mt_startdate as startdate,
+    mt_enddate as enddate,
+    mt_location as location,
+    mt_status as status
+    from master_training 
+    inner join master_employee on mt_employeeid = me_id
+    where mt_employeeid = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        console.log("SQL query:", sql);
+
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.post("/gettrainingforapp", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = ` select
+    me_id as employeeid,
+    mt_trainingid as trainingid, 
     mt_name as name,
     mt_startdate as startdate,
     mt_enddate as enddate,

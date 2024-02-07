@@ -1,9 +1,9 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Salary</h1>
 <br>
-<br>
+
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header py-3">
+    <div class="card-header">
+      <h3 class="title-card-table">Salary Settings</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#resignedmodal">
         <b>+ Add</b>
       </button>
@@ -15,11 +15,11 @@
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>ID</th>
-                        <th>Employee</th>
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-26">Employee</th>
                         <th>Monthly Salary</th>
                         <th>Monthly Allowances</th>
-                        <th>Action</th>
+                        <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,16 +35,14 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <i class='fas fa-money-bill' style='color:#0ebb39; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">Salary of Employee </h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h3 class="modal-title fs-5" id="exampleModalLabel">Salary of Employee </h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
             <form>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="salaryemp" name="salaryemp" aria-label="Floating label select example"
-                        style="border: 2.5px solid #174634 !important;">
+                        <select class="form-select border-form-modal" id="salaryemp" name="salaryemp" aria-label="Floating label select example">
                           <option selected>Choose..</option>
                         </select>
                         <label for="floatingSelectGrid">Employee</label>
@@ -53,34 +51,74 @@
                  <br>
                  <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="msemp" name="msemp"
-                      placeholder="Monthly Salary" style="border: 2.5px solid #174634 !important;">
-                    <label for="msemp">Monthly Salary</label>
+                      <input type="text" class="form-control border-form-modal" id="msemp" name="msemp"
+                          placeholder="Monthly Salary">
+                      <label for="msemp">Monthly Salary</label>
                   </div>
-                </div>                                       
-                <br>
-                <div class="col">
+              </div>                                       
+              <br>
+              <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="allowances" name="allowances"
-                      placeholder="Monthly Allowances" style="border: 2.5px solid #174634 !important;">
-                    <label for="allowances">Monthly Allowances</label>
+                      <input type="text" class="form-control border-form-modal" id="allowances" name="allowances"
+                          placeholder="Monthly Allowances">
+                      <label for="allowances">Monthly Allowances</label>
                   </div>
-                </div>                                       
-                <br>   
-                <br>
+              </div>                 
+              <br>   
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="salarysavebtn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="salarysavebtn">Save</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Edit Modal -->
+  <div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Salary of Employee </h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select border-form-modal" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example">
+                          <option selected>Choose..</option>
+                        </select>
+                        <label for="floatingSelectGrid">Employee</label>
+                    </div>
+                </div>
+                 <br>
+                 <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text border-form-modal" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control border-form-modal" id="msemp" name="msemp" placeholder="Monthly Salary">
+                    </div>
+                </div>                            
+                <br>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text border-form-modal" id="basic-addon1">₱</span>
+                        <input type="number" class="form-control border-form-modal" id="allowances" name="allowances" placeholder="Monthly Allowances">
+                    </div>
+                </div>     
+                <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editsalarysavebtsn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal 
   <div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -93,8 +131,7 @@
             <form>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example"
-                        style="border: 2.5px solid #174634 !important;">
+                        <select class="form-select border-form-modal" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example">
                           <option selected>Choose..</option>
                         </select>
                         <label for="floatingSelectGrid">Employee</label>
@@ -104,27 +141,24 @@
                  <div class="col">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">₱</span>
-                        <input type="number" class="form-control" id="editmsemp" name="editmsemp"
-                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Salary">
+                        <input type="number" class="form-control border-form-modal" id="editmsemp" name="editmsemp" placeholder="Monthly Salary">
                     </div>
                 </div>                            
                 <br>
                 <div class="col">
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">₱</span>
-                        <input type="number" class="form-control" id="editallowances" name="editallowances"
-                            style="border: 2.5px solid #174634 !important;" placeholder="Monthly Allowances">
+                        <input type="number" class="form-control border-form-modal" id="editallowances" name="editallowances" placeholder="Monthly Allowances">
                     </div>
                 </div>     
                 <br>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: red !important;
-          border: 2px solid white !important;">Close</button>
-          <button type="button" class="btn btn-primary" id="editsalarysavebtsn" style="background-color: green !important;
-          border: 2px solid white !important;">Save</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editsalarysavebtsn">Save</button>
         </div>
       </div>
     </div>
   </div>
+   -->

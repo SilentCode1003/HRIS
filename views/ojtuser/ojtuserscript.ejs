@@ -99,7 +99,7 @@
         } else {
           $.ajax({
             type: "POST",
-            url: "/users/save",
+            url: "/ojtuser/save",
             data: {
               employeeid: employeeid,
               accesstype: accesstype,
@@ -202,7 +202,7 @@
       }
   
   
-      $("#dataTableusers tbody").on("click", "tr", function () {
+      $("#dataTableusersojt tbody").on("click", "tr", function () {
         var dataRow = [];
         $(this)
           .closest("tr")
@@ -218,7 +218,7 @@
         console.log('hit');
         $.ajax({
           type: "POST",
-          url: "/users/getusers",
+          url: "/ojtuser/getusers",
           data: {
             userid: userid,
           },
@@ -274,7 +274,7 @@
         } else {
           $.ajax({
             type: "POST",
-            url: "/users/update",
+            url: "/ojtuser/update",
             data: {
               userid: id,
               username: username,

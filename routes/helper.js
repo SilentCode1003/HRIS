@@ -7,10 +7,8 @@ exports.generateUsernameAndPassword = (employee) => {
       me_birthday: birthday,
     } = employee;
 
-    // Generate username by combining the first letter of the first name and the last name
     const username = (firstname.charAt(0) + lastname).toLowerCase();
 
-    // Generate the password by combining employeeid and birthday
     const password = employeeid + birthday.replace(/-/g, "");
 
     return { username, password };
@@ -28,10 +26,9 @@ exports.generateUsernameAndPasswordforemployee = (employee) => {
       me_birthday: birthday,
     } = employee;
 
-    // Generate username by combining the first name and the first letter of the last name
+    
     const username = firstname.toLowerCase() + lastname.charAt(0).toLowerCase();
 
-    // Generate the password by combining employee id and birthday
     const password = newEmployeeId + birthday.replace(/-/g, "");
 
     return { username, password };
@@ -39,6 +36,28 @@ exports.generateUsernameAndPasswordforemployee = (employee) => {
     console.log(error);
   }
 };
+
+exports.generateUsernameAndPasswordForApprentice = (apprentice) => {
+  try {
+    const {
+      apprentice_id: newApprenticeId,
+      apprentice_firstname: firstname,
+      apprentice_lastname: lastname,
+      apprentice_birthday: birthday,
+    } = apprentice;
+
+    // Generate username by combining the first name and the first letter of the last name
+    const username = firstname.toLowerCase() + lastname.charAt(0).toLowerCase();
+
+    // Generate the password by combining apprentice id and birthday
+    const password = newApprenticeId + birthday.replace(/-/g, "");
+
+    return { username, password };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 exports.UserLogin = (result, callback) => {
   try {
@@ -50,7 +69,11 @@ exports.UserLogin = (result, callback) => {
         employeeid: row.employeeid,
         fullname: row.fullname,
         accesstype: row.accesstype,
-        department: row.department,
+        departmentid: row.departmentid,
+        departmentname: row.departmentname,
+        position: row.position,
+        jobstatus: row.jobstatus,
+        geofenceid: row.geofenceid,
       });
     });
 
@@ -60,6 +83,29 @@ exports.UserLogin = (result, callback) => {
     callback(error);
   }
 };
+
+exports.OjtLogin = (result, callback) => {
+  try {
+    const ojtData = [];
+
+    result.forEach((row) => {
+      ojtData.push({
+        image: row.image,
+        ojtid: row.ojtid,
+        fullname: row.fullname,
+        accesstype: row.accesstype,
+        departmentid: row.departmentid,
+        status: row.status,
+      });
+    });
+
+    return ojtData;
+  } catch (error) {
+    console.log(error);
+    callback(error);
+  }
+};
+
 exports.showSweetAlert = (title, text, icon, buttonText) => {
   try {
     swal({

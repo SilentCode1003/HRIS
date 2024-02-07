@@ -201,16 +201,16 @@
 }
 
 #myInput {
-  float: right;
+  float: left;
   border: none;
   height: 33px;
   margin-right: 5px;
   border-radius: 8px;
-  border: 2px solid #8ED1AE !important;
+  border: 2px solid #F5E0B3 !important;
 }
 
 #myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
-#myInputRegular, #myInputtotal, #myInputtotalcandidate, #myInputtotalbagapuro   {
+#myInputRegular, #myInputtotal, #myInputtotalcandidate, #myInputtotalbagapuro, #myInputtotalapprentice   {
   margin-left:700px;
   margin-right: 5px;
   margin-top: 5px;
@@ -220,33 +220,29 @@
   border-radius: 8px;
 }
 
+
 #myInput2 {
-  float: right;
+  float: left;
   border: none;
   height: 33px;
   width: 300px;
   margin-right: 5px;
   border-radius: 8px;
-  border: 2px solid #8ED1AE !important;
+  border: 2px solid #F5E0B3 !important;
 }
 
 #myInput3 {
   margin-left: 80%;
   margin-top: -40px;
-  float: right;
+  float: left;
   width: 300px;
   height: 40px;
   border-radius: 8px;
-  border: 2px solid #8ED1AE !important;
+  border: 2px solid #F5E0B3 !important;
 }
 
 /*--- table ---*/
-#tablecard {
-  width: 100;
-  margin-left: 2%;
-  margin-right: 2%;
-  background-color:  #8ED1AE !important;
-}
+
 
 #table-responsive-id {
   overflow: hidden; 
@@ -277,8 +273,8 @@ table th {
   text-align: center;
   font-size: 12px;
   text-transform: uppercase;
-  border: 2px solid #168164 !important;
-  background-color: #0D9488 !important;
+  border: 2px solid #510A0A  !important;
+  background-color: #7a1818  !important;
   color: white !important;
 }
 .card .card-header {

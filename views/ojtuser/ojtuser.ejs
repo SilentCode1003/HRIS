@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Users for OJT</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Users for OJT</h3>
       <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
         <b>+ Add</b>
       </button>
@@ -34,15 +34,15 @@
 <div class="modal fade" id="usersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Users For Ojt</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h5 class="modal-title fs-5" id="exampleModalLabel">Users For Ojt</h5>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
               <div class="col">
                 <div class="form-floating">
-                  <select class="form-select" id="usersname" name="usersname" aria-label="Floating label select example">
+                  <select class="form-select border-form-modal" id="usersname" name="usersname" aria-label="Floating label select example">
                     <option selected>Choose....</option>
                   </select>
                   <label for="floatingSelectGrid">Employee ID</label>
@@ -51,7 +51,7 @@
               <br>
               <div class="col">
                   <div class="form-floating">
-                      <select class="form-select" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
+                      <select class="form-select border-form-modal" id="usersaccesstype" name="usersaccesstype" aria-label="Floating label select example">
                         <option selected>Choose....</option>
                       </select>
                       <label for="floatingSelectGrid">Access Type</label>
@@ -60,9 +60,9 @@
               <br>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="userssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="userssavebtn">Save</button>
         </div>
       </div>
     </div>
@@ -72,16 +72,16 @@
 <div class="modal fade" id="editusersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Users</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Users for OJT</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
               <br>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="editusername" name="editusername" placeholder="Created By">
+                    <input type="text" class="form-control border-form-modal" id="editusername" name="editusername" placeholder="Created By">
                     <label for="floatingInput">Username</label>
                   </div>
                 </div>
@@ -95,7 +95,7 @@
                 <br> -->
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editusersaccesstype" name="editusersaccesstype" aria-label="Floating label select example">
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
@@ -103,7 +103,7 @@
                 <br>
                 <div class="col">
                     <div class="form-floating">
-                        <select class="form-select" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
+                        <select class="form-select border-form-modal" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
                           <option selected>Choose....</option>
                           <option value="Active">Active</option>
                           <option value="Inactive">Inactive</option>
@@ -114,9 +114,9 @@
                 <br>
         </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="edituserssavebtn">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="edituserssavebtn">Save</button>
         </div>
       </div>
     </div>

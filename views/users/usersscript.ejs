@@ -2,7 +2,6 @@
   let userid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadListEmp();
     LoadAccess();
@@ -31,7 +30,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -87,7 +85,6 @@
           });
         },
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -155,14 +152,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
             $("#usersname").append(options);
-            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -176,14 +171,12 @@
         type: "GET",
         url: "/access/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.accessid, item.accessid);
             $(options).html(item.accessname);
             $("#usersaccesstype").append(options);
-            console.log(item.accessname);
           });
         },
         error: function (result) {
@@ -197,14 +190,12 @@
         type: "GET",
         url: "/access/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.accessid, item.accessid);
             $(options).html(item.accessname);
             $("#editusersaccesstype").append(options);
-            console.log(item.accessname);
           });
         },
         error: function (result) {
@@ -222,12 +213,10 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       userid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {
-      console.log('hit');
       $.ajax({
         type: "POST",
         url: "/users/getusers",
@@ -256,7 +245,6 @@
     });
 
     $(document).on("click", "#edituserssavebtn", function () {
-      console.log("Save button clicked");
       let id = userid
       let username = $("#editusername").val();
       //let password = $("#editpassword").val();

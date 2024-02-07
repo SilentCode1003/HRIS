@@ -1,54 +1,79 @@
 <script>
     $(document).ready(function () {
-        console.log('Initialize');
-        let userLocation;
+        let userLocation = '';
         let employeeid = "<%= employeeid %>";
+        let departmentid = '<%= departmentid %>';
         let devicein = '';
         let deviceout = '';
-        let geofenceChecked = false;
-        let logStatusChecked = false;
         let bdaydiv = "";
         let anouncementdiv = "";
+        let geofenceid = '';
         LoadTable();
         LoadBdayFolks();
         GenerateAnouncement();
 
-        //#region maps
+        console.log('department', departmentid);
 
-
-        console.log('Employee ID:', employeeid);
-
-        const OFFICE_LOCATION_LAT = 14.337945;
-        const OFFICE_LOCATION_LNG = 121.060511;
-
-        const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
+        const map = L.map('map').setView([0, 0], 15);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        const officeIcon = L.icon({
-            iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32],
+        // let geofencesettings = [];
+        let geofences = [];
+
+        $.ajax({
+            type: "POST",
+            url: "/geofencesettings/departmentgefence",
+            data: {
+                departmentid: departmentid,
+            },
+            success: function (result) {
+                let data = result.data;
+                console.log(data);
+                data.forEach(item => {
+                    const geofence = L.circle([item.latitude, item.longitude], {
+                        color: "red",
+                        fillColor: "#f03",
+                        fillOpacity: 0.3,
+                        radius: item.radius,
+                        geofenceid: item.geofenceid,
+                        departmentid: item.departmentid,
+                    }).addTo(map);
+                    geofences.push(geofence);
+                    // geofencesettings.push({
+                    //     geofenceid: item.geofenceid,
+                    //     latitude: item.latitude,
+                    //     longitude: item.longitude,
+                    //     radius: item.rad
+                    // });
+                });
+
+                validateUserLocation();
+            },
+            error: function (error) {
+                console.error('Error loading geofences:', error);
+            },
         });
-
-        const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
-        officeMarker.bindPopup('Office Location').openPopup();
-
-        const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.3,
-            radius: 100
-        }).addTo(map);
 
         function checkGeofence(userLocation) {
             const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
-            const isInside = userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
-            console.log('User is inside the geofence:', isInside);
-            return isInside;
+
+            for (const geofence of geofences) {
+                const geofenceLatLng = geofence.getLatLng();
+                const distance = userLatLng.distanceTo(geofenceLatLng);
+
+                if (distance <= geofence.getRadius()) {
+                    console.log('Geofence ID:', geofence.options.geofenceid);
+                    console.log('true');
+                    geofenceid = geofence.options.geofenceid;
+                    return true;
+
+                }
+            }
+            console.log('false');
+            return false;
         }
 
         function updateLocationOnMap(position) {
@@ -57,7 +82,6 @@
                 lng: position.coords.longitude
             };
 
-            // Clear previous markers
             map.eachLayer((layer) => {
                 if (layer instanceof L.Marker) {
                     layer.remove();
@@ -66,88 +90,43 @@
 
             const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
             userMarker.bindPopup(`My Location`).openPopup();
+            const geofenceButtonClockIn = document.getElementById('clockinbtn');
+            const geofenceButtonClockOut = document.getElementById('clockoutbtn');
 
-            const geofenceButton = document.getElementById('clockinbtn');
             if (checkGeofence(userLocation)) {
+                swal("You are inside the geofence!", "You clicked the clockin button!", "success");
                 console.log('User is inside the geofence.');
-                geofenceButton.style.display = 'block';
+                geofenceButtonClockIn.style.display = 'block';
+                geofenceButtonClockOut.style.display = 'block';
             } else {
+                swal("You are outside the geofence!", "You clicked the clockin button!", "warning");
                 console.log('User is outside the geofence.');
-                geofenceButton.style.display = 'block';
+                geofenceButtonClockIn.style.display = 'none';
+                geofenceButtonClockOut.style.display = 'none';
             }
         }
 
         function handleError(error) {
-            console.error(`Error getting user location: ${error.message}`, error);
+            console.error(`Error getting user location: ${error.message}`);
+        }
 
-            if (error.code === error.PERMISSION_DENIED) {
-                notifyUserToEnableLocation();
+        function validateUserLocation() {
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    updateLocationOnMap,
+                    handleError,
+                    { enableHighAccuracy: true, maximumAge: 10000, timeout: 1000 }
+                );
+            } else {
+                console.error('Geolocation is not supported on this device.');
             }
         }
 
-        function notifyUserToEnableLocation() {
-            if ('Notification' in window) {
-                if (Notification.permission !== 'denied') {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === 'granted') {
-                            new Notification('Enable Location Services', {
-                                body: 'Please enable location services to use this feature.',
-                            });
-                        }
-                    });
-                }
-            }
-        }
-
-        const watchId = navigator.geolocation.watchPosition(
-            updateLocationOnMap,
-            handleError,
-            {
-                enableHighAccuracy: true,
-                maximumAge: 30000,
-                timeout: 27000
-            }
-        );
-
-        function updateClockButtonStatus() {
-            $.ajax({
-                type: "GET",
-                url: "/eportalindex/latestlog",
-                data: {
-                    employeeid: employeeid,
-                },
-                success: function (response) {
-                    console.log("Latest Log API response", response);
-
-                    if (response && response.al_logtype) {
-                        const isClockIn = response.al_logtype === "ClockIn";
-
-                        $('#clockinbtn').toggle(!isClockIn);
-                        $('#clockoutbtn').toggle(isClockIn);
-                    } else {
-                        $('#clockinbtn').show();
-                        $('#clockoutbtn').hide();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Latest Log API error", error);
-                }
-            });
-        }
-
-        updateClockButtonStatus();
 
 
-        //#endregion
-
-
-        //#region clockin/out api
-
-
-
+        //#region buttons
 
         $('#clockinbtn').on('click', function () {
-            // Use SweetAlert to confirm before proceeding with clock-in
             swal({
                 title: "Confirm Clock-in",
                 text: "Are you sure you want to clock in?",
@@ -156,10 +135,8 @@
                 dangerMode: false,
             }).then((proceed) => {
                 if (proceed) {
-                    // User clicked "Yes, Clock In"
                     getDeviceInformation()
                         .then((devicein) => {
-                            // Use the retrieved devicein value in your AJAX request
                             $.ajax({
                                 type: "POST",
                                 url: "/eportalindex/clockin",
@@ -167,11 +144,10 @@
                                     employeeid: employeeid,
                                     latitude: userLocation.lat,
                                     longitude: userLocation.lng,
-                                    employeeid: employeeid,
                                     devicein: devicein,
+                                    geofenceid: geofenceid,
                                 },
                                 success: function (response) {
-                                    console.log("API response", response);
 
                                     if (response.msg === "exist") {
                                         swal({
@@ -184,7 +160,6 @@
                                             title: "Clock-in successful!",
                                             icon: "success",
                                         }).then(() => {
-                                            // Handle success
                                         });
                                     } else {
                                         swal({
@@ -195,9 +170,6 @@
                                     }
                                 },
                                 error: function (xhr, status, error) {
-                                    console.log("API error", error);
-
-                                    console.log("API response text:", xhr.responseText);
 
                                     swal({
                                         title: "Error",
@@ -209,23 +181,18 @@
                         })
                         .catch((error) => {
                             console.error("Error getting device information:", error);
-                            // Handle error getting device information
                         });
                 } else {
-                    // User clicked "Cancel" or closed the modal
                     swal("Clock-in Canceled", "", "info");
                 }
             });
         });
-
 
         $('#clockoutbtn').on('click', function () {
             if (!userLocation || typeof userLocation.lat === 'undefined' || typeof userLocation.lng === 'undefined') {
                 console.error("Error: userLocation is not defined or incomplete.");
                 return;
             }
-
-            // Use SweetAlert to confirm before proceeding with clock-out
             swal({
                 title: "Confirm Clock-out",
                 text: "Are you sure you want to clock out?",
@@ -234,7 +201,6 @@
                 dangerMode: false,
             }).then((proceed) => {
                 if (proceed) {
-                    // User clicked "Yes, Clock Out"
                     $.ajax({
                         type: "POST",
                         url: "/eportalindex/clockout",
@@ -244,35 +210,33 @@
                             longitude: userLocation.lng,
                             employeeid: employeeid,
                             deviceout: deviceout,
+                            geofenceid: geofenceid,
                         },
 
                         success: function (response) {
-                            console.log("API response", response);
 
-                            if (response.msg === "success") {
+                            if (response.msg === "exist") {
+                                swal({
+                                    title: "Clock-in Warning",
+                                    text: "You have already clocked in today.",
+                                    icon: "warning",
+                                });
+                            } else if (response.status === "success") {
                                 swal({
                                     title: "Clock-out successful!",
                                     icon: "success",
                                 }).then(() => {
-                                    // Handle success
-                                });
-                            } else if (response.msg === "exist") {
-                                swal({
-                                    title: "Clock-out failed",
-                                    text: "Clock-out not allowed. Employee already clocked out on the same day.",
-                                    icon: "error",
                                 });
                             } else {
                                 swal({
-                                    title: "Clock-out failed",
-                                    text: response.message || "Unknown error",
+                                    title: "Clock-in failed",
+                                    text: response.message,
                                     icon: "error",
                                 });
                             }
                         },
                         error: function (xhr, status, error) {
-                            console.log("API error", error);
-                            console.log("API response text:", xhr.responseText);
+
 
                             swal({
                                 title: "Error",
@@ -287,13 +251,11 @@
             });
         });
 
-
         //#endregion
 
 
-        //#region load employee dashboard
 
-
+        //#region tables
         function LoadTable() {
             $("#attendanceTable").DataTable({
                 destroy: true,
@@ -313,8 +275,6 @@
                     dataSrc: (json) => {
                         var finalData = [];
                         var data = json.data;
-
-                        console.log(data);
                         $.each(data, (key, item) => {
 
                             finalData.push({
@@ -345,7 +305,6 @@
                     });
                 },
                 initComplete: function () {
-                    console.log("Done");
                 },
             });
         }
@@ -421,8 +380,6 @@
                     if (result.msg === "success") {
                         const announcementData = result.data;
                         let counter = 0;
-
-                        console.log(announcementData.length);
                         $.each(announcementData, (key, item) => {
                             counter++;
                             anouncementdiv += `
@@ -445,7 +402,6 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>`;
-                            // console.log(anouncementdiv);
                         });
                     } else {
                         console.error("Error: ", result.message);
@@ -469,7 +425,6 @@
             });
         }
 
-        //#region 
-
+        //#endregion
     });
 </script>

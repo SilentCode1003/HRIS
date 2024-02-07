@@ -4,11 +4,14 @@
 
 
   $(document).ready(function () {
-    console.log("Initialize");
     LoadTable();
     LoadListEmp();
     LoadListviolation();
     searchTable();
+    EditLoadListEmp();
+    EditLoadDesciplinary();
+    EditLoadListOffensename();
+    EditLoadListviolation();
 
     $(document).on('keyup', '#myInput', function () {
       searchTable();
@@ -31,7 +34,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -90,7 +92,6 @@
           });
         },
         initComplete: function () {
-          console.log("Done");
         },
       });
     }
@@ -164,19 +165,19 @@
       }
     });
 
+//#region add modal
+
     function LoadListEmp() {
       $.ajax({
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.newEmployeeId);
+            $(options).html(item.firstname);
             $("#disciplinaryemployeeid").append(options);
-            console.log(item.newEmployeeId);
           });
         },
         error: function (result) {
@@ -190,14 +191,12 @@
         type: "GET",
         url: "/disciplinaryaction/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.description, item.description);
             $(options).html(item.description);
             $("#disciplinaryactionid").append(options);
-            console.log(item.description);
           });
         },
         error: function (result) {
@@ -208,7 +207,6 @@
 
     $("#disciplinaryviolationid").on("change", function () {
       var description = $(this).val();
-      console.log(index);
       $.ajax({
         type: "POST",
         url: "/disciplinary/getactionoffense",
@@ -217,7 +215,6 @@
         },
         success: function (result) {
           try {
-            console.log(result.data);
             var data = result.data;
             let actioncode = data[0].actioncode;
 
@@ -245,8 +242,6 @@
 
                   $("#disciplinaryactionid").val(value.actioncode);
 
-                  console.log(value.actioncode);
-
                   var offenceoption = new Option(
                     value.offencename,
                     value.offencename
@@ -256,7 +251,6 @@
 
                   $("#disciplinaryoffenseid").val(value.offencename);
 
-                  console.log(value.offencename);
                 });
               },
               error: function (error) { },
@@ -275,7 +269,6 @@
       var offensename = $(this).val();
       var description = $("#disciplinaryviolationid").val();
 
-      console.log(offensename);
       $.ajax({
         type: "POST",
         url: "/disciplinary/getactionoffense",
@@ -285,7 +278,6 @@
 
         success: function (result) {
           try {
-            // console.log(result.data);
             var data = result.data;
             let actioncode = data[0].actioncode;
 
@@ -298,12 +290,8 @@
               },
               success: function (result) {
                 var data = result.data;
-
-                console.log(data);
                 $.each(data, function (index, value) {
                   $("#disciplinaryactionid").val(value.actioncode);
-
-                  console.log(`${value.actioncode} - ${value.description}`);
                 });
               },
             });
@@ -322,14 +310,12 @@
         type: "GET",
         url: "/offenses/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.offensename, item.offensename);
             $(options).html(item.offensename);
             $("#disciplinaryoffenseid").append(options);
-            console.log(item.offensename);
           });
         },
         error: function (result) {
@@ -343,14 +329,12 @@
         type: "GET",
         url: "/violation/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.description, item.description);
             $(options).html(item.description);
             $("#disciplinaryviolationid").append(options);
-            console.log(item.description);
           });
         },
         error: function (result) {
@@ -358,6 +342,189 @@
         },
       });
     }
+
+    //#endregion
+
+
+
+//#region edit modal    
+    function EditLoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#editdafname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadDesciplinary() {
+      $.ajax({
+        type: "GET",
+        url: "/disciplinaryaction/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.actionid, item.actionid);
+            $(options).html(item.description);
+            $("#editdaaction").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#editdaviolation").on("change", function () {
+      var description = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/disciplinary/getactionoffense",
+        data: {
+          description: description,
+        },
+        success: function (result) {
+          try {
+            var data = result.data;
+            let actioncode = data[0].actioncode;
+
+            $("#editdaaction").empty();
+            $("#editdaoffense").empty();
+
+            $.ajax({
+              type: "POST",
+              url: "/disciplinary/getactioncode",
+              data: {
+                actioncode: actioncode,
+              },
+              success: function (result) {
+                var data = result.data;
+
+                $.each(data, function (index, value) {
+                  var actionoptions = new Option(
+                    value.actioncode,
+                    value.actioncode
+                  );
+                  $(actionoptions).html(
+                    `${value.actioncode} - ${value.description}`
+                  );
+                  $("#editdaaction").append(actionoptions);
+
+                  $("#editdaaction").val(value.actioncode);
+
+                  var offenceoption = new Option(
+                    value.offencename,
+                    value.offencename
+                  );
+                  $(offenceoption).html(value.offencename);
+                  $("#editdaoffense").append(offenceoption);
+
+                  $("#editdaoffense").val(value.offencename);
+
+                });
+              },
+              error: function (error) { },
+            });
+          } catch (error) {
+            console.error("Error parsing response data:", error);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("AJAX request failed:", error);
+        },
+      });
+    });
+
+    $("#editdaoffense").on("change", function () {
+      var offensename = $(this).val();
+      var description = $("#editdaaction").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/disciplinary/getactionoffense",
+        data: {
+          description: description,
+        },
+
+        success: function (result) {
+          try {
+            var data = result.data;
+            let actioncode = data[0].actioncode;
+
+            $.ajax({
+              type: "POST",
+              url: "/disciplinary/getoffenseaction",
+              data: {
+                actioncode: actioncode,
+                offenceid: offensename,
+              },
+              success: function (result) {
+                var data = result.data;
+                $.each(data, function (index, value) {
+                  $("#editdaaction").val(value.actioncode);
+                });
+              },
+            });
+          } catch (error) {
+            console.error("error:", error);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("ajax request failed", error);
+        },
+      });
+    });
+
+    function EditLoadListOffensename() {
+      $.ajax({
+        type: "GET",
+        url: "/offenses/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.offenseid, item.offenseid);
+            $(options).html(item.offensename);
+            $("#editdaoffense").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadListviolation() {
+      $.ajax({
+        type: "GET",
+        url: "/violation/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.violationid, item.violationid);
+            $(options).html(item.description);
+            $("#editdaviolation").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+//#endregion    
+
 
     $("#dataTabledisciplianary tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -367,8 +534,8 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       disciplinaryid = dataRow[1];
+      console.log(dataRow);
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -382,17 +549,23 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
+            console.log(existingData);
+
             $.each(existingData, (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              base64String = item.image;
               $("#daid").val(item.disciplinaryid);
-              $("#daimage").val(item.image);
-              $("#dafname").val(item.employeeid);
-              $("#daoffense").val(item.offenseid);
-              $("#daaction").val(item.actionid);
-              $("#daviolation").val(item.violation);
-              $("#dadate").val(item.date);
-              $("#dacreateby").val(item.createby);
-              $("#dacreatedate").val(item.createdate);
-              $("#dastatus").val(item.status);
+              $("#editdafname").val(item.employeeid);
+              $("#editdaoffense").val(item.offenseid);
+              $("#editdaaction").val(item.actionid);
+              $("#editdaviolation").val(item.violation);
+              $("#editdadate").val(item.date);
+              $("#editdacreateby").val(item.createby);
+              $("#editdacreatedate").val(item.createdate);
+              $("#editdastatus").val(item.status);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -403,8 +576,7 @@
         },
       });
     });
-    $(document).on("click", "#editshiftsavebtn", function () {
-      console.log("Save button clicked");
+    $(document).on("click", "#editdasavebtn", function () {
       let id = disciplinaryid;
       let employeeid = $("#editshift").val();
       let offenseid = $("#editshiftstatus").val();
@@ -482,7 +654,39 @@
         });
       }
     });
+
+
+    $(document).on("change", "#editdaimage", function (e) {
+      const input = document.getElementById("editdaimage");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      imageUploaded();
+    });
+
+    function imageUploaded() {
+      const input = document.getElementById("editdaimage");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+      };
+      reader.readAsDataURL(file);
+    }
   });
+
+
+
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");

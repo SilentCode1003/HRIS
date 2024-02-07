@@ -1,9 +1,9 @@
 <br>
-<h1 class="font-weight-bold" id="h-title">Pending Leave</h1>
 
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header">
+      <h3 class="title-card-table">Pending Leave</h3>
       <input id='myInput2' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
@@ -11,12 +11,12 @@
             <table class="table table-striped" id="dataTablependingleave">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th class="col-sm-1">ID</th>
                         <th class="col-25">Name</th>
                         <th>Leave Type</th>
                         <th>Date Started</th>
                         <th>Date Finished</th>
-                        <th>Reason</th>
+                        <th class="col-26">Reason</th>
                         <th>Applied Date</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
@@ -28,6 +28,7 @@
     </div>
 </div>
 
+<!--- Action Leave Modal -->
 <div class="modal fade" id="pendingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">

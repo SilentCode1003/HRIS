@@ -6,7 +6,6 @@
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
-    console.log("Initialize");
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -20,6 +19,7 @@
     loadtotalcablingCard();
     loadtotalcandidateCard();
     loadtotalbagapuroCard();
+    loadtotalapprenticeCard();
     searchEmployeeTable();
     searchRegularTable();
     searchprobaTable();
@@ -29,6 +29,7 @@
     searchcablingTable();
     searchcandidateTable();
     searchbagapuroTable();
+    searchapprenticeTable();
     GenerateAnouncement();
 
     //#endregion
@@ -72,6 +73,10 @@
       searchbagapuroTable();
     });
 
+    $(document).on('keyup', '#myInputtotalapprentice', function () {
+      searchapprenticeTable();
+    });
+
 
     //#endregion    
 
@@ -84,21 +89,17 @@
         type: "GET",
         url: "/employee/totalactive",
         success: function (json) {
-          console.log("API response", json);
-
           var data = json.data;
 
           populatedatatable(data)
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatedatatable(data) {
-      console.log(data);
       const tableBody = $('#dataTableemployees tbody');
       tableBody.empty();
 
@@ -111,7 +112,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -142,7 +142,6 @@
         type: "GET",
         url: "/employee/totalregular",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -150,13 +149,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateregularemloyeetbl(data) {
-      console.log(data);
       const tableBody = $('#regularemloyeetbl tbody');
       tableBody.empty();
 
@@ -169,7 +166,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -199,7 +195,6 @@
         type: "GET",
         url: "/employee/totalprobi",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -207,13 +202,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateprobiemloyeetbl(data) {
-      console.log(data);
       const tableBody = $('#probiemloyeetbl tbody');
       tableBody.empty();
 
@@ -226,7 +219,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -256,21 +248,17 @@
         type: "GET",
         url: "/employee/totalresigned",
         success: function (json) {
-          console.log("API response", json);
-
           var finalData = [];
           var data = json.data;
           populateresignedemployeetbl(data);
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populateresignedemployeetbl(data) {
-      console.log(data);
       const tableBody = $('#resignedemployeetbl tbody');
       tableBody.empty();
 
@@ -283,7 +271,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -315,7 +302,6 @@
         type: "GET",
         url: "/totaladmin",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -323,13 +309,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotaladmintable(data) {
-      console.log(data);
       const tableBody = $('#totaladmintable tbody');
       tableBody.empty();
 
@@ -342,7 +326,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -372,7 +355,6 @@
         type: "GET",
         url: "/totalIT",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -380,13 +362,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalittable(data) {
-      console.log(data);
       const tableBody = $('#totalittable tbody');
       tableBody.empty();
 
@@ -399,7 +379,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -429,7 +408,6 @@
         type: "GET",
         url: "/totalcabling",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -437,13 +415,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalcablingtable(data) {
-      console.log(data);
       const tableBody = $('#totalcablingtable tbody');
       tableBody.empty();
 
@@ -456,7 +432,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -486,7 +461,6 @@
         type: "GET",
         url: "/totalcandidate",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -494,13 +468,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalcandidatetable(data) {
-      console.log(data);
       const tableBody = $('#totalcandidatetable tbody');
       tableBody.empty();
 
@@ -513,7 +485,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -543,7 +514,6 @@
         type: "GET",
         url: "/totalbagapuroapi",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -551,13 +521,11 @@
 
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
 
     function populatetotalbagapurotable(data) {
-      console.log(data);
       const tableBody = $('#totalbagapurotable tbody');
       tableBody.empty();
 
@@ -570,7 +538,6 @@
         tableBody.append(tr);
       } else {
         data.forEach(item => {
-          console.log("data img", item.profilePicturePath);
           const tr = $('<tr>').append(
             $('<td>', {
               html: item.profilePicturePath
@@ -592,6 +559,58 @@
       }
     }
 
+    //#Apprentice Modal
+    $(document).on("click", "#totalapprentice", function () {
+      $(`#totalapprenticetable`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/apprenticemodal",
+        success: function (json) {
+
+          var finalData = [];
+          var data = json.data;
+          populatetotalapprenticetable(data);
+
+        },
+        error: function (xhr, status, error) {
+        },
+      });
+    });
+
+    function populatetotalapprenticetable(data) {
+      const tableBody = $('#totalapprenticetable tbody');
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $('<tr>').append($('<td>', {
+          colspan: 6,
+          class: 'text-center',
+          text: 'No Data Matched'
+        }));
+        tableBody.append(tr);
+      } else {
+        data.forEach(item => {
+          const tr = $('<tr>').append(
+            $('<td>', {
+              html: item.profilePicturePath
+                ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+                : 'No Image',
+              'data-label': 'Product Image',
+            }),
+            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
+            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
+            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
+
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
 
     //#endregion
 
@@ -602,7 +621,6 @@
         type: "GET",
         url: "/countactive",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalActive = result.data.activeCount;
             $("#totalEmployeeCard .h5").text(totalActive);
@@ -621,7 +639,6 @@
         type: "GET",
         url: "/countregular",
         success: function (result) {
-          console.log("loadregularCard:", result);
           if (result.msg === "success") {
             const totalRegular = result.data.regularCount;
             $("#regularEmployeeCard .h5").text(totalRegular);
@@ -640,7 +657,6 @@
         type: "GET",
         url: "/countprobitionary",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalProbitionary = result.data.probitionaryCount;
 
@@ -663,7 +679,6 @@
         type: "GET",
         url: "/countresigned",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalResigned = result.data.resignedCount;
 
@@ -686,7 +701,6 @@
         type: "GET",
         url: "/countadmin",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalempadmin = result.data.adminCount;
 
@@ -709,7 +723,6 @@
         type: "GET",
         url: "/countit",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalIT = result.data.ITCount;
             $("#totalIT .h5").text(totalIT);
@@ -728,7 +741,6 @@
         type: "GET",
         url: "/countcabling",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCabling = result.data.CablingCount;
             $("#totalCABLING .h5").text(totalCabling);
@@ -747,7 +759,6 @@
         type: "GET",
         url: "/countcandidate",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCandidate = result.data.CandidateCount;
             $("#totalempcandidate .h5").text(totalCandidate);
@@ -766,10 +777,27 @@
         type: "GET",
         url: "/countbagapuro",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalBagapuro = result.data.BagapuroCount;
             $("#totalempbagapuro .h5").text(totalBagapuro);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    function loadtotalapprenticeCard() {
+      $.ajax({
+        type: "GET",
+        url: "/countapprentice",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalApprentice = result.data.ApprenticeCount;
+            $("#totalempapprentice .h5").text(totalApprentice);
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -788,7 +816,6 @@
         type: "GET",
         url: "/countreqleavebadge",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalleave = result.data.leavereqCount;
             $("#loadleaveBadge").text(totalleave);
@@ -807,7 +834,6 @@
         type: "GET",
         url: "/countcashreqbadge",
         success: function (result) {
-          console.log(result);
           if (result.msg === "success") {
             const totalCa = result.data.CAreqCount;
             $("#loadcaBadge").text(totalCa);
@@ -832,14 +858,12 @@
 
     //   success: function (data) {
     //     let details = data.data;
-    //     console.log(data.data);
     //     let bulletinid = [];
     //     $.each(details, (key, item) => {
     //       bulletinid.push({
     //         id: item.bulletinid,
     //       });
     //     });
-    //     console.log(bulletinid);
     //     LoadAnnouncement(bulletinid);
     //   },
     //   error: function (error) {
@@ -848,10 +872,8 @@
     // });
 
     // function LoadAnnouncement(bulletinid) {
-    //   console.log("id", bulletinid);
     //   $.each(bulletinid, (key, item) => {
     //     let id = item.id;
-    //     console.log("id2: ", id);
     //     GenerateAnouncement();
     //   });
     // }
@@ -868,7 +890,6 @@
             const announcementData = result.data;
             let counter = 0;
 
-            console.log(announcementData.length);
             $.each(announcementData, (key, item) => {
               counter++;
               anouncementdiv += `
@@ -891,7 +912,6 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>`;
-              // console.log(anouncementdiv);
             });
           } else {
             console.error("Error: ", result.message);
@@ -926,7 +946,6 @@
             const bdayData = result.data;
             let counterbday = 0;
 
-            console.log(bdayData.length);
             $.each(bdayData, (key, item) => {
               counterbday++;
               bdaydiv += `
@@ -950,7 +969,6 @@
                                     </button>`;
             });
 
-            // console.log(bdaydiv);
 
             $("#carouselbday").html(bdaydiv);
           } else {
@@ -987,7 +1005,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -1043,7 +1060,6 @@
           });
         },
         initComplete: function () {
-          console.log("Done");
         },
       });
     }
@@ -1056,7 +1072,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       leaveid = dataRow[1];
     });
 
@@ -1097,7 +1112,6 @@
     });
 
     $(document).on("click", "#pendingleavesavebtn", function () {
-      console.log("Save button clicked");
       let id = leaveid
       let status = $("#pendingleaveaction").val();
       let comment = $("#pendingleaveremarks").val();
@@ -1135,7 +1149,7 @@
           .then((willApprove) => {
             if (willApprove) {
               $.ajax({
-                type: "POST", 
+                type: "POST",
                 url: "/allleave/update",
                 data: {
                   leaveid: id,
@@ -1173,7 +1187,6 @@
         type: "GET",
         url: "/loadCA",
         success: function (json) {
-          console.log("API response", json);
 
           var finalData = [];
           var data = json.data;
@@ -1192,7 +1205,7 @@
             var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
-            action.id = "editCABtn"; 
+            action.id = "editCABtn";
             action.className = "btn text-primary view-btn"; // Use a class
             action.setAttribute("data-bs-toggle", "modal");
             action.setAttribute("data-bs-target", "#pendingcamodal");
@@ -1202,7 +1215,6 @@
               $(this).closest("tr").find("td").each(function () {
                 dataRow.push($(this).text());
               });
-              console.log(dataRow);
               cashadvanceid = dataRow[1];
             };
 
@@ -1228,7 +1240,6 @@
           });
         },
         error: function (xhr, status, error) {
-          console.log("API error", error);
         },
       });
     });
@@ -1266,7 +1277,6 @@
       });
     });
     $(document).on("click", "#pendingcasavebtn", function () {
-      console.log("Save button clicked");
 
       let id = cashadvanceid;
       let status = $("#pendingcastatus").val();
@@ -1342,7 +1352,6 @@
       const input = document.getElementById("announcementimage");
       const file = input.files[0];
 
-      console.log("click");
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1780,6 +1789,194 @@
         }
       }
     }
+
+
+    function searchapprenticeTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalapprentice");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalapprenticetable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+    //#endregion
+
+    //#region geofence map
+
+    const OFFICE_LOCATION_LAT = 14.337945;
+    const OFFICE_LOCATION_LNG = 121.060511;
+
+    const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // const officeIcon = L.icon({
+    //     iconUrl: './images/img/5L.png',  // Replace with the path to your office icon image
+    //     iconSize: [32, 32],
+    //     iconAnchor: [16, 32],
+    //     popupAnchor: [0, -32],
+    // });
+
+    // const officeMarker = L.marker([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], { icon: officeIcon }).addTo(map);
+    // officeMarker.bindPopup('Office Location').openPopup();
+
+    // let geofence;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/geofencesettings/selectgeofence",
+    //     data: {
+    //         departmentid: departmentid,
+    //     },
+    //     success: function (result) {
+    //         let data = result.data;
+    //         $.each(data, (key, item) => {
+    //             geofence = +L.circle([item.latitude, item.longitude], {
+    //                 color: "red",
+    //                 fillColor: "#f03",
+    //                 fillOpacity: 0.3,
+    //                 radius: item.radius,
+    //                 departmentid: item.departmentid,
+    //             }).addTo(map);
+    //         });
+    //         //console.log(radius);
+    //     },
+    //     error: function (error) { },
+    // });
+
+    let geofence;
+    $.ajax({
+      type: "GET",
+      url: "/geofencesettings/load",
+      success: function (result) {
+        let data = result.data;
+        $.each(data, (key, item) => {
+          geofence = +L.circle([item.latitude, item.longitude], {
+            color: "red",
+            fillColor: "#f03",
+            fillOpacity: 0.3,
+            radius: item.radius,
+          }).addTo(map);
+        });
+        console.log('data',data);
+      },
+      error: function (error) { },
+    });
+
+    // let geofence;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/geofencesettings/selectgeofence",
+    //     data: {
+    //         departmentid: departmentid,
+    //     },
+    //     success: function (result) {
+    //         let data = result.data;
+    //         $.each(data, (key, item) => {
+    //             geofence = +L.circle([item.latitude, item.longitude], {
+    //                 color: "red",
+    //                 fillColor: "#f03",
+    //                 fillOpacity: 0.3,
+    //                 radius: item.radius,
+    //                 departmentid: item.departmentid,
+    //             }).addTo(map);
+    //         });
+    //         //console.log(radius);
+    //     },
+    //     error: function (error) { },
+    // });
+
+
+    // const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
+    //     color: 'red',
+    //     fillColor: '#f03',
+    //     fillOpacity: 0.3,
+    //     radius: 100
+    // }).addTo(map);
+
+    // function checkGeofence(userLocation) {
+    //   const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
+    //   const isInside = userLatLng.distanceTo(geofence.getLatLng()) <= geofence.getRadius();
+    //   //console.log('User is inside the geofence:', isInside);
+    //   return isInside;
+    // }
+
+    // function updateLocationOnMap(position) {
+    //   userLocation = {
+    //     lat: position.coords.latitude,
+    //     lng: position.coords.longitude
+    //   };
+
+    //   // Clear previous markers
+    //   map.eachLayer((layer) => {
+    //     if (layer instanceof L.Marker) {
+    //       layer.remove();
+    //     }
+    //   });
+
+    //   const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
+    //   userMarker.bindPopup(`My Location`).openPopup();
+
+    //   const geofenceButton = document.getElementById('clockinbtn');
+    //   if (checkGeofence(userLocation)) {
+    //     // console.log('User is inside the geofence.');
+    //     geofenceButton.style.display = 'block';
+    //   } else {
+    //     //console.log('User is outside the geofence.');
+    //     geofenceButton.style.display = 'block';
+    //   }
+    // }
+
+    // function handleError(error) {
+    //   console.error(`Error getting user location: ${error.message}`, error);
+
+    //   if (error.code === error.PERMISSION_DENIED) {
+    //     notifyUserToEnableLocation();
+    //   }
+    // }
+
+    // function notifyUserToEnableLocation() {
+    //   if ('Notification' in window) {
+    //     if (Notification.permission !== 'denied') {
+    //       Notification.requestPermission().then(permission => {
+    //         if (permission === 'granted') {
+    //           new Notification('Enable Location Services', {
+    //             body: 'Please enable location services to use this feature.',
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
+    // }
+
+    // const watchId = navigator.geolocation.watchPosition(
+    //   updateLocationOnMap,
+    //   handleError,
+    //   {
+    //     enableHighAccuracy: true,
+    //     maximumAge: 30000,
+    //     timeout: 27000
+    //   }
+    // );
+
     //#endregion
 
   });

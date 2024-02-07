@@ -1,3 +1,5 @@
+const { OJTAttendanceModel } = require("./model");
+
 exports.Master_Employee = (data) => {
   let dataResult = [];
 
@@ -206,7 +208,6 @@ exports.Master_GovId = (data) => {
       idtype: key.mg_idtype,
       idnumber: key.mg_idnumber,
       issuedate: key.mg_issuedate,
-      expirydate: key.mg_expirydate,
       createby: key.mg_createby,
       createdate: key.mg_createdate,
       status: key.mg_status,
@@ -325,12 +326,16 @@ exports.Master_Shift = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
-      shiftid: key.ms_shiftid,
-      shiftname: key.ms_shiftname,
-      status: key.ms_status,
+      shiftid: key.ms_id,
+      employeeid: key.ms_employeeid,
       department: key.ms_department,
-      createby: key.ms_createby,
-      createdate: key.ms_createdate,
+      monday: key.ms_monday,
+      tuesday: key.ms_tuesday,
+      wednesday: key.ms_wednesday,
+      thursday: key.ms_thursday,
+      friday: key.ms_friday,
+      saturday: key.ms_saturday,
+      sunday: key.ms_sunday,
     });
   });
 
@@ -409,25 +414,6 @@ exports.Payslip = (data) => {
       deductions: key.p_deductions,
       overtime: key.p_overtime,
       netsalary: key.p_netsalary,
-    });
-  });
-
-  return dataResult;
-};
-
-exports.Salary = (data) => {
-  let dataResult = [];
-
-  data.forEach((key, item) => {
-    dataResult.push({
-      salaryid: key.s_salaryid,
-      employeeid: key.s_employeeid,
-      salarymonth: key.s_salarymonth,
-      allowances: key.s_allowances,
-      deductions: key.s_deductions,
-      netsalary: key.s_netsalary,
-      paymentdate: key.s_paymentdate,
-      status: key.s_status,
     });
   });
 
@@ -638,21 +624,112 @@ exports.Master_Salary = (data) => {
   return dataResult;
 };
 
-exports.Master_Deductions = (data) => {
+exports.Government_Deductions = (data) => {
   let dataResult = [];
 
   data.forEach((key, item) => {
     dataResult.push({
       image: key.me_profile_pic,
-      deductionsid: key.mds_id,
-      employeeid: key.mds_employeeid,
-      type: key.mds_type,
-      amount: key.mds_amount,
-      period: key.mds_period,
-      cutoff: key.mds_cutoff,
+      govdeduct: key.gd_id,
+      employeeid: key.gd_employeeid,
+      type: key.gd_idtype,
+      amount: key.gd_amount,
+      period: key.gd_period,
+      cutoff: key.gd_cutoff,
     });
   });
 
   return dataResult;
 };
 
+exports.Salary_History = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      historyid: key.sh_id,
+      date: key.sh_date,
+      salaryid: key.sh_salaryid,
+      employeeid: key.sh_employeeid,
+      monthly: key.sh_monthly,
+      allowances: key.sh_allowances,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Salary = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      salaryid: key.s_salaryid,
+      employeeid: key.s_employeeid,
+      salarymonth: key.s_mssalaryid,
+      cutoff: key.s_cutoff,
+      netpay: key.s_netpay,
+      totalhours: key.s_totalhours,
+      totaldeductions: key.s_totaldeductions,
+      payrolldate: key.s_payrolldate,
+      allowances: key.s_allowances,
+      adjustnent: key.s_adjustment,
+      spholiday: key.s_spholiday,
+      restdayot: key.s_restdayot,
+      legalholiday: key.s_legalholiday,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Ojt_Attendance_Logs = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      logid: key.oal_logid,
+      attendanceid: key.oal_attendanceid,
+      ojtid: key.oal_ojtid,
+      longdatetime: key.oal_logdatetime,
+      logtype: key.oal_logtype,
+      latitude: key.oal_latitude,
+      longitude: key.oal_longitude,
+      device: key.oal_device,
+    });
+  });
+
+  return dataResult;
+};
+
+//#region Remodeling
+
+exports.OJTAttendance = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      id: key.id,
+      date: key.date,
+      time: key.time,
+      latitude: key.latitude,
+      longitude: key.longitude,
+      device: key.device,
+    });
+  });
+
+  return dataResult.map(
+    (key) =>
+      new OJTAttendanceModel(
+        key["id"],
+        key["date"],
+        key["time"],
+        key["latitude"],
+        key["longitude"],
+        key["device"]
+      )
+  );
+};
+//#endregion

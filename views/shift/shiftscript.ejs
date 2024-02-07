@@ -2,7 +2,6 @@
   let shiftid = "";
 
   $(document).ready(function () {
-    console.log('Initialize');
     LoadTable();
     LoadList();
     LoadEditShift();
@@ -32,7 +31,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -43,11 +41,15 @@
 
               finalData.push({
                 shiftid: item.shiftid,
-                shiftname: item.shiftname,
-                status: item.status,
+                employeeid: item.employeeid,
                 department: item.department,
-                createby: item.createby,
-                createdate: item.createdate,
+                monday: item.monday,
+                tuesday: item.tuesday,
+                wednesday: item.wednesday,
+                thursday: item.thursday,
+                friday: item.friday,
+                saturday: item.saturday,
+                sunday: item.sunday,
                 action: action,
               });
             });
@@ -63,15 +65,18 @@
         ],
         columns: [
           { data: "shiftid" },
-          { data: "shiftname" },
-          { data: "status" },
+          { data: "employeeid" },
           { data: "department" },
-          { data: "createby" },
-          { data: "createdate" },
+          { data: "monday" },
+          { data: "tuesday" },
+          { data: "wednesday" },
+          { data: "thursday" },
+          { data: "friday" },
+          { data: "saturday" },
+          { data: "sunday" },
           { data: "action" },
         ],
         initComplete: function () {
-          console.log('Done');
         },
       });
     }
@@ -139,14 +144,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentname, item.departmentname);
             $(options).html(item.departmentname);
             $('#shiftdepartment').append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -162,14 +165,12 @@
         type: "GET",
         url: "/department/load",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $('#editshiftdepartment').append(options);
-            console.log(item.departmentname);
           });
         },
         error: function (result) {
@@ -188,7 +189,6 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       shiftid = dataRow[0];
     });
 
@@ -219,7 +219,6 @@
       });
     });
     $(document).on("click", "#editshiftsavebtn", function () {
-      console.log("Save button clicked");
       let id = shiftid
       let shiftname = $("#editshift").val();
       let status = $("#editshiftstatus").val();

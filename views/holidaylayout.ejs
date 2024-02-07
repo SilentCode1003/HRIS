@@ -2,52 +2,40 @@
 <html lang="en">
 
 <head>
-<%- include("header.ejs")%>
-
+  <%- include("header.ejs")%>
 </head>
 
 <body id="page-top">
+  <!-- Page Wrapper -->
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <%- include("sidebar.ejs")%>
+      <!-- End of Sidebar -->
 
-        <!-- Sidebar -->
-        <%- include("sidebar.ejs")%>
-        <!-- End of Sidebar -->
+      <!-- Topbar -->
+      <%- include("topbar.ejs")%>
+      <!-- End of Topbar -->
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Content Wrapper -->
+      <div id="content-wrapper">
+          <div class="content">
+            <%- include("./holiday/holiday.ejs")%>
+          </div>    
+          
+      </div>
+       <!-- End of Content Wrapper -->
+  
+  </div>
 
-            <!-- Main Content -->
-            <div id="content">
 
-                <!-- Topbar -->
-                <%- include("topbar.ejs")%>
-                <!-- End of Topbar -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-                <!-- Begin Page Content -->
-                <%- include("./holiday/holiday.ejs")%>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Bootstrap core JavaScript-->
-    <%- include("scripts.ejs")%>
+  <!-- Bootstrap core JavaScript-->
+  <%- include("./scripts.ejs")%>
     <%- include("./holiday/holidayscript.ejs")%>
 </body>
 
