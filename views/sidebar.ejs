@@ -1,10 +1,10 @@
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav sidebar-bg sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-text mx-3">
             <img class="img-profile rounded-circle"
-            src="/images/img/whitelogo.png" style="width: 100px; margin-left: -60px;">
+            src="/images/img/whitelogo.png" style="width: 50%; margin-left: -60px;">
             HRMIS
         </div>
     </a>
@@ -16,7 +16,8 @@
     <li class="nav-item">
         <a class="nav-link" href="/">
             <i class='bx bxs-dashboard bx-tada db-icon'></i>
-           <span><b>Dashboard</b></span></a>
+           <span style="color: white !important;"><b>Dashboard</b></span>
+        </a>
     </li>
 
     <!-- Heading -->
@@ -25,14 +26,15 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseemployee"
+    <li class="nav-item sidebar-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseemployee"
             aria-expanded="true" aria-controls="collapseemployee">
             <i class='bx bxs-user-rectangle bx-tada employee-icon'></i>
-            <span><b>Employee</b></span></a>
-
+            <span><b>Employee</b></span>
+        </a>
+  
         <div id="collapseemployee" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/employee">List of Employee</a>
                 <a class="collapse-item" href="/shift">Shift</a>
                 <a class="collapse-item" href="/trainings">Trainings</a>
@@ -46,54 +48,59 @@
             </div>
         </div>
     </li>
+
     <!--- hahahha-->
     <%if (accesstype == 'Admin') {%>
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsemasteraccess"
             aria-expanded="true" aria-controls="collapsemasteraccess">
-            <i class='bx bxs-shield-alt-2 bx-tada access-icon'></i>
-           <span><b>Master Access</b></span></a>
+            <i class='bx bxs-shield-alt-2 bx-tada access-icon' aria-hidden="true"></i>
+           <span><b>Master Access</b></span>
+        </a>
 
         <div id="collapsemasteraccess" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/access">Access</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseojt"
             aria-expanded="true" aria-controls="collapseojt">
             <i class='bx bxs-user-rectangle bx-tada employee-icon'></i>
             <span><b>OJT</b></span></a>
 
         <div id="collapseojt" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/ojt">List Of Ojt</a>
                 <a class="collapse-item" href="/ojtuser">Users For Ojt</a>
                 <a class="collapse-item" href="/attendanceojt">Attendance For Ojt</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseusercontrol"
             aria-expanded="true" aria-controls="collapseusercontrol">
             <i class='bx bxs-user-circle bx-tada usercontrol-icon'></i>
-            <span><b>User Control</b></span></a>
+            <span><b>User Control</b></span>
+        </a>
 
         <div id="collapseusercontrol" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded" id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/users">Users</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedepartment"
             aria-expanded="true" aria-controls="collapsedepartment">
             <i class='bx bxs-buildings bx-tada dep-icon'></i>
-            <span><b>Department</b></span></a>
+            <span><b>Department</b></span>
+        </a>
 
         <div id="collapsedepartment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/department">Department</a>
                 <a class="collapse-item" href="/position">Position</a>
             </div>
@@ -102,14 +109,15 @@
     <% }%>
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseattendance "
             aria-expanded="true" aria-controls="collapseattendance">
             <i class='bx bxs-spreadsheet bx-tada attendance-icon'></i>
-            <span><b>Attendance</b></span></a>
+            <span><b>Attendance</b></span>
+        </a>
 
         <div id="collapseattendance" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/attendance">All Attendance</a>
                 <a class="collapse-item" href="/geofencesettings">Geo Fences</a>
                 <a class="collapse-item" href="/timelogs">Logs For Approval</a>
@@ -117,14 +125,15 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsepayroll"
             aria-expanded="true" aria-controls="collapsepayroll">
             <i class='bx bxs-badge-dollar bx-tada payroll-icon'></i>
             <span><b>Payroll</b></span></a>
 
         <div id="collapsepayroll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <h6 class="collapse-header">Payroll:</h6>
                 <a class="collapse-item" href="/salary">Salary Settings</a>
                 <a class="collapse-item" href="/salaryhistory">Salary History</a>
@@ -135,8 +144,9 @@
             </div>
         </div>
     </li>
+
     <!----Coop ---->
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsecoop"
             aria-expanded="true" aria-controls="collapsecoop">
             <i class='bx bxs-landmark bx-tada coop-icon'></i>
@@ -144,7 +154,7 @@
 
         <div id="collapsecoop" class="collapse" aria-labelledby="headingcoop"
             data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded" id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/loan">Loan</a>
                 <a class="collapse-item" href="/payment">Payments</a>
                 <a class="collapse-item" href="/interest">Interests</a>
@@ -153,14 +163,14 @@
             </div>
         </div>
     </li> 
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseleave"
             aria-expanded="true" aria-controls="collapseleave">
             <i class='bx bxs-door-open bx-tada leave-icon'></i>
             <span><b>Leave</b></span></a>
 
         <div id="collapseleave" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/allleave">All Leave</a>
                 <a class="collapse-item" href="/pendingleave">Pending Leave</a>
                 <a class="collapse-item" href="/approvedleave">Approved Leave</a>
@@ -168,35 +178,35 @@
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedeviation"
             aria-expanded="true" aria-controls="collapsedeviation">
             <i class='bx bxs-notification bx-tada dn-icon'></i>
             <span><b>Deviation Notices</b></span></a>
 
         <div id="collapsedeviation" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/offenses">Offenses</a>
                 <a class="collapse-item" href="/violation">Violation</a>
                 <a class="collapse-item" href="/disciplinaryaction">Disciplinary Action</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseholiday"
             aria-expanded="true" aria-controls="collapseholiday">
             <i class='bx bxs-tree bx-tada holiday-icon'></i>
             <span><b>Holiday</b></span></a>
 
         <div id="collapseholiday" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded"  id="boxshadow-sidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/holiday">Holiday</a>
                 <a class="collapse-item" href="/holidayrate">Holiday Rate</a>
             </div>
         </div>
     </li>
      
-    <li class="nav-item">
+    <li class="nav-item sidebar-item">
         <a class="nav-link" href="/announcement">
             <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
             <span><b>Announcement</b></span></a>
