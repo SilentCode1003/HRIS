@@ -191,21 +191,18 @@
         <!-- Total Apprentice Card -->
         <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempapprentice" class="card h-100 py-2" style="border-left: 4px solid #751a1a !important;
-                border-radius: 8px;">
+            <div id="totalempapprentice" class="card h-100 py-2 db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1"
-                                style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
                                 Apprentice Sheet
                             </div>
-                            <div class="h5 mb-0 font-weight-bold"
-                                style="color: white !important; text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;">
+                            <div class="h5 mb-0 font-weight-bold card-text">
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fa fa-credit-card-alt fa-2x text-gray-300"></i>
+                            <i class='bx bx-face card-icon'></i>
                         </div>
                     </div>
                 </div>
@@ -614,9 +611,8 @@
                         <h3 class="modal-title fs-6" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
                     </div>
                     <br>
-                    <input id='myInputtotalapprentice' type='text' placeholder="  Search...."
-                        style="  border: 2.5px solid #174634 !important;">
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <input id='myInputtotalapprentice'  class="db-modal-search" type='text' placeholder="  Search....">
+                    <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -639,8 +635,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                        style="background-color: red !important; border: 2px solid white !important;">Close</button>
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -650,37 +645,37 @@
 
     <!-- Content Row -->
     <div class="row">
-        <div class="col-xl-8 col-lg-5  db-wholecard">
+        <div class="col-xl-8 col-lg-5 db-wholecard">
             <div class="card">
                 <div class="card-header header-card">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                            <button class="nav-link active requestleave-db" id="nav-home-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
-                                aria-selected="true" style="margin-left: 3px;">
+                                aria-selected="true">
                                 <b>REQUEST LEAVE</b>
                                 <span id="loadleaveBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button>
-                            <button class="nav-link" id="nav-ca-tab" data-bs-toggle="tab"
+                            <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false" style="margin-left: 3px;">
+                                aria-selected="false">
                                 <b>REQUEST CASH ADVANCE</b>
                                 <span id="loadcaBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                            <button class="nav-link attendance-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-attendance" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false" style="margin-left: 3px;"><b>ATTENDANCE</b></button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                aria-selected="false"><b>ATTENDANCE</b></button>
+                            <button class="nav-link employee-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false" style="margin-left: 3px;"><b>EMPLOYEE</b>
+                                aria-selected="false"><b>EMPLOYEE</b>
                             </button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                            <button class="nav-link geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false" style="margin-left: 3px;"><b>GEO FENCE'S</b>
+                                aria-selected="false"><b>GEO FENCE'S</b>
                             </button>
                         </div>
                     </nav>
@@ -695,15 +690,15 @@
                                     <table class="table table-striped" id="dataTableleaverequest">
                                         <thead>
                                             <tr>
-                                                <th style="font-size: x-small;">Image</th>
-                                                <th class="col-sm-1" style="font-size: x-small;">ID</th>
-                                                <th class="col-25" style="font-size: x-small;">Name</th>
-                                                <th style="font-size: x-small;">Start</th>
-                                                <th style="font-size: x-small;">End</th>
-                                                <th style="font-size: x-small;">Type</th>
-                                                <th style="font-size: x-small;">Reason</th>
-                                                <th style="font-size: x-small;">Applied</th>
-                                                <th style="font-size: x-small;">Action</th>
+                                               <th class="font-tb">Image</th>
+                                                <th  class="font-tb">ID</th>
+                                                <th  class="font-tb">Name</th>
+                                                <th  class="font-tb">Start</th>
+                                                <th  class="font-tb">End</th>
+                                                <th  class="font-tb">Type</th>
+                                                <th  class="col-25 font-tb">Reason</th>
+                                                <th  class="font-tb">Applied</th>
+                                                <th  class="font-tb">Action</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -717,14 +712,14 @@
                                     <table class="table table-striped" id="dataTablecashrequest">
                                         <thead>
                                             <tr>
-                                                <th style="font-size: x-small;">Image</th>
-                                                <th style="font-size: x-small;">Cash Advance ID</th>
-                                                <th style="font-size: x-small;">Employee</th>
-                                                <th style="font-size: x-small;">Date</th>
-                                                <th style="font-size: x-small;">Amount</th>
-                                                <th class="col-25" style="font-size: x-small;">Purpose</th>
-                                                <th style="font-size: x-small;">Status</th>
-                                                <th style="font-size: x-small;">Action</th>
+                                                <th class="font-tb">Image</th>
+                                                <th  class="font-tb">Cash Advance ID</th>
+                                                <th  class="font-tb">Employee</th>
+                                                <th  class="font-tb">Date</th>
+                                                <th  class="font-tb">Amount</th>
+                                                <th  class="col-25 font-tb">Purpose</th>
+                                                <th  class="font-tb">Status</th>
+                                                <th  class="font-tb">Action</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -775,8 +770,8 @@
                                 <div class="col-xl-12 col-lg-12">
                                   <div class="card shadow mb-4">
                                     <div class="card-header">
-                                      <h6 class="m-0">
-                                        <i class="fas fa-birthday-cake"></i> Map
+                                      <h6 class="m-0 map">
+                                        <i class='bx bx-map bx-flashing'></i> MAP
                                       </h6>
                                     </div>
                                     <div id="map"></div>
@@ -805,7 +800,7 @@
                     </nav>
                 </div>
 
-                <div class="card-body" style="height: 510px; overflow: auto;">
+                <div class="card-body db-custom-cards">
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-announcement" role="tabpanel"
                             aria-labelledby="nav-home-tab">

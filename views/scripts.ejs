@@ -177,18 +177,35 @@
 }
 </script>
 
+<!-- Sticky Topbar & Sidebar -->
+<script>
+$(document).ready(function () {
+   let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
 
-  <!---Java Script for Topbar-->
-  <!-- <script>
-    const topbar = document.getElementById('topbar');
+   function updateSidebarState() {
+     $("body").toggleClass("sidebar-toggled", isSidebarOpen);
+     $(".sidebar").toggleClass("toggled", isSidebarOpen);
 
-    window.addEventListener('scroll', () =>{
-        if(window.scrollY > 0) {
-            
-            topbar.classList.add('light-bg');
-        }else{
+     if (isSidebarOpen) {
+       $('.sidebar .collapse').collapse('hide');
+       $('.content').toggleClass('content-toggled');
+       $('.navbar').toggleClass('navbar-toggled');
+       $('.sticky-footer').toggleClass('footer-toggled');
+     } else {
+       $('.content').removeClass('content-toggled');
+       $('.navbar').removeClass('navbar-toggled');
+       $('.sticky-footer').removeClass('footer-toggled');
+     }
+   }
 
-            topbar.classList.remove('light-bg');
-        }
-    })
-</script>  -->
+   updateSidebarState();
+
+   $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+     isSidebarOpen = !isSidebarOpen;
+
+     localStorage.setItem('isSidebarOpen', isSidebarOpen);
+
+     updateSidebarState();
+   });
+ });
+</script>

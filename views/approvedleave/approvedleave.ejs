@@ -32,60 +32,60 @@
 <div class="modal fade" id="approvedmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" id="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Approved Leave</h1>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <form>
           <div class="row g-3">
           <div class="col">
             <label for="editfname" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="pendingleavename" name="pendingleavename" value="Wendell Blanco" disabled>
+            <input type="text" class="form-control border-form-modal" id="pendingleavename" name="pendingleavename" value="Wendell Blanco" disabled>
           </div>
           <div class="col">
             <label for="editlname" class="form-label">Email</label>
-            <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail" value="Blanco@gmail.com" disabled>
+            <input type="text" class="form-control border-form-modal" id="pendingleaveemail" name="pendingleaveemail" value="Blanco@gmail.com" disabled>
           </div>
           <div class="col">
             <label for="editbday" class="form-label">Gender</label>
-            <input type="text" class="form-control" id="pendingleavegender" name="pendingleavegender" value="Male" disabled>
+            <input type="text" class="form-control border-form-modal" id="pendingleavegender" name="pendingleavegender" value="Male" disabled>
           </div>
           </div>
           <br>
           <div class="row g-3">
             <div class="col">
               <label for="editfname" class="form-label">Phone Number</label>
-              <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone" value="09205844276" disabled>
+              <input type="text" class="form-control border-form-modal" id="pendingleavephone" name="pendingleavephone" value="09205844276" disabled>
             </div>
             <div class="col">
               <label for="editlname" class="form-label">Leave Type</label>
-              <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype" value="Casual" disabled>
+              <input type="text" class="form-control border-form-modal" id="pendingleavetype" name="pendingleavetype" value="Casual" disabled>
             </div>
             <div class="col">
               <label for="editbday" class="form-label">Apply Date</label>
-              <input type="text" class="form-control" id="pendingleaveapplydate" name="pendingleaveapplydate" value="2000-10-10" disabled>
+              <input type="text" class="form-control border-form-modal" id="pendingleaveapplydate" name="pendingleaveapplydate" value="2000-10-10" disabled>
             </div>
             </div>
             <br>
             <div class="row g-3">
               <div class="col">
                 <label for="editphone" class="form-label">Applied No. of Days</label>
-                <input type="text" class="form-control" id="pendingleaveapplynodays" name="pendingleaveapplynodays" value="5" disabled>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveapplynodays" name="pendingleaveapplynodays" value="5" disabled>
               </div>
               <div class="col">
                 <label for="editemail" class="form-label">Available No. of Days</label>
-                <input type="text" class="form-control" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
               </div>
               <div class="col">
                 <label for="editpassword" class="form-label">Leave Period</label>
-                <input type="text" class="form-control" id="pendingleaveaperiod" name="pendingleaveaperiod" value="2000-10-10 to 2000-11-11" disabled>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveaperiod" name="pendingleaveaperiod" value="2000-10-10 to 2000-11-11" disabled>
               </div>
               </div>
               <div class="row g-3">
                 <div class="mb-3">
                   <label for="message-text" class="col-form-label">Reason:</label>
-                  <textarea class="form-control" id="pendingleavereason" name="pendingleavereason" disabled>Masakit ulo ko</textarea>
+                  <textarea class="form-control border-form-modal" id="pendingleavereason" name="pendingleavereason" disabled>Masakit ulo ko</textarea>
                 </div>
                 <!-- <div class="col-md-8">
                   <label for="editemail" class="form-label">Remarks</label>
@@ -93,7 +93,7 @@
                 </div> -->
                 <div class="col">
                   <label for="editbday" class="form-label">Action</label>
-                  <select class="form-select" id="pendingleaveaction" name="pendingleaveaction" disabled>
+                  <select class="form-select border-form-modal" id="pendingleaveaction" name="pendingleaveaction" disabled>
                     <option value="Pending">Pending</option>
                     <option value="Approved">Approved</option>
                     <option value="Rejected">Rejected</option>
@@ -103,8 +103,8 @@
                 <br>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
         <!-- <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button> -->
       </div>
     </div>
