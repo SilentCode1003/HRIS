@@ -72,7 +72,7 @@ router.post("/logs", (req, res) => {
  from ojt_attendance_logs
  inner join master_ojt on ojt_attendance_logs.oal_ojtid = mo_id
  inner join master_geofence_settings on ojt_attendance_logs.oal_geofenceid = mgs_id
- where oal_attendanceid = '${attendanceid}';`;
+ where oal_attendanceid = '${attendanceid}'`;
 
     mysql
       .mysqlQueryPromise(sql)

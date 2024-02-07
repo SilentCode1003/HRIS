@@ -527,7 +527,7 @@ router.get("/countcandidate", (req, res) => {
     COUNT(*) AS Candidate
     FROM master_employee
     WHERE me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -846,7 +846,7 @@ LEFT JOIN
     master_position ON master_employee.me_position = mp_positionid
 WHERE
     me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
 
     mysql
       .mysqlQueryPromise(sql)
