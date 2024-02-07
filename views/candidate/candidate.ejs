@@ -34,32 +34,32 @@
 <div class="modal fade" id="candidatemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to Regular this Employee?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to Regular this Employee?</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body candidate-prof">
                         <form>
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="candidatefullname">Employee Name</label>
-                                        <input type="text" class="form-control" id="candidatefullname" placeholder="Employee Name" disabled>
+                                        <input type="text" class="form-control border-form-prof" id="candidatefullname" placeholder="Employee Name" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="candidatetenure">Tenure</label>
-                                        <input type="text" class="form-control" id="candidatetenure" placeholder="Tenure" disabled>
+                                        <input type="text" class="form-control border-form-prof" id="candidatetenure" placeholder="Tenure" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="candidatehiredate">Hire Date</label>
-                                        <input type="text" class="form-control" id="candidatehiredate" placeholder="Hire Date" disabled>
+                                        <input type="text" class="form-control border-form-prof" id="candidatehiredate" placeholder="Hire Date" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputState">Action</label>
-                                        <select id="inputState" class="form-control">
+                                        <select id="inputState" class="form-control border-form-prof">
                                             <option>Choose...</option>
                                             <option value="regular">Approve Regularization</option>
                                             <option value="end_of_contract">End of Contract</option>
@@ -68,7 +68,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="text-center">
-                                        <img id="editpreview" style="width: 200px; height: 200px;" class="rounded rounded-circle" alt="placeholder" disabled>
+                                        <img id="editpreview" style="  width: 200px;
+                                        height: 200px;" class="rounded rounded-circle border-form-prof"
+                                         alt="placeholder" disabled>
                                     </div>
                                     <br>
                                 </div>
@@ -78,9 +80,9 @@
                 </div>
             </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveregular">Save</button>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="saveregular">Save</button>
         </div>
       </div>
     </div>

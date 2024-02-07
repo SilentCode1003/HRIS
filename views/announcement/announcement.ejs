@@ -104,15 +104,15 @@
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Announcement</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Announcement</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal-body">
         <form>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="editannouncementtittle" name="editannouncementtittle"
+              <input type="text" class="form-control border-form-modal" id="editannouncementtittle" name="editannouncementtittle"
                 placeholder="Department Name">
               <label for="floatingInput">Tittle</label>
             </div>
@@ -120,8 +120,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-control" id="editannouncementtype" name="editannouncementtype"
-                style="border: 2.5px solid #174634 !important;">
+              <select class="form-control border-form-modal" id="editannouncementtype" name="editannouncementtype">
                 <option value="Event">Event</option>
                 <option value="Announcement">Announcement</option>
               </select>
@@ -131,7 +130,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <input type="text" class="form-control" id="editannouncementdescription"
+              <input type="text" class="form-control border-form-modal" id="editannouncementdescription"
                 name="editannouncementdescription" placeholder="Department Name">
               <label for="floatingInput">Description</label>
             </div>
@@ -139,15 +138,15 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <input type="date" class="form-control" id="edittargetdate" name="edittargetdate"
-                placeholder="Department Name" style="border: 2.5px solid #174634 !important;">
+              <input type="date" class="form-control border-form-modal" id="edittargetdate" name="edittargetdate"
+                placeholder="Department Name">
               <label for="floatingInput">Target Date</label>
             </div>
           </div>
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="editannouncementstatus" name="editannouncementstatus"
+              <select class="form-select border-form-modal" id="editannouncementstatus" name="editannouncementstatus"
                 aria-label="Floating label select example">
                 <option selected>Choose...</option>
                 <option value="Active">Active</option>
@@ -160,11 +159,11 @@
           <div class="col">
             <div class="form-floating">
               <label class="form-label" for="customFile"></label>
-              <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control"
+              <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control border-form-modal"
                 accept="image/*">
               <br>
               <div class="text-center">
-                <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
+                <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
                   class="rounded" alt="placeholder">
               </div>
             </div>
@@ -172,9 +171,9 @@
           <br>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="editannouncementsavebtn">Save</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editannouncementsavebtn">Save</button>
       </div>
     </div>
   </div>
