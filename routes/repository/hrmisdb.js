@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('def0bfa8157a1400cf18027a613bdb4295969612d4cd5585f885ab1d7f76c1fa', (err, encrypted) => {
+Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 })
@@ -200,6 +200,7 @@ exports.Select = (sql, table, callback) => {
       if (table == "Ojt_Attendance") {
         callback(null, model.Ojt_Attendance(results));
       }
+
     });
   } catch (error) {}
 };
@@ -277,7 +278,8 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_clockin,
         ma_latitudein,
         ma_longitudein,
-        ma_devicein) VALUES ?`;
+        ma_devicein,
+        ma_gefenceidIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -473,11 +475,15 @@ exports.InsertTable = (tablename, data, callback) => {
   }
   if (tablename == "master_shift") {
     let sql = `INSERT INTO master_shift(
-        ms_shiftname,
+        ms_employeeid,
         ms_department,
-        ms_status,
-        ms_createby,
-        ms_createdate) VALUES ?`;
+        ms_monday,
+        ms_tuesday,
+        ms_wednesday,
+        ms_thursday,
+        ms_friday,
+        ms_saturday,
+        ms_sunday) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -791,7 +797,8 @@ exports.InsertTable = (tablename, data, callback) => {
         oa_clockin,
         oa_latitudein,
         oa_longitudein,
-        oa_devicein) VALUES ?`;
+        oa_devicein,
+        oa_gefenceidIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

@@ -99,11 +99,10 @@ router.post("/cancelLeave", async (req, res) => {
   try {
     const leaveid = req.body.leaveid;
 
-    // Update the leave status to 'cancelled' in the database
-    const updateLeaveStatusQuery = `UPDATE leaves SET status = 'Cancelled' WHERE leaveid = ${leaveid}`;
+    const updateLeaveStatusQuery = `UPDATE leaves SET l_leavestatus = 'Cancelled' WHERE l_leaveid = ${leaveid}`;
 
     try {
-      await mysql.mysqlQueryPromise(updateLeaveStatusQuery, [leaveId]);
+      await mysql.mysqlQueryPromise(updateLeaveStatusQuery, [leaveid]);
       res.json({ msg: "success", leaveid: leaveid, status: "cancelled" });
     } catch (updateError) {
       console.error("Error updating leave status: ", updateError);

@@ -1,243 +1,363 @@
 <script>
-    let map;
-    let attendanceid = '';
+  let map;
+  let attendanceid = "";
 
-    $(document).ready(function () {
-        searchTable();
-        LoadTable();
+  $(document).ready(function () {
+    searchTable();
+    LoadTable();
 
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
 
-        $(document).on('keyup', '#myInput', function () {
-            searchTable();
-        });
+    function LoadTable() {
+      $("#dataTableattendance").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/attendanceojt/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
 
-
-
-        function LoadTable() {
-            $("#dataTableattendance").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                serverMethod: "GET",
-                ajax: {
-                    url: "/attendanceojt/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
-
-                        $.each(data, (key, item) => {
-                            var action = "";
-                            var status = item.status;
-
-                            action = `
+              action = `
                 <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
                `;
 
-                            var imgElement = document.createElement("img");
-                            imgElement.src = "data:image/jpg;base64," + item.image;
-                            imgElement.alt = "Profile Image";
-                            imgElement.style.width = "90px";
-                            imgElement.style.height = "90px";
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "90px";
+              imgElement.style.height = "90px";
 
-                            finalData.push({
-                                image: imgElement.outerHTML,
-                                attendanceid: item.attendanceid,
-                                employeeid: item.employeeid,
-                                attendancedate: item.attendancedate,
-                                clockin: item.clockin,
-                                clockout: item.clockout,
-                                devicein: item.devicein,
-                                deviceout: item.deviceout,
-                                totalhours: item.totalhours,
-                                action: action,
-                            });
-                        });
-
-                        return finalData;
-                    },
-                },
-                columnDefs: [
-                    {
-                        targets: 1,
-                        className: "td-indent",
-                    },
-                ],
-                columns: [
-                    { data: "image" },
-                    { data: "attendanceid" },
-                    { data: "employeeid" },
-                    { data: "attendancedate" },
-                    { data: "clockin" },
-                    { data: "clockout" },
-                    { data: "devicein" },
-                    { data: "deviceout" },
-                    { data: "totalhours" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                    $("td", row).each(function (index) {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
-                    });
-                },
-                initComplete: function () {
-                },
+              finalData.push({
+                image: imgElement.outerHTML,
+                attendanceid: item.attendanceid,
+                employeeid: item.employeeid,
+                attendancedate: item.attendancedate,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                devicein: item.devicein,
+                deviceout: item.deviceout,
+                totalhours: item.totalhours,
+                action: action,
+              });
             });
-        }
 
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "image" },
+          { data: "attendanceid" },
+          { data: "employeeid" },
+          { data: "attendancedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "devicein" },
+          { data: "deviceout" },
+          { data: "totalhours" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
 
-        $("#dataTableattendance tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-                .closest("tr")
-                .find("td")
-                .each(function () {
-                    dataRow.push($(this).text());
-                });
-            attendanceid = dataRow[1];
+    $("#dataTableattendance tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
         });
-
-        $(document).on("click", "#editBtn", function () {
-            $(`#dataTableattendancelogs`).find("tr:gt(0)").remove();
-            $.ajax({
-                type: "POST",
-                url: "/attendanceojt/logs",
-                data: {
-                    attendanceid: attendanceid,
-                },
-                success: function (json) {
-
-                    var finalData = [];
-                    var data = json.data;
-
-                    if ($.fn.DataTable.isDataTable("#dataTableattendancelogs")) {
-                        $("#dataTableattendancelogs").DataTable().destroy();
-                    }
-                    material_list_tbl = document.getElementById("dataTableattendancelogs");
-
-                    $.each(data, function (key, item) {
-                        var row = material_list_tbl.insertRow(1);
-                        var IMAGE = row.insertCell(0);
-                        var FULLNAME = row.insertCell(1);
-                        var LOGDATE = row.insertCell(2);
-                        var LOGTIME = row.insertCell(3);
-                        var LOGTYPE = row.insertCell(4);
-                        var LATITUDE = row.insertCell(5);
-                        var LONGITUDE = row.insertCell(6);
-                        var DEVICE = row.insertCell(7);
-                        var LOCATION = row.insertCell(8);
-                        var DISTANCE = row.insertCell(9);
-
-                        var imgElement = document.createElement("img");
-                        imgElement.src = "data:image/jpg;base64," + item.image;
-                        imgElement.alt = "Profile Image";
-                        imgElement.style.width = "100px";
-                        imgElement.style.height = "100px";
-
-                        IMAGE.appendChild(imgElement);
-
-                        FULLNAME.innerHTML = item.fullname;
-                        LOGDATE.innerHTML = item.logdate;
-                        LOGTIME.innerHTML = item.logtime;
-                        LOGTYPE.innerHTML = item.logtype;
-                        LATITUDE.innerHTML = item.latitude;
-                        LONGITUDE.innerHTML = item.longitude;
-                        DEVICE.innerHTML = item.device;
-                        LOCATION.innerHTML = item.location;
-                        DISTANCE.innerHTML = item.distance;
-
-                        $.each(
-                            [FULLNAME, LOGDATE, LOGTIME, LOGTYPE, LATITUDE, LONGITUDE, DEVICE, LOCATION, DISTANCE],
-                            function (_, cell) {
-                                cell.style.textAlign = "center";
-                                cell.style.verticalAlign = "middle";
-                            }
-                        );
-                    });
-                },
-                error: function (xhr, status, error) {
-                },
-            });
-        });
-
-
-
-        // Initialize the map
-        function initMap() {
-            map = L.map('map').setView([0, 0], 2);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Add a marker to the map
-            const marker = L.marker([0, 0]).addTo(map);
-
-            // Listen for map click events
-            map.on('click', function (e) {
-                const { lat, lng } = e.latlng;
-                marker.setLatLng([lat, lng]);
-                $('#latitude').val(lat.toFixed(6));
-                $('#longitude').val(lng.toFixed(6));
-            });
-        }
-
-        // Call initMap on modal show
-        $('#geoFenceModal').on('shown.bs.modal', function () {
-            initMap();
-        });
-
-        function setGeoFence() {
-            const latitude = $('#latitude').val();
-            const longitude = $('#longitude').val();
-            const radius = $('#radius').val();
-
-            // Make an AJAX request to the server
-            $.ajax({
-                type: 'POST',
-                url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
-                contentType: 'application/json',
-                success: function (data) {
-                    // Handle success or show a message to the user
-                    $('#geoFenceModal').modal('hide'); // Close the modal
-                },
-                error: function (error) {
-                    console.error('Error:', error);
-                    // Handle errors or show an error message to the user
-                }
-            });
-        }
-
+      attendanceid = dataRow[1];
     });
 
-    function searchTable() {
-        var input, filter, found, table, tr, td, i, j;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("dataTableattendance");
-        tr = table.getElementsByTagName("tr");
+    $(document).on("click", "#editBtn", function () {
+      $(`#dataTableattendancelogs`).find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "/attendanceojt/logs",
+        data: {
+          attendanceid: attendanceid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
 
-        for (i = 1; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            found = false;
+          if ($.fn.DataTable.isDataTable("#dataTableattendancelogs")) {
+            $("#dataTableattendancelogs").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById(
+            "dataTableattendancelogs"
+          );
 
-            for (j = 0; j < td.length; j++) {
-                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                    break;
-                }
-            }
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var LOGDATE = row.insertCell(2);
+            var LOGTIME = row.insertCell(3);
+            var LOGTYPE = row.insertCell(4);
+            var LATITUDE = row.insertCell(5);
+            var LONGITUDE = row.insertCell(6);
+            var DEVICE = row.insertCell(7);
+            var LOCATION = row.insertCell(8);
+            var DISTANCE = row.insertCell(9);
 
-            if (found) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.image;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "100px";
+            imgElement.style.height = "100px";
+
+            IMAGE.appendChild(imgElement);
+
+            FULLNAME.innerHTML = item.fullname;
+            LOGDATE.innerHTML = item.logdate;
+            LOGTIME.innerHTML = item.logtime;
+            LOGTYPE.innerHTML = item.logtype;
+            LATITUDE.innerHTML = item.latitude;
+            LONGITUDE.innerHTML = item.longitude;
+            DEVICE.innerHTML = item.device;
+            LOCATION.innerHTML = item.location;
+            DISTANCE.innerHTML = item.distance;
+
+            $.each(
+              [
+                FULLNAME,
+                LOGDATE,
+                LOGTIME,
+                LOGTYPE,
+                LATITUDE,
+                LONGITUDE,
+                DEVICE,
+                LOCATION,
+                DISTANCE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    // Initialize the map
+    function initMap() {
+      map = L.map("map").setView([0, 0], 2);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Add a marker to the map
+      const marker = L.marker([0, 0]).addTo(map);
+
+      // Listen for map click events
+      map.on("click", function (e) {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]);
+        $("#latitude").val(lat.toFixed(6));
+        $("#longitude").val(lng.toFixed(6));
+      });
     }
+
+    // Call initMap on modal show
+    $("#geoFenceModal").on("shown.bs.modal", function () {
+      initMap();
+    });
+
+    function setGeoFence() {
+      const latitude = $("#latitude").val();
+      const longitude = $("#longitude").val();
+      const radius = $("#radius").val();
+
+      // Make an AJAX request to the server
+      $.ajax({
+        type: "POST",
+        url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
+        contentType: "application/json",
+        success: function (data) {
+          // Handle success or show a message to the user
+          $("#geoFenceModal").modal("hide"); // Close the modal
+        },
+        error: function (error) {
+          console.error("Error:", error);
+          // Handle errors or show an error message to the user
+        },
+      });
+    }
+
+    $(document).on("click", "#uploadButton", function () {
+      showspinner();
+      UploadProcess();
+    });
+
+    function UploadProcess() {
+      var fileUpload = document.getElementById("excelFileInput");
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcel(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcel(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
+      }
+    }
+
+    function GetTableFromExcel(data) {
+      var workbook = XLSX.read(data, {
+        type: "binary",
+      });
+
+      var Sheet = workbook.SheetNames[0];
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      var row = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+
+      for (var i = 0; i < excelRows.length; i++) {
+        var data = [];
+        var row = myTable.insertRow(-1);
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]];
+          data.push({
+            item: excelRows[i][columns[j]],
+          });
+        }
+        dataExcelArr.push({
+          id: data[0].item,
+          date: data[1].item,
+          time: data[2].item,
+          latitude: data[3].item,
+          longitude: data[4].item,
+          device: data[5].item,
+          type: data[6].item,
+          // geofenceid: data[7].item,
+        });
+      }
+      excelDataSave(dataExcelArr);
+    }
+
+    function excelDataSave(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      $.ajax({
+        type: "POST",
+        url: "/attendanceojt/upload",
+        data: {
+          data: dataraw,
+        },
+        success: function (result) {
+          if (result.msg != "success") {
+            // warning(
+            //   "Duplicate",
+            //   `Some data already exist on the database. ID[${result.data}]`
+            // );
+
+            swal({
+              title: "Exist",
+              text: "Some data already exist on the database. ID[${result.data}]",
+              icon: "warning",
+              button: "OK!",
+            });
+          } else {
+            // success("Saved!", "Data saved!");
+            LoadTable();
+            swal({
+              title: "Success",
+              text: "Data saved!",
+              icon: "success",
+              button: "OK!",
+            });
+          }
+
+          // $('#item-tbl').DataTable().ajax.reload();
+        },
+        error: function (result) {
+          console.error(result);
+        },
+      });
+      hidespinner();
+    }
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableattendance");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      found = false;
+
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
 </script>

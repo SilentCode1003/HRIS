@@ -527,7 +527,7 @@ router.get("/countcandidate", (req, res) => {
     COUNT(*) AS Candidate
     FROM master_employee
     WHERE me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -656,10 +656,12 @@ router.get('/getbdaytoday' , (req, res)=> {
 FROM 
     master_employee
 WHERE 
-    DAY(me_birthday) = DAY(CURRENT_DATE) 
+    DAY(me_birthday) = DAY(CURRENT_DATE)
+    AND MONTH(me_birthday) = MONTH(CURRENT_DATE)
     AND me_jobstatus IN ('regular', 'probitionary', 'apprentice')
 ORDER BY 
     me_birthday`;
+
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
       if (err) console.log("Error" , err);
@@ -844,7 +846,7 @@ LEFT JOIN
     master_position ON master_employee.me_position = mp_positionid
 WHERE
     me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
 
     mysql
       .mysqlQueryPromise(sql)

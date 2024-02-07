@@ -1,3 +1,5 @@
+const { OJTAttendanceModel } = require("./model");
+
 exports.Master_Employee = (data) => {
   let dataResult = [];
 
@@ -324,12 +326,16 @@ exports.Master_Shift = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
-      shiftid: key.ms_shiftid,
-      shiftname: key.ms_shiftname,
-      status: key.ms_status,
+      shiftid: key.ms_id,
+      employeeid: key.ms_employeeid,
       department: key.ms_department,
-      createby: key.ms_createby,
-      createdate: key.ms_createdate,
+      monday: key.ms_monday,
+      tuesday: key.ms_tuesday,
+      wednesday: key.ms_wednesday,
+      thursday: key.ms_thursday,
+      friday: key.ms_friday,
+      saturday: key.ms_saturday,
+      sunday: key.ms_sunday,
     });
   });
 
@@ -413,7 +419,6 @@ exports.Payslip = (data) => {
 
   return dataResult;
 };
-
 
 exports.Master_User = (data) => {
   let dataResult = [];
@@ -655,7 +660,6 @@ exports.Salary_History = (data) => {
   return dataResult;
 };
 
-
 exports.Salary = (data) => {
   let dataResult = [];
 
@@ -681,7 +685,6 @@ exports.Salary = (data) => {
   return dataResult;
 };
 
-
 exports.Ojt_Attendance_Logs = (data) => {
   let dataResult = [];
 
@@ -701,3 +704,32 @@ exports.Ojt_Attendance_Logs = (data) => {
   return dataResult;
 };
 
+//#region Remodeling
+
+exports.OJTAttendance = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      id: key.id,
+      date: key.date,
+      time: key.time,
+      latitude: key.latitude,
+      longitude: key.longitude,
+      device: key.device,
+    });
+  });
+
+  return dataResult.map(
+    (key) =>
+      new OJTAttendanceModel(
+        key["id"],
+        key["date"],
+        key["time"],
+        key["latitude"],
+        key["longitude"],
+        key["device"]
+      )
+  );
+};
+//#endregion

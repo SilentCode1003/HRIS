@@ -9,7 +9,7 @@
     LoadEditModal();
     searchTable();
 
-    $(document).on('keyup', '#myInput', function () {
+    $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
 
@@ -43,7 +43,6 @@
               imgElement.alt = "Profile Image";
               imgElement.style.width = "100px";
               imgElement.style.height = "100px";
-
 
               finalData.push({
                 image: imgElement.outerHTML,
@@ -82,16 +81,14 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          $('td', row).each(function (index) {
+          $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () {
-        },
+        initComplete: function () {},
       });
     }
-
 
     $(document).on("click", "#ojtsavebtn", function () {
       let image = base64String;
@@ -108,8 +105,6 @@
       let department = $("#ojtdepartment").val();
       let startdate = $("#ojtstartdate").val();
       let hours = $("#ojthours").val();
-
-  
 
       var message = "";
 
@@ -198,13 +193,11 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                })
+              }).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
-            }
-            else {
+            } else {
               swal({
                 title: "Exist",
                 text: "Data already exists!",
@@ -212,14 +205,12 @@
                 button: "OK!",
               });
             }
-
           },
           error: function (err) {
             swal("Data already exist!", "You clicked the button!", "warning");
           },
         });
       }
-
     });
 
     function LoadModal() {
@@ -301,21 +292,25 @@
               $("#editojtschool").val(item.school);
               $("#editojtdepartment").val(item.department);
               $("#editojtstartdate").val(item.startdate);
-              $("#editojthours").val(item.hours.split(':')[0]);
+              $("#editojthours").val(item.hours.split(":")[0]);
             });
           } else {
             swal("Error fetching employee data", message, "error");
           }
         },
         error: function (err) {
-          swal("An error occurred while fetching employee data", message, "error");
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
         },
       });
     });
 
     $(document).on("click", "#editojtsavebtn", function () {
       console.log("Save button clicked");
-      let id = ojtid
+      let id = ojtid;
       let image = base64String;
       let firstname = $("#editojtfname").val();
       let lastname = $("#editojtlname").val();
@@ -324,13 +319,12 @@
       let birthday = $("#editojtbirthday").val();
       let gender = $("#edditojtgender").val();
       let phone = $("#editojtphone").val();
-      let ercontact = $("#editojtecname").val(); 
+      let ercontact = $("#editojtecname").val();
       let ercontactnumber = $("#editojtecphone").val();
       let school = $("#editojtschool").val();
       let department = $("#editojtdepartment").val();
       let startdate = $("#editojtstartdate").val();
       let hours = $("#editojthours").val();
-
 
       var message = "";
 
@@ -345,7 +339,7 @@
       if (lastname === "") {
         message += "lastname is required. ";
       }
-      
+
       if (address === "") {
         message += "address is required. ";
       }
@@ -357,7 +351,7 @@
       if (birthday === "") {
         message += "birthday is required. ";
       }
-      
+
       if (gender === "") {
         message += "gender is required. ";
       }
@@ -419,10 +413,9 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                });
+              }).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
             } else if (result.msg == "exist") {
               swal({
@@ -432,7 +425,11 @@
                 button: "OK!",
               });
             } else {
-              swal("Data already exists!", "You clicked the button!", "warning");
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
             }
           },
           error: function (err) {
@@ -443,25 +440,27 @@
     });
 
     function convertToHoursFormat(hours) {
-    if (isNaN(hours)) {
-        return 'Invalid input';
-    }
+      if (isNaN(hours)) {
+        return "Invalid input";
+      }
 
-    // Convert the number to an integer
-    hours = parseInt(hours);
+      // Convert the number to an integer
+      hours = parseInt(hours);
 
-    // Calculate hours and minutes
-    const formattedHours = Math.floor(hours);
-    const minutes = Math.round((hours - formattedHours) * 60);
+      // Calculate hours and minutes
+      const formattedHours = Math.floor(hours);
+      const minutes = Math.round((hours - formattedHours) * 60);
 
-    // Format the result as HH:mm
-    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      // Format the result as HH:mm
+      const formattedTime = `${formattedHours
+        .toString()
+        .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 
-    return formattedTime;
+      return formattedTime;
     }
 
     // const formattedTime = convertToHoursFormat(input);
-    // console.log(formattedTime); 
+    // console.log(formattedTime);
 
     $(document).on("change", "#ojtprofileimage", function (e) {
       const input = document.getElementById("ojtprofileimage");
@@ -482,10 +481,32 @@
 
       var reader = new FileReader();
 
-      reader.onload = function () {
-        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
 
-        imageBase64Stringsep = base64String;
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          // Set the canvas dimensions to the desired size
+          const targetWidth = 250;
+          const targetHeight = 250;
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+
+          // Draw the image on the canvas with the new dimensions
+          ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+          // Convert the canvas content to a Base64 string
+          base64String = canvas.toDataURL().replace("data:image/png;base64,", ""); // Change format if needed
+
+          // Display or use the base64String as needed
+          console.log(base64String);
+          imageBase64Stringsep = base64String;
+        };
+
+        // base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
       };
       reader.readAsDataURL(file);
     }
@@ -509,10 +530,34 @@
 
       var reader = new FileReader();
 
-      reader.onload = function () {
-        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
 
-        imageBase64Stringsep = base64String;
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          // Set the canvas dimensions to the desired size
+          const targetWidth = 250;
+          const targetHeight = 250;
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+
+          // Draw the image on the canvas with the new dimensions
+          ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+          // Convert the canvas content to a Base64 string
+          base64String = canvas
+            .toDataURL()
+            .replace("data:image/png;base64,", ""); // Change format if needed
+
+          // Display or use the base64String as needed
+          // console.log(base64String);
+          imageBase64Stringsep = base64String;
+        };
+
+        // base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
       };
       reader.readAsDataURL(file);
     }
@@ -530,9 +575,7 @@
     //   };
     //   // reader.readAsDataURL(file);
     // }
-
   });
-
 
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
