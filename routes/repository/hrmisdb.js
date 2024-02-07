@@ -200,6 +200,7 @@ exports.Select = (sql, table, callback) => {
       if (table == "Ojt_Attendance") {
         callback(null, model.Ojt_Attendance(results));
       }
+
     });
   } catch (error) {}
 };
@@ -474,11 +475,15 @@ exports.InsertTable = (tablename, data, callback) => {
   }
   if (tablename == "master_shift") {
     let sql = `INSERT INTO master_shift(
-        ms_shiftname,
+        ms_employeeid,
         ms_department,
-        ms_status,
-        ms_createby,
-        ms_createdate) VALUES ?`;
+        ms_monday,
+        ms_tuesday,
+        ms_wednesday,
+        ms_thursday,
+        ms_friday,
+        ms_saturday,
+        ms_sunday) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

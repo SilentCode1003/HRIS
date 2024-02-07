@@ -92,6 +92,7 @@ WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
         .catch((error) => {
           return res.json({
             msg: "error",
+            data: error,
           });
         });
     });
@@ -113,3 +114,5 @@ router.post("/logout", (req, res) => {
     });
   });
 });
+
+
