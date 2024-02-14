@@ -1,120 +1,322 @@
 <br>
 <!-- Table -->
 <div class="card" id="tablecard">
-    <div class="card-header">
-      <h3 class="title-card-table">Shift</h3>
-      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
-        <b>+ Add</b>
-      </button>
-        <input id='myInput'  type='text' placeholder="  Search....">
+  <div class="card-header">
+    <h3 class="title-card-table">Shift</h3>
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
+      <b>+ Add</b>
+    </button>
+    <input id='myInput' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTableshift">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th>Employee</th>
+            <th>Department</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+            <th class="col-sm-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableshift">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee</th>
-                        <th>Department</th>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                        <th>Sunday</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
 </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h3 class="modal-title fs-5" id="exampleModalLabel">SHIFT</h3>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="shifthours" name="shifthours" placeholder="Department Name">
-                        <label for="floatingInput">Shift Hours</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                      <div class="form-floating">
-                          <select class="form-select border-form-modal" id="shiftdepartment" name="shiftdepartment" aria-label="Floating label select example">
-                            <option selected>Department</option>
-                          </select>
-                          <label for="floatingSelectGrid">Department</label>
-                        </div>
-                  </div>
-                  <br>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="shiftsavebtn">Save</button>
-        </div>
+<div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">SHIFT</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="employeeshift" name="employeeshift"
+                  aria-label="Floating label select example">
+                  <option>Employee</option>
+                </select>
+                <label for="floatingSelectGrid">Employee Name</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="shiftdepartment" name="shiftdepartment"
+                  aria-label="Floating label select example">
+                  <option>Department</option>
+                </select>
+                <label for="floatingSelectGrid">Department</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="mondayTimeIn" name="mondayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Monday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="mondayTimeIn">Monday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="mondayTimeOut" name="mondayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Monday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="mondayTimeOut">Monday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="tuesdayTimeIn" name="tuesdayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Tuesday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="tuesdayTimeIn">Tuesday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="tuesdayTimeOut" name="tuesdayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Tuesday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="tuesdayTimeOut">Tuesday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="wednesdayTimeIn" name="wednesdayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Wednesday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="wednesdayTimeIn">Wednesday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="wednesdayTimeOut" name="wednesdayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Wednesday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="wednesdayTimeOut">Wednesday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="thursdayTimeIn" name="thursdayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Thursday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="thursdayTimeIn">Thursday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="thursdayTimeOut" name="thursdayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Thursday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="thursdayTimeOut">Thursday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="fridayTimeIn" name="fridayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Friday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="fridayTimeIn">Friday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="fridayTimeOut" name="fridayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Friday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="fridayTimeOut">Friday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="saturdayTimeIn" name="saturdayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Saturday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="saturdayTimeIn">Saturday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="saturdayTimeOut" name="saturdayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Saturday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="saturdayTimeOut">Saturday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="sundayTimeIn" name="sundayTimeIn"
+                  aria-label="Floating label select example">
+                  <option selected>Sunday Time In</option>
+                  <option value="08:00:00">8:00 AM</option>
+                  <option value="09:00:00">9:00 AM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="sundayTimeIn">Sunday Time In</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="sundayTimeOut" name="sundayTimeOut"
+                  aria-label="Floating label select example">
+                  <option selected>Sunday Time Out</option>
+                  <option value="17:00:00">5:00 PM</option>
+                  <option value="18:00:00">6:00 PM</option>
+                  <option value="00:00:00">Rest Day</option>
+                </select>
+                <label for="sundayTimeOut">Sunday Time Out</label>
+              </div>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="shiftsavebtn">Save</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Edit Modal -->
-<div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-                <div class="col">
-                    <input type="hidden" id="editshiftid" name="editshiftid">
-                    <div class="form-floating">
-                    <input type="text" class="form-control border-form-modal" id="editshift" name="editshift" value="8:00:00 - 17:00:00">
-                    <label for="floatingInput">Shift Hours</label>
-                    </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select border-form-modal" id="editshiftdepartment" name="editshiftdepartment" aria-label="Floating label select example">
-                          <option>Department</option>
-                        </select>
-                        <label for="floatingSelectGrid">Department</label>
-                      </div>
-                </div>
-                <br>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select border-form-modal" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
-                          <option>Status</option>
-                          <option value="Active"selected>Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                        <label for="floatingSelectGrid">Shift</label>
-                      </div>
-                </div>
-                <br>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="editshiftsavebtn">Save</button>
-        </div>
+<!-- Edit Modal -->
+<div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Shift</h5>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col">
+            <input type="hidden" id="editshiftid" name="editshiftid">
+            <div class="form-floating">
+              <input type="text" class="form-control border-form-modal" id="editshift" name="editshift"
+                value="8:00:00 - 17:00:00">
+              <label for="floatingInput">Shift Hours</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select border-form-modal" id="editshiftdepartment" name="editshiftdepartment"
+                aria-label="Floating label select example">
+                <option>Department</option>
+              </select>
+              <label for="floatingSelectGrid">Department</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+              <select class="form-select border-form-modal" id="editshiftstatus" name="editshiftstatus"
+                aria-label="Floating label select example">
+                <option>Status</option>
+                <option value="Active" selected>Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="floatingSelectGrid">Shift</label>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editshiftsavebtn">Save</button>
       </div>
     </div>
   </div>
+</div>

@@ -55,7 +55,7 @@ router.get('/load', (req, res) => {
   try {
     let sql = `SELECT 
     ms_id,
-    ms_employeeid,
+    concat(me_lastname,' ',me_firstname) as ms_employeeid,
     md_departmentname as ms_department,
     ms_monday,
     ms_tuesday,
@@ -65,7 +65,8 @@ router.get('/load', (req, res) => {
     ms_saturday,
     ms_sunday
     from master_shift
-    LEFT JOIN master_department ON master_shift.ms_department = md_departmentid`;
+    LEFT JOIN master_department ON master_shift.ms_department = md_departmentid
+    LEFT JOIN master_employee ON master_shift.ms_employeeid = me_id`;
 
     mysql.Select(sql, 'Master_Shift', (err, result) => {
       if (err) console.error('Error: ', err);
@@ -80,49 +81,141 @@ router.get('/load', (req, res) => {
     res.json({
       msg:'error',
       data:error,
-    })
+    });
     
   }
 });
 
-router.post('/save', async (req, res) => {
+router.post('/loadshiftforapp', (req, res) => {
   try {
-    let shiftname = req.body.shiftname;
-    let status = 'Active';
-    let department = req.body.department; 
-    let createby = req.session.fullname; 
-    let createdate = currentDate.format('YYYY-MM-DD');
-    console.log('Received department name:', department);
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
+    ms_id,
+    ms_employeeid,
+    md_departmentname as ms_department,
+    ms_monday,
+    ms_tuesday,
+    ms_wednesday,
+    ms_thursday,
+    ms_friday,
+    ms_saturday,
+    ms_sunday
+    from master_shift
+    LEFT JOIN master_department ON master_shift.ms_department = md_departmentid
+    where ms_employeeid = '${employeeid}'`;
 
-    const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
+    mysql.Select(sql, 'Master_Shift', (err, result) => {
+      if (err) console.error('Error: ', err);
 
-    const departmentIdResult = await mysql.mysqlQueryPromise(departmentIdQuery, [department]);
+      console.log(result);
 
-    if (departmentIdResult.length > 0) {
-      const departmentId = departmentIdResult[0].md_departmentid;
-
-      const data = [
-        [shiftname, departmentId, status, createby, createdate]
-      ];
-
-      mysql.InsertTable('master_shift', data, (insertErr, insertResult) => {
-        if (insertErr) {
-          console.error('Error inserting record: ', insertErr);
-          res.json({ msg: 'insert_failed' });
-        } else {
-          console.log(insertResult);
-          res.json({ msg: 'success' });
-        }
+      res.json({
+        msg: 'success', data: result
       });
-    } else {
-      res.json({ msg: 'department_not_found' });
-    }
+    });
   } catch (error) {
-    console.error('Error: ', error);
-    res.json({ msg: 'error' });
+    res.json({
+      msg:'error',
+      data:error,
+    });
+    
   }
 });
 
+// router.post('/save', async (req, res) => {
+//   try {
+//     let shiftname = req.body.shiftname;
+//     let status = 'Active';
+//     let department = req.body.department; 
+//     let createby = req.session.fullname; 
+//     let createdate = currentDate.format('YYYY-MM-DD');
+//     console.log('Received department name:', department);
+
+//     const departmentIdQuery = `SELECT md_departmentid FROM master_department WHERE md_departmentname = '${department}'`;
+
+//     const departmentIdResult = await mysql.mysqlQueryPromise(departmentIdQuery, [department]);
+
+//     if (departmentIdResult.length > 0) {
+//       const departmentId = departmentIdResult[0].md_departmentid;
+
+//       const data = [
+//         [shiftname, departmentId, status, createby, createdate]
+//       ];
+
+//       mysql.InsertTable('master_shift', data, (insertErr, insertResult) => {
+//         if (insertErr) {
+//           console.error('Error inserting record: ', insertErr);
+//           res.json({ msg: 'insert_failed' });
+//         } else {
+//           console.log(insertResult);
+//           res.json({ msg: 'success' });
+//         }
+//       });
+//     } else {
+//       res.json({ msg: 'department_not_found' });
+//     }
+//   } catch (error) {
+//     console.error('Error: ', error);
+//     res.json({ msg: 'error' });
+//   }
+// });
+
+
+router.post('/save', async (req, res) => {
+  try {
+    let employeeName = req.body.employeeName;
+    let department = req.body.department;
+    let mondayformat = req.body.mondayformat;
+    let tuesdayformat = req.body.tuesdayformat;
+    let wednesdayformat = req.body.wednesdayformat;
+    let thursdayformat = req.body.thursdayformat;
+    let fridayformat = req.body.fridayformat;
+    let saturdayformat = req.body.saturdayformat;
+    let sundayformat = req.body.sundayformat;
+
+    let data = [];
+
+    data.push([
+      employeeName, department, mondayformat, tuesdayformat,
+      wednesdayformat, thursdayformat, fridayformat, saturdayformat,
+      sundayformat,
+    ]);
+
+    console.log(data);
+
+    let sql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
+
+    console.log(sql);
+
+    mysql.Select(sql, "Master_Shift", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      if (result.length !=0) {
+        res.json({
+          msg:"exist",
+          data: err,
+        });
+      }
+      else {
+        mysql.InsertTable('master_shift', data, (err, result) => {
+          if (err) console.error("Error: ",err);
+
+          console.log(result);
+
+          res.json({
+            msg:'success',
+            data: result,
+          })
+        });
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
 
 router.post('/update', (req, res) => {
   try {

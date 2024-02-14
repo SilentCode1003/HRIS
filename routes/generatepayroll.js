@@ -39,50 +39,164 @@ router.post('/generatepayroll', (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
-    let sql = `INSERT INTO generate_payroll (gp_attendancedate, gp_employeeid, gp_datetimein, gp_datetimeout, gp_totalhours_numeric, gp_totalminutes_numeric, gp_late, gp_status)
-    SELECT
-        dates.date_value AS gp_attendancedate,
-        e.me_id AS gp_employeeid,
-        COALESCE(ma.ma_clockin, '0000-00-00 00:00:00') AS gp_datetimein,
-        COALESCE(ma.ma_clockout, '0000-00-00 00:00:00') AS gp_datetimeout,
-        COALESCE(HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) AS gp_totalhours_numeric,
-        COALESCE(MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) AS gp_totalminutes_numeric,
-        IFNULL(
-            CASE
-                WHEN ma.ma_clockin = '0000-00-00 00:00:00' OR ma.ma_clockout = '0000-00-00 00:00:00' THEN 0
-                WHEN HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)) >= 9 THEN 0
-                ELSE (9 - HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin))) * 60 + MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin))
-            END,
-            0
-        ) AS gp_late,
+    let sql = `INSERT INTO generate_payroll (
+      gp_employeeid,
+      gp_attendancedate,
+      gp_clockin,
+      gp_clockout,
+      gp_timein_schedule,
+      gp_timeout_schedule,
+      gp_late,
+      gp_overtime,
+      gp_per_day,
+      gp_per_hour,
+      gp_total_hours,
+      gp_night_differentials,
+      gp_normal_ot,
+      gp_early_ot,
+      gp_nightdiff_pay_per_ot,
+      gp_basic_pay_per_ot,
+      gp_status,
+      gp_total_nd_pay,
+      gp_total_normal_ot_pay
+  )
+  SELECT
+      employee_ids.ma_employeeid as gp_employeeid,
+      date_range_table.date_range_date AS gp_attendancedate,
+      COALESCE(ma.ma_clockin, '00:00:00') AS gp_clockin,
+      COALESCE(ma.ma_clockout, '00:00:00') AS gp_clockout,
+       COALESCE(
+          CASE
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 2 THEN TIME_FORMAT(ms.ms_MONDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 3 THEN TIME_FORMAT(ms.ms_TUESDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 4 THEN TIME_FORMAT(ms.ms_WEDNESDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 5 THEN TIME_FORMAT(ms.ms_THURSDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 6 THEN TIME_FORMAT(ms.ms_FRIDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 7 THEN TIME_FORMAT(ms.ms_SATURDAY->>'$.time_in', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 1 THEN TIME_FORMAT(ms.ms_SUNDAY->>'$.time_in', '%H:%i:%s')
+              ELSE NULL
+          END,
+          '00:00:00'
+      ) AS gp_timein_schedule,
+      COALESCE(
+          CASE
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 2 THEN TIME_FORMAT(ms.ms_MONDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 3 THEN TIME_FORMAT(ms.ms_TUESDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 4 THEN TIME_FORMAT(ms.ms_WEDNESDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 5 THEN TIME_FORMAT(ms.ms_THURSDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 6 THEN TIME_FORMAT(ms.ms_FRIDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 7 THEN TIME_FORMAT(ms.ms_SATURDAY->>'$.time_out', '%H:%i:%s')
+              WHEN DAYOFWEEK(date_range_table.date_range_date) = 1 THEN TIME_FORMAT(ms.ms_SUNDAY->>'$.time_out', '%H:%i:%s')
+              ELSE NULL
+          END,
+          '00:00:00'
+      ) AS gp_timeout_schedule,
+      IFNULL(
+          TIMEDIFF(ma.ma_clockin, CONCAT(ma.ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_in')),
+          '00:00:00'
+      ) AS gp_late,
      IFNULL(
-            CASE
-                WHEN ma.ma_clockin = '0000-00-00 00:00:00' AND ma.ma_clockout = '0000-00-00 00:00:00' THEN 0.00
-                WHEN COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout, '0000-00-00 00:00:00'), COALESCE(ma.ma_clockin, '0000-00-00 00:00:00'))), 0) >= 9 THEN 1
-                WHEN COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout, '0000-00-00 00:00:00'), COALESCE(ma.ma_clockin, '0000-00-00 00:00:00'))), 0) < 9 
-            AND COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout, '0000-00-00 00:00:00'), COALESCE(ma.ma_clockin, '0000-00-00 00:00:00'))), 0) > 9 THEN 0.5
-          WHEN (9 - HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin))) * 60 + MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)) >= 60 THEN 0.5
-                WHEN COALESCE(MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) = 5 THEN 0.5
-                ELSE 0
-            END,
-            0
-        ) AS gp_status
-    FROM
-        (
-            SELECT '${startdate}' + INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY AS date_value
-            FROM
-                (SELECT 0 AS a UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a,
-                (SELECT 0 AS a UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b,
-                (SELECT 0 AS a UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
-        ) dates
-    CROSS JOIN
-        (select * from master_employee where me_jobstatus not in ('end_of_contract','resigned','terminated')) e
-    LEFT JOIN
-        master_attendance ma ON dates.date_value = ma.ma_attendancedate AND e.me_id = ma.ma_employeeid
-    WHERE
-        dates.date_value BETWEEN '${startdate}' AND '${enddate}'
-    ORDER BY gp_attendancedate DESC
-    `;
+      GREATEST(
+          TIMEDIFF(
+              ma.ma_clockout,
+              CONCAT(ma.ma_attendancedate, ' ', COALESCE(ms.ms_MONDAY->>'$.time_out', '00:00:00'))
+          ),
+          '00:00:00'
+      ),
+      '00:00:00'
+  ) AS gp_overtime,
+      COALESCE(s.ms_monthly / 2 / 13 , 0) AS gp_per_day,
+      COALESCE(s.ms_monthly / 2 / 13 / 8, 0) AS gp_per_hour,
+      COALESCE(HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) AS gp_total_hours,
+      LEAST(
+          CASE
+              WHEN ((ma.ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME)) 
+                  AND (CAST(CONCAT(DATE(ma_clockout), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE(ma_clockout), ' ', '06:00:00') AS DATETIME))
+                  THEN COALESCE(HOUR( TIMEDIFF(ma.ma_clockout,CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME))))
+              ELSE
+                  0
+          END,
+          8
+      ) AS gp_night_differentials,
+      CASE
+          WHEN ma.ma_clockout <= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME) AND ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+              THEN COALESCE(HOUR(TIMEDIFF(ma.ma_clockout,CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
+          WHEN ma.ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME)
+              THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME),CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
+          ELSE
+              0
+      END AS gp_normal_ot,
+      CASE
+          WHEN ma.ma_clockin <= CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+              THEN COALESCE(HOUR(TIMEDIFF(ma.ma_clockin,CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))))
+          ELSE
+              0
+      END AS gp_early_ot,
+      ROUND(COALESCE(s.ms_monthly / 2 / 13 / 8 * 1.25 * 1.10, 0), 2) AS gp_nightdiff_pay_per_ot,
+      ROUND(COALESCE(s.ms_monthly / 2 / 13 / 8 * 1.25, 0), 2) AS gp_basic_pay_per_ot,
+     CASE
+      WHEN COALESCE(HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) = 0 THEN 0  -- Set status to 0 if total hours is 0
+      ELSE
+          IFNULL(
+              CASE
+                  WHEN ma.ma_clockin = ms.ms_MONDAY->>'$.time_in' AND ma.ma_clockout = ms.ms_MONDAY->>'$.time_out' THEN 0.00
+                  WHEN COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout,ms.ms_MONDAY->>'$.time_out'), COALESCE(ma.ma_clockin, ms.ms_MONDAY->>'$.time_in'))), 0) >= 9 THEN 1
+                  WHEN COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout,ms.ms_MONDAY->>'$.time_out'), COALESCE(ma.ma_clockin, ms.ms_MONDAY->>'$.time_in'))), 0) < 9 
+                      AND COALESCE(HOUR(TIMEDIFF(COALESCE(ma.ma_clockout,ms.ms_MONDAY->>'$.time_out'), COALESCE(ma.ma_clockin, ms.ms_MONDAY->>'$.time_in'))), 0) >= 4 THEN 0.5
+                  WHEN (9 - HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin))) * 60 + MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)) >= 60 THEN 0.5
+                  WHEN COALESCE(MINUTE(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) >= 5 THEN 0.5
+                  ELSE 0
+              END,
+              CASE
+                  WHEN COALESCE(HOUR(TIMEDIFF(ma.ma_clockout, ma.ma_clockin)), 0) = 0 THEN 0  -- Set status to 0 if total hours is 0
+                  ELSE 0
+              END
+          )
+  END AS gp_status,
+      ROUND(
+          COALESCE(s.ms_monthly / 2 / 13 / 8 * 1.25 * 1.10, 0) * LEAST(
+              CASE
+                  WHEN ((ma.ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME)) 
+                      AND (CAST(CONCAT(DATE(ma_clockout), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE(ma_clockout), ' ', '06:00:00') AS DATETIME))
+                      THEN COALESCE(HOUR( TIMEDIFF(ma.ma_clockout,CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME))))
+                  ELSE
+                      0
+              END,
+              8
+          ),
+          2
+      ) AS gp_total_nd_pay,
+      ROUND(
+          COALESCE(s.ms_monthly / 2 / 13 / 8 * 1.25, 0) * CASE
+              WHEN ma.ma_clockout <= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME) AND ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+                  THEN COALESCE(HOUR(TIMEDIFF(ma.ma_clockout,CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
+              WHEN ma.ma_clockout >= CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME)
+                  THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT(ma_attendancedate, ' ', '22:00:00') AS DATETIME),CAST(CONCAT(ma_attendancedate, ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
+              ELSE
+                  0
+          END,
+          2
+      ) AS gp_total_normal_ot_pay
+  FROM (
+      SELECT DATE_ADD('${startdate}', INTERVAL (t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) DAY) AS date_range_date
+      FROM 
+          (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS t0,
+          (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS t1,
+          (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS t2,
+          (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS t3,
+          (SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS t4
+      WHERE 
+          DATE_ADD('${startdate}', INTERVAL (t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) DAY) BETWEEN '${startdate}' AND '${enddate}'
+  ) AS date_range_table
+  CROSS JOIN (
+      SELECT DISTINCT me_id AS ma_employeeid FROM master_employee
+  ) AS employee_ids
+  LEFT JOIN master_attendance ma ON date_range_table.date_range_date = ma.ma_attendancedate AND employee_ids.ma_employeeid = ma.ma_employeeid
+  JOIN master_employee me ON employee_ids.ma_employeeid = me.me_id
+  JOIN master_shift ms ON me.me_id = ms.ms_employeeid
+  LEFT JOIN master_salary s ON me.me_id = s.ms_employeeid
+  ORDER BY ma_attendancedate DESC;
+  `;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
@@ -106,181 +220,80 @@ router.post('/generatepayroll', (req, res) => {
 });
 
 
+router.post('/loadpayroll', (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql = `SELECT
+    '${startdate}' AS start_date,
+    '${enddate}' AS end_date,
+    gp.gp_employeeid,
+    SUM(COALESCE(gd.gd_amount, 0)) AS total_deductions,
+    (SUM(gp.gp_per_day) - SUM(COALESCE(gd.gd_amount, 0))) AS total_net_pay
+FROM
+    generate_payroll gp
+LEFT JOIN
+    government_deductions gd ON gp.gp_employeeid = gd.gd_employeeid
+    AND gp.gp_attendancedate BETWEEN @start_date AND @end_date
+GROUP BY
+    gp.gp_employeeid
+ORDER BY
+    gp.gp_employeeid ASC`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:"error",
+        data: error,
+      });
+    })
+    
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/viewpayslip', (req,res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let employeeid = req.body.employeeid;
+    let sql = ``;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+    
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
 
 
 
 
 
-// router.post('generatepayroll', (req, res) => {
-//   try {
-//     let 
-//     let sql = `UPDATE salary SET s_totalhours = ? WHERE s_employeeid = ?`;
 
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg:'success',
-//         data: result,
-//       });
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg:'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg:'error',
-//       data: error,
-//     });
-//   }
-// });
-
-
-
-
-
-// router.post('/generate_salaries', async (req, res) => {
-//   try {
-//     const startDate = req.body.startDate; 
-//     const endDate = req.body.endDate;
-
-//     const employees = await getEmployees(startDate, endDate);
-
-//     // Fetch and calculate salary details for each employee
-//     const salaries = await Promise.all(
-//       employees.map(async employee => {
-//         const attendanceData = await getAttendanceData(employee.me_id, startDate, endDate);
-//         const allowanceData = await getAllowanceData(employee.me_id);
-
-//         const totalHours = calculateTotalHours(attendanceData);
-//         const totalSalary = calculateTotalSalary(allowanceData);
-
-//         await insertSalaryDetails(
-//           employee.me_id, allowanceData[0].ms_id, 'your_cutoff_value', totalSalary,
-//           totalHours, 'your_total_deductions_value', 'your_payroll_date_value',
-//           allowanceData[0].ms_allowances, 'your_adjustment_value',
-//           'your_spholiday_value', 'your_restdayout_value', 'your_legalholiday_value'
-//         );
-
-//         return {
-//           employee_id: employee.me_id,
-//           employee_name: `${employee.me_firstname} ${employee.me_lastname}`,
-//           total_hours: totalHours,
-//           total_salary: totalSalary
-//         };
-//       })
-//     );
-
-//     res.status(200).json({ salaries });
-//   } catch (error) {
-//     console.error('Error generating salaries:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-// function insertSalaryDetails(employeeId, msSalaryId, cutoff, netPay, totalHours, totalDeductions, payRollDate, allowances, adjustment, spHoliday, restDayOT, legalHoliday) {
-//   return new Promise((resolve, reject) => {
-//     let sql = `
-//       INSERT INTO salary (
-//         s_employeeid, s_mssalaryid, s_cutoff, s_netpay, s_totalhours, s_totaldeductions, 
-//         s_payrolldate, s_allowances, s_adjustment, s_spholiday, s_restdayot, s_legalholiday
-//       )
-//       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-//     mysql.Insert(
-//       sql,
-//       [
-//         employeeId, msSalaryId, cutoff, netPay, totalHours, totalDeductions,
-//         payRollDate, allowances, adjustment, spHoliday, restDayOT, legalHoliday
-//       ],
-//       (err, result) => {
-//         if (err) {
-//           console.error("Error inserting salary details:", err);
-//           reject(err);
-//         } else {
-//           resolve(result);
-//         }
-//       }
-//     );
-//   });
-// }
-
-// function getEmployees(startDate, endDate) {
-//   return new Promise((resolve, reject) => {
-//     let sql = `
-//       SELECT * FROM master_employee
-//       WHERE me_jobstatus IN ('regular', 'probationary')`;
-
-//     mysql.Select(sql, "Master_Employee", (err, result) => {
-//       if (err) {
-//         console.error("Error fetching employees:", err);
-//         reject(err);
-//       } else {
-//         resolve(result);
-//       }
-//     });
-//   });
-// }
-
-// function getAttendanceData(employeeId, startDate, endDate) {
-//   return new Promise((resolve, reject) => {
-//     let sql = `
-//       SELECT * FROM master_attendance
-//       WHERE ma_employeeid = ? AND ma_attendancedate BETWEEN ? AND ?`;
-
-//     mysql.Select(sql, [employeeId, startDate, endDate], (err, result) => {
-//       if (err) {
-//         console.error("Error fetching attendance data:", err);
-//         reject(err);
-//       } else {
-//         resolve(result);
-//       }
-//     });
-//   });
-// }
-
-// function getAllowanceData(employeeId) {
-//   return new Promise((resolve, reject) => {
-//     let sql = `
-//       SELECT ms_id, ms_allowances FROM master_salary
-//       WHERE ms_employeeid = ?`;
-
-//     mysql.Select(sql, [employeeId], (err, result) => {
-//       if (err) {
-//         console.error("Error fetching allowance data:", err);
-//         reject(err);
-//       } else {
-//         resolve(result);
-//       }
-//     });
-//   });
-// }
-
-// function calculateTotalHours(attendanceData) {
-//   let totalHours = 0;
-//   attendanceData.forEach(row => {
-//     if (row.ma_clockin && row.ma_clockout) {
-//       const clockin = new Date(row.ma_clockin);
-//       const clockout = new Date(row.ma_clockout);
-
-//       const secondsDiff = Math.abs(Math.floor((clockout - clockin) / 1000));
-//       const hours = Math.floor(secondsDiff / 3600);
-//       const minutes = Math.floor((secondsDiff % 3600) / 60);
-//       const formattedHours = `${hours}h ${minutes}m`;
-
-//       totalHours += formattedHours;
-//     }
-//   });
-//   return totalHours;
-// }
-
-// function calculateTotalSalary(allowanceData) {
-//   if (allowanceData.length > 0) {
-//     const monthlySalary = allowanceData[0].ms_allowances || 0;
-//     const allowances = allowanceData[0].ms_allowances || 0;
-//     return monthlySalary + allowances;
-//   }
-//   return 0;
-// }
