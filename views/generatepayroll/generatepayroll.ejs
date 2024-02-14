@@ -3,12 +3,15 @@
 <div class="card" id="tablecard">
     <div class="card-header">
         <h3 class="title-card-table">Generate Payroll</h3>
-        <input type="text" name="daterange"/>
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#announcementmodal">
+            <b>Generate</b>
+        </button>
+        <input id="datepicker" type="text" name="daterange"/>
         <input id='myInput' type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableshift">
+            <table class="table table-striped" id="dataTableGeneratePayroll">
                 <thead>
                     <tr>
                         <th class="col-sm-1">ID</th>
