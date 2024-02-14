@@ -1,9 +1,98 @@
 <script>
-    $(function() {
-      $('input[name="daterange"]').daterangepicker({
-        opens: 'left'
-      }, function(start, end, label) {
-        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  $(document).ready(function () {
+    console.log('Initialize');
+    LoadTable();
+
+    function LoadTable() {
+      $("#dataTableDeduction").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/deduction/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdeductionmodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "90px";
+              imgElement.style.height = "90px";
+
+              finalData.push({
+                image: imgElement.outerHTML,
+                govdeduct: item.govdeduct,
+                employeeid: item.employeeid,
+                type: item.type,
+                amount: item.amount,
+                period: item.period,
+                cutoff: item.cutoff,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "image" },
+          { data: "govdeduct" },
+          { data: "employeeid" },
+          { data: "type" },
+          {
+            data: "amount",
+            render: function (data, type, row) {
+              return '₱' + parseFloat(data).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+            }
+          },
+          { data: "period" },
+          { data: "cutoff" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log('Done');
+        },
       });
+    }
+
+  });
+  $(function () {
+    $('input[name="daterange"]').daterangepicker({
+      opens: 'middle'
+    }, function (start, end, label) {
+      console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
+  });
 </script>

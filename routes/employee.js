@@ -24,6 +24,32 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+router.get('/selectdistinct', (req, res) => {
+  try {
+    let sql =  `SELECT DISTINCT
+    me_id,
+    concat(me_lastname,' ',me_firstname) as me_firstname
+    FROM master_employee
+    LEFT JOIN master_shift ON master_employee.me_id = master_shift.ms_employeeid
+    WHERE master_shift.ms_employeeid IS NULL
+    AND me_jobstatus IN ('regular', 'probitionary','apprentice')`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.error ("Error :", err);
+
+      res.json({
+        msg:"success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
 router.post("/upload", (req, res) => {
   const { data } = req.body;
   let dataJson = JSON.parse(data);

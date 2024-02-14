@@ -55,7 +55,7 @@ WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
               if (user.status === "Active") {
                 let data = UserLogin(result);
 
-                console.log(result);
+                //console.log(result);
 
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
