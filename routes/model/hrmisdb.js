@@ -704,6 +704,26 @@ exports.Ojt_Attendance_Logs = (data) => {
   return dataResult;
 };
 
+
+exports.Apps_Details = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      appid: key.ad_id,
+      appimage: key.ad_image,
+      appname: key.ad_name,
+      appsdetails: key.ad_details,
+      appversion: key.ad_version,
+      appdate: key.ad_date,
+      appcreateby: key.ad_createby,
+    });
+  });
+
+  return dataResult;
+};
+
+
 //#region Remodeling
 
 exports.OJTAttendance = (data) => {

@@ -1,34 +1,35 @@
-<br>
-<!-- Table -->
-<div class="card" id="tablecard">
-    <div class="card-header">
-        <h3 class="title-card-table">Generate Payroll</h3>
-        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#announcementmodal">
-            <b>Generate</b>
-        </button>
-        <input id="datepicker" type="text" name="daterange"/>
-        <input id='myInput' type='text' placeholder="  Search....">
-    </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableGeneratePayroll">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Payroll Date</th>
-                        <th>Employee</th>
-                        <th>Cut Off</th>
-                        <th>Net Pay</th>
-                        <th>Total Hours</th>
-                        <th>Total Deductions</th>
-                        <th>Allowances</th>
-                        <th>Adjustment</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+<body>
+    <!-- Table -->
+    <div class="card" id="tablecard">
+        <div class="card-header">
+            <h3 class="title-card-table">Generate Payroll</h3>
+            <input id="datepicker" type="text" name="daterange"/>
+            <button id="generateButton" class="btn btn-add-color"><b>Generate</b></button>
+            <input id="myInput" type="text" placeholder="Search....">
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped" id="dataTablePayroll">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th class="col-sm-1">EmployeeID</th>
+                            <th>Salary</th>
+                            <th>Per Day</th>
+                            <th>Work Days</th>
+                            <th>Rest Days</th>
+                            <th>Total Status</th>
+                            <th>Absent</th>
+                            <th>Absent Deductions</th>
+                            <th>Total Net Pay</th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+</body>
+</html>
