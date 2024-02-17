@@ -67,6 +67,7 @@ var ojtattendanceRouter = require('./routes/ojtattendance');
 var ojtprofileRouter = require('./routes/ojtprofile');
 var ojtreqabsentRouter = require('./routes/ojtreqabsent');
 var attendanceojtRouter = require('./routes/attendanceojt');
+var appsdetailsRouter = require('./routes/appsdetails');
 
 
 
@@ -146,6 +147,7 @@ app.use('/ojtattendance', ojtattendanceRouter);
 app.use('/ojtprofile', ojtprofileRouter);
 app.use('/ojtreqabsent', ojtreqabsentRouter);
 app.use('/attendanceojt', attendanceojtRouter);
+app.use('/appsdetails', appsdetailsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

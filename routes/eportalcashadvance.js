@@ -150,7 +150,8 @@ router.post('/update', (req, res) => {
     })
     .catch((error) =>{
       res.json({
-        msg:error
+        msg:'error',
+        data: error,
       })
       
     });
@@ -196,5 +197,25 @@ router.post('/getca', (req, res) => {
       msg:error
     })
     
+  }
+});
+
+
+router.post("/cancelcashadvanced", async (req, res) => {
+  try {
+    const cashadvanceid = req.body.cashadvanceid;
+
+    const updateCashAdvanceStatusQuery = `UPDATE cash_advance SET ca_status = 'Cancelled' WHERE ca_cashadvanceid = ${cashadvanceid}`;
+
+    try {
+      await mysql.mysqlQueryPromise(updateCashAdvanceStatusQuery, [cashadvanceid]);
+      res.json({ msg: "success", cashadvanceid: cashadvanceid, status: "Cancelled" });
+    } catch (updateError) {
+      console.error("Error updating cashadvance status: ", updateError);
+      res.json({ msg: "error" });
+    }
+  } catch (error) {
+    console.error("Error in /cancelcashadvance route: ", error);
+    res.json({ msg: "error" });
   }
 });

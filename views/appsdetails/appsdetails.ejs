@@ -1,0 +1,154 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header">
+        <h3 class="title-card-table">Apps</h3>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addmodal">
+            + Add New
+        </button>
+        <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTableappdetails">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>ID</th>
+                        <th>App Name</th>
+                        <th>App Details</th>
+                        <th class="col-25">Version</th>
+                        <th>Date</th>
+                        <th>Create By</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="addmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Apps</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="card">
+                        <div class="card-body candidate-prof">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="addappname">Apps Name</label>
+                                            <input type="text" class="form-control border-form-prof" id="addappname"
+                                                placeholder="Apps Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="addappdetails">Details</label>
+                                            <input type="text" class="form-control border-form-prof" id="addappdetails"
+                                                placeholder="Details">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="addappversion">Version</label>
+                                            <input type="text" class="form-control border-form-prof" id="addappversion"
+                                                placeholder="Version">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-4" style="width: 250px; margin-top: -50px;">
+                                            <div class="text-center">
+                                                <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder" style="width: 100%; height: auto;">
+                                            </div>
+                                            <br>
+                                            <div class="col">
+                                                <div class="col g-6">
+                                                    <input type="file" name="appsprofile" id="appsprofile" class="form-control border-form-modal"
+                                                        accept="image/*">
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="saveaddapps">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+
+<div class="modal fade" id="editmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Apps</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="card">
+                        <div class="card-body candidate-prof">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="editappname">Apps Name</label>
+                                            <input type="text" class="form-control border-form-prof" id="editappname" placeholder="Apps Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editappdetails">Details</label>
+                                            <input type="text" class="form-control border-form-prof" id="editappdetails" placeholder="Details">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editappversion">Version</label>
+                                            <input type="text" class="form-control border-form-prof" id="editappversion" placeholder="Version">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="p-4" style="width: 250px; margin-top: -50px;">
+                                            <div class="text-center">
+                                                <img id="editpreview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder" style="width: 100%; height: auto;">
+                                            </div>
+                                            <br>
+                                            <div class="col">
+                                                <div class="col g-6">
+                                                    <input type="file" name="editappimage" id="editappimage" class="form-control border-form-modal" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="saveditapps">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
