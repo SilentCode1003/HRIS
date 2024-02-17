@@ -62,27 +62,20 @@ router.get("/load", (req, res) => {
 router.post("/logs", (req, res) => {
   try {
     let attendanceid = req.body.attendanceid;
-    let sql = `SELECT
-    mo_image AS image,
-    CONCAT(mo_lastname, ' ', mo_name) AS fullname,
-    DATE_FORMAT(oal_logdatetime, '%W, %M %e, %Y') AS logdate,
-    TIME(oal_logdatetime) AS logtime,
+    let sql = `select 
+    mo_image as image,
+    concat(mo_lastname,' ',mo_name) as fullname,
+	  DATE_FORMAT(oal_logdatetime, '%W, %M %e, %Y') AS logdate,
+	  TIME(oal_logdatetime) AS logtime,
     oal_logtype AS logtype,
-    oal_latitude AS latitude,
+	  oal_latitude AS latitude,
     oal_longitude AS longitude,
-    oal_device AS device,
-    mgs_location AS location,
-    SQRT(POW(mgs_latitude - oal_latitude, 2) + POW(mgs_longitude - oal_longitude, 2)) * 111.32 AS distance
-    FROM
-    master_ojt
-    INNER JOIN
-    ojt_attendance_logs ON mo_id = oal_ojtid
-    LEFT JOIN
-    master_geofence_settings ON mo_department = mgs_departmentid
-    WHERE
-    oal_attendanceid = '${attendanceid}'
-    HAVING
-    distance <= 1`;
+	  oal_device AS device,
+    mgs_geofencename as location
+    from ojt_attendance_logs
+    inner join master_ojt on ojt_attendance_logs.oal_ojtid = mo_id
+    inner join master_geofence_settings on ojt_attendance_logs.oal_geofenceid = mgs_id
+    where oal_attendanceid = '${attendanceid}'`;
 
     mysql
       .mysqlQueryPromise(sql)

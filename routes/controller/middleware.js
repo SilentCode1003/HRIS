@@ -3,6 +3,9 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "appsdetailslayout",
+      },
+      {
         layout: "attendanceojtlayout",
       },
       {
