@@ -1,66 +1,80 @@
-<ul class="navbar-nav sidebar sidebar-dark accordion" id="navSidebar" style="background-color: rgba(179, 2, 2);">
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/eportalindex">
-        <div class="sidebar-brand-text mx-3">5L Solution</div>
+        <div class="sidebar-brand-text">5L Solution</div>
     </a>
 
     <!-- Divider -->
-    <hr class="sidebar-divider my-0">
+    <hr class="bg-light sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item active link-hover">
         <a class="nav-link" href="/eportalindex">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <lord-icon src="https://cdn.lordicon.com/kgvlhryh.json" trigger="loop" class="db-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Dashboard</span></a>
     </li>
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
+    <hr class="bg-light sidebar-divider">
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Interface
-    </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link" href="/eportalsalary">
-            <i class="fas fa-fw fa-money-bill"></i>
-            <span>Salary</span></a>
+        <a class="nav-link link-hover" href="/eportalsalary">
+            <lord-icon src="https://cdn.lordicon.com/qnwzeeae.json" trigger="loop" class="salary-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Salary</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/eportalcoop">
-            <i class="fas fa-fw fa-money-bill"></i>
-            <span>Coop</span></a>
+        <a class="nav-link link-hover" href="/eportalcoop">
+            <lord-icon src="https://cdn.lordicon.com/tjiwvnho.json" trigger="loop" class="coop-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Coop</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/eportalattendance">
-            <i class="fas fa-fw fa-wallet"></i>
-            <span>Attendance</span></a>
+        <a class="nav-link link-hover" href="/eportalattendance">
+            <lord-icon src="https://cdn.lordicon.com/qwjfapmb.json" trigger="loop" class="attendance-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Attendance</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/eportalcashadvance">
-            <i class="fas fa-fw fa-wallet"></i>
-            <span>Cash Advance</span></a>
+        <a class="nav-link link-hover" href="/eportalcashadvance">
+            <lord-icon src="https://cdn.lordicon.com/qtnfcnne.json" trigger="loop"
+                colors="primary:#16c72e,secondary:#109121,tertiary:#d4f49c,quaternary:#e8b730"
+                class="cash-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Cash Advance</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="eportalrequestleave">
-            <i class="fas fa-fw fa-file"></i>
-            <span>Request Leave</span></a>
+        <a class="nav-link link-hover" href="eportalrequestleave">
+            <lord-icon src="https://cdn.lordicon.com/ncseweia.json" trigger="loop"
+                colors="primary:#b26836,secondary:#f9c9c0,tertiary:#ebe6ef,quaternary:#3a3347,quinary:#f24c00,senary:#109173"
+                class="leave-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Request Leave</span></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="/eportaldisciplinaryaction">
-            <i class="fas fa-fw fa-exclamation-triangle"></i>
-            <span>Disciplinary Action</span></a>
+        <a class="nav-link link-hover" href="/eportaldisciplinaryaction">
+            <lord-icon src="https://cdn.lordicon.com/jqnbdcqr.json" trigger="loop" class="disciplinary-icon-eportal">
+            </lord-icon>
+            <span class="span-eportal">Disciplinary Action</span></a>
     </li>
 
+    <!-- Divider
+    <hr class="sidebar-divider"> -->
+
+    <br>
     <!-- Divider -->
-    <hr class="sidebar-divider">
+    <hr class="bg-light sidebar-divider d-none d-md-block">
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+     <!--Sidebar Toggler (Sidebar)-->
+     <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+    
 </ul>
 
 <!-- Small Screen Navigation -->
@@ -116,4 +130,7 @@
             <i class="fas fa-fw fa-exclamation-triangle"></i>
             <span>Disciplinary Action</span></a>
     </li>
+
+    
 </nav>
+

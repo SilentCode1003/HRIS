@@ -14,17 +14,15 @@
         <!-- Sidebar -->
         <%- include("eportalsidebar.ejs")%>
         <!-- End of Sidebar -->
+          <!-- Topbar -->
+          <%- include("eportaltopbar.ejs")%>
+          <!-- End of Topbar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper">
 
             <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
-                <%- include("eportaltopbar.ejs")%>
-                <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <%- include("./eportalindex/eportalindex.ejs")%>
                 <!-- /.container-fluid -->
@@ -42,7 +40,7 @@
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <a class="scroll-to-top rounded top-round-button" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
