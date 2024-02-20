@@ -344,14 +344,11 @@
                 img.onload = function () {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
-
-                    // Set the canvas dimensions to the desired size
                     const targetWidth = 250;
                     const targetHeight = 250;
                     canvas.width = targetWidth;
                     canvas.height = targetHeight;
 
-                    // Draw the image on the canvas with the new dimensions
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
                     // Convert the canvas content to a Base64 string

@@ -6,6 +6,9 @@ var roleacess = [
         layout: "appsdetailslayout",
       },
       {
+        layout: "otapprovallayout",
+      },
+      {
         layout: "attendanceojtlayout",
       },
       {

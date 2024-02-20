@@ -79,28 +79,6 @@
             startdate: startdate,
             enddate: enddate,
           },
-          // success: function (result) {
-          //   if (result.msg == "success") {
-          //     swal({
-          //       title: "Saved Successfully",
-          //       text: "You clicked the button!",
-          //       icon: "success",
-          //       button: "OK!",
-          //     }).then(() => {
-          //       window.location.reload();
-          //     });
-          //   } else {
-          //     swal({
-          //       title: "Exist",
-          //       text: "Data already exists!",
-          //       icon: "warning",
-          //       button: "OK!",
-          //     });
-          //   }
-          // },
-          // error: function (err) {
-          //   swal("Data already exist!", "You clicked the button!", "warning");
-          // },
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -209,6 +187,154 @@
         },
       });
     }
+
+    $("#loadbutton").click(function () {
+      $("#dataTablePayroll").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/generatepayroll/loadpayroll",
+          data: {
+            startdate: startdate,
+            enddate: enddate,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data[0], (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdeductionmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.Image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "90px";
+              imgElement.style.height = "90px";
+
+              finalData.push({
+                Image: imgElement.outerHTML,
+                EmployeeId: item.EmployeeId,
+                Salary: item.Salary,
+                Per_Day: item.Per_Day,
+                Work_Days: item.Work_Days,
+                Rest_Day: item.Rest_Day,
+                Total_gp_status: item.Total_gp_status,
+                Absent: item.Absent,
+                Absent_Deductions: item.Absent_Deductions,
+                Total_Net_Pay: item.Total_Net_Pay,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [{
+          targets: 1,
+          className: "td-indent",
+        }],
+        columns: [{
+          data: "Image"
+        },
+        {
+          data: "EmployeeId"
+        },
+        {
+          data: "Salary",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "Per_Day",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "Work_Days"
+        },
+        {
+          data: "Rest_Day"
+        },
+        {
+          data: "Total_gp_status"
+        },
+        {
+          data: "Absent"
+        },
+        {
+          data: "Absent_Deductions",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "Total_Net_Pay",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "action"
+        },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log('Done');
+        },
+      });
+    });
 
     $(function () {
       $('input[name="daterange"]').daterangepicker({
