@@ -689,13 +689,10 @@ router.get("/totaladmin", (req, res) => {
    me_email AS email,
    mp_positionname AS position,
    CONCAT(
-       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
-       ' years ',
-       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
-       ' months ',
-       DATEDIFF(CURDATE(), me_hiredate) % 30,
-       ' days'
-   ) AS tenure
+    TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+    TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+    DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+) AS tenure
 FROM
    master_employee
 LEFT JOIN
@@ -736,13 +733,10 @@ router.get("/totalIT", (req, res) => {
    me_email AS email,
    mp_positionname AS position,
    CONCAT(
-       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
-       ' years ',
-       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
-       ' months ',
-       DATEDIFF(CURDATE(), me_hiredate) % 30,
-       ' days'
-   ) AS tenure
+    TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+    TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+    DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+  ) AS tenure
    FROM
    master_employee
    LEFT JOIN
@@ -783,13 +777,10 @@ router.get("/totalcabling", (req, res) => {
    me_email AS email,
    mp_positionname AS position,
    CONCAT(
-       TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
-       ' years ',
-       TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
-       ' months ',
-       DATEDIFF(CURDATE(), me_hiredate) % 30,
-       ' days'
-   ) AS tenure
+    TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+    TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+    DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+  ) AS tenure
    FROM
    master_employee
    LEFT JOIN
@@ -831,13 +822,10 @@ router.get("/totalcandidate", (req, res) => {
     me_hiredate as hiredate,
     mp_positionname AS position,
     CONCAT(
-        TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
-        ' years ',
-        TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
-        ' months ',
-        DATEDIFF(CURDATE(), me_hiredate) % 30,
-        ' days'
-    ) AS tenure
+      TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+      TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+      DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+  ) AS tenure
 FROM
     master_employee
 LEFT JOIN
@@ -880,13 +868,10 @@ router.get("/totalbagapuroapi", (req, res) => {
     me_hiredate as hiredate,
     mp_positionname AS position,
     CONCAT(
-        TIMESTAMPDIFF(YEAR, me_hiredate, CURDATE()),
-        ' years ',
-        TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) % 12,
-        ' months ',
-        DATEDIFF(CURDATE(), me_hiredate) % 30,
-        ' days'
-    ) AS tenure
+      TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+      TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+      DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+  ) AS tenure
 FROM
     master_employee
 LEFT JOIN

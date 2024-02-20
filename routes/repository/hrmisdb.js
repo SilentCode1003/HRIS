@@ -201,6 +201,11 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Ojt_Attendance(results));
       }
 
+      if (table == "Apps_Details") {
+        callback(null, model.Apps_Details(results));
+      }
+
+
     });
   } catch (error) {}
 };
@@ -799,6 +804,22 @@ exports.InsertTable = (tablename, data, callback) => {
         oa_longitudein,
         oa_devicein,
         oa_gefenceidIn) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+  if (tablename == "apps_details") {
+    let sql = `INSERT INTO apps_details(
+        ad_image,
+        ad_name,
+        ad_details,
+        ad_version,
+        ad_date,
+        ad_createby) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
