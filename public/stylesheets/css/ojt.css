@@ -1,0 +1,619 @@
+#content-wrapper {
+    background-color: white !important;
+    margin: 2%;
+}
+#content {
+    margin-left: 220px;
+    margin-top: 3%;
+}
+.top-round-button {
+    z-index: 1001;
+    background-color: #7F8487 !important;
+}
+#topbar {    
+    background: linear-gradient(180deg, #8b2525, rgb(173, 7, 7)) !important;
+    position: fixed !important;
+    z-index: 1001;
+    width: 100%;
+}
+
+.searchbar-eportal {
+  border: 2px solid #F5E0B3 !important;
+}
+
+.searchbar-bg {
+  background: linear-gradient(180deg, #8b2525, rgb(173, 7, 7)) !important;
+}
+
+.btn-search-eportal {
+  background-color: rgb(99, 241, 99) !important;
+  color: white !important;
+}
+
+
+.dropdown-eportal {
+    background-color: #7a1818 !important;
+    color: white !important;
+    border:  2px solid #7a1818 !important;
+}
+
+.profilename-eportal {
+    color: white !important;
+    font-weight: bold;
+}
+
+.navbar-expand .navbar-nav  .dropdown-profile-eportal {
+    background-color: #7a1818 !important;
+}
+
+.dropd-eportal {
+    color: white !important;
+    font-weight: bold !important;
+}
+.dropd-eportal:hover {
+    background-color: #7a1818 !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px white !important;
+}
+
+
+/* sidebar toggled
+@media only screen and (max-width: 600px) {
+   
+  .content-toggled {
+    margin-left: 0px !important;
+  }
+
+  .topbar-toggled  {
+    margin-left: 6.5rem !important;
+    width: 100%;
+    padding-right: 110px !important;
+  }
+
+  .footer-toggled{
+    margin-left: 6.5rem !important;
+  }
+
+  #topbar {
+    padding-right: 230px;
+    margin-left: 14rem;
+  }
+
+
+  .sidebar{
+    min-height: 100vh;
+    overflow-y: auto !important;
+    max-height: 100vh;
+    overflow-x: hidden !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px; 
+  }
+} */
+
+:root{
+    --minus-14rem: calc(100% - 14rem);
+    --minus-6rem: calc(100% - 6rem);
+}
+
+/*default*/
+@media (min-width: 767px) {
+
+  .content-toggled {
+    margin-left: 6.5rem !important;
+  }
+
+  .topbar-toggled {
+    margin-left: 6.5rem !important;
+    width: var(--minus-6rem);
+    padding-right: 110px !important;
+  }
+
+  .footer-toggled{
+    margin-left: 6.5rem !important;
+  }
+
+  #topbar {
+    margin-left: 14rem;
+    padding-right: 220px;
+  }
+  .table th {
+    width: 100%;
+  }
+  
+  .text-brand-ojt {
+      font-size: medium;
+      word-wrap: break-word;
+  }
+
+  .sidebar{
+    min-height: 100vh;
+    overflow-y: auto;
+    max-height: 100vh;
+    overflow-x: hidden !important;
+  }
+
+  .sidebar-brand-text {
+    display: block !important;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;/* Width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px white;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #8b2525;
+     /* Color of the thumb (the draggable scrolling handle) */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8b2525; /* Color of the thumb when hovering */
+  }
+}
+
+/*mobile-view/sidebar*/
+@media (max-width: 768px) {
+ 
+  .table td {
+    padding: 1rem !important;
+  }
+  .table th {
+    width: 100%;
+  }
+  
+  #content{
+    margin-left: 6rem;
+    margin-top: 50px;
+  }
+
+ .col-sm-8, .col-4, .col-md-4 {
+     width: 100% !important;
+     margin-bottom: 5%;
+     margin-left: 2%;
+     margin-right: 2%;
+ }
+  
+  .sticky-footer{
+    margin-left: 6rem;
+  }  
+
+  #topbar{
+    margin-left: 6.5rem;
+    width: var(--minus-6rem);
+    width: 100%;
+    padding-right: 110px;
+  }
+
+
+  #announcedesc1, #announcedesc2, #announcedesc3  {
+    background-color: #BCFFB9 !important;
+    color: black !important;
+    font-family: Arial;
+    font-weight: bold;
+    border-radius: 10px;
+    word-wrap: break-word;
+    padding: 2%;
+    font-size: small;
+  }
+  
+  #announcedate1, #announcedate2, #announcedate3 {
+    background-color: darkgreen !important;
+    color: white !important;
+    border-radius: 10px;
+    font-family: cursive;
+    font-weight: bold;
+    font-size: smaller;
+  }
+  
+
+  .content-toggled {
+    margin-left: 0!important;
+  }
+  .topbar-toggled {
+    margin-left: 0 !important;
+    width: 100%;
+    padding: 5px !important;
+  }
+  .footer-toggled{
+    margin-left: 0!important;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 900px){
+  .table {
+    overflow-x: hidden;
+  }
+  .table td {
+    padding: 1rem !important;
+  }
+  .table th {
+    width: 100%;
+  }
+    
+  
+  #content{
+    margin-left: 205px;
+    margin-top: 50px;
+  }
+
+ .col-sm-8, .col-4, .col-md-4 {
+     width: 100% !important;
+     margin-bottom: 5%;
+     margin-left: 2%;
+     margin-right: 2%;
+ }
+  
+  .sticky-footer{
+    margin-left: 6rem;
+  }  
+
+  #topbar{
+    margin-left: 14rem;
+    width: var(--minus-14rem);
+    width: 100%;
+  }
+
+  .content-toggled {
+    margin-left: 10% !important;
+  }
+  .topbar-toggled {
+    margin-left: 6.5rem !important;
+    width: 100%;
+    padding-right: 110px !important;
+  }
+  .footer-toggled{
+    margin-left: 0!important;
+  }
+}
+
+
+
+
+
+#accordionSidebar {
+    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    position: fixed;
+}
+
+
+#card-attendance {
+    width: 100% ;
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+
+#card-announcement {
+    /* border: 2px solid lightsalmon !important; */
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+.ch-announcement {
+    background: linear-gradient(45deg, #FF6C22, #FFD099)!important;
+    color: white !important;  
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+}
+.ch-announcement h6 {
+    padding: 5px;
+    font-size: larger;
+    font-family: Cambria;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .3rem;
+}
+
+.consultation-icon {
+    height: 30px;
+    width: 30px;
+    top: 3px;
+    right: 10px;
+}
+
+.db-icon-eportal, .salary-icon-eportal, .cash-icon-eportal, .coop-icon-eportal, .attendance-icon-eportal, .leave-icon-eportal, .disciplinary-icon-eportal {
+    width: 25px;
+    height: 25px; 
+    top: 3px;
+}
+
+.ch-attendance {
+    background: linear-gradient(45deg, #00A9FF, #c270d6)  !important;
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+}
+
+.ch-attendance h6 {
+    color: white !important;
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: Cambria;
+    font-size: larger;
+    letter-spacing: .3rem;
+}
+
+.cb-attendance {
+   background-color: rgb(212, 250, 237) !important;
+}
+
+#table-attendance {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.span-eportal{
+    color: white;
+    font-weight: bold;
+    margin: 3%;
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.link-hover:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px white !important;
+}
+
+.btn-clockin {
+    background-color: green !important;
+    color: white !important;
+    margin: auto;
+    border-radius: 15px !important;
+    border: 3px solid #006400 !important;
+    height: 60px;
+    width: 35%;
+    padding: 10px;
+    font-family: Cambria !important;
+    text-transform: uppercase;
+}
+
+.btn-clockin:hover {
+    transform: scale(1.1);
+    font-weight: bolder;
+}
+
+.btn-clockout {
+    background-color: red !important;
+    color: white !important;
+    margin: auto;
+    border-radius: 15px !important;
+    border: 3px solid darkred !important;
+    height: 60px;
+    width: 35%;
+    padding: 10px;
+    font-family: Cambria !important;
+    text-transform: uppercase;
+}
+
+.btn-clockout:hover {
+    transform: scale(1.1);
+    font-weight: bolder;
+}
+
+#map {
+    height: 350px;
+    width: 100%;
+    z-index: 1;
+}
+
+#card-map { 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+
+.ch-map {
+    background: #1e887c !important;
+}
+
+.ch-map h6 {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: Cambria;
+    font-size: larger;
+    letter-spacing: .3rem;
+}
+
+.container {
+    margin-bottom: 5%;
+}
+
+#clock-in-out {
+    height: 540px;
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+    /* background: linear-gradient(45deg, lightgreen,white); */
+    background-image: url(/images/bg-clockin-out.jpg);
+}
+
+#clock-lordicon {
+    display: flex;
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+    border-radius: 500px;
+    background-color: #E9B384 !important;
+    width: 150px;
+    height: 150px;
+    margin: auto;
+}
+
+#card-birthday {
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+
+.ch-birthday {
+  background: linear-gradient(45deg, #FA7070, #E9A8F2) !important;
+}
+
+.ch-birthday h6 {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: Cambria;
+    font-size: larger;
+    letter-spacing: .3rem;
+}
+
+.ch-salary, .cheader-attendance {
+    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+    height: 90px !important;
+}
+
+.cheader-attendance, .ch-cashad, .ch-requestleave, .ch-da {
+    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+    height: 50% !important;
+}
+
+.ch-salary h3, .cheader-attendance h3, .ch-cashad h3, .ch-requestleave h3, .ch-da h3 {
+    color: white !important;
+    padding: 15px;
+    font-family: Times New Roman;
+    font-weight: bolder;
+}
+
+.cbody-salary, .cbody-attendance, .cbody-cashad, .cbody-requestleave, .cbody-da {
+    background-color: #F5E0B3;
+}
+
+.btn-eportal-color {
+    float: right;
+    padding: 5px !important;
+    border-radius: 8px;
+    height: 33px;
+    background-color: #53c24e !important;
+    border: 2px solid #d3bb86 !important;
+    color: white !important;
+    -webkit-animation: btn-eportal-color 0.9s both;
+              animation: btn-eportal-color 0.9s both;
+}
+
+.btn-eportal-color h6 {
+    font-weight: bold;
+    font-family: 'Times New Roman';
+}
+
+#announcetitle1, #announcetitle2,  #announcetitle3, #announcetitle4  {
+  background: darkgreen !important;
+  text-transform: uppercase;
+  color: white !important;
+  font-weight: bold;
+  font-family: 'Times New Roman';
+  word-wrap: break-word;
+  padding: 5% !important;
+  border-radius: 35px 8px 35px 8px;
+  font-size: medium;
+}
+
+#announcedesc1, #announcedesc2, #announcedesc3, #announcedesc4  {
+  background-color: #BCFFB9 !important;
+  color: black !important;
+  font-family: Arial;
+  font-weight: bold;
+  border-radius: 10px;
+  word-wrap: break-word;
+  padding: 2%;
+  font-size: small;
+}
+
+#announcedate1, #announcedate2, #announcedate3, #announcedate4 {
+  background-color: darkgreen !important;
+  color: white !important;
+  border-radius: 10px;
+  font-family: cursive;
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.card-ojt {
+  background: linear-gradient(150deg, white, #14C38E) !important;
+  border: 3px solid #005B41 !important;
+}
+
+.ch-ojt {
+  background: #14C38E !important;
+  border: 2px solid #005B41 !important;
+}
+
+#nav-home-tab.nav-link.active {
+  background: #E3F4F4 !important;
+  color: #1a8867 !important;
+  font-weight: bold;
+  font-family: Georgia;
+  font-size: large;
+  box-shadow: 0 0 8px black !important;
+}
+
+#nav-home-tab.nav-link {
+  color: #005B41 !important;
+  font-family: Georgia;
+  font-size: medium;
+  font-weight: bold;
+  text-shadow: 2px 2px 1px white !important; /* Text shadow */
+} 
+
+#nav-profile-tab.nav-link.active {
+  background: #E3F4F4 !important;
+  color: #1a8867 !important;
+  font-weight: bold;
+  font-family: Georgia;
+  font-size: large;
+  box-shadow: 0 0 8px black !important;
+}
+
+#nav-profile-tab.nav-link {
+  color: #005B41 !important;
+  font-family: Georgia;
+  font-size: medium;
+  font-weight: bold;
+  text-shadow: 2px 2px 1px white !important; /* Text shadow */
+}
+
+.nav-tabs {
+  border-bottom: none !important;
+}
+
+.fc-ojt {
+  border: 2px solid #1a8867 !important;
+  background-color: white !important;
+}
+
+label {
+  font-weight: bold;
+  font-family: Georgia;
+  color: #005B41  !important;
+}
+
+input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#department.form-control.fc-ojt, input#school.form-control.fc-ojt, input#datestart.form-control.fc-ojt, input#totalhours.form-control.fc-ojt, input#totaltime.form-control.fc-ojt, input#remaining.form-control.fc-ojt, input#endddate.form-control.fc-ojt {
+  color: #575b5e !important;
+  font-size: small;
+}
+
+.img-ojt-round {
+  margin-top: 8%;
+  width:250px; 
+  height:250px;
+  border: 2px solid #005B41;
+}
+
+.btn-outline-primary:hover {
+  color: black !important;
+}
+
+.btn-modal-save {
+  color: white !important;
+  background-color: green !important;
+  border: 2px solid #00B25A !important;
+  font-family: Georgia !important;
+}
+.btn-modal-save:hover {
+  background-color: rgb(10, 112, 61)important;
+  color: white !important;
+  font-weight: bold;
+}

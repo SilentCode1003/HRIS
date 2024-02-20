@@ -323,7 +323,7 @@
                         if (bdayData.length === 0) {
                             bdaydiv = `<div class="carousel-item active" data-bs-interval="2000">
                                     <img src="/images/img/bday.jpg" class="d-block w-100" alt="Default Image"
-                                        style="height: 470px;">
+                                        style="height: 250px;">
                                     <div class="carousel-caption d-none d-md-block">
                                         <h5>No Birthdays Today</h5>
                                     </div>
@@ -334,7 +334,7 @@
                                 bdaydiv += `
                             <div class="carousel-item active" data-bs-interval="2000">
                                 <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
-                                    style="height: 470px;">
+                                    style="height: 250px;">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5 id="employeeid${counterbday}">${item.firstname}</h5>
                                     <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
@@ -385,7 +385,7 @@
                             anouncementdiv += `
               <div class="carousel-item active" data-bs-interval="2000">
                 <img id="preview${counter}"  src="data:image/jpg;base64,${item.image}" class="d-block w-100" alt="..."
-                style="height: 470px;">
+                style="height: 350px;">
               <div class="carousel-caption d-none d-md-block">
                 <h5 id="announcetitle${counter}">${item.title}</h5>
                 <p id="announcedesc${counter}">${item.description}</p>
@@ -428,3 +428,40 @@
         //#endregion
     });
 </script>
+
+
+
+   <!--- Eportal Topbar & Navbar-->
+   <script>
+    $(document).ready(function () {
+      let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
+  
+      function updateSidebarState() {
+        $("body").toggleClass("sidebar-toggled", isSidebarOpen);
+        $(".sidebar").toggleClass("toggled", isSidebarOpen);
+  
+        if (isSidebarOpen) {
+          $('.sidebar .collapse').collapse('hide');
+          $('#content').toggleClass('content-toggled');
+          $('#topbar').toggleClass('topbar-toggled ');
+          $('.sticky-footer').toggleClass('footer-toggled');
+        } else {
+          $('#content').removeClass('content-toggled');
+          $('#topbar').removeClass('topbar-toggled ');
+          $('.sticky-footer').removeClass('footer-toggled');
+        }
+      }
+  
+      updateSidebarState();
+  
+      $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+        isSidebarOpen = !isSidebarOpen;
+  
+        localStorage.setItem('isSidebarOpen', isSidebarOpen);
+  
+        updateSidebarState();
+      });
+    });
+  
+  </script>
+  
