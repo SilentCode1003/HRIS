@@ -6,7 +6,6 @@
     LoadTable();
     LoadList();
     LoadEditShift();
-    searchTable();
     LoadEmplist();
     AddEmplist();
 
@@ -292,15 +291,15 @@
     function LoadEmplist() {
       $.ajax({
         type: "GET",
-        url: "/employee/selectdistinct",
+        url: "/employee/load",
         success: function (result) {
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
-            console.log(newEmployeeId);
             $('#editshiftemployee').append(options);
+            console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -333,10 +332,10 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
-            console.log(existingData);
+            console.log('data',existingData);
 
             $.each(existingData, (key, item) => {
-              //$("#editshiftid").val(item.shiftid);
+              $("#editshiftid").val(item.shiftid);
               $("#editshiftemployee").val(item.employeeid);
               $("#editshiftdepartment").val(item.department);
               $("#editmondaytimein").val(item.monday_time_in);
