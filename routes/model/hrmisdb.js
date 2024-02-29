@@ -738,13 +738,16 @@ exports.Payroll_Approval_Ot = (data) => {
       clockout: key.pao_clockout,
       totalhours: key.pao_total_hours,
       night_ot: key.pao_night_differentials,
+      earlyot: key.pao_early_ot,
       normal_ot: key.pao_normal_ot,
       night_pay: key.pao_night_pay,
       normal_pay: key.pao_normal_pay,
+      earlyot_pay: key.pao_early_ot_pay,
       night_pay_perhour: key.pao_night_hours_pay,
       normal_pay_perhour: key.pao_normal_ot_pay,
       totalot_pay: key.pao_total_ot_net_pay,
       payrolldate: key.pao_payroll_date,
+      reason: key.pao_reason,
       status: key.pao_status,
     });
   });
