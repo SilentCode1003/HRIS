@@ -219,35 +219,6 @@ router.post("/logs", (req, res) => {
   }
 });
 
-// router.post('/gethomestatus', (req, res) => {
-//     try {
-//        //let attendancedate = req.body.attendancedate;
-//         let employeeid = req.body.employeeid;
-//         let sql = `SELECT
-//         DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS formatted_clockin,
-//         DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS formatted_clockout
-//         FROM master_attendance
-//         WHERE ma_employeeid = '${employeeid}'
-//         LIMIT 1`;
-
-//         mysql.mysqlQueryPromise(sql)
-//         .then((result) => {
-//             res.json({
-//                 msg: 'success',
-//                 data: result,
-//             });
-//         })
-//         .catch((error) => {
-//             res.json({
-//                 msg: 'error',
-//                 data: error,
-//             });
-//         });
-//     } catch (error) {
-//         console.log('error', error);
-//     }
-// });
-
 router.post("/gethomestatus2", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -281,31 +252,3 @@ router.post("/gethomestatus2", (req, res) => {
     console.log("error", error);
   }
 });
-
-// router.post('/filterforapp', (req, res) => {
-//   try {
-//     let startdate = req.body.startdate;
-//     let enddate = req.body.enddate;
-//     let sql = `SELECT ma_attendancedate as attendancedate
-//     FROM master_attendance
-//     WHERE ma_attendancedate BETWEEN '${startdate}' AND '${enddate}';`;
-
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg: 'success',
-//         data: result,
-//       });
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg: 'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg: error,
-//     });
-//   }
-// });

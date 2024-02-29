@@ -118,8 +118,9 @@ router.post("/save", (req, res) => {
 
           console.log(result);
 
-          res.json({
+          res.status(200).json({
             msg: "success",
+            data: data,
           });
         });
       }
