@@ -1,10 +1,9 @@
 <script>
-  let startdate = '2024-01-26';
-  let enddate = '2024-02-10';
+  let startdate = '';
+  let enddate = '';
 
   $(document).ready(function () {
     console.log('Initialize');
-    LoadTable();
 
     $(document).on("click", "#generateButton", function () {
       let startDate = $('#datepicker').data('daterangepicker').startDate.format('YYYY-MM-DD');
@@ -23,46 +22,83 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        swal({
+          title: "Generating and Loading Payroll",
+          text: "Please wait... These Will Take a few Minutes",
+          buttons: false,
+          closeOnEsc: false,
+          closeOnClickOutside: false,
+          allowOutsideClick: false,
+          content: {
+            element: "div",
+            attributes: {
+              innerHTML: '<div class="progress"><div class="determinate" style="width: 0%"></div></div>'
+            },
+          },
+        });
+
+        let progress = 0;
+        const interval = setInterval(function () {
+          progress += 10;
+          if (progress <= 100) {
+            $('.progress .determinate').css('width', progress + '%');
+          } else {
+            clearInterval(interval);
+          }
+        }, 1000);
+
         $.ajax({
           type: "POST",
-          url: "/generatepayroll/generatepayroll",
+          url: "/generatepayroll/generateAndLoadPayroll",
           data: {
             startdate: startDate,
             enddate: endDate,
           },
           success: function (result) {
+            console.log("Success:", result);
+            clearInterval(interval);
+            swal.close();
+
             if (result.msg == "success") {
               swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
+                title: "Generate and Load Successfully",
+                text: "Thank you For Waiting ;)",
                 icon: "success",
                 button: "OK!",
               }).then(results => {
-                window.location.reload();
-              });
-            } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
+                loadPayrollTable(startDate, endDate); 
               });
             } else {
-              swal("Data already exists!", "You clicked the button!", "warning");
+              swal("Error", "An error occurred while generating and loading payroll.", "error");
             }
           },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
+          error: function (xhr, status, error) {
+            console.log("Error:", xhr.responseText);
+            clearInterval(interval);
+            swal.close();
+            swal("Error", "An error occurred while generating and loading payroll.", "error");
           },
         });
       }
     });
 
     $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
-      LoadTable();
+      $("#loadbutton").click(function () {
+        let startDate = picker.startDate.format('YYYY-MM-DD');
+        let endDate = picker.endDate.format('YYYY-MM-DD');
+        loadPayrollTable(startDate, endDate);
+      });
     });
 
-    function LoadTable() {
+    function loadPayrollTable(startDate, endDate) {
+      swal({
+        title: 'Loading Payroll',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+          swal.showLoading();
+        }
+      });
+
       $("#dataTablePayroll").DataTable({
         destroy: true,
         processing: true,
@@ -76,31 +112,9 @@
         ajax: {
           url: "/generatepayroll/loadpayroll",
           data: {
-            startdate: startdate,
-            enddate: enddate,
+            startdate: startDate,
+            enddate: endDate,
           },
-          // success: function (result) {
-          //   if (result.msg == "success") {
-          //     swal({
-          //       title: "Saved Successfully",
-          //       text: "You clicked the button!",
-          //       icon: "success",
-          //       button: "OK!",
-          //     }).then(() => {
-          //       window.location.reload();
-          //     });
-          //   } else {
-          //     swal({
-          //       title: "Exist",
-          //       text: "Data already exists!",
-          //       icon: "warning",
-          //       button: "OK!",
-          //     });
-          //   }
-          // },
-          // error: function (err) {
-          //   swal("Data already exist!", "You clicked the button!", "warning");
-          // },
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -110,7 +124,7 @@
               var action = "";
               var status = item.status;
 
-              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdeductionmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#payslipmodal"><i class="fas fa-fw fa-pen"></i></button>`;
 
               var imgElement = document.createElement("img");
               imgElement.src = "data:image/jpg;base64," + item.Image;
@@ -122,13 +136,10 @@
                 Image: imgElement.outerHTML,
                 EmployeeId: item.EmployeeId,
                 Salary: item.Salary,
-                Per_Day: item.Per_Day,
-                Work_Days: item.Work_Days,
-                Rest_Day: item.Rest_Day,
-                Total_gp_status: item.Total_gp_status,
-                Absent: item.Absent,
-                Absent_Deductions: item.Absent_Deductions,
-                Total_Net_Pay: item.Total_Net_Pay,
+                Payroll_Date: item.Payroll_Date,
+                CutOff: item.CutOff,
+                Total_AllDeductions: parseFloat(item.Total_AllDeductions) + parseFloat(item.Absent_Deductions),
+                Total_Netpay: item.Total_Netpay,
                 action: action,
               });
             });
@@ -156,7 +167,20 @@
           }
         },
         {
-          data: "Per_Day",
+          data: "Payroll_Date",
+          render: function (data, type, row) {
+            var originalDate = new Date(data);
+            var year = originalDate.getFullYear();
+            var month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); 
+            var day = originalDate.getDate().toString().padStart(2, '0');
+            return year + "-" + month + "-" + day;
+          }
+        },
+        {
+          data: "CutOff"
+        },
+        {
+          data: "Total_AllDeductions",
           render: function (data, type, row) {
             return '₱' + parseFloat(data).toLocaleString('en-US', {
               minimumFractionDigits: 2,
@@ -165,28 +189,7 @@
           }
         },
         {
-          data: "Work_Days"
-        },
-        {
-          data: "Rest_Day"
-        },
-        {
-          data: "Total_gp_status"
-        },
-        {
-          data: "Absent"
-        },
-        {
-          data: "Absent_Deductions",
-          render: function (data, type, row) {
-            return '₱' + parseFloat(data).toLocaleString('en-US', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            });
-          }
-        },
-        {
-          data: "Total_Net_Pay",
+          data: "Total_Netpay",
           render: function (data, type, row) {
             return '₱' + parseFloat(data).toLocaleString('en-US', {
               minimumFractionDigits: 2,
@@ -206,10 +209,10 @@
         },
         initComplete: function () {
           console.log('Done');
+          swal.close();
         },
       });
     }
-
     $(function () {
       $('input[name="daterange"]').daterangepicker({
         opens: 'middle'

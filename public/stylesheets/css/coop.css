@@ -302,10 +302,6 @@ tr:hover {
   #employeeid, #loanid {
     width: 40%;
   }
-  .navbar {
-    margin: 0;
-    border-radius: 0;
-  }
 }
 /*--- Employee ---*/
 .btn-color {
@@ -571,7 +567,7 @@ tr:hover {
   margin-right: 8px;
   color: white !important;
   text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;
-  font-size: 30px;
+  font-size: 25px;
 }
 .db-modal-search {
   width: 155px;
@@ -782,18 +778,6 @@ tr:hover {
   color: #0f899e !important;
 }
 
-/*-- Sidebar ---
-.sidebar {
-  height: 100%;
-  width: 200px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-*/
 /*--- Card body of edit --- */
 .card-profile-edit {
   height: 600px;
@@ -844,18 +828,21 @@ tr:hover {
   border-radius: 10px;
 }
 .content {
-  margin-top: 80px;
-  margin-left: 220px;
+  margin-top: 100px;
 }
 .sidebar {
-  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   z-index: 2;
+  /* position: fixed !important; */
+  /* min-height: 100vh;
+  overflow-y: auto !important;
+  max-height: 100vh;
+  overflow-x: hidden; */
 }
 ::-webkit-scrollbar {
-  width: 5px; /* Set the width of the scrollbar */
+  width: 5px; 
 }
 :root{
   --minus-15rem: calc(100% - 15rem);
@@ -864,45 +851,29 @@ tr:hover {
 
 .navbar {
   background-color: #8b2525 !important;
-  box-shadow: 0 4px 8px #3b3939 !important;
-  border-radius: 12px;
-  margin-left: 14.5rem;
   position: fixed !important;
-  width: var(--minus-15rem);
+  margin-left: 6.4rem;
+  width: 75%;
   z-index: 2;
-  margin-bottom: 10px;
-  margin-top: 13px;
 }
 
 /* sidebar toggled*/
-@media (min-width: 768px) {
-
-  .content-toggled {
-    margin-left: 6.5rem !important;
-    /* margin-left: 0 !important; */
-  }
-
-  .navbar-toggled {
-    margin-left: 7rem !important;
-    margin-right: 8rem;
-    width: var(--minus-6rem);
-  }
-
-  .footer-toggled{
-    margin-left: 0 !important;
-  }
-  .sidebar{
-   height: 100vh;
-   overflow-y: auto !important;
-    overflow-x: hidden;
-  }
-}
-
 /*default state*/
-@media (max-width: 768px){
+/* @media (max-width: 768px){
 
   .table td {
     padding: 1rem !important;
+  }
+  .table th {
+    width: 100%;
+  }
+  .sidebar {
+    position: relative;
+    display: flex;
+    top: 0px;
+  }
+  .sidebar li .collapse.show {
+    display: block;
   }
   
   .content{
@@ -918,20 +889,17 @@ tr:hover {
     width: var(--minus-6rem);
     border-radius: 0px;
     margin-top: 0px;
+    height: 50px;
     width: 100% !important;
   }
-
   .content-toggled {
     margin-left: 0!important;
   }
-  .navbar-toggled {
-    margin-left: 0!important;
-    width: 100%;
-  }
+ 
   .footer-toggled{
     margin-left: 0 !important;
   }
-}
+} */
 .bars {
   margin-top: 30%;
   margin-bottom: 30%;
@@ -940,16 +908,41 @@ tr:hover {
 .topbar-profile-img {
   margin-top: 1px !important;
 }
-/*--- Mobile View ---*/ 
-/* @media screen and (max-width: 768px) {
-  .sidebar .nav-item .collapse {
-      display: block;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1001;
-    }
-} */
+
+/* default state */
+@media (min-width: 768px) {
+  .content {
+    margin-left: 220px;
+  }
+
+  .content-toggled {
+    margin-left: 0px !important;
+  }
+
+  .footer-toggled{
+    margin-left: 0px !important;
+  }
+
+  .sidebar {
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .navbar {
+    margin-left: 14.5rem;
+    width: var(--minus-15rem);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    margin-top: 13px;
+    box-shadow: 0 4px 8px #3b3939 !important;
+  }
+  .navbar-toggled {
+    margin-left: 0px !important;
+  }
+}
+
+
 
 
 
