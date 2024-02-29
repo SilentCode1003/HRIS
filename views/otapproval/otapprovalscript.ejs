@@ -122,12 +122,15 @@
                             $("#otclockout").val(item.clockout);
                             $("#ottotalothours").val(item.totalhours);
                             $("#otnight").val(item.night_ot);
+                            $("#otearly").val(item.earlyot);
                             $("#otnormal").val(item.normal_ot);
                             $("#otnightpay").val(item.night_pay);
                             $("#otnormalpay").val(item.normal_pay);
+                            $("#otearlypay").val(item.earlyot_pay);
                             $("#ottotalpay").val(item.totalot_pay);
                             $("#otpayrolldate").val(item.payrolldate);
                             $("#otstatus").val(item.status);
+                            $("#otreason").val(item.reason);
                         });
                     } else {
                         swal("Error fetching employee data", message, "error");
@@ -140,47 +143,49 @@
         });
 
         $(document).on("click", "#otsavebutton", function () {
-            let id = performanceid;
-            let employeeid = $("#editperformanceemployeeid").val();
-            let appraisaldate = $("#editperformanceappraisaldate").val();
-            let appraisaltype = $("#editperformanceappraisaltype").val();
-            let rating = $("#editperformancerating").val();
-            let comments = $("#editperformancecomment").val();
+            let id = approveot_id;
+            let night_ot = $("#otnight").val();
+            let earlyot = $("#otearly").val();
+            let normal_ot = $("#otnormal").val();
+            let payrolldate = $("#otpayrolldate").val();
+            let status = $("#otstatus").val();
+
 
             var message = "";
 
-            if (employeeid === "") {
+
+            if (night_ot === "") {
                 message += "departmentname is required. ";
             }
 
-            if (appraisaldate === "") {
+            if (earlyot === "") {
+                message += "departmentname is required. ";
+            }
+
+            if (normal_ot === "") {
                 message += "departmenthead is required. ";
             }
 
-            if (appraisaltype === "") {
+            if (payrolldate === "") {
                 message += "status is required. ";
             }
 
-            if (rating === "") {
-                message += "status is required. ";
-            }
-
-            if (comments === "") {
-                message += "status is required. ";
+            if (status === "Applied" || status === "Pending") {
+                message += "You Need to Approve or Disregard. ";
             }
             if (message !== "") {
                 swal("Validation Error", message, "error");
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "performance/update",
+                    url: "otapproval/update",
                     data: {
-                        performanceid: id,
-                        employeeid: employeeid,
-                        appraisaldate: appraisaldate,
-                        appraisaltype: appraisaltype,
-                        rating: rating,
-                        comments: comments,
+                        approveot_id: id,
+                        night_ot: night_ot,
+                        earlyot: earlyot,
+                        normal_ot: normal_ot,
+                        payrolldate: payrolldate,
+                        status: status,
                     },
                     success: function (result) {
                         if (result.msg == "success") {
@@ -226,29 +231,59 @@
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
 
-                    // Set the canvas dimensions to the desired size
                     const targetWidth = 250;
                     const targetHeight = 250;
                     canvas.width = targetWidth;
                     canvas.height = targetHeight;
 
-                    // Draw the image on the canvas with the new dimensions
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
-                    // Convert the canvas content to a Base64 string
                     base64String = canvas
                         .toDataURL()
-                        .replace("data:image/png;base64,", ""); // Change format if needed
+                        .replace("data:image/png;base64,", "");
 
-                    // Display or use the base64String as needed
-                    // console.log(base64String);
                     imageBase64Stringsep = base64String;
                 };
 
-                // base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
             };
             reader.readAsDataURL(file);
         }
+
+        function populateEventDropdown() {
+            var dropdown = document.getElementById("otpayrolldate");
+            dropdown.innerHTML = "";
+
+            var currentDate = new Date();
+            var currentYear = currentDate.getFullYear();
+            var currentMonth = currentDate.getMonth() + 1;
+            var currentDay = currentDate.getDate();
+
+            var nextMonth = currentMonth + 1;
+            var nextYear = currentYear;
+            if (nextMonth > 12) {
+                nextMonth = 1;
+                nextYear++;
+            }
+
+            if (currentDay <= 15) {
+                dropdown.add(new Option(currentYear + "-" + addZero(currentMonth) + "-15", currentYear + "-" + addZero(currentMonth) + "-15"));
+            }
+
+            var lastDayCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
+            dropdown.add(new Option(currentYear + "-" + addZero(currentMonth) + "-" + lastDayCurrentMonth, currentYear + "-" + addZero(currentMonth) + "-" + lastDayCurrentMonth));
+
+            dropdown.add(new Option(nextYear + "-" + addZero(nextMonth) + "-15", nextYear + "-" + addZero(nextMonth) + "-15"));
+
+            var lastDayNextMonth = new Date(nextYear, nextMonth, 0).getDate();
+            dropdown.add(new Option(nextYear + "-" + addZero(nextMonth) + "-" + lastDayNextMonth, nextYear + "-" + addZero(nextMonth) + "-" + lastDayNextMonth));
+        }
+
+        function addZero(number) {
+            return number < 10 ? "0" + number : number;
+        }
+
+        populateEventDropdown();
 
 
 
