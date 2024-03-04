@@ -98,15 +98,15 @@ $(document).ready(function () {
           success: function (result) {
             console.log(result);
             if (result.msg == "success") {
-              // swal({
-              //   title: "Saved Successfully",
-              //   text: "You clicked the button!",
-              //   icon: "success",
-              //   button: "OK!",
-              // })
-              //   .then(result => {
-              //     window.location.reload();
-              //   })
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              })
+                .then(result => {
+                  window.location.reload();
+                })
               // LoadTable();
             }
             if (result.msg === "exist") {
