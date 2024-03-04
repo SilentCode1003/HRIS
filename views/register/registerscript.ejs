@@ -96,21 +96,20 @@ $(document).ready(function () {
             hours: hours,
           },
           success: function (result) {
-            console.log(result);
             if (result.msg == "success") {
-              swal({
+              showSweetAlert({
                 title: "Saved Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
               })
-                .then(result => {
+                .then(results => {
                   window.location.reload();
                 })
-              // LoadTable();
+              //LoadTable();
             }
             if (result.msg === "exist") {
-              swal({
+              showSweetAlert({
                 title: "Saved Successfully",
                 text: "You clicked the button!",
                 icon: "Exist",
@@ -119,7 +118,7 @@ $(document).ready(function () {
             }
           },
           error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
+            showSweetAlert("Data already exist!", "You clicked the button!", "warning");
           },
         });
       }
