@@ -85,11 +85,12 @@ router.post('/loadpayroll', (req, res) =>{
 
 
 
-router.post('/viewpayslip', (req,res) => {
+router.post('/LoadPayslipSummary', (req,res) => {
   try {
-    let generateid = req.body.generateid;
+    let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;
-    let sql = ``;
+    let sql = `call hrmis.LoadPayslipSummary('${payrolldate}', '${employeeid}')`
+
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
       res.json({
@@ -111,6 +112,40 @@ router.post('/viewpayslip', (req,res) => {
     })
   }
 });
+
+
+
+router.post('/LoadPayslipDetailed', (req,res) => {
+  try {
+    let payrolldate = req.body.payrolldate;
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.LoadPayslipDetailed('${payrolldate}', '${employeeid}')`
+
+    console.log(payrolldate);
+    console.log(employeeid);
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+    
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
 
 
 

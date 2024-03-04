@@ -15,11 +15,11 @@ Decrypter('410ae362ace2a276d6efba6963fa5290a039d16488bdd20c7bd1ab40b939a62b', (e
   console.log(encrypted);
 });
 
-Encrypter('101520122321', (err, encrypted) => {
-  if (err) console.error("Error: ", err);
-  console.log(encrypted);
+// Encrypter('101520122321', (err, encrypted) => {
+//   if (err) console.error("Error: ", err);
+//   console.log(encrypted);
 
-})
+// });
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
