@@ -748,7 +748,7 @@ exports.Payroll_Approval_Ot = (data) => {
       totalot_pay: key.pao_total_ot_net_pay,
       payrolldate: key.pao_payroll_date,
       reason: key.pao_reason,
-      status: key.pao_status,
+      overtimestatus: key.pao_status,
     });
   });
 

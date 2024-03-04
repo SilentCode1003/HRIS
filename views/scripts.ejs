@@ -8,24 +8,13 @@
 </div>
 
 <!-- Logout Modal-->
-<div
-  class="modal fade"
-  id="logoutModal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-        <button
-          class="close"
-          type="button"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
       </div>
@@ -165,23 +154,74 @@
       button: buttonText,
     });
   }
-  
+
   function getDeviceInformation() {
     return new Promise((resolve, reject) => {
-        if (typeof navigator !== 'undefined') {
-            resolve(navigator.userAgent || 'web');
-        } else {
-            reject(new Error('Navigator object not available.'));
-        }
+      if (typeof navigator !== 'undefined') {
+        resolve(navigator.userAgent || 'web');
+      } else {
+        reject(new Error('Navigator object not available.'));
+      }
     });
-}
+  }
+  function formatToCurrency(value) {
+    return '₱' + parseFloat(value).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // function formatDateTime(dateTimeString) {
+  //   if (!dateTimeString) return ""; 
+
+  //   const dateTimeParts = dateTimeString.split(' ');
+  //   if (dateTimeParts.length !== 2) return ""; 
+
+  //   const dateParts = dateTimeParts[0].split('-');
+  //   const timeParts = dateTimeParts[1].split(':');
+
+  //   if (dateParts.length !== 3 || timeParts.length !== 3) return "";
+
+  //   const year = dateParts[0];
+  //   const month = dateParts[1];
+  //   const day = dateParts[2];
+
+  //   const hours = timeParts[0];
+  //   const minutes = timeParts[1];
+  //   const seconds = timeParts[2];
+
+  //   return `${day}/${month}/${year} ${hours}:${minutes}`;
+  // }
+
+  function formatTime(dateTimeString) {
+    if (!dateTimeString) return "";
+
+    // Split the dateTimeString by 'T' to separate date and time
+    const dateTimeParts = dateTimeString.split('T');
+    if (dateTimeParts.length !== 2) return ""; // Check if the format is correct
+
+    // Extract the time part from the second element of the array
+    const timeString = dateTimeParts[1];
+
+    // Split the timeString by ':' to extract hours and minutes
+    const timeParts = timeString.split(':');
+    if (timeParts.length !== 2) return ""; // Check if the format is correct
+
+    const hours = timeParts[0];
+    const minutes = timeParts[1];
+
+    // Format the time as 'HH:MM'
+    return `${hours}:${minutes}`;
+  }
+
+
 </script>
-
-
-
-
-
-
-
-
-

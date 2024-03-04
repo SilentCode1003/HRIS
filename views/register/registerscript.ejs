@@ -96,17 +96,18 @@ $(document).ready(function () {
             hours: hours,
           },
           success: function (result) {
+            console.log(result);
             if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                })
-              LoadTable();
+              // swal({
+              //   title: "Saved Successfully",
+              //   text: "You clicked the button!",
+              //   icon: "success",
+              //   button: "OK!",
+              // })
+              //   .then(result => {
+              //     window.location.reload();
+              //   })
+              // LoadTable();
             }
             if (result.msg === "exist") {
               swal({
