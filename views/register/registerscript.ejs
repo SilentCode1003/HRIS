@@ -96,6 +96,7 @@ $(document).ready(function () {
             hours: hours,
           },
           success: function (result) {
+            console.log(result);
             if (result.msg == "success") {
               swal({
                 title: "Saved Successfully",
@@ -103,10 +104,10 @@ $(document).ready(function () {
                 icon: "success",
                 button: "OK!",
               })
-                .then(results => {
+                .then(result => {
                   window.location.reload();
                 })
-              LoadTable();
+              // LoadTable();
             }
             if (result.msg === "exist") {
               swal({
