@@ -3,6 +3,12 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "otherdeductionsIDlayout",
+      },
+      {
+        layout: "otherdeductionslayout",
+      },
+      {
         layout: "appsdetailslayout",
       },
       {

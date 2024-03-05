@@ -69,7 +69,8 @@ var ojtreqabsentRouter = require('./routes/ojtreqabsent');
 var attendanceojtRouter = require('./routes/attendanceojt');
 var appsdetailsRouter = require('./routes/appsdetails');
 var otapprovalRouter = require('./routes/otapproval');
-
+var otherdeductionsRouter = require('./routes/otherdeductions');
+var otherdeductionsIDRouter = require('./routes/otherdeductionsID');
 
 
 var app = express();
@@ -150,6 +151,9 @@ app.use('/ojtreqabsent', ojtreqabsentRouter);
 app.use('/attendanceojt', attendanceojtRouter);
 app.use('/appsdetails', appsdetailsRouter);
 app.use('/otapproval', otapprovalRouter);
+app.use('/otherdeductions', otherdeductionsRouter);
+app.use('/otherdeductionsID', otherdeductionsIDRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

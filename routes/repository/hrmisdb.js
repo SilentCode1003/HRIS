@@ -213,6 +213,14 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Payroll_Date(results));
       }
 
+      if (table == "Other_Deductions") {
+        callback(null, model.Other_Deductions(results));
+      }
+
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
+
 
 
     });

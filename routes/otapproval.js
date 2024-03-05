@@ -50,7 +50,7 @@ router.post("/update", (req, res) => {
     let normal_ot = req.body.normal_ot;
     let payrolldate = req.body.payrolldate;
     let approveot_id = req.body.approveot_id;
-    let status = req.body.status;
+    let overtimestatus = req.body.overtimestatus;
     let sql = `UPDATE payroll_approval_ot SET 
     pao_night_differentials = '${night_ot}',
     pao_early_ot = '${earlyot}',
@@ -60,7 +60,7 @@ router.post("/update", (req, res) => {
     pao_early_ot_pay = pao_early_ot * pao_normal_ot_pay,
     pao_total_ot_net_pay = (pao_night_pay + pao_normal_pay + pao_early_ot_pay),
     pao_payroll_date = '${payrolldate}',
-    pao_status = '${status}' 
+    pao_status = '${overtimestatus}' 
     WHERE pao_id = '${approveot_id}'`;
 
     mysql.Update(sql)

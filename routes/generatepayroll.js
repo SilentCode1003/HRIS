@@ -147,25 +147,28 @@ router.post('/LoadPayslipDetailed', (req,res) => {
 });
 
 
-router.get('/getpayrolldate' , (req, res) => {
+router.post('/getpayrolldate' , (req, res) => {
   try {
-    let sql =  `select 
-    distinct gp_payrolldate
-    from generate_payroll
-    order by gp_payrolldate desc
+    let sql =  `SELECT DISTINCT 
+    DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
+    gp_cutoff
+    FROM 
+    generate_payroll  
+    ORDER BY 
+    gp_payrolldate DESC
     LIMIT 2`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
       res.json({
         msg:'success',
-        data: result,
+        data:result,
       });
     })
     .catch((error) => {
       res.json({
         msg:'error',
-        data
+        data: error,
       })
     })
   } catch (error) {
