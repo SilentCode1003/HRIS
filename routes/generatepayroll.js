@@ -147,6 +147,68 @@ router.post('/LoadPayslipDetailed', (req,res) => {
 });
 
 
+router.get('/getpayrolldate' , (req, res) => {
+  try {
+    let sql =  `select 
+    distinct gp_payrolldate
+    from generate_payroll
+    order by gp_payrolldate desc
+    LIMIT 2`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data
+      })
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error
+    });
+  }
+});
+
+
+router.post('/loadpayslipsummaryforapp', (req, res) =>{
+  try {
+    let payrolldate1 = req.body.payrolldate1;
+    let payrolldate2 = req.body.payrolldate2;
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.LoadPayslipSummaryForApp('${payrolldate1}', '${payrolldate2}', '${employeeid}')`;
+
+
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+
+      console.log(result);
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg: 'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+  }
+});
+
 
 
 
