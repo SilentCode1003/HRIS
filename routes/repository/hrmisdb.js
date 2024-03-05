@@ -209,6 +209,11 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Payroll_Approval_Ot(results));
       }
 
+      if (table == "Payroll_Date") {
+        callback(null, model.Payroll_Date(results));
+      }
+
+
 
     });
   } catch (error) {}

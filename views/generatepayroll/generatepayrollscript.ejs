@@ -145,7 +145,7 @@
                 Salary: item.Salary,
                 Payroll_Date: item.Payroll_Date,
                 CutOff: item.CutOff,
-                Total_AllDeductions: parseFloat(item.Total_AllDeductions) + parseFloat(item.Absent_Deductions),
+                Total_AllDeductions: item.Total_AllDeductions,
                 Total_Netpay: item.Total_Netpay,
                 action: action,
               });
@@ -254,7 +254,7 @@
                 "data:image/jpg;base64," + item.Image
               );
               base64String = item.Image;
-              $("#employeename").text(item.EmployeeFullnanme);
+              $("#employeename").text(item.EmployeeFullName);
               $("#position").text(item.PositionName);
               $("#department").text(item.Department);
               $("#payrollrange").text(formatDate(item.StartDate) + " To " + formatDate(item.Enddate));
@@ -302,8 +302,8 @@
               $("#payslipphilhealthid").text(item.PhilHealthID);
               $("#payslipdeppagibigid").text(item.PagIbigID);
               $("#payslipid").text(item.EmployeeId);
-              $("#payslipname").text(item.EmployeeFullnanme);
-              $("#payslipempname").text(item.EmployeeFullnanme);
+              $("#payslipname").text(item.EmployeeFullName);
+              $("#payslipempname").text(item.EmployeeFullName);
               $("#payslipposition").text(item.PositionName);
               $("#payslipdepartment").text(item.Department);
               $("#paysliprange").text(formatDate(item.StartDate) + "- TO - " + formatDate(item.Enddate));
@@ -323,7 +323,7 @@
               $("#paysliphdmf").text(formatToCurrency(item.PhilHealth));
               $("#paysliptin").text(formatToCurrency(item.TIN));
               $("#payslipabsent").text(formatToCurrency(item.Absent_Deductions));
-              $("#paysliphealthcard").text(formatToCurrency(item.healthcard));
+              $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
               $("#paysliptotaldeductions").text(formatToCurrency(item.Total_AllDeductions));
               $("#paysliptotalnetpay").text(formatToCurrency(item.Total_Netpay));
@@ -359,7 +359,7 @@
             const existingData = result.data;
 
             $.each(existingData[0], (key, item) => {
-              $("#datename").text(item.EmployeeFullnanme);
+              $("#datename").text(item.EmployeeFullName);
             });
           } else {
             swal("Error fetching");
