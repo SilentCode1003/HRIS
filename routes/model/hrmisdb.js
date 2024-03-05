@@ -757,6 +757,26 @@ exports.Payroll_Approval_Ot = (data) => {
 
 
 
+exports.Payroll_Date = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      payrolldate_id: key.pd_payrollid,
+      payroll_name: key.pd_name,
+      payroll_cutoff: key.pd_cutoff,
+      payroll_startdate: key.pd_startdate,
+      payroll_enddate: key.pd_enddate,
+      payrolldate: key.pd_payrolldate,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
+
 //#region Remodeling
 
 exports.OJTAttendance = (data) => {
