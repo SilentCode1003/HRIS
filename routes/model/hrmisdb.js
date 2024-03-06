@@ -783,7 +783,7 @@ exports.Other_Deductions = (data) => {
       image: key.me_profile_pic,
       otherdeduct: key.od_id,
       employeeid: key.od_employeeid,
-      type: key.od_idtype,
+      idtype: key.od_idtype,
       amount: key.od_amount,
       period: key.od_period,
       cutoff: key.od_cutoff,

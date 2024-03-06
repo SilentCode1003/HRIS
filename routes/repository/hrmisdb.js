@@ -845,6 +845,40 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+        md_employeeid,
+        md_idtype,
+        md_idnumber,
+        md_issuedate,
+        md_createby,
+        md_createdate,
+        md_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "other_deductions") {
+    let sql = `INSERT INTO other_deductions(
+      od_employeeid,
+      od_idtype,
+      od_amount,
+      od_period,
+      od_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
 };
 
 exports.Update = async (sql) => {
