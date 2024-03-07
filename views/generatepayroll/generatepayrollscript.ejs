@@ -221,6 +221,64 @@
       });
     }
 
+    $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
+      $("#exportBtn").click(function () {
+        let startDate = picker.startDate.format('YYYY-MM-DD');
+        let endDate = picker.endDate.format('YYYY-MM-DD');
+        exportPayroll(startDate, endDate);
+      });
+    });
+
+    function exportPayroll(startDate, endDate) {
+      $.ajax({
+        url: '/generatepayroll/exportfile',
+        type: 'POST',
+        data: {
+          startdate: startDate,
+          enddate: endDate
+        },
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (response) {
+          if (response) {
+            swal({
+              title: 'Download Payroll Data',
+              text: 'Are you sure you want to download the payroll data?',
+              confirm: '#28a745',
+              cancel: '#dc3545',
+              buttons: {
+                confirm: 'Yes, download it!',
+                cancel: 'No, cancel'
+              },
+              dangerMode: true
+            }).then((result) => {
+              if (result) {
+                var blob = response;
+
+                var url = URL.createObjectURL(blob);
+
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = `payroll_data_${startDate}_${endDate}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+              } else {
+                swal('Cancelled', 'Payroll data download cancelled :)', 'error');
+              }
+            });
+          } else {
+            console.error('Error: Empty response');
+            swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
+          swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+        }
+      });
+    }
 
     $("#dataTablePayroll tbody").on("click", "tr", function () {
       var dataRow = [];

@@ -814,6 +814,30 @@ exports.Master_Deductions = (data) => {
 };
 
 
+exports.Attendance_Request = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      requestid: key.ar_requestid,
+      employeeid: key.ar_employeeid,
+      attendancedate: key.ar_attendace_date,
+      timein: key.ar_timein,
+      timeout: key.ar_timeout,
+      total: key.ar_total,
+      createdate: key.ar_createdate,
+      createby: key.ar_createby,
+      requeststatus: key.ar_status,
+      reason: key.ar_reason,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
 
 
 //#region Remodeling

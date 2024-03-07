@@ -71,6 +71,8 @@ var appsdetailsRouter = require('./routes/appsdetails');
 var otapprovalRouter = require('./routes/otapproval');
 var otherdeductionsRouter = require('./routes/otherdeductions');
 var otherdeductionsIDRouter = require('./routes/otherdeductionsID');
+var attendancerequestRouter = require('./routes/attendancerequest');
+var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
 
 
 var app = express();
@@ -153,6 +155,8 @@ app.use('/appsdetails', appsdetailsRouter);
 app.use('/otapproval', otapprovalRouter);
 app.use('/otherdeductions', otherdeductionsRouter);
 app.use('/otherdeductionsID', otherdeductionsIDRouter);
+app.use('/attendancerequest', attendancerequestRouter);
+app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
 
 
 // catch 404 and forward to error handler

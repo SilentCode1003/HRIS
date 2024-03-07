@@ -221,8 +221,9 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Master_Deductions(results));
       }
 
-
-
+      if (table == "Attendance_Request") {
+        callback(null, model.Attendance_Request(results));
+      }
     });
   } catch (error) {}
 };
@@ -871,6 +872,26 @@ exports.InsertTable = (tablename, data, callback) => {
       od_amount,
       od_period,
       od_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request") {
+    let sql = `INSERT INTO attendance_request(
+      ar_employeeid,
+      ar_attendace_date,
+      ar_timein,
+      ar_timeout,
+      ar_total,
+      ar_createdate,
+      ar_createby,
+      ar_status,
+      ar_reason) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

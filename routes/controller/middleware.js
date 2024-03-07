@@ -143,6 +143,9 @@ var roleacess = [
       {
         layout: "apprenticelayout",
       },
+      {
+        layout: "attendancerequestlayout",
+      },
     ],
   },
   {
@@ -177,6 +180,9 @@ var roleacess = [
       },
       {
         layout: "eportalsalarylayout",
+      },
+      {
+        layout: "eportalrequestattendancelayout",
       },
     ],
   },
