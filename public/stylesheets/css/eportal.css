@@ -10,11 +10,12 @@
     z-index: 1001;
     background-color: #7F8487 !important;
 }
-#topbar {    
-    background: linear-gradient(180deg, #8b2525, rgb(173, 7, 7)) !important;
-    position: fixed !important;
-    z-index: 1001;
-    width: 100%;
+
+#topbar {
+  background-color: #8b2525 !important;
+  position: fixed !important;
+  z-index: 1001;
+  width: 100%;
 }
 
 .searchbar-eportal {
@@ -46,15 +47,16 @@
     background-color: #7a1818 !important;
 }
 
-.dropd-eportal {
-    color: white !important;
-    font-weight: bold !important;
+/* .dropd-eportal {
+  color: white !important;
+  font-weight: bold !important;
 }
+
 .dropd-eportal:hover {
-    background-color: #7a1818 !important;
-    transform: scale(1.1);
-    box-shadow: 0 0 8px white !important;
-}
+  background-color: #7a1818 !important;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px white !important;
+} */
 
 
 /* sidebar toggled
@@ -269,12 +271,12 @@
 }
 
 #accordionSidebar {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 2;
-    position: fixed;
+  background-color: #7a1818 !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  position: fixed;
 }
 
 
@@ -339,18 +341,18 @@
     overflow-x: hidden;
 }
 
-.span-eportal{
+/* .span-eportal{
     color: white;
     font-weight: bold;
     margin: 3%;
     display: inline-block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+} */
 
-.link-hover:hover {
+/* .link-hover:hover {
     transform: scale(1.1);
     box-shadow: 0 0 8px white !important;
-}
+} */
 
 .btn-clockin {
     background-color: green !important;
@@ -455,12 +457,12 @@
 }
 
 .ch-salary, .cheader-attendance {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+     background-color: #7a1818 !important;
     height: 90px !important;
 }
 
 .cheader-attendance, .ch-cashad, .ch-requestleave, .ch-da {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+     background-color: #7a1818 !important;
     height: 50% !important;
 }
 
@@ -522,4 +524,77 @@
   font-family: cursive;
   font-weight: bold;
   font-size: smaller;
+}
+
+.btn-search-topbar {
+  height: 40px;
+  width: 40px;
+  padding-left: 8px;
+  border: 2.5px solid #fcf0d7  !important;
+  border-radius: 3px;
+  background-color: #E41717 !important;
+  color: white !important;
+}
+
+.btn-search-topbar:hover {
+  background-color: #fa0303 !important;
+  color: white !important;
+}
+
+.db-search-hrmis {
+  color: white !important;
+}
+
+
+.db-bell-eportal {
+  width: 25px;
+  height: 25px;
+}
+
+.db-message-eportal {
+  width: 40px;
+  height: 40px;
+}
+
+#dp-header {
+  background-color: #7a1818 !important;
+  border: 3px solid #fcf0d7 !important;
+}
+
+.profile-box-db {
+  background-color: #7a1818 !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.profile-box-db:hover {
+  background-color: #fcf0d7 !important;
+  color: #7a1818 !important;
+  font-weight: bold !important;
+}
+
+/*-- Topbar Icons ----*/
+.user-prof-icon,
+.settings-icon,
+.log-icon,
+.logout-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.sidebar-item span{
+  color: white !important;
+  padding:8px;
+}
+.sidebar-item {
+  transition: background-color 0.1s ease;
+}
+
+.sidebar-item:hover {
+  background-color: #fcf0d7 !important;
+  font-weight: bold;
+}
+
+.sidebar-item:hover span {
+  color: #7a1818 !important;
 }
