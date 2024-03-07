@@ -25,8 +25,8 @@
         <li class="nav-item dropdown no-arrow d-sm-none">
             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json" trigger="loop" colors="primary:#ffffff"
-                    class="attendance-icon-eportal">
+                <lord-icon src="https://cdn.lordicon.com/kkvxgpti.json" colors="primary:#ffffff"
+                    class="db-search-hrmis">
                 </lord-icon>
             </a>
             <!-- Dropdown - Messages -->
@@ -50,8 +50,7 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" trigger="loop" colors="primary:#e8e230"
-                class="attendance-icon-eportal">
+                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" trigger="loop" state="loop-bell" colors="primary:#e8e230" class="db-bell-hrmis">
                 </lord-icon>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter">3+</span>
@@ -103,8 +102,8 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" trigger="loop" stroke="bold"
-                    colors="primary:#121331,secondary:#ebe6ef,tertiary:#4bb3fd,quaternary:#ffffff" class="mail-icon-eportal">
+                <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" trigger="loop"
+                    colors="primary:#0a2e5c,secondary:#1663c7,tertiary:#66d7ee,quaternary:#ffffff" class="db-message-hrmis">
                 </lord-icon>
                 <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter">7</span>
@@ -176,21 +175,25 @@
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in dropdown-profile-eportal" aria-labelledby="userDropdown" >
-                <a class="dropdown-item dropd-eportal" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2"></i>
+                <a class="dropdown-item" href="#">
+                    <a class="dropdown-item dropd-eportal" href="#">
+                        <lord-icon src="https://cdn.lordicon.com/fmasbomy.json" class="user-prof-icon">
+                        </lord-icon>
                     Profile
                 </a>
                 <a class="dropdown-item dropd-eportal" href="/settings">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2"></i>
+                    <lord-icon src="https://cdn.lordicon.com/dvqeipeg.json" class="settings-icon">
+                    </lord-icon>
                     Settings
                 </a>
                 <a class="dropdown-item dropd-eportal" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2"></i>
+                    <lord-icon src="https://cdn.lordicon.com/ujxzdfjx.json" class="log-icon">
+                    </lord-icon>
                     Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item dropd-eportal" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+                    <i class='bx bx-log-in-circle logout-icon'></i>
                     Logout
                 </a>
             </div>
