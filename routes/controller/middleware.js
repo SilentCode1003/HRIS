@@ -3,6 +3,12 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "otherdeductionsIDlayout",
+      },
+      {
+        layout: "otherdeductionslayout",
+      },
+      {
         layout: "appsdetailslayout",
       },
       {
@@ -137,6 +143,9 @@ var roleacess = [
       {
         layout: "apprenticelayout",
       },
+      {
+        layout: "attendancerequestlayout",
+      },
     ],
   },
   {
@@ -171,6 +180,9 @@ var roleacess = [
       },
       {
         layout: "eportalsalarylayout",
+      },
+      {
+        layout: "eportalrequestattendancelayout",
       },
     ],
   },
