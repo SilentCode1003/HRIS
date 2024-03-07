@@ -49,7 +49,7 @@
                                 clockout: item.clockout,
                                 totalhours: item.totalhours,
                                 payrolldate: item.payrolldate,
-                                status: item.status,
+                                overtimestatus: item.overtimestatus,
                                 action: action,
                             });
                         });
@@ -72,7 +72,7 @@
                     { data: "clockout" },
                     { data: "totalhours" },
                     { data: "payrolldate" },
-                    { data: "status" },
+                    { data: "overtimestatus" },
                     { data: "action" },
                 ],
                 createdRow: function (row, data, dataIndex) {
@@ -129,7 +129,7 @@
                             $("#otearlypay").val(item.earlyot_pay);
                             $("#ottotalpay").val(item.totalot_pay);
                             $("#otpayrolldate").val(item.payrolldate);
-                            $("#otstatus").val(item.status);
+                            $("#otstatus").val(item.overtimestatus);
                             $("#otreason").val(item.reason);
                         });
                     } else {
@@ -148,7 +148,7 @@
             let earlyot = $("#otearly").val();
             let normal_ot = $("#otnormal").val();
             let payrolldate = $("#otpayrolldate").val();
-            let status = $("#otstatus").val();
+            let overtimestatus = $("#otstatus").val();
 
 
             var message = "";
@@ -170,7 +170,7 @@
                 message += "status is required. ";
             }
 
-            if (status === "Applied" || status === "Pending") {
+            if (overtimestatus === "Applied" || overtimestatus === "Pending") {
                 message += "You Need to Approve or Disregard. ";
             }
             if (message !== "") {
@@ -185,7 +185,7 @@
                         earlyot: earlyot,
                         normal_ot: normal_ot,
                         payrolldate: payrolldate,
-                        status: status,
+                        overtimestatus: overtimestatus,
                     },
                     success: function (result) {
                         if (result.msg == "success") {

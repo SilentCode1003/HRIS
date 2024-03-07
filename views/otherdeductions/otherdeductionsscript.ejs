@@ -1,18 +1,17 @@
 <script>
-    let govdeduct = "";
+    let otherdeduct = "";
+    let employeeid = "";
 
     $(document).ready(function () {
         console.log('Initialize');
         LoadTable();
         LoadListEmp();
-        Loadedittype();
-        //searchTable();
         LoadeditListEmp();
-        //LoadListGovid();
+        Loadedittype();
 
-          $(document).on('keyup', '#myInput', function () {
-            searchTable();
-          });
+        //   $(document).on('keyup', '#myInput', function () {
+        //     searchTable();
+        //   });
 
 
         function LoadTable() {
@@ -27,7 +26,7 @@
                 scrollCollapse: true,
                 serverMethod: "GET",
                 ajax: {
-                    url: "/deduction/load",
+                    url: "/otherdeductions/load",
                     dataSrc: (json) => {
                         var finalData = [];
                         var data = json.data;
@@ -50,9 +49,9 @@
 
                             finalData.push({
                                 image: imgElement.outerHTML,
-                                govdeduct: item.govdeduct,
+                                otherdeduct: item.otherdeduct,
                                 employeeid: item.employeeid,
-                                type: item.type,
+                                idtype: item.idtype,
                                 amount: item.amount,
                                 period: item.period,
                                 cutoff: item.cutoff,
@@ -71,9 +70,9 @@
                 ],
                 columns: [
                     { data: "image" },
-                    { data: "govdeduct" },
+                    { data: "otherdeduct" },
                     { data: "employeeid" },
-                    { data: "type" },
+                    { data: "idtype" },
                     {
                         data: "amount",
                         render: function (data, type, row) {
@@ -103,7 +102,7 @@
 
         $(document).on("click", "#deductionsvbtn", function () {
             let employeeid = $("#employee").val();
-            let type = $("#govid").val();
+            let idtype = $("#govid").val();
             let amount = $("#deductamount").val();
             let period = $("#deductperiod").val();
             let cutoff = $("#cutoff").val();
@@ -114,7 +113,7 @@
                 message += "employeeid is required ";
             }
 
-            if (type == "") {
+            if (idtype == "") {
                 message += "monthly is required ";
             }
 
@@ -137,10 +136,10 @@
                 amount = amount.replace(/,/g, '').replace('₱', '');
                 $.ajax({
                     type: "POST",
-                    url: "/deduction/save",
+                    url: "/otherdeductions/save",
                     data: {
                         employeeid: employeeid,
-                        type: type,
+                        idtype: idtype,
                         amount: parseFloat(amount),
                         period: period,
                         cutoff: cutoff,
@@ -186,14 +185,14 @@
                 type: "GET",
                 url: "/employee/load",
                 success: function (result) {
-                   // console.log(result.data);
+                    //console.log(result.data);
                     var data = result.data;
 
                     $.each(data, function (key, item) {
                         var options = new Option(item.newEmployeeId, item.newEmployeeId);
                         $(options).html(item.firstname);
                         $("#employee").append(options);
-                        //console.log(item.firstname);
+                        // console.log(item.firstname);
                     });
                 },
                 error: function (result) {
@@ -208,17 +207,17 @@
                 $("#govid").empty();
                 $.ajax({
                     type: "POST",
-                    url: "/employee/getgovid",
+                    url: "/employee/getdeductother",
                     data: { employeeid: employeeId },
                     success: function (result) {
                         //console.log(result.data);
                         var data = result.data;
 
                         $.each(data, function (key, item) {
-                            var options = new Option(item.governmentid, item.governmentid);
+                            var options = new Option(item.otherdeductid, item.otherdeductid);
                             $(options).html(item.idtype);
                             $("#govid").append(options);
-                            console.log(item.idtype);
+                            // console.log(item.idtype);
                         });
                     },
                     error: function (result) {
@@ -253,7 +252,27 @@
                         var options = new Option(item.newEmployeeId, item.newEmployeeId);
                         $(options).html(item.firstname);
                         $("#editemployee").append(options);
-                        //console.log(item.firstname);
+                        // console.log(item.firstname);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+        function Loadedittype() {
+            $.ajax({
+                type: "GET",
+                url: "/otherdeductionsID/load",
+                success: function (result) {
+                    console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.otherdeductid, item.otherdeductid);
+                        $(options).html(item.idtype);
+                        $("#editgovid").append(options);
                     });
                 },
                 error: function (result) {
@@ -274,14 +293,14 @@
         //         // Use AJAX to get government IDs for the specified employee
         //         $.ajax({
         //             type: "POST",
-        //             url: "/employee/getgovid",
+        //             url: "/employee/getdeductother",
         //             data: { employeeid: employeeId },
         //             success: function (result) {
         //                 console.log(result.data);
         //                 var data = result.data;
 
         //                 $.each(data, function (key, item) {
-        //                     var options = new Option(item.governmentid, item.governmentid);
+        //                     var options = new Option(item.otherdeductid, item.otherdeductid);
         //                     $(options).html(item.idtype);
         //                     $("#editgovid").append(options);
         //                     console.log(item.idtype);
@@ -295,52 +314,33 @@
         // });
 
 
-        function Loadedittype() {
-            $.ajax({
-                type: "GET",
-                url: "/govermentid/load",
-                success: function (result) {
-                    //console.log(result.data);
-                    var data = result.data;
+        // $(document).ready(function () {
+        //     $("#editBtn").on("click", function () { // Change event to click for the editBtn
+        //         var employeeId = $("#editemployee").val(); // Get the value of editemployee field
+        //         $("#editgovid").empty();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/employee/getdeductother",
+        //             data: { employeeid: employeeId },
+        //             success: function (result) {
+        //                 console.log(result.data);
+        //                 var data = result.data;
 
-                    $.each(data, function (key, item) {
-                        var options = new Option(item.governmentid, item.governmentid);
-                        $(options).html(item.idtype);
-                        $("#editgovid").append(options);
-                    });
-                },
-                error: function (result) {
-                    alert("error: " + result.data);
-                },
-            });
-        }
+        //                 $.each(data, function (key, item) {
+        //                     var options = new Option(item.otherdeductid, item.otherdeductid);
+        //                     $(options).html(item.idtype);
+        //                     $("#editgovid").append(options);
+        //                     console.log(item.idtype);
+        //                 });
+        //             },
+        //             error: function (result) {
+        //                 alert("error: " + result.data);
+        //             },
+        //         });
+        //     });
+        // });
 
 
-        $(document).ready(function () {
-            $("#editemployee").on("change", function () {
-                var employeeId = $(this).val();
-                $("#editgovid").empty();
-                $.ajax({
-                    type: "POST",
-                    url: "/employee/getgovid",
-                    data: { employeeid: employeeId },
-                    success: function (result) {
-                        //console.log(result.data);
-                        var data = result.data;
-
-                        $.each(data, function (key, item) {
-                            var options = new Option(item.governmentid, item.governmentid);
-                            $(options).html(item.idtype);
-                            $("#editgovid").append(options);
-                           // console.log(item.idtype);
-                        });
-                    },
-                    error: function (result) {
-                        alert("error: " + result.data);
-                    },
-                });
-            });
-        });
 
         $(document).ready(function () {
             $("#editdeductperiod").on("change", function () {
@@ -366,15 +366,15 @@
                     dataRow.push($(this).text());
                 });
             console.log(dataRow);
-            govdeduct = dataRow[1];
+            otherdeduct = dataRow[1];
         });
 
         $(document).on("click", "#editBtn", function () {
             $.ajax({
                 type: "POST",
-                url: "/deduction/getdeduction",
+                url: "/otherdeductions/getotherdeduction",
                 data: {
-                    govdeduct: govdeduct,
+                    otherdeduct: otherdeduct,
                 },
                 success: function (result) {
                     if (result.msg === "success") {
@@ -382,7 +382,7 @@
 
                         $.each(existingData, (key, item) => {
                             $("#editemployee").val(item.employeeid);
-                            $("#editgovid").val(item.type);
+                            $("#editgovid").val(item.idtype);
                             $("#editdeductamount").val(formatCurrencyValue(item.amount));
                             $("#editdeductperiod").val(item.period);
                             $("#editcutoff").val(item.cutoff);
@@ -398,9 +398,9 @@
         });
 
         $(document).on("click", "#editdeductionsvbtn", function () {
-            let id = govdeduct
+            let id = otherdeduct
             let employeeid = $("#editemployee").val();
-            let type = $("#editgovid").val();
+            let idtype = $("#editgovid").val();
             let amount = $("#editdeductamount").val().replace(/[^\d.-]/g, '');
             let period = $("#editdeductperiod").val();
             let cutoff = $("#editcutoff").val();
@@ -411,7 +411,7 @@
                 message += "employeeid is required. ";
             }
 
-            if (type === "") {
+            if (idtype === "") {
                 message += "type is required. ";
             }
 
@@ -434,11 +434,11 @@
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "/deduction/update",
+                    url: "/otherdeductions/update",
                     data: {
-                        govdeduct: id,
+                        otherdeduct: id,
                         employeeid: employeeid,
-                        type: type,
+                        idtype: idtype,
                         amount: parseFloat(amount),
                         period: period,
                         cutoff: cutoff,
@@ -476,7 +476,12 @@
 
     });
 
-//#region FUNCTIONS
+    //#region FUNCTIONS
+
+    function formatCurrencyValue(amount) {
+        var formattedAmount = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
+        return formattedAmount;
+    }
 
     $("#deductamount").on({
         input: function () {
@@ -536,29 +541,6 @@
         input.val(formatted_val);
     }
 
-    function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableDeduction");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
-        }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-
-//#endregion
-
+    //#endregion
 
 </script>

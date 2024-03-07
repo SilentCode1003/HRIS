@@ -213,8 +213,17 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Payroll_Date(results));
       }
 
+      if (table == "Other_Deductions") {
+        callback(null, model.Other_Deductions(results));
+      }
 
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
 
+      if (table == "Attendance_Request") {
+        callback(null, model.Attendance_Request(results));
+      }
     });
   } catch (error) {}
 };
@@ -829,6 +838,60 @@ exports.InsertTable = (tablename, data, callback) => {
         ad_version,
         ad_date,
         ad_createby) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+        md_employeeid,
+        md_idtype,
+        md_idnumber,
+        md_issuedate,
+        md_createby,
+        md_createdate,
+        md_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "other_deductions") {
+    let sql = `INSERT INTO other_deductions(
+      od_employeeid,
+      od_idtype,
+      od_amount,
+      od_period,
+      od_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request") {
+    let sql = `INSERT INTO attendance_request(
+      ar_employeeid,
+      ar_attendace_date,
+      ar_timein,
+      ar_timeout,
+      ar_total,
+      ar_createdate,
+      ar_createby,
+      ar_status,
+      ar_reason) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

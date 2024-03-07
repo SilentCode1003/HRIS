@@ -1,216 +1,248 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
+const XLSX = require("xlsx");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('govermentidlayout', { title: 'Express' });
-  Validator(req, res, 'generatepayrolllayout',);
+  Validator(req, res, "generatepayrolllayout");
 });
 
 module.exports = router;
 
-
-
-router.post('/generateAndLoadPayroll', (req, res) => {
+router.post("/generateAndLoadPayroll", (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
     let generateSql = `call hrmis.GeneratePayroll('${startdate}', '${enddate}')`;
     let loadSql = `call hrmis.LoadPayroll('${startdate}', '${enddate}')`;
 
-    mysql.mysqlQueryPromise(generateSql)
-    .then((generateResult) => {
-      console.log("Payroll generated:", generateResult);
-      return mysql.mysqlQueryPromise(loadSql);
-    })
-    .then((loadResult) => {
-      console.log("Payroll loaded:", loadResult);
-      res.json({
-        msg: 'success',
-        data: loadResult,
+    mysql
+      .mysqlQueryPromise(generateSql)
+      .then((generateResult) => {
+        console.log("Payroll generated:", generateResult);
+        return mysql.mysqlQueryPromise(loadSql);
+      })
+      .then((loadResult) => {
+        console.log("Payroll loaded:", loadResult);
+        res.json({
+          msg: "success",
+          data: loadResult,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    });
   } catch (error) {
     console.error("Error:", error);
-    res.json({ 
-      msg: 'error',
+    res.json({
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-
-router.post('/loadpayroll', (req, res) =>{
+router.post("/loadpayroll", (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
     let sql = `call hrmis.LoadPayroll('${startdate}', '${enddate}')`;
 
-
-
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-
-      console.log(result);
-      res.json({
-        msg: 'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-
-router.post('/LoadPayslipSummary', (req,res) => {
+router.post("/LoadPayslipSummary", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;
-    let sql = `call hrmis.LoadPayslipSummary('${payrolldate}', '${employeeid}')`
+    let sql = `call hrmis.LoadPayslipSummary('${payrolldate}', '${employeeid}')`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
-    
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
-
-
-router.post('/LoadPayslipDetailed', (req,res) => {
+router.post("/LoadPayslipDetailed", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;
-    let sql = `call hrmis.LoadPayslipDetailed('${payrolldate}', '${employeeid}')`
+    let sql = `call hrmis.LoadPayslipDetailed('${payrolldate}', '${employeeid}')`;
 
     console.log(payrolldate);
     console.log(employeeid);
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
-    
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
-
-router.get('/getpayrolldate' , (req, res) => {
+router.post("/getpayrolldate", (req, res) => {
   try {
-    let sql =  `select 
-    distinct gp_payrolldate
-    from generate_payroll
-    order by gp_payrolldate desc
+    let sql = `SELECT DISTINCT 
+    DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
+    gp_cutoff
+    FROM 
+    generate_payroll  
+    ORDER BY 
+    gp_payrolldate DESC
     LIMIT 2`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:'error',
-      data: error
-    });
-  }
-});
-
-
-router.post('/loadpayslipsummaryforapp', (req, res) =>{
-  try {
-    let payrolldate1 = req.body.payrolldate1;
-    let payrolldate2 = req.body.payrolldate2;
-    let employeeid = req.body.employeeid;
-    let sql = `call hrmis.LoadPayslipSummaryForApp('${payrolldate1}', '${payrolldate2}', '${employeeid}')`;
-
-
-
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-
-      console.log(result);
-      res.json({
-        msg: 'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    })
-  } catch (error) {
-    res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
+router.post("/loadpayslipsummaryforapp", (req, res) => {
+  try {
+    let payrolldate = req.body.payrolldate;
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.LoadPayslipSummaryForApp('${payrolldate}', '${employeeid}')`;
 
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result[0],
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
 
+router.post("/exportfile", async (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql = `call hrmis.LoadPayrollExport('${startdate}', '${enddate}')`;
 
+    const result = await mysql.mysqlQueryPromise(sql);
 
+    const jsonData = JSON.parse(JSON.stringify(result[0]));
 
+    if (jsonData.length === 0) {
+      return res.status(404).json({ msg: "No data found" });
+    }
+
+    const headers = Object.keys(jsonData[0]);
+
+    const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
+    const workbook = XLSX.utils.book_new();
+    const worksheetName = `${startdate}_${enddate}`;
+    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+
+    const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
+    worksheet["!cols"] = [];
+    for (let i = 0; i < columnCount; i++) {
+      if (i === 0) {
+        worksheet["!cols"].push({ wch: 30 }); 
+      } else {
+        worksheet["!cols"].push({ wch: 20 }); 
+      }
+    }
+    const excelBuffer = XLSX.write(workbook, { type: "buffer" });
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="payroll_data_${startdate}_${enddate}.xlsx"`
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );    
+    res.send(excelBuffer);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ msg: "error", data: error });
+  }
+});

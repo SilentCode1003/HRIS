@@ -171,6 +171,11 @@
     });
   }
 
+  function formatCurrencyValue(amount) {
+    var formattedAmount = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
+    return formattedAmount;
+  }
+
 
   function formatDate(dateString) {
     const date = new Date(dateString);

@@ -1,0 +1,200 @@
+<script>
+    let requestid = "";
+  
+    $(document).ready(function () {
+      searchTable();
+      LoadTable();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableattendancerequest").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/attendancerequest/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+                 `;
+  
+                var imgElement = document.createElement("img");
+                imgElement.src = "data:image/jpg;base64," + item.image;
+                imgElement.alt = "Profile Image";
+                imgElement.style.width = "90px";
+                imgElement.style.height = "90px";
+  
+                finalData.push({
+                  image: imgElement.outerHTML,
+                  requestid: item.requestid,
+                  employeeid: item.employeeid,
+                  attendancedate: item.attendancedate,
+                  timein: item.timein,
+                  timeout: item.timeout,
+                  total: item.total,
+                  createdate: item.createdate,
+                  requeststatus: item.requeststatus,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            { data: "image" },
+            { data: "requestid" },
+            { data: "employeeid" },
+            { data: "attendancedate" },
+            { data: "timein" },
+            { data: "timeout" },
+            { data: "total" },
+            { data: "createdate" },
+            { data: "requeststatus" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      $("#dataTableattendancerequest tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+          requestid = dataRow[1];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $(`#dataTableattendancerequest`).find("tr:gt(0)").remove();
+        $.ajax({
+          type: "POST",
+          url: "/attendancerequest/getattendancerequest",
+          data: {
+            requestid: requestid,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTableattendancerequest")) {
+              $("#dataTableattendancerequest").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById(
+              "dataTableattendancerequest"
+            );
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var IMAGE = row.insertCell(0);
+              var FULLNAME = row.insertCell(1);
+              var LOGDATE = row.insertCell(2);
+              var LOGTIME = row.insertCell(3);
+              var LOGTYPE = row.insertCell(4);
+              var LATITUDE = row.insertCell(5);
+              var LONGITUDE = row.insertCell(6);
+              var DEVICE = row.insertCell(7);
+              var LOCATION = row.insertCell(8);
+  
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "100px";
+              imgElement.style.height = "100px";
+  
+              IMAGE.appendChild(imgElement);
+  
+              FULLNAME.innerHTML = item.fullname;
+              LOGDATE.innerHTML = item.logdate;
+              LOGTIME.innerHTML = item.logtime;
+              LOGTYPE.innerHTML = item.logtype;
+              LATITUDE.innerHTML = item.latitude;
+              LONGITUDE.innerHTML = item.longitude;
+              DEVICE.innerHTML = item.device;
+              LOCATION.innerHTML = item.location;
+  
+              $.each(
+                [
+                  FULLNAME,
+                  LOGDATE,
+                  LOGTIME,
+                  LOGTYPE,
+                  LATITUDE,
+                  LONGITUDE,
+                  DEVICE,
+                  LOCATION,
+                ],
+                function (_, cell) {
+                  cell.style.textAlign = "center";
+                  cell.style.verticalAlign = "middle";
+                }
+              );
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+      });
+  
+    });
+
+//#region FUNCTIONS
+  
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableattendancerequest");
+      tr = table.getElementsByTagName("tr");
+  
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+  
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+  
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+//#endregion
+  </script>
+  

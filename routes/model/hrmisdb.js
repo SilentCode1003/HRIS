@@ -775,6 +775,69 @@ exports.Payroll_Date = (data) => {
 };
 
 
+exports.Other_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      otherdeduct: key.od_id,
+      employeeid: key.od_employeeid,
+      idtype: key.od_idtype,
+      amount: key.od_amount,
+      period: key.od_period,
+      cutoff: key.od_cutoff,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Master_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      otherdeductid: key.md_deductionid,
+      employeeid: key.md_employeeid,
+      idtype: key.md_idtype,
+      idnumber: key.md_idnumber,
+      issuedate: key.md_issuedate,
+      createby: key.md_createby,
+      createdate: key.md_createdate,
+      status: key.md_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Attendance_Request = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      requestid: key.ar_requestid,
+      employeeid: key.ar_employeeid,
+      attendancedate: key.ar_attendace_date,
+      timein: key.ar_timein,
+      timeout: key.ar_timeout,
+      total: key.ar_total,
+      createdate: key.ar_createdate,
+      createby: key.ar_createby,
+      requeststatus: key.ar_status,
+      reason: key.ar_reason,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
 
 
 //#region Remodeling

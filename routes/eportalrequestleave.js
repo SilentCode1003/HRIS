@@ -15,13 +15,13 @@ module.exports = router;
 
 router.post("/submit", async (req, res) => {
   try {
-    const employeeid = req.body.employeeid; // Retrieve the employee ID from the session
+    const employeeid = req.body.employeeid; 
     const { startdate, enddate, leavetype, reason } = req.body;
     const createdate = currentDate.format("YYYY-MM-DD");
-    const status = "Pending"; // You can set an initial status for the leave request
+    const status = "Pending"; 
     console.log(startdate, enddate, leavetype, reason, employeeid);
 
-    // Check if the employee ID is valid (you might want to add more validation)
+
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
 
@@ -33,7 +33,6 @@ router.post("/submit", async (req, res) => {
       [employeeid, startdate, enddate, leavetype, reason, status, createdate],
     ];
 
-    // Insert the leave request into the master_leave table
     mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
       if (insertErr) {
         console.error("Error inserting leave record: ", insertErr);
