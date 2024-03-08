@@ -370,9 +370,9 @@
               $("#payslipperday").text(formatToCurrency(item.Per_Day));
               $("#payslipallowances").text(formatToCurrency(item.Allowances));
               $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
-              $("#payslipndpay").text(formatToCurrency(item.NDpay));
-              $("#payslipotpay").text(formatToCurrency(item.OTpay));
-              $("#payslipearlypay").text(formatToCurrency(item.EarlyOtpay));
+              $("#payslipndpay").text(formatToCurrency(item.ApprovedNightDiffOt));
+              $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
+              $("#payslipearlypay").text(formatToCurrency(item.ApprovedEarlyOt));
               $("#payslipregular").text(formatToCurrency(item.Regular_Holiday_Compensation));
               $("#payslipspecial").text(formatToCurrency(item.Special_Holiday_Compensation));
               $("#payslipregularovertime").text(formatToCurrency(item.RegularHolidayOT));

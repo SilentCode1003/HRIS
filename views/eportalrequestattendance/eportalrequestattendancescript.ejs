@@ -1,5 +1,5 @@
 <script>
-    let leaveid = '';
+    let requestid = '';
     $(document).ready(function () {
         console.log('Initialize');
         let employeeid = "<%= employeeid %>";
@@ -112,13 +112,15 @@
                     },
                     success: function (result) {
                         if (result.msg == "success") {
-                            swal("Update Successfully", "You clicked the button!", "success",)
+                            swal("Update Successfully", "You clicked the button!", "success")
                                 .then(results => {
                                     window.location.reload();
                                 });
                             LoadTable();
                         } else if (result.msg == "exist") {
-                            swal("Exist", "Data already exists!", "warning",);
+                            swal("Exist", "Data already exists!", "warning");
+                        } else if (result.msg == "nodate") {
+                            swal("No Date Available", "The selected date is not available.", "warning");
                         }
                     },
                     error: function (err) {
@@ -130,7 +132,7 @@
 
         });
 
-        $("#dataTableapplyleave tbody").on("click", "tr", function () {
+        $("#dataTablereqCOA tbody").on("click", "tr", function () {
             var dataRow = [];
             $(this)
                 .closest("tr")
@@ -139,31 +141,27 @@
                     dataRow.push($(this).text());
                 });
             console.log(dataRow);
-            leaveid = dataRow[0];
+            requestid = dataRow[0];
         });
+
         $(document).on("click", "#editBtn", function () {
             $.ajax({
                 type: "POST",
-                url: "/allleave/getleavedashboard",
+                url: "/eportalrequestattendance/getreqCOA",
                 data: {
-                    leaveid: leaveid,
+                    requestid: requestid,
                 },
                 success: function (result) {
                     if (result.msg === "success") {
                         const existingData = result.data;
 
                         $.each(existingData, (key, item) => {
-                            $("#id").val(item.leaveid);
-                            $("#pendingleavename").val(item.employeeid);
-                            $("#pendingleaveemail").val(item.email);
-                            $("#pendingleavegender").val(item.gender);
-                            $("#pendingleavephone").val(item.phone);
-                            $("#pendingleavetype").val(item.leavetype);
-                            $("#pendingleaveapplydate").val(item.applieddate);
-                            $("#pendingleavestart").val(item.leavestartdate);
-                            $("#pendingleaveend").val(item.leaveenddate);
-                            $("#pendingleavereason").val(item.reason);
-                            $("#pendingleaveaction").val(item.status);
+                            $("#id").val(item.requestid);
+                            $("#editattendancedate").val(item.attendancedate);
+                            $("#edittimein").val(item.timein);
+                            $("#edittimeout").val(item.timeout);
+                            $("#editcoastatus").val(item.requeststatus);
+                            $("#editcoareason").val(item.reason);
                         });
                     } else {
                         swal("Error fetching employee data", "success");
@@ -174,30 +172,51 @@
                 },
             });
         });
-        $(document).on("click", "#pendingleavesavebtn", function () {
-            console.log("Save button clicked");
-            let id = leaveid
-            let status = $("#pendingleaveaction").val();
+        $(document).on("click", "#editcOAsavebtn", function () {
+            let attendancedate = $("#editattendancedate").val();
+            let timein = $("#edittimein").val();
+            let timeout = $("#edittimeout").val();
+            let reason = $("#editcoareason").val();
+            let requeststatus = $("#editcoastatus").val();
 
             var message = "";
 
-
-            if (status === "") {
-                message += "status is required. ";
+            if (attendancedate == "") {
+                message += "Attendance date is required. ";
             }
 
+            if (timein == "") {
+                message += "Time in is required. ";
+            }
 
+            if (timeout == "") {
+                message += "Time out is required. ";
+            }
 
+            if (reason == "") {
+                message += "Reason is required. ";
+            }
 
+            if (requeststatus === "Approved") {
+                message += "You Are Not Allowed to Approved Your Request";
+            }
+
+            if (requeststatus === "") {
+                message += "Status is required. ";
+            }
             if (message !== "") {
-                swal("Validation Error", message, "error");
+                swal("Ooops !!!", message, "error");
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "/allleave/update",
+                    url: "/eportalrequestattendance/update",
                     data: {
-                        leaveid: id,
-                        status: status,
+                        requestid: requestid,
+                        attendancedate: attendancedate,
+                        timein: timein,
+                        timeout: timeout,
+                        reason: reason,
+                        requeststatus: requeststatus,
                     },
                     success: function (result) {
                         if (result.msg == "success") {

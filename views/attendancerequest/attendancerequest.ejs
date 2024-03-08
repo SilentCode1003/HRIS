@@ -4,13 +4,6 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
         <h3 class="title-card-table">Attendance Request</h3>
-      <!-- <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#">
-        <b>Export Attendance</b>
-      </button>
-
-      <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
-        <b>Import Attendance</b>
-      </button> -->
         <input id='myInput'  type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
@@ -39,101 +32,78 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header" id="modal-header">
-                <div>
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
-                       Logs
-                    </h1>
-                </div>
-                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <div class="table-responsive" id="table-responsive-id">
-                    <table class="table table-striped" id="dataTableattendancelogs">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th class="col-25">Full Name</th>
-                                <th>Date</th>
-                                <th class="col-sm-1">Time</th>
-                                <th>Log Type</th>
-                                <th>Latitude</th>
-                                <th>Lonitude</th>
-                                <th class="col-sm-1">Device</th>
-                                <th class="col-25">Location</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer" id="modal-footer">
-                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Upload Modal -->
-
-<div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div class="modal fade" id="editrequestmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
         <div class="modal-header" id="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">BATCH UPLOAD</h1>
-            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to Regular this Employee?</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body modal-batch-body" id="modal-body">
+        <div class="modal-body" id="modal-body">
             <form>
-            <div class="modal-content">
-                <input type="file" class="form-control-file" id="excelFileInput" accept=".xls, .xlsx" />
-            </div>
+                <div class="card">
+                    <div class="card-body candidate-prof">
+                        <form>
+                            <div class="row">
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <label for="coafullname">Employee Name</label>
+                                        <input type="text" class="form-control border-form-prof" id="coafullname" placeholder="Employee Name" disabled>
+                                    </div>
+                                    <div class="col">
+                                        <label for="editpassword" class="form-label">Status</label>
+                                        <select class="form-control" id="editcoastatus" name="editcoastatus">
+                                            <option value="Pending" selected>Pending</option>
+                                            <option value="Approved">Approved</option>
+                                            <option value="Cancel">Cancel</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="text-center">
+                                            <img id="editpreview" style="  width: 200px;
+                                            height: 200px;" class="rounded rounded-circle border-form-prof"
+                                             alt="placeholder" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <label for="editattendancedate" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="editattendancedate" name="editattendancedate">
+                                    </div>
+                                    <div class="col">
+                                        <label for="edittimein" class="form-label">Date Time In</label>
+                                        <input type="datetime-local" class="form-control" id="edittimein" name="edittimein">
+                                    </div>
+                                    <div class="col">
+                                        <label for="edittimeout" class="form-label">Date Time Out</label>
+                                        <input type="datetime-local" class="form-control" id="edittimeout" name="edittimeout">
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <label for="message-text" class="col-form-label">Reason:</label>
+                                        <textarea class="form-control" id="editcoareason" name="editcoareason" disabled></textarea>
+                                    </div>                                   
+                                </div>
+                                <div class="col">
+                                    <label for="empid" class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" id="empid" name="empid" disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
-            <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-modal-upload" id="uploadButton">Upload</button>
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editcOAsavebtn">Save</button>
         </div>
-        </div>
+      </div>
     </div>
-</div>
-
-
-
-
-
-
-
-
-<!-- <div class="modal fade" id="geoFenceModal" tabindex="-1" role="dialog" aria-labelledby="geoFenceModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <i class='bx bxs-component' style='color:#1ff143; font-size: 50px; margin: 3px;'></i>
-                    <h3 class="modal-title" id="geoFenceModalLabel">GEO-FENCE SETTINGS</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modal-body">
-                    <label for="latitude">Latitude:</label>
-                    <input type="text" id="latitude" class="form-control" placeholder="Enter latitude" style="border: 2.5px solid #174634 !important;">
-    
-                    <label for="longitude">Longitude:</label>
-                    <input type="text" id="longitude" class="form-control" placeholder="Enter longitude" style="border: 2.5px solid #174634 !important;">
-    
-                    <label for="radius">Radius:</label>
-                    <input type="text" id="radius" class="form-control" placeholder="Enter radius" style="border: 2.5px solid #174634 !important;">
-
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-secondary" style="background-color: red !important; border: 2px solid white !important;" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="setGeoFence()" style="background-color: green !important; border: 2px solid white !important;">Set Geo-fence</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+  </div>
