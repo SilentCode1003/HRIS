@@ -1,14 +1,14 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { ValidatorForTeamLead } = require("./controller/middleware");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('pendingleavelayout', { title: 'Express' });
-  ValidatorForTeamLead(
+  Validator(
     req,
     res,
     "teamleadpendingleavelayout",

@@ -506,6 +506,20 @@ exports.UpdateStatement = (tablename, prefix, columns, arguments) => {
   return statement;
 };
 
+
+
+exports.UpdateStatementWithArrayDates = (tablename, prefix, columns, datesColumn, loanIdColumn) => {
+  let cols = columns.map(col => `${prefix}_${col} = ?`).join(', ');
+  let datesPlaceholder = datesColumn.map(() => '?').join(', ');
+
+  let statement = `UPDATE ${tablename} 
+  SET ${cols} 
+  WHERE ${prefix}_${datesColumn} IN (${datesPlaceholder}) AND ${prefix}_${loanIdColumn} = ?`;
+
+  return statement;
+};
+
+
 exports.SelectStatement = (str, data) => {
   let statement = "";
   let found = 0;
@@ -519,4 +533,24 @@ exports.SelectStatement = (str, data) => {
   }
   return statement;
 };
+
+
+exports.SelectStatementWithArray = (str, data) => {
+  let statement = "";
+  let found = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "?") {
+      if (Array.isArray(data[found])) {
+        statement += data[found].map(val => `'${val}'`).join(',');
+      } else {
+        statement += `'${data[found]}'`;
+      }
+      found += 1;
+    } else {
+      statement += str[i];
+    }
+  }
+  return statement;
+};
+
 

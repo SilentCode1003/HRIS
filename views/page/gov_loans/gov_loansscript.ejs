@@ -1,0 +1,683 @@
+<script>
+  let govloanid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    LoadEditEmp();
+    LoadPayrollDate();
+    EditLoadPayrollDate();
+    searchTable();
+    LoadAdvancedList();
+    AdvancedLoadPayrollDate();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTablegovermentLoans").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/gov_loans/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-fw fa-pen"></i></button>
+                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-fw fa-eye"></i></button>
+                     `;
+
+              finalData.push({
+                loanid: item.loanid,
+                fullname: item.fullname,
+                loan_type: item.loan_type,
+                per_month: item.per_month,
+                amount_recieved: item.amount_recieved,
+                createdate: item.createdate,
+                createby: item.createby,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "loanid" },
+          { data: "fullname" },
+          { data: "loan_type" },
+          {
+            data: "per_month",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          {
+            data: "amount_recieved",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(7)");
+          statusCell.wrapInner("<span class='pending-status'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    $("#govloanemployeeid").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#govermentloansavebtn", function () {
+      let employeeid = $("#govloanemployeeid").val();
+      let loan_type = $("#govloantype").val();
+      let amount_recieved = $("#govloanrecieved").val();
+      let per_month = $("#govloanpermonth").val();
+      let payment_type = $("#govloanpaymenttype").val();
+      let effective_date = $("#govloaneffectivedate").val();
+      let duration = $("#govpayrolldates").val();
+
+      var message = "";
+
+      if (employeeid == "") {
+        message += "employeeid is required ";
+      }
+
+      if (loan_type == "") {
+        message += "loan_type is required ";
+      }
+
+      if (amount_recieved == "") {
+        message += "amount_recieved is required ";
+      }
+
+      if (payment_type == "") {
+        message += "payment_type is required ";
+      }
+
+      if (per_month == "") {
+        message += "per_month is required ";
+      }
+
+      if (duration == "") {
+        message += "duration is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        amount_recieved = amount_recieved.replace(/,/g, "").replace("₱", "");
+        per_month = per_month.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/gov_loans/save",
+          data: {
+            employeeid: employeeid,
+            loan_type: loan_type,
+            amount_recieved: parseFloat(amount_recieved),
+            per_month: parseFloat(per_month),
+            payment_type: payment_type,
+            effective_date: effective_date,
+            duration: duration,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#govloanemployeeid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadAdvancedList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#govloanadvancedemployeeid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editgovloanemployeeid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#govloaneffectivedate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#addpayrolldateot").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function AdvancedLoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#govloanadvancedpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTablegovermentLoans tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      govloanid = dataRow[0];
+    });
+
+    // $(document).on("click", "#editBtn", function () {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/gov_loans/getgovloans",
+    //     data: {
+    //       governmentid: governmentid,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+
+    //         $.each(existingData, (key, item) => {
+    //           $("#editgovermentidemployeeid").val(item.employeeid);
+    //           $("#editgovermentidtype").val(item.idtype);
+    //           $("#editgovermentidnumber").val(item.idnumber);
+    //           $("#editgovermentidissuedate").val(item.issuedate);
+    //           $("#editgovermentidstatus").val(item.status);
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", "success");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", err, "error");
+    //     },
+    //   });
+    // });
+
+    $(document).on("click", "#viewBtn", function () {
+      $(`#dataTablegovermentdetails`).find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "/gov_loans/getgovloans",
+        data: {
+          govloanid: govloanid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const TittleContainer = $("#TittleContainer");
+            TittleContainer.empty();
+
+            // Use a flag to append the title only once
+            let titleAppended = false;
+
+            $.each(existingData, (key, item) => {
+              if (!titleAppended) {
+                const cardHtml = `<h3 class="modal-title" id="">${item.fullname}'s ${item.loan_type}</h3>`;
+                $("#datename").text(item.fullname);
+                TittleContainer.append(cardHtml);
+                titleAppended = true; // Set the flag to true after appending the first title
+              }
+            });
+          } else {
+            swal("Error fetching");
+          }
+
+          var finalData = [];
+          var data = result.data;
+
+          if ($.fn.DataTable.isDataTable("#dataTablegovermentdetails")) {
+            $("#dataTablegovermentdetails").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById(
+            "dataTablegovermentdetails"
+          );
+
+          console.log(data);
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var PAYROLL_DATES = row.insertCell(0);
+            var LOAN_TYPE = row.insertCell(1);
+            var PER_MONTH = row.insertCell(2);
+            var LOAN_STATUS = row.insertCell(3);
+            var PAID_DATES = row.insertCell(4);
+            var PAYMENT_TYPE = row.insertCell(5);
+
+            PAYROLL_DATES.innerHTML = formatDate(item.payrolldates);
+            LOAN_TYPE.innerHTML = item.loan_type;
+            PER_MONTH.innerHTML = formatCurrencyValue(item.per_month);
+            LOAN_STATUS.innerHTML = item.loanstatus;
+            PAID_DATES.innerHTML = item.paid_dates;
+            PAYMENT_TYPE.innerHTML = item.payment_type;
+
+            $.each(
+              [
+                PAYROLL_DATES,
+                LOAN_TYPE,
+                PER_MONTH,
+                LOAN_STATUS,
+                PAID_DATES,
+                PAYMENT_TYPE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+            var statusCell = $(row).find("td:eq(3)");
+            var statusText = item.loanstatus;
+            var statusClass = "";
+
+            switch (statusText) {
+              case "PAID":
+                statusClass = "active-status";
+                break;
+              case "NOT PAID":
+                statusClass = "pending-status";
+                break;
+              default:
+                statusClass = "";
+            }
+
+            statusCell.html(
+              `<span class="${statusClass}">${statusText}</span>`
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/gov_loans/getgovloansadvanced",
+        data: {
+          govloanid: govloanid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            const tableBody = $("#payrolldates-table-body");
+            tableBody.empty();
+
+            existingData.forEach((item) => {
+              const row = `
+            <tr>
+              <td>${item.payrolldates}</td>
+              <td><input type="checkbox" class="form-check-input" value="${item.payrolldates}"></td>
+            </tr>
+          `;
+              tableBody.append(row);
+            });
+
+            if (existingData.length > 0) {
+              $("#govloanadvancedemployeeid").val(existingData[0].employeeid);
+              $("#govloanadvancedrecived").val(
+                formatCurrencyValue(existingData[0].amount_recieved)
+              );
+              $("#govloanadvancedtype").val(existingData[0].loan_type);
+              $("#govloanadvancedpermonth").val(
+                formatCurrencyValue(existingData[0].per_month)
+              );
+            }
+            $("#editgovloansmodal").modal("show");
+          }
+        },
+      });
+    });
+
+    $(document).on("click", "#govloanadvancedsaveBTN", function () {
+      let id = govloanid;
+      let payroll_date = $("#govloanadvancedpayrolldate").val();
+      let employeeid = $("#govloanadvancedemployeeid").val();
+      let payment_type = $("#govloanpaymenttypeadvanced").val();
+
+      var message = "";
+
+      if (payroll_date === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (payment_type === "") {
+        message += "status is required. ";
+      }
+
+      let selected_dates = [];
+      $("input[type=checkbox]:checked").each(function () {
+        selected_dates.push($(this).val());
+      });
+
+      if (selected_dates.length === 0) {
+        message += "At least one payroll date must be selected. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        console.log(govloanid,'payrolldate');
+        console.log(payroll_date,'payrolldate');
+        console.log(payment_type,'payrolldate');
+        console.log(selected_dates,'payrolldate');
+        $.ajax({
+          type: "PUT",
+          url: "gov_loans/edit",
+          data: {
+            govloanid: id,
+            employeeid: employeeid,
+            paid_date: payroll_date,
+            payment_type: payment_type,
+            selected_dates: selected_dates,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#editgovermentidsavebtn", function () {
+      let id = governmentid;
+      let employeeid = $("#editgovermentidemployeeid").val();
+      let idtype = $("#editgovermentidtype").val();
+      let idnumber = $("#editgovermentidnumber").val();
+      let issuedate = $("#editgovermentidissuedate").val();
+      let status = $("#editgovermentidstatus").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (idtype === "") {
+        message += "status is required. ";
+      }
+
+      if (idnumber === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (issuedate === "") {
+        message += "status is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "govermentid/update",
+          data: {
+            governmentid: id,
+            employeeid: employeeid,
+            idtype: idtype,
+            idnumber: idnumber,
+            issuedate: issuedate,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTablegovermentLoans");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

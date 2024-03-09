@@ -1,74 +1,53 @@
 <script>
   $(document).ready(function () {
-    const loginUrlDropdown = document.getElementById("loginUrl");
+    LoadAccess();
+    // const loginUrlDropdown = document.getElementById("loginUrl");
 
-    loginUrlDropdown.addEventListener("change", (e) => {
-      const selectedUrl = e.target.value;
-      if (selectedUrl) {
-        window.location.href = selectedUrl;
-      }
-    });
-    //   console.log('Initialize');
-    //   document.addEventListener("keyup", function (event) {
-    //     if (event.keyCode === 13) {
-    //       let username = $("#username").val();
-    //       let password = $("#password").val();
+    // loginUrlDropdown.addEventListener("change", (e) => {
+    //   const selectedUrl = e.target.value;
+    //   if (selectedUrl) {
+    //     window.location.href = selectedUrl;
+    //   }
+    // });
 
-    //       var message = "";
+    function LoadAccess() {
+      $.ajax({
+        type: "GET",
+        url: "/access/load",
+        success: function (result) {
+          var data = result.data;
 
-    //       if (username === "") {
-    //         message += "Username ";
-    //       }
-    //       if (password === "") {
-    //         message += "Password ";
-    //       }
+          $.each(data, function (key, item) {
+            var options = new Option(item.accessid, item.accessid);
+            $(options).html(item.accessname);
+            $("#loginUrl").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
 
-    //       if (message !== "") {
-    //         showSweetAlert("Required", `Please fill up ${message}`);
-    //       } else {
-    //         $.ajax({
-    //           type: "POST",
-    //           url: "/login/login",
-    //           data: {
-    //             username: username,
-    //             password: password,
-    //           },
-    //           success: function (result) {
-    //             if (result.msg === "success") {
-    //               swal("Login Successfully", "You clicked the button!", "success")
-    //                 .then(results => {
-    //                   if (result.data[0].accesstype === 'Employee') {
-    //                     location.replace("/eportalindex");
-    //                   } else {
-    //                     location.replace("/");
-    //                   }
-    //                 });
-    //             } else if (result.msg === "inactive") {
-    //               swal("Inactive", "Your account is inactive. Please be guided accordingly.", "Ok")
-    //                 .then(() => {
-    //                   location.reload();
-    //                 });
-    //             } else if (result.msg === "incorrect") {
-    //               swal("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
-    //             }
-    //           },
-    //           error: function (err) {
-    //             swal("Error", "An error occurred while saving data.", "error");
-    //           },
 
-    //         });
-    //       }
-    //     }
-    //   });
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
+      let accesstypeid = $("#loginUrl").val();
+
+      console.log(accesstypeid,'id');
 
       var message = "";
 
       if (username === "") {
         message += "Username ";
       }
+
+      if (accesstypeid === "") {
+        message += "accesstypeid ";
+      }
+
+
       if (password === "") {
         message += ". ";
       }
@@ -82,6 +61,7 @@
           data: {
             username: username,
             password: password,
+            accesstypeid: accesstypeid,
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -92,6 +72,10 @@
               ).then((results) => {
                 if (result.data[0].accesstype === "Employee") {
                   location.replace("/eportalindex");
+                } else if (result.data[0].accesstype === "Team Leader") {
+                  location.replace("/teamleadindex");
+                } else if (result.data[0].accesstype === "Super Visor") {
+                  location.replace("/teamleadindex");
                 } else {
                   location.replace("/");
                 }

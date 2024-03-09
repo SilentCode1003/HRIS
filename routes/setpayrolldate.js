@@ -61,7 +61,7 @@ router.get("/loadreq", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
+      //console.log(result);
       res.json({
         msg: "success",
         data: result,
