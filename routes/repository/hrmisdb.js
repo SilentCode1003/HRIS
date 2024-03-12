@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('410ae362ace2a276d6efba6963fa5290a039d16488bdd20c7bd1ab40b939a62b', (err, encrypted) => {
+Decrypter('05a67991a51d3baf5ff2071454864705', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -303,6 +303,29 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_longitudein,
         ma_devicein,
         ma_gefenceidIn) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_attendance_request") {
+    let sql = `INSERT INTO master_attendance(
+        ma_employeeid,
+        ma_attendancedate,
+        ma_clockin,
+        ma_clockout,
+        ma_latitudeIn,
+        ma_longitudein,
+        ma_latitudeout,
+        ma_longitudeout,
+        ma_gefenceidIn,
+        ma_geofenceidOut,
+        ma_devicein,
+        ma_deviceout) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

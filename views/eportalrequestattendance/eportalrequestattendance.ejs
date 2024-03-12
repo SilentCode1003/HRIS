@@ -40,30 +40,18 @@
             <div class="modal-body">
                 <form>
                     <div class="row g-3">
-                        <!-- <div class="col">
-                            <label for="editgender" class="form-label">Date</label>
-                            <select class="form-select" id="leavetype" name="leavetype">
-                                <option selected>Choose...</option>
-                                <option value="Service Incentive Leave">Service Incentive Leave</option>
-                                <option value="Vacation Leave">Vacation Leave</option>
-                                <option value="Sick Leave">Sick Leave</option>
-                                <option value="Maternity Leave">Maternity Leave</option>
-                                <option value="Paternity Leave">Paternity Leave</option>
-                                <option value="Solo Parent Leave">Solo Parent Leave</option>
-                            </select>
-                        </div> -->
                         <div class="col">
                             <label for="editemail" class="form-label">Date</label>
                             <input type="date" class="form-control" id="attendancedate" name="attendancedate">
                         </div>
                         <div class="col">
-                            <label for="editpassword" class="form-label">Time In</label>
-                            <input type="time" class="form-control" id="timein" name="timein">
+                            <label for="timein" class="form-label">Date Time In</label>
+                            <input type="datetime-local" class="form-control" id="timein" name="timein">
                         </div>
                         <div class="col">
-                            <label for="editpassword" class="form-label">Time Out</label>
-                            <input type="time" class="form-control" id="timeout" name="timeout">
-                        </div>
+                            <label for="timeout" class="form-label">Date Time Out</label>
+                            <input type="datetime-local" class="form-control" id="timeout" name="timeout">
+                        </div>                    
                     </div>
                     <div class="row g-3">
                         <div class="mb-3">
@@ -86,89 +74,44 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Pending COA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="row g-3">
-                        <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid" disabled>
                         <div class="col">
-                            <label for="pendingleavename" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="pendingleavename" name="pendingleavename"
-                                disabled>
+                            <label for="editemail" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="editattendancedate" name="editattendancedate">
                         </div>
                         <div class="col">
-                            <label for="pendingleaveemail" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="pendingleaveemail" name="pendingleaveemail"
-                                disabled>
+                            <label for="edittimein" class="form-label">Date Time In</label>
+                            <input type="datetime-local" class="form-control" id="edittimein" name="edittimein">
                         </div>
                         <div class="col">
-                            <label for="pendingleavegender" class="form-label">Gender</label>
-                            <input type="text" class="form-control" id="pendingleavegender" name="pendingleavegender"
-                                disabled>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-3">
+                            <label for="edittimeout" class="form-label">Date Time Out</label>
+                            <input type="datetime-local" class="form-control" id="edittimeout" name="edittimeout">
+                        </div>     
                         <div class="col">
-                            <label for="pendingleavephone" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="pendingleavephone" name="pendingleavephone"
-                                disabled>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleavetype" class="form-label">Leave Type</label>
-                            <input type="text" class="form-control" id="pendingleavetype" name="pendingleavetype"
-                                disabled>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
-                            <input type="text" class="form-control" id="pendingleaveapplydate"
-                                name="pendingleaveapplydate" disabled>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-3">
-                        <div class="col">
-                            <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
-                            <input type="text" class="form-control" id="pendingleaveapplynodays"
-                                name="pendingleaveapplynodays" disabled>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
-                            <input type="text" class="form-control" id="pendingleaveavailabledays"
-                                name="pendingleaveavailabledays" value="6" disabled>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleavestart" class="form-label">Leave Start</label>
-                            <input type="text" class="form-control" id="pendingleavestart" name="pendingleavestart"
-                                disabled>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleaveend" class="form-label">Leave End</label>
-                            <input type="text" class="form-control" id="pendingleaveend" name="pendingleaveend"
-                                disabled>
-                        </div>
-                    </div>
-                    <div class="row g-3">
-                        <div class="mb-3">
-                            <label for="pendingleavereason" class="col-form-label">Reason:</label>
-                            <textarea class="form-control" id="pendingleavereason" name="pendingleavereason"
-                                disabled></textarea>
-                        </div>
-                        <div class="col">
-                            <label for="pendingleaveaction" class="form-label">Action</label>
-                            <select class="form-select" id="pendingleaveaction" name="pendingleaveaction">
+                            <label for="editpassword" class="form-label">Status</label>
+                            <select class="form-control" id="editcoastatus" name="editcoastatus">
+                                <option value="Pending" selected>Pending</option>
+                                <option value="Approved">Approved</option>
                                 <option value="Cancel">Cancel</option>
                             </select>
                         </div>
                     </div>
-                    <br>
+                    <div class="row g-3">
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Reason:</label>
+                            <textarea class="form-control" id="editcoareason" name="editcoareason"></textarea>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="pendingleavesavebtn">Save</button>
+                <button type="button" class="btn btn-primary" id="editcOAsavebtn">Save</button>
             </div>
         </div>
     </div>
