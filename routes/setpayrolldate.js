@@ -113,9 +113,7 @@ router.post("/generate", (req, res) => {
             data: err,
           });
         }
-  
-        console.log(result);
-  
+
         res.json({
           msg: "success",
           data: result,
