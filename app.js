@@ -73,6 +73,7 @@ var otherdeductionsRouter = require('./routes/otherdeductions');
 var otherdeductionsIDRouter = require('./routes/otherdeductionsID');
 var attendancerequestRouter = require('./routes/attendancerequest');
 var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
+var setsetpayrolldateRouter = require('./routes/setpayrolldate');
 
 
 var app = express();
@@ -157,6 +158,7 @@ app.use('/otherdeductions', otherdeductionsRouter);
 app.use('/otherdeductionsID', otherdeductionsIDRouter);
 app.use('/attendancerequest', attendancerequestRouter);
 app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
+app.use('/setpayrolldate', setsetpayrolldateRouter);
 
 
 // catch 404 and forward to error handler

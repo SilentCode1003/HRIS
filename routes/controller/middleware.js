@@ -146,6 +146,9 @@ var roleacess = [
       {
         layout: "attendancerequestlayout",
       },
+      {
+        layout: "setpayrolldatelayout",
+      },
     ],
   },
   {

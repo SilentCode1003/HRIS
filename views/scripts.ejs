@@ -210,21 +210,18 @@
   function formatTime(dateTimeString) {
     if (!dateTimeString) return "";
 
-    // Split the dateTimeString by 'T' to separate date and time
+   
     const dateTimeParts = dateTimeString.split('T');
-    if (dateTimeParts.length !== 2) return ""; // Check if the format is correct
+    if (dateTimeParts.length !== 2) return ""; 
 
-    // Extract the time part from the second element of the array
+
     const timeString = dateTimeParts[1];
 
-    // Split the timeString by ':' to extract hours and minutes
     const timeParts = timeString.split(':');
-    if (timeParts.length !== 2) return ""; // Check if the format is correct
+    if (timeParts.length !== 2) return ""; 
 
     const hours = timeParts[0];
     const minutes = timeParts[1];
-
-    // Format the time as 'HH:MM'
     return `${hours}:${minutes}`;
   }
 

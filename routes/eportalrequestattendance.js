@@ -58,14 +58,12 @@ router.post("/submit", async (req, res) => {
 
     console.log(attendancedate, timein, timeout, reason, employeeid, total);
 
-
-    const attendanceQuery = `SELECT * FROM master_attendance WHERE ma_attendancedate = '${attendancedate}'`;
-    const attendanceResult = await mysql.mysqlQueryPromise(attendanceQuery);
-
-    if (attendanceResult.length === 0) {
+    const Datenow = new Date();
+    const inputDate = new Date(attendancedate);
+    if (inputDate > Datenow) {
       return res.json({
-      msg:"nodate",
-      data: attendanceResult,
+        msg: "nodate",
+        data: "Date is in the future",
       });
     }
 
