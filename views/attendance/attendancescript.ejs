@@ -1,6 +1,8 @@
 <script>
     let map;
     let attendanceid = '';
+    let startdate = '';
+    let enddate = '';
 
     $(document).ready(function () {
         searchTable();
@@ -164,6 +166,65 @@
             });
         });
 
+        $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
+            $("#exportBtn").click(function () {
+                let startDate = picker.startDate.format('YYYY-MM-DD');
+                let endDate = picker.endDate.format('YYYY-MM-DD');
+                exportPayroll(startDate, endDate);
+            });
+        });
+
+        function exportPayroll(startDate, endDate) {
+            $.ajax({
+                url: '/attendance/exportfile',
+                type: 'POST',
+                data: {
+                    startdate: startDate,
+                    enddate: endDate
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (response) {
+                    if (response) {
+                        swal({
+                            title: 'Download Payroll Data',
+                            text: 'Are you sure you want to download the payroll data?',
+                            confirm: '#28a745',
+                            cancel: '#dc3545',
+                            buttons: {
+                                confirm: 'Yes, download it!',
+                                cancel: 'No, cancel'
+                            },
+                            dangerMode: true
+                        }).then((result) => {
+                            if (result) {
+                                var blob = response;
+
+                                var url = URL.createObjectURL(blob);
+
+                                var link = document.createElement('a');
+                                link.href = url;
+                                link.download = `Attendance_data_${startDate}_${endDate}.xlsx`;
+                                document.body.appendChild(link);
+                                link.click();
+                                URL.revokeObjectURL(url);
+                            } else {
+                                swal('Cancelled', 'Payroll data download cancelled :)', 'error');
+                            }
+                        });
+                    } else {
+                        console.error('Error: Empty response');
+                        swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+                }
+            });
+        }
+
         // Click event handler for the "editBtn" button
         // $(document).on("click", "#editBtn", function () {
         //     $("#dataTableattendancelogs").DataTable({
@@ -268,10 +329,7 @@
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-            // Add a marker to the map
             const marker = L.marker([0, 0]).addTo(map);
-
-            // Listen for map click events
             map.on('click', function (e) {
                 const { lat, lng } = e.latlng;
                 marker.setLatLng([lat, lng]);
@@ -279,8 +337,6 @@
                 $('#longitude').val(lng.toFixed(6));
             });
         }
-
-        // Call initMap on modal show
         $('#geoFenceModal').on('shown.bs.modal', function () {
             initMap();
         });
@@ -289,23 +345,27 @@
             const latitude = $('#latitude').val();
             const longitude = $('#longitude').val();
             const radius = $('#radius').val();
-
-            // Make an AJAX request to the server
             $.ajax({
                 type: 'POST',
                 url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
                 contentType: 'application/json',
                 success: function (data) {
-                    // Handle success or show a message to the user
-                    $('#geoFenceModal').modal('hide'); // Close the modal
+                    $('#geoFenceModal').modal('hide');
                 },
                 error: function (error) {
                     console.error('Error:', error);
-                    // Handle errors or show an error message to the user
                 }
             });
         }
 
+    });
+
+    $(function () {
+      $('input[name="daterange"]').daterangepicker({
+        opens: 'middle'
+      }, function (start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      });
     });
 
     function searchTable() {

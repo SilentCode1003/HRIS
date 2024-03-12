@@ -923,6 +923,22 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+  if (tablename == "payroll_date") {
+    let sql = `INSERT INTO payroll_date(
+      pd_name,
+      pd_cutoff,
+      pd_startdate,
+      pd_enddate,
+      pd_payrolldate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
 };
 
 exports.Update = async (sql) => {
