@@ -16,7 +16,19 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
-    let sql = `SELECT * FROM attendance_request WHERE ar_employeeid = '${employeeid}'`;
+    let sql = `SELECT 
+    ar_requestid,
+    DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+    ar_total,
+    ar_createdate,
+    ar_status,
+    ar_reason
+  FROM attendance_request
+  INNER JOIN
+  master_employee ON attendance_request.ar_employeeid = me_id
+  where ar_employeeid ='${employeeid}'`;
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -46,6 +58,17 @@ router.post("/submit", async (req, res) => {
 
     console.log(attendancedate, timein, timeout, reason, employeeid, total);
 
+
+    const attendanceQuery = `SELECT * FROM master_attendance WHERE ma_attendancedate = '${attendancedate}'`;
+    const attendanceResult = await mysql.mysqlQueryPromise(attendanceQuery);
+
+    if (attendanceResult.length === 0) {
+      return res.json({
+      msg:"nodate",
+      data: attendanceResult,
+      });
+    }
+
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
 
@@ -73,22 +96,86 @@ router.post("/submit", async (req, res) => {
 });
 
 
-function calculateTotalHours(timein, timeout) {
-  const timeInParts = timein.split(":");
-  const timeOutParts = timeout.split(":");
-  const timeInHours = parseInt(timeInParts[0], 10);
-  const timeInMinutes = parseInt(timeInParts[1], 10);
-  const timeOutHours = parseInt(timeOutParts[0], 10);
-  const timeOutMinutes = parseInt(timeOutParts[1], 10);
+router.post("/getreqCOA", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let requestid = req.body.requestid;
+    let sql = `    
+    SELECT 
+    DATE_FORMAT(ar_attendace_date, '%Y-%m-%d') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+    ar_status,
+    ar_reason
+    FROM attendance_request
+    WHERE ar_employeeid='${employeeid}' AND ar_requestid = '${requestid}'
+    ORDER BY ar_requestid DESC`;
+    console.log(employeeid);
 
-  let totalHours = timeOutHours - timeInHours;
-  let totalMinutes = timeOutMinutes - timeInMinutes;
+    mysql.Select(sql, "Attendance_Request", (err, result) => {
+      if (err) console.error("Error: ", err);
 
-  if (totalMinutes < 0) {
-    totalHours -= 1;
-    totalMinutes += 60;
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
   }
+});
 
-  const totalHoursDecimal = totalHours + totalMinutes / 60;
+
+router.post("/update", (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let attendancedate = req.body.attendancedate;
+    let timein = req.body.timein;
+    let timeout = req.body.timeout;
+    let reason = req.body.reason;
+    let requeststatus = req.body.requeststatus;
+    let total = calculateTotalHours(timein, timeout);
+
+    
+    let sqlupdate = `UPDATE attendance_request SET 
+      ar_attendace_date = '${attendancedate}', 
+      ar_timein = '${timein}',
+      ar_timeout = '${timeout}', 
+      ar_reason = '${reason}',
+      ar_total = '${total}', 
+      ar_status = '${requeststatus}'  
+      WHERE ar_requestid = '${requestid}'`;
+
+    mysql
+      .Update(sqlupdate)
+      .then((result) => {
+        console.log(sqlupdate);
+
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+    });
+  }
+});
+
+
+function calculateTotalHours(timein, timeout) {
+  const datetimeIn = new Date(timein);
+  const datetimeOut = new Date(timeout);
+  const timeDifferenceMs = datetimeOut - datetimeIn;
+  const totalHoursDecimal = timeDifferenceMs / (1000 * 60 * 60);
   return totalHoursDecimal.toFixed(2);
 }
