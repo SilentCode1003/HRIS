@@ -831,6 +831,7 @@ exports.Attendance_Request = (data) => {
       createby: key.ar_createby,
       requeststatus: key.ar_status,
       reason: key.ar_reason,
+      file: key.ar_file,
     });
   });
 

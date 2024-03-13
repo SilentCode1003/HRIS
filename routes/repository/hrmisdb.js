@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('05a67991a51d3baf5ff2071454864705', (err, encrypted) => {
+Decrypter('c574ca8d727ae317e1061f878591ef49', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -914,7 +914,8 @@ exports.InsertTable = (tablename, data, callback) => {
       ar_createdate,
       ar_createby,
       ar_status,
-      ar_reason) VALUES ?`;
+      ar_reason,
+      ar_file) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

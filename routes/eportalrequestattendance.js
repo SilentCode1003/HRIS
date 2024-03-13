@@ -48,13 +48,17 @@ router.get("/load", (req, res) => {
 
 router.post("/submit", async (req, res) => {
   try {
-    const employeeid = req.body.employeeid;
-    const { attendancedate, timein, timeout, reason } = req.body;
-    const createdate = currentDate.format("YYYY-MM-DD");
-    const status = "Pending";
-    const createby = 'On Process';
+    let employeeid = req.body.employeeid;
+    let attendancedate = req.body.attendancedate;
+    let timein = req.body.timein;
+    let timeout = req.body.timeout;
+    let reason = req.body.reason;
+    let file = req.body.file;
+    let createdate = currentDate.format("YYYY-MM-DD");
+    let status = "Pending";
+    let createby = 'On Process';
 
-    const total = calculateTotalHours(timein, timeout);
+    let total = calculateTotalHours(timein, timeout);
 
     console.log(attendancedate, timein, timeout, reason, employeeid, total);
 
@@ -62,7 +66,7 @@ router.post("/submit", async (req, res) => {
     const inputDate = new Date(attendancedate);
     if (inputDate > Datenow) {
       return res.json({
-        msg: "nodate",
+        message: "nodate",
         data: "Date is in the future",
       });
     }
@@ -71,25 +75,25 @@ router.post("/submit", async (req, res) => {
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
 
     if (employeeResult.length === 0) {
-      return res.json({ msg: "Invalid employee ID" });
+      return res.json({ message: "Invalid employee ID" });
     }
 
     const data = [
-      [employeeid, attendancedate, timein, timeout, total, createdate, createby, status, reason],
+      [employeeid, attendancedate, timein, timeout, total, createdate, createby, status, reason, file],
     ];
 
     mysql.InsertTable("attendance_request", data, (insertErr, insertResult) => {
       if (insertErr) {
         console.error("Error inserting leave record: ", insertErr);
-        res.json({ msg: "insert_failed" });
+        res.json({ message: "insert_failed" });
       } else {
         console.log(insertResult);
-        res.json({ msg: "success" });
+        res.json({ message: "success" });
       }
     });
   } catch (error) {
     console.error("Error in /submit route: ", error);
-    res.json({ msg: "error" });
+    res.json({ message: "error" });
   }
 });
 
@@ -104,7 +108,8 @@ router.post("/getreqCOA", (req, res) => {
     DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
     DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
     ar_status,
-    ar_reason
+    ar_reason,
+    ar_file
     FROM attendance_request
     WHERE ar_employeeid='${employeeid}' AND ar_requestid = '${requestid}'
     ORDER BY ar_requestid DESC`;
