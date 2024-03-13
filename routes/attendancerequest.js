@@ -33,7 +33,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error Fetching Data: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -61,7 +60,8 @@ router.post("/getattendancerequest", (req, res) => {
         ar_total,
         ar_createdate,
         ar_status,
-        ar_reason
+        ar_reason,
+        ar_file
       FROM attendance_request
       INNER JOIN
       master_employee ON attendance_request.ar_employeeid = me_id
@@ -84,25 +84,65 @@ router.post("/getattendancerequest", (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {
-    try {
-      let requestid = req.body.requestid;
-      let requeststatus = req.body.requeststatus;
-      let emp_id = req.body.emp_id;
-      let attendancedate = req.body.attendancedate;
-      let timein = req.body.timein;
-      let timeout = req.body.timeout;
-      let latitudein = "14.337957";
-      let latitudeout = "14.337957";
-      let longitudein = "121.060336";
-      let longitudeout = "121.060336";
-      let geofencein = "1";
-      let geofenceout = "1";
-      let devicein = "app";
-      let deviceout = "app";
-      let data = [];
-      
-      if (requeststatus === "Approved") {
+
+router.post("/updateMasterAttendance", (req, res) => {
+  try {
+    let emp_id = req.body.emp_id;
+    let attendancedate = req.body.attendancedate;
+    let timein = req.body.timein;
+    let timeout = req.body.timeout;
+    let latitudein = "14.337957";
+    let latitudeout = "14.337957";
+    let longitudein = "121.060336";
+    let longitudeout = "121.060336";
+    let geofencein = "1";
+    let geofenceout = "1";
+    let devicein = "app";
+    let deviceout = "app";
+    let data = [];
+
+    console.log(data);
+
+    let selectQuery = `SELECT * FROM master_attendance WHERE ma_employeeid = '${emp_id}' AND ma_attendancedate = '${attendancedate}'`;
+    mysql.Select(selectQuery, "Master_Attendance", (selectErr, selectResult) => {
+      if (selectErr) {
+        console.error("Error checking attendance record:", selectErr);
+        return res.json({
+          msg: 'error',
+          data: selectErr,
+        });
+      }
+
+      if (selectResult.length > 0) {
+        let updateSql = `UPDATE master_attendance SET 
+        ma_employeeid = '${emp_id}', 
+        ma_attendancedate = '${attendancedate}',
+        ma_clockin = '${timein}', 
+        ma_clockout = '${timeout}',
+        ma_latitudeIn = '${latitudein}', 
+        ma_longitudein = '${longitudein}',
+        ma_latitudeout = '${latitudeout}', 
+        ma_longitudeout = '${longitudeout}',
+        ma_gefenceidIn = '${geofencein}', 
+        ma_geofenceidOut = '${geofenceout}',
+        ma_devicein = '${devicein}', 
+        ma_deviceout = '${deviceout}' 
+        WHERE ma_employeeid = '${emp_id}' 
+        AND ma_attendancedate = '${attendancedate}'`;
+        mysql.Update(updateSql)
+          .then((result) => {
+            res.json({
+              msg: 'success',
+              data: result,
+            });
+          })
+          .catch((error) => {
+            res.json({
+              msg: 'error',
+              data: error,
+            });
+          });
+      } else {
         data.push([
           emp_id,
           attendancedate,
@@ -117,46 +157,55 @@ router.post("/update", (req, res) => {
           devicein,
           deviceout
         ]);
-  
-        mysql.InsertTable("master_attendance_request", data, (err, result) => {
-          if (err) {
-            console.error("Error Insert Attendance: ", err);
+
+        mysql.InsertTable("master_attendance", data, (insertErr, insertResult) => {
+          if (insertErr) {
+            console.error("Error Insert Attendance: ", insertErr);
             return res.json({
               msg: 'error',
-              data: err,
+              data: insertErr,
             });
           }
-  
-          console.log(result);
-  
-          
-          let sql = `UPDATE attendance_request SET ar_status = 'Approved' WHERE ar_requestid = '${requestid}'`;
-  
-          mysql.Update(sql)
-            .then(() => {
-              res.json({
-                msg: 'success',
-                data: result,
-              });
-            })
-            .catch((error) => {
-              res.json({
-                msg: 'error',
-                data: error,
-              });
-            });
-        });
-      } else {
-        res.json({
-          msg: 'error',
-          data: "Request status must be 'Approved' to proceed.",
+
+          res.json({
+            msg: 'success',
+            data: insertResult,
+          });
         });
       }
-    } catch (error) {
-      res.json({
-        msg: "error",
-        data: error,
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.post("/updateAttendanceRequest", (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+
+    let sql = `UPDATE attendance_request SET ar_status = 'Approved' WHERE ar_requestid = '${requestid}'`;
+
+    mysql.Update(sql)
+      .then((result) => {
+        res.json({
+          msg: 'success',
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: 'error',
+          data: error,
+        });
       });
-    }
-  });
-  
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
