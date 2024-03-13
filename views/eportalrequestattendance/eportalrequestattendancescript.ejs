@@ -78,6 +78,7 @@
             let timein = $("#timein").val();
             let timeout = $("#timeout").val();
             let reason = $("#coareason").val();
+            let file = base64String;
 
             var message = "";
 
@@ -97,6 +98,10 @@
                 message += "createby is required ";
             }
 
+            if (file == "") {
+                message += "createby is required ";
+            }
+
             if (message !== "") {
                 swal("Validation Error", message, "error");
             } else {
@@ -109,6 +114,7 @@
                         timein: timein,
                         timeout: timeout,
                         reason: reason,
+                        file: file,
                     },
                     success: function (result) {
                         if (result.msg == "success") {
@@ -162,6 +168,7 @@
                             $("#edittimeout").val(item.timeout);
                             $("#editcoastatus").val(item.requeststatus);
                             $("#editcoareason").val(item.reason);
+                            $("#editpreview").attr("src", "data:image/jpg;base64," + item.file);
                         });
                     } else {
                         swal("Error fetching employee data", "success");
@@ -178,6 +185,7 @@
             let timeout = $("#edittimeout").val();
             let reason = $("#editcoareason").val();
             let requeststatus = $("#editcoastatus").val();
+            let file = base64String;
 
             var message = "";
 
@@ -204,6 +212,10 @@
             if (requeststatus === "") {
                 message += "Status is required. ";
             }
+
+            if (file === "") {
+                message += "Status is required. ";
+            }
             if (message !== "") {
                 swal("Ooops !!!", message, "error");
             } else {
@@ -217,6 +229,7 @@
                         timeout: timeout,
                         reason: reason,
                         requeststatus: requeststatus,
+                        file: file,
                     },
                     success: function (result) {
                         if (result.msg == "success") {
@@ -241,18 +254,107 @@
 
     function submitRequest() {
         var selectedDate = document.getElementById("datepicker").value;
-        // Here you can perform further actions like sending the selected date to the server
         console.log("Attendance requested for date:", selectedDate);
-        // Close the modal
         $('#attendanceModal').modal('hide');
     }
+
+    $(document).on("change", "#coafile", function (e) {
+      const input = document.getElementById("coafile");
+      const file = input.files[0];
+
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("preview");
+        preview.src = reader.result;
+      };
+      imageUploaded();
+    });
+
+
+    function imageUploaded() {
+      const input = document.getElementById("coafile");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+
+      };
+      reader.readAsDataURL(file);
+    }
+
+    $(document).on("change", "#editcoafile", function (e) {
+      const input = document.getElementById("editcoafile");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      editimage();
+    });
+
+
+
+
+    function editimage() {
+      const input = document.getElementById("editcoafile");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+
+      };
+      reader.readAsDataURL(file);
+    }
+
+    let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
+
+        function updateSidebarState() {
+            $("body").toggleClass("sidebar-toggled", isSidebarOpen);
+            $(".sidebar").toggleClass("toggled", isSidebarOpen);
+
+            if (isSidebarOpen) {
+                $('.sidebar .collapse').collapse('hide');
+                $('#content').toggleClass('content-toggled');
+                $('#topbar').toggleClass('topbar-toggled ');
+                $('.sticky-footer').toggleClass('footer-toggled');
+            } else {
+                $('#content').removeClass('content-toggled');
+                $('#topbar').removeClass('topbar-toggled ');
+                $('.sticky-footer').removeClass('footer-toggled');
+            }
+        }
+
+        updateSidebarState();
+
+        $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+            isSidebarOpen = !isSidebarOpen;
+
+            localStorage.setItem('isSidebarOpen', isSidebarOpen);
+
+            updateSidebarState();
+        });
 
 
 </script>
 
 
 <!--- Eportal Topbar & Navbar-->
-<script>
+<!-- <script>
     $(document).ready(function () {
         let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
 
@@ -283,4 +385,4 @@
         });
     });
 
-</script>
+</script> -->
