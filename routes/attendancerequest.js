@@ -158,7 +158,7 @@ router.post("/updateMasterAttendance", (req, res) => {
           deviceout
         ]);
 
-        mysql.InsertTable("master_attendance", data, (insertErr, insertResult) => {
+        mysql.InsertTable("master_attendance_request", data, (insertErr, insertResult) => {
           if (insertErr) {
             console.error("Error Insert Attendance: ", insertErr);
             return res.json({

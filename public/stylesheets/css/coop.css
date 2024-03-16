@@ -479,12 +479,12 @@ tr:hover {
   border: #7a1818 !important;
 }
 /*--- Dashboard ----*/
-#nav-home-tab, #nav-ca-tab, #nav-profile-tab {
+#nav-home-tab, #nav-ca-tab, #nav-profile-tab, #nav-reqattendance-tab, #nav-ot-tab {
   background-color: #7a1818 !important;
   color: white !important;
   border-bottom: 1px solid white !important;
 }
-#nav-home-tab:hover, #nav-ca-tab:hover, #nav-profile-tab:hover {
+#nav-home-tab:hover, #nav-ca-tab:hover, #nav-profile-tab:hover, #nav-reqattendance-tab:hover, #nav-ot-tab:hover {
   background-color: #fcf0d7 !important;
   border: 2px solid white !important;
   color: #7a1818 !important;
