@@ -6,11 +6,16 @@
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
+    let approveot_id = "";
+    let requestid = "";
+    LoadList();
     LoadTable();
     loadtotalCard();
     LoadBdayFolks();
     loadleaveBadge();
     loadCashBadge();
+    loadOvertimeBadge();
+    loadCOABadge();
     loadregularCard();
     loadprobitionaryCard();
     loadresignedCard();
@@ -847,6 +852,42 @@
       });
     }
 
+    function loadOvertimeBadge() {
+      $.ajax({
+        type: "GET",
+        url: "/countovertimeot",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalOT = result.data.OTreqCount;
+            $("#loadotBadge").text(totalOT);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    function loadCOABadge() {
+      $.ajax({
+        type: "GET",
+        url: "/countCOA",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalCOA = result.data.COAreqCount;
+            $("#loadCOABadge").text(totalCOA);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
     //#endregion
 
 
@@ -912,7 +953,7 @@
                                 </button>
                                 </div>
                                 </div>`;
-                                    
+
             });
           } else {
             console.error("Error: ", result.message);
@@ -1117,7 +1158,6 @@
         },
       });
     });
-
     $(document).on("click", "#pendingleavesavebtn", function () {
       let id = leaveid
       let status = $("#pendingleaveaction").val();
@@ -1213,7 +1253,7 @@
 
             var action = document.createElement("button");
             action.id = "editCABtn";
-            action.className = "btn text-primary view-btn"; // Use a class
+            action.className = "btn text-primary view-btn";
             action.setAttribute("data-bs-toggle", "modal");
             action.setAttribute("data-bs-target", "#pendingcamodal");
             action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
@@ -1348,6 +1388,375 @@
               swal("Action Canceled", "", "info");
             }
           });
+      }
+    });
+
+
+    //reqovertime section-->
+    $(document).on("click", "#nav-ot-tab", function () {
+      $("#dataTableovertimerequest").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/loadreqOT",
+        success: function (json) {
+
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById("dataTableovertimerequest");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var APPROVEDOT_ID = row.insertCell(1);
+            var NAME = row.insertCell(2);
+            var ATTENDANCE_DATE = row.insertCell(3);
+            var PAYROLL_DATE = row.insertCell(4);
+            var CLOCKIN = row.insertCell(5);
+            var CLOCKOUT = row.insertCell(6);
+            var TOTAL_HOURS = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+            var action = document.createElement("button");
+            action.id = "editOTBTN";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#otapprovalmodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this).closest("tr").find("td").each(function () {
+                dataRow.push($(this).text());
+              });
+              approveot_id = dataRow[1];
+            };
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.image;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "100px";
+            imgElement.style.height = "100px";
+
+            IMAGE.appendChild(imgElement);
+            APPROVEDOT_ID.innerHTML = item.approveot_id;
+            NAME.innerHTML = item.fullname;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            PAYROLL_DATE.innerHTML = item.payrolldate;
+            CLOCKIN.innerHTML = item.clockin;
+            CLOCKOUT.innerHTML = item.clockout;
+            TOTAL_HOURS.innerHTML = item.totalhours;
+            ACTION.appendChild(action);
+
+            $.each([APPROVEDOT_ID, NAME, ATTENDANCE_DATE, PAYROLL_DATE, CLOCKIN, CLOCKOUT, TOTAL_HOURS], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+        },
+      });
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#otpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#editOTBTN", function () {
+      $.ajax({
+        type: "POST",
+        url: "/otapproval/getotapproval",
+        data: {
+          approveot_id: approveot_id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              base64String = item.image;
+              $("#otfullname").val(item.fullname);
+              $("#otdate").val(item.attendancedate);
+              $("#otclockin").val(item.clockin);
+              $("#otclockout").val(item.clockout);
+              $("#ottotalothours").val(item.totalhours);
+              $("#otnight").val(item.night_ot);
+              $("#otearly").val(item.earlyot);
+              $("#otnormal").val(item.normal_ot);
+              $("#otnightpay").val(item.night_pay);
+              $("#otnormalpay").val(item.normal_pay);
+              $("#otearlypay").val(item.earlyot_pay);
+              $("#ottotalpay").val(item.totalot_pay);
+              $("#otpayrolldate").val(item.payrolldate);
+              $("#otstatus").val(item.overtimestatus);
+              $("#otreason").val(item.reason);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#otsavebutton", function () {
+      let id = approveot_id;
+      let night_ot = $("#otnight").val();
+      let earlyot = $("#otearly").val();
+      let normal_ot = $("#otnormal").val();
+      let payrolldate = $("#otpayrolldate").val();
+      let overtimestatus = $("#otstatus").val();
+
+
+      var message = "";
+
+
+      if (night_ot === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (earlyot === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (normal_ot === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
+        message += "You Need to Approve or Disregard. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "otapproval/update",
+          data: {
+            approveot_id: id,
+            night_ot: night_ot,
+            earlyot: earlyot,
+            normal_ot: normal_ot,
+            payrolldate: payrolldate,
+            overtimestatus: overtimestatus,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal("Update Successfully", "You clicked the button!", "success",)
+                .then(results => {
+                  window.location.reload();
+                });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning",);
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+
+    //request attendance section-->>>>
+    $(document).on("click", "#nav-reqattendance-tab", function () {
+      $("#dataTableattendancerequest").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/loadreqattendance",
+        success: function (json) {
+
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById("dataTableattendancerequest");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var REQUEST_ID = row.insertCell(1);
+            var FULLNAME = row.insertCell(2);
+            var ATTENDANCE_DATE = row.insertCell(3);
+            var TIME_IN = row.insertCell(4);
+            var TIME_OUT = row.insertCell(5);
+            var TOTAL_HOURS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            var action = document.createElement("button");
+            action.id = "editCOABTN";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#editrequestcoamodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this).closest("tr").find("td").each(function () {
+                dataRow.push($(this).text());
+              });
+              requestid = dataRow[1];
+            };
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.image;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "100px";
+            imgElement.style.height = "100px";
+
+            IMAGE.appendChild(imgElement);
+            REQUEST_ID.innerHTML = item.requestid;
+            FULLNAME.innerHTML = item.employeeid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            TOTAL_HOURS.innerHTML = item.total;
+            ACTION.appendChild(action);
+
+            $.each([REQUEST_ID, FULLNAME, ATTENDANCE_DATE, TIME_IN, TIME_OUT, TOTAL_HOURS], function (_, cell) {
+              cell.style.textAlign = "center";
+              cell.style.verticalAlign = "middle";
+            });
+          });
+        },
+        error: function (xhr, status, error) {
+        },
+      });
+    });
+
+    $(document).on("click", "#editCOABTN", function () {
+      $.ajax({
+        type: "POST",
+        url: "/attendancerequest/getattendancerequest",
+        data: {
+          requestid: requestid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              $("#empid").val(item.emp_id);
+              $("#coafullname").val(item.employeeid);
+              $("#editattendancedate").val(item.attendancedate);
+              $("#edittimein").val(item.timein);
+              $("#edittimeout").val(item.timeout);
+              $("#coatotalhours").val(item.total);
+              $("#coacreatedate").val(item.createdate);
+              $("#coarequeststatus").val(item.requeststatus);
+              $("#editcoareason").val(item.reason);
+              $("#editpreviewfile").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#editcOAsavebtn", function () {
+      console.log('hit');
+      let id = requestid;
+      let emp_id = $("#empid").val();
+      let attendancedate = $("#editattendancedate").val();
+      let timein = $("#edittimein").val();
+      let timeout = $("#edittimeout").val();
+      let requeststatus = $("#editcoastatus").val();
+
+      var message = "";
+
+      if (attendancedate == "") {
+        message += "Attendance date is required. ";
+      }
+
+      if (timein == "") {
+        message += "Time in is required. ";
+      }
+
+      if (timeout == "") {
+        message += "Time out is required. ";
+      }
+
+      if (requeststatus === "") {
+        message += "Status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Oops!!!", message, "error");
+      } else {
+        if (requeststatus === "Approved") {
+          $.ajax({
+            type: "POST",
+            url: "/attendancerequest/updateMasterAttendance",
+            data: {
+              emp_id: emp_id,
+              attendancedate: attendancedate,
+              timein: timein,
+              timeout: timeout,
+            },
+            success: function (masterResult) {
+              if (masterResult.msg == "success") {
+                $.ajax({
+                  type: "POST",
+                  url: "/attendancerequest/updateAttendanceRequest",
+                  data: {
+                    requestid: requestid,
+                  },
+                  success: function (attendanceResult) {
+                    if (attendanceResult.msg == "success") {
+                      swal("Save Successfully", "You clicked the button!", "success")
+                        .then(results => {
+                          window.location.reload();
+                        });
+                      LoadTable();
+                    }
+                  },
+                  error: function (attendanceErr) {
+                    swal("Error", "An error occurred while updating attendance request.", "error");
+                  },
+                });
+              }
+            },
+            error: function (masterErr) {
+              swal("Error", "An error occurred while updating master attendance.", "error");
+            },
+          });
+        }
       }
     });
 
@@ -1883,7 +2292,7 @@
             radius: item.radius,
           }).addTo(map);
         });
-        console.log('data',data);
+        console.log('data', data);
       },
       error: function (error) { },
     });
@@ -1983,22 +2392,14 @@
     //     timeout: 27000
     //   }
     // );
+    //<!-- Sticky Topbar & Sidebar -->
+    $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+
+      $('.navbar').toggleClass('navbar-toggled');
+
+    });
 
     //#endregion
 
   });
 </script>
-
-
-<!-- Sticky Topbar & Sidebar -->
-<script>
-  $(document).ready(function () {
-  
-     $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
-     
-       $('.navbar').toggleClass('navbar-toggled');
-    
-     });
-   });
-  </script>
-  

@@ -2,11 +2,13 @@
   let shiftid = "";
 
   $(document).ready(function () {
+    console.log("initialize");
     LoadTable();
     LoadList();
     LoadEditShift();
     searchTable();
     LoadEmplist();
+    AddEmplist();
 
 
     $(document).on('keyup', '#myInput', function () {
@@ -35,7 +37,6 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
-
               action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshiftmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
@@ -227,6 +228,27 @@
     });
 
 
+    function AddEmplist() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/selectdistinct",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            console.log(newEmployeeId);
+            $('#employeeshift').append(options);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+    }
+
+
     function LoadList() {
       $.ajax({
         type: "GET",
@@ -277,7 +299,8 @@
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
-            $('#employeeshift').append(options);
+            console.log(newEmployeeId);
+            $('#editshiftemployee').append(options);
           });
         },
         error: function (result) {
@@ -295,6 +318,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
+        console.log(dataRow);
       shiftid = dataRow[0];
     });
 
@@ -309,11 +333,26 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
+            console.log(existingData);
+
             $.each(existingData, (key, item) => {
-              $("#editshiftid").val(item.shiftid);
-              $("#editshift").val(item.shiftname);
+              //$("#editshiftid").val(item.shiftid);
+              $("#editshiftemployee").val(item.employeeid);
               $("#editshiftdepartment").val(item.department);
-              $("#editshiftstatus").val(item.status);
+              $("#editmondaytimein").val(item.monday_time_in);
+              $("#editmondaytimeout").val(item.monday_time_out);
+              $("#edittuesdaytimein").val(item.tuesday_time_in);
+              $("#edittuesdaytimeout").val(item.tuesday_time_out);
+              $("#editwednesdaytimein").val(item.wednesday_time_in);
+              $("#editwednesdaytimeout").val(item.wednesday_time_out);
+              $("#editthursdaytimein").val(item.thursday_time_in);
+              $("#editthursdaytimeout").val(item.thursday_time_out);
+              $("#editfridaytimein").val(item.friday_time_in);
+              $("#editfridaytimeout").val(item.friday_time_out);
+              $("#editsaturdaytimein").val(item.saturday_time_in);
+              $("#editsaturdaytimeout").val(item.saturday_time_out);
+              $("#editsundaytimein").val(item.sunday_time_in);
+              $("#editsundaytimeout").val(item.sunday_time_out);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -393,6 +432,20 @@
     });
   });
 
+  //#region FUNCTIONS
+
+  function formatTime(time) {
+    if (!time) return "";
+    var parts = time.split(":");
+    var hour = parseInt(parts[0]);
+    var minute = parseInt(parts[1]);
+
+    var period = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    return hour + ":" + (minute < 10 ? "0" : "") + minute + " " + period;
+  }
+
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");
@@ -414,6 +467,8 @@
       }
     }
   }
+
+  //#endregion
 
 
 
