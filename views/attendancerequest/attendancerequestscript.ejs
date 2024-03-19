@@ -123,6 +123,10 @@
               $("#coacreatedate").val(item.createdate);
               $("#coarequeststatus").val(item.requeststatus);
               $("#editcoareason").val(item.reason);
+              $("#editpreviewfile").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -136,12 +140,14 @@
 
 
     $(document).on("click", "#editcOAsavebtn", function () {
+      console.log('hit');
       let id = requestid;
       let emp_id = $("#empid").val();
       let attendancedate = $("#editattendancedate").val();
       let timein = $("#edittimein").val();
       let timeout = $("#edittimeout").val();
       let requeststatus = $("#editcoastatus").val();
+      let file = base64String;
 
       var message = "";
 
@@ -161,37 +167,58 @@
         message += "Status is required. ";
       }
 
+      if (file === "") {
+        message += "Status is required. ";
+      }
+
       if (message !== "") {
         swal("Oops!!!", message, "error");
       } else {
         if (requeststatus === "Approved") {
           $.ajax({
             type: "POST",
-            url: "/attendancerequest/update",
+            url: "/attendancerequest/updateMasterAttendance",
             data: {
-              requestid: requestid,
               emp_id: emp_id,
               attendancedate: attendancedate,
               timein: timein,
               timeout: timeout,
-              requeststatus: requeststatus,
             },
-            success: function (result) {
-              if (result.msg == "success") {
-                swal("Save Successfully", "You clicked the button!", "success",)
-                  .then(results => {
-                    window.location.reload();
-                  });
-                LoadTable();
+            success: function (masterResult) {
+              if (masterResult.msg == "success") {
+                $.ajax({
+                  type: "POST",
+                  url: "/attendancerequest/updateAttendanceRequest",
+                  data: {
+                    requestid: requestid,
+                  },
+                  success: function (attendanceResult) {
+                    if (attendanceResult.msg == "success") {
+                      swal("Save Successfully", "You clicked the button!", "success")
+                        .then(results => {
+                          window.location.reload();
+                        });
+                      LoadTable();
+                    }
+                  },
+                  error: function (attendanceErr) {
+                    swal("Error", "An error occurred while updating attendance request.", "error");
+                  },
+                });
               }
             },
-            error: function (err) {
-              swal("Error", "An error occurred while saving data.", "error");
+            error: function (masterErr) {
+              swal("Error", "An error occurred while updating master attendance.", "error");
             },
           });
         }
       }
     });
+<<<<<<< HEAD
+=======
+
+  });
+>>>>>>> 2df3cf70a60398b5301b70a28bd44cdc140dcce3
 
 
     $(document).on("change", "#c", function (e) {
@@ -240,10 +267,62 @@
           }
         }
 
+<<<<<<< HEAD
         if (found) {
           tr[i].style.display = "";
         } else {
           tr[i].style.display = "none";
+=======
+      imageBase64Stringsep = base64String;
+
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#c", function (e) {
+    const input = document.getElementById("editcoafile");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("editpreview");
+      preview.src = reader.result;
+    };
+    editimagefile();
+  });
+
+  function editimagefile() {
+    const input = document.getElementById("editcoafile");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableattendancerequest");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      found = false;
+
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+          break;
+>>>>>>> 2df3cf70a60398b5301b70a28bd44cdc140dcce3
         }
       }
     }
