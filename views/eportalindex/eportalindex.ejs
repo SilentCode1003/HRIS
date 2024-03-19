@@ -12,17 +12,19 @@
 
 <!-- Begin Page Content -->
 
-  <!-- Page Heading -->
-  <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+<!-- Page Heading -->
+<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Employee Dashboard</h1>
   </div> -->
-<br>
+
+
+<!-- <br>
 <br>
 
 <div class="container">
   <div class="row">
 
-    <!--- Map-->
+   
     <div class="col-sm-8">
         <div class="card" id="card-map">
           <div class="card-header ch-map">
@@ -34,7 +36,7 @@
         </div>
       </div>
 
-      <!---- Announcements ---->
+     
     <div class="col-4">
       <div class="card" id="card-announcement">
         <div class="card-header ch-announcement">
@@ -49,14 +51,14 @@
       </div>
     </div>
 
-  <!--- End of container & rows --->
+ 
   </div>
 </div>
 
 
 <div class="container">
   <div class="row">
-       <!--- Clockin & Clockout ---->
+      
        <div class="col-4 clock">
         <div class="card" id="clock-in-out">
           <lord-icon src="https://cdn.lordicon.com/lzgqzxrq.json" trigger="loop"
@@ -71,7 +73,7 @@
       </div>
     </div>
   
-     <!---- Attendance ---->
+     
      <div class="col-md-4">
       <div class="card" id="card-attendance">
         <div class="card-header ch-attendance">
@@ -95,7 +97,7 @@
       </div>
     </div>
 
-    <!---- Birthday ---->
+   
     <div class="col-4">
       <div class="card" id="card-birthday">
         <div class="card-header ch-birthday">
@@ -112,14 +114,137 @@
     </div>
 
    
-<!--- End of container and rows-->
+
   </div>
-</div>
+</div> -->
+
+<br>
+<br>
+<div class="container">
+  <div class="row">
+
+    <div class="col-4">
+      <div class="card" id="clockin-out">
+        <!-- <div class="card-header ch-clockin-out">
+          <lord-icon src="https://cdn.lordicon.com/wsdieofl.json" stroke="bold"
+            colors="primary:#121331,secondary:#ffffff,tertiary:#2516c7,quaternary:#f24c00" class="eportal-icon">
+          </lord-icon>
+          <span><b>Clock In/Out</b></span></a>
+        </div> -->
+        <div class="card-body">
+          <!-- <lord-icon src="https://cdn.lordicon.com/lzgqzxrq.json" trigger="loop"
+            colors="primary:#000000,secondary:#d1f3fa,tertiary:#66a1ee,quaternary:#f24c00" id="clock-lordicon">
+          </lord-icon> -->
+          <h6 class="time-title">Hello <span><%= fullname%></span>!</h6>
+          <p class="time-p">Select clock-in to start work..</p>
+          <img class="img-profile rounded-circle time-profile-img" src="data:image/jpg;base64,<%= image%>">
+          
+          <div class="card-header ch-time">
+            <h6 class="status-text">Status: <span class="status-time">IN</span></h6>
+            <h6 class="time-text">Time: <span class="time-clock">7:00 AM</span></h6>
+          </div>
+
+          <button type="button" class="btn btn-clockin" id="clockinbtn">
+            Clock-In
+          </button>
+          <button type="button" class="btn btn-clockout" id="clockoutbtn">
+            Clock-Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card" id="card-attendance">
+        <div class="card-header ch-attendance">
+          <lord-icon src="https://cdn.lordicon.com/svsiboke.json" stroke="bold"
+            colors="primary:#000000,secondary:#faf9d1,tertiary:#66d7ee,quaternary:#c71f16,quinary:#e8e230,senary:#000000"
+            class="eportal-icon">
+          </lord-icon>
+          <span><b>Attendance</b></span></a>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" id="table-attendance">
+            <table class="table table-bordered" id="attendanceTable">
+              <thead class="attendance-th">
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card" id="card-birthday">
+        <div class="card-header ch-birthday">
+          <lord-icon src="https://cdn.lordicon.com/dkanzxbo.json" stroke="bold"
+            colors="primary:#000000,secondary:#e8308c,tertiary:#e8e230,quaternary:#30e8bd,quinary:#ebe6ef"
+            class="eportal-icon">
+          </lord-icon>
+          <span><b>Birthday</b></span></a>
+        </div>
+        <div class="card-body cb-bday">
+          <div aria-labelledby="nav-profile-tab">
+            <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
+              <div class="carousel-inner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--- end of row -->
+  </div>
+
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card" id="card-map">
+        <div class="card-header ch-map">
+          <lord-icon src="https://cdn.lordicon.com/tdtlrbly.json" stroke="bold"
+            colors="primary:#000000,secondary:#e83a30" class="eportal-icon">
+          </lord-icon>
+          <span><b>Map</b></span></a>
+        </div>
+        <div class="card-body">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card" id="card-announcement">
+        <div class="card-header ch-announcement">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+            colors="primary:#000000,secondary:#30c9e8,tertiary:#e83a30,quaternary:#e8e230" class="eportal-icon">
+          </lord-icon>
+          <span><b>Announcement</b></span></a>
+        </div>
+        <div class="card-body db-custom-cards1">
+          <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+
+   
 
 
 
 
-  <!-- <div class="row">
+
+    <!-- <div class="row">
 
     <div class="col-xl-12 col-lg-12" id="card-map">
       <div class="card shadow mb-4">
@@ -142,7 +267,7 @@
         </div>
         <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
           <div class="carousel-inner"> -->
-            <!-- <div class="carousel-item active" data-bs-interval="2000">
+    <!-- <div class="carousel-item active" data-bs-interval="2000">
                   <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                       style="height: 470px;">
                   <div class="carousel-caption d-none d-md-block">
@@ -168,13 +293,13 @@
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
               </button> -->
-          <!-- </div>
+    <!-- </div>
         </div>
       </div>
     </div> -->
 
-      <!-- Birthday -->
-      <!-- <div class="col-md-4">
+    <!-- Birthday -->
+    <!-- <div class="col-md-4">
         <div class="card shadow mb-4">
           <div class="card-header">
             <h6 class="m-0">
@@ -184,7 +309,7 @@
           <div aria-labelledby="nav-profile-tab">
             <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
               <div class="carousel-inner"> -->
-                <!-- <div class="carousel-item active" data-bs-interval="2000">
+    <!-- <div class="carousel-item active" data-bs-interval="2000">
                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                             style="height: 470px;">
                         <div class="carousel-caption d-none d-md-block">
@@ -202,13 +327,13 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button> -->
-              <!-- </div>
+    <!-- </div>
             </div>
           </div>
         </div>
       </div> -->
 
-<!--    
+    <!--    
   </div>
 
 
@@ -225,8 +350,8 @@
     </button>
   </div> -->
 
-   <!-- Attendance -->
-   <!-- <div class="col-xl-4 col-lg-5">
+    <!-- Attendance -->
+    <!-- <div class="col-xl-4 col-lg-5">
     <div class="card shadow mb-4">
       <div class="card-header ch-attendance">
         <h6 class="m-0 h6-attendance">
@@ -251,15 +376,3 @@
 
  
 </div> -->
-
-
-
-
-
-
-
-
-
-
- 
-

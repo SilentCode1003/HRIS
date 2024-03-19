@@ -323,7 +323,7 @@
                         if (bdayData.length === 0) {
                             bdaydiv = `<div class="carousel-item active" data-bs-interval="2000">
                                     <img src="/images/img/bday.jpg" class="d-block w-100" alt="Default Image"
-                                        style="height: 250px;">
+                                        style="height: 220px;">
                                     <div class="carousel-caption d-none d-md-block">
                                         <h5>No Birthdays Today</h5>
                                     </div>
@@ -334,7 +334,7 @@
                                 bdaydiv += `
                             <div class="carousel-item active" data-bs-interval="2000">
                                 <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
-                                    style="height: 250px;">
+                                    style="height: 220px;">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5 id="employeeid${counterbday}">${item.firstname}</h5>
                                     <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
@@ -383,25 +383,28 @@
                         $.each(announcementData, (key, item) => {
                             counter++;
                             anouncementdiv += `
-              <div class="carousel-item active" data-bs-interval="2000">
-                <img id="preview${counter}"  src="data:image/jpg;base64,${item.image}" class="d-block w-100" alt="..."
-                style="height: 350px;">
-              <div class="carousel-caption d-none d-md-block">
-                <h5 id="announcetitle${counter}">${item.title}</h5>
-                <p id="announcedesc${counter}">${item.description}</p>
-                <p id="announcedate${counter}">${item.targetdate}</p>
-              </div>
-                                    </div>
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselannouncement" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>`;
+                            <div class="carousel-item active" data-bs-interval="3000">
+                                    <img id="preview${counter}" src="data:image/jpg;base64,${item.image}"
+                                     class="d-block w-100 eportal-img-announce" alt="..."
+                                      style="height: 200px; border: 3px solid white !important;">
+                 
+                                    
+                                <div class="announcement-hrmis">
+                                    <h6 id="announcedate${counter}" class="a-date">${item.targetdate}</h6>
+                                    <h6 id="announcetitle${counter}" class="announce-title">${item.title}</h6>
+                                    <p id="announcedesc${counter}" class="a-des">${item.description}</p>  
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                    <i class='bx bxs-left-arrow prev-hrmis' aria-hidden="true"></i>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                    <i class='bx bxs-right-arrow next-hrmis' aria-hidden="true"></i>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                                </div>
+                                </div>`;
                         });
                     } else {
                         console.error("Error: ", result.message);
