@@ -141,18 +141,29 @@ router.post("/save", async (req, res) => {
 router.post("/update", (req, res) => {
   try {
     let shiftid = req.body.shiftid;
-    let shiftname = req.body.shiftname;
-    let status = req.body.status;
+    let employeeName = req.body.employeeName;
     let department = req.body.department;
-    let createby = req.session.fullname;
+    let mondayformat = req.body.mondayformat;
+    let tuesdayformat = req.body.tuesdayformat;
+    let wednesdayformat = req.body.wednesdayformat;
+    let thursdayformat = req.body.thursdayformat;
+    let fridayformat = req.body.fridayformat;
+    let saturdayformat = req.body.saturdayformat;
+    let sundayformat = req.body.sundayformat;
 
-    let sqlupdate = `UPDATE master_shift SET   
-    ms_shiftname ='${shiftname}', 
-    ms_status ='${status}', 
-    ms_department ='${department}',
-    ms_createby ='${createby}' 
-    WHERE ms_shiftid ='${shiftid}'`;
+    console.log(shiftid);
 
+    let sqlupdate = `update master_shift set 
+    ms_monday = '${mondayformat}',
+    ms_tuesday = '${tuesdayformat}',
+    ms_wednesday = '${wednesdayformat}',
+    ms_thursday = '${thursdayformat}',
+    ms_friday = '${fridayformat}',
+    ms_saturday = '${saturdayformat}',
+    ms_sunday = '${sundayformat}'
+    WHERE ms_id = '${shiftid}'`;
+
+    console.log(sqlupdate);
     mysql
       .Update(sqlupdate)
       .then((result) => {
@@ -160,11 +171,13 @@ router.post("/update", (req, res) => {
 
         res.json({
           msg: "success",
+          data: result,
         });
       })
       .catch((error) => {
         res.json({
-          msg: error,
+          msg: 'error',
+          data: error,
         });
       });
   } catch (error) {
