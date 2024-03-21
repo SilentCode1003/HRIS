@@ -2,10 +2,13 @@
   let shiftid = "";
 
   $(document).ready(function () {
+    console.log("initialize");
     LoadTable();
     LoadList();
     LoadEditShift();
     searchTable();
+    LoadEmplist();
+    AddEmplist();
 
 
     $(document).on('keyup', '#myInput', function () {
@@ -34,7 +37,6 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
-
               action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshiftmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
@@ -81,32 +83,122 @@
       });
     }
 
-
     $(document).on("click", "#shiftsavebtn", function () {
-      let shiftname = $("#shifthours").val();
+      let employeeName = $("#employeeshift").val();
       let department = $("#shiftdepartment").val();
+      let mondayTimein = $("#mondayTimeIn").val();
+      let mondayTimeout = $("#mondayTimeOut").val();
+      let tuesdayTimein = $("#tuesdayTimeIn").val();
+      let tuesdayTimeout = $("#tuesdayTimeOut").val();
+      let wednesdayTimein = $("#wednesdayTimeIn").val();
+      let wednesdayTimeout = $("#wednesdayTimeOut").val();
+      let thursdayTimein = $("#thursdayTimeIn").val();
+      let thursdayTimeout = $("#thursdayTimeOut").val();
+      let fridayTimein = $("#fridayTimeIn").val();
+      let fridayTimeout = $("#fridayTimeOut").val();
+      let saturdayTimein = $("#saturdayTimeIn").val();
+      let saturdayTimeout = $("#saturdayTimeOut").val();
+      let sundayTimein = $("#sundayTimeIn").val();
+      let sundayTimeout = $("#sundayTimeOut").val();
 
       var message = "";
 
-      if (shiftname == "") {
-        message += "shiftname is required ";
+      if (employeeName == "Employee") {
+        message += "Employee name is required\n";
       }
-
-      if (department == "") {
-        message += "department is required ";
+      if (department == "Department") {
+        message += "Department is required\n";
+      }
+      if (mondayTimein == "Monday Time In" || mondayTimeout == "Monday Time Out") {
+        message += "Monday shift time is required\n";
+      }
+      if (tuesdayTimein == "Tuesday Time In" || tuesdayTimeout == "Tuesday Time Out") {
+        message += "Tuesday shift time is required\n";
+      }
+      if (wednesdayTimein == "Wednesday Time In" || wednesdayTimeout == "Wednesday Time Out") {
+        message += "Wednesday shift time is required\n";
+      }
+      if (thursdayTimein == "Thursday Time In" || thursdayTimeout == "Thursday Time Out") {
+        message += "Thursday shift time is required\n";
+      }
+      if (fridayTimein == "Friday Time In" || fridayTimeout == "Friday Time Out") {
+        message += "Friday shift time is required\n";
+      }
+      if (saturdayTimein == "Saturday Time In" || saturdayTimeout == "Saturday Time Out") {
+        message += "Saturday shift time is required\n";
+      }
+      if (sundayTimein == "Sunday Time In" || sundayTimeout == "Sunday Time Out") {
+        message += "Sunday shift time is required\n";
       }
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        const shiftData = {
+          "shifts": {
+            "Monday": { "time_in": mondayTimein, "time_out": mondayTimeout },
+            "Tuesday": { "time_in": tuesdayTimein, "time_out": tuesdayTimeout },
+            "Wednesday": { "time_in": wednesdayTimein, "time_out": wednesdayTimeout },
+            "Thursday": { "time_in": thursdayTimein, "time_out": thursdayTimeout },
+            "Friday": { "time_in": fridayTimein, "time_out": fridayTimeout },
+            "Saturday": { "time_in": saturdayTimein, "time_out": saturdayTimeout },
+            "Sunday": { "time_in": sundayTimein, "time_out": sundayTimeout }
+          }
+        };
+
+        let mondayformat = "";
+        let tuesdayformat = "";
+        let wednesdayformat = "";
+        let thursdayformat = "";
+        let fridayformat = "";
+        let saturdayformat = "";
+        let sundayformat = "";
+
+        Object.keys(shiftData.shifts).forEach(day => {
+          const timeIn = shiftData.shifts[day].time_in;
+          const timeOut = shiftData.shifts[day].time_out;
+          const dayFormat = `{"time_in": "${timeIn}", "time_out": "${timeOut}"},`;
+
+          switch (day) {
+            case 'Monday':
+              mondayformat += dayFormat;
+              break;
+            case 'Tuesday':
+              tuesdayformat += dayFormat;
+              break;
+            case 'Wednesday':
+              wednesdayformat += dayFormat;
+              break;
+            case 'Thursday':
+              thursdayformat += dayFormat;
+              break;
+            case 'Friday':
+              fridayformat += dayFormat;
+              break;
+            case 'Saturday':
+              saturdayformat += dayFormat;
+              break;
+            case 'Sunday':
+              sundayformat += dayFormat;
+              break;
+            default:
+              break;
+          }
+        });
 
         $.ajax({
           type: "POST",
           url: "/shift/save",
           data: {
-            shiftname: shiftname,
+            employeeName: employeeName,
             department: department,
-
+            mondayformat: mondayformat.slice(0, -1),
+            tuesdayformat: tuesdayformat.slice(0, -1),
+            wednesdayformat: wednesdayformat.slice(0, -1),
+            thursdayformat: thursdayformat.slice(0, -1),
+            fridayformat: fridayformat.slice(0, -1),
+            saturdayformat: saturdayformat.slice(0, -1),
+            sundayformat: sundayformat.slice(0, -1),
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -115,13 +207,11 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                })
+              }).then(results => {
+                window.location.reload();
+              });
               LoadTable();
-            }
-            else {
+            } else {
               swal({
                 title: "Exist",
                 text: "Data already exists!",
@@ -129,15 +219,35 @@
                 button: "OK!",
               });
             }
-
           },
           error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
-          },
+            swal("Error", "An error occurred while saving data!", "error");
+          }
         });
       }
-
     });
+
+
+    function AddEmplist() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/selectdistinct",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            console.log(newEmployeeId);
+            $('#employeeshift').append(options);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+    }
+
 
     function LoadList() {
       $.ajax({
@@ -147,7 +257,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.departmentname, item.departmentname);
+            var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $('#shiftdepartment').append(options);
           });
@@ -177,9 +287,28 @@
           alert('error: ' + result.data);
         }
       });
-
-
     }
+
+    function LoadEmplist() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/selectdistinct",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            console.log(newEmployeeId);
+            $('#editshiftemployee').append(options);
+          });
+        },
+        error: function (result) {
+          alert('error: ' + result.data);
+        }
+      });
+    }
+
 
     $("#dataTableshift tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -189,6 +318,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
+        console.log(dataRow);
       shiftid = dataRow[0];
     });
 
@@ -203,11 +333,26 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
+            console.log(existingData);
+
             $.each(existingData, (key, item) => {
-              $("#editshiftid").val(item.shiftid);
-              $("#editshift").val(item.shiftname);
+              //$("#editshiftid").val(item.shiftid);
+              $("#editshiftemployee").val(item.employeeid);
               $("#editshiftdepartment").val(item.department);
-              $("#editshiftstatus").val(item.status);
+              $("#editmondaytimein").val(item.monday_time_in);
+              $("#editmondaytimeout").val(item.monday_time_out);
+              $("#edittuesdaytimein").val(item.tuesday_time_in);
+              $("#edittuesdaytimeout").val(item.tuesday_time_out);
+              $("#editwednesdaytimein").val(item.wednesday_time_in);
+              $("#editwednesdaytimeout").val(item.wednesday_time_out);
+              $("#editthursdaytimein").val(item.thursday_time_in);
+              $("#editthursdaytimeout").val(item.thursday_time_out);
+              $("#editfridaytimein").val(item.friday_time_in);
+              $("#editfridaytimeout").val(item.friday_time_out);
+              $("#editsaturdaytimein").val(item.saturday_time_in);
+              $("#editsaturdaytimeout").val(item.saturday_time_out);
+              $("#editsundaytimein").val(item.sunday_time_in);
+              $("#editsundaytimeout").val(item.sunday_time_out);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -218,6 +363,9 @@
         },
       });
     });
+
+
+
     $(document).on("click", "#editshiftsavebtn", function () {
       let id = shiftid
       let shiftname = $("#editshift").val();
@@ -284,6 +432,20 @@
     });
   });
 
+  //#region FUNCTIONS
+
+  function formatTime(time) {
+    if (!time) return "";
+    var parts = time.split(":");
+    var hour = parseInt(parts[0]);
+    var minute = parseInt(parts[1]);
+
+    var period = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    return hour + ":" + (minute < 10 ? "0" : "") + minute + " " + period;
+  }
+
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
     input = document.getElementById("myInput");
@@ -305,6 +467,8 @@
       }
     }
   }
+
+  //#endregion
 
 
 

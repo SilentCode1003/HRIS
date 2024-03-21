@@ -1,9 +1,596 @@
 <script>
-    $(function() {
+  let startdate = '';
+  let enddate = '';
+  let payrolldate = '';
+  let employeeid = '';
+
+  $(document).ready(function () {
+    console.log('Initialize');
+    searchTable();
+
+    $(document).on('keyup', '#myInput', function () {
+      searchTable();
+    });
+
+    $(document).on("click", "#generateButton", function () {
+      let startDate = $('#datepicker').data('daterangepicker').startDate.format('YYYY-MM-DD');
+      let endDate = $('#datepicker').data('daterangepicker').endDate.format('YYYY-MM-DD');
+
+      var message = "";
+
+      if (startDate === "") {
+        message += "Start date is required. ";
+      }
+
+      if (endDate === "") {
+        message += "End date is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        swal({
+          title: "Generating and Loading Payroll",
+          text: "Please wait... These Will Take a few Minutes",
+          buttons: false,
+          closeOnEsc: false,
+          closeOnClickOutside: false,
+          allowOutsideClick: false,
+          content: {
+            element: "div",
+            attributes: {
+              innerHTML: '<div class="progress"><div class="determinate" style="width: 0%"></div></div>'
+            },
+          },
+        });
+
+        let progress = 0;
+        const interval = setInterval(function () {
+          progress += 10;
+          if (progress <= 100) {
+            $('.progress .determinate').css('width', progress + '%');
+          } else {
+            clearInterval(interval);
+          }
+        }, 1000);
+
+        $.ajax({
+          type: "POST",
+          url: "/generatepayroll/generateAndLoadPayroll",
+          data: {
+            startdate: startDate,
+            enddate: endDate,
+          },
+          success: function (result) {
+            console.log("Success:", result);
+            clearInterval(interval);
+            swal.close();
+
+            if (result.msg == "success") {
+              swal({
+                title: "Generate and Load Successfully",
+                text: "Thank you For Waiting ;)",
+                icon: "success",
+                button: "OK!",
+              }).then(results => {
+                loadPayrollTable(startDate, endDate);
+              });
+            } else {
+              swal("Error", "An error occurred while generating and loading payroll.", "error");
+            }
+          },
+          error: function (xhr, status, error) {
+            console.log("Error:", xhr.responseText);
+            clearInterval(interval);
+            swal.close();
+            swal("Error", "An error occurred while generating and loading payroll.", "error");
+          },
+        });
+      }
+    });
+
+    $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
+      $("#loadbutton").click(function () {
+        let startDate = picker.startDate.format('YYYY-MM-DD');
+        let endDate = picker.endDate.format('YYYY-MM-DD');
+        loadPayrollTable(startDate, endDate);
+      });
+    });
+
+    function loadPayrollTable(startDate, endDate) {
+      swal({
+        title: 'Loading Payroll',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+          swal.showLoading();
+        }
+      });
+
+      $("#dataTablePayroll").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/generatepayroll/loadpayroll",
+          data: {
+            startdate: startDate,
+            enddate: endDate,
+          },
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data[0], (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#payslipmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.Image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "90px";
+              imgElement.style.height = "90px";
+
+              finalData.push({
+                Image: imgElement.outerHTML,
+                EmployeeId: item.EmployeeId,
+                Salary: item.Salary,
+                Payroll_Date: item.Payroll_Date,
+                CutOff: item.CutOff,
+                Total_AllDeductions: item.Total_AllDeductions,
+                Total_Netpay: item.Total_Netpay,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [{
+          targets: 1,
+          className: "td-indent",
+        }],
+        columns: [{
+          data: "Image"
+        },
+        {
+          data: "EmployeeId"
+        },
+        {
+          data: "Salary",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "Payroll_Date",
+          render: function (data, type, row) {
+            var originalDate = new Date(data);
+            var year = originalDate.getFullYear();
+            var month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
+            var day = originalDate.getDate().toString().padStart(2, '0');
+            return year + "-" + month + "-" + day;
+          }
+        },
+        {
+          data: "CutOff"
+        },
+        {
+          data: "Total_AllDeductions",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "Total_Netpay",
+          render: function (data, type, row) {
+            return '₱' + parseFloat(data).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+        },
+        {
+          data: "action"
+        },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log('Done');
+          swal.close();
+        },
+      });
+    }
+
+    $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
+      $("#exportBtn").click(function () {
+        let startDate = picker.startDate.format('YYYY-MM-DD');
+        let endDate = picker.endDate.format('YYYY-MM-DD');
+        exportPayroll(startDate, endDate);
+      });
+    });
+
+    function exportPayroll(startDate, endDate) {
+      $.ajax({
+        url: '/generatepayroll/exportfile',
+        type: 'POST',
+        data: {
+          startdate: startDate,
+          enddate: endDate
+        },
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (response) {
+          if (response) {
+            swal({
+              title: 'Download Payroll Data',
+              text: 'Are you sure you want to download the payroll data?',
+              confirm: '#28a745',
+              cancel: '#dc3545',
+              buttons: {
+                confirm: 'Yes, download it!',
+                cancel: 'No, cancel'
+              },
+              dangerMode: true
+            }).then((result) => {
+              if (result) {
+                var blob = response;
+
+                var url = URL.createObjectURL(blob);
+
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = `payroll_data_${startDate}_${endDate}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+              } else {
+                swal('Cancelled', 'Payroll data download cancelled :)', 'error');
+              }
+            });
+          } else {
+            console.error('Error: Empty response');
+            swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
+          swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+        }
+      });
+    }
+
+    $("#dataTablePayroll tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      employeeid = dataRow[1];
+      payrolldate = dataRow[3];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/LoadPayslipSummary",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log(existingData);
+            $.each(existingData[0], (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.Image
+              );
+              base64String = item.Image;
+              $("#employeename").text(item.EmployeeFullName);
+              $("#position").text(item.PositionName);
+              $("#department").text(item.Department);
+              $("#payrollrange").text(formatDate(item.StartDate) + " To " + formatDate(item.Enddate));
+              $("#payrolldate").text(formatDate(item.PayrollDate));
+              $("#salary").text(formatToCurrency(item.Salary));
+              $("#dailyrate").text(formatToCurrency(item.Per_Day));
+              $("#allowances").text(formatToCurrency(item.Allowances));
+              $("#compensation").text(formatToCurrency(item.Compensation));
+              $("#deductions").text(formatToCurrency(item.Total_AllDeductions));
+              $("#totalnetpay").text(formatToCurrency(item.Total_Netpay));
+              $("#workdays").text(item.Work_Days);
+              $("#restday").text(item.Rest_Day);
+              $("#present").text(item.Total_gp_status);
+              $("#absent").text(item.Absent);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+
+    $(document).on("click", "#nav-payslip-tab", function () {
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/LoadPayslipSummary",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log(existingData);
+            $.each(existingData[0], (key, item) => {
+              $("#editpreview").attr("src", "data:image/jpg;base64," + item.Image);
+              base64String = item.Image;
+              $("#payslipSSSid").text(item.SSSID);
+              $("#payslipTINid").text(item.TINID);
+              $("#payslipphilhealthid").text(item.PhilHealthID);
+              $("#payslipdeppagibigid").text(item.PagIbigID);
+              $("#payslipid").text(item.EmployeeId);
+              $("#payslipname").text(item.EmployeeFullName);
+              $("#payslipempname").text(item.EmployeeFullName);
+              $("#payslipposition").text(item.PositionName);
+              $("#payslipdepartment").text(item.Department);
+              $("#paysliprange").text(formatDate(item.StartDate) + "- TO - " + formatDate(item.Enddate));
+              $("#payslipdate").text(formatDate(item.PayrollDate));
+              $("#payslipbasic").text(formatToCurrency(item.Salary));
+              $("#payslipperday").text(formatToCurrency(item.Per_Day));
+              $("#payslipallowances").text(formatToCurrency(item.Allowances));
+              $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
+              $("#payslipndpay").text(formatToCurrency(item.ApprovedNightDiffOt));
+              $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
+              $("#payslipearlypay").text(formatToCurrency(item.ApprovedEarlyOt));
+              $("#payslipregular").text(formatToCurrency(item.Regular_Holiday_Compensation));
+              $("#payslipspecial").text(formatToCurrency(item.Special_Holiday_Compensation));
+              $("#payslipregularovertime").text(formatToCurrency(item.RegularHolidayOT));
+              $("#payslipspecialovertime").text(formatToCurrency(item.SpecialHolidayOT));
+              $("#paysliptotal").text(formatToCurrency(item.Overall_Net_Pay));
+              $("#payslipsss").text(formatToCurrency(item.SSS));
+              $("#payslippagibig").text(formatToCurrency(item.PagIbig));
+              $("#paysliphdmf").text(formatToCurrency(item.PhilHealth));
+              $("#paysliptin").text(formatToCurrency(item.TIN));
+              $("#payslipabsent").text(formatToCurrency(item.Absent_Deductions));
+              $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
+              $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
+              $("#paysliptotaldeductions").text(formatToCurrency(item.Total_AllDeductions));
+              $("#paysliptotalnetpay").text(formatToCurrency(item.Total_Netpay));
+              $("#totalNetPayWords").text(convertCurrencyToWords(item.Total_Netpay));
+
+              const currencyAmount = Total_Netpay;
+              console.log(convertCurrencyToWords(currencyAmount));
+
+              console.log("Setting salary:", item.Salary);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+
+    $(document).on("click", "#nav-date-tab", function () {
+      $(`#dataTablePayslip`).find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/LoadPayslipDetailed",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData[0], (key, item) => {
+              $("#datename").text(item.EmployeeFullName);
+            });
+          } else {
+            swal("Error fetching");
+          };
+
+          var finalData = [];
+          var data = result.data;
+
+          if ($.fn.DataTable.isDataTable("#dataTablePayslip")) {
+            $("#dataTablePayslip").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("dataTablePayslip");
+
+          console.log(data);
+
+          $.each(data[0], function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var DATE = row.insertCell(0);
+            var CLOCK_IN = row.insertCell(1);
+            var CLOCK_OUT = row.insertCell(2);
+            var LATE_MINUTES = row.insertCell(3);
+            var LATE_HOURS = row.insertCell(4);
+            var EARLY_OT = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
+            var TOTAL_HOURS = row.insertCell(8);
+            var TOTAL_MINUTES = row.insertCell(9);
+
+
+            DATE.innerHTML = formatDate(item.gp_attendancedate);
+            CLOCK_IN.innerHTML = item.TimeIn;
+            CLOCK_OUT.innerHTML = item.TimeOut;
+            LATE_MINUTES.innerHTML = item.Late_Minutes;
+            LATE_HOURS.innerHTML = item.Late_Hours;
+            EARLY_OT.innerHTML = item.EarlyOt;
+            NIGHT_DIFF.innerHTML = item.NightDiff;
+            NORMAL_OT.innerHTML = item.NormalOt;
+            TOTAL_HOURS.innerHTML = item.Total_Hours;
+            TOTAL_MINUTES.innerHTML = item.Total_Minutes;
+
+            $.each(
+              [DATE, CLOCK_IN, CLOCK_OUT, LATE_MINUTES, LATE_HOURS, EARLY_OT, NIGHT_DIFF, NORMAL_OT, TOTAL_HOURS, TOTAL_MINUTES],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+        },
+      });
+    });
+
+
+
+    //#region function 
+    $(document).on("change", "#editemployeeprofile", function (e) {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      editimage();
+    });
+
+    function editimage() {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+      console.log("next");
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+        console.log(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    $(function () {
       $('input[name="daterange"]').daterangepicker({
-        opens: 'left'
-      }, function(start, end, label) {
+        opens: 'middle'
+      }, function (start, end, label) {
         console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
       });
     });
+
+    function convertToWords(number) {
+      const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+      const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+      if (number === 0) return 'Zero';
+
+      let words = '';
+
+      if (number >= 1000) {
+        words += ones[Math.floor(number / 1000)] + ' Thousand ';
+        number %= 1000;
+      }
+
+      if (number >= 100) {
+        words += ones[Math.floor(number / 100)] + ' Hundred ';
+        number %= 100;
+      }
+
+      if (number >= 10 && number <= 19) {
+        words += teens[number - 10];
+      } else if (number >= 20) {
+        words += tens[Math.floor(number / 10)];
+        if (number % 10 !== 0) words += ' ';
+        number %= 10;
+      }
+
+      if (number > 0) {
+        words += ones[number];
+      }
+
+      return words.trim();
+    }
+
+    function convertCurrencyToWords(currency) {
+      const parts = currency.split('.');
+      const integerPart = parseInt(parts[0].replace(',', ''));
+      const decimalPart = parseInt(parts[1] || 0);
+
+      let words = convertToWords(integerPart);
+      words += ' pesos';
+
+      if (decimalPart > 0) {
+        words += ' and ' + convertToWords(decimalPart) + ' centavos';
+      }
+
+      return words;
+    }
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablePayroll");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+    //#endregion
+
+  });
 </script>

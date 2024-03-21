@@ -187,78 +187,7 @@
             }
         });
 
-        // $(document).on("click", "#saveprobi", function () {
-        //     let id = employeeid; // Assuming apprenticeIdToUpdate is defined somewhere
-        //     let action = $("#inputState").val();
-        //     console.log('hit',employeeid);
-
-        //     if (action === "end_of_contract") {
-        //         // Display a message or perform any necessary actions for "end_of_contract" action
-        //         swal({
-        //             title: "Update Not Allowed",
-        //             text: "Cannot update to 'end_of_contract'.",
-        //             icon: "warning",
-        //             button: "OK!",
-        //         });
-        //         return; // Stop execution if the action is "end_of_contract"
-        //     }
-
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "/apprentice/update", // Update the URL to the correct endpoint
-        //         data: {
-        //             employeeid: employeeid, // Use employeeid instead of apprenticeId
-        //             action: action,
-        //         },
-        //         success: function (result) {
-        //             if (result.msg == "success") {
-        //                 swal({
-        //                     title: "Update Successfully",
-        //                     text: "You clicked the button!",
-        //                     icon: "success",
-        //                     button: "OK!",
-        //                 }).then((results) => {
-        //                     window.location.reload();
-        //                 });
-        //                 // Optionally, you can call LoadTable() here if needed
-        //             } else if (result.msg == "apprentice_not_found") {
-        //                 swal({
-        //                     title: "Apprentice Not Found",
-        //                     text: "The apprentice record was not found!",
-        //                     icon: "error",
-        //                     button: "OK!",
-        //                 });
-        //             } else if (result.msg == "insert_failed") {
-        //                 swal({
-        //                     title: "Insert Failed",
-        //                     text: "An error occurred while inserting the new employee record!",
-        //                     icon: "error",
-        //                     button: "OK!",
-        //                 });
-        //             } else if (result.msg == "encrypt_error") {
-        //                 swal({
-        //                     title: "Encrypt Error",
-        //                     text: "An error occurred while encrypting the password!",
-        //                     icon: "error",
-        //                     button: "OK!",
-        //                 });
-        //             } else if (result.msg == "user_save_error") {
-        //                 swal({
-        //                     title: "User Save Error",
-        //                     text: "An error occurred while saving the user record!",
-        //                     icon: "error",
-        //                     button: "OK!",
-        //                 });
-        //             } else {
-        //                 swal("Unknown Error", "An unknown error occurred!", "error");
-        //             }
-        //         },
-        //         error: function (err) {
-        //             swal("Error", "An error occurred while updating data.", "error");
-        //         },
-        //     });
-        // });
-
+        
         $(document).on("change", "#editemployeeprofile", function (e) {
             const input = document.getElementById("editemployeeprofile");
             const file = input.files[0];

@@ -1,0 +1,167 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">Other Deduction Benefits ID</h3>
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#govermentidmodal">
+            <b>+ Add</b>
+          </button>
+            <input id='myInput'  type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped" id="dataTablegovermentid">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee ID</th>
+                        <th>ID Type</th>
+                        <th>ID Number</th>
+                        <th>Issue Daten</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="govermentidmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Other Deduction Benefits ID</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="govermentidemployeeid" name="govermentidemployeeid" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Employee ID</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="govermentidtype" name="govermentidtype" aria-label="Floating label select example">
+                                <option value="Health Card">Health Card</option>
+                                <!-- <option value="PhilHealth">PhilHealth</option>
+                                <option value="PagIbig">PagIbig</option>
+                                <option value="TIN">TIN</option> -->
+                            </select>
+                            <label for="floatingSelectGrid">ID Type</label>
+                          </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="govermentidnumber" name="healthrecordmedicalcondition" placeholder="First Name">
+                        <label for="floatingInput">ID Number</label>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control border-form-modal" id="govermentidissuedate" name="govermentidissuedate" placeholder="First Name">
+                        <label for="floatingInput">Issue Date</label>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="govermentidsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editgovermentidmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Goverment ID</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editgovermentidemployeeid" name="editgovermentidemployeeid" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Employee ID</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editgovermentidtype" name="editgovermentidtype" aria-label="Floating label select example">
+                                <option value="Health Card">Health Card</option>
+                                <!-- <option value="PhilHealth">PhilHealth</option>
+                                <option value="PagIbig">PagIbig</option>
+                                <option value="TIN">TIN</option> -->
+                            </select>
+                            <label for="floatingSelectGrid">ID Type</label>
+                          </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="editgovermentidnumber" name="edithealthrecordmedicalcondition" placeholder="First Name">
+                        <label for="floatingInput">ID Number</label>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control border-form-modal" id="editgovermentidissuedate" name="editgovermentidissuedate" placeholder="First Name">
+                        <label for="floatingInput">Issue Date</label>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editgovermentidstatus" name="editgovermentidstatus" aria-label="Floating label select example">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                            <label for="floatingSelectGrid">Status</label>
+                          </div>
+                    </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editgovermentidsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

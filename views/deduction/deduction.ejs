@@ -2,7 +2,7 @@
 
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-  <div class="card-header">
+  <div class="card-header ch-coop">
     <h3 class="title-card-table">Goverment Deductions</h3>
     <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#resignedmodal">
       <b>+ Add</b>
@@ -38,7 +38,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Salary of Employee </h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Deductions</h1>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
@@ -115,7 +115,7 @@
         <form>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="editemployee" name="editemployee" aria-label="Floating label select example">
+              <select class="form-select" id="editemployee" name="editemployee" aria-label="Floating label select example" disabled>
                 <option selected>Choose..</option>
               </select>
               <label for="editemployee">Employee</label>
@@ -124,7 +124,7 @@
           <br>
           <div class="col">
             <div class="form-floating">
-              <select class="form-select" id="editgovid" name="editgovid" aria-label="Floating label select example">
+              <select class="form-select" id="editgovid" name="editgovid" aria-label="Floating label select example" disabled>
                 <option selected>Choose..</option>
               </select>
               <label for="editgovid">GovernmentID Type</label>

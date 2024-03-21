@@ -15,18 +15,17 @@
         <%- include("eportalsidebar.ejs")%>
         <!-- End of Sidebar -->
 
+        <!-- Topbar -->
+        <%- include("eportaltopbar.ejs")%>
+        <!-- End of Topbar -->
+
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper">
 
             <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
-                <%- include("eportaltopbar.ejs")%>
-                <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
-                <%- include("./dashboard/dashboard.ejs")%>
+                <%- include("./eportalrequestovertime/eportalrequestovertime.ejs")%>
                 <!-- /.container-fluid -->
 
             </div>
@@ -47,8 +46,8 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <%- include("scripts.ejs")%>
-    <%- include("./dashboard/dashboardscript.ejs")%>
+    <%- include("./scripts.ejs")%>
+    <%- include("./eportalrequestovertime/eportalrequestovertimescript.ejs")%>
 </body>
 
 </html>

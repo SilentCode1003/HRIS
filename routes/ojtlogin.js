@@ -55,8 +55,6 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
                     req.session.status = user.status;
                 });
     
-                // console.log('result',user);
-    
                 return res.json({
                     msg:'success',
                     data: data,

@@ -19,28 +19,24 @@ router.post("/login", (req, res) => {
 
       console.log(encrypted);
 
-      let sql = `
-      
-SELECT 
-mu_employeeid AS employeeid,
-CONCAT(me_firstname, ' ', me_lastname) AS fullname,
-ma_accessname AS accesstype,
-mu_status AS status,
-me_profile_pic AS image,
-me_jobstatus AS jobstatus,
-md_departmentid AS departmentid,
-md_departmentname AS departmentname,
-mp_positionname AS position,
-mgs_id AS geofenceid
-FROM master_user
-INNER JOIN master_access ON mu_accesstype = ma_accessid
-LEFT JOIN master_employee ON mu_employeeid = me_id
-LEFT JOIN master_department ON md_departmentid = me_department
-LEFT JOIN master_position ON mp_positionid = me_position
-LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
-WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
-
-      // console.log(sql);
+      let sql = `SELECT 
+      mu_employeeid AS employeeid,
+      CONCAT(me_firstname, ' ', me_lastname) AS fullname,
+      ma_accessname AS accesstype,
+      mu_status AS status,
+      me_profile_pic AS image,
+      me_jobstatus AS jobstatus,
+      md_departmentid AS departmentid,
+      md_departmentname AS departmentname,
+      mp_positionname AS position,
+      mgs_id AS geofenceid
+      FROM master_user
+      INNER JOIN master_access ON mu_accesstype = ma_accessid
+      LEFT JOIN master_employee ON mu_employeeid = me_id
+      LEFT JOIN master_department ON md_departmentid = me_department
+      LEFT JOIN master_position ON mp_positionid = me_position
+      LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
+      WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
       mysqlQueryPromise(sql)
         .then((result) => {
@@ -55,7 +51,7 @@ WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
               if (user.status === "Active") {
                 let data = UserLogin(result);
 
-                console.log(result);
+                //console.log(result);
 
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
@@ -114,5 +110,3 @@ router.post("/logout", (req, res) => {
     });
   });
 });
-
-

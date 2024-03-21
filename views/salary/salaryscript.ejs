@@ -109,8 +109,8 @@
 
         $(document).on("click", "#salarysavebtn", function () {
             let employeeid = $("#salaryemp").val();
-            let monthly = formatCurrencyValue($("#msemp").val());
-            let allowances = formatCurrencyValue($("#allowances").val());
+            let monthly = $("#msemp").val();
+            let allowances = $("#allowances").val();
 
             var message = "";
 
@@ -129,10 +129,8 @@
             if (message !== "") {
                 swal("Validation Error", message, "error");
             } else {
-                // Remove commas and currency symbol from formatted values
                 monthly = monthly.replace(/,/g, '').replace('₱', '');
                 allowances = allowances.replace(/,/g, '').replace('₱', '');
-                // Perform the insertion
                 $.ajax({
                     type: "POST",
                     url: "/salary/save",
@@ -246,10 +244,8 @@
                         $.each(existingData, (key, item) => {
                             $("#editdepartmentid").val(item.salaryid);
                             $("#editsalaryemp").val(item.employeeid);
-                            $("#editmsemp").val(item.monthly);
-                            $("#editallowances").val(item.allowances);
-                            formatCurrencyInput('editmsemp', 'PHP');
-                            formatCurrencyInput('editallowances', 'PHP');
+                            $("#editmsemp").val(formatCurrencyValue(item.monthly));
+                            $("#editallowances").val(formatCurrencyValue(item.allowances));
                         });
                     } else {
                         swal("Error fetching employee data", message, "error");
@@ -261,41 +257,12 @@
             });
         });
 
-        // Function to format currency values
-        function formatCurrencyInput(inputId, currencyCode) {
-            // Get the input element
-            let inputElement = document.getElementById(inputId);
-
-            // Add event listener for input changes
-            inputElement.addEventListener('input', function () {
-                // Remove non-numeric characters
-                let numericValue = parseFloat(inputElement.value.replace(/[^\d.]/g, ''));
-
-                // Check if the input is a valid number
-                if (!isNaN(numericValue)) {
-                    // Format the number as currency with the specified currency code
-                    let formattedCurrency = new Intl.NumberFormat('en-PH', {
-                        style: 'currency',
-                        currency: currencyCode,
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                    }).format(numericValue);
-
-                    // Update the input value with the formatted currency
-                    inputElement.value = formattedCurrency;
-                }
-            });
-
-            // Trigger the event to format the initial value
-            inputElement.dispatchEvent(new Event('input'));
-        }
-
         $(document).on("click", "#editsalarysavebtsn", function () {
             console.log("Save button clicked");
             let id = salaryid;
             let employeeid = $("#editsalaryemp").val();
-            let monthly = $("#editmsemp").val().replace(/[^\d.-]/g, ''); // Remove formatting symbols
-            let allowances = $("#editallowances").val().replace(/[^\d.-]/g, ''); // Remove formatting symbols
+            let monthly = $("#editmsemp").val().replace(/[^\d.-]/g, '');
+            let allowances = $("#editallowances").val().replace(/[^\d.-]/g, '');
 
             var message = "";
 
@@ -320,8 +287,8 @@
                     data: {
                         salaryid: id,
                         employeeid: employeeid,
-                        monthly: parseFloat(monthly), // Parse to numeric value
-                        allowances: parseFloat(allowances), // Parse to numeric value
+                        monthly: parseFloat(monthly), 
+                        allowances: parseFloat(allowances),
                     },
                     success: function (result) {
                         if (result.msg == "success") {
@@ -356,6 +323,126 @@
 
     });
 
+//#region FUNCTIONS 
+
+
+    $("#msemp").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+
+        var numeric_val = input_val.replace(/\D/g, "");
+
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+
+        input.val(formatted_val);
+    }
+
+
+    $("#editmsemp").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+        var numeric_val = input_val.replace(/\D/g, "");
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+        input.val(formatted_val);
+    }
+
+
+    $("#allowances").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+
+        var numeric_val = input_val.replace(/\D/g, "");
+
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+
+        input.val(formatted_val);
+    }
+
+
+    $("#editallowances").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+        var numeric_val = input_val.replace(/\D/g, "");
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+        input.val(formatted_val);
+    }
+
 
 
     function searchTable() {
@@ -380,97 +467,7 @@
         }
     }
 
-    // Define formatCurrency globally
-    function formatCurrency(inputId, currencyCode) {
-        // Get the input element
-        let inputElement = document.getElementById(inputId);
-
-        // Get the input value as a number
-        let inputValue = parseFloat(inputElement.value.replace(/[^\d.]/g, '')); // Remove non-numeric characters
-
-        // Check if the input is a valid number
-        if (!isNaN(inputValue)) {
-            // Format the number as currency with the specified currency code
-            let formattedCurrency = new Intl.NumberFormat('en-PH', { style: 'currency', currency: currencyCode }).format(inputValue);
-
-            // Update the input value with the formatted currency
-            inputElement.value = formattedCurrency;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add event listeners after the DOM has fully loaded
-        document.getElementById('msemp').addEventListener('input', function () {
-            formatCurrency('msemp', 'PHP');
-        });
-
-        document.getElementById('allowances').addEventListener('input', function () {
-            formatCurrency('allowances', 'PHP');
-        });
-    });
-
-
-    function formatCurrencyValue(value) {
-        // Ensure value is defined and is a non-empty string
-        if (typeof value === 'string' && value.trim() !== '') {
-            // Remove non-numeric characters
-            let numericValue = value.replace(/[^0-9.]/g, '');
-
-            // Convert to numeric value
-            let floatValue = parseFloat(numericValue);
-
-            // Check if the conversion resulted in a valid number
-            if (!isNaN(floatValue)) {
-                // Format as a string with two decimal places and add peso sign
-                let formattedValue = floatValue.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'PHP',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                return formattedValue;
-            }
-        }
-
-        // If value is not a string, is an empty string, or conversion failed, return an empty string
-        return '';
-    }
-
-    function formatPrice(event, input) {
-        event.preventDefault();
-
-        const cursorPosition = input.selectionStart;
-        const originalValue = input.value;
-        const defaultValue = '₱0.00';
-        const currentValue = originalValue || defaultValue;
-
-        let value = currentValue.replace(/[^0-9.]/g, '');
-        let number = parseFloat(value);
-
-        if (!isNaN(number)) {
-            const formattedValue = number.toLocaleString('en-PH', {
-                style: 'currency',
-                currency: 'PHP',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-
-            input.value = formattedValue;
-
-            let newPosition = cursorPosition + (formattedValue.indexOf('.') > currentValue.indexOf('.') ? 1 : 0);
-
-            // Set the new cursor position
-            input.setSelectionRange(newPosition, newPosition);
-        } else {
-            input.value = defaultValue;
-        }
-    }
-
-
-
-
-
+//#endregion
 
 
 </script>

@@ -10,16 +10,16 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
+Decrypter('c574ca8d727ae317e1061f878591ef49', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
-})
+});
 
 // Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
 
-// })
+// });
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
@@ -201,6 +201,29 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Ojt_Attendance(results));
       }
 
+      if (table == "Apps_Details") {
+        callback(null, model.Apps_Details(results));
+      }
+
+      if (table == "Payroll_Approval_Ot") {
+        callback(null, model.Payroll_Approval_Ot(results));
+      }
+
+      if (table == "Payroll_Date") {
+        callback(null, model.Payroll_Date(results));
+      }
+
+      if (table == "Other_Deductions") {
+        callback(null, model.Other_Deductions(results));
+      }
+
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
+
+      if (table == "Attendance_Request") {
+        callback(null, model.Attendance_Request(results));
+      }
     });
   } catch (error) {}
 };
@@ -280,6 +303,29 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_longitudein,
         ma_devicein,
         ma_gefenceidIn) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_attendance_request") {
+    let sql = `INSERT INTO master_attendance(
+        ma_employeeid,
+        ma_attendancedate,
+        ma_clockin,
+        ma_clockout,
+        ma_latitudeIn,
+        ma_longitudein,
+        ma_latitudeout,
+        ma_longitudeout,
+        ma_gefenceidIn,
+        ma_geofenceidOut,
+        ma_devicein,
+        ma_deviceout) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -807,6 +853,93 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+  if (tablename == "apps_details") {
+    let sql = `INSERT INTO apps_details(
+        ad_image,
+        ad_name,
+        ad_details,
+        ad_version,
+        ad_date,
+        ad_createby) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+        md_employeeid,
+        md_idtype,
+        md_idnumber,
+        md_issuedate,
+        md_createby,
+        md_createdate,
+        md_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "other_deductions") {
+    let sql = `INSERT INTO other_deductions(
+      od_employeeid,
+      od_idtype,
+      od_amount,
+      od_period,
+      od_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request") {
+    let sql = `INSERT INTO attendance_request(
+      ar_employeeid,
+      ar_attendace_date,
+      ar_timein,
+      ar_timeout,
+      ar_total,
+      ar_createdate,
+      ar_createby,
+      ar_status,
+      ar_reason,
+      ar_file) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "payroll_date") {
+    let sql = `INSERT INTO payroll_date(
+      pd_name,
+      pd_cutoff,
+      pd_startdate,
+      pd_enddate,
+      pd_payrolldate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
 };
 
 exports.Update = async (sql) => {
@@ -827,7 +960,6 @@ exports.UpdateMultiple = async (sql, data, callback) => {
       if (error) {
         callback(error, null);
       }
-      // console.log('Rows affected:', results.affectedRows);
 
       callback(null, `Rows affected: ${results.affectedRows}`);
     });

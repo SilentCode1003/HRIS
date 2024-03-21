@@ -5,13 +5,14 @@
         console.log('Initialize');
         LoadTable();
         LoadListEmp();
+        Loadedittype();
         //searchTable();
         LoadeditListEmp();
         //LoadListGovid();
 
-        //   $(document).on('keyup', '#myInput', function () {
-        //     searchTable();
-        //   });
+          $(document).on('keyup', '#myInput', function () {
+            searchTable();
+          });
 
 
         function LoadTable() {
@@ -31,7 +32,7 @@
                         var finalData = [];
                         var data = json.data;
 
-                        console.log(data);
+                        //console.log(data);
                         $.each(data, (key, item) => {
                             var action = "";
                             var status = item.status;
@@ -103,7 +104,7 @@
         $(document).on("click", "#deductionsvbtn", function () {
             let employeeid = $("#employee").val();
             let type = $("#govid").val();
-            let amount = formatCurrencyValue($("#deductamount").val());
+            let amount = $("#deductamount").val();
             let period = $("#deductperiod").val();
             let cutoff = $("#cutoff").val();
 
@@ -185,14 +186,14 @@
                 type: "GET",
                 url: "/employee/load",
                 success: function (result) {
-                    console.log(result.data);
+                   // console.log(result.data);
                     var data = result.data;
 
                     $.each(data, function (key, item) {
                         var options = new Option(item.newEmployeeId, item.newEmployeeId);
                         $(options).html(item.firstname);
                         $("#employee").append(options);
-                        console.log(item.firstname);
+                        //console.log(item.firstname);
                     });
                 },
                 error: function (result) {
@@ -210,7 +211,7 @@
                     url: "/employee/getgovid",
                     data: { employeeid: employeeId },
                     success: function (result) {
-                        console.log(result.data);
+                        //console.log(result.data);
                         var data = result.data;
 
                         $.each(data, function (key, item) {
@@ -245,14 +246,14 @@
                 type: "GET",
                 url: "/employee/loadedit",
                 success: function (result) {
-                    console.log(result.data);
+                    //console.log(result.data);
                     var data = result.data;
 
                     $.each(data, function (key, item) {
                         var options = new Option(item.newEmployeeId, item.newEmployeeId);
                         $(options).html(item.firstname);
                         $("#editemployee").append(options);
-                        console.log(item.firstname);
+                        //console.log(item.firstname);
                     });
                 },
                 error: function (result) {
@@ -294,6 +295,27 @@
         // });
 
 
+        function Loadedittype() {
+            $.ajax({
+                type: "GET",
+                url: "/govermentid/load",
+                success: function (result) {
+                    //console.log(result.data);
+                    var data = result.data;
+
+                    $.each(data, function (key, item) {
+                        var options = new Option(item.governmentid, item.governmentid);
+                        $(options).html(item.idtype);
+                        $("#editgovid").append(options);
+                    });
+                },
+                error: function (result) {
+                    alert("error: " + result.data);
+                },
+            });
+        }
+
+
         $(document).ready(function () {
             $("#editemployee").on("change", function () {
                 var employeeId = $(this).val();
@@ -303,14 +325,14 @@
                     url: "/employee/getgovid",
                     data: { employeeid: employeeId },
                     success: function (result) {
-                        console.log(result.data);
+                        //console.log(result.data);
                         var data = result.data;
 
                         $.each(data, function (key, item) {
                             var options = new Option(item.governmentid, item.governmentid);
                             $(options).html(item.idtype);
                             $("#editgovid").append(options);
-                            console.log(item.idtype);
+                           // console.log(item.idtype);
                         });
                     },
                     error: function (result) {
@@ -323,11 +345,12 @@
         $(document).ready(function () {
             $("#editdeductperiod").on("change", function () {
                 var selectedDeductPeriod = $(this).val();
-                $("#editcutoff").empty();
                 if (selectedDeductPeriod === "1") {
+                    $("#editcutoff").empty();
                     $("#editcutoff").append('<option>1st Cut Off</option>');
                     $("#editcutoff").append('<option>2nd Cut Off</option>');
                 } else if (selectedDeductPeriod === "2") {
+                    $("#editcutoff").empty();
                     $("#editcutoff").append('<option selected>1st Cut Off and 2nd Cut Off</option>');
                 }
             });
@@ -360,8 +383,7 @@
                         $.each(existingData, (key, item) => {
                             $("#editemployee").val(item.employeeid);
                             $("#editgovid").val(item.type);
-                            $("#editdeductamount").val(item.amount);
-                            formatCurrencyInput('editdeductamount', 'PHP');
+                            $("#editdeductamount").val(formatCurrencyValue(item.amount));
                             $("#editdeductperiod").val(item.period);
                             $("#editcutoff").val(item.cutoff);
                         });
@@ -374,24 +396,6 @@
                 },
             });
         });
-
-        function formatCurrencyInput(inputId, currencyCode) {
-            let inputElement = document.getElementById(inputId);
-            inputElement.addEventListener('input', function () {
-                let numericValue = parseFloat(inputElement.value.replace(/[^\d.]/g, ''));
-
-                if (!isNaN(numericValue)) {
-                    let formattedCurrency = new Intl.NumberFormat('en-PH', {
-                        style: 'currency',
-                        currency: currencyCode,
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                    }).format(numericValue);
-                    inputElement.value = formattedCurrency;
-                }
-            });
-            inputElement.dispatchEvent(new Event('input'));
-        }
 
         $(document).on("click", "#editdeductionsvbtn", function () {
             let id = govdeduct
@@ -472,81 +476,89 @@
 
     });
 
-    // function searchTable() {
-    //   var input, filter, found, table, tr, td, i, j;
-    //   input = document.getElementById("myInput");
-    //   filter = input.value.toUpperCase();
-    //   table = document.getElementById("dataTableresigned");
-    //   tr = table.getElementsByTagName("tr");
-    //   for (i = 0; i < tr.length; i++) {
-    //     td = tr[i].getElementsByTagName("td");
-    //     for (j = 0; j < td.length; j++) {
-    //       if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-    //         found = true;
-    //       }
-    //     }
-    //     if (found) {
-    //       tr[i].style.display = "";
-    //       found = false;
-    //     } else {
-    //       tr[i].style.display = "none";
-    //     }
-    //   }
-    // }
+//#region FUNCTIONS
 
-    function formatCurrency(inputId, currencyCode) {
-        // Get the input element
-        let inputElement = document.getElementById(inputId);
-
-        // Get the input value as a number
-        let inputValue = parseFloat(inputElement.value.replace(/[^\d.]/g, '')); // Remove non-numeric characters
-
-        // Check if the input is a valid number
-        if (!isNaN(inputValue)) {
-            // Format the number as currency with the specified currency code
-            let formattedCurrency = new Intl.NumberFormat('en-PH', { style: 'currency', currency: currencyCode }).format(inputValue);
-
-            // Update the input value with the formatted currency
-            inputElement.value = formattedCurrency;
+    $("#deductamount").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
         }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add event listeners after the DOM has fully loaded
-        document.getElementById('deductamount').addEventListener('input', function () {
-            formatCurrency('deductamount', 'PHP');
-        });
-
     });
 
-
-    function formatCurrencyValue(value) {
-        // Ensure value is defined and is a non-empty string
-        if (typeof value === 'string' && value.trim() !== '') {
-            // Remove non-numeric characters
-            let numericValue = value.replace(/[^0-9.]/g, '');
-
-            // Convert to numeric value
-            let floatValue = parseFloat(numericValue);
-
-            // Check if the conversion resulted in a valid number
-            if (!isNaN(floatValue)) {
-                // Format as a string with two decimal places and add peso sign
-                let formattedValue = floatValue.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'PHP',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                return formattedValue;
-            }
-        }
-
-        // If value is not a string, is an empty string, or conversion failed, return an empty string
-        return '';
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+
+        var numeric_val = input_val.replace(/\D/g, "");
+
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+
+        input.val(formatted_val);
+    }
+
+
+    $("#editdeductamount").on({
+        input: function () {
+            formatCurrency($(this));
+        },
+        blur: function () {
+            formatCurrency($(this), true);
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+        var numeric_val = input_val.replace(/\D/g, "");
+        if (numeric_val === "" || numeric_val === "00") {
+            return;
+        }
+        var formatted_val = formatNumber(numeric_val);
+        formatted_val = "₱" + formatted_val;
+        if (blur) {
+            formatted_val += ".00";
+        }
+        input.val(formatted_val);
+    }
+
+    function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableDeduction");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+//#endregion
 
 
 </script>

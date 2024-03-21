@@ -1,12 +1,16 @@
 <ul class="navbar-nav sidebar bg-danger sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center bg-danger justify-content-center" href="/">
-        <div class="sidebar-brand-text mx-3">
-            <img class="img-profile rounded-circle"
-            src="/images/img/whitelogo.png" style="width: 100px; margin-left: -60px;">
+<!-- Sidebar - Brand -->
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <div class="sidebar-brand-text mx-3 ojt-img-rounded">
+        <img class="img-profile rounded-circle ojt-img-rounded"
+        src="/images/img/whitelogo.png" style="width: 50%; margin-left: -60px;">
+       OJT
+    </div>
+</a>
+        <!-- <div class="sidebar-brand-text mx-3 text-brand-ojt">
             OJT PORTAL
-        </div>
+        </div> -->
     </a>
 
     <!-- Divider -->
@@ -15,8 +19,9 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
         <a class="nav-link" href="/ojtindex">
-            <i class='bx bxs-dashboard bx-tada db-icon'></i>
-           <span><b>Dashboard</b></span></a>
+            <lord-icon src="https://cdn.lordicon.com/kgvlhryh.json" trigger="loop" class="db-icon-hrmis">
+            </lord-icon>
+            <span style="color: white !important;"><b>Dashboard</b></span></a>
     </li>
 
     <!-- Heading -->
@@ -24,21 +29,27 @@
         Interface
     </div>
 
-    <li class="nav-item bg-danger">
+
+    <li class="nav-item sidebar-item">
         <a class="nav-link" href="/ojtattendance">
-            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+            <lord-icon src="https://cdn.lordicon.com/svsiboke.json" trigger="loop"
+                colors="primary:#121331,secondary:#ebe6ef,tertiary:#16c72e,quaternary:#66d7ee,quinary:#e8e230,senary:#3a3347" class="db-icon-hrmis">
+            </lord-icon>
             <span><b>Attendance</b></span></a>
     </li>
 
-    <li class="nav-item bg-danger">
-        <a class="nav-link" href="/ojtprofile">
-            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+    <li class="nav-item sidebar-item">
+        <a class="nav-link link-hover" href="/ojtprofile">
+            <lord-icon src="https://cdn.lordicon.com/fmasbomy.json" trigger="loop" class="db-icon-hrmis">
+            </lord-icon>
             <span><b>Profile</b></span></a>
     </li>
 
-    <li class="nav-item bg-danger">
-        <a class="nav-link" href="/ojtreqabsent">
-            <i class='bx bxs-comment-dots bx-tada announce-icon'></i>
+    <li class="nav-item sidebar-item">
+        <a class="nav-link link-hover" href="/ojtreqabsent">
+            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" trigger="loop"
+                colors="primary:#121331,secondary:#eee966,tertiary:#c71f16,quaternary:#ffffff" class="db-icon-hrmis">
+            </lord-icon>
             <span><b>Request Absent</b></span></a>
     </li>
 
@@ -210,10 +221,10 @@
    
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block bg-danger">
+    <hr class="sidebar-divider d-none d-md-block">
 
     <!--Sidebar Toggler (Sidebar)-->
-    <div class="text-center d-none d-md-inline bg-danger">
+    <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
     

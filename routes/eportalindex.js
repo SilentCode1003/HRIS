@@ -31,8 +31,8 @@ function getLatestLog(employeeId) {
   });
 }
 
-function getDeviceInformation(req) {
-  if (typeof navigator === "undefined") {
+function getDeviceInformation(device) {
+  if (typeof device === "undefined" || " ") {
     return "app";
   } else {
     return "web";
@@ -86,7 +86,7 @@ router.post("/clockin", (req, res) => {
 
   const { latitude, longitude } = req.body;
   const attendancedate = moment().format("YYYY-MM-DD");
-  const devicein = getDeviceInformation(req);
+  const devicein = getDeviceInformation(req.body.devicein);
 
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
@@ -197,7 +197,7 @@ router.post("/clockout", (req, res) => {
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = getDeviceInformation(req);
+        const deviceout = getDeviceInformation(req.body.deviceout);
 
         const updateQuery = `
         UPDATE master_attendance
@@ -255,7 +255,8 @@ router.post('/emplogs', (req, res) => {
     TIME(al_logdatetime) AS logtime
     FROM attendance_logs
     WHERE al_employeeid = '${employeeid}'
-    order by al_logdatetime desc`;
+    order by al_logdatetime desc
+    limit 4`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {

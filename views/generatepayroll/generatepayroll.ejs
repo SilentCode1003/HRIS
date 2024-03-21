@@ -1,31 +1,483 @@
-<br>
-<!-- Table -->
-<div class="card" id="tablecard">
-    <div class="card-header">
-        <h3 class="title-card-table">Generate Payroll</h3>
-        <input type="text" name="daterange"/>
-        <input id='myInput' type='text' placeholder="  Search....">
+<body>
+    <!-- Table -->
+    <div class="card" id="tablecard">
+        <div class="card-header ch-coop">
+            <h3 class="title-card-table">Generate Payroll</h3>
+            <input id="datepicker" type="text" name="daterange" />
+            <button id="generateButton" class="btn btn-add-color"><b>Generate</b></button>
+            <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button>
+            <button id="exportBtn" class="btn btn-add-color"><b>Export</b></button>
+            <input id="myInput" type="text" placeholder="Search....">
+        </div>
+        <div class="card-body">
+
+            <div class="progress" id="loadingBar" style="display: none;">
+                <div class="indeterminate"></div>
+            </div>
+
+
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped" id="dataTablePayroll">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th class="col-sm-1">EmployeeID</th>
+                            <th>Salary</th>
+                            <th>Payroll Date</th>
+                            <th>Cut Off</th>
+                            <th>Total Deductions</th>
+                            <th>Total Net Pay</th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableshift">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Payroll Date</th>
-                        <th>Employee</th>
-                        <th>Cut Off</th>
-                        <th>Net Pay</th>
-                        <th>Total Hours</th>
-                        <th>Total Deductions</th>
-                        <th>Allowances</th>
-                        <th>Adjustment</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+</body>
+
+</html>
+
+<div class="modal fade" id="payslipmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="head-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="font-weight-bold text-danger" id="head-title">Payslip</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <br>
+                <div class="container p-0">
+                    <div class="col-md-12 col-xl-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="account" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <nav>
+                                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                                    <button class="nav-link active" id="nav-profile-tab"
+                                                        data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+                                                        role="tab" aria-controls="nav-profile"
+                                                        aria-selected="true">Profile</button>
+                                                    <button class="nav-link" id="nav-payslip-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#nav-payslip" type="button" role="tab"
+                                                        aria-controls="nav-payslip"
+                                                        aria-selected="false">Payslip</button>
+                                                    <button class="nav-link" id="nav-date-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#nav-date" type="button" role="tab"
+                                                        aria-controls="nav-date" aria-selected="false">Date</button>
+                                                    <button class="nav-link" id="nav-deductions-tab"
+                                                        data-bs-toggle="tab" data-bs-target="#nav-deductions"
+                                                        type="button" role="tab" aria-controls="nav-deductions"
+                                                        aria-selected="false">Deductions</button>
+                                                    <button class="nav-link" id="nav-holidays-tab" data-bs-toggle="tab"
+                                                        data-bs-target="#nav-holidays" type="button" role="tab"
+                                                        aria-controls="nav-holidays"
+                                                        aria-selected="false">Holidays</button>
+                                                </div>
+                                            </nav>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <div class="tab-pane fade show active" id="nav-profile" role="tabpanel"
+                                                aria-labelledby="nav-profile-tab" tabindex="0">
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="card mb-4">
+                                                                <div class="card-body text-center">
+                                                                    <img id="editpreview" alt="avatar"
+                                                                        class="rounded-circle img-fluid"
+                                                                        style="width: 150px;">
+                                                                    <h5 class="my-3" id="employeename"></h5>
+                                                                    <p class="text-muted mb-1" id="position"></p>
+                                                                    <p class="text-muted mb-4" id="department"></p>
+                                                                    <div class="d-flex justify-content-center mb-2">
+                                                                        <button type="button"
+                                                                            class="btn btn-primary">PDF</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary ms-1">Excel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card mb-4 mb-lg-0">
+                                                                <div class="card-body p-0">
+                                                                    <ul class="list-group list-group-flush rounded-3">
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                                            <div class="col-sm-6">
+                                                                                <p class="mb-0">Work Days</p>
+                                                                            </div>
+                                                                            <p class="mb-0" id="workdays"></p>
+                                                                        </li>
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                                            <div class="col-sm-6">
+                                                                                <p class="mb-0">Rest Day</p>
+                                                                            </div>
+                                                                            <p class="mb-0" id="restday"></p>
+                                                                        </li>
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                                            <div class="col-sm-6">
+                                                                                <p class="mb-0">Present Days</p>
+                                                                            </div>
+                                                                            <p class="mb-0" id="present"></p>
+                                                                        </li>
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                                            <div class="col-sm-6">
+                                                                                <p class="mb-0">Absents</p>
+                                                                            </div>
+                                                                            <p class="mb-0" id="absent"></p>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <div class="card mb-4">
+                                                                <div class="card-body">
+                                                                    <!-- Payroll Period -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Payroll Period</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="payrollrange">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Payroll Date -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Payroll Date</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="payrolldate">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Semi-Monthly Salary -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Semi-Monthly Salary</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="salary">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Daily Rate -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Daily Rate</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="dailyrate">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Monthly Allowances -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Monthly Allowances</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="allowances">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Compensation -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Compensation</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="compensation">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Total Deductions -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Total Deductions</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="deductions">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <!-- Total Net Pay -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0">Total Net Pay</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="totalnetpay">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-date" role="tabpanel"
+                                                aria-labelledby="nav-date-tab" tabindex="0">
+                                                <h3 class="font-weight-bold text-danger">Date Range</h3>
+                                                <form>
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <table class="table table-striped" id="dataTablePayslip">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>Clock In</th>
+                                                                        <th>Clock Out</th>
+                                                                        <th>Late In Minutes</th>
+                                                                        <th>Late In Hours</th>
+                                                                        <th>Early OT</th>
+                                                                        <th>Total Night Diff</th>
+                                                                        <th>Total Normal OT</th>
+                                                                        <th>Total Hours</th>
+                                                                        <th>Total in Minutes</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <div class="d-flex flex-column mt-2"> <span
+                                                                    class="fw-bolder" id="datename"></span> <span
+                                                                    class="mt-4">Authorised Signatory</span> </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-payslip" role="tabpanel"
+                                                aria-labelledby="nav-payslip-tab" tabindex="0">
+                                                <form>
+                                                    <div class="col-md-12">
+                                                        <div class="text-center lh-1 mb-2">
+                                                            <h6 class="fw-bold">Payslip</h6> <span class="fw-normal"
+                                                                id="paysliprange"></span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <label for="payslipdate">Payroll Date
+                                                                :</label>
+                                                            <span class="fw-bold" id="payslipdate"></span>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">EMP
+                                                                                Code</span> <small class="ms-3"
+                                                                                id="payslipid"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">EMP
+                                                                                Name</span> <small class="ms-3"
+                                                                                id="payslipname"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">SSS
+                                                                                ID</span> <small class="ms-3"
+                                                                                id="payslipSSSid"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">POSITION</span>
+                                                                            <small class="ms-3"
+                                                                                id="payslipposition"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">TIN
+                                                                                ID</span> <small class="ms-3"
+                                                                                id="payslipTINid"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">DEPARTMENT</span>
+                                                                            <small class="ms-3"
+                                                                                id="payslipdepartment"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">PHILHEALTH
+                                                                                ID</span> <small class="ms-3"
+                                                                                id="payslipphilhealthid"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">REMAINING
+                                                                                SL</span> <small class="ms-3">5</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">PAG
+                                                                                IBIG ID</span> <small class="ms-3"
+                                                                                id="payslipdeppagibigid"></small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bolder">REMAINING
+                                                                                LEAVE</span> <small
+                                                                                class="ms-3">5</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <table class="mt-4 table table-bordered">
+                                                                <thead class="bg-dark text-white">
+                                                                    <tr>
+                                                                        <th scope="col">Earnings</th>
+                                                                        <th scope="col">Amount</th>
+                                                                        <th scope="col">Deductions</th>
+                                                                        <th scope="col">Amount</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Basic</th>
+                                                                        <td id="payslipbasic"></td>
+                                                                        <td>SSS</td>
+                                                                        <td id="payslipsss"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Daily Rate</th>
+                                                                        <td id="payslipperday"></td>
+                                                                        <td>Philhealth</td>
+                                                                        <td id="paysliphdmf"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Allowances</th>
+                                                                        <td id="payslipallowances"></td>
+                                                                        <td>HDMF</td>
+                                                                        <td id="payslippagibig"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Total Approve Overtime
+                                                                        </th>
+                                                                        <td id="payslipovertime"></td>
+                                                                        <td>Tax</td>
+                                                                        <td id="paysliptin"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Night
+                                                                            Differrentials</th>
+                                                                        <td id="payslipndpay"></td>
+                                                                        <td>Absent</td>
+                                                                        <td id="payslipabsent"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Normal Overtime
+                                                                        </th>
+                                                                        <td id="payslipotpay"></td>
+                                                                        <td>Health Card</td>
+                                                                        <td id="paysliphealthcard"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Early Overtime
+                                                                        </th>
+                                                                        <td id="payslipearlypay"></td>
+                                                                        <td>Late</td>
+                                                                        <td id="paysliplate"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Special Holiday Overtime
+                                                                        </th>
+                                                                        <td id="payslipspecialovertime"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Regular Holiday Overtime
+                                                                        </th>
+                                                                        <td id="payslipregularovertime"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Special Holiday
+                                                                        </th>
+                                                                        <td id="payslipspecial"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Regular Holiday
+                                                                        </th>
+                                                                        <td id="payslipregular"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr class="border-top">
+                                                                        <th scope="row">Total
+                                                                            Compensation</th>
+                                                                        <td id="paysliptotal"></td>
+                                                                        <td>Total Deductions</td>
+                                                                        <td id="paysliptotaldeductions">
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <br>
+                                                                <label for="paysliptotalnetpay">Total
+                                                                    Net Pay :</label>
+                                                                <span class="fw-bold" id="paysliptotalnetpay"></span>
+                                                            </div>
+                                                            <div class="border col-md-8">
+                                                                <div class="d-flex flex-column" id="totalNetPayWords">
+                                                                    <span>In
+                                                                        Words</span> <span></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <div class="d-flex flex-column mt-2"> <span
+                                                                    class="fw-bolder" id="payslipempname"></span> <span
+                                                                    class="mt-4">Authorised
+                                                                    Signatory</span> </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="tab-pane fade" id="nav-deductions" role="tabpanel"
+                                                aria-labelledby="nav-deductions-tab" tabindex="0">
+                                                <form>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

@@ -704,6 +704,144 @@ exports.Ojt_Attendance_Logs = (data) => {
   return dataResult;
 };
 
+
+exports.Apps_Details = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      appid: key.ad_id,
+      appimage: key.ad_image,
+      appname: key.ad_name,
+      appsdetails: key.ad_details,
+      appversion: key.ad_version,
+      appdate: key.ad_date,
+      appcreateby: key.ad_createby,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Payroll_Approval_Ot = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approveot_id: key.pao_id,
+      image: key.pao_image,
+      fullname: key.pao_fullname,
+      employeeid: key.pao_employeeid,
+      attendancedate: key.pao_attendancedate,
+      clockin: key.pao_clockin,
+      clockout: key.pao_clockout,
+      totalhours: key.pao_total_hours,
+      night_ot: key.pao_night_differentials,
+      earlyot: key.pao_early_ot,
+      normal_ot: key.pao_normal_ot,
+      night_pay: key.pao_night_pay,
+      normal_pay: key.pao_normal_pay,
+      earlyot_pay: key.pao_early_ot_pay,
+      night_pay_perhour: key.pao_night_hours_pay,
+      normal_pay_perhour: key.pao_normal_ot_pay,
+      totalot_pay: key.pao_total_ot_net_pay,
+      payrolldate: key.pao_payroll_date,
+      reason: key.pao_reason,
+      overtimestatus: key.pao_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
+exports.Payroll_Date = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      payrolldate_id: key.pd_payrollid,
+      payroll_name: key.pd_name,
+      payroll_cutoff: key.pd_cutoff,
+      payroll_startdate: key.pd_startdate,
+      payroll_enddate: key.pd_enddate,
+      payrolldate: key.pd_payrolldate,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Other_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      otherdeduct: key.od_id,
+      employeeid: key.od_employeeid,
+      idtype: key.od_idtype,
+      amount: key.od_amount,
+      period: key.od_period,
+      cutoff: key.od_cutoff,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Master_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      otherdeductid: key.md_deductionid,
+      employeeid: key.md_employeeid,
+      idtype: key.md_idtype,
+      idnumber: key.md_idnumber,
+      issuedate: key.md_issuedate,
+      createby: key.md_createby,
+      createdate: key.md_createdate,
+      status: key.md_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Attendance_Request = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      emp_id: key.me_id,
+      image: key.me_profile_pic,
+      requestid: key.ar_requestid,
+      employeeid: key.ar_employeeid,
+      attendancedate: key.ar_attendace_date,
+      timein: key.ar_timein,
+      timeout: key.ar_timeout,
+      total: key.ar_total,
+      createdate: key.ar_createdate,
+      createby: key.ar_createby,
+      requeststatus: key.ar_status,
+      reason: key.ar_reason,
+      file: key.ar_file,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
+
+
 //#region Remodeling
 
 exports.OJTAttendance = (data) => {

@@ -61,7 +61,7 @@ router.post('/save', (req, res) => {
 
     let data = [employeeid, type, amount, period, cutoff];
 
-    let sql = `SELECT * FROM government_deductions WHERE gd_employeeid = '${employeeid}' AND gd_idtype = '${type}' AND gd_amount = '${amount}' AND gd_period = '${period}' AND gd_cutoff = '${cutoff}'`;
+    let sql = `SELECT * FROM government_deductions WHERE gd_employeeid = '${employeeid}' AND gd_idtype = '${type}'`;
 
     mysql.Select(sql, "Government_Deductions", (err, result) => {
       if (err) {

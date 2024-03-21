@@ -3,6 +3,18 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "otherdeductionsIDlayout",
+      },
+      {
+        layout: "otherdeductionslayout",
+      },
+      {
+        layout: "appsdetailslayout",
+      },
+      {
+        layout: "otapprovallayout",
+      },
+      {
         layout: "attendanceojtlayout",
       },
       {
@@ -120,9 +132,6 @@ var roleacess = [
         layout: "salaryhistorylayout",
       },
       {
-        layout: "timelogslayout",
-      },
-      {
         layout: "generatepayrolllayout",
       },
       {
@@ -130,6 +139,12 @@ var roleacess = [
       },
       {
         layout: "apprenticelayout",
+      },
+      {
+        layout: "attendancerequestlayout",
+      },
+      {
+        layout: "setpayrolldatelayout",
       },
     ],
   },
@@ -165,6 +180,12 @@ var roleacess = [
       },
       {
         layout: "eportalsalarylayout",
+      },
+      {
+        layout: "eportalrequestattendancelayout",
+      },
+      {
+        layout: "eportalrequestovertimelayout",
       },
     ],
   },

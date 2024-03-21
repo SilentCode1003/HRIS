@@ -1,11 +1,12 @@
-<h1 class="font-weight-bold text-danger" id="head-title">Profile</h1>
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Profile</h1> -->
+<br>
 <br>
 <div class="container p-0">
         <div class="col-md-9 col-xl-12">
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="account" role="tabpanel">
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="card card-ojt">
+                        <div class="card-header ch-ojt">
                             <h5 class="card-title mb-0">
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -21,47 +22,47 @@
                                         <div class="row">
                                             <div class="col-md-8">
                                                 <div class="form-group">
-                                                    <label for="ojtid">Ojt ID</label>
-                                                    <input type="text" class="form-control" id="ojtid" placeholder="Ojt ID" disabled>
+                                                    <label for="ojtid" class="ojt-label">OJT ID</label>
+                                                    <input type="text" class="form-control fc-ojt" id="ojtid" placeholder="Ojt ID" disabled>
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
-                                                        <label for="fullname">Full Name</label>
-                                                        <input type="text" class="form-control" id="fullname" placeholder="Full Name" disabled>
+                                                        <label for="fullname" class="ojt-label">Fullname</label>
+                                                        <input type="text" class="form-control fc-ojt" id="fullname" placeholder="Full Name" disabled>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="department">Department</label>
-                                                        <input type="text" class="form-control" id="department" placeholder="Department" disabled>
+                                                        <label for="department" class="ojt-label">Department</label>
+                                                        <input type="text" class="form-control fc-ojt" id="department" placeholder="Department" disabled>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="school">School</label>
-                                                        <input type="text" class="form-control" id="school" placeholder="School" disabled>
+                                                        <label for="school" class="ojt-label">School</label>
+                                                        <input type="text" class="form-control fc-ojt" id="school" placeholder="School" disabled>
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="datestart">Date Started</label>
-                                                        <input type="text" class="form-control" id="datestart" placeholder="Date Started" disabled>
+                                                        <label for="datestart" class="ojt-label">Date Started</label>
+                                                        <input type="text" class="form-control fc-ojt" id="datestart" placeholder="Date Started" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="totalhours">Total Hours</label>
-                                                    <input type="text" class="form-control" id="totalhours" placeholder="Total Hours" disabled>
+                                                    <label for="totalhours" class="ojt-label">Total Hours</label>
+                                                    <input type="text" class="form-control fc-ojt" id="totalhours" placeholder="Total Hours" disabled>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="totaltime">Accumulated Hours</label>
-                                                    <input type="text" class="form-control" id="totaltime" placeholder="Accumulated Hours" disabled>
+                                                    <label for="totaltime" class="ojt-label">Accumulated Hours</label>
+                                                    <input type="text" class="form-control fc-ojt" id="totaltime" placeholder="Accumulated Hours" disabled>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="remaining">Remaining Hours</label>
-                                                    <input type="text" class="form-control" id="remaining" placeholder="Remaining Hours" disabled>
+                                                    <label for="remaining" class="ojt-label">Remaining Hours</label>
+                                                    <input type="text" class="form-control fc-ojt" id="remaining" placeholder="Remaining Hours" disabled>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="endddate">End Date</label>
-                                                    <input type="text" class="form-control" id="endddate" placeholder="End Date" disabled>
+                                                    <label for="endddate" class="ojt-label">End Date</label>
+                                                    <input type="text" class="form-control fc-ojt" id="endddate" placeholder="End Date" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="text-center">
-                                                    <img id="editpreview" style="width:200px; height:200px;" class="rounded rounded-circle"
+                                                    <img id="editpreview"" class="rounded rounded-circle img-ojt-round"
                                                       alt="placeholder" disabled>
                                                   </div>
                                                   <br>
@@ -78,42 +79,42 @@
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                                     <form>
                                         <div class="form-group">
-                                            <label for="inputPasswordCurrent">Current password</label>
+                                            <label for="inputPasswordCurrent" class="ojt-label">Current password</label>
                                             <div class="input-group">
-                                                <input type="password" class="form-control" id="inputPasswordCurrent">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordCurrent">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <!-- <small><a href="#">Forgot your password?</a></small> -->
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="inputPasswordNew">New password</label>
+                                            <label for="inputPasswordNew" class="ojt-label">New password</label>
                                             <div class="input-group">
-                                                <input type="password" class="form-control" id="inputPasswordNew">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordNew">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="inputPasswordNew2">Confirm password</label>
+                                            <label for="inputPasswordNew2" class="ojt-label">Confirm password</label>
                                             <div class="input-group">
-                                                <input type="password" class="form-control" id="inputPasswordNew2">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordNew2">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>                                        
-                                        <button type="submit" id="saveBtn" class="btn btn-danger">Save changes</button>
+                                        <button type="submit" id="saveBtn" class="btn btn-modal-save">Save</button>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
