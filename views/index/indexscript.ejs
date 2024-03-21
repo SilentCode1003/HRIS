@@ -1,8 +1,7 @@
 <script>
   $(document).ready(function () {
-
     //#region declaration
-    let leaveid = '';
+    let leaveid = "";
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
@@ -39,99 +38,110 @@
 
     //#endregion
 
-
     //#region search key up
 
-    $(document).on('keyup', '#myInputtotal', function () {
+    $(document).on("keyup", "#myInputtotal", function () {
       searchEmployeeTable();
     });
 
-    $(document).on('keyup', '#myInputRegular', function () {
+    $(document).on("keyup", "#myInputRegular", function () {
       searchRegularTable();
     });
 
-    $(document).on('keyup', '#myInputproba', function () {
+    $(document).on("keyup", "#myInputproba", function () {
       searchprobaTable();
     });
 
-    $(document).on('keyup', '#myInputresigned', function () {
+    $(document).on("keyup", "#myInputresigned", function () {
       searchresignedTable();
     });
 
-    $(document).on('keyup', '#myInputtotaladmin', function () {
+    $(document).on("keyup", "#myInputtotaladmin", function () {
       searchadminTable();
     });
 
-    $(document).on('keyup', '#myInputtotalit', function () {
+    $(document).on("keyup", "#myInputtotalit", function () {
       searchitTable();
     });
 
-    $(document).on('keyup', '#myInputtotalcabling', function () {
+    $(document).on("keyup", "#myInputtotalcabling", function () {
       searchcablingTable();
     });
 
-    $(document).on('keyup', '#myInputtotalcandidate', function () {
+    $(document).on("keyup", "#myInputtotalcandidate", function () {
       searchcandidateTable();
     });
 
-    $(document).on('keyup', '#myInputtotalbagapuro', function () {
+    $(document).on("keyup", "#myInputtotalbagapuro", function () {
       searchbagapuroTable();
     });
 
-    $(document).on('keyup', '#myInputtotalapprentice', function () {
+    $(document).on("keyup", "#myInputtotalapprentice", function () {
       searchapprenticeTable();
     });
 
-
-    //#endregion    
-
+    //#endregion
 
     //#region Load Modal Table
     //#Employee Modal
     $(document).on("click", "#totalEMP", function () {
-
       $.ajax({
         type: "GET",
         url: "/employee/totalactive",
         success: function (json) {
           var data = json.data;
 
-          populatedatatable(data)
-
+          populatedatatable(data);
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatedatatable(data) {
-      const tableBody = $('#dataTableemployees tbody');
+      const tableBody = $("#dataTableemployees tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.jobstatus, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.email,
+              "data-label": "Created Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.jobstatus, class: "custom-mobile-align" }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -147,44 +157,61 @@
         type: "GET",
         url: "/employee/totalregular",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populateregularemloyeetbl(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populateregularemloyeetbl(data) {
-      const tableBody = $('#regularemloyeetbl tbody');
+      const tableBody = $("#regularemloyeetbl tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.contact, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.me_department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.me_position, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.contact,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.email,
+              "data-label": "Created Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.me_department,
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.me_position, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -200,44 +227,58 @@
         type: "GET",
         url: "/employee/totalprobi",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populateprobiemloyeetbl(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populateprobiemloyeetbl(data) {
-      const tableBody = $('#probiemloyeetbl tbody');
+      const tableBody = $("#probiemloyeetbl tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, 'data-label': 'Created Date', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.email,
+              "data-label": "Created Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -256,42 +297,56 @@
           var finalData = [];
           var data = json.data;
           populateresignedemployeetbl(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populateresignedemployeetbl(data) {
-      const tableBody = $('#resignedemployeetbl tbody');
+      const tableBody = $("#resignedemployeetbl tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 9,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 9,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.reason, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.dateresigned, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.createdate, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.reason, class: "custom-mobile-align" }),
+            $("<td>", {
+              text: item.dateresigned,
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.createdate, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -307,44 +362,54 @@
         type: "GET",
         url: "/totaladmin",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotaladmintable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotaladmintable(data) {
-      const tableBody = $('#totaladmintable tbody');
+      const tableBody = $("#totaladmintable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.email, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -360,44 +425,54 @@
         type: "GET",
         url: "/totalIT",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotalittable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotalittable(data) {
-      const tableBody = $('#totalittable tbody');
+      const tableBody = $("#totalittable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.email, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -413,44 +488,54 @@
         type: "GET",
         url: "/totalcabling",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotalcablingtable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotalcablingtable(data) {
-      const tableBody = $('#totalcablingtable tbody');
+      const tableBody = $("#totalcablingtable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.phone, 'data-label': 'Created By', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.email, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.phone,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.email, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -466,44 +551,50 @@
         type: "GET",
         url: "/totalcandidate",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotalcandidatetable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotalcandidatetable(data) {
-      const tableBody = $('#totalcandidatetable tbody');
+      const tableBody = $("#totalcandidatetable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -519,44 +610,50 @@
         type: "GET",
         url: "/totalbagapuroapi",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotalbagapurotable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotalbagapurotable(data) {
-      const tableBody = $('#totalbagapurotable tbody');
+      const tableBody = $("#totalbagapurotable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 7,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 7,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.tenure, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" }),
+            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -572,43 +669,49 @@
         type: "GET",
         url: "/apprenticemodal",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
           populatetotalapprenticetable(data);
-
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
     function populatetotalapprenticetable(data) {
-      const tableBody = $('#totalapprenticetable tbody');
+      const tableBody = $("#totalapprenticetable tbody");
       tableBody.empty();
 
       if (data.length === 0) {
-        const tr = $('<tr>').append($('<td>', {
-          colspan: 6,
-          class: 'text-center',
-          text: 'No Data Matched'
-        }));
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
         tableBody.append(tr);
       } else {
-        data.forEach(item => {
-          const tr = $('<tr>').append(
-            $('<td>', {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
               html: item.profilePicturePath
                 ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-                : 'No Image',
-              'data-label': 'Product Image',
+                : "No Image",
+              "data-label": "Product Image",
             }),
-            $('<td>', { text: item.newEmployeeId, 'data-label': 'ID', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.firstname, 'data-label': 'Category', class: 'custom-mobile-align' }),
-            $('<td>', { text: item.department, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.hiredate, class: 'custom-mobile-align' }),
-            $('<td>', { text: item.position, class: 'custom-mobile-align' }),
-
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Category",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", { text: item.department, class: "custom-mobile-align" }),
+            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
+            $("<td>", { text: item.position, class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -616,11 +719,9 @@
       }
     }
 
-
     //#endregion
 
-
-    //#region Load Card 
+    //#region Load Card
     function loadtotalCard() {
       $.ajax({
         type: "GET",
@@ -814,7 +915,6 @@
     }
     //#endregion
 
-
     //#region Load Badge Notif
     function loadleaveBadge() {
       $.ajax({
@@ -890,7 +990,6 @@
 
     //#endregion
 
-
     //#region Announcement and Bday Folks
     // $.ajax({
     //   url: "/announcement/load",
@@ -936,12 +1035,12 @@
               anouncementdiv += `
               <div class="carousel-item active" data-bs-interval="3000">
                                     <img id="preview${counter}" src="data:image/jpg;base64,${item.image}" class="d-block w-100 hrmis-img-announce" alt="..." style="height: 200px; border: 3px solid white !important;">
-                 
-                                    
+
+
                                 <div class="announcement-hrmis">
                                     <h6 id="announcedate${counter}" class="a-date">${item.targetdate}</h6>
                                     <h6 id="announcetitle${counter}" class="announce-title">${item.title}</h6>
-                                    <p id="announcedesc${counter}" class="a-des">${item.description}</p>  
+                                    <p id="announcedesc${counter}" class="a-des">${item.description}</p>
                                 <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="prev">
                                     <i class='bx bxs-left-arrow prev-hrmis' aria-hidden="true"></i>
@@ -954,7 +1053,6 @@
                                 </button>
                                 </div>
                                 </div>`;
-
             });
           } else {
             console.error("Error: ", result.message);
@@ -966,7 +1064,6 @@
           }
 
           $("#carouselannouncement").html(anouncementdiv);
-
         },
         error: function (err) {
           console.error("AJAX Error: ", err.responseText);
@@ -993,17 +1090,17 @@
             $.each(bdayData, (key, item) => {
               counterbday++;
               bdaydiv += `
-                          <div class="carousel-item active" data-bs-interval="5000">
+                          <div class="carousel-item active" data-bs-interval="3000">
                             <div class="confetti"></div>
                               <img id="preview${counterbday}"  src="data:image/jpg;base64,${item.profilePicturePath}" alt="..." class="d-flex image-frame rounded-circle" style="height: 250px; width: 250px;">
-                            
+
                                 <div class="bday-hrmis">
                                   <p class="bday-greet">Happy Birthday</p>
                                   <div class="ribbon">
                                   <h5 id="employeeid${counterbday}">${item.firstname}</h5>
                                   </div>
                                   <h6 id="bdaydate${counterbday}" class="bday-text-hrmis">${item.birthday}</h6>
-                                  
+
                                   <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon prev-bday" aria-hidden="true"></span>
@@ -1016,9 +1113,7 @@
                                 </button>
                                 </div>
                                 </div>`;
-
             });
-
 
             $("#carouselbday").html(bdaydiv);
           } else {
@@ -1036,8 +1131,7 @@
 
     //#endregion
 
-
-    //#region Load All Requset Table 
+    //#region Load All Requset Table
     function LoadTable() {
       $("#dataTableleaverequest").DataTable({
         destroy: true,
@@ -1068,7 +1162,6 @@
               imgElement.alt = "Profile Image";
               imgElement.style.width = "100px";
               imgElement.style.height = "100px";
-
 
               finalData.push({
                 image: imgElement.outerHTML,
@@ -1104,13 +1197,12 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          $('td', row).each(function (index) {
+          $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () {
-        },
+        initComplete: function () {},
       });
     }
 
@@ -1149,7 +1241,6 @@
               $("#pendingleavereason").val(item.reason);
               $("#pendingleaveaction").val(item.status);
               $("#pendingleaveremarks").val(item.comment);
-
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -1161,12 +1252,11 @@
       });
     });
     $(document).on("click", "#pendingleavesavebtn", function () {
-      let id = leaveid
+      let id = leaveid;
       let status = $("#pendingleaveaction").val();
       let comment = $("#pendingleaveremarks").val();
 
       var message = "";
-
 
       if (status === "") {
         message += "status is required. ";
@@ -1184,7 +1274,6 @@
         message += "comment is required. ";
       }
 
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -1194,37 +1283,39 @@
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        })
-          .then((willApprove) => {
-            if (willApprove) {
-              $.ajax({
-                type: "POST",
-                url: "/allleave/update",
-                data: {
-                  leaveid: id,
-                  status: status,
-                  comment: comment,
-                },
-                success: function (result) {
-                  if (result.msg == "success") {
-                    swal("Save Successfully", "You clicked the button!", "success",)
-                      .then(results => {
-                        window.location.reload();
-                      });
-                    LoadTable();
-                  }
-                },
-                error: function (err) {
-                  swal("Error", "An error occurred while saving data.", "error");
-                },
-                error: function (err) {
-                  swal("Error", "An error occurred while saving data.", "error");
-                },
-              });
-            } else {
-              swal("Action Canceled", "", "info");
-            }
-          });
+        }).then((willApprove) => {
+          if (willApprove) {
+            $.ajax({
+              type: "POST",
+              url: "/allleave/update",
+              data: {
+                leaveid: id,
+                status: status,
+                comment: comment,
+              },
+              success: function (result) {
+                if (result.msg == "success") {
+                  swal(
+                    "Save Successfully",
+                    "You clicked the button!",
+                    "success"
+                  ).then((results) => {
+                    window.location.reload();
+                  });
+                  LoadTable();
+                }
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+            });
+          } else {
+            swal("Action Canceled", "", "info");
+          }
+        });
       }
     });
 
@@ -1236,7 +1327,6 @@
         type: "GET",
         url: "/loadCA",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
 
@@ -1261,9 +1351,12 @@
             action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
             action.onclick = function () {
               var dataRow = [];
-              $(this).closest("tr").find("td").each(function () {
-                dataRow.push($(this).text());
-              });
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
               cashadvanceid = dataRow[1];
             };
 
@@ -1282,14 +1375,24 @@
             STATUS.innerHTML = item.status;
             ACTION.appendChild(action);
 
-            $.each([CASHADVANCE_ID, NAME, REQUEST_DATE, AMOUNT, PURPOSE, STATUS, ACTION], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [
+                CASHADVANCE_ID,
+                NAME,
+                REQUEST_DATE,
+                AMOUNT,
+                PURPOSE,
+                STATUS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -1326,7 +1429,6 @@
       });
     });
     $(document).on("click", "#pendingcasavebtn", function () {
-
       let id = cashadvanceid;
       let status = $("#pendingcastatus").val();
       let comment = $("#pendingcaremarks").val();
@@ -1351,48 +1453,50 @@
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        })
-          .then((willApprove) => {
-            if (willApprove) {
-              $.ajax({
-                type: "POST",
-                url: "/requestcashadvance/update",
-                data: {
-                  cashadvanceid: id,
-                  status: status,
-                  comment: comment,
-                },
-                success: function (result) {
-                  if (result.msg === "success") {
-                    swal({
-                      title: "Save Successfully",
-                      text: "You clicked the button!",
-                      icon: "success",
-                    }).then(() => {
-                      window.location.reload();
-                    });
-                    LoadTable();
-                  } else {
-                    swal("Error", "An error occurred while saving data.", "error");
-                  }
-                },
-                error: function (xhr, status, error) {
+        }).then((willApprove) => {
+          if (willApprove) {
+            $.ajax({
+              type: "POST",
+              url: "/requestcashadvance/update",
+              data: {
+                cashadvanceid: id,
+                status: status,
+                comment: comment,
+              },
+              success: function (result) {
+                if (result.msg === "success") {
                   swal({
-                    title: "Error",
-                    text: "An error occurred while saving data.",
-                    icon: "error",
+                    title: "Save Successfully",
+                    text: "You clicked the button!",
+                    icon: "success",
+                  }).then(() => {
+                    window.location.reload();
                   });
-                  console.error("AJAX error:", error);
-                },
-              });
-            } else {
-              // User clicked "Cancel"
-              swal("Action Canceled", "", "info");
-            }
-          });
+                  LoadTable();
+                } else {
+                  swal(
+                    "Error",
+                    "An error occurred while saving data.",
+                    "error"
+                  );
+                }
+              },
+              error: function (xhr, status, error) {
+                swal({
+                  title: "Error",
+                  text: "An error occurred while saving data.",
+                  icon: "error",
+                });
+                console.error("AJAX error:", error);
+              },
+            });
+          } else {
+            // User clicked "Cancel"
+            swal("Action Canceled", "", "info");
+          }
+        });
       }
     });
-
 
     //reqovertime section-->
     $(document).on("click", "#nav-ot-tab", function () {
@@ -1402,11 +1506,12 @@
         type: "GET",
         url: "/loadreqOT",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
 
-          material_list_tbl = document.getElementById("dataTableovertimerequest");
+          material_list_tbl = document.getElementById(
+            "dataTableovertimerequest"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -1428,9 +1533,12 @@
             action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
             action.onclick = function () {
               var dataRow = [];
-              $(this).closest("tr").find("td").each(function () {
-                dataRow.push($(this).text());
-              });
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
               approveot_id = dataRow[1];
             };
 
@@ -1450,14 +1558,24 @@
             TOTAL_HOURS.innerHTML = item.totalhours;
             ACTION.appendChild(action);
 
-            $.each([APPROVEDOT_ID, NAME, ATTENDANCE_DATE, PAYROLL_DATE, CLOCKIN, CLOCKOUT, TOTAL_HOURS], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [
+                APPROVEDOT_ID,
+                NAME,
+                ATTENDANCE_DATE,
+                PAYROLL_DATE,
+                CLOCKIN,
+                CLOCKOUT,
+                TOTAL_HOURS,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -1492,10 +1610,7 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#preview").attr(
-                "src",
-                "data:image/jpg;base64," + item.image
-              );
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
               base64String = item.image;
               $("#otfullname").val(item.fullname);
               $("#otdate").val(item.attendancedate);
@@ -1530,9 +1645,7 @@
       let payrolldate = $("#otpayrolldate").val();
       let overtimestatus = $("#otstatus").val();
 
-
       var message = "";
-
 
       if (night_ot === "") {
         message += "departmentname is required. ";
@@ -1569,13 +1682,16 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal("Update Successfully", "You clicked the button!", "success",)
-                .then(results => {
-                  window.location.reload();
-                });
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
               LoadTable();
             } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning",);
+              swal("Exist", "Data already exists!", "warning");
             }
           },
           error: function (err) {
@@ -1585,7 +1701,6 @@
       }
     });
 
-
     //request attendance section-->>>>
     $(document).on("click", "#nav-reqattendance-tab", function () {
       $("#dataTableattendancerequest").find("tr:gt(0)").remove();
@@ -1594,11 +1709,12 @@
         type: "GET",
         url: "/loadreqattendance",
         success: function (json) {
-
           var finalData = [];
           var data = json.data;
 
-          material_list_tbl = document.getElementById("dataTableattendancerequest");
+          material_list_tbl = document.getElementById(
+            "dataTableattendancerequest"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -1619,9 +1735,12 @@
             action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
             action.onclick = function () {
               var dataRow = [];
-              $(this).closest("tr").find("td").each(function () {
-                dataRow.push($(this).text());
-              });
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
               requestid = dataRow[1];
             };
 
@@ -1640,14 +1759,23 @@
             TOTAL_HOURS.innerHTML = item.total;
             ACTION.appendChild(action);
 
-            $.each([REQUEST_ID, FULLNAME, ATTENDANCE_DATE, TIME_IN, TIME_OUT, TOTAL_HOURS], function (_, cell) {
-              cell.style.textAlign = "center";
-              cell.style.verticalAlign = "middle";
-            });
+            $.each(
+              [
+                REQUEST_ID,
+                FULLNAME,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL_HOURS,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -1692,7 +1820,7 @@
     });
 
     $(document).on("click", "#editcOAsavebtn", function () {
-      console.log('hit');
+      console.log("hit");
       let id = requestid;
       let emp_id = $("#empid").val();
       let attendancedate = $("#editattendancedate").val();
@@ -1741,21 +1869,32 @@
                   },
                   success: function (attendanceResult) {
                     if (attendanceResult.msg == "success") {
-                      swal("Save Successfully", "You clicked the button!", "success")
-                        .then(results => {
-                          window.location.reload();
-                        });
+                      swal(
+                        "Save Successfully",
+                        "You clicked the button!",
+                        "success"
+                      ).then((results) => {
+                        window.location.reload();
+                      });
                       LoadTable();
                     }
                   },
                   error: function (attendanceErr) {
-                    swal("Error", "An error occurred while updating attendance request.", "error");
+                    swal(
+                      "Error",
+                      "An error occurred while updating attendance request.",
+                      "error"
+                    );
                   },
                 });
               }
             },
             error: function (masterErr) {
-              swal("Error", "An error occurred while updating master attendance.", "error");
+              swal(
+                "Error",
+                "An error occurred while updating master attendance.",
+                "error"
+              );
             },
           });
         }
@@ -1764,12 +1903,10 @@
 
     //#endregion
 
-
     //#region Graph Functions
     $(document).on("change", "#announcementimage", function (e) {
       const input = document.getElementById("announcementimage");
       const file = input.files[0];
-
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1971,7 +2108,6 @@
     });
 
     //#endregion
-
 
     //#region Search Functions
     function searchEmployeeTable() {
@@ -2208,7 +2344,6 @@
       }
     }
 
-
     function searchapprenticeTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInputtotalapprentice");
@@ -2241,10 +2376,13 @@
     const OFFICE_LOCATION_LAT = 14.337945;
     const OFFICE_LOCATION_LNG = 121.060511;
 
-    const map = L.map('map').setView([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], 15);
+    const map = L.map("map").setView(
+      [OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG],
+      15
+    );
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
     // const officeIcon = L.icon({
@@ -2294,9 +2432,9 @@
             radius: item.radius,
           }).addTo(map);
         });
-        console.log('data', data);
+        console.log("data", data);
       },
-      error: function (error) { },
+      error: function (error) {},
     });
 
     // let geofence;
@@ -2321,7 +2459,6 @@
     //     },
     //     error: function (error) { },
     // });
-
 
     // const geofence = L.circle([OFFICE_LOCATION_LAT, OFFICE_LOCATION_LNG], {
     //     color: 'red',
@@ -2395,8 +2532,8 @@
     //   }
     // );
     //<!-- Sticky Topbar & Sidebar -->
-    $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
-
-      $('.navbar').toggleClass('navbar-toggled');
+    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
+      $(".navbar").toggleClass("navbar-toggled");
+    });
   });
 </script>
