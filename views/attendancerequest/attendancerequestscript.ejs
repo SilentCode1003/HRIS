@@ -147,7 +147,6 @@
       let timein = $("#edittimein").val();
       let timeout = $("#edittimeout").val();
       let requeststatus = $("#editcoastatus").val();
-      let file = base64String;
 
       var message = "";
 
@@ -164,10 +163,6 @@
       }
 
       if (requeststatus === "") {
-        message += "Status is required. ";
-      }
-
-      if (file === "") {
         message += "Status is required. ";
       }
 

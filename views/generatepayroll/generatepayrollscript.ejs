@@ -438,18 +438,20 @@
           $.each(data[0], function (key, item) {
             var row = material_list_tbl.insertRow(1);
             var DATE = row.insertCell(0);
-            var CLOCK_IN = row.insertCell(1);
-            var CLOCK_OUT = row.insertCell(2);
-            var LATE_MINUTES = row.insertCell(3);
-            var LATE_HOURS = row.insertCell(4);
-            var EARLY_OT = row.insertCell(5);
-            var NIGHT_DIFF = row.insertCell(6);
-            var NORMAL_OT = row.insertCell(7);
-            var TOTAL_HOURS = row.insertCell(8);
-            var TOTAL_MINUTES = row.insertCell(9);
+            var ATTENDANCE_STATUS = row.insertCell(1);
+            var CLOCK_IN = row.insertCell(2);
+            var CLOCK_OUT = row.insertCell(3);
+            var LATE_MINUTES = row.insertCell(4);
+            var LATE_HOURS = row.insertCell(5);
+            var EARLY_OT = row.insertCell(6);
+            var NIGHT_DIFF = row.insertCell(7);
+            var NORMAL_OT = row.insertCell(8);
+            var TOTAL_HOURS = row.insertCell(9);
+            var TOTAL_MINUTES = row.insertCell(10);
 
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
+            ATTENDANCE_STATUS.innerHTML  = item.Attendance_Status;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;
@@ -460,8 +462,10 @@
             TOTAL_HOURS.innerHTML = item.Total_Hours;
             TOTAL_MINUTES.innerHTML = item.Total_Minutes;
 
+            console.log(ATTENDANCE_STATUS);
+
             $.each(
-              [DATE, CLOCK_IN, CLOCK_OUT, LATE_MINUTES, LATE_HOURS, EARLY_OT, NIGHT_DIFF, NORMAL_OT, TOTAL_HOURS, TOTAL_MINUTES],
+              [DATE, ATTENDANCE_STATUS, CLOCK_IN, CLOCK_OUT, LATE_MINUTES, LATE_HOURS, EARLY_OT, NIGHT_DIFF, NORMAL_OT, TOTAL_HOURS, TOTAL_MINUTES],
               function (_, cell) {
                 cell.style.textAlign = "center";
                 cell.style.verticalAlign = "middle";

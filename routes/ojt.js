@@ -36,7 +36,8 @@ router.get("/load", (req, res) => {
     LEFT JOIN
         ojt_attendance oa ON mo.mo_id = oa.oa_ojtid
     GROUP BY
-        mo.mo_id, mo.mo_hours;
+        mo.mo_id, mo.mo_hours
+        ORDER BY mo_startdate DESC
         `;
 
     mysql

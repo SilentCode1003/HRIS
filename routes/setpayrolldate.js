@@ -41,6 +41,41 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.get("/loadreq", (req, res) => {
+  try {
+    let sql = `SELECT 
+    pd_payrollid,
+    pd_name,
+    pd_cutoff,
+    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+    FROM 
+    payroll_date
+    WHERE
+    pd_payrolldate >= CURDATE() 
+    ORDER BY 
+    pd_startdate
+    LIMIT 5`;
+
+    mysql.Select(sql, "Payroll_Date", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      mag: "error",
+      data: error,
+    });
+  }
+});
+
+
 
 
 router.post("/generate", (req, res) => {

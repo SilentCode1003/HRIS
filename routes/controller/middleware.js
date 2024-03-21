@@ -132,9 +132,6 @@ var roleacess = [
         layout: "salaryhistorylayout",
       },
       {
-        layout: "timelogslayout",
-      },
-      {
         layout: "generatepayrolllayout",
       },
       {
@@ -186,6 +183,9 @@ var roleacess = [
       },
       {
         layout: "eportalrequestattendancelayout",
+      },
+      {
+        layout: "eportalrequestovertimelayout",
       },
     ],
   },

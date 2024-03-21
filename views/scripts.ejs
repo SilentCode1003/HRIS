@@ -185,6 +185,11 @@
     return `${year}-${month}-${day}`;
   }
 
+  function formatDateTime(dateTime) {
+    const formattedDateTime = moment(dateTime).format('YYYY-MM-DD HH:mm:ss');
+    return formattedDateTime;
+  }
+
   // function formatDateTime(dateTimeString) {
   //   if (!dateTimeString) return ""; 
 
@@ -210,15 +215,15 @@
   function formatTime(dateTimeString) {
     if (!dateTimeString) return "";
 
-   
+
     const dateTimeParts = dateTimeString.split('T');
-    if (dateTimeParts.length !== 2) return ""; 
+    if (dateTimeParts.length !== 2) return "";
 
 
     const timeString = dateTimeParts[1];
 
     const timeParts = timeString.split(':');
-    if (timeParts.length !== 2) return ""; 
+    if (timeParts.length !== 2) return "";
 
     const hours = timeParts[0];
     const minutes = timeParts[1];

@@ -1,4 +1,5 @@
 <script>
+    let base64String = "";
     let requestid = '';
     $(document).ready(function () {
         console.log('Initialize');
@@ -169,6 +170,7 @@
                             $("#editcoastatus").val(item.requeststatus);
                             $("#editcoareason").val(item.reason);
                             $("#editpreview").attr("src", "data:image/jpg;base64," + item.file);
+                            base64String = item.file;
                         });
                     } else {
                         swal("Error fetching employee data", "success");
@@ -186,6 +188,8 @@
             let reason = $("#editcoareason").val();
             let requeststatus = $("#editcoastatus").val();
             let file = base64String;
+
+            console.log('file',file);
 
             var message = "";
 
@@ -214,7 +218,7 @@
             }
 
             if (file === "") {
-                message += "Status is required. ";
+                message += "file is required. ";
             }
             if (message !== "") {
                 swal("Ooops !!!", message, "error");

@@ -60,7 +60,7 @@ router.post("/submit", async (req, res) => {
 
     let total = calculateTotalHours(timein, timeout);
 
-    console.log(attendancedate, timein, timeout, reason, employeeid, total);
+    console.log(attendancedate, timein, timeout, reason, employeeid, file);
 
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
@@ -141,6 +141,7 @@ router.post("/update", (req, res) => {
     let reason = req.body.reason;
     let requeststatus = req.body.requeststatus;
     let total = calculateTotalHours(timein, timeout);
+    let file = req.body.file;
 
     
     let sqlupdate = `UPDATE attendance_request SET 
@@ -149,7 +150,8 @@ router.post("/update", (req, res) => {
       ar_timeout = '${timeout}', 
       ar_reason = '${reason}',
       ar_total = '${total}', 
-      ar_status = '${requeststatus}'  
+      ar_status = '${requeststatus}',
+      ar_file  = '${file}'
       WHERE ar_requestid = '${requestid}'`;
 
     mysql
