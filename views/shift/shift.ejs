@@ -79,6 +79,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="mondayTimeIn">Monday Time In</label>
               </div>
@@ -91,6 +92,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="mondayTimeOut">Monday Time Out</label>
               </div>
@@ -106,6 +108,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="tuesdayTimeIn">Tuesday Time In</label>
               </div>
@@ -118,6 +121,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="tuesdayTimeOut">Tuesday Time Out</label>
               </div>
@@ -133,6 +137,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="wednesdayTimeIn">Wednesday Time In</label>
               </div>
@@ -145,6 +150,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="wednesdayTimeOut">Wednesday Time Out</label>
               </div>
@@ -160,6 +166,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="thursdayTimeIn">Thursday Time In</label>
               </div>
@@ -172,6 +179,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="thursdayTimeOut">Thursday Time Out</label>
               </div>
@@ -187,6 +195,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="fridayTimeIn">Friday Time In</label>
               </div>
@@ -199,6 +208,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="fridayTimeOut">Friday Time Out</label>
               </div>
@@ -214,6 +224,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="saturdayTimeIn">Saturday Time In</label>
               </div>
@@ -226,6 +237,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="saturdayTimeOut">Saturday Time Out</label>
               </div>
@@ -241,6 +253,7 @@
                   <option value="08:00:00">8:00 AM</option>
                   <option value="09:00:00">9:00 AM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="sundayTimeIn">Sunday Time In</label>
               </div>
@@ -253,6 +266,7 @@
                   <option value="17:00:00">5:00 PM</option>
                   <option value="18:00:00">6:00 PM</option>
                   <option value="00:00:00">Rest Day</option>
+                  <option value="Exempted">Exempted</option>
                 </select>
                 <label for="sundayTimeOut">Sunday Time Out</label>
               </div>
@@ -282,25 +296,20 @@
         <form>
           <div class="row">
             <div class="col">
+              <label for="editshiftemployee">Employee Name</label>
               <div class="form-floating">
-                <select class="form-select border-form-modal" id="editshiftemployee" name="editshiftemployee"
-                  aria-label="Floating label select example">
-                </select>
-                <label for="floatingSelectGrid">Employee Name</label>
-              </div>
+                <input type="text" class="form-control border-form-modal" id="editshiftemployee" disabled>
             </div>
+          </div>
           </div>
           <br>
           <div class="row">
             <div class="col">
+              <label for="editshiftdepartment">Department</label>
               <div class="form-floating">
-                <select class="form-select border-form-modal" id="editshiftdepartment" name="editshiftdepartment"
-                  aria-label="Floating label select example">
-                  <option>Department</option>
-                </select>
-                <label for="floatingSelectGrid">Department</label>
-              </div>
+                <input type="text" class="form-control border-form-modal" id="editshiftdepartment" disabled>
             </div>
+          </div>
           </div>
           <br>
           <div class="row">
@@ -312,6 +321,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editmondaytimein">Monday Time In</label>
               </div>
@@ -324,6 +334,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editmondaytimeout">Monday Time Out</label>
               </div>
@@ -339,6 +350,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="edittuesdaytimein">Tuesday Time In</label>
               </div>
@@ -351,6 +363,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="edittuesdaytimeout">Tuesday Time Out</label>
               </div>
@@ -366,6 +379,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editwednesdaytimein">Wednesday Time In</label>
               </div>
@@ -378,6 +392,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editwednesdaytimeout">Wednesday Time Out</label>
               </div>
@@ -393,6 +408,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editthursdaytimein">Thursday Time In</label>
               </div>
@@ -405,6 +421,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editthursdaytimeout">Thursday Time Out</label>
               </div>
@@ -420,6 +437,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editfridaytimein">Friday Time In</label>
               </div>
@@ -432,6 +450,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editfridaytimeout">Friday Time Out</label>
               </div>
@@ -447,6 +466,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editsaturdaytimein">Saturday Time In</label>
               </div>
@@ -459,6 +479,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editsaturdaytimeout">Saturday Time Out</label>
               </div>
@@ -474,6 +495,7 @@
                   <option>08:00 AM</option>
                   <option>09:00 AM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editsundaytimein">Sunday Time In</label>
               </div>
@@ -486,6 +508,7 @@
                   <option>05:00 PM</option>
                   <option>06:00 PM</option>
                   <option>Rest Day</option>
+                  <option>Exempted</option>
                 </select>
                 <label for="editsundaytimeout">Sunday Time Out</label>
               </div>
