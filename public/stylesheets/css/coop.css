@@ -29,11 +29,21 @@
 }
 
 .sticky-footer {
-  height: 40px !important;
+  height: 30px !important;
   background-color: #8b2525 !important;
   margin-top: 50px;
   color: white !important;
 }
+
+.fa-bars {
+  color: white !important;
+}
+
+.fa-bars:hover {
+  background: transparent;
+}
+
+
 
 
 
@@ -41,9 +51,9 @@
 
 
 .user-topbar {
-  margin-left: 0% !important;
   color: white !important;
   font-weight: bold;
+  font-size: 13px;
 }
 
 .img-profile {
@@ -207,7 +217,7 @@
 
 
 /*------ Module Searchbar --- */
-#searchbar {
+/* #searchbar {
     float: right;
     border: none;
     margin-right: 5px;
@@ -230,7 +240,7 @@
 .btn-search:hover {
   background-color: #8ED1AE !important;
   color: #7a1818 !important;
-}
+} */
 
 /*----- Modules Table --- */
 .c-header {
@@ -305,7 +315,7 @@ tr:hover {
   }
 }
 /*--- Employee ---*/
-.btn-color {
+.btn-color, .btn-attendance {
     background-color: #436c92 !important;
     color: white !important;
     float: right;
@@ -313,9 +323,10 @@ tr:hover {
     border-radius: 8px;
     height: 33px;
     border: 2px solid #fcf0d7 !important;
-    -webkit-animation: btn-color 0.9s both;
-	        animation: btn-color 0.9s both;
+    -webkit-animation: btn-color, btn-attendance 0.9s both;
+	        animation: btn-color, btn-attendance 0.9s both;
 }
+
 @-webkit-keyframes btn-color {
   0% {
     -webkit-transform: scale3d(1, 1, 1);
@@ -346,6 +357,7 @@ tr:hover {
             transform: scale3d(1, 1, 1);
   }
 }
+
 @keyframes btn-color {
   0% {
     -webkit-transform: scale3d(1, 1, 1);
@@ -376,38 +388,9 @@ tr:hover {
             transform: scale3d(1, 1, 1);
   }
 }
-.btn-color:hover {
-    background-color: #103e68 !important;
-    color: white !important;
-}
-.btn-generate-holiday {
-  height: 33px;
-  background-color: #436c92 !important;
-  border: 2px solid #fcf0d7 !important;
-  color: white !important;
-}
-.btn-add-holiday {
-  height: 33px;
-  background-color: #53c24e !important;
-  border: 2px solid #fcf0d7 !important;
-  color: white !important;
-}
-#yearInput {
-  border: 2px solid #fcf0d7 !important;
-  height: 33px;
-}
-.btn-add-color {
-  float: right;
-  margin-right: 8px;
-  border-radius: 8px;
-  height: 33px;
-  background-color: #53c24e !important;
-  border: 2px solid #fcf0d7 !important;
-  color: white !important;
-  -webkit-animation: btn-add-color 0.9s both;
-	        animation: btn-add-color 0.9s both;
-}
-@-webkit-keyframes btn-add-color {
+
+
+@-webkit-keyframes btn-attendance {
   0% {
     -webkit-transform: scale3d(1, 1, 1);
             transform: scale3d(1, 1, 1);
@@ -437,6 +420,101 @@ tr:hover {
             transform: scale3d(1, 1, 1);
   }
 }
+
+@keyframes btn-attendance {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+
+.btn-color:hover, .btn-attendance:hover {
+    background-color: #103e68 !important;
+    color: white !important;
+}
+.btn-generate-holiday {
+  height: 33px;
+  background-color: #436c92 !important;
+  border: 2px solid #fcf0d7 !important;
+  color: white !important;
+}
+.btn-add-holiday {
+  height: 33px;
+  background-color: #53c24e !important;
+  border: 2px solid #fcf0d7 !important;
+  color: white !important;
+}
+#yearInput {
+  border: 2px solid #fcf0d7 !important;
+  height: 33px;
+}
+.btn-add-color, .btn-add-attendance {
+  float: right;
+  margin-right: 8px;
+  border-radius: 8px;
+  height: 33px;
+  background-color: #53c24e !important;
+  border: 2px solid #fcf0d7 !important;
+  color: white !important;
+  -webkit-animation: btn-add-color, btn-add-attendance 0.9s both;
+	        animation: btn-add-color, btn-add-attendance 0.9s both;
+}
+
+@-webkit-keyframes btn-add-color  {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+
 @keyframes btn-add-color {
   0% {
     -webkit-transform: scale3d(1, 1, 1);
@@ -467,10 +545,73 @@ tr:hover {
             transform: scale3d(1, 1, 1);
   }
 }
-.btn-add-color:hover {
+
+@-webkit-keyframes btn-add-attendance  {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes btn-add-attendance {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+  30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+            transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+            transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+            transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+            transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+            transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+
+.btn-add-color:hover, .btn-add-attendance:hover {
   background-color: #197214 !important;
     color: white !important;
 }
+
 .ch-coop {
   background-color: #7a1818 !important;
   height: 250% !important;
@@ -754,10 +895,11 @@ tr:hover {
   #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover {
   transform: scale(1.1);
 }
+
 .db-wholecard {
   margin-top: 3% !important;
-
 }
+
 .db-custom-cards  {
   background-color: #fcf0d7 !important;
   height: 546px;
@@ -830,7 +972,7 @@ tr:hover {
 }
 
 .candidate-prof {
-  background-color: #baecfc !important;
+  background-color: #baebfcc2 !important;
   border: 3px solid #3e6e7e !important;
   border-radius: 10px;
 }
@@ -949,6 +1091,61 @@ tr:hover {
   }
 }
 
+/* mobile state */
+@media (max-width: 769px) {
+  .content {
+    margin-left: 0px;
+  }
+
+  .content-toggled {
+    margin-left: 0px !important;
+  }
+
+  .footer-toggled {
+    margin-left: 0px !important;
+  }
+
+  .navbar {
+    width: 75%;
+    position: absolute !important;
+  }
+
+  .navbar-toggled {
+    margin-left: 0px !important;
+    width: 100%;
+  }
+
+  /*--- employee page--*/
+  #myInput {
+    width: 40%;
+  }
+
+  .btn-color,
+  .btn-add-color {
+    width: 25%;
+    font-size: 9px !important;
+    padding: 0px;
+  }
+
+  .btn-add-attendance, .btn-attendance {
+    font-size: 9px !important;
+    height:20%;
+    width: 25%;
+    margin-right: 1.3%;
+  }
+  
+}
+
+.modal-ojt-edit {
+  margin-left: 10px;
+  margin-top: 75px !important;
+}
+
+.modal-form-edit {
+  width: 300px;
+  margin-top: -100px;
+}
+
 .announcement-footer {
   background-color: #751a1a !important;
   height: 150px;
@@ -976,45 +1173,47 @@ tr:hover {
 }
 
 /*--- HRMIS Footer ----*/
+
 .announcement-hrmis {
-  /* margin-top: 10px; */
-  background-color: #7a1818 !important;
-  height: 225px;
+  background-color: white !important;
+  height: 300px;
   padding: 15px !important;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  position: relative;
 }
 
 .hrmis-img-announce {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-
 }
 
-#announcetitle1, #announcetitle2, #announcetitle3 {
-  color: white !important;
+.announce-title {
+  margin: 8%;
+  color: black !important;
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
   font-family: 'Arial';
 }
 
-#announcedesc1, #announcedesc2, #announcedesc3 {
-  color: white !important;
+.a-des {
+  color: black !important;
   font-style: italic;
-  margin-top: 5%;
+  margin-top: 3%;
 }
 
-#announcedate1, #announcedate2, #announcedate3 {
-  color: white;
+.a-date {
+  color: gray;
   font-weight: bold;
-  float: right;
+  /* float: right; */
+  margin-top: 2%;
 }
 
-.announcement-hrmis span.carousel-control-prev-icon, .announcement-hrmis span.carousel-control-next-icon {
-  background-color: grey !important;
+.prev-hrmis, .next-hrmis {
+  position: absolute;
+  top: 22%;
+  color:#020202 !important; 
 }
 
 .bday-hrmis {
@@ -1069,7 +1268,7 @@ tr:hover {
   color: gold !important;
   text-align: center;
   margin: 10px;
-  font-size: 48px;
+  font-size: 38px;
   font-family: 'Tangerine', serif;
   font-style: italic;
   font-weight: bold;
@@ -1236,5 +1435,34 @@ tr:hover {
 }
 
 
+span.prev-bday, span.next-bday {
+  display: none;
+}
+
+.card-app-edit {
+  height: 500px;
+  width: 500px;
+  background-color: white !important;
+  border-radius: 10px;
+  border: 3px solid #7a1818 !important;
+  margin: auto;
+  padding: 15px;
+}
+
+.border-app-form {
+  border: 2.5px solid #7a1818 !important;
+  width: 250px !important;
+  margin: auto;
+}
+
+.app-form {
+  width: 200px !important;
+  margin: auto;
+}
+
+.app-form-c {
+  border: 2.5px solid #7a1818 !important;
+  margin-bottom: 5px !important;
+}
 
 

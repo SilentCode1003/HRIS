@@ -19,7 +19,7 @@
 }
 
 .searchbar-eportal {
-  border: 2px solid #F5E0B3 !important;
+  border: 2px solid #fcf0d7 !important;
 }
 
 .searchbar-bg {
@@ -41,6 +41,7 @@
 .profilename-eportal {
     color: white !important;
     font-weight: bold;
+    font-size: 13px;
 }
 
 .navbar-expand .navbar-nav  .dropdown-profile-eportal {
@@ -132,8 +133,19 @@
     overflow-x: hidden !important;
   }
 
-  .sidebar-brand-text {
-    display: block !important;
+  .img-hrmis img {
+    width: 50%;
+    padding-top: 12px !important;
+    margin-left: -30px;
+  }
+
+  h6.eportal-text {
+    float: right;
+    padding-top: 35px;
+    margin-right: 10px;
+    font-family: Calibri;
+    font-weight: bold;
+    font-size: 18px;
   }
   
   ::-webkit-scrollbar {
@@ -152,6 +164,7 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #8b2525; /* Color of the thumb when hovering */
   }
+
 }
 
 /*mobile-view/sidebar*/
@@ -187,11 +200,13 @@
     padding-right: 20px;
   }
 
-  .sidebar-brand-text {
-    display: block !important;
+  #card-announcement, #card-birthday, #card-attendance {
+    margin-top: 5% !important;
   }
 
-  #announcedesc1, #announcedesc2, #announcedesc3  {
+
+
+  /* #announcedesc1, #announcedesc2, #announcedesc3  {
     background-color: #BCFFB9 !important;
     color: black !important;
     font-family: Arial;
@@ -209,7 +224,7 @@
     font-family: cursive;
     font-weight: bold;
     font-size: smaller;
-  }
+  } */
   
 
   .content-toggled {
@@ -224,6 +239,7 @@
   }
 }
 
+/*-- More Responsive sizes ---*/
 @media only screen and (min-width: 769px) and (max-width: 900px){
   .table {
     overflow-x: hidden;
@@ -279,29 +295,56 @@
   position: fixed;
 }
 
-
 #card-attendance {
     width: 100% ;
     box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+    background-color: white !important;
+    /* border: 1px solid #E41717 !important; */
 }
 
-#card-announcement {
+#card-announcement, #card-birthday {
     /* border: 2px solid lightsalmon !important; */
+    /* border: 1px solid #E41717 !important; */
     box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+    background-color: white !important;
 }
+
+.ch-birthday {
+  /* background: linear-gradient(45deg, #29A173, #05633f) !important ; */
+  color: black !important;
+  text-shadow: 2px 2px 4px white !important;
+  font-weight: bold;
+  border-bottom: 2px solid #d874d0 !important;
+  background: linear-gradient(45deg, rgb(237, 160, 253), white) !important;
+}
+
+.ch-attendance {
+  /* background: linear-gradient(45deg, #FF3232, #FFB774)  !important; */
+  color: black !important;
+  text-shadow: 2px 2px 4px white !important;
+  font-weight: bold;
+  border-bottom: 2px solid #e0d869 !important;
+  background: linear-gradient(45deg, rgb(253, 247, 160), white) !important;
+}
+
 .ch-announcement {
-    background: linear-gradient(45deg, #FF6C22, #FFD099)!important;
-    color: white !important;  
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+  /* background: linear-gradient(45deg, #aa14cf, #6e218d)  !important; */
+  color: black !important;
+  text-shadow: 2px 2px 4px white !important;
+  font-weight: bold;
+  border-bottom: 2px solid #fabe70 !important;
+  background: linear-gradient(45deg, rgb(252, 187, 126), white) !important;
 }
-.ch-announcement h6 {
-    padding: 5px;
-    font-size: larger;
-    font-family: Cambria;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: .3rem;
+
+.ch-map {
+  /* background: #2094a3 !important ; */
+  color: black !important;
+  text-shadow: 2px 2px 4px white !important;
+  font-weight: bold;
+  border-bottom: 2px solid #5bc945 !important;
+  background: linear-gradient(45deg, rgb(175, 253, 160), rgb(223, 253, 213)) !important;
 }
+
 
 .consultation-icon {
     height: 30px;
@@ -316,20 +359,11 @@
     top: 3px;
 }
 
-.ch-attendance {
-    background: linear-gradient(45deg, #00A9FF, #c270d6)  !important;
-    color: white !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
-}
-
-.ch-attendance h6 {
-    color: white !important;
-    padding: 5px;
-    text-transform: uppercase;
-    text-align: center;
-    font-family: Cambria;
-    font-size: larger;
-    letter-spacing: .3rem;
+.eportal-icon {
+  width: 25px;
+  height: 25px; 
+  top: 3px;
+  color: #7a1818 !important;
 }
 
 .cb-attendance {
@@ -340,6 +374,11 @@
     width: 100%;
     overflow-x: hidden;
 }
+
+/* div.dataTables_scrollHead {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+} */
 
 /* .span-eportal{
     color: white;
@@ -357,37 +396,52 @@
 .btn-clockin {
     background-color: green !important;
     color: white !important;
-    margin: auto;
-    border-radius: 15px !important;
-    border: 3px solid #006400 !important;
-    height: 60px;
-    width: 35%;
-    padding: 10px;
+    /* margin: auto; */
+    margin-top: 20px !important;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+    border-radius: 5px !important;
+    border: 2px solid rgb(6, 97, 3) !important;
+    height: 35px;
+    width: 30%;
+    font-size: 13px !important;
     font-family: Cambria !important;
-    text-transform: uppercase;
+    margin-top: 2%;
 }
 
 .btn-clockin:hover {
-    transform: scale(1.1);
-    font-weight: bolder;
+  transform: scale(1.1);
+  font-size: 13px !important;
+  width: 35%;
+  font-weight: bold;
+  background-color: rgb(6, 97, 3) !important;
 }
 
 .btn-clockout {
     background-color: red !important;
     color: white !important;
-    margin: auto;
-    border-radius: 15px !important;
-    border: 3px solid darkred !important;
-    height: 60px;
-    width: 35%;
-    padding: 10px;
+    /* margin: auto; */
+    margin-top: 20px !important;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    float: right;
+    border-radius: 5px !important;
+    border: 2px solid rgb(185, 10, 10) !important;
+    height: 35px;
+    width: 30%;
+    font-size: 13px !important;
     font-family: Cambria !important;
-    text-transform: uppercase;
 }
 
 .btn-clockout:hover {
     transform: scale(1.1);
-    font-weight: bolder;
+    font-size: 13px !important;
+    width: 35%;
+    font-weight: bold;
+    background-color: rgb(185, 10, 10) !important;
 }
 
 #map {
@@ -399,33 +453,18 @@
 #card-map { 
     border-radius: 8px;
     box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
-}
-
-.ch-map {
-    background: #1e887c !important;
-}
-
-.ch-map h6 {
-    color: white !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
-    padding: 5px;
-    text-transform: uppercase;
-    text-align: center;
-    font-family: Cambria;
-    font-size: larger;
-    letter-spacing: .3rem;
+    background-color: white !important;
 }
 
 .container {
     margin-bottom: 5%;
 }
 
-#clock-in-out {
+/* #clock-in-out {
     height: 540px;
     box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
-    /* background: linear-gradient(45deg, lightgreen,white); */
     background-image: url(/images/bg-clockin-out.jpg);
-}
+} */
 
 #clock-lordicon {
     display: flex;
@@ -437,33 +476,19 @@
     margin: auto;
 }
 
-#card-birthday {
-    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+
+.ch-salary,
+.cheader-attendance {
+  background-color: #7a1818 !important;
+  height: 90px !important;
 }
 
-.ch-birthday {
-  background: linear-gradient(45deg, #FA7070, #E9A8F2) !important;
-}
-
-.ch-birthday h6 {
-    color: white !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
-    padding: 5px;
-    text-transform: uppercase;
-    text-align: center;
-    font-family: Cambria;
-    font-size: larger;
-    letter-spacing: .3rem;
-}
-
-.ch-salary, .cheader-attendance {
-     background-color: #7a1818 !important;
-    height: 90px !important;
-}
-
-.cheader-attendance, .ch-cashad, .ch-requestleave, .ch-da {
-     background-color: #7a1818 !important;
-    height: 50% !important;
+.cheader-attendance,
+.ch-cashad,
+.ch-requestleave,
+.ch-da {
+  background-color: #7a1818 !important;
+  height: 50% !important;
 }
 
 .ch-salary h3, .cheader-attendance h3, .ch-cashad h3, .ch-requestleave h3, .ch-da h3 {
@@ -474,7 +499,7 @@
 }
 
 .cbody-salary, .cbody-attendance, .cbody-cashad, .cbody-requestleave, .cbody-da {
-    background-color: #F5E0B3;
+    background-color: #fcf0d7;
 }
 
 .btn-eportal-color {
@@ -483,17 +508,20 @@
     border-radius: 8px;
     height: 33px;
     background-color: #53c24e !important;
-    border: 2px solid #d3bb86 !important;
+    border: 2px solid #fcf0d7 !important;
     color: white !important;
-    -webkit-animation: btn-eportal-color 0.9s both;
-              animation: btn-eportal-color 0.9s both;
+}
+
+.btn-eportal-color:hover {
+  background-color: #197214 !important;
+  color: white !important;
 }
 
 .btn-eportal-color h6 {
     font-weight: bold;
     font-family: 'Times New Roman';
 }
-
+/* 
 #announcetitle1, #announcetitle2,  #announcetitle3  {
   background: darkgreen !important;
   text-transform: uppercase;
@@ -524,7 +552,7 @@
   font-family: cursive;
   font-weight: bold;
   font-size: smaller;
-}
+} */
 
 .btn-search-topbar {
   height: 40px;
@@ -598,3 +626,186 @@
 .sidebar-item:hover span {
   color: #7a1818 !important;
 }
+
+.boxshadow-sidebar {
+  background-color: #510A0A !important;
+}
+.collapse .collapse-item {
+  font-weight: 600;
+  color: white !important;
+}
+
+.collapse .collapse-item:hover {
+background-color: white !important;
+color: black !important;
+}
+
+#modal-header {
+  background-color: #7a1818 !important ;
+  color: white !important;
+  height: 80px;
+}
+
+#modal-footer {
+  background-color: #7a1818 !important ;
+}
+
+.modal-dialog #modal-body {
+  background-color: #fcf0d7 !important;
+}
+
+.btn-modal-close {
+  color: white !important;
+  background-color: red !important;
+  border: 2px solid #fcf0d7 !important;
+}
+.btn-modal-close:hover {
+  background-color: #ff3535 !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.bx-x {
+  color: white !important;
+  font-size: 30px;
+  margin: 0%;
+}
+.bx-x:hover {
+  border: 2px solid white !important;
+  border-radius: 8px;
+}
+
+.modal-title {
+  font-size: 18px;
+  margin: 0%;
+}
+
+
+.eportal-img-announce {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.db-custom-cards1 {
+  /* background-color: #fcf0d7 !important; */
+  height: 550px;
+  overflow: auto;
+  width: 100%;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.announce-title {
+  margin: 8%;
+  color: black !important;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+  font-family: 'Arial';
+}
+
+.a-des {
+  color: black !important;
+  font-style: italic;
+  margin-top: 3%;
+}
+
+.a-date {
+  color: gray;
+  font-weight: bold;
+  /* float: right; */
+  margin-top: 2%;
+}
+
+.announcement-hrmis {
+  background-color: white !important;
+  height: 300px;
+  padding: 15px !important;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: relative;
+}
+
+.prev-hrmis, .next-hrmis {
+  position: absolute;
+  top: 22%;
+  color:#020202 !important; 
+}
+
+#clockin-out {
+  box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+  background-color: white !important;
+}
+
+.time-title {
+  font-family: "Lexend", sans-serif;
+  font-style: normal;
+  font-size: 19px;
+  text-align: center;
+  color: rgb(128, 18, 18) !important;
+  text-shadow: 1px 1px 1px gray !important;
+  font-weight: bold;
+}
+
+.time-p {
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+  color: rgb(85, 85, 85) !important;
+
+}
+
+.time-profile-img {
+  margin: auto !important;
+  height: 10% !important;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid rgb(169, 241, 253) !important;
+}
+
+.ch-time {
+  background:linear-gradient(45deg, rgb(169, 241, 253), white) !important;
+  border-radius: 8px;
+  margin-top: 3%;
+  padding: 18px !important;
+  box-shadow: 0 4px 8px 0 rgb(82, 81, 81) !important;
+}
+
+.status-text {
+  font-size: 13px;
+  color: black !important;
+  font-weight: bold !important;
+  float: left;
+  letter-spacing: 1px;
+}
+
+.status-time {
+  font-size: 12px;
+  color: white !important;
+  padding: 5px;
+  font-weight: none;
+  text-transform: none;
+  background-color: #53c24e !important;
+  border-radius: 5px;
+}
+
+.time-text {
+  font-size: 13px;
+  color: black !important;
+  font-weight: bold !important;
+  float: right;
+  letter-spacing: 1px;
+}
+
+.time-clock {
+  font-size: 12px;
+  color: rgb(73, 73, 73) !important;
+ text-shadow: 0px 1px 1px rgb(73, 73, 73) !important;
+  padding: 2px;
+}
+
+
+
+
