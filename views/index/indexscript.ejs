@@ -935,20 +935,21 @@
               counter++;
               anouncementdiv += `
               <div class="carousel-item active" data-bs-interval="3000">
-                                    <img id="preview${counter}"  src="data:image/jpg;base64,${item.image}" class="d-block w-100 hrmis-img-announce" alt="..."
-                                    style="height: 280px; border: 3px solid white !important;">
+                                    <img id="preview${counter}" src="data:image/jpg;base64,${item.image}" class="d-block w-100 hrmis-img-announce" alt="..." style="height: 200px; border: 3px solid white !important;">
+                 
+                                    
                                 <div class="announcement-hrmis">
-                                    <h6 id="announcetitle${counter}">${item.title}</h6>
-                                    <p id="announcedesc${counter}">${item.description}</p>
-                                    <p id="announcedate${counter}">${item.targetdate}</p>
+                                    <h6 id="announcedate${counter}" class="a-date">${item.targetdate}</h6>
+                                    <h6 id="announcetitle${counter}" class="announce-title">${item.title}</h6>
+                                    <p id="announcedesc${counter}" class="a-des">${item.description}</p>  
                                 <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <i class='bx bxs-left-arrow prev-hrmis' aria-hidden="true"></i>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <i class='bx bxs-right-arrow next-hrmis' aria-hidden="true"></i>
                                     <span class="visually-hidden">Next</span>
                                 </button>
                                 </div>
@@ -965,6 +966,7 @@
           }
 
           $("#carouselannouncement").html(anouncementdiv);
+
         },
         error: function (err) {
           console.error("AJAX Error: ", err.responseText);
@@ -1004,12 +1006,12 @@
                                   
                                   <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-prev-icon prev-bday" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
                                 </button>
                                 <button class="carousel-control-next" type="button"
                                     data-bs-target="#carouselannouncement" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-next-icon next-bday" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
                                 </div>
@@ -2396,10 +2398,5 @@
     $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
 
       $('.navbar').toggleClass('navbar-toggled');
-
-    });
-
-    //#endregion
-
   });
 </script>

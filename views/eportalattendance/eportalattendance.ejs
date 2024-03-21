@@ -40,15 +40,15 @@
     aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" id="modal-header">
                 <div>
-                    <h1 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">
+                    <h1 class="modal-title" id="exampleModalToggleLabel">
                        Logs
                     </h1>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <div class="table-responsive" id="table-responsive-id">
                     <table class="table table-striped" id="dataTableattendancelogs">
                         <thead>
@@ -67,8 +67,8 @@
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -206,7 +206,7 @@
   height: 33px;
   margin-right: 5px;
   border-radius: 8px;
-  border: 2px solid #F5E0B3 !important;
+  border: 2px solid #fcf0d7 !important;
 }
 
 #myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
@@ -258,22 +258,22 @@ table caption {
 }
 
 table tr {
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
+  /* background-color: #f8f8f8; */
+  border: none !important;
+  margin: 3px !important;
 }
 
 table td {
   text-align: center;
-  padding: 8px;
-  border: 1px solid rgb(226, 223, 223) !important;
   word-wrap: break-word;
+  font-size: 14.3px;
 }
 
 table th {
   text-align: center;
   font-size: 12px;
   text-transform: uppercase;
-  border: 2px solid #510A0A  !important;
+  border: none !important;
   background-color: #7a1818  !important;
   color: white !important;
 }

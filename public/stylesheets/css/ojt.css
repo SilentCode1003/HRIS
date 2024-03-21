@@ -144,13 +144,19 @@ body {
     overflow-x: hidden !important;
   }
 
-  .img-ojt-round {
-    width:200px;
-    height:200px;
+  .img-hrmis img {
+    width: 50%;
+    padding-top: 12px !important;
+    margin-left: -30px;
   }
 
-  .sidebar-brand-text {
-    display: block !important;
+  h6.eportal-text {
+    float: right;
+    padding-top: 35px;
+    margin-right: 10px;
+    font-family: Calibri;
+    font-weight: bold;
+    font-size: 18px;
   }
 
   ::-webkit-scrollbar {
@@ -204,12 +210,6 @@ body {
     width: 100%;
     padding-right: 110px;
   }
-
-  .img-ojt-round {
-    width: 200px;
-    height: 200px;
-  }
-
 
   #announcedesc1, #announcedesc2, #announcedesc3  {
     background-color: #BCFFB9 !important;
@@ -265,9 +265,8 @@ body {
     margin-left: 20px;
   }
   
-  .img-ojt-round {
-    width: 200px;
-    height: 200px;
+  .ojt-img-rounded {
+    width: 50%;
   }
 
 
@@ -366,7 +365,7 @@ body {
 }
 
 .ch-attendance {
-    background: linear-gradient(45deg, #00A9FF, #c270d6)  !important;
+    background: linear-gradient(45deg, #00A9FF, #2d6a9c)  !important;
     color: white !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
 }

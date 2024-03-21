@@ -209,38 +209,65 @@
         }
       }
     });
+<<<<<<< HEAD
+=======
 
   });
+>>>>>>> 2df3cf70a60398b5301b70a28bd44cdc140dcce3
 
 
+    $(document).on("change", "#c", function (e) {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
 
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      editimage();
+    });
 
+    function editimage() {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
 
-  //#region FUNCTIONS
+      var reader = new FileReader();
 
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
-  $(document).on("change", "#c", function (e) {
-    const input = document.getElementById("editemployeeprofile");
-    const file = input.files[0];
+        imageBase64Stringsep = base64String;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = function () {
-      const preview = document.getElementById("editpreview");
-      preview.src = reader.result;
-    };
-    editimage();
-  });
+      };
+      reader.readAsDataURL(file);
+    }
 
-  function editimage() {
-    const input = document.getElementById("editemployeeprofile");
-    const file = input.files[0];
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableattendancerequest");
+      tr = table.getElementsByTagName("tr");
 
-    var reader = new FileReader();
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
 
-    reader.onload = function () {
-      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
 
+<<<<<<< HEAD
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+=======
       imageBase64Stringsep = base64String;
 
     };
@@ -290,15 +317,12 @@
         if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
           found = true;
           break;
+>>>>>>> 2df3cf70a60398b5301b70a28bd44cdc140dcce3
         }
       }
-
-      if (found) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
     }
-  }
-  //#endregion
+    //#endregion
+    
+  });
+  //#region FUNCTIONS
 </script>
