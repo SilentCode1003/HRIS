@@ -14,14 +14,14 @@ body {
     background-color: #7F8487 !important;
 }
 #topbar {    
-    background: linear-gradient(180deg, #8b2525, rgb(173, 7, 7)) !important;
+  background-color: #8b2525 !important;
     position: fixed !important;
-    z-index: 1001;
+    z-index: 2;
     width: 100%;
 }
 
 .searchbar-eportal {
-  border: 2px solid #F5E0B3 !important;
+  border: 2px solid #fcf0d7 !important;
 }
 
 .searchbar-bg {
@@ -29,15 +29,20 @@ body {
 }
 
 .btn-search-eportal {
-  background-color: rgb(99, 241, 99) !important;
+  background-color: #E41717 !important;
+  border: 2.5px solid #fcf0d7  !important;
+  color: white !important;
+}
+
+.btn-search-eportal:hover {
+  background-color: #fa0303 !important;
   color: white !important;
 }
 
 
 .dropdown-eportal {
-    background-color: #7a1818 !important;
-    color: white !important;
-    border:  2px solid #7a1818 !important;
+  background-color: #7a1818 !important;
+  border: 3px solid #fcf0d7 !important;
 }
 
 .profilename-eportal {
@@ -50,14 +55,15 @@ body {
 }
 
 .dropd-eportal {
-    color: white !important;
-    font-weight: bold !important;
+  color: white !important;
+  font-weight: bold !important;
 }
 .dropd-eportal:hover {
-    background-color: #7a1818 !important;
-    transform: scale(1.1);
-    box-shadow: 0 0 8px white !important;
+  background-color: #fcf0d7 !important;
+  color: #7a1818 !important;
+  font-weight: bold !important;
 }
+
 
 
 /* sidebar toggled
@@ -138,13 +144,19 @@ body {
     overflow-x: hidden !important;
   }
 
-  .img-ojt-round {
-    width:200px;
-    height:200px;
+  .img-hrmis img {
+    width: 50%;
+    padding-top: 12px !important;
+    margin-left: -30px;
   }
 
-  .sidebar-brand-text {
-    display: block !important;
+  h6.eportal-text {
+    float: right;
+    padding-top: 35px;
+    margin-right: 10px;
+    font-family: Calibri;
+    font-weight: bold;
+    font-size: 18px;
   }
 
   ::-webkit-scrollbar {
@@ -198,12 +210,6 @@ body {
     width: 100%;
     padding-right: 110px;
   }
-
-  .img-ojt-round {
-    width: 200px;
-    height: 200px;
-  }
-
 
   #announcedesc1, #announcedesc2, #announcedesc3  {
     background-color: #BCFFB9 !important;
@@ -259,9 +265,8 @@ body {
     margin-left: 20px;
   }
   
-  .img-ojt-round {
-    width: 200px;
-    height: 200px;
+  .ojt-img-rounded {
+    width: 50%;
   }
 
 
@@ -300,7 +305,7 @@ body {
 
 
 #accordionSidebar {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
+    background: #7a1818 !important;
     top: 0;
     left: 0;
     bottom: 0;
@@ -339,10 +344,19 @@ body {
     right: 10px;
 }
 
-.db-icon-eportal, .salary-icon-eportal, .cash-icon-eportal, .coop-icon-eportal, .attendance-icon-eportal, .leave-icon-eportal, .disciplinary-icon-eportal {
-    width: 25px;
-    height: 25px; 
-    top: 3px;
+.db-bell-hrmis {
+  width: 25px;
+  height: 25px;
+}
+
+.db-message-hrmis {
+  width: 40px;
+  height: 40px;
+}
+
+.db-search-hrmis {
+  width: 25px;
+  height: 25px;
 }
 
 .mail-icon-eportal {
@@ -351,7 +365,7 @@ body {
 }
 
 .ch-attendance {
-    background: linear-gradient(45deg, #00A9FF, #c270d6)  !important;
+    background: linear-gradient(45deg, #00A9FF, #2d6a9c)  !important;
     color: white !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
 }
@@ -381,11 +395,6 @@ body {
     margin: 3%;
     display: inline-block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.link-hover:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 8px white !important;
 }
 
 .btn-clockin {
@@ -490,14 +499,18 @@ body {
     letter-spacing: .3rem;
 }
 
-.ch-salary, .cheader-attendance {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
-    height: 90px !important;
+.ch-salary,
+.cheader-attendance {
+  background-color: #7a1818 !important;
+  height: 90px !important;
 }
 
-.cheader-attendance, .ch-cashad, .ch-requestleave, .ch-da {
-    background: linear-gradient(250deg, #8b2525, rgb(173, 7, 7))!important;
-    height: 50% !important;
+.cheader-attendance,
+.ch-cashad,
+.ch-requestleave,
+.ch-da {
+  background-color: #7a1818 !important;
+  height: 50% !important;
 }
 
 .ch-salary h3, .cheader-attendance h3, .ch-cashad h3, .ch-requestleave h3, .ch-da h3 {
@@ -508,7 +521,7 @@ body {
 }
 
 .cbody-salary, .cbody-attendance, .cbody-cashad, .cbody-requestleave, .cbody-da {
-    background-color: #F5E0B3;
+    background-color: #fcf0d7;
 }
 
 .btn-eportal-color {
@@ -517,7 +530,7 @@ body {
     border-radius: 8px;
     height: 33px;
     background-color: #53c24e !important;
-    border: 2px solid #d3bb86 !important;
+    border: 2px solid #fcf0d7 !important;
     color: white !important;
     -webkit-animation: btn-eportal-color 0.9s both;
               animation: btn-eportal-color 0.9s both;
@@ -561,18 +574,19 @@ body {
 }
 
 .card-ojt {
-  background: linear-gradient(150deg, white, #14C38E) !important;
-  border: 3px solid #005B41 !important;
+  background: #fcf0d7 !important;
+  border: 2px solid #5b0000 !important;
+  border-radius: 10px;
 }
 
 .ch-ojt {
-  background: #14C38E !important;
-  border: 2px solid #005B41 !important;
+  background: #7a1818 !important;
+  /* border: 1.5px solid #5b0000 !important; */
 }
 
 #nav-home-tab.nav-link.active {
-  background: #E3F4F4 !important;
-  color: #1a8867 !important;
+  background: #fcf0d7 !important;
+  color: #881a1a !important;
   font-weight: bold;
   font-family: Georgia;
   font-size: large;
@@ -580,16 +594,15 @@ body {
 }
 
 #nav-home-tab.nav-link {
-  color: #005B41 !important;
+  color: white !important;
   font-family: Georgia;
   font-size: medium;
   font-weight: bold;
-  text-shadow: 2px 2px 1px white !important; /* Text shadow */
 } 
 
 #nav-profile-tab.nav-link.active {
-  background: #E3F4F4 !important;
-  color: #1a8867 !important;
+  background: #fcf0d7 !important;
+  color: #881a1a !important;
   font-weight: bold;
   font-family: Georgia;
   font-size: large;
@@ -597,11 +610,10 @@ body {
 }
 
 #nav-profile-tab.nav-link {
-  color: #005B41 !important;
+  color: white !important;
   font-family: Georgia;
   font-size: medium;
   font-weight: bold;
-  text-shadow: 2px 2px 1px white !important; /* Text shadow */
 }
 
 .nav-tabs {
@@ -609,14 +621,15 @@ body {
 }
 
 .fc-ojt {
-  border: 2px solid #1a8867 !important;
+  border: 2px solid #5b0000 !important;
   background-color: white !important;
 }
 
 .ojt-label {
   font-weight: bold;
-  font-family: Georgia;
-  color: #005B41  !important;
+  font-family: Calibri;
+  color: #5b0000  !important;
+  font-size: medium;
 }
 
 input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#department.form-control.fc-ojt, input#school.form-control.fc-ojt, input#datestart.form-control.fc-ojt, input#totalhours.form-control.fc-ojt, input#totaltime.form-control.fc-ojt, input#remaining.form-control.fc-ojt, input#endddate.form-control.fc-ojt {
@@ -626,7 +639,7 @@ input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#depar
 
 .img-ojt-round {
   margin-top: 8%;
-  border: 2px solid #005B41;
+  border: 2px solid #5b0000;
 }
 
 .btn-outline-primary:hover {
@@ -637,111 +650,15 @@ input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#depar
   color: white !important;
   background-color: green !important;
   border: 2px solid #00B25A !important;
-  font-family: Georgia !important;
+  float: right;
+  font-family: Calibri;
+  font-size: 18px;
 }
 .btn-modal-save:hover {
   background-color: rgb(10, 112, 61)important;
   color: white !important;
   font-weight: bold;
 }
-
-/*--- old login css ---*/
-
-/* .login-box {
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0, 0, 0, 0.4);
-  width: 450px;
-  padding: 20px;
-  border: 2px solid white;
-  border-radius: 8px;
-  height: 500px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  padding: 20px;
- 
-  color: white;
-  box-shadow:
-  0 4px 6px rgba(0, 0, 0, 0.1),
-  0 6px 8px rgb(66, 2, 2), 
-  0 8px 10px rgb(194, 1, 1);
-}
-
-.bg-img {
-  background-image: url(/images/img/5lreg.jpg);
-  filter: blur(6px);
-  -webkit-filter: blur(6px);
-  height: 100%; 
-  
-  
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.img-ojt-login img {
-  width: 90px;
-  height: 80px;
-}
-
-.img-ojt-login h6 {
-  font-weight: bold;
-  font-family: Cambria;
-  text-transform: uppercase;
-  letter-spacing: 0.6rex;
-  font-size: 20px;
-}
-
-
-.p-ojt-login {
-  margin-top: 10%;
-  text-align: center;
-  font-family:'Times New Roman';
-}
-
-
-.label-username, .label-password {
-  font-family: Cambria;
-  letter-spacing: 0.1rex;
-  margin-top: 8px;
-}
-
-#loginBtn h6 {
-  font-family: Georgia;
-  font-weight: bold;
-  margin-top: 3px;
-}
-
-.text-light h6 {
-  font-size: small;
-} 
-
-.btn-login-ojt {
-  background-color: #0079FF !important;
-  color: white !important;
-}
-
-.btn-login-ojt:hover {
-  background-color: darkblue !important;
-  font-weight: bolder;
-  transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-  .login-box {
-    width: 350px;
-    height: 500px;
-  }
-}
-
-@media only screen and (min-width: 769px) and (max-width: 900px) {
-  .login-box {
-    width: 300px;
-    height: 400
-}
-} */
 
 
 /*---- new css -----*/
@@ -767,14 +684,15 @@ input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#depar
 }
 
 .login-container {
+  margin-top: 2%;
   max-width: 95%;
   /* margin: 0 auto; */
 }
 
 .login-form h2 {
-  line-height: 40px;
+  line-height: 20px;
   margin-bottom: 5px;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 500;
   color: white !important;
   text-align: center;
@@ -801,7 +719,7 @@ input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#depar
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  z-index: 2;
+  z-index: 1;
 }
 
 .login-form-img {
@@ -809,7 +727,7 @@ input#ojtid.form-control.fc-ojt, input#fullname.form-control.fc-ojt, input#depar
   background-image: url(/images/img/5lreg2.jpg);
   background-position: center;
   background-size: cover;
-  padding: 40px;
+  /* padding: 40px; */
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   align-items: center;
@@ -908,5 +826,38 @@ p.account:hover {
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
   }
+}
+
+.sidebar-item span {
+  color: white !important;
+  padding:8px;
+}
+
+.sidebar-item {
+  transition: background-color 0.1s ease;
+}
+
+.sidebar-item:hover {
+  background-color: #fcf0d7 !important;
+  font-weight: bold;
+}
+
+.sidebar-item:hover span {
+  color: #7a1818 !important;
+}
+
+.sidebar-divider {
+  border-bottom: 3px solid white !important;
+}
+
+.user-prof-icon, .settings-icon, .log-icon, .logout-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.db-icon-hrmis {
+  width: 25px;
+  height: 25px; 
+  top: 3px;
 }
 

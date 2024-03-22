@@ -28,7 +28,6 @@ var performanceRouter = require('./routes/performance');
 var holidayRouter = require('./routes/holiday');
 var holidayrateRouter = require('./routes/holidayrate');
 var ojtRouter = require('./routes/ojt');
-var ovetimeRouter = require('./routes/ovetime');
 var announcementRouter = require('./routes/announcement');
 var settingsRouter = require('./routes/settings');
 var eportalsettingsRouter = require('./routes/eportalsettings');
@@ -57,7 +56,6 @@ var registerRouter = require('./routes/register');
 var ojtuserRouter = require('./routes/ojtuser');
 var geofencesettingsRouter = require('./routes/geofencesettings');
 var salaryhistoryRouter = require('./routes/salaryhistory');
-var timelogsRouter = require('./routes/timelogs');
 var payslipRouter = require('./routes/payslip');
 var generatepayrollRouter = require('./routes/generatepayroll');
 var apprenticeRouter = require('./routes/apprentice');
@@ -69,7 +67,12 @@ var ojtreqabsentRouter = require('./routes/ojtreqabsent');
 var attendanceojtRouter = require('./routes/attendanceojt');
 var appsdetailsRouter = require('./routes/appsdetails');
 var otapprovalRouter = require('./routes/otapproval');
-
+var otherdeductionsRouter = require('./routes/otherdeductions');
+var otherdeductionsIDRouter = require('./routes/otherdeductionsID');
+var attendancerequestRouter = require('./routes/attendancerequest');
+var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
+var setsetpayrolldateRouter = require('./routes/setpayrolldate');
+var eportalrequestovertimeRouter = require('./routes/eportalrequestovertime');
 
 
 var app = express();
@@ -109,7 +112,6 @@ app.use('/performance', performanceRouter);
 app.use('/holiday', holidayRouter);
 app.use('/holidayrate', holidayrateRouter);
 app.use('/ojt', ojtRouter);
-app.use('/ovetime', ovetimeRouter);
 app.use('/announcement', announcementRouter);
 app.use('/settings', settingsRouter);
 app.use('/eportalsettings', eportalsettingsRouter);
@@ -138,7 +140,6 @@ app.use('/register', registerRouter);
 app.use('/ojtuser', ojtuserRouter);
 app.use('/geofencesettings', geofencesettingsRouter);
 app.use('/salaryhistory', salaryhistoryRouter);
-app.use('/timelogs',timelogsRouter);
 app.use('/payslip', payslipRouter);
 app.use('/generatepayroll', generatepayrollRouter);
 app.use('/apprentice', apprenticeRouter);
@@ -150,6 +151,13 @@ app.use('/ojtreqabsent', ojtreqabsentRouter);
 app.use('/attendanceojt', attendanceojtRouter);
 app.use('/appsdetails', appsdetailsRouter);
 app.use('/otapproval', otapprovalRouter);
+app.use('/otherdeductions', otherdeductionsRouter);
+app.use('/otherdeductionsID', otherdeductionsIDRouter);
+app.use('/attendancerequest', attendancerequestRouter);
+app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
+app.use('/setpayrolldate', setsetpayrolldateRouter);
+app.use('/eportalrequestovertime', eportalrequestovertimeRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

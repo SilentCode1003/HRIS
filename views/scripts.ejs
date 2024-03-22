@@ -171,6 +171,11 @@
     });
   }
 
+  function formatCurrencyValue(amount) {
+    var formattedAmount = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(amount);
+    return formattedAmount;
+  }
+
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -178,6 +183,11 @@
     let month = (date.getMonth() + 1).toString().padStart(2, '0');
     let day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  function formatDateTime(dateTime) {
+    const formattedDateTime = moment(dateTime).format('YYYY-MM-DD HH:mm:ss');
+    return formattedDateTime;
   }
 
   // function formatDateTime(dateTimeString) {
@@ -205,23 +215,26 @@
   function formatTime(dateTimeString) {
     if (!dateTimeString) return "";
 
-    // Split the dateTimeString by 'T' to separate date and time
-    const dateTimeParts = dateTimeString.split('T');
-    if (dateTimeParts.length !== 2) return ""; // Check if the format is correct
 
-    // Extract the time part from the second element of the array
+    const dateTimeParts = dateTimeString.split('T');
+    if (dateTimeParts.length !== 2) return "";
+
+
     const timeString = dateTimeParts[1];
 
-    // Split the timeString by ':' to extract hours and minutes
     const timeParts = timeString.split(':');
-    if (timeParts.length !== 2) return ""; // Check if the format is correct
+    if (timeParts.length !== 2) return "";
 
     const hours = timeParts[0];
     const minutes = timeParts[1];
-
-    // Format the time as 'HH:MM'
     return `${hours}:${minutes}`;
   }
+
+  $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+
+$('.navbar').toggleClass('navbar-toggled');
+
+});
 
 
 </script>

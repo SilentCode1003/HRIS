@@ -25,7 +25,7 @@
 
 .reg-main {
     border: 5px solid rgb(88, 11, 11) !important;
-    border-radius: 12px;
+    border-radius: 15px;
 }
 
 .reg-logo {
@@ -59,8 +59,8 @@
     flex-basis: 50%;
     padding: 3em 3em;
     box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
     color: white !important;
    
     background-image: url(/images/img/5lreg.jpg);
@@ -74,8 +74,8 @@
     flex-basis: 50%;
     background: white !important;
     padding: 40px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
     align-items: center;
     display: grid;
     background-color: rgba(126, 7, 7, 0.938) !important;

@@ -322,48 +322,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-function generateEmployeeId(year, month) {
-  return new Promise((resolve, reject) => {
-    const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
-    mysql
-      .mysqlQueryPromise(maxIdQuery)
-      .then((result) => {
-        let currentCount = parseInt(result[0].count) + 1;
-        const paddedNumericPart = String(currentCount).padStart(2, "0");
-
-        let newEmployeeID = `${year}${month}${paddedNumericPart}`;
-
-        resolve(newEmployeeID);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
-function generateApprenticeId(year, month) {
-  return new Promise((resolve, reject) => {
-    const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
-    // Replace 'apprentice_table' with the actual table name where apprentice IDs are stored
-
-    mysql
-      .mysqlQueryPromise(maxIdQuery)
-      .then((result) => {
-        let currentCount = parseInt(result[0].count) + 1;
-        const paddedNumericPart = String(currentCount).padStart(2, "0");
-
-        let newApprenticeID = `${year}${month}${paddedNumericPart}`;
-
-        resolve(newApprenticeID);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
-
-
 router.post("/save", async (req, res) => {
   try {
     const {
@@ -842,6 +800,39 @@ router.post("/update", async (req, res) => {
   }
 });
 
+router.post("/getdeductother", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select
+    md_deductionid,
+    md_employeeid,
+    md_idtype,
+    md_idnumber,
+    md_issuedate
+    from master_deductions
+    inner join master_employee on md_employeeid = me_id
+    where md_employeeid = '${employeeid}'`;
+
+    console.log(sql);
+
+    mysql.Select(sql, "Master_Deductions", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      console.log(result);
+
+      res.json({
+        msg: 'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
 
 router.post("/getgovid", (req, res) => {
   try {
@@ -1190,6 +1181,48 @@ router.get("/totalresigned", (req, res) => {
 });
 
 //#region functions
+
+
+function generateEmployeeId(year, month) {
+  return new Promise((resolve, reject) => {
+    const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
+    mysql
+      .mysqlQueryPromise(maxIdQuery)
+      .then((result) => {
+        let currentCount = parseInt(result[0].count) + 1;
+        const paddedNumericPart = String(currentCount).padStart(2, "0");
+
+        let newEmployeeID = `${year}${month}${paddedNumericPart}`;
+
+        resolve(newEmployeeID);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+function generateApprenticeId(year, month) {
+  return new Promise((resolve, reject) => {
+    const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
+    // Replace 'apprentice_table' with the actual table name where apprentice IDs are stored
+
+    mysql
+      .mysqlQueryPromise(maxIdQuery)
+      .then((result) => {
+        let currentCount = parseInt(result[0].count) + 1;
+        const paddedNumericPart = String(currentCount).padStart(2, "0");
+
+        let newApprenticeID = `${year}${month}${paddedNumericPart}`;
+
+        resolve(newApprenticeID);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 function GetDepartment(name, callback) {
   let sql = `select * from master_department where md_departmentname='${name}'`;
   mysql.Select(sql, "Master_Department", (err, result) => {

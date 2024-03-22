@@ -221,6 +221,64 @@
       });
     }
 
+    $('#datepicker').on('apply.daterangepicker', function (ev, picker) {
+      $("#exportBtn").click(function () {
+        let startDate = picker.startDate.format('YYYY-MM-DD');
+        let endDate = picker.endDate.format('YYYY-MM-DD');
+        exportPayroll(startDate, endDate);
+      });
+    });
+
+    function exportPayroll(startDate, endDate) {
+      $.ajax({
+        url: '/generatepayroll/exportfile',
+        type: 'POST',
+        data: {
+          startdate: startDate,
+          enddate: endDate
+        },
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (response) {
+          if (response) {
+            swal({
+              title: 'Download Payroll Data',
+              text: 'Are you sure you want to download the payroll data?',
+              confirm: '#28a745',
+              cancel: '#dc3545',
+              buttons: {
+                confirm: 'Yes, download it!',
+                cancel: 'No, cancel'
+              },
+              dangerMode: true
+            }).then((result) => {
+              if (result) {
+                var blob = response;
+
+                var url = URL.createObjectURL(blob);
+
+                var link = document.createElement('a');
+                link.href = url;
+                link.download = `payroll_data_${startDate}_${endDate}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+              } else {
+                swal('Cancelled', 'Payroll data download cancelled :)', 'error');
+              }
+            });
+          } else {
+            console.error('Error: Empty response');
+            swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
+          swal('Error', 'Failed to export payroll data. Please try again later.', 'error');
+        }
+      });
+    }
 
     $("#dataTablePayroll tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -312,11 +370,13 @@
               $("#payslipperday").text(formatToCurrency(item.Per_Day));
               $("#payslipallowances").text(formatToCurrency(item.Allowances));
               $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
-              $("#payslipndpay").text(formatToCurrency(item.NDpay));
-              $("#payslipotpay").text(formatToCurrency(item.OTpay));
-              $("#payslipearlypay").text(formatToCurrency(item.EarlyOtpay));
+              $("#payslipndpay").text(formatToCurrency(item.ApprovedNightDiffOt));
+              $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
+              $("#payslipearlypay").text(formatToCurrency(item.ApprovedEarlyOt));
               $("#payslipregular").text(formatToCurrency(item.Regular_Holiday_Compensation));
               $("#payslipspecial").text(formatToCurrency(item.Special_Holiday_Compensation));
+              $("#payslipregularovertime").text(formatToCurrency(item.RegularHolidayOT));
+              $("#payslipspecialovertime").text(formatToCurrency(item.SpecialHolidayOT));
               $("#paysliptotal").text(formatToCurrency(item.Overall_Net_Pay));
               $("#payslipsss").text(formatToCurrency(item.SSS));
               $("#payslippagibig").text(formatToCurrency(item.PagIbig));
@@ -378,18 +438,20 @@
           $.each(data[0], function (key, item) {
             var row = material_list_tbl.insertRow(1);
             var DATE = row.insertCell(0);
-            var CLOCK_IN = row.insertCell(1);
-            var CLOCK_OUT = row.insertCell(2);
-            var LATE_MINUTES = row.insertCell(3);
-            var LATE_HOURS = row.insertCell(4);
-            var EARLY_OT = row.insertCell(5);
-            var NIGHT_DIFF = row.insertCell(6);
-            var NORMAL_OT = row.insertCell(7);
-            var TOTAL_HOURS = row.insertCell(8);
-            var TOTAL_MINUTES = row.insertCell(9);
+            var ATTENDANCE_STATUS = row.insertCell(1);
+            var CLOCK_IN = row.insertCell(2);
+            var CLOCK_OUT = row.insertCell(3);
+            var LATE_MINUTES = row.insertCell(4);
+            var LATE_HOURS = row.insertCell(5);
+            var EARLY_OT = row.insertCell(6);
+            var NIGHT_DIFF = row.insertCell(7);
+            var NORMAL_OT = row.insertCell(8);
+            var TOTAL_HOURS = row.insertCell(9);
+            var TOTAL_MINUTES = row.insertCell(10);
 
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
+            ATTENDANCE_STATUS.innerHTML  = item.Attendance_Status;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;
@@ -400,8 +462,10 @@
             TOTAL_HOURS.innerHTML = item.Total_Hours;
             TOTAL_MINUTES.innerHTML = item.Total_Minutes;
 
+            console.log(ATTENDANCE_STATUS);
+
             $.each(
-              [DATE, CLOCK_IN, CLOCK_OUT, LATE_MINUTES, LATE_HOURS, EARLY_OT, NIGHT_DIFF, NORMAL_OT, TOTAL_HOURS, TOTAL_MINUTES],
+              [DATE, ATTENDANCE_STATUS, CLOCK_IN, CLOCK_OUT, LATE_MINUTES, LATE_HOURS, EARLY_OT, NIGHT_DIFF, NORMAL_OT, TOTAL_HOURS, TOTAL_MINUTES],
               function (_, cell) {
                 cell.style.textAlign = "center";
                 cell.style.verticalAlign = "middle";
@@ -531,6 +595,7 @@
       }
     }
     //#endregion
-
   });
+
+
 </script>

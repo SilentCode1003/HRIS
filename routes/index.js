@@ -7,13 +7,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  // res.render("indexlayout", {
-  //   image: req.session.image,
-  //   employeeid: req.session.employeeid,
-  //   fullname: req.session.fullname,
-  //   accesstype: req.session.accesstype,
-  // });
-
   Validator(req, res, "indexlayout");
 });
 
@@ -141,6 +134,69 @@ router.get("/loadCA", (req, res) => {
 });
 
 
+router.get("/loadreqOT", (req, res) => {
+  try {
+    let sql = `   
+    SELECT 
+    pao_image,
+    pao_id,
+    pao_fullname,
+    DATE_FORMAT(pao_attendancedate, '%W, %M %d, %Y') as pao_attendancedate,
+    DATE_FORMAT(pao_payroll_date, '%W, %M %d, %Y') as  pao_payroll_date, 
+    DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') as pao_clockin,  
+    DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') as  pao_clockout,
+    pao_total_hours
+    FROM payroll_approval_ot
+    WHERE pao_status = 'Appllied'`;
+
+    mysql.Select(sql, "Payroll_Approval_Ot" , (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+router.get("/loadreqattendance", (req, res) => {
+  try {
+    let sql = `   
+    SELECT 
+    me_profile_pic,
+    ar_requestid,
+    concat(me_lastname,' ' ,me_firstname) as  ar_employeeid,
+    DATE_FORMAT(ar_attendace_date, '%W, %M %d, %Y') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') as ar_timein,  
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') as  ar_timeout,
+    ar_total
+    FROM attendance_request
+    INNER JOIN master_employee on ar_employeeid = me_id
+    WHERE ar_status = 'Pending'`;
+
+    mysql.Select(sql, "Attendance_Request" , (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 router.get("/getbulletin", (req, res) => {
   try {
     // let bulletinid = req.body.bulletinid;
@@ -252,6 +308,78 @@ router.get("/countcashreqbadge", (req, res) => {
     console.log(error);
   }
 });
+
+router.get("/countovertimeot", (req, res) => {
+  try {
+    let sql = `    
+    SELECT count(*) as pending
+    from payroll_approval_ot 
+    where 
+    pao_status = 'Appllied'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              OTreqCount: result[0].pending,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.get("/countCOA", (req, res) => {
+  try {
+    let sql = `    
+    SELECT count(*) as pending
+    from attendance_request 
+    where 
+    ar_status = 'Pending'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              COAreqCount: result[0].pending,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 
 router.get("/countactive", (req, res) => {
   try {

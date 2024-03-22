@@ -6,6 +6,7 @@
             <input id="datepicker" type="text" name="daterange" />
             <button id="generateButton" class="btn btn-add-color"><b>Generate</b></button>
             <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button>
+            <button id="exportBtn" class="btn btn-add-color"><b>Export</b></button>
             <input id="myInput" type="text" placeholder="Search....">
         </div>
         <div class="card-body">
@@ -237,6 +238,7 @@
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Date</th>
+                                                                        <th>Status</th>
                                                                         <th>Clock In</th>
                                                                         <th>Clock Out</th>
                                                                         <th>Late In Minutes</th>
@@ -374,7 +376,7 @@
                                                                         <td id="payslippagibig"></td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th scope="row">Total Overtime
+                                                                        <th scope="row">Total Approve Overtime
                                                                         </th>
                                                                         <td id="payslipovertime"></td>
                                                                         <td>Tax</td>
@@ -400,6 +402,18 @@
                                                                         <td id="payslipearlypay"></td>
                                                                         <td>Late</td>
                                                                         <td id="paysliplate"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Special Holiday Overtime
+                                                                        </th>
+                                                                        <td id="payslipspecialovertime"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">Regular Holiday Overtime
+                                                                        </th>
+                                                                        <td id="payslipregularovertime"></td>
+                                                                        <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row">Special Holiday
