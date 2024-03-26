@@ -217,23 +217,28 @@ router.post('/update', (req, res) => {
     mgs_status ='${status}'
     WHERE mgs_id ='${geofenceid}'`;
 
+    console.log(sqlupdate);
+
     mysql.Update(sqlupdate)
     .then((result) =>{
       console.log(result);
   
       res.json({
-        msg: 'success'
+        msg: 'success',
+        data: result,
       })
     })
     .catch((error) =>{
       res.json({
-        msg:error
+        msg:'error',
+        data: error,
       })
       
     });
   } catch (error) {
     res.json({
-      msg: 'error'
+      msg: 'error',
+      data: error,
     })
   }
 });

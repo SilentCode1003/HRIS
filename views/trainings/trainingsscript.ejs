@@ -38,14 +38,14 @@
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#edittrainingmodal"><i class="fas fa-fw fa-pen"></i></button>
                    `;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "80px";
-              imgElement.style.height = "80px";
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "80px";
+              // imgElement.style.height = "80px";
 
               finalData.push({
-                image: imgElement.outerHTML,
+                // image: imgElement.outerHTML,
                 trainingid: item.trainingid,
                 name: item.name,
                 employeeid: item.employeeid,
@@ -67,7 +67,7 @@
           },
         ],
         columns: [
-          { data: "image" },
+          // { data: "image" },
           { data: "trainingid" },
           { data: "name" },
           { data: "employeeid" },
@@ -212,7 +212,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      trainingid = dataRow[1];
+      trainingid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {

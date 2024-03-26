@@ -838,6 +838,27 @@ exports.Attendance_Request = (data) => {
   return dataResult;
 };
 
+exports.Master_Notification = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      notificationid: key.mn_notificationid,
+      employeeid: key.mn_employeeid,
+      date: key.mn_date,
+      tittle: key.mn_tittle,
+      description: key.mn_description,
+      subdescription: key.mn_subdescription,
+      image: key.mn_image,
+      isrecieved: key.mn_isReceived,
+      isread: key.mn_isRead,
+      isdelete: key.mn_isDeleate,
+    });
+  });
+
+  return dataResult;
+};
+
 
 
 

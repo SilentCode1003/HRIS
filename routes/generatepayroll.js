@@ -142,6 +142,7 @@ router.post("/getpayrolldate", (req, res) => {
   try {
     let sql = `SELECT DISTINCT 
     DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
+    concat(gp_startdate,' To ',gp_enddate) as DateRange,
     gp_cutoff
     FROM 
     generate_payroll  

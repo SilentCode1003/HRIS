@@ -294,7 +294,8 @@
                         status: status,
                     },
                     success: function (result) {
-                        if (result.msg == "success") {
+                        console.log(result);
+                        if (result.msg === "success") {
                             swal({
                                 title: "Update Successfully",
                                 text: "You clicked the button!",
@@ -305,7 +306,7 @@
                                     window.location.reload();
                                 });
                             LoadTable();
-                        } else if (result.msg == "exist") {
+                        } else if (result.msg === "exist") {
                             swal({
                                 title: "Exist",
                                 text: "Data already exists!",
@@ -397,8 +398,8 @@
             }
 
             editCircle = L.circle([latitude, longitude], {
-                color: 'red', // Change the color for the edit preview
-                fillColor: '#f03', // Change the fill color for the edit preview
+                color: 'red', 
+                fillColor: '#f03',
                 fillOpacity: 0.1,
                 radius: radius
             }).addTo(editMap);
