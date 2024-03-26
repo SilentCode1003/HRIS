@@ -228,6 +228,10 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_Notification") {
         callback(null, model.Master_Notification(results));
       }
+
+      if (table == "Admin_Notification") {
+        callback(null, model.Admin_Notification(results));
+      }
     });
   } catch (error) {}
 };
