@@ -78,42 +78,80 @@ router.post("/upload", (req, res) => {
         // let datehired = moment(key.hiredate, "MM/DD/YYYY").format("YYYY-MM-DD");
         console.log("Birth Date", dateofbirth, "Date Hired", datehired);
 
-        master_employee = [
-          [
-            key.id,
-            key.firstname,
-            key.middlename,
-            key.lastname,
-            dateofbirth,
-            key.gender,
-            key.civilstatus,
-            key.contactno,
-            key.email,
-            datehired,
-            key.jobstatus,
-            key.econtactname,
-            key.econtactno,
-            departmentid,
-            positionid,
-            key.address,
-            "",
-          ],
-        ];
-
-        console.log(master_employee);
-        mysql.InsertTable("master_employee", master_employee, (err, result) => {
-          if (err) console.error("Error: ", err);
-
-          console.log(result);
+        let employeeId, username, password;
+          employeeId = key.id;
+          ({ username, password } = generateUsernameAndPasswordforemployee({
+            me_firstname: key.firstname,
+            me_lastname: key.lastname,
+            me_id: key.id,
+            me_birthday: dateofbirth,
+          }));
+  
+          master_employee = [
+            [
+              key.id,
+              key.firstname,
+              key.middlename,
+              key.lastname,
+              dateofbirth,
+              key.gender,
+              key.civilstatus,
+              key.contactno,
+              key.email,
+              datehired,
+              key.jobstatus,
+              key.econtactname,
+              key.econtactno,
+              departmentid,
+              positionid,
+              key.address,
+              "",
+            ],
+          ];
+  
+          console.log("id",key.id)
+  
+          mysql.InsertTable(
+            "master_employee",
+            master_employee,
+            async (insertErr, insertResult) => {
+              if (insertErr) {
+                console.error("Error inserting employee record: ", insertErr);
+                return res.json({ msg: "insert_failed" });
+              }
+      
+              console.log("Employee record inserted: ", insertResult);
+      
+              Encrypter(password, async (encryptErr, encryptedPassword) => {
+                if (encryptErr) {
+                  console.error("Error encrypting password: ", encryptErr);
+                  return res.json({ msg: "encrypt_error" });
+                }
+                const userSaveResult = await saveUserRecord(
+                  req,
+                  employeeId,
+                  username,
+                  encryptedPassword
+                );
+      
+                if (userSaveResult.msg === "success") {
+                } else {
+                  console.error("Error saving user record: ", userSaveResult.msg);
+                  return res.json({ msg: "user_save_error" });
+                }
+              
+              });
+            }
+          );
+          if (counter == dataJson.length) {
+            res.json({
+              msg: "success",
+            });
+          }
         });
-      });
     });
 
-    if (counter == dataJson.length) {
-      res.json({
-        msg: "success",
-      });
-    }
+    
   });
 });
 
@@ -286,7 +324,6 @@ router.get("/load", (req, res) => {
   try {
     let sql = ` 
     SELECT
-    me_profile_pic as image,
     me_id as newEmployeeId,
     CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
     me_phone as phone,
@@ -352,10 +389,7 @@ router.post("/save", async (req, res) => {
     let employeeId, username, password;
 
     if (jobstatus === "apprentice") {
-      // If jobstatus is apprentice, generate apprentice ID
       employeeId = await generateApprenticeId(apprenticecurrentYear, currentMonth);
-      
-      // Generate username and password for apprentice
       ({ username, password } = generateUsernameAndPasswordForApprentice({
         apprentice_firstname: firstname,
         apprentice_lastname: lastname,
@@ -363,10 +397,8 @@ router.post("/save", async (req, res) => {
         apprentice_birthday: birthday,
       }));
     } else {
-      // If jobstatus is not apprentice, generate employee ID
       employeeId = await generateEmployeeId(currentYear, currentMonth);
 
-      // Generate username and password for employee
       ({ username, password } = generateUsernameAndPasswordforemployee({
         me_firstname: firstname,
         me_lastname: lastname,
@@ -374,8 +406,6 @@ router.post("/save", async (req, res) => {
         me_birthday: birthday,
       }));
     }
-
-    // Directly use department and position names for insertion
     const employeeData = [
       [
         employeeId,
@@ -414,8 +444,6 @@ router.post("/save", async (req, res) => {
             console.error("Error encrypting password: ", encryptErr);
             return res.json({ msg: "encrypt_error" });
           }
-
-          // Save user record
           const userSaveResult = await saveUserRecord(
             req,
             employeeId,
@@ -437,8 +465,6 @@ router.post("/save", async (req, res) => {
     return res.json({ msg: "error" });
   }
 });
-
-
 
 // router.post("/save", async (req, res) => {
 //   try {
