@@ -14,7 +14,6 @@ module.exports = router;
 router.get('/load', (req, res) => {
   try {
     let sql = ` SELECT 
-    me_profile_pic,
     mt_trainingid,
     mt_name,
     me_id, concat(me_firstname, ' ', me_lastname) AS mt_employeeid,
@@ -44,7 +43,7 @@ router.get('/load', (req, res) => {
 router.post('/save', async (req, res) => {
   try {
     let name = req.body.name;
-    let employeeid = req.body.employeeid; // Format it as needed
+    let employeeid = req.body.employeeid;
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
     let location = req.body.location;

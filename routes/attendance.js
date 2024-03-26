@@ -54,7 +54,6 @@ router.post("/set-geofence", async (req, res) => {
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
-        me_profile_pic as image,
         ma_attendanceid as attendanceid,
         CONCAT(me_lastname, " ", me_firstname) as employeeid,
         DATE_FORMAT(ma_attendancedate, '%W, %M %e, %Y') as attendancedate,

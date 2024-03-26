@@ -24,7 +24,6 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
-    mo_image as image,
     oa_attendanceid as attendanceid,
     CONCAT(mo_lastname, " ", mo_name) as employeeid,
     DATE_FORMAT(oa_attendancedate, '%W, %M %e, %Y') as attendancedate,
