@@ -1,57 +1,57 @@
 <script>
   $(document).ready(function () {
-    console.log('Initialize');
-    document.addEventListener("keyup", function (event) {
-      if (event.keyCode === 13) {
-        let username = $("#username").val();
-        let password = $("#password").val();
+  //   console.log('Initialize');
+  //   document.addEventListener("keyup", function (event) {
+  //     if (event.keyCode === 13) {
+  //       let username = $("#username").val();
+  //       let password = $("#password").val();
 
-        var message = "";
+  //       var message = "";
 
-        if (username === "") {
-          message += "Username ";
-        }
-        if (password === "") {
-          message += "Password ";
-        }
+  //       if (username === "") {
+  //         message += "Username ";
+  //       }
+  //       if (password === "") {
+  //         message += "Password ";
+  //       }
 
-        if (message !== "") {
-          showSweetAlert("Required", `Please fill up ${message}`);
-        } else {
-          $.ajax({
-            type: "POST",
-            url: "/login/login",
-            data: {
-              username: username,
-              password: password,
-            },
-            success: function (result) {
-              if (result.msg === "success") {
-                swal("Login Successfully", "You clicked the button!", "success")
-                  .then(results => {
-                    if (result.data[0].accesstype === 'Employee') {
-                      location.replace("/eportalindex");
-                    } else {
-                      location.replace("/");
-                    }
-                  });
-              } else if (result.msg === "inactive") {
-                swal("Inactive", "Your account is inactive. Please be guided accordingly.", "Ok")
-                  .then(() => {
-                    location.reload();
-                  });
-              } else if (result.msg === "incorrect") {
-                swal("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
-              }
-            },
-            error: function (err) {
-              swal("Error", "An error occurred while saving data.", "error");
-            },
+  //       if (message !== "") {
+  //         showSweetAlert("Required", `Please fill up ${message}`);
+  //       } else {
+  //         $.ajax({
+  //           type: "POST",
+  //           url: "/login/login",
+  //           data: {
+  //             username: username,
+  //             password: password,
+  //           },
+  //           success: function (result) {
+  //             if (result.msg === "success") {
+  //               swal("Login Successfully", "You clicked the button!", "success")
+  //                 .then(results => {
+  //                   if (result.data[0].accesstype === 'Employee') {
+  //                     location.replace("/eportalindex");
+  //                   } else {
+  //                     location.replace("/");
+  //                   }
+  //                 });
+  //             } else if (result.msg === "inactive") {
+  //               swal("Inactive", "Your account is inactive. Please be guided accordingly.", "Ok")
+  //                 .then(() => {
+  //                   location.reload();
+  //                 });
+  //             } else if (result.msg === "incorrect") {
+  //               swal("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
+  //             }
+  //           },
+  //           error: function (err) {
+  //             swal("Error", "An error occurred while saving data.", "error");
+  //           },
 
-          });
-        }
-      }
-    });
+  //         });
+  //       }
+  //     }
+  //   });
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
