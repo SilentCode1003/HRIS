@@ -321,8 +321,6 @@ router.post('/generatenotification', (req, res) => {
     mysql.StoredProcedure(sql, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      //console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -395,6 +393,7 @@ router.post('/readnotif', (req, res) => {
   }
 });
 
+
 router.post('/deleatenotif', (req, res) => {
   try {
     let notificationId = req.body.notificationId;
@@ -424,89 +423,6 @@ router.post('/deleatenotif', (req, res) => {
     });
   }
 });
-
-
-
-// router.post('/unrecieved', (req, res) => {
-//   try {
-//     let employee_id = req.session.employee_id;
-//     let sql = `select * from master_notification
-//     where mn_employeeid = '${employee_id}' and mn_isReceived ='NO'`;
-
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg:'success',
-//         data: result,
-//       })
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg:'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg:'error',
-//       data: error,
-//     });
-//   }
-// });
-
-// router.post('/unread', (req, res) => {
-//   try {
-//     let employee_id = req.session.employee_id;
-//     let sql = `select * from master_notification
-//     where mn_employeeid = '${employee_id}' and mn_isRead ='NO'`;
-
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg:'success',
-//         data: result,
-//       })
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg:'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg:'error',
-//       data: error,
-//     });
-//   }
-// });
-
-// router.post('/undelete', (req, res) => {
-//   try {
-//     let employee_id = req.session.employee_id;
-//     let sql = `select * from master_notification
-//     where mn_employeeid = '${employee_id}' and mn_isDeleate ='NO'`;
-
-//     mysql.mysqlQueryPromise(sql)
-//     .then((result) => {
-//       res.json({
-//         msg:'success',
-//         data: result,
-//       })
-//     })
-//     .catch((error) => {
-//       res.json({
-//         msg:'error',
-//         data: error,
-//       });
-//     })
-//   } catch (error) {
-//     res.json({
-//       msg:'error',
-//       data: error,
-//     });
-//   }
-// });
 
 
 router.post("/countunreadbadge", (req, res) => {

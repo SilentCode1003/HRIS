@@ -12,7 +12,7 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-//<<<<<<<<<<<<<<<load table dashboard>>>>>>>>>>>>>>>>>>>>
+//#region LOAD TABLE DASHBOARD
 
 router.get("/load", (req, res) => {
   try {
@@ -237,7 +237,10 @@ router.get("/getbulletin", (req, res) => {
   }
 });
 
-//<<<<<<<<<<<<<<<counting dashboard>>>>>>>>>>>>>>>>>>>>
+//#endregion
+
+
+//#region DASH BOARD CARD
 
 router.get("/countreqleavebadge", (req, res) => {
   try {
@@ -745,6 +748,11 @@ router.get("/countapprentice", (req, res) => {
 });
 
 
+//#endregion
+
+
+//#region MODAL DASH BOARD 
+
 router.get('/getbday' , (req, res)=> {
   try {
     let sql =  ` SELECT 
@@ -1061,3 +1069,163 @@ router.get('/apprenticemodal', (req, res) => {
   }
 });
 
+//#endregion
+
+
+//#region ADMIN NOTIFICATION
+
+
+router.post('/viewnotif', (req,res) => {
+  try {
+    let notificationIdClicked = req.body.notificationIdClicked;
+    let sql = `select *
+    from admin_notification
+    where an_notificationid = '${notificationIdClicked}'`;
+
+    console.log("notif_id",notificationIdClicked);
+
+    mysql.Select(sql, "Admin_Notification", (err, result) => {
+      if (err) console.error("Error : ", err);
+
+      console.log(result);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
+router.get('/loadnotif', (req, res) => {
+  try {
+    let sql =  `SELECT * FROM admin_notification
+    WHERE an_isDeleate = 'NO'
+    ORDER BY an_date DESC`;
+
+    mysql.Select(sql, "Admin_Notification", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
+
+router.get("/countunreadbadge", (req, res) => {
+  try {
+    let sql = `    
+    SELECT count(*) AS Unreadcount
+    FROM admin_notification 
+    WHERE an_isReceived = 'NO'
+    AND an_isRead = 'NO'
+    AND an_isDeleate = 'NO'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data:result
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.post('/readnotif', (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE admin_notification SET 
+    an_isReceived = 'YES',
+    an_isRead = 'YES'
+    WHERE an_notificationid = '${notificationId}'`;
+
+    mysql.Update(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+
+
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/deleatenotif', (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE admin_notification SET 
+    an_isReceived = 'YES',
+    an_isRead = 'YES',
+    an_isDeleate = 'YES'
+    WHERE an_notificationid = '${notificationId}'`;
+
+    mysql.Update(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+
+
+
+
+
+//#endregion
