@@ -1,6 +1,6 @@
 var express = require("express");
 const { Encrypter } = require("./repository/crytography");
-const { Select, mysqlQueryPromise } = require("./repository/hrmisdb");
+const mysql = require("./repository/hrmisdb");
 const { UserLogin } = require("./helper");
 var router = express.Router();
 /* GET home page. */
@@ -16,8 +16,6 @@ router.post("/login", (req, res) => {
 
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
-
-      console.log(encrypted);
 
       let sql = `SELECT 
       mu_employeeid AS employeeid,
@@ -38,7 +36,7 @@ router.post("/login", (req, res) => {
       LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
       WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
-      mysqlQueryPromise(sql)
+      mysql.mysqlQueryPromise(sql)
         .then((result) => {
           if (result.length !== 0) {
             const user = result[0];
@@ -51,8 +49,6 @@ router.post("/login", (req, res) => {
               if (user.status === "Active") {
                 let data = UserLogin(result);
 
-                //console.log(result);
-
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
@@ -64,10 +60,23 @@ router.post("/login", (req, res) => {
                   req.session.jobstatus = user.jobstatus;
                   req.session.geofenceid = user.geofenceid;
                 });
+                
+                let genNotifSql = `call hrmis.GetNotification('${req.session.employeeid}')`;
 
-                return res.json({
-                  msg: "success",
-                  data: data,
+                mysql.StoredProcedure(genNotifSql, (err, result) => {
+                  if (err) {
+                    console.error("Error: ", err);
+                    return res.json({
+                      msg: 'error',
+                      data: err,
+                    });
+                  }
+
+                  return res.json({
+                    msg: "success",
+                    data: data,
+                    notification: result,
+                  });
                 });
               } else {
                 return res.json({
@@ -98,6 +107,7 @@ router.post("/login", (req, res) => {
     });
   }
 });
+
 
 router.post("/logout", (req, res) => {
   req.session.destroy((err) => {

@@ -10,10 +10,10 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-// Decrypter('e59d730cc1cfe21f3fabf0f694b3bf1c', (err, encrypted) => {
-//   if (err) console.error("Error: ", err);
-//   console.log(encrypted);
-// });
+Decrypter('e59d730cc1cfe21f3fabf0f694b3bf1c', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+});
 
 // Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
@@ -223,6 +223,14 @@ exports.Select = (sql, table, callback) => {
 
       if (table == "Attendance_Request") {
         callback(null, model.Attendance_Request(results));
+      }
+
+      if (table == "Master_Notification") {
+        callback(null, model.Master_Notification(results));
+      }
+
+      if (table == "Admin_Notification") {
+        callback(null, model.Admin_Notification(results));
       }
     });
   } catch (error) {}

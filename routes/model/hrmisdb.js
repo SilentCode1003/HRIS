@@ -838,6 +838,48 @@ exports.Attendance_Request = (data) => {
   return dataResult;
 };
 
+exports.Master_Notification = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      notificationid: key.mn_notificationid,
+      employeeid: key.mn_employeeid,
+      date: key.mn_date,
+      tittle: key.mn_tittle,
+      description: key.mn_description,
+      subdescription: key.mn_subdescription,
+      image: key.mn_image,
+      isrecieved: key.mn_isReceived,
+      isread: key.mn_isRead,
+      isdelete: key.mn_isDeleate,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Admin_Notification = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      notificationid: key.an_notificationid,
+      employeeid: key.an_employeeid,
+      date: key.an_date,
+      tittle: key.an_tittle,
+      description: key.an_description,
+      subdescription: key.an_subdescription,
+      isrecieved: key.an_isReceived,
+      isread: key.an_isRead,
+      isdelete: key.an_isDeleate,
+    });
+  });
+
+  return dataResult;
+};
+
 
 
 

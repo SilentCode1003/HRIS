@@ -88,6 +88,9 @@ router.post("/clockin", (req, res) => {
   const attendancedate = moment().format("YYYY-MM-DD");
   const devicein = getDeviceInformation(req.body.devicein);
 
+
+  console.log(employee_id);
+
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
     FROM master_attendance
@@ -278,3 +281,186 @@ router.post('/emplogs', (req, res) => {
     });
   }
 });
+
+
+//#region notification api
+
+router.post('/viewnotif', (req,res) => {
+  try {
+    let notificationIdClicked = req.body.notificationIdClicked;
+    let sql = `select *
+    from master_notification
+    where mn_notificationid = '${notificationIdClicked}'`;
+
+    console.log("notif_id",notificationIdClicked);
+
+    mysql.Select(sql, "Master_Notification", (err, result) => {
+      if (err) console.error("Error : ", err);
+
+      console.log(result);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
+
+router.post('/generatenotification', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.GetNotification('${employeeid}')`;
+
+    mysql.StoredProcedure(sql, (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/loadnotif', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql =  `SELECT * FROM master_notification
+    WHERE mn_employeeid = '${employeeid}'
+    AND mn_isDeleate = 'NO'
+    ORDER BY mn_date DESC`;
+
+    console.log();
+
+    mysql.Select(sql, "Master_Notification", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
+
+router.post('/readnotif', (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES',
+    mn_isRead = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql.Update(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+
+
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/deleatenotif', (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES',
+    mn_isRead = 'YES',
+    mn_isDeleate = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql.Update(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post("/countunreadbadge", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `    
+    SELECT count(*) AS Unreadcount
+    FROM master_notification 
+    WHERE mn_employeeid = '${employeeid}'
+    AND mn_isReceived = 'NO'
+    AND mn_isRead = 'NO'
+    AND mn_isDeleate = 'NO'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data:result
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+
+//#endregion

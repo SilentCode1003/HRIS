@@ -1,3 +1,18 @@
+/* Add custom styles to the dropdown menu */
+.dropdown-list.dropdown-menu {
+  max-height: 300px; /* Set the maximum height for the dropdown menu */
+  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
+}
+
+.dropdown-header-notif {
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Position the header at the top */
+  z-index: 1000; /* Set a high z-index to ensure the header appears above other elements */
+  background-color: #fff; /* Set background color for the header */
+  padding: 8px 16px; /* Add padding to the header */
+}
+
+
 .overlay {
   position: absolute;
   top: 0;

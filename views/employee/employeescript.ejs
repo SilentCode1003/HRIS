@@ -211,14 +211,14 @@
                 <button id="edit-btn" class="btn text-primary" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-eye"></i></button>
                `;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "90px";
-              imgElement.style.height = "90px";
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
 
               finalData.push({
-                image: imgElement.outerHTML,
+                //image: imgElement.outerHTML,
                 newEmployeeId: item.newEmployeeId,
                 firstname: item.firstname,
                 phone: item.phone,
@@ -240,7 +240,7 @@
           },
         ],
         columns: [
-          { data: "image" },
+          // { data: "image" },
           { data: "newEmployeeId" },
           { data: "firstname" },
           { data: "phone" },
@@ -256,21 +256,33 @@
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () { },
+        initComplete: function () {},
       });
     }
 
     $("#dataTableemployees tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
-        .find("td:not(:first-child)")
+        .closest("tr")
+        .find("td")
         .each(function () {
           dataRow.push($(this).text());
         });
-
       employeeid = dataRow[0];
-      console.log(dataRow);
+      console.log(employeeid);
     });
+
+    // $("#dataTableemployees tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .find("td:not(:first-child)")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+
+    //   employeeid = dataRow[0];
+    //   console.log(employeeid);
+    // });
 
     $(document).on("click", "#edit-btn", function () {
       $.ajax({
@@ -656,7 +668,7 @@
             EXPIRY_DATE.innerHTML = item.expirydate;
           });
         },
-        error: function (xhr, status, error) { },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -695,7 +707,7 @@
             INSURANCE_NUMBER.innerHTML = item.insurancenumber;
           });
         },
-        error: function (xhr, status, error) { },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -732,7 +744,7 @@
             STATUS.innerHTML = item.status;
           });
         },
-        error: function (xhr, status, error) { },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -769,7 +781,7 @@
             STATUS.innerHTML = item.status;
           });
         },
-        error: function (xhr, status, error) { },
+        error: function (xhr, status, error) {},
       });
     });
 
@@ -925,5 +937,4 @@
   function reloadPage() {
     location.reload();
   }
-
 </script>

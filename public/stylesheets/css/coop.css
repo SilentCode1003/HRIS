@@ -1,3 +1,8 @@
+/*---- wendell/class -----*/
+.uppercase-input {
+  text-transform: uppercase;
+}
+
 /*---- Content/Dashborad -----*/
 .geofence-db, .requestcash-db, .attendance-db, .employee-db, .requestleave-db {
   margin-top: 5px;
