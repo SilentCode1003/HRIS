@@ -14,9 +14,9 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.post("/load", (req, res) => {
+router.get("/load", (req, res) => {
   try {
-    let ojtid = req.body.ojtid;
+    let ojtid = req.session.ojtid;
     let sql = `SELECT
       oa_attendanceid as attendanceid,
       CONCAT(mo_lastname, " ", mo_name) as ojtid,
