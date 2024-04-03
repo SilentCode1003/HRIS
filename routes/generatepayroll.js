@@ -50,6 +50,32 @@ router.post("/generateAndLoadPayroll", (req, res) => {
   }
 });
 
+
+router.post('/checkmissedlogs' , (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql =  `SELECT * 
+    FROM master_attendance 
+    WHERE ma_attendancedate BETWEEN 
+    '${startdate}' AND '${enddate}' AND ma_clockout IS NULL`;
+
+    mysql.Select(sql, "Master_Attendance", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    })
+  }
+});
+
 router.post("/loadpayroll", (req, res) => {
   try {
     let startdate = req.body.startdate;
