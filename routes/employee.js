@@ -10,6 +10,7 @@ const { convertExcelDate } = require("./repository/customhelper");
 const { Encrypter } = require("./repository/crytography");
 const { generateUsernameAndPasswordForApprentice } = require("./helper");
 const { generateUsernameAndPasswordforemployee } = require("./helper");
+const { sq } = require("date-fns/locale");
 
 const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
@@ -323,7 +324,7 @@ router.get("/loadedit", (req, res) => {
 router.get("/load", (req, res) => {
   try {
     let sql = ` 
-    SELECT
+    SELECT 
     me_id as newEmployeeId,
     CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
     me_phone as phone,
@@ -859,6 +860,46 @@ router.post("/getdeductother", (req, res) => {
   }
 });
 
+router.post("/getleave", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select
+    l_leaveid as leaveid,
+    l_employeeid as employeeid,
+    l_leavetype as leavetype,
+    l_leavestartdate as startdate,
+    l_leaveenddate as enddate,
+    l_leavestatus as status
+    from leaves
+    inner join master_employee on l_employeeid = me_id
+    where l_employeeid = '${employeeid}'`;
+
+    console.log(sql);
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+
+        console.log(result);
+
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
 
 router.post("/getgovid", (req, res) => {
   try {
@@ -945,6 +986,8 @@ router.post("/gettraining", (req, res) => {
     from master_training 
     inner join master_employee on mt_employeeid = me_id
     where mt_employeeid = '${employeeid}'`;
+
+    console.log(sql);
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1231,7 +1274,6 @@ function generateEmployeeId(year, month) {
 function generateApprenticeId(year, month) {
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
-    // Replace 'apprentice_table' with the actual table name where apprentice IDs are stored
 
     mysql
       .mysqlQueryPromise(maxIdQuery)
