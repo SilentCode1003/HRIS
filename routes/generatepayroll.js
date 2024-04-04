@@ -14,7 +14,7 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.post("/generateAndLoadPayroll", (req, res) => {
+router.post("/generateandaoadaayroll", (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
@@ -105,7 +105,7 @@ router.post("/loadpayroll", (req, res) => {
   }
 });
 
-router.post("/LoadPayslipSummary", (req, res) => {
+router.post("/loadpayslipsummary", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;
@@ -133,7 +133,7 @@ router.post("/LoadPayslipSummary", (req, res) => {
   }
 });
 
-router.post("/LoadPayslipDetailed", (req, res) => {
+router.post("/loadpayslipdetailed", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;

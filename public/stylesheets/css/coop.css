@@ -625,7 +625,7 @@ tr:hover {
   border: #7a1818 !important;
 }
 /*--- Dashboard ----*/
-#nav-home-tab, #nav-ca-tab, #nav-profile-tab, #nav-reqattendance-tab, #nav-ot-tab {
+#nav-leave-tab, #nav-ca-tab, #nav-profile-tab, #nav-reqattendance-tab, #nav-ot-tab {
   background-color: #7a1818 !important;
   color: white !important;
   border-bottom: 1px solid white !important;
