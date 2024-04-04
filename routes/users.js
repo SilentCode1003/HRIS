@@ -102,7 +102,6 @@ router.post("/save", async (req, res) => {
 router.get("/load", (req, res) => {
   try {
     let sql = `  SELECT 
-    me_profile_pic,
     mu_userid,
     concat(me_firstname,' ',me_lastname) as mu_employeeid,
     mu_username,
