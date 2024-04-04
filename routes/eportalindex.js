@@ -394,6 +394,37 @@ router.post('/readnotif', (req, res) => {
 });
 
 
+router.post('/recievednotif', (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql.Update(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+
+
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
 router.post('/deleatenotif', (req, res) => {
   try {
     let notificationId = req.body.notificationId;
@@ -432,9 +463,7 @@ router.post("/countunreadbadge", (req, res) => {
     SELECT count(*) AS Unreadcount
     FROM master_notification 
     WHERE mn_employeeid = '${employeeid}'
-    AND mn_isReceived = 'NO'
-    AND mn_isRead = 'NO'
-    AND mn_isDeleate = 'NO'`;
+    AND mn_isRead = 'NO'`;
 
     mysql
       .mysqlQueryPromise(sql)

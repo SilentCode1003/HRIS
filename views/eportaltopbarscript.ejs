@@ -74,11 +74,8 @@
                     </a>`;
               $("#notifmenu").append(dropdownItem);
             });
-
-            // Optional: Check if the modal element exists before hiding it
             const modalElement = document.querySelector("#modal-backdrop-dark");
             if (modalElement) {
-              // Hide the modal
               $(modalElement).modal("hide");
             }
           } else {
@@ -162,7 +159,7 @@
               icon: "success",
               button: "OK!",
             }).then((results) => {
-              loadNotifBadge();
+             loadNotifBadge();
             });
           } else if (result.msg == "exist") {
             swal({
@@ -197,7 +194,8 @@
               icon: "success",
               button: "OK!",
             }).then((results) => {
-              loadNotifBadge();
+              location.reload();
+              //loadNotifBadge();
             });
           } else if (result.msg == "exist") {
             swal({

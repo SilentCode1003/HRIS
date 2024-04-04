@@ -4,18 +4,20 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    <!-- Topbar Search --> 
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
+    <!-- Topbar Search -->
+    <form id="searchForm" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for..."
-                aria-label="Search" aria-describedby="basic-addon2">
-                <form>
-                    <button class="btn-search-topbar" type="button">
-                        <i class="bi bi-search-heart"></i>
-                    </button>
-                </form>
+            <input id="searchInput" type="text" class="form-control" placeholder="Search Employee Name here...."
+                aria-label="Search" aria-describedby="basic-addon2" autocomplete="off">
+            <div class="input-group-append">
+                <button id="searchButton" class="btn btn-search-topbar" type="submit">
+                    <i class="bi bi-search-heart"></i>
+                </button>
+            </div>
         </div>
     </form>
+    <div id="autocompleteDropdown" class="dropdown-menu"></div>
+
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
@@ -45,9 +47,10 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" trigger="loop" state="loop-bell" colors="primary:#e8e230" class="db-bell-eportal">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" trigger="loop" state="loop-bell"
+                    colors="primary:#e8e230" class="db-bell-eportal">
                 </lord-icon>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger" id="badge-counter"></span>
@@ -58,7 +61,8 @@
                 <h6 class="dropdown-header" id="dp-header">
                     Alerts Center
                 </h6>
-                <a id="notiftextcenter" class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                <a id="notiftextcenter" class="dropdown-item text-center small text-gray-500" 
+                href="#">Clear Notifications</a>
             </div>
         </li>
 
@@ -67,7 +71,8 @@
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" trigger="loop"
-                    colors="primary:#0a2e5c,secondary:#1663c7,tertiary:#66d7ee,quaternary:#ffffff" class="db-message-hrmis">
+                    colors="primary:#0a2e5c,secondary:#1663c7,tertiary:#66d7ee,quaternary:#ffffff"
+                    class="db-message-hrmis">
                 </lord-icon>
                 <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter">7</span>
@@ -138,7 +143,8 @@
                 <img class="img-profile rounded-circle topbar-profile-img" src="data:image/jpg;base64,<%= image%>">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in profile-divider-db" aria-labelledby="userDropdown" >
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in profile-divider-db"
+                aria-labelledby="userDropdown">
                 <a class="dropdown-item profile-box-db" href="#">
                     <lord-icon src="https://cdn.lordicon.com/fmasbomy.json" class="user-prof-icon">
                     </lord-icon>
@@ -161,19 +167,19 @@
                 </a>
             </div>
         </li>
-
-    </ul>     
+    </ul>
 
 </div>
 
 
 <!--Modal-->
-<div class="modal fade" id="modal-backdrop-dark" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-backdrop-dark" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-md" id="notiftittle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="isRead" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
@@ -194,6 +200,858 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="isRead">Close</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="siDeleate">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Profile Modal-->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileModalLabel">Employee Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="content">
+                    <div class="profile-header">
+                        <div class="profile-header-cover"></div>
+
+                        <div class="profile-header-content">
+                            <div class="profile-header-img">
+                                <img id="profilepreview" alt="avatar" alt="" style="width: 150px; height: 100px;" />
+                            </div>
+
+                            <div class="profile-header-info">
+                                <h4 class="m-t-sm" id="profilefullname"></h4>
+                                <p class="m-b-sm" id="profileposition"></p>
+                                <h3 class="m-t-sm" id="profileid"></h3>
+                            </div>
+                        </div>
+
+                        <ul class="profile-header-tab nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" data-bs-target="#profile-home" role="tab" aria-controls="profile-home" class="nav-link active">PROFILE</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-leave" role="tab" aria-controls="profile-leave" class="nav-link ">LEAVE HISTORY</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showdisciplinaryprofile" data-bs-target="#profile-disciplinary" role="tab" aria-controls="profile-disciplinary" class="nav-link ">DISCIPLINARY</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-attendance" role="tab" aria-controls="profile-attendance" class="nav-link ">ATTENDANCE</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showtrainingprofile" data-bs-target="#profile-trainings" role="tab" aria-controls="profile-trainings" class="nav-link ">TRAININGS</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showhealthprofile" data-bs-target="#profile-healthdata" role="tab" aria-controls="profile-healthdata" class="nav-link ">HEALTH DATA</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showgovprofile" data-bs-target="#profile-govid" role="tab" aria-controls="profile-govid" class="nav-link ">GOV ID</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-cashadvance" role="tab" aria-controls="profile-cashadvance" class="nav-link ">CASH ADVANCED</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <!--Profile-->
+                        <div class="tab-pane fade show active" id="profile-home" role="tabpanel" aria-labelledby="profile-home-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-profile">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2">WORK AND EDUCATION</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="field">Work</td>
+                                                            <td class="value">
+                                                                <div class="m-b-5">
+                                                                    <b>Magnificient IT (2017)</b> <a href="#"
+                                                                        class="m-l-10">Edit</a><br />
+                                                                    <span class="text-muted">PHP Programmer</span>
+                                                                </div>
+                                                                <div>
+                                                                    <b>Neutrino IT (2012)</b> <a href="#"
+                                                                        class="m-l-10">Edit</a><br />
+                                                                    <span class="text-muted">UXUI / Frontend Developer</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Education</td>
+                                                            <td class="value">
+                                                                <div class="m-b-5">
+                                                                    <b>University (2009)</b> <a href="#"
+                                                                        class="m-l-10">Edit</a><br />
+                                                                    <span class="text-muted">University of Georgia, Athens,
+                                                                        GA</span>
+                                                                </div>
+                                                                <div>
+                                                                    <b>High School (2006)</b> <a href="#"
+                                                                        class="m-l-10">Edit</a><br />
+                                                                    <span class="text-muted">Heritage High School, West
+                                                                        Chestter, PA</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Skills</td>
+                                                            <td class="value">
+                                                                C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel, Phonegap,
+                                                                Bootstrap, Angular JS, Angular JS, Asp.net
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Tenure</td>
+                                                            <td class="value" id="profiltenure"></td>                                               
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Job Status</td>
+                                                            <td class="value" id="profilejobstatus"></td>                                               
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table class="table table-profile">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2">CONTACT INFORMATION</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="field">Mobile Phones</td>
+                                                            <td class="value" id="profilephone2"></td>                                               
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Email</td>
+                                                            <td class="value" id="profileemail"></td>                                                    
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Emergency Contact Name</td>
+                                                            <td class="value" id="profileemcontact"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Emergency Contact Number</td>
+                                                            <td class="value" id="profileemphone"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Address</td>
+                                                            <td class="value" id="profileaddress2"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table class="table table-profile">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2">BASIC INFORMATION</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="field">Birth of Date</td>
+                                                            <td class="value" id="profilebday2"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Gender</td>
+                                                            <td class="value" id="profilegender"></td>                             
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Facebook</td>
+                                                            <td class="value">
+                                                                http://facebook.com/infinite.admin
+                                                                <a href="#" class="m-l-10">Edit</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="field">Website</td>
+                                                            <td class="value">
+                                                                http://seantheme.com
+                                                                <a href="#" class="m-l-10">Edit</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartment"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profileposition2"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebday"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatus"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddress">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephone">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Leave-->
+                        <div class="tab-pane fade " id="profile-leave" role="tabpanel" aria-labelledby="profile-leave-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-striped" id="dataTableleaveprofile">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Date Started</th>
+                                                        <th>Date Finished</th>
+                                                        <th>Leave Type</th>
+                                                        <th>Status</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartmentleave"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profilepositionleave"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebdayleave"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatusleave"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddressleave">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephoneleave">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Disciplinary-->
+                        <div class="tab-pane fade " id="profile-disciplinary" role="tabpanel" aria-labelledby="profile-disciplinary-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-striped" id="dataTabledisciplianaryprofile">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Action Code</th>
+                                                        <th>Offense ID</th>
+                                                        <th>Description</th>
+                                                        <th>Created Date</th>
+                                                        <th>Status</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartmentdisciplinary"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profilepositiondisciplinary"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebdaydisciplinary"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatusdisciplinary"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddressdisciplinary">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephonedisciplinary">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Attendance-->
+                        <div class="tab-pane fade " id="profile-attendance" role="tabpanel" aria-labelledby="profile-attendance-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8 error404">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <div class="tab-content p-0">
+                                                    <div class="tab-pane active show" id="profile-about">
+                                                       <center><h3>Gawa Ni Charles Absorb nyo daw po sya</h3></center>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartment"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profileposition2"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebday"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatus"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddress">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephone">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Trainnings-->
+                        <div class="tab-pane fade " id="profile-trainings" role="tabpanel" aria-labelledby="profile-trainings-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-striped" id="dataTabletrainingprofile">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Training Name</th>
+                                                        <th>Date Started</th>
+                                                        <th>Date Finished</th>
+                                                        <th>Location</th>
+                                                        <th>Status</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartmenttraining"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profilepositiontraining"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebdaytraining"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatustraining"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddresstraining">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephonetraining">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Health Data-->
+                        <div class="tab-pane fade " id="profile-healthdata" role="tabpanel" aria-labelledby="profile-healthdata-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-striped" id="dataTablehealthrecordprofile">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Blood Type</th>
+                                                        <th>Medical Condition</th>
+                                                        <th>Prescribe Medication</th>
+                                                        <th>Last Checkup</th>
+                                                        <th>Insurance</th>
+                                                        <th>Insurance ID</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartmenthealth"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profilepositionhealth"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebdayhealth"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatushealth"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddresshealth">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephonehealth">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Gov Id-->
+                        <div class="tab-pane fade " id="profile-govid" role="tabpanel" aria-labelledby="profile-govid-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                                <table class="table table-striped" id="dataTablegovermentidprofile">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>ID Type</th>
+                                                        <th>ID Number</th>
+                                                        <th>Issue Date</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartmentgov"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profilepositiongov"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebdaygov"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatusgov"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddressgov">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephonegov">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Cash Advance-->
+                        <div class="tab-pane fade " id="profile-cashadvance" role="tabpanel" aria-labelledby="profile-cashadvance-tab">
+                            <div class="profile-container">
+                                <div class="row row-space-20">
+                                    <div class="col-md-8 coming_soon">
+                                        <div class="tab-content p-0">
+                                            <div class="tab-pane active show" id="profile-about">
+                                               <center><div>Gawa Ni Charles</div></center>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-4 hidden-xs hidden-sm">
+                                        <ul class="profile-info-list">
+                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li>
+                                                <div class="field">Department:</div>
+                                                <div class="value" id="profiledepartment"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Position:</div>
+                                                <div class="value" id="profileposition2"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Skills:</div>
+                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Birth of Date:</div>
+                                                <div class="value" id="profilebday"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Civil Status:</div>
+                                                <div class="value" id="profilecicilstatus"></div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Address:</div>
+                                                <div class="value">
+                                                    <address class="m-b-0" id="profileaddress">
+                                                       <br />
+                                                       <br />                    
+                                                    </address>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="field">Phone No.:</div>
+                                                <div class="value" id="profilephone">
+                                                </div>
+                                            </li>
+                                            <!-- <li class="title">FRIEND LIST (9)</li>
+                                            <li class="img-list">
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
+                                                <a href="#" class="m-b-5"><img
+                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
