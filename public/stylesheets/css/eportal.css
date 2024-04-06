@@ -1,22 +1,31 @@
 
 #content-wrapper {
-    background-color: white !important;
-    margin: 2%;
-}
-#content {
-    margin-left: 220px;
-    margin-top: 3%;
-}
-.top-round-button {
-    z-index: 1001;
-    background-color: #7F8487 !important;
+  background-color: white !important;
 }
 
-#topbar {
+.content {
+  margin-top: 75px;
+}
+
+.fa-bars {
+  color: white !important;
+}
+
+.fa-bars:hover {
+  background: transparent;
+}
+
+/* .top-round-button {
+    z-index: 1001;
+    background-color: #7F8487 !important;
+} */
+
+.navbar {
   background-color: #8b2525 !important;
   position: fixed !important;
-  z-index: 1001;
-  width: 100%;
+  margin-left: 6.4rem;
+  width: 75%;
+  z-index: 2;
 }
 
 .searchbar-eportal {
@@ -28,7 +37,8 @@
 }
 
 .btn-search-eportal {
-  background-color: rgb(99, 241, 99) !important;
+  background-color: #E41717 !important;
+  border: 2.5px solid #fcf0d7  !important;
   color: white !important;
 }
 
@@ -97,14 +107,19 @@
 } */
 
 :root{
-    --minus-14rem: calc(100% - 14rem);
-    --minus-6rem: calc(100% - 6rem);
+  --minus-15rem: calc(100% - 15rem);
+  --minus-6rem: calc(100% - 8rem);
 }
 
 /*default*/
-@media (min-width: 767px) {
+@media (min-width: 768px) {
 
-  .content-toggled {
+  .content {
+    margin-left: 250px;
+    margin-right: 30px;
+  }
+
+  /* .content-toggled {
     margin-left: 6.5rem !important;
   }
 
@@ -116,22 +131,32 @@
 
   .footer-toggled{
     margin-left: 6.5rem !important;
-  }
+  } */
 
-  #topbar {
+  /* #topbar {
     margin-left: 14rem;
     padding-right: 220px;
-  }
+  } */
 
   .table th {
     width: 100%;
   }
 
-  .sidebar{
-    min-height: 100vh;
+  .sidebar {
+    position: fixed;
+    height: 100%;
     overflow-y: auto;
-    max-height: 100vh;
-    overflow-x: hidden !important;
+    overflow-x: hidden;
+  }
+
+
+  .navbar {
+    margin-left: 14.5rem;
+    width: var(--minus-15rem);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    margin-top: 13px;
+    box-shadow: 0 4px 8px #3b3939 !important;
   }
 
   .img-hrmis img {
@@ -149,8 +174,9 @@
     font-size: 18px;
   }
   
-  ::-webkit-scrollbar {
-    width: 8px;/* Width of the scrollbar */
+  /* ::-webkit-scrollbar {
+    width: 8px;
+
   }
   
   ::-webkit-scrollbar-track {
@@ -159,17 +185,17 @@
   
   ::-webkit-scrollbar-thumb {
     background: #8b2525;
-     /* Color of the thumb (the draggable scrolling handle) */
+
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: #8b2525; /* Color of the thumb when hovering */
-  }
+    background: #8b2525; 
+  } */
 
 }
 
 /*mobile-view/sidebar*/
-@media (max-width: 768px) {
+@media (max-width: 769px) {
  
   .table td {
     padding: 1rem !important;
@@ -177,10 +203,10 @@
   .table th {
     width: 100%;
   }
-  
-  #content{
-    margin-left: 6rem;
-    margin-top: 50px;
+
+  .content {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
  .col-sm-8, .col-4, .col-md-4 {
@@ -190,19 +216,37 @@
      margin-right: 2%;
  }
   
-  .sticky-footer{
-    margin-left: 6rem;
-  }  
 
-  #topbar{
-    margin-left: 6.5rem;
-    width: var(--minus-6rem);
-    width: 100%;
-    padding-right: 20px;
+  .content-toggled {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
   }
+
+  .footer-toggled {
+    margin-left: 0px !important;
+  }
+
+  .navbar {
+    width: 75%;
+    position: absolute !important;
+  }
+
+  .navbar-toggled {
+    margin-left: 0px !important;
+    width: 100%;
+  }
+
 
   #card-announcement, #card-birthday, #card-attendance {
     margin-top: 5% !important;
+  }
+
+  #card-map {
+    margin-bottom: 5%;
+  }
+
+  #myInput {
+    width: 35%;
   }
 
 
@@ -228,7 +272,7 @@
   } */
   
 
-  .content-toggled {
+  /* .content-toggled {
     margin-left: 0!important;
   }
   .topbar-toggled {
@@ -237,11 +281,11 @@
   }
   .footer-toggled{
     margin-left: 0!important;
-  }
+  } */
 }
 
 /*-- More Responsive sizes ---*/
-@media only screen and (min-width: 769px) and (max-width: 900px){
+/* @media only screen and (min-width: 769px) and (max-width: 900px){
   .table {
     overflow-x: hidden;
   }
@@ -285,15 +329,27 @@
   .footer-toggled{
     margin-left: 0!important;
   }
-}
+} */
 
 #accordionSidebar {
   background-color: #7a1818 !important;
+}
+
+.sidebar {
   top: 0;
   left: 0;
-  bottom: 0;
   z-index: 2;
-  position: fixed;
+}
+
+.sticky-footer {
+  height: 30px !important;
+  background-color: #8b2525 !important;
+  margin-top: 50px;
+  color: white !important;
+}
+
+::-webkit-scrollbar {
+  width: 2px; 
 }
 
 #card-attendance {
@@ -398,9 +454,9 @@
     background-color: green !important;
     color: white !important;
     /* margin: auto; */
-    margin-top: 20px !important;
+    margin-top: 70px !important;
     margin-left: 20px;
-    margin-right: 10px;
+    /* margin-right: 10px; */
     margin-bottom: 10px;
     float: left;
     border-radius: 5px !important;
@@ -409,7 +465,6 @@
     width: 30%;
     font-size: 13px !important;
     font-family: Cambria !important;
-    margin-top: 2%;
 }
 
 .btn-clockin:hover {
@@ -424,8 +479,8 @@
     background-color: red !important;
     color: white !important;
     /* margin: auto; */
-    margin-top: 20px !important;
-    margin-left: 10px;
+    margin-top: 70px !important;
+    /* margin-left: 10px; */
     margin-right: 20px;
     margin-bottom: 10px;
     float: right;
@@ -665,6 +720,16 @@ color: black !important;
   color: white !important;
   font-weight: bold;
 }
+.btn-modal-save {
+  color: white !important;
+  background-color: green !important;
+   border: 2px solid #fcf0d7 !important;
+}
+.btn-modal-save:hover {
+  background-color: #00B25A !important;
+  color: white !important;
+  font-weight: bold;
+}
 
 .bx-x {
   color: white !important;
@@ -763,9 +828,10 @@ color: black !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid rgb(169, 241, 253) !important;
+  border: 3px solid #7a1818 !important;
 }
 
+/* 
 .ch-time {
   background:linear-gradient(45deg, rgb(169, 241, 253), white) !important;
   border-radius: 8px;
@@ -805,6 +871,114 @@ color: black !important;
   color: rgb(73, 73, 73) !important;
  text-shadow: 0px 1px 1px rgb(73, 73, 73) !important;
   padding: 2px;
+} */
+
+.border-form-modal {
+  border: 2.5px solid #7a1818 !important;
+} 
+
+#badge-counter {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  background-color: #e74a3b !important;
+  font-size: 13px;
+  padding: 2px;
+  position: absolute;
+  transform: scale(.7);
+  transform-origin: top right;
+  right: .25rem;
+  margin-top: -.25rem;
+}
+
+.logout-header {
+  background-color: #7a1818 !important;
+  color: white !important;
+  height: 70px;
+  font-family: 'Calibri';
+}
+
+.logout-body {
+  height: 150px;
+  color: black !important;
+  font-family: Arial;
+  font-size: 15px;
+  padding: 10% !important;
+  background-color: #fcf0d7 !important;
+}
+
+.btn-out-body {
+  background-color: red !important;
+  color: white !important;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  border: 2px solid lightslategray !important;
+}
+
+.btn-logout-cancel {
+  background-color: rgb(6, 161, 244) !important;
+  color: white !important;
+  border: 2px solid white !important;
+}
+
+.btn-logout-cancel:hover {
+  background-color: rgb(34, 129, 169) !important;
+  font-weight: bold;
+}
+
+.btn-logout {
+  background-color: rgb(248, 65, 65) !important;
+  color: white !important;
+  border: 2px solid white !important;
+}
+
+.btn-logout:hover {
+  background-color: rgb(225, 59, 59) !important;
+  font-weight: bold;
+}
+
+.logout-footer {
+  background-color: #7a1818 !important;
+  height: 70px;
+}
+
+#nav-tab {
+  border-bottom: none;
+}
+
+.settings-header {
+  background-color: #7a1818 !important;
+}
+
+.settings-acc, .settings-pw {
+  background-color: transparent !important;
+  border: transparent !important;
+  color: white !important;
+  font-family: Arial;
+  font-size: 15px !important;
+  font-weight: bold;
+}
+
+.settings-acc:hover, .settings-pw:hover {
+  background: #fcf0d7 !important;
+  color: #881a1a !important;
+  font-weight: 600;
+  font-family: Arial;
+}
+
+.settings-card {
+  box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+.settings-body {
+  background-color: #fcf0d7 !important;
+} 
+
+.label-set {
+  font-weight: bold;
+  font-family: Calibri;
+  color: #5b0000  !important;
+  font-size: medium;
 }
 
 

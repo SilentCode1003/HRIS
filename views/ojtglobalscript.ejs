@@ -154,11 +154,28 @@
           }
       });
   }
+
+
+  
+  function toggleSidebarAndNavbar() {
+      $('body').toggleClass('sidebar-toggled'); // Toggle class for body
+      $('.sidebar').toggleClass('toggled'); // Toggle class for sidebar
+      // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
+      $('.navbar').toggleClass('navbar-toggled'); // Toggle class for navbar
+      $('.content').toggleClass('content-toggled'); // Toggle class for content
+    }
+
+    $(document).ready(function () {
+      $('#sidebarToggleTop').on('click', function () {
+        toggleSidebarAndNavbar();
+      });
+    });
+    
   </script>
   
   
     <!---Java Script for Topbar-->
-    <script>
+    <!-- <script>
       const topbar = document.getElementById('topbar');
   
       window.addEventListener('scroll', () =>{
@@ -170,5 +187,7 @@
               topbar.classList.remove('light-bg');
           }
       })
-  </script> 
+
+
+  </script>  -->
   
