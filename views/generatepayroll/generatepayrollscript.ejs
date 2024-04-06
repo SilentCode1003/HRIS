@@ -69,7 +69,7 @@
 
             $.ajax({
               type: "POST",
-              url: "/generatepayroll/generateAndLoadPayroll",
+              url: "/generatepayroll/generateandaoadaayroll",
               data: {
                 startdate: startDate,
                 enddate: endDate,
@@ -355,7 +355,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/generatepayroll/LoadPayslipSummary",
+        url: "/generatepayroll/loadpayslipsummary",
         data: {
           employeeid: employeeid,
           payrolldate: payrolldate,
@@ -402,7 +402,7 @@
     $(document).on("click", "#nav-payslip-tab", function () {
       $.ajax({
         type: "POST",
-        url: "/generatepayroll/LoadPayslipSummary",
+        url: "/generatepayroll/loadpayslipsummary",
         data: {
           employeeid: employeeid,
           payrolldate: payrolldate,
@@ -495,7 +495,7 @@
       $(`#dataTablePayslip`).find("tr:gt(0)").remove();
       $.ajax({
         type: "POST",
-        url: "/generatepayroll/LoadPayslipDetailed",
+        url: "/generatepayroll/loadpayslipdetailed",
         data: {
           employeeid: employeeid,
           payrolldate: payrolldate,

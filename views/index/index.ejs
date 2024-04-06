@@ -656,9 +656,13 @@
                 <div class="card-header header-card ch-coop">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active requestleave-db" id="nav-home-tab" data-bs-toggle="tab"
+                            <button class="nav-link active geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                                aria-selected="true"><b>GEO FENCE'S</b>
+                            </button>
+                            <button class="nav-link requestleave-db" id="nav-leave-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
-                                aria-selected="true">
+                                aria-selected="false">
                                 <b>REQUEST LEAVE</b>
                                 <span id="loadleaveBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
@@ -695,10 +699,6 @@
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
                             </button>
-                            <button class="nav-link geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false"><b>GEO FENCE'S</b>
-                            </button>
                         </div>
                     </nav>
                 </div>
@@ -728,7 +728,7 @@
                                             <tr>
                                                 <th class="font-tb">Image</th>
                                                 <th class="font-tb">ID</th>
-                                                <th class="font-tb">Name</th>
+                                                <th class="col-25 font-tb">Name</th>
                                                 <th class="font-tb">Start</th>
                                                 <th class="font-tb">End</th>
                                                 <th class="font-tb">Type</th>

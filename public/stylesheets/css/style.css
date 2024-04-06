@@ -602,6 +602,18 @@ form select:not(#inputState) {
 
 
 /*WENDELL CSS*/
+
+.green-row {
+  background-color: green;
+  color: white; /* Optional: Change text color for better visibility */
+}
+
+.red-row {
+  background-color: red;
+  color: white; /* Optional: Change text color for better visibility */
+}
+
+
 .coming_soon{
   background-image: url(/images/img/coming\ soon!.gif.gif);
   background-size: cover;
