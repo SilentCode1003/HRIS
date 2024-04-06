@@ -11,7 +11,7 @@
         </button>
     </div>
     <div class="card-body cbody-requestleave">
-        <table class="table table-striped" id="dataTablereqCOA">
+        <table class="table table-light table-striped" id="dataTablereqCOA">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -30,33 +30,33 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Request COA</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Request COA</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <form>
                     <div class="row g-3">
                         <div class="col">
                             <label for="editemail" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="attendancedate" name="attendancedate">
+                            <input type="date" class="form-control border-form-modal" id="attendancedate" name="attendancedate">
                         </div>
                         <div class="col">
                             <label for="timein" class="form-label">Date Time In</label>
-                            <input type="datetime-local" class="form-control" id="timein" name="timein">
+                            <input type="datetime-local" class="form-control border-form-modal" id="timein" name="timein">
                         </div>
                         <div class="col">
                             <label for="timeout" class="form-label">Date Time Out</label>
-                            <input type="datetime-local" class="form-control" id="timeout" name="timeout">
+                            <input type="datetime-local" class="form-control border-form-modal" id="timeout" name="timeout">
                         </div>                    
                     </div>
                     <div class="row g-3">
                         <div class="mb-3">
                             <label for="message-text" class="col-form-label">Reason:</label>
-                            <textarea class="form-control" id="coareason" name="coareason"></textarea>
+                            <textarea class="form-control border-form-modal" id="coareason" name="coareason"></textarea>
                         </div>
                     </div>
                     <div class="row g-3">
@@ -67,15 +67,15 @@
                           <br>
                           <div class="text-center">
                             <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
-                              class="rounded" alt="placeholder">
+                              class="rounded border-form-modal" alt="placeholder">
                           </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="coasavebtn">Save</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="coasavebtn">Save</button>
             </div>
         </div>
     </div>

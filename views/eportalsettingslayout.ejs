@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<%- include("header.ejs")%>
+<%- include("eportalheader.ejs")%>
 
 </head>
 
@@ -15,15 +15,15 @@
         <%- include("eportalsidebar.ejs")%>
         <!-- End of Sidebar -->
 
+          <!-- Topbar -->
+          <%- include("eportaltopbar.ejs")%>
+          <!-- End of Topbar -->
+
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper">
 
             <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <%- include("eportaltopbar.ejs")%>
-                <!-- End of Topbar -->
+            <div class="content">
 
                 <!-- Begin Page Content -->
                 <%- include("./eportalsettings/eportalsettings.ejs")%>

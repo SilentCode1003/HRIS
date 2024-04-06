@@ -1,6 +1,6 @@
 <script>
   $(document).ready(function () {
-    let isSidebarOpen = localStorage.getItem("isSidebarOpen") === "true";
+    // let isSidebarOpen = localStorage.getItem("isSidebarOpen") === "true";
     let userLocation = "";
     let employeeid = "<%= employeeid %>";
     let departmentid = "<%= departmentid %>";
@@ -133,32 +133,6 @@
         console.error("Geolocation is not supported on this device.");
       }
     }
-    //<!--- Eportal Topbar & Navbar-->
-    function updateSidebarState() {
-      $("body").toggleClass("sidebar-toggled", isSidebarOpen);
-      $(".sidebar").toggleClass("toggled", isSidebarOpen);
-
-      if (isSidebarOpen) {
-        $(".sidebar .collapse").collapse("hide");
-        $("#content").toggleClass("content-toggled");
-        $("#topbar").toggleClass("topbar-toggled ");
-        $(".sticky-footer").toggleClass("footer-toggled");
-      } else {
-        $("#content").removeClass("content-toggled");
-        $("#topbar").removeClass("topbar-toggled ");
-        $(".sticky-footer").removeClass("footer-toggled");
-      }
-    }
-
-    updateSidebarState();
-
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
-      isSidebarOpen = !isSidebarOpen;
-
-      localStorage.setItem("isSidebarOpen", isSidebarOpen);
-
-      updateSidebarState();
-    });
 
     //#endregion
 
