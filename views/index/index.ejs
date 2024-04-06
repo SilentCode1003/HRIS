@@ -230,7 +230,7 @@
                     <div class="modal-body" id="modal-body">
                         <div class="modal-table">
                             <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                                <table class="table custom-mobile-table table-striped" id="dataTableemployees">
+                                <table class="table custom-mobile-table table-striped table-light" id="dataTableemployees">
                                     <thead class="table-header">
                                         <tr>
                                             <td class="no-match-cell" style="display: none;"></td>
@@ -277,7 +277,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="regularemloyeetbl">
+                            <table class="table custom-mobile-table table-striped table-light" id="regularemloyeetbl">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -320,7 +320,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="probiemloyeetbl">
+                            <table class="table custom-mobile-table table-striped table-light" id="probiemloyeetbl">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -364,7 +364,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="resignedemployeetbl">
+                            <table class="table custom-mobile-table table-striped table-light" id="resignedemployeetbl">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -410,7 +410,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totaladmintable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totaladmintable">
                                 <thead class="table-header">
                                     <!-- <th>Image</th> -->
                                     <th class="col-sm-1">ID</th>
@@ -451,7 +451,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totalittable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totalittable">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -496,7 +496,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totalcablingtable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totalcablingtable">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -539,7 +539,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totalcandidatetable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totalcandidatetable">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -580,7 +580,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totalbagapurotable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totalbagapurotable">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -623,7 +623,7 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="totalapprenticetable">
+                            <table class="table custom-mobile-table table-striped table-light" id="totalapprenticetable">
                                 <thead class="table-header">
                                     <tr>
                                         <!-- <th>Image</th> -->
@@ -656,9 +656,13 @@
                 <div class="card-header header-card ch-coop">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active requestleave-db" id="nav-home-tab" data-bs-toggle="tab"
+                            <button class="nav-link active geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                                aria-selected="true"><b>GEO FENCE'S</b>
+                            </button>
+                            <button class="nav-link requestleave-db" id="nav-leave-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
-                                aria-selected="true">
+                                aria-selected="false">
                                 <b>REQUEST LEAVE</b>
                                 <span id="loadleaveBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
@@ -695,10 +699,6 @@
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
                             </button>
-                            <button class="nav-link geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-                                aria-selected="false"><b>GEO FENCE'S</b>
-                            </button>
                         </div>
                     </nav>
                 </div>
@@ -723,12 +723,12 @@
                             aria-labelledby="nav-profile-tab">
                             <div class="card-body">
                                 <div class="table-responsive" id="table-responsive-id">
-                                    <table class="table table-striped" id="dataTableleaverequest">
+                                    <table class="table table-light table-striped" id="dataTableleaverequest">
                                         <thead>
                                             <tr>
                                                 <th class="font-tb">Image</th>
                                                 <th class="font-tb">ID</th>
-                                                <th class="font-tb">Name</th>
+                                                <th class="col-25 font-tb">Name</th>
                                                 <th class="font-tb">Start</th>
                                                 <th class="font-tb">End</th>
                                                 <th class="font-tb">Type</th>
@@ -745,7 +745,7 @@
                             aria-labelledby="nav-profile-tab">
                             <div class="card-body">
                                 <div class="table-responsive" id="table-responsive-id">
-                                    <table class="table table-striped" id="dataTablecashrequest">
+                                    <table class="table table-light table-striped" id="dataTablecashrequest">
                                         <thead>
                                             <tr>
                                                 <th class="font-tb">Image</th>
@@ -766,7 +766,7 @@
                             aria-labelledby="nav-profile-tab">
                             <div class="card-body">
                                 <div class="table-responsive" id="table-responsive-id">
-                                    <table class="table table-striped" id="dataTableovertimerequest">
+                                    <table class="table table-light table-striped" id="dataTableovertimerequest">
                                         <thead>
                                             <tr>
                                                 <th class="col-25 font-tb">Image</th>
@@ -788,7 +788,7 @@
                             aria-labelledby="nav-profile-tab">
                             <div class="card-body">
                                 <div class="table-responsive" id="table-responsive-id">
-                                    <table class="table table-striped" id="dataTableattendancerequest">
+                                    <table class="table table-light table-striped" id="dataTableattendancerequest">
                                         <thead>
                                             <tr>
                                                 <th class="col-25 font-tb">Image</th>
@@ -854,10 +854,10 @@
                 <div class="card-header header-card ch-coop">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                            <button class="nav-link active announcement-db" id="nav-home-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-announcement" type="button" role="tab" aria-controls="nav-home"
                                 aria-selected="true"><b>Announcement</b></button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                            <button class="nav-link bday-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-bday" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>Birthday Folks</b></button>
                         </div>
@@ -1300,7 +1300,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to Approve this COA?
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to approve this COA?
                     </h1>
                     <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
                 </div>
@@ -1313,12 +1313,12 @@
                                         <div class="row g-3">
                                             <div class="col">
                                                 <label for="coafullname">Employee Name</label>
-                                                <input type="text" class="form-control border-form-prof"
+                                                <input type="text" class="form-control border-form-modal"
                                                     id="coafullname" placeholder="Employee Name" disabled>
                                             </div>
                                             <div class="col">
                                                 <label for="editpassword" class="form-label">Status</label>
-                                                <select class="form-control" id="editcoastatus" name="editcoastatus">
+                                                <select class="form-control border-form-modal" id="editcoastatus" name="editcoastatus">
                                                     <option value="Pending" selected>Pending</option>
                                                     <option value="Approved">Approved</option>
                                                     <option value="Cancel">Cancel</option>
@@ -1326,8 +1326,7 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="text-center">
-                                                    <img id="editpreview" style="  width: 200px;
-                                                height: 200px;" class="rounded rounded-circle border-form-prof"
+                                                    <img id="editpreview" style="width: 150px;; height: 150px;" class="rounded rounded-circle border-form-modal"
                                                         alt="placeholder" disabled>
                                                 </div>
                                             </div>
@@ -1337,17 +1336,17 @@
                                         <div class="row g-3">
                                             <div class="col">
                                                 <label for="editattendancedate" class="form-label">Date</label>
-                                                <input type="date" class="form-control" id="editattendancedate"
+                                                <input type="date" class="form-control border-form-modal" id="editattendancedate"
                                                     name="editattendancedate">
                                             </div>
                                             <div class="col">
                                                 <label for="edittimein" class="form-label">Date Time In</label>
-                                                <input type="datetime-local" class="form-control" id="edittimein"
+                                                <input type="datetime-local" class="form-control border-form-modal" id="edittimein"
                                                     name="edittimein">
                                             </div>
                                             <div class="col">
                                                 <label for="edittimeout" class="form-label">Date Time Out</label>
-                                                <input type="datetime-local" class="form-control" id="edittimeout"
+                                                <input type="datetime-local" class="form-control border-form-modal" id="edittimeout"
                                                     name="edittimeout">
                                             </div>
                                         </div>
@@ -1356,20 +1355,24 @@
                                         <div class="row g-3">
                                             <div class="col">
                                                 <label for="message-text" class="col-form-label">Reason:</label>
-                                                <textarea class="form-control" id="editcoareason" name="editcoareason"
+                                                <textarea class="form-control border-form-modal" id="editcoareason" name="editcoareason"
                                                     disabled></textarea>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="empid" class="form-label">Employee ID</label>
-                                            <input type="text" class="form-control" id="empid" name="empid" disabled>
+
+                                        <div class="row g-3">
+                                            <div class="col">
+                                                <label for="empid" class="form-label">Employee ID</label>
+                                                <input type="text" class="form-control border-form-modal" id="empid" name="empid" disabled>
+                                            </div>
                                         </div>
+
                                         <div class="row g-3">
                                             <div class="form-floating">
                                                 <label class="form-label" for="customFile"></label>
                                                 <div class="text-center">
                                                     <img id="editpreviewfile" src="https://via.placeholder.com/250"
-                                                        style="width: 250px;; height: 250px;" class="rounded"
+                                                        style="width: 150px;; height: 150px;" class="rounded"
                                                         alt="placeholder">
                                                 </div>
                                             </div>

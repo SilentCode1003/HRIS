@@ -8,7 +8,7 @@
     let approveot_id = "";
     let requestid = "";
     LoadList();
-    LoadTable();
+    //LoadTable();
     loadtotalCard();
     LoadBdayFolks();
     loadleaveBadge();
@@ -82,7 +82,6 @@
 
     //#endregion
 
-
     //#region Load Modal Table
     //#Employee Modal
     $(document).on("click", "#totalEMP", function () {
@@ -127,22 +126,34 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.email,
-              "data-label": "Created Date",
+              "data-label": "Email",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.jobstatus, class: "custom-mobile-align" }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.jobstatus,
+              "data-label": "Job Status",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -195,24 +206,29 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.contact,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.email,
-              "data-label": "Created Date",
+              "data-label": "Email",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.me_department,
+              "data-label": "Department",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.me_position, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.me_position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -265,21 +281,29 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.email,
-              "data-label": "Created Date",
+              "data-label": "Email",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -332,22 +356,39 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.reason, class: "custom-mobile-align" }),
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.reason,
+              "data-label": "Reason",
+              class: "custom-mobile-align"
+            }),
             $("<td>", {
               text: item.dateresigned,
+              "data-label": "Date Resigned",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.createdate, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.createdate,
+              "data-label": "Create Date",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -400,17 +441,29 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.email, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.email,
+              "data-label": "Email",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -463,17 +516,27 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.email, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.email,
+              "data-label": "Email",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+               text: item.position,
+               "data-label": "Position",
+                class: "custom-mobile-align" }),
+            $("<td>", { 
+              text: item.tenure,
+              "data-label": "Tenure",
+               class: "custom-mobile-align" })
           );
 
           tableBody.append(tr);
@@ -526,17 +589,29 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.phone,
-              "data-label": "Created By",
+              "data-label": "Contact",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.email, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.email,
+              "data-label": "Email",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -589,13 +664,28 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", { 
+              text: item.hiredate,
+              "data-label": "Hire Date",
+               class: "custom-mobile-align" }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -648,13 +738,29 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" }),
-            $("<td>", { text: item.tenure, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.hiredate,
+              "data-label": "Hire Date",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -707,12 +813,24 @@
             }),
             $("<td>", {
               text: item.firstname,
-              "data-label": "Category",
+              "data-label": "Name",
               class: "custom-mobile-align",
             }),
-            $("<td>", { text: item.department, class: "custom-mobile-align" }),
-            $("<td>", { text: item.hiredate, class: "custom-mobile-align" }),
-            $("<td>", { text: item.position, class: "custom-mobile-align" })
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.hiredate,
+              "data-label": "Hire Date",
+              class: "custom-mobile-align"
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align"
+            })
           );
 
           tableBody.append(tr);
@@ -1133,90 +1251,171 @@
     //#endregion
 
     //#region Load All Requset Table
-    function LoadTable() {
-      $("#dataTableleaverequest").DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        paging: false,
-        searching: false,
-        info: false,
-        scrollY: 400,
-        scrollCollapse: true,
-        serverMethod: "GET",
-        ajax: {
-          url: "/load",
-          dataSrc: (json) => {
-            var finalData = [];
-            var data = json.data;
+    // function LoadTable() {
+    //   $("#dataTableleaverequest").DataTable({
+    //     destroy: true,
+    //     processing: true,
+    //     serverSide: true,
+    //     paging: false,
+    //     searching: false,
+    //     info: false,
+    //     scrollY: 400,
+    //     scrollCollapse: true,
+    //     serverMethod: "GET",
+    //     ajax: {
+    //       url: "/load",
+    //       dataSrc: (json) => {
+    //         var finalData = [];
+    //         var data = json.data;
 
-            $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
+    //         $.each(data, (key, item) => {
+    //           var action = "";
+    //           var status = item.status;
 
-              action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-                     `;
+    //           action = `
+    //                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
+    //                  `;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "100px";
-              imgElement.style.height = "100px";
+    //           var imgElement = document.createElement("img");
+    //           imgElement.src = "data:image/jpg;base64," + item.image;
+    //           imgElement.alt = "Profile Image";
+    //           imgElement.style.width = "100px";
+    //           imgElement.style.height = "100px";
 
-              finalData.push({
-                image: imgElement.outerHTML,
-                leaveid: item.leaveid,
-                firstname: item.firstname,
-                leavestartdate: item.leavestartdate,
-                leaveenddate: item.leaveenddate,
-                leavetype: item.leavetype,
-                reason: item.reason,
-                applieddate: item.applieddate,
-                action: action,
-              });
-            });
+    //           finalData.push({
+    //             image: imgElement.outerHTML,
+    //             leaveid: item.leaveid,
+    //             firstname: item.firstname,
+    //             leavestartdate: item.leavestartdate,
+    //             leaveenddate: item.leaveenddate,
+    //             leavetype: item.leavetype,
+    //             reason: item.reason,
+    //             applieddate: item.applieddate,
+    //             action: action,
+    //           });
+    //         });
 
-            return finalData;
-          },
-        },
-        columnDefs: [
-          {
-            targets: 1,
-            className: "td-indent",
-          },
-        ],
-        columns: [
-          { data: "image" },
-          { data: "leaveid" },
-          { data: "firstname" },
-          { data: "leavestartdate" },
-          { data: "leaveenddate" },
-          { data: "leavetype" },
-          { data: "reason" },
-          { data: "applieddate" },
-          { data: "action" },
-        ],
-        createdRow: function (row, data, dataIndex) {
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
+    //         return finalData;
+    //       },
+    //     },
+    //     columnDefs: [
+    //       {
+    //         targets: 1,
+    //         className: "td-indent",
+    //       },
+    //     ],
+    //     columns: [
+    //       { data: "image" },
+    //       { data: "leaveid" },
+    //       { data: "firstname" },
+    //       { data: "leavestartdate" },
+    //       { data: "leaveenddate" },
+    //       { data: "leavetype" },
+    //       { data: "reason" },
+    //       { data: "applieddate" },
+    //       { data: "action" },
+    //     ],
+    //     createdRow: function (row, data, dataIndex) {
+    //       $("td", row).each(function (index) {
+    //         this.style.textAlign = "center";
+    //         this.style.verticalAlign = "middle";
+    //       });
+    //     },
+    //     initComplete: function () {},
+    //   });
+    // }
+
+
+    //Leave Section>>>>>>>>>>>>>>>>>>
+    $(document).on("click", "#nav-leave-tab", function () {
+      $("#dataTableleaverequest").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/load",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById("dataTableleaverequest");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var IMAGE = row.insertCell(0);
+            var LEAVE_ID = row.insertCell(1);
+            var FIRSTNAME = row.insertCell(2);
+            var LEAVE_STARTDADTE = row.insertCell(3);
+            var LEAVE_ENDATE = row.insertCell(4);
+            var LEAVE_TYPE = row.insertCell(5);
+            var REASON = row.insertCell(6);
+            var APPLIEDDATE = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#allleavemodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                leaveid = dataRow[1];
+            };
+
+            var imgElement = document.createElement("img");
+            imgElement.src = "data:image/jpg;base64," + item.image;
+            imgElement.alt = "Profile Image";
+            imgElement.style.width = "100px";
+            imgElement.style.height = "100px";
+
+            IMAGE.appendChild(imgElement);
+            LEAVE_ID.innerHTML = item.leaveid;
+            FIRSTNAME.innerHTML = item.firstname;
+            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
+            LEAVE_ENDATE.innerHTML = item.leaveenddate;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            REASON.innerHTML = item.reason;
+            APPLIEDDATE.innerHTML = item.applieddate;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                LEAVE_ID,
+                FIRSTNAME,
+                LEAVE_STARTDADTE,
+                LEAVE_ENDATE,
+                LEAVE_TYPE,
+                REASON,
+                APPLIEDDATE,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
         },
-        initComplete: function () {},
+        error: function (xhr, status, error) {},
       });
-    }
-
-    $("#dataTableleaverequest tbody").on("click", "tr", function () {
-      var dataRow = [];
-      $(this)
-        .closest("tr")
-        .find("td")
-        .each(function () {
-          dataRow.push($(this).text());
-        });
-      leaveid = dataRow[1];
     });
+
+    // $("#dataTableleaverequest tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .closest("tr")
+    //     .find("td")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+    //   leaveid = dataRow[1];
+    // });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({

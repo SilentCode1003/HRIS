@@ -18,26 +18,22 @@
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-        <button
-          class="close"
-          type="button"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+      <div class="modal-header logout-header">
+        <h6 class="modal-title fs-5" id="exampleModalLabel"><b>Ready to leave?</b></h6>
+        <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
-        </button>
+        </button> -->
+        <i class='bx bx-x' data-dismiss="modal" aria-label="CLose"></i>
       </div>
-      <div class="modal-body">
-        Select "Logout" below if you are ready to end your current session.
+      <div class="modal-body logout-body">
+        <h5>Select <span class="btn-out-body">Log Out</span> below if you are ready to end your current session.</h5>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">
+      <div class="modal-footer logout-footer">
+        <button class="btn btn-logout-cancel" type="button" data-dismiss="modal">
           Cancel
         </button>
-        <button class="btn btn-danger" id="logoutBtn" name="logoutBtn">
-          Logout
+        <button class="btn btn-logout" id="logoutBtn" name="logoutBtn">
+          Log Out
         </button>
       </div>
     </div>
@@ -97,6 +93,10 @@
   type="text/javascript"
   src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
 ></script>
+
+<!--PDF DOWNLOADER-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+
 
 <script>
   $(document).ready(function () {
@@ -222,7 +222,55 @@
       return `${hours}:${minutes}`;
     }
 
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
-      $(".navbar").toggleClass("navbar-toggled");
+
+    // $("#sidebarToggleTop").on("click", function (e) {
+    //   $(".navbar").toggleClass("navbar-toggled");
+    // });
+
+  //   $(document).ready(function () {
+  //   let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
+
+  //   function updateSidebarState() {
+  //     $("body").toggleClass("sidebar-toggled", isSidebarOpen);
+  //     $(".sidebar").toggleClass("toggled", isSidebarOpen);
+
+  //     if (isSidebarOpen) {
+  //       $('.sidebar .collapse').collapse('hide');
+  //       $('#content').toggleClass('content-toggled');
+  //       $('.sticky-footer').toggleClass('footer-toggled');
+  //     } else {
+  //       $('#content').removeClass('content-toggled');
+  //       $('.navbar').removeClass('navbar-toggled');
+  //       $('.sticky-footer').removeClass('footer-toggled');
+  //     }
+  //   }
+
+  //   updateSidebarState();
+
+  //   $("#sidebarToggle", "#sidebarToggleTop").on('click', function (e) {
+  //     isSidebarOpen = !isSidebarOpen;
+
+  //     localStorage.setItem('isSidebarOpen', isSidebarOpen);
+
+  //     updateSidebarState();
+  //   });
+  // });
+
+  function toggleSidebarAndNavbar() {
+      $('body').toggleClass('sidebar-toggled'); // Toggle class for body
+      $('.sidebar').toggleClass('toggled'); // Toggle class for sidebar
+      // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
+      $('.navbar').toggleClass('navbar-toggled'); // Toggle class for navbar
+      $('.content').toggleClass('content-toggled'); // Toggle class for content
+    }
+
+    $(document).ready(function () {
+      $('#sidebarToggleTop').on('click', function () {
+        toggleSidebarAndNavbar();
+      });
     });
+
+
+ 
+
 </script>

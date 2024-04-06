@@ -29,14 +29,14 @@
                 <i class="fas fa-search fa-fw db-search-hrmis"></i>
             </a>
             <!-- Dropdown - Messages -->
-            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in searchbar-bg"
                 aria-labelledby="searchDropdown">
                 <form class="form-inline mr-auto w-100 navbar-search">
                     <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                        <input type="text" class="form-control searchbar-hrmis" placeholder="Search for..."
                             aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-search-hrmis" type="button">
                                 <i class="fas fa-search fa-sm"></i>
                             </button>
                         </div>
@@ -47,10 +47,9 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" trigger="loop" state="loop-bell"
-                    colors="primary:#e8e230" class="db-bell-eportal">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" state="loop-bell" colors="primary:#e8e230" class="db-bell-hrmis">
                 </lord-icon>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger" id="badge-counter"></span>
@@ -70,9 +69,7 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" trigger="loop"
-                    colors="primary:#0a2e5c,secondary:#1663c7,tertiary:#66d7ee,quaternary:#ffffff"
-                    class="db-message-hrmis">
+                <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" colors="primary:#66d7ee,secondary:#3080e8,tertiary:#66d7ee,quaternary:#8b2525" class="db-message-hrmis">
                 </lord-icon>
                 <!-- Counter - Messages -->
                 <span class="badge badge-danger badge-counter">7</span>
@@ -163,7 +160,7 @@
                 <div class="dropdown-divider profile-box-db"></div>
                 <a class="dropdown-item profile-box-db" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class='bx bx-log-in-circle logout-icon'></i>
-                    Logout
+                    Log Out
                 </a>
             </div>
         </li>
@@ -637,7 +634,6 @@
                                             <div class="tab-pane active show" id="profile-about">
                                                 <div class="tab-content p-0">
                                                     <div class="tab-pane active show" id="profile-about">
-                                                       <center><h3>Gawa Ni Charles Absorb nyo daw po sya</h3></center>
                                                     </div>
                                                 </div>
                                             </div>
@@ -978,7 +974,6 @@
                                     <div class="col-md-8 coming_soon">
                                         <div class="tab-content p-0">
                                             <div class="tab-pane active show" id="profile-about">
-                                               <center><div>Gawa Ni Charles</div></center>
                                             </div>
                                         </div>
                                     </div>
