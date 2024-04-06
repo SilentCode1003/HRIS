@@ -165,7 +165,7 @@
     //#region buttons
 
     $("#clockinbtn").on("click", function () {
-      console.log('hit')
+      console.log("hit");
       swal({
         title: "Confirm Clock-in",
         text: "Are you sure you want to clock in?",
@@ -195,8 +195,7 @@
                 swal({
                   title: "Clock-in successful!",
                   icon: "success",
-                }).then(() => {
-                });
+                }).then(() => {});
               } else {
                 swal({
                   title: "Clock-in failed",
@@ -327,10 +326,17 @@
           { data: "logtime" },
         ],
         createdRow: function (row, data, dataIndex) {
+          console.log("Log Type:", data.logtype);
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
+
+          if (data.logtype === "ClockIn") {
+            $(row).addClass("green-row");
+          } else if (data.logtype === "ClockOut") {
+            $(row).addClass("red-row");
+          }
         },
         initComplete: function () {},
       });
