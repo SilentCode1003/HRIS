@@ -207,10 +207,11 @@ router.post("/loadpayslipsummaryforapp", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
+
         console.log(result);
         res.json({
           msg: "success",
-          data: result[0],
+          data: result,
         });
       })
       .catch((error) => {
