@@ -73,7 +73,12 @@ var attendancerequestRouter = require('./routes/attendancerequest');
 var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
 var setsetpayrolldateRouter = require('./routes/setpayrolldate');
 var eportalrequestovertimeRouter = require('./routes/eportalrequestovertime');
-
+var teamleadindexRouter = require('./routes/teamleadindex');
+var teamleadloginRouter = require('./routes/teamleadlogin');
+var teamleademployeeRouter = require('./routes/teamleademployee');
+var teamleadcoaRouter = require('./routes/teamleadcoa');
+var teamleadovertimeRouter = require('./routes/teamleadovertime');
+var teamleadleaveRouter = require('./routes/teamleadleave');
 
 var app = express();
 
@@ -157,6 +162,14 @@ app.use('/attendancerequest', attendancerequestRouter);
 app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
 app.use('/setpayrolldate', setsetpayrolldateRouter);
 app.use('/eportalrequestovertime', eportalrequestovertimeRouter);
+app.use('/teamleadindex', teamleadindexRouter);
+app.use('/teamleadlogin' , teamleadloginRouter);
+app.use('/teamleademployee', teamleademployeeRouter);
+app.use('/teamleadcoa' , teamleadcoaRouter);
+app.use('/teamleadovertime', teamleadovertimeRouter);
+app.use('/teamleadleave' , teamleadleaveRouter);
+
+
 
 
 // catch 404 and forward to error handler

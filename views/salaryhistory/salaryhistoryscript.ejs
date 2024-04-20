@@ -40,19 +40,21 @@
                         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editsalarymodal"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
-                            var imgElement = document.createElement("img");
-                            imgElement.src = "data:image/jpg;base64," + item.image;
-                            imgElement.alt = "Profile Image";
-                            imgElement.style.width = "90px";
-                            imgElement.style.height = "90px";
+                            // var imgElement = document.createElement("img");
+                            // imgElement.src = "data:image/jpg;base64," + item.image;
+                            // imgElement.alt = "Profile Image";
+                            // imgElement.style.width = "90px";
+                            // imgElement.style.height = "90px";
 
                             finalData.push({
-                                image: imgElement.outerHTML,
+                                // image: imgElement.outerHTML,
                                 historyid: item.historyid,
                                 date: item.date,
                                 employeeid: item.employeeid,
                                 monthly: item.monthly,
                                 allowances: item.allowances,
+                                adjustments: item.adjustments,
+                                payrolltype: item.payrolltype,
                                 action: action,
                             });
                         });
@@ -67,7 +69,7 @@
                     },
                 ],
                 columns: [
-                    { data: "image" },
+                    // { data: "image" },
                     { data: "historyid" },
                     { data: "date" },
                     { data: "employeeid" },
@@ -89,6 +91,16 @@
                             });
                         }
                     },
+                    {
+                        data: "adjustments",
+                        render: function (data, type, row) {
+                            return '₱' + parseFloat(data).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            });
+                        }
+                    },
+                    { data: "payrolltype" },
                     { data: "action" },
                 ],
 

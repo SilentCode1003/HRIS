@@ -14,11 +14,12 @@
             <table class="table table-light table-striped" id="dataTablesalary">
                 <thead>
                     <tr>
-                        <th>Image</th>
                         <th class="col-sm-1">ID</th>
                         <th class="col-26">Employee</th>
-                        <th>Monthly Salary</th>
+                        <th>Monthly/Daily Salary</th>
                         <th>Monthly Allowances</th>
+                        <th>Adjustments</th>
+                        <th>Payroll Type</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
@@ -53,7 +54,7 @@
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="msemp" name="msemp"
                           placeholder="Monthly Salary">
-                      <label for="msemp">Monthly Salary</label>
+                      <label for="msemp">Monthly Or Daily Salary</label>
                   </div>
               </div>                                       
               <br>
@@ -64,7 +65,26 @@
                       <label for="allowances">Monthly Allowances</label>
                   </div>
               </div>                 
-              <br>   
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="adjustments" name="adjustments"
+                        placeholder="Adjustments">
+                    <label for="editallowances">Adjustments</label>
+                </div>
+            </div>                 
+            <br> 
+            <div class="col">
+              <div class="form-floating">
+                  <select class="form-select border-form-modal" id="payrolltype" name="payrolltype">
+                    <option selected>Choose..</option>
+                    <option value="Daily" >Daily</option>
+                    <option value="Monthly" >Monthly</option>
+                  </select>
+                  <label for="floatingSelectGrid">Payroll Type</label>
+              </div>
+          </div>
+           <br>       
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
@@ -98,7 +118,7 @@
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="editmsemp" name="editmsemp"
                           placeholder="Monthly Salary">
-                      <label for="editmsemp">Edit Monthly Salary</label>
+                      <label for="editmsemp">Edit Monthly Or Daily Salary</label>
                   </div>
               </div>                                       
               <br>
@@ -109,7 +129,25 @@
                       <label for="editallowances">Edit Monthly Allowances</label>
                   </div>
               </div>                 
-              <br>   
+              <br> 
+              <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
+                        placeholder="Adjustments">
+                    <label for="editallowances">Edit Adjustments</label>
+                </div>
+            </div>                 
+            <br> 
+            <div class="col">
+              <div class="form-floating">
+                  <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
+                    <option value="Daily">Daily</option>
+                    <option value="Monthly">Monthly</option>
+                  </select>
+                  <label for="floatingSelectGrid">Edit Payroll Type</label>
+              </div>
+          </div>
+           <br>    
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">

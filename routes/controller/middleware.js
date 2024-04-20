@@ -210,6 +210,26 @@ var roleacess = [
     ],
   },
   {
+    role: "Team Leader",
+    routes: [
+      {
+        layout: "teamleadindexlayout",
+      },
+      {
+        layout: "teamleademployeelayout",
+      },
+      {
+        layout: "teamleadcoalayout",
+      },
+      {
+        layout: "teamleadovertimelayout",
+      },
+      {
+        layout: "teamleadleavelayout",
+      },
+    ],
+  },
+  {
     role: "HR",
     routes: [
       {
@@ -300,13 +320,18 @@ var roleacess = [
   },
 ];
 
-exports.Validator = function (req, res, layout) {
-  // console.log(layout);
 
+exports.Validator = function (req, res, layout) {
   let ismatch = false;
   let counter = 0;
-  // //console.log(roleacess.length)
-  if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
+
+  console.log("Access Type:", req.session.accesstype);
+  console.log("Layout:", layout);
+  
+  if (
+    (req.session.accesstype == "Employee" && layout == "eportalindexlayout")
+  ) {
+    console.log(req.session.accesstype);
     console.log("hit");
     return res.render(`${layout}`, {
       image: req.session.image,
@@ -322,8 +347,6 @@ exports.Validator = function (req, res, layout) {
       var routes = key.routes;
 
       routes.forEach((value, index) => {
-        // console.log(`${key.role} - ${value.layout}`);
-
         if (key.role == req.session.accesstype && value.layout == layout) {
           console.log("Role: ", req.session.accesstype, "Layout: ", layout);
           ismatch = true;
@@ -349,6 +372,60 @@ exports.Validator = function (req, res, layout) {
     });
   }
 };
+
+
+exports.ValidatorForTeamLead = function (req, res, layout) {
+  let ismatch = false;
+  let counter = 0;
+
+  console.log("Access Type:", req.session.accesstype);
+  console.log("Layout:", layout);
+  
+  if (
+    (req.session.accesstype == "Team Leader" && layout == "teamleadindexlayout")
+  ) {
+    console.log(req.session.accesstype);
+    console.log("hit");
+    return res.render(`${layout}`, {
+      image: req.session.image,
+      employeeid: req.session.employeeid,
+      fullname: req.session.fullname,
+      accesstype: req.session.accesstype,
+      geofenceid: req.session.geofenceid,
+      departmentid: req.session.departmentid,
+    });
+  } else {
+    roleacess.forEach((key, item) => {
+      counter += 1;
+      var routes = key.routes;
+
+      routes.forEach((value, index) => {
+        if (key.role == req.session.accesstype && value.layout == layout) {
+          console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+          ismatch = true;
+
+          return res.render(`${layout}`, {
+            image: req.session.image,
+            employeeid: req.session.employeeid,
+            fullname: req.session.fullname,
+            accesstype: req.session.accesstype,
+            departmentid: req.session.departmentid,
+            departmentname: req.session.departmentname,
+            position: req.session.position,
+            geofenceid: req.session.geofenceid,
+          });
+        }
+      });
+
+      if (counter == roleacess.length) {
+        if (!ismatch) {
+          res.redirect("/login");
+        }
+      }
+    });
+  }
+};
+
 
 exports.ValidatorforOjt = function (req, res, layout) {
   // console.log(layout);

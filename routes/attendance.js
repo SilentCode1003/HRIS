@@ -88,6 +88,95 @@ router.get("/load", (req, res) => {
   }
 });
 
+
+router.post("/missedlogs", (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql = ` SELECT 
+    ma_attendanceid as attendanceid,
+    CONCAT(me_lastname, " ", me_firstname) as employeeid,
+    DATE_FORMAT(ma_attendancedate, '%W, %M %e, %Y') as attendancedate,
+    TIME_FORMAT(ma_clockin, '%h:%i %p') as clockin,
+    TIME_FORMAT(ma_clockout, '%h:%i %p') as clockout,
+    ma_devicein as devicein,
+    ma_deviceout as deviceout,
+     CONCAT(
+            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+        ) AS totalhours
+    FROM master_attendance 
+    LEFT JOIN master_employee ON ma_employeeid = me_id
+    WHERE ma_attendancedate BETWEEN 
+    '${startdate}' AND '${enddate}' AND ma_clockout IS NULL OR ma_clockin IS NULL`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+
+router.post("/daterange", (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let sql = ` SELECT 
+    ma_attendanceid as attendanceid,
+    CONCAT(me_lastname, " ", me_firstname) as employeeid,
+    DATE_FORMAT(ma_attendancedate, '%W, %M %e, %Y') as attendancedate,
+    TIME_FORMAT(ma_clockin, '%h:%i %p') as clockin,
+    TIME_FORMAT(ma_clockout, '%h:%i %p') as clockout,
+    ma_devicein as devicein,
+    ma_deviceout as deviceout,
+     CONCAT(
+            FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
+            FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
+        ) AS totalhours
+    FROM master_attendance 
+    LEFT JOIN master_employee ON ma_employeeid = me_id
+    WHERE ma_attendancedate BETWEEN 
+    '${startdate}' AND '${enddate}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+
 router.post("/getloadforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
