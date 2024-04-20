@@ -73,6 +73,7 @@ var attendancerequestRouter = require('./routes/attendancerequest');
 var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
 var setsetpayrolldateRouter = require('./routes/setpayrolldate');
 var eportalrequestovertimeRouter = require('./routes/eportalrequestovertime');
+var teamleadindexRouter = require('./routes/teamleadindex');
 
 
 var app = express();
@@ -157,6 +158,7 @@ app.use('/attendancerequest', attendancerequestRouter);
 app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
 app.use('/setpayrolldate', setsetpayrolldateRouter);
 app.use('/eportalrequestovertime', eportalrequestovertimeRouter);
+app.use('/teamleadindex', teamleadindexRouter);
 
 
 // catch 404 and forward to error handler

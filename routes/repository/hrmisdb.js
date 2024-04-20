@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('e59d730cc1cfe21f3fabf0f694b3bf1c', (err, encrypted) => {
+Decrypter('2772eba30ffb6be45bed019b31e7e74c', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -819,7 +819,9 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_salary(
       ms_employeeid,
       ms_monthly,
-      ms_allowances) VALUES ?`;
+      ms_allowances,
+      ms_basic_adjustments,
+      ms_payrolltype) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

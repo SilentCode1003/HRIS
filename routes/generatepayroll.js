@@ -58,7 +58,7 @@ router.post('/checkmissedlogs' , (req, res) => {
     let sql =  `SELECT * 
     FROM master_attendance 
     WHERE ma_attendancedate BETWEEN 
-    '${startdate}' AND '${enddate}' AND ma_clockout IS NULL`;
+    '${startdate}' AND '${enddate}' AND ma_clockout IS NULL OR ma_clockin IS NULL`;
 
     mysql.Select(sql, "Master_Attendance", (err, result) => {
       if (err) console.error("Error: ", err);
