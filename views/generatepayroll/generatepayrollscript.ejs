@@ -12,6 +12,7 @@
       searchTable();
     });
 
+
     $(document).on("click", "#generateButton", function () {
       let startDate = $("#datepicker")
         .data("daterangepicker")
@@ -33,90 +34,267 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        swal({
-          title: "Confirmation",
-          text: `Are you sure you want to generate and load payroll from ${startDate} To ${endDate}`,
-          icon: "warning",
-          buttons: ["Cancel", "Confirm"],
-          dangerMode: true,
-        }).then((willGenerate) => {
-          if (willGenerate) {
-            swal({
-              title: "Generating and Loading Payroll",
-              text: "Please wait... This will take a few minutes.",
-              buttons: false,
-              closeOnEsc: false,
-              closeOnClickOutside: false,
-              allowOutsideClick: false,
-              content: {
-                element: "div",
-                attributes: {
-                  innerHTML:
-                    '<div class="progress"><div class="determinate" style="width: 0%"></div></div>',
-                },
-              },
-            });
-
-            let progress = 0;
-            const interval = setInterval(function () {
-              progress += 10;
-              if (progress <= 100) {
-                $(".progress .determinate").css("width", progress + "%");
-              } else {
-                clearInterval(interval);
-              }
-            }, 1000);
-
-            $.ajax({
-              type: "POST",
-              url: "/generatepayroll/generateandaoadaayroll",
-              data: {
-                startdate: startDate,
-                enddate: endDate,
-              },
-              success: function (result) {
-                console.log("Success:", result);
-                clearInterval(interval);
-                swal.close();
-
-                if (result.msg == "success") {
-                  swal({
-                    title: "Generate and Load Successfully",
-                    text: "Thank you for waiting ;)",
-                    icon: "success",
-                    button: "OK!",
-                  }).then((results) => {
-                    loadPayrollTable(startDate, endDate);
-                  });
+        $.ajax({
+          type: "POST",
+          url: "/generatepayroll/checkmissedlogs",
+          data: {
+            startdate: startDate,
+            enddate: endDate,
+          },
+          success: function (result) {
+            if (result.msg == "success" && result.data.length > 0) {
+              swal({
+                title: "Oh No !! There's a Missed Logs",
+                text: `There are missed logs between ${startDate} and ${endDate}. Do you still want to generate and load payroll?`,
+                icon: "warning",
+                buttons: ["Cancel", "Generate Anyway"],
+                dangerMode: true,
+              }).then((willGenerate) => {
+                if (willGenerate) {
+                  generatePayroll(startDate, endDate);
                 } else {
                   swal(
-                    "Error",
-                    "An error occurred while generating and loading payroll.",
-                    "error"
+                    "Operation Cancelled",
+                    "Payroll generation cancelled.",
+                    "info"
                   );
                 }
+              });
+            } else {
+              generatePayroll(startDate, endDate);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.log("Error:", xhr.responseText);
+            swal(
+              "Error",
+              "An error occurred while checking missed logs.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    function generatePayroll(startDate, endDate) {
+      swal({
+        title: "Confirmation",
+        text: `Are you sure you want to generate and load payroll from ${startDate} To ${endDate}`,
+        icon: "warning",
+        buttons: ["Cancel", "Confirm"],
+        dangerMode: true,
+      }).then((willGenerate) => {
+        if (willGenerate) {
+          swal({
+            title: "Generating and Loading Payroll",
+            text: "Please wait... This will take a few minutes.",
+            buttons: false,
+            closeOnEsc: false,
+            closeOnClickOutside: false,
+            allowOutsideClick: false,
+            content: {
+              element: "div",
+              attributes: {
+                innerHTML:
+                  '<div class="progress"><div class="determinate" style="width: 0%"></div></div>',
               },
-              error: function (xhr, status, error) {
-                console.log("Error:", xhr.responseText);
-                clearInterval(interval);
-                swal.close();
+            },
+          });
+
+          let progress = 0;
+          const interval = setInterval(function () {
+            progress += 10;
+            if (progress <= 100) {
+              $(".progress .determinate").css("width", progress + "%");
+            } else {
+              clearInterval(interval);
+            }
+          }, 1000);
+
+          $.ajax({
+            type: "POST",
+            url: "/generatepayroll/generateandaoadaayroll",
+            data: {
+              startdate: startDate,
+              enddate: endDate,
+            },
+            success: function (result) {
+              console.log("Success:", result);
+              clearInterval(interval);
+              swal.close();
+
+              if (result.msg == "success") {
+                swal({
+                  title: "Generate and Load Successfully",
+                  text: "Thank you for waiting ;)",
+                  icon: "success",
+                  button: "OK!",
+                }).then((results) => {
+                  loadPayrollTable(startDate, endDate);
+                });
+              } else {
                 swal(
                   "Error",
                   "An error occurred while generating and loading payroll.",
                   "error"
                 );
-              },
-            });
-          } else {
-            swal(
-              "Operation Cancelled",
-              "Payroll generation and loading process cancelled.",
-              "info"
-            );
-          }
-        });
-      }
-    });
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log("Error:", xhr.responseText);
+              clearInterval(interval);
+              swal.close();
+              swal(
+                "Error",
+                "An error occurred while generating and loading payroll.",
+                "error"
+              );
+            },
+          });
+        } else {
+          swal(
+            "Operation Cancelled",
+            "Payroll generation and loading process cancelled.",
+            "info"
+          );
+        }
+      });
+    }
+
+    // $(document).on("click", "#generateButton", function () {
+    //   let startDate = $("#datepicker")
+    //     .data("daterangepicker")
+    //     .startDate.format("YYYY-MM-DD");
+    //   let endDate = $("#datepicker")
+    //     .data("daterangepicker")
+    //     .endDate.format("YYYY-MM-DD");
+
+    //   var message = "";
+
+    //   if (startDate === "") {
+    //     message += "Start date is required. ";
+    //   }
+
+    //   if (endDate === "") {
+    //     message += "End date is required. ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/generatepayroll/checkmissedlogs",
+    //       data: {
+    //         startdate: startDate,
+    //         enddate: endDate,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success" && result.data.length > 0) {
+    //           swal({
+    //             title: "Confirmation",
+    //             text: `There are missed logs between ${startDate} and ${endDate}. Do you still want to generate and load payroll?`,
+    //             icon: "warning",
+    //             buttons: "OK",
+    //             dangerMode: true,
+    //           });
+    //         } else {
+    //           swal("Success", "No missed logs found.", "success");
+    //         }
+    //       },
+    //       error: function (xhr, status, error) {
+    //         console.log("Error:", xhr.responseText);
+    //         swal(
+    //           "Error",
+    //           "An error occurred while checking missed logs.",
+    //           "error"
+    //         );
+    //       },
+    //     });
+    //     swal({
+    //       title: "Confirmation",
+    //       text: `Are you sure you want to generate and load payroll from ${startDate} To ${endDate}`,
+    //       icon: "warning",
+    //       buttons: ["Cancel", "Confirm"],
+    //       dangerMode: true,
+    //     }).then((willGenerate) => {
+    //       if (willGenerate) {
+    //         swal({
+    //           title: "Generating and Loading Payroll",
+    //           text: "Please wait... This will take a few minutes.",
+    //           buttons: false,
+    //           closeOnEsc: false,
+    //           closeOnClickOutside: false,
+    //           allowOutsideClick: false,
+    //           content: {
+    //             element: "div",
+    //             attributes: {
+    //               innerHTML:
+    //                 '<div class="progress"><div class="determinate" style="width: 0%"></div></div>',
+    //             },
+    //           },
+    //         });
+
+    //         let progress = 0;
+    //         const interval = setInterval(function () {
+    //           progress += 10;
+    //           if (progress <= 100) {
+    //             $(".progress .determinate").css("width", progress + "%");
+    //           } else {
+    //             clearInterval(interval);
+    //           }
+    //         }, 1000);
+
+    //         $.ajax({
+    //           type: "POST",
+    //           url: "/generatepayroll/generateandaoadaayroll",
+    //           data: {
+    //             startdate: startDate,
+    //             enddate: endDate,
+    //           },
+    //           success: function (result) {
+    //             console.log("Success:", result);
+    //             clearInterval(interval);
+    //             swal.close();
+
+    //             if (result.msg == "success") {
+    //               swal({
+    //                 title: "Generate and Load Successfully",
+    //                 text: "Thank you for waiting ;)",
+    //                 icon: "success",
+    //                 button: "OK!",
+    //               }).then((results) => {
+    //                 loadPayrollTable(startDate, endDate);
+    //               });
+    //             } else {
+    //               swal(
+    //                 "Error",
+    //                 "An error occurred while generating and loading payroll.",
+    //                 "error"
+    //               );
+    //             }
+    //           },
+    //           error: function (xhr, status, error) {
+    //             console.log("Error:", xhr.responseText);
+    //             clearInterval(interval);
+    //             swal.close();
+    //             swal(
+    //               "Error",
+    //               "An error occurred while generating and loading payroll.",
+    //               "error"
+    //             );
+    //           },
+    //         });
+    //       } else {
+    //         swal(
+    //           "Operation Cancelled",
+    //           "Payroll generation and loading process cancelled.",
+    //           "info"
+    //         );
+    //       }
+    //     });
+    //   }
+    // });
 
     $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
       $("#loadbutton").click(function () {
@@ -173,14 +351,13 @@
                 EmployeeFullName: item.EmployeeFullName,
                 EmployeeId: item.EmployeeId,
                 Salary: item.Salary,
-                Payroll_Date: item.Payroll_Date,
+                PayrollDate: item.PayrollDate,
                 CutOff: item.CutOff,
                 Total_AllDeductions: item.Total_AllDeductions,
                 Total_Netpay: item.Total_Netpay,
                 action: action,
               });
             });
-
             return finalData;
           },
         },
@@ -213,7 +390,7 @@
             },
           },
           {
-            data: "Payroll_Date",
+            data: "PayrollDate",
             render: function (data, type, row) {
               var originalDate = new Date(data);
               var year = originalDate.getFullYear();
@@ -422,6 +599,7 @@
               $("#payslipTINid").text(item.TINID);
               $("#payslipphilhealthid").text(item.PhilHealthID);
               $("#payslipdeppagibigid").text(item.PagIbigID);
+              $("#payslippayrolltype").text(item.PayrollType);
               $("#payslipid").text(item.EmployeeId);
               $("#payslipname").text(item.EmployeeFullName);
               $("#payslipempname").text(item.EmployeeFullName);
@@ -436,6 +614,9 @@
               $("#payslipbasic").text(formatToCurrency(item.Salary));
               $("#payslipperday").text(formatToCurrency(item.Per_Day));
               $("#payslipallowances").text(formatToCurrency(item.Allowances));
+              $("#payslipbasicadustments").text(
+                formatToCurrency(item.Basic_Adjustments)
+              );
               $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
               $("#payslipndpay").text(
                 formatToCurrency(item.ApprovedNightDiffOt)

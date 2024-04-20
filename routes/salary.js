@@ -17,11 +17,12 @@ router.get("/load", (req, res) => {
   try {
     let sql = `    
     SELECT 
-   me_profile_pic,
    ms_id,
    concat(me_lastname,' ',me_firstname) as ms_employeeid,
    ms_monthly,
-   ms_allowances
+   ms_allowances,
+   ms_basic_adjustments,
+   ms_payrolltype
    FROM master_salary
     LEFT JOIN master_employee ON master_salary.ms_employeeid = me_id`;
 
@@ -45,10 +46,12 @@ router.post("/save", (req, res) => {
     let employeeid = req.body.employeeid;
     let monthly = req.body.monthly;
     let allowances = req.body.allowances;
+    let adjustments = req.body.adjustments;
+    let payrolltype = req.body.payrolltype;
 
     let data = [];
 
-    data.push([employeeid, monthly, allowances]);
+    data.push([employeeid, monthly, allowances, adjustments, payrolltype]);
 
     let sql = `SELECT * FROM master_salary WHERE ms_employeeid = '${employeeid}'`;
 
@@ -86,7 +89,9 @@ router.post('/getsalary', (req, res) => {
     let sql = `select 
     ms_employeeid,
     ms_monthly,
-    ms_allowances
+    ms_allowances,
+    ms_basic_adjustments,
+    ms_payrolltype
     from master_salary
     where ms_id = '${salaryid}'`;
     
@@ -115,23 +120,30 @@ router.post('/update', (req ,res) => {
     let employeeid = req.body.employeeid;
     let monthly = req.body.monthly;
     let allowances = req.body.allowances;
+    let adjustments = req.body.adjustments;
+    let payrolltype = req.body.payrolltype;
     let sqlupdate = `update master_salary set 
     ms_employeeid = '${employeeid}',
     ms_monthly = '${monthly}',
-    ms_allowances = '${allowances}'
+    ms_allowances = '${allowances}',
+    ms_basic_adjustments = '${adjustments}',
+    ms_payrolltype = '${payrolltype}'
     where ms_id = '${salaryid}'`;
+
 
     mysql.Update(sqlupdate)
       .then((result) =>{
         console.log(result);
     
         res.json({
-          msg: 'success'
+          msg: 'success',
+          data: result,
         })
       })
       .catch((error) =>{
         res.json({
-          msg:error
+          msg:'error',
+          data: error,
         })
         
       });

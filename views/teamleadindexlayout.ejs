@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <%- include("header.ejs")%>
+  <%- include("teamleadheader.ejs")%>
 </head>
 
 <body id="page-top">
@@ -10,22 +10,21 @@
 
   <div id="wrapper">
     <!-- Sidebar -->
-    <%- include("sidebar.ejs")%>
+    <%- include("teamleadsidebar.ejs")%>
       <!-- End of Sidebar -->
-
       <!-- Topbar -->
       <%- include("topbar.ejs")%>
-      <!-- End of Topbar -->
-
-      <!-- Content Wrapper -->
-      <div id="content-wrapper">
+        <!-- End of Topbar -->
+  
+        <!-- Content Wrapper -->
+        <div id="content-wrapper">
           <div class="content">
-            <%- include("./employee/employee.ejs")%>
-          </div>    
+              <%- include("./teamleadindex/teamleadindex.ejs")%>
+          </div>
+  
           
-      </div>
-      <%- include("footer.ejs")%>
-       <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Content Wrapper -->
   
   </div>
 
@@ -38,7 +37,7 @@
   <!-- Bootstrap core JavaScript-->
   <%- include("./scripts.ejs")%>
   <%- include("./topbarscript.ejs")%>
-    <%- include("./employee/employeescript.ejs")%>
+    <%- include("./teamleadindex/teamleadindexscript.ejs")%>
 </body>
 
 </html>
