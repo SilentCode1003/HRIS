@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTableappdetails">
+            <table class="table table-light table-striped" id="dataTableappdetails">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -40,7 +40,7 @@
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
             <div class="modal-body" id="modal-body">
-                <form>
+                <!-- <form>
                     <div class="card">
                         <div class="card-body candidate-prof">
                             <form>
@@ -83,7 +83,46 @@
                             </form>
                         </div>
                     </div>
-                </form>
+                </form> -->
+
+                <div class="card-body text-center card-app-add">
+      
+                    <form>
+                        <div class="row">
+                            <div class="text-center">
+                                <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal"
+                                    alt="placeholder" style="width: 150px; height: 150px; margin-top: 20px; margin-bottom: 10px;">
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-auto app-form">
+                                <input type="file" name="appsprofile" id="appsprofile" class="form-control app-form-c" accept="image/*">
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="addappname">Apps Name</label>
+                                <input type="text" class="form-control border-app-form" id="addappname" placeholder="Apps Name">
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="addappdetails">Details</label>
+                                <input type="text" class="form-control border-app-form" id="addappdetails" placeholder="Details">
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="addappversion">Version</label>
+                                <input type="text" class="form-control border-app-form" id="addappversion" placeholder="Version">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer" id="modal-footer">
                 <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -151,7 +190,7 @@
                             <div class="row">
                                 <div class="text-center">
                                     <img id="editpreview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal"
-                                        alt="placeholder" style="width: 150px; height: 150px;">
+                                        alt="placeholder" style="width: 150px; height: 150px; margin-top: 20px; margin-bottom: 10px;">
                                 </div>
                             </div>
                         

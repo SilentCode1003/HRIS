@@ -25,9 +25,9 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.get('/selectdistinct', (req, res) => {
+router.get("/selectdistinct", (req, res) => {
   try {
-    let sql =  `SELECT DISTINCT
+    let sql = `SELECT DISTINCT
     me_id,
     concat(me_lastname,' ',me_firstname) as me_firstname
     FROM master_employee
@@ -36,16 +36,16 @@ router.get('/selectdistinct', (req, res) => {
     AND me_jobstatus IN ('regular', 'probitionary','apprentice')`;
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
-      if (err) console.error ("Error :", err);
+      if (err) console.error("Error :", err);
 
       res.json({
-        msg:"success",
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
@@ -80,79 +80,76 @@ router.post("/upload", (req, res) => {
         console.log("Birth Date", dateofbirth, "Date Hired", datehired);
 
         let employeeId, username, password;
-          employeeId = key.id;
-          ({ username, password } = generateUsernameAndPasswordforemployee({
-            me_firstname: key.firstname,
-            me_lastname: key.lastname,
-            me_id: key.id,
-            me_birthday: dateofbirth,
-          }));
-  
-          master_employee = [
-            [
-              key.id,
-              key.firstname,
-              key.middlename,
-              key.lastname,
-              dateofbirth,
-              key.gender,
-              key.civilstatus,
-              key.contactno,
-              key.email,
-              datehired,
-              key.jobstatus,
-              key.econtactname,
-              key.econtactno,
-              departmentid,
-              positionid,
-              key.address,
-              "",
-            ],
-          ];
-  
-          console.log("id",key.id)
-  
-          mysql.InsertTable(
-            "master_employee",
-            master_employee,
-            async (insertErr, insertResult) => {
-              if (insertErr) {
-                console.error("Error inserting employee record: ", insertErr);
-                return res.json({ msg: "insert_failed" });
-              }
-      
-              console.log("Employee record inserted: ", insertResult);
-      
-              Encrypter(password, async (encryptErr, encryptedPassword) => {
-                if (encryptErr) {
-                  console.error("Error encrypting password: ", encryptErr);
-                  return res.json({ msg: "encrypt_error" });
-                }
-                const userSaveResult = await saveUserRecord(
-                  req,
-                  employeeId,
-                  username,
-                  encryptedPassword
-                );
-      
-                if (userSaveResult.msg === "success") {
-                } else {
-                  console.error("Error saving user record: ", userSaveResult.msg);
-                  return res.json({ msg: "user_save_error" });
-                }
-              
-              });
+        employeeId = key.id;
+        ({ username, password } = generateUsernameAndPasswordforemployee({
+          me_firstname: key.firstname,
+          me_lastname: key.lastname,
+          me_id: key.id,
+          me_birthday: dateofbirth,
+        }));
+
+        master_employee = [
+          [
+            key.id,
+            key.firstname,
+            key.middlename,
+            key.lastname,
+            dateofbirth,
+            key.gender,
+            key.civilstatus,
+            key.contactno,
+            key.email,
+            datehired,
+            key.jobstatus,
+            key.econtactname,
+            key.econtactno,
+            departmentid,
+            positionid,
+            key.address,
+            "",
+          ],
+        ];
+
+        console.log("id", key.id);
+
+        mysql.InsertTable(
+          "master_employee",
+          master_employee,
+          async (insertErr, insertResult) => {
+            if (insertErr) {
+              console.error("Error inserting employee record: ", insertErr);
+              return res.json({ msg: "insert_failed" });
             }
-          );
-          if (counter == dataJson.length) {
-            res.json({
-              msg: "success",
+
+            console.log("Employee record inserted: ", insertResult);
+
+            Encrypter(password, async (encryptErr, encryptedPassword) => {
+              if (encryptErr) {
+                console.error("Error encrypting password: ", encryptErr);
+                return res.json({ msg: "encrypt_error" });
+              }
+              const userSaveResult = await saveUserRecord(
+                req,
+                employeeId,
+                username,
+                encryptedPassword
+              );
+
+              if (userSaveResult.msg === "success") {
+              } else {
+                console.error("Error saving user record: ", userSaveResult.msg);
+                return res.json({ msg: "user_save_error" });
+              }
             });
           }
-        });
+        );
+        if (counter == dataJson.length) {
+          res.json({
+            msg: "success",
+          });
+        }
+      });
     });
-
-    
   });
 });
 
@@ -243,7 +240,6 @@ router.post("/getemployeeprofileforappbasicinformation", (req, res) => {
     });
   }
 });
-
 
 router.post("/getemployee", (req, res) => {
   try {
@@ -390,7 +386,10 @@ router.post("/save", async (req, res) => {
     let employeeId, username, password;
 
     if (jobstatus === "apprentice") {
-      employeeId = await generateApprenticeId(apprenticecurrentYear, currentMonth);
+      employeeId = await generateApprenticeId(
+        apprenticecurrentYear,
+        currentMonth
+      );
       ({ username, password } = generateUsernameAndPasswordForApprentice({
         apprentice_firstname: firstname,
         apprentice_lastname: lastname,
@@ -803,7 +802,7 @@ router.post("/update", async (req, res) => {
       me_profile_pic = '${profilePicturePath}'
       WHERE me_id = '${newEmployeeId}'`;
 
-      mysql
+    mysql
       .Update(sql)
       .then((result) => {
         console.log(result);
@@ -821,9 +820,7 @@ router.post("/update", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ msg: "Internal server error", 
-      error: error.message 
-    });
+      .json({ msg: "Internal server error", error: error.message });
   }
 });
 
@@ -848,7 +845,7 @@ router.post("/getdeductother", (req, res) => {
       console.log(result);
 
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
@@ -879,7 +876,6 @@ router.post("/getleave", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-
         console.log(result);
 
         res.json({
@@ -900,7 +896,6 @@ router.post("/getleave", (req, res) => {
   }
 });
 
-
 router.post("/getgovid", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -917,7 +912,6 @@ router.post("/getgovid", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-
         res.json({
           msg: "success",
           data: result,
@@ -1251,7 +1245,6 @@ router.get("/totalresigned", (req, res) => {
 
 //#region functions
 
-
 function generateEmployeeId(year, month) {
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_employee WHERE me_id LIKE '${year}${month}%'`;
@@ -1311,31 +1304,37 @@ function GetPosition(name, callback) {
 
 async function saveUserRecord(req, employeeId, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
-    const createdate = moment().format('YYYY-MM-DD');
-    const createby = req.session ? req.session.fullname : null; 
+    const createdate = moment().format("YYYY-MM-DD");
+    const createby = req.session ? req.session.fullname : null;
 
     console.log("Session:", req.session);
+    let sql = `select * from master_access where ma_accessname='Employee'`;
 
-    const data = [
-      [
-        employeeId,
-        username,
-        encryptedPassword,
-        2,
-        createby,
-        createdate,
-        "Active",
-      ],
-    ];
+    mysql.Select(sql, "Master_Access", (err, result) => {
+      if (err) reject(err);
 
-    mysql.InsertTable("master_user", data, (inserterr, insertResult) => {
-      if (inserterr) {
-        console.error("Error inserting user record: ", inserterr);
-        reject({ msg: "insert_failed" });
-      } else {
-        console.log("User record inserted: ", insertResult);
-        resolve({ msg: "success" });
-      }
+      let accessid = result[0].accessid;
+      const data = [
+        [
+          employeeId,
+          username,
+          encryptedPassword,
+          accessid,
+          createby,
+          createdate,
+          "Active",
+        ],
+      ];
+
+      mysql.InsertTable("master_user", data, (inserterr, insertResult) => {
+        if (inserterr) {
+          console.error("Error inserting user record: ", inserterr);
+          reject({ msg: "insert_failed" });
+        } else {
+          console.log("User record inserted: ", insertResult);
+          resolve({ msg: "success" });
+        }
+      });
     });
   });
 }

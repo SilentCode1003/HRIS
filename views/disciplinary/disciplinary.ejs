@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-striped" id="dataTabledisciplianary">
+            <table class="table table-light table-striped" id="dataTabledisciplianary">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -111,31 +111,31 @@
 
 <div class="modal fade" id="editdisciplinarymodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content" style="height: 700px; width: 1300px; margin-left: -400px;">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
       <div class="modal-header" id="modal-header">
         <h3 class="modal-title" id="exampleModalLabel">Disciplinary Action</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
         <br>
         <br>
         <div class="row">
-          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;  margin-top: 100px;">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
             <div class="col g-6">
               <div class="p-4" style="width: 300px; margin-top: -100px;">
                 <div class="text-center">
-                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle"
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal"
                     alt="placeholder">
                 </div>
                 <br>
                 <div class="col">
                   <div class="col g-6">
-                    <input type="file" name="editdaimage" id="editdaimage" class="form-control" accept="image/*">
+                    <input type="file" name="editdaimage" id="editdaimage" class="form-control border-form-modal" accept="image/*">
                   </div>
                 </div>
                 <br>
-                <h2 class="border-top pb-3 mb-4 text-center">First Preview</h2>
+                <h2 class=" pb-3 mb-4 text-center modal-content-title">First Preview</h2>
               </div>
             </div>
           </div>
@@ -145,14 +145,14 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="dafname"
+                    <input type="text" class="form-control border-form-modal" id="dafname"
                       name="dafname" placeholder="First Name">
                     <label for="floatingInput">Full Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control"
+                    <input type="text" class="form-control border-form-modal"
                       id="daoffense" name="daoffense" placeholder="Last Name">
                     <label for="floatingInput">Offense</label>
                   </div>
@@ -162,14 +162,14 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control"
+                    <input type="text" class="form-control border-form-modal"
                       id="daaction" name="daaction" placeholder="Last Name">
                     <label for="floatingInput">Disciplinary Action</label>
                   </div>
                 </div>
                 <div class="col-md-8">
                   <div class="form-floating">
-                    <input type="text" class="form-control"
+                    <input type="text" class="form-control border-form-modal"
                       id="daviolation" name="daviolation" placeholder="Address">
                     <label for="floatingInput">Violation</label>
                   </div>
@@ -179,14 +179,14 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control"
+                    <input type="date" class="form-control border-form-modal"
                       id="dacreatedate" name="dacreatedate" placeholder="Phone Number">
                     <label for="floatingInput">Create Date</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="email" class="form-control"
+                    <input type="email" class="form-control border-form-modal"
                       id="dastatus" name="dastatus" placeholder="Email">
                     <label for="floatingInput">Status</label>
                   </div>
@@ -196,14 +196,14 @@
               <div class="row g-3">
                 <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control"
+                    <input type="text" class="form-control border-form-modal"
                       id="dacreateby" name="dacreateby" placeholder="Address">
                     <label for="floatingInput">Create By</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-floating">
-                    <input type="date" class="form-control"
+                    <input type="date" class="form-control border-form-modal"
                       id="dadate" name="dadate" placeholder="Address">
                     <label for="floatingInput">Subject Date</label>
                   </div>
@@ -216,8 +216,8 @@
         </div>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="employeesavebtn">Save</button>
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="employeesavebtn">Save</button>
       </div>
     </div>
   </div>

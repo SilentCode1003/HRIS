@@ -210,16 +210,22 @@ var roleacess = [
     ],
   },
   {
-    role: "Team_Leader",
+    role: "Team Leader",
     routes: [
       {
         layout: "teamleadindexlayout",
       },
       {
-        layout: "otapprovallayout",
+        layout: "teamleademployeelayout",
       },
       {
-        layout: "attendancerequestlayout",
+        layout: "teamleadcoalayout",
+      },
+      {
+        layout: "teamleadovertimelayout",
+      },
+      {
+        layout: "teamleadleavelayout",
       },
     ],
   },
@@ -323,8 +329,60 @@ exports.Validator = function (req, res, layout) {
   console.log("Layout:", layout);
   
   if (
-    (req.session.accesstype == "Employee" && layout == "eportalindexlayout") ||
-    (req.session.accesstype == "Team_Leader" && layout == "teamleadindexlayout")
+    (req.session.accesstype == "Employee" && layout == "eportalindexlayout")
+  ) {
+    console.log(req.session.accesstype);
+    console.log("hit");
+    return res.render(`${layout}`, {
+      image: req.session.image,
+      employeeid: req.session.employeeid,
+      fullname: req.session.fullname,
+      accesstype: req.session.accesstype,
+      geofenceid: req.session.geofenceid,
+      departmentid: req.session.departmentid,
+    });
+  } else {
+    roleacess.forEach((key, item) => {
+      counter += 1;
+      var routes = key.routes;
+
+      routes.forEach((value, index) => {
+        if (key.role == req.session.accesstype && value.layout == layout) {
+          console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+          ismatch = true;
+
+          return res.render(`${layout}`, {
+            image: req.session.image,
+            employeeid: req.session.employeeid,
+            fullname: req.session.fullname,
+            accesstype: req.session.accesstype,
+            departmentid: req.session.departmentid,
+            departmentname: req.session.departmentname,
+            position: req.session.position,
+            geofenceid: req.session.geofenceid,
+          });
+        }
+      });
+
+      if (counter == roleacess.length) {
+        if (!ismatch) {
+          res.redirect("/login");
+        }
+      }
+    });
+  }
+};
+
+
+exports.ValidatorForTeamLead = function (req, res, layout) {
+  let ismatch = false;
+  let counter = 0;
+
+  console.log("Access Type:", req.session.accesstype);
+  console.log("Layout:", layout);
+  
+  if (
+    (req.session.accesstype == "Team Leader" && layout == "teamleadindexlayout")
   ) {
     console.log(req.session.accesstype);
     console.log("hit");

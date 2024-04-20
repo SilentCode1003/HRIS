@@ -168,6 +168,7 @@ p.account {
 }
 
 p.account:hover {
+    color: white !important;
     text-decoration: underline;
 }
 
@@ -175,6 +176,11 @@ p.account:hover {
     width: 55px;
     height: 55px;
 }
+
+.btn-ojt-pw {
+    border: 1px solid white !important;
+    color: white !important;
+  }
 
 /* .overlay {
     z-index: 0;

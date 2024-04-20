@@ -222,36 +222,4 @@
 </script>
 
 
-   <!--- Eportal Topbar & Navbar-->
-   <script>
-    $(document).ready(function () {
-      let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
-  
-      function updateSidebarState() {
-        $("body").toggleClass("sidebar-toggled", isSidebarOpen);
-        $(".sidebar").toggleClass("toggled", isSidebarOpen);
-  
-        if (isSidebarOpen) {
-          $('.sidebar .collapse').collapse('hide');
-          $('#content').toggleClass('content-toggled');
-          $('#topbar').toggleClass('topbar-toggled ');
-          $('.sticky-footer').toggleClass('footer-toggled');
-        } else {
-          $('#content').removeClass('content-toggled');
-          $('#topbar').removeClass('topbar-toggled ');
-          $('.sticky-footer').removeClass('footer-toggled');
-        }
-      }
-  
-      updateSidebarState();
-  
-      $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
-        isSidebarOpen = !isSidebarOpen;
-  
-        localStorage.setItem('isSidebarOpen', isSidebarOpen);
-  
-        updateSidebarState();
-      });
-    });
-  
-  </script>
+   

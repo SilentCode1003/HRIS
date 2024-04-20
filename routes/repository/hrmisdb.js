@@ -6,7 +6,7 @@ require("dotenv").config();
 let password = "";
 Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
-  console.log(encrypted);
+  // console.log(encrypted);
   password = encrypted;
 });
 
@@ -26,6 +26,7 @@ const connection = mysql.createConnection({
   user: process.env._USER_ADMIN,
   password: password,
   database: process.env._DATABASE_ADMIN,
+  timezone: "PST",
 });
 
 exports.CheckConnection = () => {
@@ -632,7 +633,6 @@ exports.InsertTable = (tablename, data, callback) => {
     });
   }
 
-
   if (tablename == "salary") {
     let sql = `INSERT INTO salary(
         s_employeeid,
@@ -656,7 +656,6 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
-
 
   if (tablename == "master_resigned") {
     let sql = `INSERT INTO master_resigned(
