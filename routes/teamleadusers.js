@@ -113,7 +113,7 @@ router.get("/load", (req, res) => {
     left join master_employee on teamlead_user.tu_employeeid = me_id
     LEFT JOIN master_access ON teamlead_user.tu_accesstype = ma_accessid`;
 
-    mysql.Select(sql, "Team_Leader_User", (err, result) => {
+    mysql.Select(sql, "TeamLeader_User", (err, result) => {
       if (err) console.error("Error: ", err);
 
       res.json({
@@ -130,10 +130,10 @@ router.get("/load", (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    let userid = req.body.userid;
+    let tluserid = req.body.tluserid;
     let username = req.body.username;
     //let password = req.body.password;
-    let accesstype = req.body.accesstype;
+    // let accesstype = req.body.accesstype;
     let status = req.body.status;
 
     // Wrap the Encrypter function in a promise
@@ -148,11 +148,10 @@ router.post("/update", async (req, res) => {
     //   });
     // });
 
-    let sqlupdate = `UPDATE master_user SET 
-      mu_username = '${username}',
-      mu_accesstype = '${accesstype}',
-      mu_status ='${status}'
-      WHERE mu_userid ='${userid}'`;
+    let sqlupdate = `UPDATE teamlead_user SET 
+    tu_username = '${username}',
+    tu_status ='${status}'
+    WHERE tu_userid ='${tluserid}'`;
 
     const updateResult = await mysql.Update(sqlupdate);
 
@@ -171,17 +170,16 @@ router.post("/update", async (req, res) => {
 
 router.post("/getusers", (req, res) => {
   try {
-    let userid = req.body.userid;
+    let tluserid = req.body.tluserid;
     let sql = `
     SELECT 
-        mu_username,
-        mu_password,
-        mu_accesstype,
-        mu_status
-        from master_user
-        where mu_userid = '${userid}'`;
+        tu_username,
+        tu_password,
+        tu_status
+        from teamlead_user
+        where tu_userid = '${tluserid}'`;
 
-    mysql.Select(sql, "Master_User", (err, result) => {
+    mysql.Select(sql, "TeamLeader_User", (err, result) => {
       if (err) console.error("Error: ", err);
 
       res.json({

@@ -10,19 +10,19 @@
     <div class="row">
 
         <!-- Total Employee Card -->
-        <div data-toggle="modal" id="totalEMP" data-target="#totalEmployeeModal"
-            class="card-link col-xl-2 col-sm-6 mb-4">
-            <div id="totalEmployeeCard" class="card h-100 py-2 db-card">
+        <div data-toggle="modal" id="totalCOA" data-target="#totalEmployeeModal"
+            class="card-link col-md-4">
+            <div id="totalCOACard" class="card h-100 py-2 db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                <b>Total Employee</b>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                <b>COA</b>
                             </div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
+                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-people-fill card-icon"></i>
+                            <!-- <i class="bi bi-people-fill card-icon"></i> -->
                         </div>
                     </div>
                 </div>
@@ -30,19 +30,19 @@
         </div>
 
         <!-- Regular Employee Card -->
-        <div data-toggle="modal" id="totalregularEMP" data-target="#regularEmployeeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="regularEmployeeCard" class="card h-100 py-2 db-card">
+        <div data-toggle="modal" id="totalovertime" data-target="#regularEmployeeModal"
+            class="card-link col-md-4">
+            <div id="totalovertimeCard" class="card h-100 py-2 db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                <b>Regular Employee</b>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                <b>Overtime</b>
                             </div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
+                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-person-check-fill card-icon"></i>
+                            <!-- <i class="bi bi-person-check-fill card-icon"></i> -->
                         </div>
                     </div>
                 </div>
@@ -50,159 +50,19 @@
         </div>
 
         <!-- Probationary Employee Card -->
-        <div data-toggle="modal" id="totalprobiEMP" data-target="#probationaryEmployeeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="probationaryEmployeeCard" class="card h-100 py-2 db-card">
+        <div data-toggle="modal" id="totalleave" data-target="#probationaryEmployeeModal"
+            class="card-link col-md-4">
+            <div id="totalleaveCard" class="card h-100 py-2 db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                <b>Probationary</b>
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                <b>Leave</b>
                             </div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
+                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-person-fill-add card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Resigned Employee Card -->
-        <div data-toggle="modal" id="totalresignedEMP" data-target="#resignedEmployeeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="resignedEmployeeCard" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Resigned Employee</div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-person-fill-slash card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Admin Card -->
-        <div data-toggle="modal" id="totaladminEMP" data-target="#totaladminemployeeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalADMIN" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Admin Department </div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-buildings-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total IT Department Card -->
-        <div data-toggle="modal" id="totalitEMP" data-target="#totalitModal" class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalIT" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                IT Department</div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-building-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Cabling Department Card -->
-        <div data-toggle="modal" id="totalcablingEMP" data-target="#totalCablingModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalCABLING" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Cabling Department </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-wrench-adjustable-circle card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Candidate For Rgular Card -->
-        <div data-toggle="modal" id="totalcandidate" data-target="#totalCandidateModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempcandidate" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Candidate for Regularization </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-calendar-check card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Bagapuro Family Card -->
-        <div data-toggle="modal" id="totalbagapuro" data-target="#totalaBagapuroModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempbagapuro" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Bagapuro Family
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-house-heart-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Total Apprentice Card -->
-        <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempapprentice" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Apprentice Sheet
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-person-vcard-fill card-icon"></i>
+                            <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
                         </div>
                     </div>
                 </div>
@@ -221,7 +81,7 @@
                 <div class="modal-content">
                     <div class="modal-header" id="modal-header">
                         <div>
-                            <h3 class="modal-title" id="exampleModalToggleLabel">Total Employee</h3>
+                            <h3 class="modal-title" id="exampleModalToggleLabel">Pending COA</h3>
                         </div>
                         <br>
                         <input id='myInputtotal' class="db-modal-search" type='text' placeholder="  Search....">
@@ -234,14 +94,12 @@
                                     <thead class="table-header">
                                         <tr>
                                             <td class="no-match-cell" style="display: none;"></td>
-                                            <!-- <th>Image</th> -->
-                                            <th class="col-sm-1">ID</th>
                                             <th class="col-26">Name</th>
-                                            <th>Contact</th>
-                                            <th class="col-25">Email</th>
-                                            <th>Job Status</th>
-                                            <th>Department</th>
-                                            <th>Position</th>
+                                            <th class="col-26">Attendance Date</th>
+                                            <th class="col-sm-1">Time In</th>
+                                            <th class="col-sm-1">Time Out</th>
+                                            <th class="col-sm-1">Total Hours</th>
+                                            <th>Reason</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -267,7 +125,7 @@
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
                     <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Regular Employee</h3>
+                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Applied Overtime</h3>
                     </div>
                     <br>
                     <input id='myInputRegular' class="db-modal-search" type='text'
@@ -277,16 +135,16 @@
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-striped" id="regularemloyeetbl">
+                            <table class="table custom-mobile-table table-striped" id="overtimetable">
                                 <thead class="table-header">
                                     <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
+                                        <td class="no-match-cell" style="display: none;"></td>
                                         <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Department</th>
-                                        <th>Position</th>
+                                        <th class="col-26">Attendance Date</th>
+                                        <th class="col-sm-1">Time In</th>
+                                        <th class="col-sm-1">Time Out</th>
+                                        <th class="col-sm-1">Total Hours</th>
+                                        <th>Reason</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -310,7 +168,7 @@
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
                     <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Probationary Employee</h3>
+                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Pending Leave</h3>
                     </div>
                     <br>
                     <input id='myInputproba' class="db-modal-search" type='text'
@@ -323,13 +181,14 @@
                             <table class="table custom-mobile-table table-striped" id="probiemloyeetbl">
                                 <thead class="table-header">
                                     <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
+                                        <td class="no-match-cell" style="display: none;"></td>
                                         <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Department</th>
-                                        <th>Position</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Leave Type</th>
+                                        <th class="col-sm-1">Applied Date</th>
+                                        <th class="col-sm-1">Leave Duration</th>
+                                        <th>Reason</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -663,42 +522,42 @@
                             <button class="nav-link requestleave-db" id="nav-leave-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
                                 aria-selected="false">
-                                <b>REQUEST LEAVE</b>
-                                <span id="loadleaveBadge"
+                                <b>ATTENDANCE STATUS</b>
+                                <span id="loadattendanceBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button>
-                            <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
+                            <!-- <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false">
                                 <b>REQUEST CASH ADVANCE</b>
                                 <span id="loadcaBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
-                            </button>
-                            <button class="nav-link requestot-db" id="nav-ot-tab" data-bs-toggle="tab"
+                            </button> -->
+                            <!-- <button class="nav-link requestot-db" id="nav-ot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-requestovertime" type="button" role="tab"
                                 aria-controls="nav-profile" aria-selected="false">
                                 <b>REQUEST OVERTIME</b>
                                 <span id="loadotBadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
-                            </button>
-                            <button class="nav-link requestattendance-db" id="nav-reqattendance-tab"
+                            </button> -->
+                            <!-- <button class="nav-link requestattendance-db" id="nav-reqattendance-tab"
                                 data-bs-toggle="tab" data-bs-target="#nav-reqattendance" type="button" role="tab"
                                 aria-controls="nav-reqattendance" aria-selected="false">
                                 <b>REQUEST ATTENDANCE</b>
                                 <span id="loadCOABadge"
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
-                            </button>
-                            <button class="nav-link attendance-db" id="nav-profile-tab" data-bs-toggle="tab"
+                            </button> -->
+                            <!-- <button class="nav-link attendance-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-attendance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>ATTENDANCE</b></button>
                             <button class="nav-link employee-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
-                            </button>
+                            </button> -->
                         </div>
                     </nav>
                 </div>
@@ -722,22 +581,56 @@
                         <div class="tab-pane fade" id="nav-request" role="tabpanel"
                             aria-labelledby="nav-profile-tab">
                             <div class="card-body">
-                                <div class="table-responsive" id="table-responsive-id">
-                                    <table class="table table-striped" id="dataTableleaverequest">
-                                        <thead>
-                                            <tr>
-                                                <th class="font-tb">Image</th>
-                                                <th class="font-tb">ID</th>
-                                                <th class="col-25 font-tb">Name</th>
-                                                <th class="font-tb">Start</th>
-                                                <th class="font-tb">End</th>
-                                                <th class="font-tb">Type</th>
-                                                <th class="col-25 font-tb">Reason</th>
-                                                <th class="font-tb">Applied</th>
-                                                <th class="font-tb">Action</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                <div class="box shadow-sm rounded bg-white mb-3">
+                                    <div class="box-title border-bottom p-3">
+                                        <h6 class="m-0">Recent</h6>
+                                    </div>
+                                    <div class="box-body p-0">
+                                        <!-- <div class="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
+                                            <div class="dropdown-list-image mr-3">
+                                                <img id="profilepreview" class="rounded-circle" alt="" />
+                                            </div>
+                                            <div class="font-weight-bold mr-3">
+                                                <div class="text-truncate" id="latestatusname"></div>
+                                                <div class="small" id="latestatusclockin"></div>
+                                            </div>
+                                            <span class="ml-auto mb-auto">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="mdi mdi-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                        <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="text-right text-muted pt-1">3d</div>
+                                            </span>
+                                        </div> -->
+                                        <!-- <div class="p-3 d-flex align-items-center osahan-post-header">
+                                            <div class="dropdown-list-image mr-3">
+                                                <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
+                                            </div>
+                                            <div class="font-weight-bold mr-3">
+                                                <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
+                                                <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
+                                            </div>
+                                            <span class="ml-auto mb-auto">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="mdi mdi-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                        <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="text-right text-muted pt-1">4d</div>
+                                            </span>
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
