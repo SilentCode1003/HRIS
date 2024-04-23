@@ -64,6 +64,20 @@
                     { data: "payrolldate" },
                     { data: "action" },
                 ],
+                createdRow: function (row, data, dataIndex) {
+                    var payroll_startdateCell = $(row).find("td:eq(3)");
+                    var payroll_enddateCell = $(row).find("td:eq(4)");
+                    var payrolldateCell = $(row).find("td:eq(5)");
+                
+                    payroll_startdateCell.wrapInner("<span class='payroll_startdate-text'></span>");
+                    payroll_enddateCell.wrapInner("<span class='payroll_enddate-text'></span>");
+                    payrolldateCell.wrapInner("<span class='payrolldate-text'></span>");
+
+                    $("td", row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
                 initComplete: function () {
                     console.log('Done');
                 },

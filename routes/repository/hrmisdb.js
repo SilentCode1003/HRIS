@@ -10,16 +10,16 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('9de2c5798b1774b9a5ce9f66a705b03d', (err, encrypted) => {
-  if (err) console.error("Error: ", err);
-  console.log(encrypted);
-});
-
-// Encrypter('101520122321', (err, encrypted) => {
+// Decrypter('e59d730cc1cfe21f3fabf0f694b3bf1c', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
-
 // });
+
+Encrypter('Mysql_5L12345', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+
+});
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
