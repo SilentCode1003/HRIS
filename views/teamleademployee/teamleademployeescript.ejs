@@ -1,0 +1,940 @@
+<script src="/javascripts/js/xlsx.full.min.js"></script>
+<script>
+  let base64String = "";
+  let employeeid = "";
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    LoadPosition();
+    LoadModal();
+    LoadModalPosition();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    $(document).on("click", "#employeesavebtn", function () {
+      let firstname = $("#employeefname").val();
+      let middlename = $("#employeemname").val();
+      let lastname = $("#employeelname").val();
+      let birthday = $("#employeebirthday").val();
+      let gender = $("#employeegender").val();
+      let civilstatus = $("#employeecivilstatus").val();
+      let phone = $("#employeephone").val();
+      let email = $("#employeeemail").val();
+      let hiredate = $("#employeehiredate").val();
+      let jobstatus = $("#employeejobstatus").val();
+      let ercontactname = $("#employeeemergencyname").val();
+      let ercontactphone = $("#employeeemergencyphone").val();
+      let departmentName = $("#employeedepartment").val();
+      let positionName = $("#employeeposition").val();
+      let address = $("#employeeaddress").val();
+      let profilePicturePath = base64String;
+
+      var message = "";
+
+      if (firstname == "") {
+        message += "First Name is required. ";
+      }
+
+      if (middlename == "") {
+        message += "First Name is required. ";
+      }
+
+      if (lastname == "") {
+        message += "Last Name is required. ";
+      }
+
+      if (birthday == "") {
+        message += "Birthday is required. ";
+      }
+
+      if (gender == "") {
+        message += "Gender is required. ";
+      }
+
+      if (civilstatus == "") {
+        message += "Gender is required. ";
+      }
+
+      if (phone == "") {
+        message += "Phone is required. ";
+      }
+
+      if (email == "") {
+        message += "Email is required. ";
+      }
+
+      if (hiredate == "") {
+        message += "Hire Date is required. ";
+      }
+
+      if (jobstatus == "") {
+        message += "Job Status is required. ";
+      }
+
+      if (ercontactname == "") {
+        message += "Emergency Contact Name is required. ";
+      }
+
+      if (ercontactphone == "") {
+        message += "Emergency Contact Phone is required. ";
+      }
+
+      if (departmentName == "") {
+        message += "Department is required. ";
+      }
+
+      if (positionName == "") {
+        message += "Position is required. ";
+      }
+
+      if (address == "") {
+        message += "Address is required. ";
+      }
+
+      if (profilePicturePath == "") {
+        message += "Profile is required. ";
+      }
+
+      if (message != "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/employee/save",
+          data: {
+            firstname: firstname,
+            middlename: middlename,
+            lastname: lastname,
+            birthday: birthday,
+            gender: gender,
+            civilstatus: civilstatus,
+            phone: phone,
+            email: email,
+            hiredate: hiredate,
+            jobstatus: jobstatus,
+            ercontactname: ercontactname,
+            ercontactphone: ercontactphone,
+            departmentName: departmentName,
+            positionName: positionName,
+            address: address,
+            profilePicturePath: profilePicturePath,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              showSweetAlert(
+                "Success",
+                "Log in Successfully",
+                "success",
+                "Let's go!"
+              );
+              window.location.reload();
+              LoadTable();
+            }
+            if (result.msg === "exist") {
+              showSweetAlert(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#employeedepartment").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPosition() {
+      $.ajax({
+        type: "GET",
+        url: "/position/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.positionid, item.positionid);
+            $(options).html(item.positionname);
+            $("#employeeposition").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadTable() {
+      $("#dataTableemployees").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/teamleademployee/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              // action = `
+              //   <button id="edit-btn" class="btn text-primary" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-eye"></i></button>
+              //  `;
+
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
+
+              finalData.push({
+                // image: imgElement.outerHTML,
+                newEmployeeId: item.newEmployeeId,
+                firstname: item.firstname,
+                phone: item.phone,
+                email: item.email,
+                jobstatus: item.jobstatus,
+                me_department: item.me_department,
+                me_position: item.me_position,
+                // action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          // { data: "image" },
+          { data: "newEmployeeId" },
+          { data: "firstname" },
+          { data: "phone" },
+          { data: "email" },
+          { data: "jobstatus" },
+          { data: "me_department" },
+          { data: "me_position" },
+          // { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    // $("#dataTableemployees tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .closest("tr")
+    //     .find("td")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+    //   employeeid = dataRow[0];
+    //   console.log(employeeid);
+    // });
+
+    // $("#dataTableemployees tbody").on("click", "tr", function () {
+    //   var dataRow = [];
+    //   $(this)
+    //     .find("td:not(:first-child)")
+    //     .each(function () {
+    //       dataRow.push($(this).text());
+    //     });
+
+    //   employeeid = dataRow[0];
+    //   console.log(employeeid);
+    // });
+
+    // $(document).on("click", "#edit-btn", function () {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: `/employee/getemployee`,
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+
+    //         $.each(existingData, (key, item) => {
+    //           $("#editemployeeid").val(item.employeeid);
+    //           $("#editemployeefname").val(item.firstname);
+    //           $("#editemployeemname").val(item.middlename);
+    //           $("#editemployeelname").val(item.lastname);
+    //           $("#editemployeebday").val(item.birthday);
+    //           $("#editemployeegender").val(`${item.gender}`);
+    //           $("#editemployeecivilstatus").val(`${item.civilstatus}`);
+    //           //$('#editemployeegender').append(`<option selected value="${item.gender}">${item.gender}</option>`);
+    //           $("#editemployeephone").val(item.phone);
+    //           $("#editemployeeemail").val(item.email);
+    //           $("#editemployeehiredate").val(item.hiredate);
+    //           $("#editemployeejobstatus").val(`${item.jobstatus}`);
+    //           // $('#editemployeejobstatus').append(`<option selected value="${item.jobstatus}">${item.jobstatus}</option>`);
+    //           $("#editemployeeemergencyname").val(item.ercontactname);
+    //           $("#editemployeeemergencyphone").val(item.ercontactphone);
+    //           $("#editemployeedepartment").val(item.department);
+    //           //$('#editemployeeposition').append(`<option selected value="${item.position}">${item.position}</option>`);
+    //           $("#editemployeeaddress").val(item.address);
+    //           $("#editpreview").attr(
+    //             "src",
+    //             "data:image/jpg;base64," + item.profilePicturePath
+    //           );
+    //           $("#editemployeeposition").val(`${item.position}`);
+    //           base64String = item.profilePicturePath;
+    //         });
+
+    //         $.ajax({
+    //           type: "POST",
+    //           url: "/employee/getemployeeprofile",
+    //           data: {
+    //             employeeid: employeeid,
+    //           },
+    //           success: function (result) {
+    //             if (result.msg === "success") {
+    //               const employeeprofile = result.data;
+
+    //               $.each(employeeprofile, (key, item) => {
+    //                 $("#employeeprofileid").text(item.employeeid);
+    //                 $("#employeeprofilename").text(item.firstname);
+    //                 $("#employeeprofiledepartment").text(item.department);
+    //                 $("#employeeprofileposition").text(item.position);
+    //                 $("#employeeprofilephone").text(item.contact);
+    //                 $("#employeework").text(item.tenure);
+    //               });
+    //             }
+    //           },
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", message, "error");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal(
+    //         "An error occurred while fetching employee data",
+    //         message,
+    //         "error"
+    //       );
+    //     },
+    //   });
+    // });
+
+    // $(document).on("click", "#editsavebtn", function () {
+    //   let newEmployeeId = employeeid;
+    //   let firstname = $("#editemployeefname").val();
+    //   let middlename = $("#editemployeemname").val();
+    //   let lastname = $("#editemployeelname").val();
+    //   let birthday = $("#editemployeebday").val();
+    //   let gender = $("#editemployeegender").val();
+    //   let civilstatus = $("#editemployeecivilstatus").val();
+    //   let phone = $("#editemployeephone").val();
+    //   let email = $("#editemployeeemail").val();
+    //   let hiredate = $("#editemployeehiredate").val();
+    //   let jobstatus = $("#editemployeejobstatus").val();
+    //   let ercontactname = $("#editemployeeemergencyname").val();
+    //   let ercontactphone = $("#editemployeeemergencyphone").val();
+    //   let department = $("#editemployeedepartment").val();
+    //   let position = $("#editemployeeposition").val();
+    //   let address = $("#editemployeeaddress").val();
+    //   let profilePicturePath = base64String;
+
+    //   console.log(newEmployeeId);
+
+    //   var message = "";
+
+    //   if (firstname === "") {
+    //     message += "firstname is required. ";
+    //   }
+
+    //   if (lastname === "") {
+    //     message += "lastname is required. ";
+    //   }
+
+    //   if (birthday === "") {
+    //     message += "birthday is required. ";
+    //   }
+
+    //   if (gender === "") {
+    //     message += "gender is required. ";
+    //   }
+
+    //   if (civilstatus === "") {
+    //     message += "civilstatus is required. ";
+    //   }
+
+    //   if (phone === "") {
+    //     message += "phone is required. ";
+    //   }
+
+    //   if (email === "") {
+    //     message += "email is required. ";
+    //   }
+
+    //   if (hiredate === "") {
+    //     message += "hiredate is required. ";
+    //   }
+
+    //   if (jobstatus === "") {
+    //     message += "jobstatus is required. ";
+    //   }
+
+    //   if (ercontactname === "") {
+    //     message += "ercontactname is required. ";
+    //   }
+
+    //   if (ercontactphone === "") {
+    //     message += "ercontactphone is required. ";
+    //   }
+
+    //   if (department === "") {
+    //     message += "departmentId is required. ";
+    //   }
+
+    //   if (position === "") {
+    //     message += "positionId is required. ";
+    //   }
+
+    //   if (address === "") {
+    //     message += "address is required. ";
+    //   }
+
+    //   if (profilePicturePath === "") {
+    //     message += "profilePicturePath is required. ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/employee/update",
+    //       data: {
+    //         newEmployeeId: newEmployeeId,
+    //         firstname: firstname,
+    //         middlename: middlename,
+    //         lastname: lastname,
+    //         birthday: birthday,
+    //         gender: gender,
+    //         civilstatus: civilstatus,
+    //         phone: phone,
+    //         email: email,
+    //         hiredate: hiredate,
+    //         jobstatus: jobstatus,
+    //         ercontactname: ercontactname,
+    //         ercontactphone: ercontactphone,
+    //         department: department,
+    //         position: position,
+    //         address: address,
+    //         profilePicturePath: profilePicturePath,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success") {
+    //           swal({
+    //             title: "Update Successfully",
+    //             text: "You clicked the button!",
+    //             icon: "success",
+    //             button: "OK!",
+    //           }).then((results) => {
+    //             window.location.reload();
+    //           });
+    //           LoadTable();
+    //         } else if (result.msg == "exist") {
+    //           swal({
+    //             title: "Exist",
+    //             text: "Data already exists!",
+    //             icon: "warning",
+    //             button: "OK!",
+    //           });
+    //         } else {
+    //           swal(
+    //             "Data already exists!",
+    //             "You clicked the button!",
+    //             "warning"
+    //           );
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while updating data.", "error");
+    //       },
+    //     });
+    //   }
+    // });
+
+    // function LoadModal() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/department/load",
+    //     success: function (result) {
+    //       var data = result.data;
+
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.departmentid, item.departmentid);
+    //         $(options).html(item.departmentname);
+    //         $("#editemployeedepartment").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
+
+    // function LoadModalPosition() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/position/load",
+    //     success: function (result) {
+    //       var data = result.data;
+
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.positionid, item.positionid);
+    //         $(options).html(item.positionname);
+    //         $("#editemployeeposition").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
+
+    // $(document).on("change", "#employeeprofile", function (e) {
+    //   const input = document.getElementById("employeeprofile");
+    //   const file = input.files[0];
+
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(file);
+    //   reader.onloadend = function () {
+    //     const preview = document.getElementById("preview");
+    //     preview.src = reader.result;
+    //   };
+    //   imageUploaded();
+    // });
+
+    // function imageUploaded() {
+    //   const input = document.getElementById("employeeprofile");
+    //   const file = input.files[0];
+
+    //   var reader = new FileReader();
+
+    //   reader.onload = function (e) {
+    //     const img = new Image();
+    //     img.src = e.target.result;
+
+    //     img.onload = function () {
+    //       const canvas = document.createElement("canvas");
+    //       const ctx = canvas.getContext("2d");
+
+    //       // Set the canvas dimensions to the desired size
+    //       const targetWidth = 250;
+    //       const targetHeight = 250;
+    //       canvas.width = targetWidth;
+    //       canvas.height = targetHeight;
+
+    //       // Draw the image on the canvas with the new dimensions
+    //       ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    //       // Convert the canvas content to a Base64 string
+    //       base64String = canvas
+    //         .toDataURL()
+    //         .replace("data:image/png;base64,", ""); // Change format if needed
+
+    //       // Display or use the base64String as needed
+    //       // console.log(base64String);
+    //       imageBase64Stringsep = base64String;
+    //     };
+
+    //     // base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+
+    // $(document).on("change", "#editemployeeprofile", function (e) {
+    //   const input = document.getElementById("editemployeeprofile");
+    //   const file = input.files[0];
+
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(file);
+    //   reader.onloadend = function () {
+    //     const preview = document.getElementById("editpreview");
+    //     preview.src = reader.result;
+    //   };
+    //   editimage();
+    // });
+
+    // function editimage() {
+    //   const input = document.getElementById("editemployeeprofile");
+    //   const file = input.files[0];
+
+    //   var reader = new FileReader();
+    //   reader.onload = function (e) {
+    //     const img = new Image();
+    //     img.src = e.target.result;
+
+    //     img.onload = function () {
+    //       const canvas = document.createElement("canvas");
+    //       const ctx = canvas.getContext("2d");
+
+    //       // Set the canvas dimensions to the desired size
+    //       const targetWidth = 250;
+    //       const targetHeight = 250;
+    //       canvas.width = targetWidth;
+    //       canvas.height = targetHeight;
+
+    //       // Draw the image on the canvas with the new dimensions
+    //       ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    //       // Convert the canvas content to a Base64 string
+    //       base64String = canvas
+    //         .toDataURL()
+    //         .replace("data:image/png;base64,", ""); // Change format if needed
+
+    //       // Display or use the base64String as needed
+    //       // console.log(base64String);
+    //       imageBase64Stringsep = base64String;
+    //     };
+
+    //     // base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+
+    // $(document).on("click", "#showgov", function () {
+    //   $(`#dataTablegovermentid`).find("tr:gt(0)").remove();
+
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employee/getgovid",
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (json) {
+    //       var finalData = [];
+    //       var data = json.data;
+
+    //       if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
+    //         $("#dataTablegovermentid").DataTable().destroy();
+    //       }
+    //       material_list_tbl = document.getElementById("dataTablegovermentid");
+
+    //       $.each(data, function (key, item) {
+    //         var row = material_list_tbl.insertRow(1);
+    //         var ID_TYPE = row.insertCell(0);
+    //         var ID_NUMBER = row.insertCell(1);
+    //         var ISSUE_DATE = row.insertCell(2);
+    //         var EXPIRY_DATE = row.insertCell(3);
+
+    //         ID_TYPE.innerHTML = item.idtype;
+    //         ID_NUMBER.innerHTML = item.idnumber;
+    //         ISSUE_DATE.innerHTML = item.issuedate;
+    //         EXPIRY_DATE.innerHTML = item.expirydate;
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {},
+    //   });
+    // });
+
+    // $(document).on("click", "#showhealth", function () {
+    //   $(`#dataTablehealthrecord`).find("tr:gt(0)").remove();
+
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employee/gethealth",
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (json) {
+    //       var finalData = [];
+    //       var data = json.data;
+
+    //       if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
+    //         $("#dataTablehealthrecord").DataTable().destroy();
+    //       }
+    //       material_list_tbl = document.getElementById("dataTablehealthrecord");
+
+    //       $.each(data, function (key, item) {
+    //         var row = material_list_tbl.insertRow(1);
+    //         var BLOOD_TYPE = row.insertCell(0);
+    //         var MEDICAL_CONDITION = row.insertCell(1);
+    //         var PRESCRIBED_CONDITION = row.insertCell(2);
+    //         var LAST_CHECKUP = row.insertCell(3);
+    //         var INSURANCE = row.insertCell(4);
+    //         var INSURANCE_NUMBER = row.insertCell(5);
+
+    //         BLOOD_TYPE.innerHTML = item.bloodtype;
+    //         MEDICAL_CONDITION.innerHTML = item.medicalcondition;
+    //         PRESCRIBED_CONDITION.innerHTML = item.prescribemedications;
+    //         LAST_CHECKUP.innerHTML = item.lastcheckup;
+    //         INSURANCE.innerHTML = item.insurance;
+    //         INSURANCE_NUMBER.innerHTML = item.insurancenumber;
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {},
+    //   });
+    // });
+
+    // $(document).on("click", "#showtraining", function () {
+    //   $(`#dataTabletraining`).find("tr:gt(0)").remove();
+
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employee/gettraining",
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (json) {
+    //       var finalData = [];
+    //       var data = json.data;
+
+    //       if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
+    //         $("#dataTabletraining").DataTable().destroy();
+    //       }
+    //       material_list_tbl = document.getElementById("dataTabletraining");
+
+    //       $.each(data, function (key, item) {
+    //         var row = material_list_tbl.insertRow(1);
+    //         var NAME = row.insertCell(0);
+    //         var START_DATE = row.insertCell(1);
+    //         var END_DATE = row.insertCell(2);
+    //         var LOCATION = row.insertCell(3);
+    //         var STATUS = row.insertCell(4);
+
+    //         NAME.innerHTML = item.name;
+    //         START_DATE.innerHTML = item.startdate;
+    //         END_DATE.innerHTML = item.enddate;
+    //         LOCATION.innerHTML = item.location;
+    //         STATUS.innerHTML = item.status;
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {},
+    //   });
+    // });
+
+    // $(document).on("click", "#showdisciplinary", function () {
+    //   $(`#dataTabledisciplianary`).find("tr:gt(0)").remove();
+
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employee/getdisciplinary",
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (json) {
+    //       var finalData = [];
+    //       var data = json.data;
+
+    //       if ($.fn.DataTable.isDataTable("#dataTableemployees")) {
+    //         $("#dataTabledisciplianary").DataTable().destroy();
+    //       }
+    //       material_list_tbl = document.getElementById("dataTabledisciplianary");
+
+    //       $.each(data, function (key, item) {
+    //         var row = material_list_tbl.insertRow(1);
+    //         var ACTION_CODE = row.insertCell(0);
+    //         var OFFENSE_ID = row.insertCell(1);
+    //         var DESCRIPTION = row.insertCell(2);
+    //         var DATE = row.insertCell(3);
+    //         var STATUS = row.insertCell(4);
+
+    //         ACTION_CODE.innerHTML = item.actioncode;
+    //         OFFENSE_ID.innerHTML = item.offenseid;
+    //         DESCRIPTION.innerHTML = item.description;
+    //         DATE.innerHTML = item.date;
+    //         STATUS.innerHTML = item.status;
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {},
+    //   });
+    // });
+
+    // $(document).on("click", "#uploadButton", function () {
+    //   showspinner();
+    //   UploadProcess();
+    // });
+
+    // function UploadProcess() {
+    //   var fileUpload = document.getElementById("excelFileInput");
+    //   var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+    //   if (regex.test(fileUpload.value.toLowerCase())) {
+    //     if (typeof FileReader != "undefined") {
+    //       var reader = new FileReader();
+
+    //       if (reader.readAsBinaryString) {
+    //         reader.onload = function (e) {
+    //           GetTableFromExcel(e.target.result);
+    //         };
+    //         reader.readAsBinaryString(fileUpload.files[0]);
+    //       } else {
+    //         reader.onload = function (e) {
+    //           var data = "";
+    //           var bytes = new Uint8Array(e.target.result);
+    //           for (var i = 0; i < bytes.byteLength; i++) {
+    //             data += String.fromCharCode(bytes[i]);
+    //           }
+    //           GetTableFromExcel(data);
+    //         };
+    //         reader.readAsArrayBuffer(fileUpload.files[0]);
+    //       }
+    //     } else {
+    //       warning("Upload", "This browser does not support HTML5.");
+    //     }
+    //   } else {
+    //     warning("Upload", "Please upload a valid Excel file.");
+    //   }
+    // }
+
+    // function GetTableFromExcel(data) {
+    //   var workbook = XLSX.read(data, {
+    //     type: "binary",
+    //   });
+
+    //   var Sheet = workbook.SheetNames[0];
+    //   var excelRows = XLSX.utils.sheet_to_row_object_array(
+    //     workbook.Sheets[Sheet]
+    //   );
+    //   var columns = Object.keys(excelRows[0]);
+
+    //   var myTable = document.createElement("table");
+    //   myTable.border = "1";
+
+    //   var row = myTable.insertRow(-1);
+
+    //   var dataExcelArr = [];
+
+    //   for (var i = 0; i < excelRows.length; i++) {
+    //     var data = [];
+    //     var row = myTable.insertRow(-1);
+    //     for (var j = 0; j < columns.length; j++) {
+    //       var cell = row.insertCell(-1);
+    //       cell.innerHTML = excelRows[i][columns[j]];
+    //       data.push({
+    //         item: excelRows[i][columns[j]],
+    //       });
+    //     }
+    //     dataExcelArr.push({
+    //       id: data[0].item,
+    //       firstname: data[1].item,
+    //       middlename: data[2].item,
+    //       lastname: data[3].item,
+    //       dateofbirth: data[4].item,
+    //       gender: data[5].item,
+    //       civilstatus: data[6].item,
+    //       contactno: data[7].item,
+    //       email: data[8].item,
+    //       hiredate: data[9].item,
+    //       jobstatus: data[10].item,
+    //       econtactname: data[11].item,
+    //       econtactno: data[12].item,
+    //       department: data[13].item,
+    //       position: data[14].item,
+    //       address: data[15].item,
+    //     });
+    //   }
+    //   excelDataSave(dataExcelArr);
+    // }
+
+    // function excelDataSave(data) {
+    //   var dataraw = JSON.stringify(data, null, 2);
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employee/upload",
+    //     data: {
+    //       data: dataraw,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg != "success") {
+    //         // warning(
+    //         //   "Duplicate",
+    //         //   `Some data already exist on the database. ID[${result.data}]`
+    //         // );
+
+    //         swal({
+    //           title: "Exist",
+    //           text: "Some data already exist on the database. ID[${result.data}]",
+    //           icon: "warning",
+    //           button: "OK!",
+    //         });
+    //       } else {
+    //         // success("Saved!", "Data saved!");
+    //         LoadTable();
+    //         swal({
+    //           title: "Success",
+    //           text: "Data saved!",
+    //           icon: "success",
+    //           button: "OK!",
+    //         });
+    //       }
+
+    //       // $('#item-tbl').DataTable().ajax.reload();
+    //     },
+    //     error: function (result) {
+    //       console.error(result);
+    //     },
+    //   });
+    //   hidespinner();
+    // }
+  });
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableemployees");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function reloadPage() {
+    location.reload();
+  }
+</script>

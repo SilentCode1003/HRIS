@@ -51,7 +51,7 @@ router.get('/load', (req, res) => {
       let userid = req.body.userid;
       let username = req.body.username;
       //let password = req.body.password;
-      let accesstype = req.body.accesstype;
+      //let accesstype = req.body.accesstype;
       let status = req.body.status;
   
       // Wrap the Encrypter function in a promise
@@ -68,7 +68,6 @@ router.get('/load', (req, res) => {
   
       let sqlupdate = `UPDATE ojt_user SET 
       ou_username = '${username}',
-      ou_accesstype = '${accesstype}',
       ou_status ='${status}'
       WHERE ou_userid ='${userid}'`;
   

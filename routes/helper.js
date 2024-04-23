@@ -84,6 +84,32 @@ exports.UserLogin = (result, callback) => {
   }
 };
 
+
+exports.TeamLeadLogin = (result, callback) => {
+  try {
+    const tlData = [];
+
+    result.forEach((row) => {
+      tlData.push({
+        image: row.image,
+        employeeid: row.employeeid,
+        fullname: row.fullname,
+        accesstype: row.accesstype,
+        departmentid: row.departmentid,
+        departmentname: row.departmentname,
+        position: row.position,
+        jobstatus: row.jobstatus,
+        geofenceid: row.geofenceid,
+      });
+    });
+
+    return tlData;
+  } catch (error) {
+    console.log(error);
+    callback(error);
+  }
+};
+
 exports.OjtLogin = (result, callback) => {
   try {
     const ojtData = [];

@@ -73,7 +73,19 @@ var attendancerequestRouter = require('./routes/attendancerequest');
 var eportalrequestattendanceRouter = require('./routes/eportalrequestattendance');
 var setsetpayrolldateRouter = require('./routes/setpayrolldate');
 var eportalrequestovertimeRouter = require('./routes/eportalrequestovertime');
-
+var teamleadindexRouter = require('./routes/teamleadindex');
+var teamleadloginRouter = require('./routes/teamleadlogin');
+var teamleademployeeRouter = require('./routes/teamleademployee');
+var teamleadcoaRouter = require('./routes/teamleadcoa');
+var teamleadovertimeRouter = require('./routes/teamleadovertime');
+var teamleadleaveRouter = require('./routes/teamleadleave');
+var teamleadusersRouter = require('./routes/teamleadusers');
+var teamleadpendingcoaRouter = require('./routes/teamleadpendingcoa');
+var teamleadapprovedcoaRouter = require('./routes/teamleadapprovedcoa');
+var teamleadappliedovertimeRouter = require('./routes/teamleadappliedovertime');
+var teamleadapprovedovertimeRouter = require('./routes/teamleadapprovedovertime');
+var teamleadpendingleaveRouter = require('./routes/teamleadpendingleave');
+var teamleadapprovedleaveRouter = require('./routes/teamleadapprovedleave');
 
 var app = express();
 
@@ -157,6 +169,21 @@ app.use('/attendancerequest', attendancerequestRouter);
 app.use('/eportalrequestattendance', eportalrequestattendanceRouter);
 app.use('/setpayrolldate', setsetpayrolldateRouter);
 app.use('/eportalrequestovertime', eportalrequestovertimeRouter);
+app.use('/teamleadindex', teamleadindexRouter);
+app.use('/teamleadlogin' , teamleadloginRouter);
+app.use('/teamleademployee', teamleademployeeRouter);
+app.use('/teamleadcoa' , teamleadcoaRouter);
+app.use('/teamleadovertime', teamleadovertimeRouter);
+app.use('/teamleadleave' , teamleadleaveRouter);
+app.use('/teamleadusers', teamleadusersRouter);
+app.use('/teamleadpendingcoa' , teamleadpendingcoaRouter);
+app.use('/teamleadapprovedcoa', teamleadapprovedcoaRouter);
+app.use('/teamleadappliedovertime' , teamleadappliedovertimeRouter);
+app.use('/teamleadapprovedovertime' , teamleadapprovedovertimeRouter);
+app.use('/teamleadpendingleave' , teamleadpendingleaveRouter);
+app.use('/teamleadapprovedleave' , teamleadapprovedleaveRouter);
+
+
 
 
 // catch 404 and forward to error handler

@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("e0c6b351995386cc41246fe07c21b530", (err, encrypted) => {
+Decrypter('9de2c5798b1774b9a5ce9f66a705b03d', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -232,6 +232,10 @@ exports.Select = (sql, table, callback) => {
 
       if (table == "Admin_Notification") {
         callback(null, model.Admin_Notification(results));
+      }
+
+      if (table == "TeamLeader_User") {
+        callback(null, model.TeamLeader_User(results));
       }
     });
   } catch (error) {}
@@ -818,7 +822,9 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_salary(
       ms_employeeid,
       ms_monthly,
-      ms_allowances) VALUES ?`;
+      ms_allowances,
+      ms_basic_adjustments,
+      ms_payrolltype) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -939,6 +945,24 @@ exports.InsertTable = (tablename, data, callback) => {
       pd_startdate,
       pd_enddate,
       pd_payrolldate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "teamlead_user") {
+    let sql = `INSERT INTO teamlead_user(
+       tu_employeeid,
+       tu_username,
+       tu_password,
+       tu_accesstype,
+       tu_createby,
+       tu_createdate,
+       tu_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

@@ -1,0 +1,174 @@
+<!-- LOADER -->
+<div class="loader-wrapper">
+    <div class="spinner"></div>
+  </div>
+  <!-- LOADER -->
+  <div class="loader-wrapper">
+    <span class="loader"><span class="loader-inner"></span></span>
+  </div>
+  
+  <!-- Logout Modal-->
+  <div
+    class="modal fade"
+    id="logoutModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button
+            class="close"
+            type="button"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Select "Logout" below if you are ready to end your current session.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">
+            Cancel
+          </button>
+          <button class="btn btn-danger" id="logoutBtn" name="logoutBtn">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Core bootstrap-->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Core plugin JavaScript-->
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+  
+  <!-- Custom scripts for all pages-->
+  <!-- <script src="/javascripts/js/sb-admin-2.js"></script> -->
+  <!-- <script src="/javascripts/js/sb-admin-2.js"></script> -->
+  <script src="/javascripts/js/sb-admin-2.min.js"></script>
+  
+  <!-- PCreated by level plugins -->
+  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- <script src="/vendor/chart.js/Chart.min.js"></script> -->
+  
+  <!-- PCreated by level custom scripts -->
+  <!-- <script src="/javascripts/javascripts/js/demo/datatables-demo.js"></script>
+  <script src="/javascripts/js/demo/chart-area-demo.js"></script>
+  <script src="/javascripts/js/demo/chart-pie-demo.js"></script> -->
+  
+  <!-- swal-->
+  <script src="/javascripts/js/sweetalert.min.js"></script>
+  
+  <script src="/javascripts/js/scripts.js"></script>
+  
+  <!-- XLSX -->
+  <script src="/javascripts/js/xlsx.mini.min.js"></script>
+  
+  <!-- Page level custom scripts -->
+  <!-- <script src="/javascripts/js/demo/datatables-demo.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
+  
+  <!-- google map -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Leaflet CSS and JS -->
+  
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  
+  
+  <!--Date Picker-->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  
+  
+  
+  
+  
+  <script>
+    $(document).on("click", "#logoutBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/ojtlogin/logout",
+        success: function (result) {
+          swal({
+            title: "Ba Bye!!!",
+            text: "Log out Successfully",
+            icon: "success",
+            button: "Ba bye!!",
+          }).then((results) => {
+            window.location.reload();
+            location.replace("/ojtlogin");
+          });
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    });
+  </script>
+  
+  <script>
+    hidespinner();
+  
+    function showspinner() {
+      console.log("show loader");
+      $(".loader-wrapper").show();
+    }
+  
+    function hidespinner() {
+      console.log("hide loader");
+  
+      setTimeout(() => {
+        $(".loader-wrapper").hide();
+      }, 1000);
+    }
+  
+    function showSweetAlert(title, text, icon, buttonText) {
+      swal({
+        title: title,
+        text: text,
+        icon: icon,
+        button: buttonText,
+      });
+    }
+    
+    function getDeviceInformation() {
+      return new Promise((resolve, reject) => {
+          if (typeof navigator !== 'undefined') {
+              resolve(navigator.userAgent || 'web');
+          } else {
+              reject(new Error('Navigator object not available.'));
+          }
+      });
+  }
+  </script>
+  
+  
+    <!---Java Script for Topbar-->
+    <script>
+      const topbar = document.getElementById('topbar');
+  
+      window.addEventListener('scroll', () =>{
+          if(window.scrollY > 0) {
+              
+              topbar.classList.add('light-bg');
+          }else{
+  
+              topbar.classList.remove('light-bg');
+          }
+      })
+  </script> 
+  

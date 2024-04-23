@@ -1,0 +1,564 @@
+<br>
+<!-- Table --> <!--- hehe-->
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table">Employee</h3>
+    <!-- Upload Modal -->
+
+    <input id='myInput' type='text' placeholder="  Search....">
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-striped" id="dataTableemployees">
+        <thead>
+          <tr>
+            <!-- <th>Image</th> -->
+            <th class="col-sm-1">ID</th>
+            <th class="col-25">Name</th>
+            <th>Contact</th>
+            <th class="col-25">Email</th>
+            <th>Job Status</th>
+            <th>Department</th>
+            <th>Position</th>
+            <!-- <th class="col-sm-1">Action</th> -->
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addemployeemodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content content-size-modal">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">EMPLOYEE</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control border-form-modal"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="employeefname" name="employeefname"
+                      placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="employeelname" name="employeelname"
+                      placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="employeemname" name="employeemname"
+                      placeholder="Middle Name">
+                    <label for="floatingInput">Middle Name</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="employeegender" name="employeegender"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="employeecivilstatus" name="employeecivilstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Separated">Separated</option>
+                      <option value="Widow">Widow</option>
+                    </select>
+                    <label for="floatingSelectGrid">Civil Status</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="employeeaddress" name="employeeaddress"
+                      placeholder="Address">
+                    <label for="floatingInput">Address</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="employeebirthday" name="employeebirthday">
+                    <label for="floatingInput">Birthday</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="employeephone" name="employeephone"
+                      placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="email" class="form-control border-form-modal" id="employeeemail" name="employeeemail"
+                      placeholder="Email">
+                    <label for="floatingInput">Email</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="employeehiredate" name="employeehiredate">
+                    <label for="floatingInput">Hire Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="employeedepartment" name="employeedepartment"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="employeedepartment">Department</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="employeeposition" name="employeeposition"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="floatingSelectGrid">Position</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="employeejobstatus" name="employeejobstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option value="regular">Regular</option>
+                      <option value="probitionary">Probitionary</option>
+                      <option value="project Based">Project Based</option>
+                      <option value="apprentice">Apprentice</option>
+                    </select>
+                    <label for="floatingSelectGrid">Job Status</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="employeeemergencyname" name="employeeemergencyname"
+                      placeholder="Emergency Contact Name">
+                    <label for="floatingInput">Emergency Contact Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="employeeemergencyphone" name="employeeemergencyphone"
+                      placeholder="Emergency Contact Phone">
+                    <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="employeesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="viewmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editmodal"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content content-size-modal">
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="editmodal">Profile</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+
+        <div class="row">
+
+          <!-- Area Chart -->
+          <div class="col-xl-4 col-lg-5">
+
+              <!-- Card Body -->
+              <div class="card-body text-center card-profile-edit">
+
+                <div class="text-center">
+                  <img id="editpreview" class="rounded rounded-circle border-form-prof"
+                    alt="placeholder">
+                </div>
+                <br>
+                <center>
+                  <div class="col">
+                    <div class="col g-6" style="width: 200px;">
+                      <input type="file" id="editemployeeprofile" name="editemployeeprofile" class="form-control border-form-prof"
+                        accept="image/*">
+                    </div>
+                  </div>
+                </center>
+                <h5 class="my-3 bold-label" id="employeeprofilename"></h5>
+
+                <label for="employeeprofileid" class="form-label bold-label"><i>Employee ID</i></label>
+                <p class="text-muted mb-1 bold-label" id="employeeprofileid"></p>
+
+                <label for="employeeprofiledepartment" class="form-label bold-label"><i>Department:</i></label>
+                <p class="text-muted mb-1 bold-label" id="employeeprofiledepartment"></p>
+
+                <label for="employeeprofileposition" class="form-label bold-label"><i>Position:</i></label>
+                <p class="text-muted mb-1 bold-label" id="employeeprofileposition"></p>
+
+                <label for="employeeprofilephone" class="form-label bold-label"><i>Phone:</i></label>
+                <p class="text-muted mb-1 bold-label" id="employeeprofilephone"></p>
+
+                <label for="employeework" class="form-label bold-label"><i>Work Term:</i></label>
+                <p class="text-muted mb-1 bold-label" id="employeework">Days:</p>
+
+              </div>
+          </div>
+
+          <!-- Pie Chart -->
+          <div class="col-xl-7 col-lg-6 card-prof-size">
+            <div class="card card-prof">
+              <!-- Card Body -->
+              <div class="card-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="pills-home-tab" data-bs-toggle="pill"
+                      data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                      aria-selected="true">Profile</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showleavehistory" data-bs-toggle="pill" data-bs-target="#pills-leaves"
+                      type="button" role="tab" aria-controls="pills-leave" aria-selected="false">Leave History</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showdisciplinary" data-bs-toggle="pill" data-bs-target="#pills-contact"
+                      type="button" role="tab" aria-controls="pills-disciplinary"
+                      aria-selected="false">Disciplinary</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showattendance" data-bs-toggle="pill"
+                      data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-attendance"
+                      aria-selected="false">Attendance</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showtraining" data-bs-toggle="pill" data-bs-target="#pills-training"
+                      type="button" role="tab" aria-controls="pills-training" aria-selected="false">Training
+                      Attended</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showhealth" data-bs-toggle="pill" data-bs-target="#pills-healthrecord"
+                      type="button" role="tab" aria-controls="pills-health" aria-selected="false">Health Data</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link border-form-tab" id="showgov" data-bs-toggle="pill" data-bs-target="#pills-govermentid"
+                      type="button" role="tab" aria-controls="pills-goverment" aria-selected="false">Goverment
+                      ID</button>
+                  </li>
+
+                </ul>
+                <!-- Employee Info -->
+                <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                    aria-labelledby="pills-home-tab">
+                    <form id="updateForm">
+                      <div class="row g-3">
+                        <input type="hidden" class="form-control" id="editemployeeid" name="editemployeeid">
+                        <div class="col">
+                          <label for="editemployeefname" class="form-label">First Name</label>
+                          <input type="text" class="form-control border-form-prof uppercase-input" id="editemployeefname" name="editemployeefname"
+                            value="Wendell">
+                        </div>
+                        <div class="col">
+                          <label for="editemployeelname" class="form-label">Last Name</label>
+                          <input type="text" class="form-control border-form-prof uppercase-input" id="editemployeelname" name="editemployeelname"
+                            value="Blanco">
+                        </div>
+                        <div class="col">
+                          <label for="editemployeemname" class="form-label">Middle Name</label>
+                          <input type="text" class="form-control border-form-prof uppercase-input" id="editemployeemname" name="editemployeemname"
+                            01-01-1990>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="editemployeegender" class="form-label">Gender</label>
+                          <select class="form-select border-form-prof" id="editemployeegender" name="editemployeegender">
+                            <option>Choose...</option>
+                            <option value="Male" selected>Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+                        </div>
+                        <div class="col">
+                          <label for="editemployeecivilstatus" class="form-label">Civil Status</label>
+                          <select class="form-select border-form-prof" id="editemployeecivilstatus" name="editemployeecivilstatus">
+                            <option selected>Choose</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widow">Widow</option>
+                          </select>
+                        </div>
+                        <div class="col-md-8">
+                          <label for="editemployeeaddress" class="form-label">Address</label>
+                          <input type="text" class="form-control border-form-prof" id="editemployeeaddress" name="editemployeeaddress"
+                            value="Maligaya 7">
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="editemployeebday" class="form-label">Birthday</label>
+                          <input type="date" class="form-control border-form-prof" id="editemployeebday" name="editemployeebday"
+                            01-01-1990>
+                        </div>
+                        <div class="col">
+                          <label for="editemployeephone" class="form-label">Phone Number</label>
+                          <input type="number" class="form-control border-form-prof" id="editemployeephone" name="editemployeephone">
+                        </div>
+                        <div class="col">
+                          <label for="editemployeeemail" class="form-label">Email</label>
+                          <input type="email" class="form-control border-form-prof" id="editemployeeemail" name="editemployeeemail">
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="editemployeejobstatus" class="form-label">Jobstatus</label>
+                          <select class="form-select border-form-prof" id="editemployeejobstatus" name="editemployeejobstatus" disabled>
+                            <option value="regular">Regular</option>
+                            <option value="probitionary">Probitionary</option>
+                            <option value="project Based">Project Based</option>
+                            <option value="apprentice">Apprentice</option>
+                            <option value="end_of_contract">End Of Contract</option>
+                            <option value="terminated">Terminate</option>
+                          </select>
+                        </div>
+                        <div class="col">
+                          <label for="editemployeehiredate" class="form-label">Hire Date</label>
+                          <input type="date" class="form-control border-form-prof" id="editemployeehiredate" name="editemployeehiredate">
+                        </div>
+                        <div class="col">
+                          <label for="editemployeedepartment" class="form-label">Department</label>
+                          <select class="form-select border-form-prof" id="editemployeedepartment" name="editemployeedepartment">
+                            <option selected>Choose...</option>
+                          </select>
+                        </div>
+                        <div class="col">
+                          <label for="editemployeeposition" class="form-label">Position</label>
+                          <select class="form-select border-form-prof" id="editemployeeposition" name="editemployeeposition">
+                            <option selected>Choose...</option>
+                          </select>
+                        </div>
+                        <br>
+                        <div class="row g-3">
+                          <div class="col">
+
+                            <label for="editemployeehiredate" class="form-label">Available No. of Leave Days</label>
+                            <input type="text" class="form-control border-form-prof" id="editemployeehiredate"
+                              name="editemployeehiredate" value="5">
+                          </div>
+                          <div class="col">
+                            <label for="editemployeeemergencyname" class="form-label">Emergency Contact Name</label>
+                            <input type="text" class="form-control border-form-prof" id="editemployeeemergencyname"
+                              name="editemployeeemergencyname" value="wendell">
+                          </div>
+                          <div class="col">
+                            <label for="editemployeeemergencyphone" class="form-label">Emergency Contact Phone</label>
+                            <input type="text" class="form-control border-form-prof" id="editemployeeemergencyphone"
+                              name="editemployeeemergencyphone" value="09205844176">
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Leave History -->
+                <div class="tab-pane fade" id="pills-leaves" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTabledepartment">
+                        <thead>
+                          <tr>
+                            <th>Date Started</th>
+                            <th>Date Finished</th>
+                            <th>Leave Type</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Disciplinary -->
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTabledisciplianary">
+                        <thead>
+                          <tr>
+                            <th>Action Code</th>
+                            <th>Offense ID</th>
+                            <th>Description</th>
+                            <th>Created Date</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- training training -->
+                <div class="tab-pane fade" id="pills-training" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTabletraining">
+                        <thead>
+                          <tr>
+                            <th>Training Name</th>
+                            <th>Date Started</th>
+                            <th>Date Finished</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- healh record -->
+                <div class="tab-pane fade" id="pills-healthrecord" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTablehealthrecord">
+                        <thead>
+                          <tr>
+                            <th>Blood Type</th>
+                            <th>Medical Condition</th>
+                            <th>Prescribe Medication</th>
+                            <th>Last Checkup</th>
+                            <th>Insurance</th>
+                            <th>Insurance ID</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- attendance -->
+                <div class="tab-pane fade" id="pills-attendance" role="tabpanel" aria-labelledby="pills-attendance">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTableattendance">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Clock In</th>
+                            <th>Device In</th>
+                            <th>Clock Out</th>
+                            <th>Device Out</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Goverment ID -->
+                <div class="tab-pane fade" id="pills-govermentid" role="tabpanel" aria-labelledby="pills-govermentid">
+                  <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped" id="dataTablegovermentid">
+                        <thead>
+                          <tr>
+                            <th>ID Type</th>
+                            <th>ID Number</th>
+                            <th>Issue Date</th>
+                            <th>Expiry Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" id="modal-footer">
+      <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal"  onclick="reloadPage()">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editsavebtn">Save</button>
+    </div>
+  </div>
+</div>

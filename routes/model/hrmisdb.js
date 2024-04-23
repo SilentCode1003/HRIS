@@ -152,7 +152,7 @@ exports.Master_Attendance = (data) => {
       geofencelatitude: key.ma_geofencelatitude,
       geofencelongitude: key.ma_geofencelongitude,
       geofenceradius: key.ma_geofenceradius,
-      ma_devicein: key.ma_devicein,
+      devicein: key.ma_devicein,
       deviceout: key.ma_deviceout,
     });
   });
@@ -618,6 +618,8 @@ exports.Master_Salary = (data) => {
       employeeid: key.ms_employeeid,
       monthly: key.ms_monthly,
       allowances: key.ms_allowances,
+      adjustments: key.ms_basic_adjustments,
+      payrolltype: key.ms_payrolltype,
     });
   });
 
@@ -654,6 +656,8 @@ exports.Salary_History = (data) => {
       employeeid: key.sh_employeeid,
       monthly: key.sh_monthly,
       allowances: key.sh_allowances,
+      adjustments: key.sh_basic_adjustments,
+      payrolltype: key.sh_payrolltype,
     });
   });
 
@@ -879,6 +883,27 @@ exports.Admin_Notification = (data) => {
 
   return dataResult;
 };
+
+exports.TeamLeader_User = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      tluserid: key.tu_userid,
+      employeeid: key.tu_employeeid,
+      username: key.tu_username,
+      password: key.tu_password,
+      accesstype: key.tu_accesstype,
+      createby: key.tu_createby,
+      createdate: key.tu_createdate,
+      status: key.tu_status,
+    });
+  });
+
+  return dataResult;
+};
+
 
 
 
