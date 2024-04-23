@@ -40,28 +40,57 @@
         </div>
     </li>
 
+
     <li class="nav-item sidebar-item">
-        <a class="nav-link" href="/teamleadcoa">
-            <lord-icon src="https://cdn.lordicon.com/svsiboke.json" trigger="loop"
-                colors="primary:#121331,secondary:#eee966,tertiary:#c71f16,quaternary:#ffffff" class="db-icon-hrmis">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsecoa"
+            aria-expanded="true" aria-controls="collapsecoa">
+            <lord-icon src="https://cdn.lordicon.com/svsiboke.json" trigger="loop" class="db-icon-hrmis">
             </lord-icon>
             <span><b>List Of COA</b></span></a>
+        </a>
+  
+        <div id="collapsecoa" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+                <a class="collapse-item" href="/teamleadcoa">Total COA</a>
+                <a class="collapse-item" href="/teamleadpendingcoa">Pending COA</a>
+                <a class="collapse-item" href="/teamleadapprovedcoa">Approved COA</a>
+            </div>
+        </div>
+    </li>
+
+
+    <li class="nav-item sidebar-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseovertime"
+            aria-expanded="true" aria-controls="collapseovertime">
+            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" trigger="loop" class="db-icon-hrmis">
+            </lord-icon>
+            <span><b>List Of Overtime</b></span>
+        </a>
+  
+        <div id="collapseovertime" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+                <a class="collapse-item" href="/teamleadovertime">Total Overtime</a>
+                <a class="collapse-item" href="/teamleadappliedovertime">Applied Overtime</a>
+                <a class="collapse-item" href="/teamleadapprovedovertime">Approved Overtime</a>
+            </div>
+        </div>
     </li>
 
     <li class="nav-item sidebar-item">
-        <a class="nav-link" href="/teamleadovertime">
-            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" trigger="loop"
-                colors="primary:#121331,secondary:#eee966,tertiary:#c71f16,quaternary:#ffffff" class="db-icon-hrmis">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseleave"
+            aria-expanded="true" aria-controls="collapseleave">
+            <lord-icon src="https://cdn.lordicon.com/eoacwhtz.json" trigger="loop" class="db-icon-hrmis">
             </lord-icon>
-            <span><b>List Of Overtime</b></span></a>
-    </li>
-
-    <li class="nav-item sidebar-item">
-        <a class="nav-link" href="/teamleadleave">
-            <lord-icon src="https://cdn.lordicon.com/eoacwhtz.json"  trigger="loop"
-                colors="primary:#121331,secondary:#eee966,tertiary:#c71f16,quaternary:#ffffff" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>List Of Leave</b></span></a>
+            <span><b>List Of Leave</b></span>
+        </a>
+  
+        <div id="collapseleave" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+                <a class="collapse-item" href="/teamleadleave">Total Leave</a>
+                <a class="collapse-item" href="/teamleadpendingleave">Pending Leave</a>
+                <a class="collapse-item" href="/teamleadapprovedleave">Approved Leave</a>
+            </div>
+        </div>
     </li>
 
     <!--- hahahha-->

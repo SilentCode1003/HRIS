@@ -1,0 +1,359 @@
+<script>
+  let approveot_id = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+    LoadList();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableOtapproval").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/teamleadappliedovertime/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "90px";
+              imgElement.style.height = "90px";
+
+              finalData.push({
+                image: imgElement.outerHTML,
+                approveot_id: item.approveot_id,
+                fullname: item.fullname,
+                attendancedate: item.attendancedate,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                totalhours: item.totalhours,
+                payrolldate: item.payrolldate,
+                overtimestatus: item.overtimestatus,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "image" },
+          { data: "approveot_id" },
+          { data: "fullname" },
+          { data: "attendancedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "totalhours" },
+          { data: "payrolldate" },
+          { data: "overtimestatus" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#otpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableOtapproval tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      approveot_id = dataRow[1];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/teamleadappliedovertime/getotapproval",
+        data: {
+          approveot_id: approveot_id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
+              base64String = item.image;
+              $("#otfullname").val(item.fullname);
+              $("#otdate").val(item.attendancedate);
+              $("#otclockin").val(item.clockin);
+              $("#otclockout").val(item.clockout);
+              $("#ottotalothours").val(item.totalhours);
+              $("#otnight").val(item.night_ot);
+              $("#otearly").val(item.earlyot);
+              $("#otnormal").val(item.normal_ot);
+              $("#otnightpay").val(item.night_pay);
+              $("#otnormalpay").val(item.normal_pay);
+              $("#otearlypay").val(item.earlyot_pay);
+              $("#ottotalpay").val(item.totalot_pay);
+              $("#otpayrolldate").val(item.payrolldate);
+              $("#otstatus").val(item.overtimestatus);
+              $("#otreason").val(item.reason);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
+    });
+
+    $(document).on("click", "#otsavebutton", function () {
+      let id = approveot_id;
+      let night_ot = $("#otnight").val();
+      let earlyot = $("#otearly").val();
+      let normal_ot = $("#otnormal").val();
+      let payrolldate = $("#otpayrolldate").val();
+      let overtimestatus = $("#otstatus").val();
+
+      var message = "";
+
+      if (night_ot === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (earlyot === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (normal_ot === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
+        message += "You Need to Approve or Disregard. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "otapproval/update",
+          data: {
+            approveot_id: id,
+            night_ot: night_ot,
+            earlyot: earlyot,
+            normal_ot: normal_ot,
+            payrolldate: payrolldate,
+            overtimestatus: overtimestatus,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    // Event listener for clockin and clockout input fields
+    // $("#otclockin, #otclockout").on("change", function () {
+    //   // Get the values of clockin and clockout
+    //   let clockinValue = $("#otclockin").val();
+    //   let clockoutValue = $("#otclockout").val();
+
+    //   // Calculate duration in minutes
+    //   let duration = moment
+    //     .duration(
+    //       moment(clockoutValue, "HH:mm").diff(moment(clockinValue, "HH:mm"))
+    //     )
+    //     .asMinutes();
+
+    //   // Adjust night_ot, earlyot, and normal_ot based on duration
+    //   if (duration >= 480) {
+    //     // 8 hours or more
+    //     $("#otnight").val(duration);
+    //     $("#otearly").val(0);
+    //     $("#otnormal").val(0);
+    //   } else if (duration >= 240) {
+    //     // 4 to 8 hours
+    //     $("#otnight").val(0);
+    //     $("#otearly").val(duration);
+    //     $("#otnormal").val(0);
+    //   } else {
+    //     // Less than 4 hours
+    //     $("#otnight").val(0);
+    //     $("#otearly").val(0);
+    //     $("#otnormal").val(duration);
+    //   }
+    // });
+
+    $(document).on("change", "#otimage", function (e) {
+      const input = document.getElementById("otimage");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("preview");
+        preview.src = reader.result;
+      };
+      editimage();
+    });
+
+    function editimage() {
+      const input = document.getElementById("otimage");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
+
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          const targetWidth = 250;
+          const targetHeight = 250;
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+
+          ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+          base64String = canvas
+            .toDataURL()
+            .replace("data:image/png;base64,", "");
+
+          imageBase64Stringsep = base64String;
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // function populateEventDropdown() {
+    //     var dropdown = document.getElementById("otpayrolldate");
+    //     dropdown.innerHTML = "";
+
+    //     var currentDate = new Date();
+    //     var currentYear = currentDate.getFullYear();
+    //     var currentMonth = currentDate.getMonth() + 1;
+    //     var currentDay = currentDate.getDate();
+
+    //     var nextMonth = currentMonth + 1;
+    //     var nextYear = currentYear;
+    //     if (nextMonth > 12) {
+    //         nextMonth = 1;
+    //         nextYear++;
+    //     }
+
+    //     if (currentDay <= 15) {
+    //         dropdown.add(new Option(currentYear + "-" + addZero(currentMonth) + "-15", currentYear + "-" + addZero(currentMonth) + "-15"));
+    //     }
+
+    //     var lastDayCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
+    //     dropdown.add(new Option(currentYear + "-" + addZero(currentMonth) + "-" + lastDayCurrentMonth, currentYear + "-" + addZero(currentMonth) + "-" + lastDayCurrentMonth));
+
+    //     dropdown.add(new Option(nextYear + "-" + addZero(nextMonth) + "-15", nextYear + "-" + addZero(nextMonth) + "-15"));
+
+    //     var lastDayNextMonth = new Date(nextYear, nextMonth, 0).getDate();
+    //     dropdown.add(new Option(nextYear + "-" + addZero(nextMonth) + "-" + lastDayNextMonth, nextYear + "-" + addZero(nextMonth) + "-" + lastDayNextMonth));
+    // }
+
+    // function addZero(number) {
+    //     return number < 10 ? "0" + number : number;
+    // }
+
+    // populateEventDropdown();
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableOtapproval");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

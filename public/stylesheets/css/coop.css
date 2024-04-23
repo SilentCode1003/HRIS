@@ -3,6 +3,26 @@
   text-transform: uppercase;
 }
 
+body{
+  margin-top:20px;
+  background-color: #f0f2f5;
+}
+.dropdown-list-image {
+  position: relative;
+  height: 80px; /* Adjusted height */
+  width: 80px; /* Adjusted width */
+}
+
+.dropdown-list-image img {
+  height: 80px; /* Adjusted height */
+  width: 80px; /* Adjusted width */
+}
+.btn-light {
+  color: #2cdd9b;
+  background-color: #e5f7f0;
+  border-color: #d8f7eb;
+}
+
 /*---- Content/Dashborad -----*/
 /* .geofence-db, .requestcash-db, .attendance-db, .employee-db, .requestleave-db {
  
@@ -447,6 +467,31 @@ tr:hover {
   box-shadow: 0 5px 8px #3d0404 !important;
 }
 
+
+#totalCOACard,
+#totalovertimeCard,
+#totalleaveCard {
+  background-image: url(/images/img/employee.jpg);
+  box-shadow: 0 5px 8px #3d0404 !important;
+  text-align: center;
+  font-size: 24px;
+  display: block;
+  margin: 0 auto; /* Center the icon horizontally */
+  margin-top: 10px; /* Adjust the top margin for vertical centering */
+}
+
+.card-text-teamlead {
+  margin-left: 8px;
+  color: white !important;
+  text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;
+  font-size: 24px;
+}
+
+.h5-teamlead {
+  font-size: 50px;
+}
+
+
 /*---- Tables --- */
 
 
@@ -705,9 +750,18 @@ tr:hover {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }
+
+
+#totalCOA, #totalovertime, #totalleave{
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  height: 200px;
+}
+
 #totalEMP:hover, #totalregularEMP:hover, #totalprobiEMP:hover, #totalresignedEMP:hover,
  #totaladminEMP:hover, #totalitEMP:hover, #totalcablingEMP:hover,
-  #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover {
+  #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover,
+  #totalCOA:hover, #totalovertime:hover, #totalleave:hover {
   transform: scale(1.1);
 }
 

@@ -79,6 +79,13 @@ var teamleademployeeRouter = require('./routes/teamleademployee');
 var teamleadcoaRouter = require('./routes/teamleadcoa');
 var teamleadovertimeRouter = require('./routes/teamleadovertime');
 var teamleadleaveRouter = require('./routes/teamleadleave');
+var teamleadusersRouter = require('./routes/teamleadusers');
+var teamleadpendingcoaRouter = require('./routes/teamleadpendingcoa');
+var teamleadapprovedcoaRouter = require('./routes/teamleadapprovedcoa');
+var teamleadappliedovertimeRouter = require('./routes/teamleadappliedovertime');
+var teamleadapprovedovertimeRouter = require('./routes/teamleadapprovedovertime');
+var teamleadpendingleaveRouter = require('./routes/teamleadpendingleave');
+var teamleadapprovedleaveRouter = require('./routes/teamleadapprovedleave');
 
 var app = express();
 
@@ -168,6 +175,13 @@ app.use('/teamleademployee', teamleademployeeRouter);
 app.use('/teamleadcoa' , teamleadcoaRouter);
 app.use('/teamleadovertime', teamleadovertimeRouter);
 app.use('/teamleadleave' , teamleadleaveRouter);
+app.use('/teamleadusers', teamleadusersRouter);
+app.use('/teamleadpendingcoa' , teamleadpendingcoaRouter);
+app.use('/teamleadapprovedcoa', teamleadapprovedcoaRouter);
+app.use('/teamleadappliedovertime' , teamleadappliedovertimeRouter);
+app.use('/teamleadapprovedovertime' , teamleadapprovedovertimeRouter);
+app.use('/teamleadpendingleave' , teamleadpendingleaveRouter);
+app.use('/teamleadapprovedleave' , teamleadapprovedleaveRouter);
 
 
 

@@ -76,7 +76,7 @@
   
       $(document).on("click", "#userssavebtn", function () {
         let employeeid = $("#usersname").val();
-        let accesstype = $("#usersaccesstype").val();
+        // let accesstype = $("#usersaccesstype").val();
         let status = $("#usersstatus").val();
   
         var message = "";
@@ -85,9 +85,9 @@
           message += "TITTLE ";
         }
   
-        if (accesstype == "") {
-          message += "DESCRIPTION ";
-        }
+        // if (accesstype == "") {
+        //   message += "DESCRIPTION ";
+        // }
   
   
         if (status == "") {
@@ -102,7 +102,7 @@
             url: "/ojtuser/save",
             data: {
               employeeid: employeeid,
-              accesstype: accesstype,
+              // accesstype: accesstype,
               status: status,
   
             },

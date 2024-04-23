@@ -23,7 +23,7 @@
                 scrollCollapse: true,
                 serverMethod: "GET",
                 ajax: {
-                    url: "/otapproval/load",
+                    url: "/teamleadapprovedovertime/load",
                     dataSrc: (json) => {
                         var finalData = [];
                         var data = json.data;
@@ -33,7 +33,7 @@
                             var action = "";
                             var status = item.status;
 
-                            // action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+                            action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
 
                             var imgElement = document.createElement("img");
                             imgElement.src = "data:image/jpg;base64," + item.image;
@@ -51,7 +51,7 @@
                                 totalhours: item.totalhours,
                                 payrolldate: item.payrolldate,
                                 overtimestatus: item.overtimestatus,
-                                // action: action,
+                                action: action,
                             });
                         });
 
@@ -74,7 +74,7 @@
                     { data: "totalhours" },
                     { data: "payrolldate" },
                     { data: "overtimestatus" },
-                    // { data: "action" },
+                    { data: "action" },
                 ],
                 createdRow: function (row, data, dataIndex) {
                     $("td", row).each(function (index) {

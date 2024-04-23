@@ -21,7 +21,7 @@
           scrollCollapse: true,
           serverMethod: "GET",
           ajax: {
-            url: "/teamleadcoa/load",
+            url: "/teamleadapprovedcoa/load",
             dataSrc: (json) => {
               var finalData = [];
               var data = json.data;
@@ -30,9 +30,9 @@
                 var action = "";
                 var status = item.status;
   
-                // action = `
-                //     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
-                //    `;
+                action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
   
                 var imgElement = document.createElement("img");
                 imgElement.src = "data:image/jpg;base64," + item.image;
@@ -50,7 +50,7 @@
                   total: item.total,
                   createdate: item.createdate,
                   requeststatus: item.requeststatus,
-                  // action: action,
+                  action: action,
                 });
               });
   
@@ -73,7 +73,7 @@
             { data: "total" },
             { data: "createdate" },
             { data: "requeststatus" },
-            // { data: "action" },
+            { data: "action" },
           ],
           createdRow: function (row, data, dataIndex) {
             $("td", row).each(function (index) {

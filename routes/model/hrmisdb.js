@@ -884,6 +884,27 @@ exports.Admin_Notification = (data) => {
   return dataResult;
 };
 
+exports.TeamLeader_User = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      tluserid: key.tu_userid,
+      employeeid: key.tu_employeeid,
+      username: key.tu_username,
+      password: key.tu_password,
+      accesstype: key.tu_accesstype,
+      createby: key.tu_createby,
+      createdate: key.tu_createdate,
+      status: key.tu_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
 
 
 

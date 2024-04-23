@@ -149,6 +149,9 @@ var roleacess = [
       {
         layout: "setpayrolldatelayout",
       },
+      {
+        layout: "teamleaduserslayout",
+      },
     ],
   },
   {
@@ -226,6 +229,24 @@ var roleacess = [
       },
       {
         layout: "teamleadleavelayout",
+      },
+      {
+        layout: "teamleadpendingcoalayout",
+      },
+      {
+        layout: "teamleadapprovedcoalayout",
+      },
+      {
+        layout: "teamleadappliedovertimelayout",
+      },
+      {
+        layout: "teamleadapprovedovertimelayout",
+      },
+      {
+        layout: "teamleadpendingleavelayout",
+      },
+      {
+        layout: "teamleadapprovedleavelayout",
       },
     ],
   },
