@@ -10,7 +10,12 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-// Decrypter('e59d730cc1cfe21f3fabf0f694b3bf1c', (err, encrypted) => {
+Decrypter('2772eba30ffb6be45bed019b31e7e74c', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+});
+
+// Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
 // });

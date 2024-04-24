@@ -248,6 +248,9 @@ var roleacess = [
       {
         layout: "teamleadapprovedleavelayout",
       },
+      {
+        layout: "teamleadgeofencelayout",
+      },
     ],
   },
   {

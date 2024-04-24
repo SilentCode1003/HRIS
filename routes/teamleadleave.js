@@ -24,7 +24,10 @@ router.get("/load", (req, res) => {
         FROM leaves 
         JOIN master_employee 
         ON leaves.l_employeeid = master_employee.me_id
-        WHERE me_department = '${departmentid}'`;
+        WHERE me_department = '${departmentid}'
+        AND l_employeeid NOT IN (
+          SELECT tu_employeeid FROM teamlead_user
+      );`;
   
       mysql.Select(sql, "Leaves", (err, result) => {
         if (err) {

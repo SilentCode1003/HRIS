@@ -16,6 +16,7 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let departmentid = req.session.departmentid;
     let sql = `SELECT
     pao_image,
     pao_id,
@@ -26,7 +27,12 @@ router.get("/load", (req, res) => {
 	  (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
     DATE_FORMAT(pao_payroll_date, '%W, %M %e, %Y') as pao_payroll_date,
     pao_status
-    FROM payroll_approval_ot`;
+    FROM payroll_approval_ot
+    JOIN master_employee 
+    ON payroll_approval_ot.pao_employeeid = master_employee.me_id
+    WHERE me_department = '${departmentid}'
+    AND pao_employeeid NOT IN (
+      SELECT tu_employeeid FROM teamlead_user)`;
 
     mysql.Select(sql, "Payroll_Approval_Ot" ,(err, result) => {
       if (err) console.error("Error", err);
