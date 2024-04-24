@@ -69,6 +69,49 @@
             { data: "status" },
             { data: "action" },
           ],
+          createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(7)");
+          var idtypeCell = $(row).find("td:eq(2)");
+
+
+         
+          var statusText = data.status;
+          var idtypeText = data.idtype;
+
+          
+          var statusClass = "";
+          var idtypeClass = "";
+
+          
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+
+          switch (idtypeText.toLowerCase()) {
+            case "health card":
+              idtypeClass = "health-card-idtype";
+              break;
+            default:
+              idtypeClass = ""; 
+          }
+          
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          idtypeCell.html(`<span class="${idtypeClass}">${idtypeText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
           initComplete: function () {
           },
         });

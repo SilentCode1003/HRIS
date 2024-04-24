@@ -66,6 +66,32 @@
           { data: "approvaldate" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(5)");
+         
+          var statusText = data.status;
+        
+          var statusClass = "";
+          
+          switch (statusText.toLowerCase()) {
+            case "approved":
+              statusClass = "approved-status";
+              break;
+            case "cancelled":
+              statusClass = "cancelled-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+        
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
           console.log('Done');
         },
