@@ -299,9 +299,25 @@
                 ],
                 createdRow: function (row, data, dataIndex) {
                     $('td', row).each(function (index) {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
+                        // this.style.textAlign = "center";
+                        // this.style.verticalAlign = "middle";
+                        $(this).css({ //miyaka
+                            "text-align": "center",
+                            "vertical-align": "middle",
+                            "background-color": "white",
+                            "color": "#7a1818",
+                            "font-weight": "bold"
+                        });
                     });
+
+                    //miyaka
+                    $("td:nth-child(2)", row).each(function () {
+                        if (data.logtype === "ClockIn") {
+                            $(this).html("<span class='clockin-btn'>" + $(this).text() + "</span>");
+                        } else if (data.logtype === "ClockOut") {
+                            $(this).html("<span class='clockout-btn'>" + $(this).text() + "</span>");
+                        }
+        });
                 },
                 initComplete: function () {
                 },
@@ -320,35 +336,37 @@
                         let bdaydiv = "";
 
                         if (bdayData.length === 0) {
-                            bdaydiv = `<div class="carousel-item active" data-bs-interval="2000">
-                                    <img src="/images/img/bday.jpg" class="d-block w-100" alt="Default Image"
-                                        style="height: 250px;">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>No Birthdays Today</h5>
+                            bdaydiv = `<div class="carousel-item active">
+                                    <img src="/images/img/nobday.jpg" class="d-block w-100 nobday-img" alt="Default Image"> 
+                                    <div class="carousel-caption d-md-block">
+                                        <h1 class="no-text">NO</h1>
+                                          <h1 class="nobday">Birthdays for today ...</h1>
                                     </div>
                                 </div>`;
                         } else {
                             $.each(bdayData, (key, item) => {
                                 counterbday++;
-                                bdaydiv += `
-                                <div class="carousel-item active" data-bs-interval="2000">
-                                <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-block w-100" alt="..."
-                                    style="height: 220px;">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5 id="employeeid${counterbday}">${item.firstname}</h5>
-                                    <h6 id="bdaydate${counterbday}">${item.birthday}</h6>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev" type="button"
-                                data-bs-target="#carouselannouncement" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                data-bs-target="#carouselannouncement" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>`;
+                                bdaydiv += `<div class="carousel-item active" data-bs-interval="5000">
+                               
+                                
+                               <div class="bday-eportal">
+                                 <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-flex bday-img-eportal rounded-circle" alt="...">
+                               <p class="bday-greet">Happy Birthday</p>
+                                   <h5 id="employeeid${counterbday}" class="fname-eportal">${item.firstname}</h5>
+                                   <h6 id="bdaydate${counterbday}" class="bdaydate-eportal">${item.birthday}</h6>
+                               
+                               <button class="carousel-control-prev" type="button"
+                                   data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                                   <i class='bx bxs-left-arrow prev-hrmis' aria-hidden="true"></i>
+                                   <span class="visually-hidden">Previous</span>
+                               </button>
+                               <button class="carousel-control-next" type="button"
+                                   data-bs-target="#carouselannouncement" data-bs-slide="next">
+                                   <i class='bx bxs-right-arrow next-hrmis' aria-hidden="true"></i>
+                                   <span class="visually-hidden">Next</span>
+                               </button>
+                             </div>
+                           </div>`;
                             });
                         }
 
@@ -383,8 +401,7 @@
                             counter++;
                             anouncementdiv += `<div class="carousel-item active" data-bs-interval="3000">
                                     <img id="preview${counter}" src="data:image/jpg;base64,${item.image}"
-                                     class="d-block w-100 eportal-img-announce" alt="..."
-                                      style="height: 200px; border: 3px solid white !important;">
+                                     class="d-block w-100 eportal-img-announce" alt="...">
                  
                                     
                                 <div class="announcement-hrmis">

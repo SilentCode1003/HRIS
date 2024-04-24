@@ -71,6 +71,22 @@
                     { data: "totalhours" },
                     { data: "action" },
                 ],
+                createdRow: function (row, data, dataIndex) {
+                    //miyaka
+                    var clockinCell = $(row).find("td:eq(2)");
+                    var clockoutCell = $(row).find("td:eq(3)"); 
+                    var totalhoursCell = $(row).find("td:eq(6)"); 
+
+                    clockinCell.wrapInner("<span class='clockin-text'></span>");
+                    clockoutCell.wrapInner("<span class='clockout-text'></span>");
+                    totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
+
+                    $("td", row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
+
                 initComplete: function () {
                     console.log('Done');
                 },

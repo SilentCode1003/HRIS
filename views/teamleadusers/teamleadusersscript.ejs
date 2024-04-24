@@ -79,11 +79,32 @@
             { data: "action" },
           ],
           createdRow: function (row, data, dataIndex) {
-            $("td", row).each(function (index) {
-              this.style.textAlign = "center";
-              this.style.verticalAlign = "middle";
-            });
-          },
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+       
+          var statusText = data.status;
+         
+          var statusClass = "";
+         
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+          
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+         
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
           initComplete: function () {
           },
         });

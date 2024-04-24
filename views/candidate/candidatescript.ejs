@@ -66,6 +66,38 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+          var hiredateCell = $(row).find("td:eq(4)");
+
+         
+          var statusText = data.status;
+
+          
+          var statusClass = "";
+
+          
+          switch (statusText.toLowerCase()) {
+            case "regular":
+              statusClass = "regular-status";
+              break;
+            case "probitionary":
+              statusClass = "probationary-status";
+              break;
+            case "project Based":
+              statusClass = "project-based-status";
+              break;
+            case "apprentice":
+              statusClass = "apprentice-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+
+          
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          hiredateCell.wrapInner("<span class='hiredate-text'></span>");
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";

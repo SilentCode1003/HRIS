@@ -65,6 +65,39 @@
                     { data: "action" },
                 ],
                 createdRow: function (row, data, dataIndex) {
+                    //miyaka
+                    var jobStatusCell = $(row).find("td:eq(5)");
+                    var hiredateCell = $(row).find("td:eq(4)");
+
+
+                    var jobStatusText = data.jobstatus;
+
+
+                    var jobStatusClass = "";
+
+
+                    switch (jobStatusText.toLowerCase()) {
+                        case "regular":
+                            jobStatusClass = "regular-status";
+                            break;
+                        case "probitionary":
+                            jobStatusClass = "probationary-status";
+                            break;
+                        case "project Based":
+                            jobStatusClass = "project-based-status";
+                            break;
+                        case "apprentice":
+                            jobStatusClass = "apprentice-status";
+                            break;
+                        default:
+                            jobStatusClass = "";
+                    }
+
+
+                    jobStatusCell.html(`<span class="${jobStatusClass}">${jobStatusText}</span>`);
+                    hiredateCell.wrapInner("<span class='hiredate-text'></span>");
+
+
                     $("td", row).each(function (index) {
                         this.style.textAlign = "center";
                         this.style.verticalAlign = "middle";

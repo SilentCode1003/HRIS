@@ -43,6 +43,7 @@
               // imgElement.style.width = "80px";
               // imgElement.style.height = "80px";
 
+<<<<<<< Updated upstream
               finalData.push({
                 //image: imgElement.outerHTML,
                 attendanceid: item.attendanceid,
@@ -55,6 +56,59 @@
                 totalhours: item.totalhours,
                 action: action,
               });
+=======
+                            finalData.push({
+                                //image: imgElement.outerHTML,
+                                attendanceid: item.attendanceid,
+                                employeeid: item.employeeid,
+                                attendancedate: item.attendancedate,
+                                clockin: item.clockin,
+                                clockout: item.clockout,
+                                devicein: item.devicein,
+                                deviceout: item.deviceout,
+                                totalhours: item.totalhours,
+                                action: action,
+                            });
+                        });
+
+                        return finalData;
+                    },
+                },
+                columnDefs: [
+                    {
+                        targets: 1,
+                        className: "td-indent",
+                    },
+                ],
+                columns: [
+                    //{ data: "image" },
+                    { data: "attendanceid" },
+                    { data: "employeeid" },
+                    { data: "attendancedate" },
+                    { data: "clockin" },
+                    { data: "clockout" },
+                    { data: "devicein" },
+                    { data: "deviceout" },
+                    { data: "totalhours" },
+                    { data: "action" },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    var clockinCell = $(row).find("td:eq(3)");
+                    var clockoutCell = $(row).find("td:eq(4)");
+                    var totalhoursCell = $(row).find("td:eq(7)");
+
+                    clockinCell.wrapInner("<span class='clockin-text'></span>");
+                    clockoutCell.wrapInner("<span class='clockout-text'></span>");
+                    totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
+
+                    $("td", row).each(function (index) {
+                        this.style.textAlign = "center";
+                        this.style.verticalAlign = "middle";
+                    });
+                },
+                initComplete: function () {
+                },
+>>>>>>> Stashed changes
             });
 
             return finalData;

@@ -1211,7 +1211,7 @@
               bdaydiv += `
                           <div class="carousel-item active" data-bs-interval="3000">
                             <div class="confetti"></div>
-                              <img id="preview${counterbday}"  src="data:image/jpg;base64,${item.profilePicturePath}" alt="..." class="d-flex image-frame rounded-circle" style="height: 250px; width: 250px;">
+                              <img id="preview${counterbday}"  src="data:image/jpg;base64,${item.profilePicturePath}" alt="..." class="d-flex image-frame rounded-circle">
 
                                 <div class="bday-hrmis">
                                   <p class="bday-greet">Happy Birthday</p>
@@ -1371,8 +1371,8 @@
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.image;
             imgElement.alt = "Profile Image";
-            imgElement.style.width = "100px";
-            imgElement.style.height = "100px";
+            imgElement.style.width = "70px";
+            imgElement.style.height = "70px";
 
             IMAGE.appendChild(imgElement);
             LEAVE_ID.innerHTML = item.leaveid;
@@ -1563,8 +1563,8 @@
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.image;
             imgElement.alt = "Profile Image";
-            imgElement.style.width = "100px";
-            imgElement.style.height = "100px";
+            imgElement.style.width = "70px";
+            imgElement.style.height = "70px";
 
             IMAGE.appendChild(imgElement);
             CASHADVANCE_ID.innerHTML = item.employeeid;
@@ -1745,8 +1745,8 @@
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.image;
             imgElement.alt = "Profile Image";
-            imgElement.style.width = "100px";
-            imgElement.style.height = "100px";
+            imgElement.style.width = "70px";
+            imgElement.style.height = "70px";
 
             IMAGE.appendChild(imgElement);
             APPROVEDOT_ID.innerHTML = item.approveot_id;
@@ -1947,8 +1947,8 @@
             var imgElement = document.createElement("img");
             imgElement.src = "data:image/jpg;base64," + item.image;
             imgElement.alt = "Profile Image";
-            imgElement.style.width = "100px";
-            imgElement.style.height = "100px";
+            imgElement.style.width = "70px";
+            imgElement.style.height = "70px";
 
             IMAGE.appendChild(imgElement);
             REQUEST_ID.innerHTML = item.requestid;
@@ -2731,10 +2731,7 @@
     //     timeout: 27000
     //   }
     // );
-    //<!-- Sticky Topbar & Sidebar -->
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
-      $(".navbar").toggleClass("navbar-toggled");
-    });
+    
     //#endregion
   });
 </script>

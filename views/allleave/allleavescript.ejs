@@ -66,6 +66,42 @@
           { data: "applieddate" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+          var leavestartdateCell = $(row).find("td:eq(2)");
+          var leaveenddateCell = $(row).find("td:eq(3)");
+         
+          var statusText = data.status;
+          
+          var statusClass = "";
+          
+          switch (statusText.toLowerCase()) {
+            case "pending":
+              statusClass = "pending-status";
+              break;
+            case "cancelled":
+              statusClass = "cancelled-status";
+              break;
+            case "approved":
+              statusClass = "approved-status";
+              break;
+            case "rejected":
+              statusClass = "rejected-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+ 
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          leavestartdateCell.wrapInner("<span class='leavestartdate-text'></span>");
+          leaveenddateCell.wrapInner("<span class='leaveenddate-text'></span>");
+          
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
         },
       });

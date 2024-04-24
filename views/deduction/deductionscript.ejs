@@ -88,6 +88,36 @@
                     { data: "action" },
                 ],
                 createdRow: function (row, data, dataIndex) {
+                       //miyaka
+                    var typeCell = $(row).find("td:eq(3)");
+                    var amountCell = $(row).find("td:eq(4)");
+
+
+
+                    var typeText = data.type;
+
+                    var typeClass = "";
+
+                    switch (typeText.toLowerCase()) {
+                        case "sss":
+                            typeClass = "sss-type";
+                            break;
+                        case "philhealth":
+                            typeClass = "philhealth-type";
+                            break;
+                        case "tin":
+                            typeClass = "tin-type";
+                            break;
+                        case "pagibig":
+                            typeClass = "pagibig-type";
+                            break;
+                        default:
+                            typeClass = "";
+                    }
+
+                    typeCell.html(`<span class="${typeClass}">${typeText}</span>`);
+                    amountCell.wrapInner("<span class='amount-text'></span>");
+
                     $("td", row).each(function (index) {
                         this.style.textAlign = "center";
                         this.style.verticalAlign = "middle";

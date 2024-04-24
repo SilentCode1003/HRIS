@@ -433,9 +433,19 @@
           },
         ],
         createdRow: function (row, data, dataIndex) {
-          $("td", row).each(function (index) {
+         $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
+
+            // Get the total hours from the row data
+            var totalHours = parseFloat(data.Total_Hours);
+
+            // Check the condition and apply styling accordingly
+            if (totalHours === 9) {
+              this.style.color = "green"; // Set text color to green
+            } else if (totalHours < 9) {
+              this.style.color = "red"; // Set text color to red
+            }
           });
         },
         initComplete: function () {
@@ -443,6 +453,7 @@
           swal.close();
         },
       });
+      
     }
 
     $("#datepicker").on("apply.daterangepicker", function (ev, picker) {

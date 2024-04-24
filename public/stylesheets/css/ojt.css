@@ -188,8 +188,16 @@
     width: 35%;
   }
 
-  
+}
 
+.bx-x {
+  color: white !important;
+  font-size: 30px;
+  margin: 0%;
+}
+.bx-x:hover {
+  border: 2px solid white !important;
+  border-radius: 8px;
 }
 
 /* @media only screen and (min-width: 769px) and (max-width: 900px){
@@ -286,12 +294,20 @@
 }
 
 .ch-announcement {
-  /* background: linear-gradient(45deg, #aa14cf, #6e218d)  !important; */
-  color: black !important;
-  text-shadow: 2px 2px 4px white !important;
-  font-weight: bold;
-  border-bottom: 2px solid #fabe70 !important;
-  background: linear-gradient(45deg, rgb(252, 187, 126), white) !important;
+   /* background: linear-gradient(45deg, #aa14cf, #6e218d)  !important; */
+   color: #7a1818 !important;
+   text-shadow: 2px 2px 4px white !important;
+   font-weight: bold;
+   /* border-bottom: 2px solid #fabe70 !important;
+   background: linear-gradient(45deg, rgb(252, 187, 126), white) !important; */
+   border-bottom: 3px solid #7a1818 !important;
+   /* background: #7a1818 !important; */
+   background-image: url(/images/img/announce1.png);
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+   text-align: center;
+   letter-spacing: 1px;
 }
 
 .db-custom-cards1 {
@@ -314,9 +330,9 @@
 
 .announce-title {
   margin: 8%;
-  color: black !important;
+  color: #7a1818  !important;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: bolder;
   text-align: center;
   font-family: 'Arial';
 }
@@ -328,7 +344,7 @@
 }
 
 .a-date {
-  color: gray;
+  color: black;
   font-weight: bold;
   /* float: right; */
   margin-top: 2%;
@@ -337,7 +353,7 @@
 .prev-hrmis, .next-hrmis {
   position: absolute;
   top: 22%;
-  color:#020202 !important; 
+  color:#7a1818 !important; 
 }
 
 .consultation-icon {
@@ -369,11 +385,15 @@
 
 .ch-attendance {
   /* background: linear-gradient(45deg, #FF3232, #FFB774)  !important; */
-  color: black !important;
+  color: #7a1818 !important;
   text-shadow: 2px 2px 4px white !important;
   font-weight: bold;
-  border-bottom: 2px solid #e0d869 !important;
-  background: linear-gradient(45deg, rgb(253, 247, 160), white) !important;
+  /* border-bottom: 2px solid #e0d869 !important;
+  background: linear-gradient(45deg, rgb(253, 247, 160), white) !important; */
+  border-bottom: 2px solid white !important;
+  background: white !important;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
 .cb-attendance {
@@ -397,7 +417,7 @@
   background-color: green !important;
   color: white !important;
   /* margin: auto; */
-  margin-top: 70px !important;
+  margin-top: 30px !important;
   margin-left: 20px;
   /* margin-right: 10px; */
   margin-bottom: 10px;
@@ -422,7 +442,7 @@ background-color: rgb(6, 97, 3) !important;
   background-color: red !important;
   color: white !important;
   /* margin: auto; */
-  margin-top: 70px !important;
+  margin-top: 30px !important;
   /* margin-left: 10px; */
   margin-right: 20px;
   margin-bottom: 10px;
@@ -444,9 +464,15 @@ background-color: rgb(6, 97, 3) !important;
 }
 
 #map {
-  height: 350px;
+  height: 518px;
   width: 100%;
   z-index: 1;
+  border: 2px solid rgb(210, 208, 208) !important;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-radius: 5px;
 }
 
 #card-map { 
@@ -456,50 +482,77 @@ background-color: rgb(6, 97, 3) !important;
 }
 
 .ch-map {
-  /* background: #2094a3 !important ; */
-  color: black !important;
-  text-shadow: 2px 2px 4px white !important;
-  font-weight: bold;
-  border-bottom: 2px solid #5bc945 !important;
-  background: linear-gradient(45deg, rgb(175, 253, 160), rgb(223, 253, 213)) !important;
+ /* background: #2094a3 !important ; */
+ color: white !important;
+ text-shadow: 2px 2px 4px #7a1818 !important;
+ font-weight: bold;
+ /* border-bottom: 2px solid #5bc945 !important;
+ background: linear-gradient(45deg, rgb(175, 253, 160), rgb(223, 253, 213)) !important; */
+ border-bottom: 2px solid white !important;
+ background: #7a1818  !important;
+ text-transform: uppercase;
+ letter-spacing: 2px;
+ text-align: left;
 }
 
-.ch-map h6 {
+/* .ch-map h6 {
     color: white !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     padding: 5px;
     text-transform: uppercase;
     text-align: center;
     font-family: Cambria;
     font-size: larger;
     letter-spacing: .3rem;
-}
+} */
 
 .container {
     margin-bottom: 5%;
 }
 
 #clockin-out {
-  box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
   background-color: white !important;
+  box-shadow: 0 4px 8px 0 rgb(82, 81, 81) !important;
+ }
+ 
+ #clock-header {
+   background-color: #7a1818 !important;
+   height: 100px;
+ }
+
+ .time-profile-img {
+  margin: auto !important;
+  height: 10% !important;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid #7a1818 !important;
 }
 
 .time-title {
   font-family: "Lexend", sans-serif;
   font-style: normal;
-  font-size: 19px;
+  font-size: 18px;
   text-align: center;
-  color: rgb(128, 18, 18) !important;
-  text-shadow: 1px 1px 1px gray !important;
+  color: white !important;
+  /* text-shadow:2px 2px 2px #c4c2c0 !important; */
   font-weight: bold;
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
 
 .time-p {
   font-size: 12px;
   text-align: center;
   font-weight: bold;
-  color: rgb(85, 85, 85) !important;
-
+  color: white !important;
+  /* background-color: #7a1818 !important;
+  height: 20px;
+  border-radius:  5px; */
+  font-style: italic;
+  padding: 2px;
+  margin-bottom: 8%;
 }
 
 .time-profile-img {
@@ -521,11 +574,15 @@ background-color: rgb(6, 97, 3) !important;
 
 .ch-birthday {
   /* background: linear-gradient(45deg, #29A173, #05633f) !important ; */
-  color: black !important;
+  color: #7a1818 !important;
   text-shadow: 2px 2px 4px white !important;
   font-weight: bold;
-  border-bottom: 2px solid #d874d0 !important;
-  background: linear-gradient(45deg, rgb(237, 160, 253), white) !important;
+  /* border-bottom: 2px solid #d874d0 !important;
+  background: linear-gradient(45deg, rgb(237, 160, 253), white) !important; */
+  border-bottom: 2px solid white !important;
+  background: white !important;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
 .ch-salary,
@@ -974,6 +1031,292 @@ p.account:hover {
   height: 25px; 
   top: 3px;
 }
+
+.no-text {
+  color: #7a1818 !important;
+  text-shadow: 4px 4px 8px goldenrod !important;
+  font-family: "Sedan", serif;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  font-size: 40px !important;
+  padding: 0px;
+  margin-top: 8%;
+}
+
+.nobday {
+  color: #7a1818 !important;
+  text-shadow: 4px 4px 8px goldenrod !important;
+  font-family: "Dancing Script", cursive;
+  font-weight: bold !important;
+  text-align: center;
+  font-size: 35px;
+}
+
+
+.logout-header {
+  background-color: #7a1818 !important;
+  color: white !important;
+  height: 70px;
+  font-family: 'Calibri';
+}
+
+.logout-body {
+  height: 150px;
+  color: black !important;
+  font-family: Arial;
+  font-size: 15px;
+  padding: 10% !important;
+  background-color: #fcf0d7 !important;
+}
+
+.btn-out-body {
+  background-color: red !important;
+  color: white !important;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid lightslategray !important;
+}
+
+.btn-logout-cancel {
+  background-color: rgb(6, 161, 244) !important;
+  color: white !important;
+  border: 1px solid rgb(4, 95, 145) !important;
+}
+
+.btn-logout-cancel:hover {
+  background-color: rgb(34, 129, 169) !important;
+  font-weight: bold;
+}
+
+.btn-logout {
+  background-color: rgb(248, 65, 65) !important;
+  color: white !important;
+  border: 1px solid rgb(224, 35, 35) !important;
+}
+
+.btn-logout:hover {
+  background-color: rgb(225, 59, 59) !important;
+  font-weight: bold;
+}
+
+.logout-footer {
+  background-color: #7a1818 !important;
+  height: 70px;
+}
+
+#modal-header {
+  background-color: #7a1818 !important ;
+  color: white !important;
+  height: 80px;
+}
+
+#modal-footer {
+  background-color: #7a1818 !important ;
+}
+
+.modal-dialog #modal-body {
+  background-color: #fcf0d7 !important;
+}
+
+.btn-modal-close {
+  color: white !important;
+  background-color: red !important;
+  border: 2px solid #fcf0d7 !important;
+}
+.btn-modal-close:hover {
+  background-color: #ff3535 !important;
+  color: white !important;
+  font-weight: bold;
+}
+.btn-modal-save {
+  color: white !important;
+  background-color: green !important;
+   border: 2px solid #fcf0d7 !important;
+}
+.btn-modal-save:hover {
+  background-color: #00B25A !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/*-- Attendance Script --*/
+.clockin-btn {
+  background-color: rgb(57, 169, 57) !important;
+  color: white !important;
+  border-radius: 8px;
+  padding: 5px !important;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.clockout-btn {
+  background-color: rgb(202, 32, 32) !important;
+  color: white !important;
+  border-radius: 8px;
+  padding: 5px !important;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.nobday-img {
+  height: 220px;
+  border: 3px solid #7a1818 !important;
+  border-radius: 8px;
+}
+
+/*Eportal Bday*/
+.bday-img-eportal {
+  height: 90px;
+  width: 90px;
+  border: 3px solid rgb(233, 187, 3) !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.bday-eportal {
+  background-image: url(/images/img/hbd.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-top: 0px;
+  padding-top: 15px !important;
+}
+
+.fname-eportal {
+  color: white !important;
+  text-align: center;
+  text-shadow: 1px 1px 2px black !important;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 18px !important;
+}
+
+.bday-greet {
+  color: yellow !important;
+  text-shadow: 1px 1px 2px red !important;
+  font-family: "Sedan", serif;
+  font-weight: bolder;
+  text-align: center;
+  margin: 10px;
+  font-size: 25px;
+  font-family: "Great Vibes", cursive;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.bdaydate-eportal {
+  color: gold !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 12px;
+  padding: 3px;
+}
+
+.cb-birthday {
+  /* background-color: #fee2fb !important ; */
+  background-color: white !important;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+ }
+
+
+.eportal-img-announce {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  height: 200px;
+  border: 2px solid #7a1818 !important;
+}
+
+a.leaflet-control-zoom-in, a.leaflet-control-zoom-out {
+  background-color: #7a1818 !important;
+  color: white !important;
+}
+
+a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
+  background-color: #fcf0d7 !important;
+  color: #7a1818 !important;
+  font-weight: bold !important;
+  font-size: 30px !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #7a1818 !important;
+  color: white !important;
+  font-family: 'Arial';
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.leaflet-popup-close-button {
+  color: white !important;
+}
+
+.tr-left-attendance {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.tr-right-attendance {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/*-- Attendance Script --*/
+.clockin-text {
+  color: white !important;
+  background-color: rgb(18, 156, 27) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(43, 176, 43)!important;
+  letter-spacing: 1px;
+}
+
+.clockout-text {
+  color: white !important;
+  background-color: rgb(182, 13, 13) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(176, 43, 43)!important;
+  letter-spacing: 1px;
+}
+
+.totalhours-text {
+  color: black !important;
+  text-shadow: 1px 1px 2px white;
+  background-color: rgb(153, 238, 224) !important;
+  border-radius: 8px;
+  padding: 5px;
+  /* text-transform: uppercase; */
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(43, 176, 174)!important;
+  letter-spacing: 1px;
+}
+
+
+
+
 
 
 

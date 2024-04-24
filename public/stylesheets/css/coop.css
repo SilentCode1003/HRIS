@@ -1094,7 +1094,14 @@ tr:hover {
    .btn-holiday {
     margin-top: 10px;
    }
-  
+   
+   .announcement-db, .bday-db {
+    font-size: 10px !important;
+   }
+
+   .generate-profile {
+    font-size: 8px !important;
+   }
 }
 
 .label-cell {
@@ -1211,7 +1218,7 @@ tr:hover {
 .bday-hrmis {
   background-color: #7a1818 !important;
   height: 225px;
-  padding: 15px !important;
+  /* padding: 15px !important; */
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   margin: 0px;
@@ -1227,9 +1234,9 @@ tr:hover {
   text-align: center;
 } */
 
-.bday-hrmis span.carousel-control-prev-icon, .bday-hrmis span.carousel-control-next-icon {
+/* .bday-hrmis span.carousel-control-prev-icon, .bday-hrmis span.carousel-control-next-icon {
   background-color: transparent !important;
-}
+} */
 
 .image-frame {
   border: 3px solid #fff8f8;
@@ -1242,6 +1249,8 @@ tr:hover {
   background-color: gold !important;
   /* Background color */
   margin: auto;
+  height: 250px;
+  width: 250px;
 }
 
 .confetti {
@@ -1376,8 +1385,8 @@ tr:hover {
 }
 
 
-/* 
-.bday-title-hrmis {
+
+/* .bday-title-hrmis {
   color: white !important;
   text-align: center;
   margin: 20px;
@@ -1528,15 +1537,29 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .a-pdf {
-  margin-right: 10px;
+  margin-right: 5px;
   color: red !important;
   font-size: small;
+  text-decoration: none;
+  font-weight: bold;
+  font-weight: 'Calibri';
+}
+
+.a-pdf:hover {
+  text-decoration: underline;
 }
 
 .a-excel {
-  margin-left: 10px;
+  margin-left: 5px;
   color: green !important;
   font-size: small;
+  text-decoration: none;
+  font-weight: bold;
+  font-weight: 'Calibri';
+}
+
+.a-excel:hover {
+  text-decoration: underline;
 }
 
 .img-generate-excel {
@@ -1591,9 +1614,9 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
   font-weight: bold;
 }
 
-.payslip-thead {
+/* .payslip-thead {
   background-color: gray !important;
-}
+} */
 
 .payslip {
   color: black !important;
@@ -1753,13 +1776,13 @@ div.drp-buttons {
   border-radius: 5px;
   padding: 5px;
   font-size: 16px;
-  border: 2px solid lightslategray !important;
+  border: 1px solid lightslategray !important;
 }
 
 .btn-logout-cancel {
   background-color: rgb(6, 161, 244) !important;
   color: white !important;
-  border: 2px solid white !important;
+  border: 1px solid rgb(4, 95, 145) !important;
 }
 
 .btn-logout-cancel:hover {
@@ -1770,7 +1793,7 @@ div.drp-buttons {
 .btn-logout {
   background-color: rgb(248, 65, 65) !important;
   color: white !important;
-  border: 2px solid white !important;
+  border: 1px solid rgb(224, 35, 35) !important;
 }
 
 .btn-logout:hover {
@@ -1811,12 +1834,758 @@ div.drp-buttons {
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
 }
 .settings-body {
-  background-color: #fcf0d7 !important;
+  /* background-color: #fcf0d7 !important; */
+  background-image: url(/images/img/settings.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 } 
 
 .label-set {
   font-weight: bold;
   font-family: Calibri;
-  color: #5b0000  !important;
+  color: white !important;
   font-size: medium;
+  background-color: #7c0404b4 !important;
+  padding: 2.3px;
+  border-radius: 8px;
+  border: 1px solid rgba(66, 1, 1, 0.508) !important;
+  box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+}
+
+/* Navbar notif */
+.notifdescription {
+  font-family: 'Calibri';
+  color:  black !important;
+  font-weight: bold;
+}
+
+.notifsubdescription {
+  font-family: 'Calibri';
+  color:  black !important;
+}
+
+.notifdate {
+  font-family: 'Times New Roman';
+  color: black !important;
+  font-weight: bold;
+  float: right;
+}
+
+.btn-notif-close {
+  background-color: blue !important;
+  color: white !important;
+  /* border: 2px solid darkblue !important; */
+  font-family: 'Calibri';
+}
+
+.btn-notif-close:hover {
+  background-color: rgb(2, 2, 142) !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.btn-notif-delete {
+  background-color: red !important;
+  color: white !important;
+  /* border: 2px solid darkred !important; */
+  font-family: 'Calibri';
+}
+
+.btn-notif-delete:hover {
+  background-color: rgb(136, 2, 2) !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Employee / Job Status */
+.regular-status {
+    color: darkgreen !important;
+    background-color: rgb(186, 243, 186) !important;
+    border-radius: 8px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    border: 1px solid green !important;
+    letter-spacing: 1px;
+}
+
+.probationary-status {
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(170, 170, 10) !important;
+  letter-spacing: 1px;
+}
+
+.project-based-status {
+  color: rgb(143, 10, 143) !important;
+  background-color: rgb(246, 197, 246) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid darkmagenta !important;
+  letter-spacing: 1px;
+}
+
+.apprentice-status{
+  color: rgb(0, 123, 139) !important;
+  background-color: lightcyan !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(16, 178, 203) !important;
+  letter-spacing: 1px;
+}
+
+/*Training / Status*/
+.active-status {
+  color: darkgreen !important;
+    background-color: rgb(186, 243, 186) !important;
+    border-radius: 8px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    border: 1px solid green !important;
+    letter-spacing: 1px;
+}
+
+.inactive-status {
+  color: darkred !important;
+    background-color: rgb(243, 186, 186) !important;
+    border-radius: 8px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    border: 1px solid red !important;
+    letter-spacing: 1px;
+}
+
+.sss-idtype {
+  color: white !important;
+  background-color: rgb(20, 102, 179) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(2, 84, 116) !important;
+  letter-spacing: 1px;
+}
+
+.philhealth-idtype {
+  color: yellow !important;
+  background-color: rgb(17, 125, 15) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.pagibig-idtype {
+  color: rgb(244, 244, 4) !important;
+  background-color: rgb(16, 30, 138) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(6, 6, 120) !important;
+  letter-spacing: 1px;
+}
+
+.tin-idtype {
+  color: white !important;
+  background-color: rgb(204, 43, 43) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(143, 10, 10) !important;
+  letter-spacing: 1px;
+}
+
+.health-card-idtype {
+  color: white !important;
+  background-color: #117984 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #135D66 !important;
+  letter-spacing: 1px;
+}
+
+.resigned-status {
+  color: white !important;
+  background-color: rgb(200, 13, 13) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(246, 106, 106) !important;
+  letter-spacing: 1px;
+}
+
+.terminated-status {
+  color: white !important;
+  background-color: rgb(17, 155, 116) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(7, 105, 77) !important;
+  letter-spacing: 1px;
+}
+
+.end_of_contract-status {
+  color: white !important;
+  background-color: rgb(14, 128, 14) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid darkgreen!important;
+  letter-spacing: 1px;
+}
+
+.awol-status {
+  color: white !important;
+  background-color: rgb(77, 72, 72) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid darkgray!important;
+  letter-spacing: 1px;
+}
+
+/*-- Attendance Script --*/
+.clockin-text {
+  color: white !important;
+  background-color: rgb(18, 156, 27) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(43, 176, 43)!important;
+  letter-spacing: 1px;
+}
+
+.clockout-text {
+  color: white !important;
+  background-color: rgb(182, 13, 13) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(176, 43, 43)!important;
+  letter-spacing: 1px;
+}
+
+.totalhours-text {
+  color: black !important;
+  text-shadow: 1px 1px 2px white;
+  background-color: rgb(153, 238, 224) !important;
+  border-radius: 8px;
+  padding: 5px;
+  /* text-transform: uppercase; */
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(43, 176, 174)!important;
+  letter-spacing: 1px;
+}
+
+.restday {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.exempted {
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(143, 143, 14) !important;
+  letter-spacing: 1px;
+}
+
+.startdate-text{
+  color: #0a80c9 !important;
+  background-color: #aef1fd !important;
+  border-radius: 8px;
+  border: 1px darkblue !important;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #1c90d8 !important;
+  letter-spacing: 1px;
+}
+
+.enddate-text {
+  color: #ae0909 !important;
+  background-color: #faaaaa !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #df3333 !important;
+  letter-spacing: 1px;
+}
+
+.hiredate-text {
+  color: white !important;
+  background-color: #56a916 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #47900f !important;
+  letter-spacing: 1px;
+}
+
+.idnumber-text {
+  color: rgb(73, 73, 5) !important;
+  background-color: #faf3cf !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(180, 177, 9) !important;
+  letter-spacing: 1px;
+}
+
+.dateresigned-text {
+  color: rgb(73, 73, 5) !important;
+  background-color: #faf3cf !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(180, 177, 9) !important;
+  letter-spacing: 1px;
+}
+
+.DateStarted-text{
+  color: #0a80c9 !important;
+  background-color: #aef1fd !important;
+  border-radius: 8px;
+  border: 1px darkblue !important;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.EndDate-text {
+  color: #ae0909 !important;
+  background-color: #faaaaa !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #c64c4c !important;
+  letter-spacing: 1px;
+}
+
+.TotalHours-text {
+  color: white !important;
+  background-color: #439A97 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #62B6B7 !important;
+  letter-spacing: 1px;
+}
+
+.AcumulatedHours-text {
+  color: white !important;
+  background-color: #F94892 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #FFA1C9 !important;
+  letter-spacing: 1px;
+}
+
+.RemainingHours-text {
+  color: white !important;
+  background-color: #C147E9 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #E5B8F4 !important;
+  letter-spacing: 1px;
+}
+
+.appname-text{
+  color: black !important;
+  text-shadow: 1px 1px 2px white;
+  background-color: rgb(153, 238, 224) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(43, 176, 174)!important;
+  letter-spacing: 1px;
+}
+
+.appdate-text {
+  color: rgb(73, 73, 5) !important;
+  background-color: #faf3cf !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(180, 177, 9) !important;
+  letter-spacing: 1px;
+}
+
+.pending-requeststatus {
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(183, 183, 19) !important;
+  letter-spacing: 1px;
+}
+
+.approved-requeststatus {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.cancel-requeststatus {
+  color: darkred !important;
+    background-color: rgb(243, 186, 186) !important;
+    border-radius: 8px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    border: 1px solid red !important;
+    letter-spacing: 1px;
+}
+
+.monthly-text {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.allowances-text {
+  color: rgb(73, 73, 5) !important;
+  background-color: #faf3cf !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(180, 177, 9) !important;
+  letter-spacing: 1px;
+}
+
+.approved-status {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.cancelled-status {
+  color: darkred !important;
+    background-color: rgb(243, 186, 186) !important;
+    border-radius: 8px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    border: 1px solid red !important;
+    letter-spacing: 1px;
+}
+
+.amount-text {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.sss-type {
+  color: white !important;
+  background-color: rgb(20, 102, 179) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(2, 84, 116) !important;
+  letter-spacing: 1px;
+}
+
+.philhealth-type{
+  color: yellow !important;
+  background-color: rgb(17, 125, 15) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.tin-type {
+  color: white !important;
+  background-color: rgb(204, 43, 43) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(143, 10, 10) !important;
+  letter-spacing: 1px;
+}
+
+.pagibig-type {
+  color: rgb(244, 244, 4) !important;
+  background-color: rgb(16, 30, 138) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(6, 6, 120) !important;
+  letter-spacing: 1px;
+}
+
+.idtype-text {
+  color: white !important;
+  background-color: #117984 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #135D66 !important;
+  letter-spacing: 1px;
+}
+
+.payroll_startdate-text {
+  color: #0a80c9 !important;
+  background-color: #aef1fd !important;
+  border-radius: 8px;
+  border: 1px darkblue !important;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #1c90d8 !important;
+  letter-spacing: 1px;
+}
+
+.payroll_enddate-text {
+  color: #ae0909 !important;
+  background-color: #faaaaa !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #c64c4c !important;
+  letter-spacing: 1px;
+}
+
+.payrolldate-text {
+  color: rgb(0, 37, 139) !important;
+  background-color: rgb(186, 201, 243) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(13, 0, 255) !important;
+  letter-spacing: 1px;
+}
+
+.pending-status{
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(183, 183, 19) !important;
+  letter-spacing: 1px;
+}
+
+.cancel-status {
+  color: darkred !important;
+  background-color: rgb(243, 186, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid red !important;
+  letter-spacing: 1px;
+}
+
+.approved-status {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.rejected-status {
+  color: white !important;
+  background-color: rgb(204, 43, 43) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(143, 10, 10) !important;
+  letter-spacing: 1px;
+}
+
+.leavestartdate-text {
+  color: #0a80c9 !important;
+  background-color: #aef1fd !important;
+  border-radius: 8px;
+  border: 1px darkblue !important;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #1c90d8 !important;
+  letter-spacing: 1px;
+}
+
+.leaveenddate-text {
+  color: #ae0909 !important;
+  background-color: #faaaaa !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #c64c4c !important;
+  letter-spacing: 1px;
+}
+
+.applieddate-text {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.finished-status {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
+  letter-spacing: 1px;
+}
+
+.incoming-status {
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(183, 183, 19) !important;
+  letter-spacing: 1px;
 }

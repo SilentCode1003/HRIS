@@ -77,10 +77,152 @@
           { data: "sunday" },
           { data: "action" },
         ],
+          createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var mondayCell = $(row).find("td:eq(3)");
+          var tuesdayCell = $(row).find("td:eq(4)");
+          var wednesdayCell = $(row).find("td:eq(5)");
+          var thursdayCell = $(row).find("td:eq(6)");
+          var fridayCell = $(row).find("td:eq(7)");
+          var saturdayCell = $(row).find("td:eq(8)");
+          var sundayCell = $(row).find("td:eq(9)");
+
+          var mondayText = data.monday;
+          var tuesdayText = data.tuesday;
+          var wednesdayText = data.wednesday;
+          var thursdayText = data.thursday;
+          var fridayText = data.friday;
+          var saturdayText = data.saturday;
+          var sundayText = data.sunday;
+
+          var mondayClass = "";
+          var tuesdayClass = "";
+          var wednesdayClass = "";
+          var thursdayClass = "";
+          var fridayClass = "";
+          var saturdayClass = "";
+          var sundayClass = "";
+
+          switch (mondayText.toLowerCase()) {
+            case "00:00:00":
+              mondayClass = "restday-monday";
+              break;
+            case "exempted":
+              mondayClass = "exempted-monday";
+              break;
+            default:
+              mondayClass = ""; 
+          }
+
+          switch (tuesdayText.toLowerCase()) {
+            case "00:00:00":
+              tuesdayClass = "restday";
+              break;
+            case "exempted":
+              tuesdayClass = "exempted";
+              break;
+            default:
+              tuesdayClass = ""; 
+          }
+
+          switch (wednesdayText.toLowerCase()) {
+            case "00:00:00":
+              wednesdayClass = "restday";
+              break;
+            case "exempted":
+              wednesdayClass = "exempted";
+              break;
+            default:
+              wednesdayClass = ""; 
+          }
+
+          switch (thursdayText.toLowerCase()) {
+            case "00:00:00":
+              thursdayClass = "restday";
+              break;
+            case "exempted":
+              thursdayClass = "exempted";
+              break;
+            default:
+              thursdayClass = ""; 
+          }
+
+          switch (fridayText.toLowerCase()) {
+            case "00:00:00":
+              fridayClass = "restday";
+              break;
+            case "exempted":
+              fridayClass = "exempted";
+              break;
+            default:
+              fridayClass = ""; 
+          }
+
+          switch (saturdayText.toLowerCase()) {
+            case "00:00:00":
+              saturdayClass = "restday";
+              break;
+            case "exempted":
+              saturdayClass = "exempted";
+              break;
+            default:
+              saturdayClass = ""; 
+          }
+
+          switch (sundayText.toLowerCase()) {
+            case "restday":
+              sundayClass = "restday";
+              break;
+            case "exempted":
+              sundayClass = "exempted";
+              break;
+            default:
+              sundayClass = ""; 
+          }
+
+
+            mondayCell.html(`<span class="${mondayClass}">${mondayText}</span>`);
+            tuesdayCell.html(`<span class="${tuesdayClass}">${tuesdayText}</span>`);
+            wednesdayCell.html(`<span class="${wednesdayClass}">${wednesdayText}</span>`);
+            thursdayCell.html(`<span class="${thursdayClass}">${thursdayText}</span>`);
+            fridayCell.html(`<span class="${fridayClass}">${fridayText}</span>`);
+            saturdayCell.html(`<span class="${saturdayClass}">${saturdayText}</span>`);
+            sundayCell.html(`<span class="${sundayClass}">${sundayText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
         initComplete: function () {
         },
       });
     }
+
+    // Call the function when the document is ready
+    styleTableData();
+
+    // Call the function whenever the select dropdowns change
+    $("#mondayTimeIn, #mondayTimeOut").change(function() {
+        // Remove existing classes before restyling
+        $("#dataTable td").removeClass("clock-in-style rest-day-style exempted-style default-style clock-out-style");
+
+        // Restyle the table data
+        styleTableData();
+    });
+   
+
+    // Call the function when the document is ready
+    styleTableData();
+
+    // Call the function whenever the select dropdowns change
+    $("#mondayTimeIn, #mondayTimeOut").change(function() {
+        // Remove existing classes before restyling
+        $("#dataTable tbody td").removeClass("clock-in-style-1 rest-day-style exempted-style default-style clock-out-style-1");
+
+        // Restyle the table data
+        styleTableData();
+    });
 
     $(document).on("click", "#shiftsavebtn", function () {
       let employeeName = $("#employeeshift").val();
