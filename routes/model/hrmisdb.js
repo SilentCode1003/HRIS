@@ -884,6 +884,47 @@ exports.Admin_Notification = (data) => {
   return dataResult;
 };
 
+exports.TeamLeader_User = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      tluserid: key.tu_userid,
+      employeeid: key.tu_employeeid,
+      username: key.tu_username,
+      password: key.tu_password,
+      accesstype: key.tu_accesstype,
+      createby: key.tu_createby,
+      createdate: key.tu_createdate,
+      status: key.tu_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+exports.Master_Shift_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      shiftsettingsid: key.mss_shiftid,
+      shiftname: key.mss_shiftname,
+      startshift: key.mss_startshift,
+      endshift: key.mss_endshift,
+      createdate: key.mss_createdate,
+      createby: key.mss_createby,
+      status: key.mss_shiftstatus,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
 
 
 

@@ -60,7 +60,7 @@ router.get('/load', (req, res) => {
   
       let data = [employeeid, idtype, amount, period, cutoff];
   
-      let sql = `SELECT * FROM other_deductions WHERE od_employeeid = '${employeeid}' AND od_idtype = '${type}'`;
+      let sql = `SELECT * FROM other_deductions WHERE od_employeeid = '${employeeid}' AND od_idtype = '${idtype}'`;
   
       mysql.Select(sql, "Other_Deductions", (err, result) => {
         if (err) {

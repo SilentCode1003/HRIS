@@ -42,14 +42,14 @@
                    `;
 
 
-                            var imgElement = document.createElement("img");
-                            imgElement.src = "data:image/jpg;base64," + item.image;
-                            imgElement.alt = "Profile Image";
-                            imgElement.style.width = "90px";
-                            imgElement.style.height = "90px";
+                            // var imgElement = document.createElement("img");
+                            // imgElement.src = "data:image/jpg;base64," + item.image;
+                            // imgElement.alt = "Profile Image";
+                            // imgElement.style.width = "90px";
+                            // imgElement.style.height = "90px";
 
                             finalData.push({
-                                image: imgElement.outerHTML,
+                                // image: imgElement.outerHTML,
                                 govdeduct: item.govdeduct,
                                 employeeid: item.employeeid,
                                 type: item.type,
@@ -70,7 +70,7 @@
                     },
                 ],
                 columns: [
-                    { data: "image" },
+                    // { data: "image" },
                     { data: "govdeduct" },
                     { data: "employeeid" },
                     { data: "type" },
@@ -88,6 +88,36 @@
                     { data: "action" },
                 ],
                 createdRow: function (row, data, dataIndex) {
+                       //miyaka
+                    var typeCell = $(row).find("td:eq(3)");
+                    var amountCell = $(row).find("td:eq(4)");
+
+
+
+                    var typeText = data.type;
+
+                    var typeClass = "";
+
+                    switch (typeText.toLowerCase()) {
+                        case "sss":
+                            typeClass = "sss-type";
+                            break;
+                        case "philhealth":
+                            typeClass = "philhealth-type";
+                            break;
+                        case "tin":
+                            typeClass = "tin-type";
+                            break;
+                        case "pagibig":
+                            typeClass = "pagibig-type";
+                            break;
+                        default:
+                            typeClass = "";
+                    }
+
+                    typeCell.html(`<span class="${typeClass}">${typeText}</span>`);
+                    amountCell.wrapInner("<span class='amount-text'></span>");
+
                     $("td", row).each(function (index) {
                         this.style.textAlign = "center";
                         this.style.verticalAlign = "middle";
@@ -366,7 +396,7 @@
                     dataRow.push($(this).text());
                 });
             console.log(dataRow);
-            govdeduct = dataRow[1];
+            govdeduct = dataRow[0];
         });
 
         $(document).on("click", "#editBtn", function () {

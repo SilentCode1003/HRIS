@@ -3,18 +3,17 @@
 
   $(document).ready(function () {
     console.log("initialize");
+    // styleTableData();
     LoadTable();
     LoadList();
+    addShiftList();
     LoadEditShift();
     LoadEmplist();
     AddEmplist();
 
-
-    $(document).on('keyup', '#myInput', function () {
+    $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
-
-
 
     function LoadTable() {
       $("#dataTableshift").DataTable({
@@ -77,28 +76,166 @@
           { data: "sunday" },
           { data: "action" },
         ],
-        initComplete: function () {
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var mondayCell = $(row).find("td:eq(3)");
+          var tuesdayCell = $(row).find("td:eq(4)");
+          var wednesdayCell = $(row).find("td:eq(5)");
+          var thursdayCell = $(row).find("td:eq(6)");
+          var fridayCell = $(row).find("td:eq(7)");
+          var saturdayCell = $(row).find("td:eq(8)");
+          var sundayCell = $(row).find("td:eq(9)");
+
+          var mondayText = data.monday;
+          var tuesdayText = data.tuesday;
+          var wednesdayText = data.wednesday;
+          var thursdayText = data.thursday;
+          var fridayText = data.friday;
+          var saturdayText = data.saturday;
+          var sundayText = data.sunday;
+
+          var mondayClass = "";
+          var tuesdayClass = "";
+          var wednesdayClass = "";
+          var thursdayClass = "";
+          var fridayClass = "";
+          var saturdayClass = "";
+          var sundayClass = "";
+
+          switch (mondayText.toLowerCase()) {
+            case "00:00:00":
+              mondayClass = "restday-monday";
+              break;
+            case "exempted":
+              mondayClass = "exempted-monday";
+              break;
+            default:
+              mondayClass = "";
+          }
+
+          switch (tuesdayText.toLowerCase()) {
+            case "00:00:00":
+              tuesdayClass = "restday";
+              break;
+            case "exempted":
+              tuesdayClass = "exempted";
+              break;
+            default:
+              tuesdayClass = "";
+          }
+
+          switch (wednesdayText.toLowerCase()) {
+            case "00:00:00":
+              wednesdayClass = "restday";
+              break;
+            case "exempted":
+              wednesdayClass = "exempted";
+              break;
+            default:
+              wednesdayClass = "";
+          }
+
+          switch (thursdayText.toLowerCase()) {
+            case "00:00:00":
+              thursdayClass = "restday";
+              break;
+            case "exempted":
+              thursdayClass = "exempted";
+              break;
+            default:
+              thursdayClass = "";
+          }
+
+          switch (fridayText.toLowerCase()) {
+            case "00:00:00":
+              fridayClass = "restday";
+              break;
+            case "exempted":
+              fridayClass = "exempted";
+              break;
+            default:
+              fridayClass = "";
+          }
+
+          switch (saturdayText.toLowerCase()) {
+            case "00:00:00":
+              saturdayClass = "restday";
+              break;
+            case "exempted":
+              saturdayClass = "exempted";
+              break;
+            default:
+              saturdayClass = "";
+          }
+
+          switch (sundayText.toLowerCase()) {
+            case "restday":
+              sundayClass = "restday";
+              break;
+            case "exempted":
+              sundayClass = "exempted";
+              break;
+            default:
+              sundayClass = "";
+          }
+
+          mondayCell.html(`<span class="${mondayClass}">${mondayText}</span>`);
+          tuesdayCell.html(
+            `<span class="${tuesdayClass}">${tuesdayText}</span>`
+          );
+          wednesdayCell.html(
+            `<span class="${wednesdayClass}">${wednesdayText}</span>`
+          );
+          thursdayCell.html(
+            `<span class="${thursdayClass}">${thursdayText}</span>`
+          );
+          fridayCell.html(`<span class="${fridayClass}">${fridayText}</span>`);
+          saturdayCell.html(
+            `<span class="${saturdayClass}">${saturdayText}</span>`
+          );
+          sundayCell.html(`<span class="${sundayClass}">${sundayText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
         },
+        initComplete: function () {},
       });
     }
+
+    // // Call the function when the document is ready
+    // styleTableData();
+
+    // // Call the function whenever the select dropdowns change
+    // $("#mondayTimeIn, #mondayTimeOut").change(function () {
+    //   // Remove existing classes before restyling
+    //   $("#dataTable td").removeClass(
+    //     "clock-in-style rest-day-style exempted-style default-style clock-out-style"
+    //   );
+
+    //   // Restyle the table data
+    //   styleTableData();
+    // });
+
+    // // Call the function when the document is ready
+    // styleTableData();
+
+    // // Call the function whenever the select dropdowns change
+    // $("#mondayTimeIn, #mondayTimeOut").change(function () {
+    //   // Remove existing classes before restyling
+    //   $("#dataTable tbody td").removeClass(
+    //     "clock-in-style-1 rest-day-style exempted-style default-style clock-out-style-1"
+    //   );
+
+    //   // Restyle the table data
+    //   styleTableData();
+    // });
 
     $(document).on("click", "#shiftsavebtn", function () {
       let employeeName = $("#employeeshift").val();
       let department = $("#shiftdepartment").val();
-      let mondayTimein = $("#mondayTimeIn").val();
-      let mondayTimeout = $("#mondayTimeOut").val();
-      let tuesdayTimein = $("#tuesdayTimeIn").val();
-      let tuesdayTimeout = $("#tuesdayTimeOut").val();
-      let wednesdayTimein = $("#wednesdayTimeIn").val();
-      let wednesdayTimeout = $("#wednesdayTimeOut").val();
-      let thursdayTimein = $("#thursdayTimeIn").val();
-      let thursdayTimeout = $("#thursdayTimeOut").val();
-      let fridayTimein = $("#fridayTimeIn").val();
-      let fridayTimeout = $("#fridayTimeOut").val();
-      let saturdayTimein = $("#saturdayTimeIn").val();
-      let saturdayTimeout = $("#saturdayTimeOut").val();
-      let sundayTimein = $("#sundayTimeIn").val();
-      let sundayTimeout = $("#sundayTimeOut").val();
+      let shiftsettingsid = $("#shiftsettingsid").val();
 
       var message = "";
 
@@ -108,105 +245,28 @@
       if (department == "Department") {
         message += "Department is required\n";
       }
-      if (mondayTimein == "Monday Time In" || mondayTimeout == "Monday Time Out") {
-        message += "Monday shift time is required\n";
+      if (shiftsettingsid == "Department") {
+        message += "Department is required\n";
       }
-      if (tuesdayTimein == "Tuesday Time In" || tuesdayTimeout == "Tuesday Time Out") {
-        message += "Tuesday shift time is required\n";
-      }
-      if (wednesdayTimein == "Wednesday Time In" || wednesdayTimeout == "Wednesday Time Out") {
-        message += "Wednesday shift time is required\n";
-      }
-      if (thursdayTimein == "Thursday Time In" || thursdayTimeout == "Thursday Time Out") {
-        message += "Thursday shift time is required\n";
-      }
-      if (fridayTimein == "Friday Time In" || fridayTimeout == "Friday Time Out") {
-        message += "Friday shift time is required\n";
-      }
-      if (saturdayTimein == "Saturday Time In" || saturdayTimeout == "Saturday Time Out") {
-        message += "Saturday shift time is required\n";
-      }
-      if (sundayTimein == "Sunday Time In" || sundayTimeout == "Sunday Time Out") {
-        message += "Sunday shift time is required\n";
-      }
-
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        const shiftData = {
-          "shifts": {
-            "Monday": { "time_in": mondayTimein, "time_out": mondayTimeout },
-            "Tuesday": { "time_in": tuesdayTimein, "time_out": tuesdayTimeout },
-            "Wednesday": { "time_in": wednesdayTimein, "time_out": wednesdayTimeout },
-            "Thursday": { "time_in": thursdayTimein, "time_out": thursdayTimeout },
-            "Friday": { "time_in": fridayTimein, "time_out": fridayTimeout },
-            "Saturday": { "time_in": saturdayTimein, "time_out": saturdayTimeout },
-            "Sunday": { "time_in": sundayTimein, "time_out": sundayTimeout }
-          }
-        };
-
-        let mondayformat = "";
-        let tuesdayformat = "";
-        let wednesdayformat = "";
-        let thursdayformat = "";
-        let fridayformat = "";
-        let saturdayformat = "";
-        let sundayformat = "";
-
-        Object.keys(shiftData.shifts).forEach(day => {
-          const timeIn = shiftData.shifts[day].time_in;
-          const timeOut = shiftData.shifts[day].time_out;
-          const dayFormat = `{"time_in": "${timeIn}", "time_out": "${timeOut}"},`;
-
-          switch (day) {
-            case 'Monday':
-              mondayformat += dayFormat;
-              break;
-            case 'Tuesday':
-              tuesdayformat += dayFormat;
-              break;
-            case 'Wednesday':
-              wednesdayformat += dayFormat;
-              break;
-            case 'Thursday':
-              thursdayformat += dayFormat;
-              break;
-            case 'Friday':
-              fridayformat += dayFormat;
-              break;
-            case 'Saturday':
-              saturdayformat += dayFormat;
-              break;
-            case 'Sunday':
-              sundayformat += dayFormat;
-              break;
-            default:
-              break;
-          }
-        });
-
         $.ajax({
           type: "POST",
           url: "/shift/save",
           data: {
             employeeName: employeeName,
             department: department,
-            mondayformat: mondayformat.slice(0, -1),
-            tuesdayformat: tuesdayformat.slice(0, -1),
-            wednesdayformat: wednesdayformat.slice(0, -1),
-            thursdayformat: thursdayformat.slice(0, -1),
-            fridayformat: fridayformat.slice(0, -1),
-            saturdayformat: saturdayformat.slice(0, -1),
-            sundayformat: sundayformat.slice(0, -1),
+            shiftsettingsid: shiftsettingsid,
           },
           success: function (result) {
             if (result.msg == "success") {
               swal({
-                title: "Saved Successfully",
+                title: "Insert Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then(results => {
+              }).then((result) => {
                 window.location.reload();
               });
               LoadTable();
@@ -216,16 +276,19 @@
                 text: "Data already exists!",
                 icon: "warning",
                 button: "OK!",
+              }).then((result) => {
+                window.location.reload();
               });
+              LoadTable();
             }
           },
           error: function (err) {
-            swal("Error", "An error occurred while saving data!", "error");
-          }
+            swal("Error", "An error occurred while saving data.", "error");
+            console.error("Error saving data:", err);
+          },
         });
       }
     });
-
 
     function AddEmplist() {
       $.ajax({
@@ -237,15 +300,14 @@
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
-            $('#employeeshift').append(options);
+            $("#employeeshift").append(options);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
     }
-
 
     function LoadList() {
       $.ajax({
@@ -257,15 +319,35 @@
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
-            $('#shiftdepartment').append(options);
+            $("#shiftdepartment").append(options);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
+    }
 
+    function addShiftList() {
+      $.ajax({
+        type: "GET",
+        url: "/shiftsettings/load",
+        success: function (result) {
+          var data = result.data;
 
+          $.each(data, function (key, item) {
+            var options = new Option(
+              item.shiftsettingsid,
+              item.shiftsettingsid
+            );
+            $(options).html(item.shiftname);
+            $("#shiftsettingsid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
     }
 
     function LoadEditShift() {
@@ -278,12 +360,12 @@
           $.each(data, function (key, item) {
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
-            $('#editshiftdepartment').append(options);
+            $("#editshiftdepartment").append(options);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
     }
 
@@ -297,16 +379,15 @@
           $.each(data, function (key, item) {
             var options = new Option(item.newEmployeeId, item.newEmployeeId);
             $(options).html(item.firstname);
-            $('#editshiftemployee').append(options);
+            $("#editshiftemployee").append(options);
             console.log(item.firstname);
           });
         },
         error: function (result) {
-          alert('error: ' + result.data);
-        }
+          alert("error: " + result.data);
+        },
       });
     }
-
 
     $("#dataTableshift tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -318,6 +399,7 @@
         });
       console.log(dataRow);
       shiftid = dataRow[0];
+      console.log(shiftid);
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -331,7 +413,7 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
-            console.log('data', existingData);
+            console.log("data", existingData);
 
             $.each(existingData, (key, item) => {
               $("#editshiftid").val(item.shiftid);
@@ -351,6 +433,104 @@
               $("#editsaturdaytimeout").val(item.saturday_time_out);
               $("#editsundaytimein").val(item.sunday_time_in);
               $("#editsundaytimeout").val(item.sunday_time_out);
+              // monday -->
+              if (
+                item.monday_time_in === "Rest Day" &&
+                item.monday_time_out === "Rest Day"
+              ) {
+                $("#editmondaytimein").prop("disabled", true); 
+                $("#editmondaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true); 
+              } else if (
+                item.monday_time_in === "Exempted" &&
+                item.monday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true); 
+              }
+              // tuesday -->
+              if (
+                item.tuesday_time_in === "Rest Day" &&
+                item.tuesday_time_out === "Rest Day"
+              ) {
+                $("#edittuesdaytimein").prop("disabled", true); 
+                $("#edittuesdaytimeout").prop("disabled", true); 
+                $("#edittuesdayrestday").prop("checked", true); 
+              } else if (
+                item.tuesday_time_in === "Exempted" &&
+                item.tuesday_time_out === "Exempted"
+              ) {
+                $("#edittuesdexmepted").prop("checked", true); 
+              }
+               // wednesday -->
+               if (
+                item.wednesday_time_in === "Rest Day" &&
+                item.wednesday_time_out === "Rest Day"
+              ) {
+                $("#editwednesdaytimein").prop("disabled", true);
+                $("#editwednesdaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true); 
+              } else if (
+                item.wednesday_time_in === "Exempted" &&
+                item.wednesday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true);
+              }
+               // thursday -->
+               if (
+                item.thursday_time_in === "Rest Day" &&
+                item.thursday_time_out === "Rest Day"
+              ) {
+                $("#editthursdaytimein").prop("disabled", true); 
+                $("#editthursdaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true);
+              } else if (
+                item.thursday_time_out === "Exempted" &&
+                item.thursday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true); 
+              }
+               // friday -->
+               if (
+                item.friday_time_in === "Rest Day" &&
+                item.friday_time_out === "Rest Day"
+              ) {
+                $("#editfridaytimein").prop("disabled", true); 
+                $("#editfridaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true); 
+              } else if (
+                item.friday_time_in === "Exempted" &&
+                item.friday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true); 
+              }
+               // saturday -->
+               if (
+                item.saturday_time_in === "Rest Day" &&
+                item.saturday_time_out === "Rest Day"
+              ) {
+                $("#editsaturdaytimein").prop("disabled", true); 
+                $("#editsaturdaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true); 
+              } else if (
+                item.saturday_time_in === "Exempted" &&
+                item.saturday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true);
+              }
+               // sunday -->
+               if (
+                item.sunday_time_in === "Rest Day" &&
+                item.sunday_time_out === "Rest Day"
+              ) {
+                $("#editsundaytimein").prop("disabled", true); 
+                $("#editsundaytimeout").prop("disabled", true); 
+                $("input[type='checkbox']:first").prop("checked", true); 
+              } else if (
+                item.sunday_time_in === "Exempted" &&
+                item.sunday_time_out === "Exempted"
+              ) {
+                $("input[type='checkbox']:last").prop("checked", true); 
+              }
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -381,25 +561,46 @@
 
       var message = "";
 
-      if (mondayTimein == "Monday Time In" || mondayTimeout == "Monday Time Out") {
+      if (
+        mondayTimein == "Monday Time In" ||
+        mondayTimeout == "Monday Time Out"
+      ) {
         message += "Monday shift time is required\n";
       }
-      if (tuesdayTimein == "Tuesday Time In" || tuesdayTimeout == "Tuesday Time Out") {
+      if (
+        tuesdayTimein == "Tuesday Time In" ||
+        tuesdayTimeout == "Tuesday Time Out"
+      ) {
         message += "Tuesday shift time is required\n";
       }
-      if (wednesdayTimein == "Wednesday Time In" || wednesdayTimeout == "Wednesday Time Out") {
+      if (
+        wednesdayTimein == "Wednesday Time In" ||
+        wednesdayTimeout == "Wednesday Time Out"
+      ) {
         message += "Wednesday shift time is required\n";
       }
-      if (thursdayTimein == "Thursday Time In" || thursdayTimeout == "Thursday Time Out") {
+      if (
+        thursdayTimein == "Thursday Time In" ||
+        thursdayTimeout == "Thursday Time Out"
+      ) {
         message += "Thursday shift time is required\n";
       }
-      if (fridayTimein == "Friday Time In" || fridayTimeout == "Friday Time Out") {
+      if (
+        fridayTimein == "Friday Time In" ||
+        fridayTimeout == "Friday Time Out"
+      ) {
         message += "Friday shift time is required\n";
       }
-      if (saturdayTimein == "Saturday Time In" || saturdayTimeout == "Saturday Time Out") {
+      if (
+        saturdayTimein == "Saturday Time In" ||
+        saturdayTimeout == "Saturday Time Out"
+      ) {
         message += "Saturday shift time is required\n";
       }
-      if (sundayTimein == "Sunday Time In" || sundayTimeout == "Sunday Time Out") {
+      if (
+        sundayTimein == "Sunday Time In" ||
+        sundayTimeout == "Sunday Time Out"
+      ) {
         message += "Sunday shift time is required\n";
       }
 
@@ -407,48 +608,69 @@
         swal("Validation Error", message, "error");
       } else {
         const convertTimeTo24Format = (timeStr) => {
-          const [time, period] = timeStr.split(' ');
-          let [hours, minutes] = time.split(':');
+          const [time, period] = timeStr.split(" ");
+          let [hours, minutes] = time.split(":");
           hours = parseInt(hours, 10);
 
-          if (period === 'PM' && hours !== 12) {
+          if (period === "PM" && hours !== 12) {
             hours += 12;
-          } else if (period === 'AM' && hours === 12) {
+          } else if (period === "AM" && hours === 12) {
             hours = 0;
           }
 
-          return `${hours.toString().padStart(2, '0')}:${minutes}:00`;
+          return `${hours.toString().padStart(2, "0")}:${minutes}:00`;
         };
 
         const formatTimeForDatabase = (timeStr) => {
           switch (timeStr) {
-            case 'Rest Day':
-              return '00:00:00';
-            case '05:00 PM':
-              return '17:00:00';
-            case '06:00 PM':
-              return '18:00:00';
-            case '08:00 AM':
-              return '08:00:00';
-            case '09:00 AM':
-              return '09:00:00';
-            case 'Exempted':
-              return 'Exempted';
+            case "Rest Day":
+              return "00:00:00";
+            case "05:00 PM":
+              return "17:00:00";
+            case "06:00 PM":
+              return "18:00:00";
+            case "08:00 AM":
+              return "08:00:00";
+            case "09:00 AM":
+              return "09:00:00";
+            case "Exempted":
+              return "Exempted";
             default:
               return convertTimeTo24Format(timeStr);
           }
         };
 
         const shiftData = {
-          "shifts": {
-            "Monday": { "time_in": formatTimeForDatabase(mondayTimein), "time_out": formatTimeForDatabase(mondayTimeout) },
-            "Tuesday": { "time_in": formatTimeForDatabase(tuesdayTimein), "time_out": formatTimeForDatabase(tuesdayTimeout) },
-            "Wednesday": { "time_in": formatTimeForDatabase(wednesdayTimein), "time_out": formatTimeForDatabase(wednesdayTimeout) },
-            "Thursday": { "time_in": formatTimeForDatabase(thursdayTimein), "time_out": formatTimeForDatabase(thursdayTimeout) },
-            "Friday": { "time_in": formatTimeForDatabase(fridayTimein), "time_out": formatTimeForDatabase(fridayTimeout) },
-            "Saturday": { "time_in": formatTimeForDatabase(saturdayTimein), "time_out": formatTimeForDatabase(saturdayTimeout) },
-            "Sunday": { "time_in": formatTimeForDatabase(sundayTimein), "time_out": formatTimeForDatabase(sundayTimeout) }
-          }
+          shifts: {
+            Monday: {
+              time_in: formatTimeForDatabase(mondayTimein),
+              time_out: formatTimeForDatabase(mondayTimeout),
+            },
+            Tuesday: {
+              time_in: formatTimeForDatabase(tuesdayTimein),
+              time_out: formatTimeForDatabase(tuesdayTimeout),
+            },
+            Wednesday: {
+              time_in: formatTimeForDatabase(wednesdayTimein),
+              time_out: formatTimeForDatabase(wednesdayTimeout),
+            },
+            Thursday: {
+              time_in: formatTimeForDatabase(thursdayTimein),
+              time_out: formatTimeForDatabase(thursdayTimeout),
+            },
+            Friday: {
+              time_in: formatTimeForDatabase(fridayTimein),
+              time_out: formatTimeForDatabase(fridayTimeout),
+            },
+            Saturday: {
+              time_in: formatTimeForDatabase(saturdayTimein),
+              time_out: formatTimeForDatabase(saturdayTimeout),
+            },
+            Sunday: {
+              time_in: formatTimeForDatabase(sundayTimein),
+              time_out: formatTimeForDatabase(sundayTimeout),
+            },
+          },
         };
 
         let mondayformat = "";
@@ -459,31 +681,31 @@
         let saturdayformat = "";
         let sundayformat = "";
 
-        Object.keys(shiftData.shifts).forEach(day => {
+        Object.keys(shiftData.shifts).forEach((day) => {
           const timeIn = shiftData.shifts[day].time_in;
           const timeOut = shiftData.shifts[day].time_out;
           const dayFormat = `{"time_in": "${timeIn}", "time_out": "${timeOut}"},`;
 
           switch (day) {
-            case 'Monday':
+            case "Monday":
               mondayformat += dayFormat;
               break;
-            case 'Tuesday':
+            case "Tuesday":
               tuesdayformat += dayFormat;
               break;
-            case 'Wednesday':
+            case "Wednesday":
               wednesdayformat += dayFormat;
               break;
-            case 'Thursday':
+            case "Thursday":
               thursdayformat += dayFormat;
               break;
-            case 'Friday':
+            case "Friday":
               fridayformat += dayFormat;
               break;
-            case 'Saturday':
+            case "Saturday":
               saturdayformat += dayFormat;
               break;
-            case 'Sunday':
+            case "Sunday":
               sundayformat += dayFormat;
               break;
             default:
@@ -511,7 +733,7 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then(results => {
+              }).then((results) => {
                 window.location.reload();
               });
               LoadTable();
@@ -526,31 +748,28 @@
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data!", "error");
-          }
+          },
         });
       }
     });
-
-
   });
-
 
   //#region FUNCTIONS
 
   const setTimeOut = (timeInSelect, timeOutSelect) => {
     $(timeInSelect).change(function () {
       const selectedTimeIn = $(this).val();
-      let selectedTimeOut = '';
+      let selectedTimeOut = "";
 
       switch (selectedTimeIn) {
-        case '08:00:00':
-          selectedTimeOut = '17:00:00'; 
+        case "08:00:00":
+          selectedTimeOut = "17:00:00";
           break;
-        case '09:00:00':
-          selectedTimeOut = '18:00:00'; 
+        case "09:00:00":
+          selectedTimeOut = "18:00:00";
           break;
-        case '00:00:00': 
-        case 'Exempted':
+        case "00:00:00":
+        case "Exempted":
           selectedTimeOut = selectedTimeIn;
           break;
         default:
@@ -565,18 +784,18 @@
   const editsetTimeOut = (edittimeInSelect, edittimeOutSelect) => {
     $(edittimeInSelect).change(function () {
       const editselectedTimeIn = $(this).val();
-      let editselectedTimeOut = '';
+      let editselectedTimeOut = "";
 
       switch (editselectedTimeIn) {
-        case '08:00 AM':
-         editselectedTimeOut = '05:00 PM'; 
+        case "08:00 AM":
+          editselectedTimeOut = "05:00 PM";
           break;
-        case '09:00 AM':
-         editselectedTimeOut = '06:00 PM'; 
+        case "09:00 AM":
+          editselectedTimeOut = "06:00 PM";
           break;
-        case 'Rest Day': 
-        case 'Exempted':
-         editselectedTimeOut = editselectedTimeIn;
+        case "Rest Day":
+        case "Exempted":
+          editselectedTimeOut = editselectedTimeIn;
           break;
         default:
           break;
@@ -586,22 +805,21 @@
     });
   };
 
+  setTimeOut("#mondayTimeIn", "#mondayTimeOut");
+  setTimeOut("#tuesdayTimeIn", "#tuesdayTimeOut");
+  setTimeOut("#wednesdayTimeIn", "#wednesdayTimeOut");
+  setTimeOut("#thursdayTimeIn", "#thursdayTimeOut");
+  setTimeOut("#fridayTimeIn", "#fridayTimeOut");
+  setTimeOut("#saturdayTimeIn", "#saturdayTimeOut");
+  setTimeOut("#sundayTimeIn", "#sundayTimeOut");
 
-  setTimeOut('#mondayTimeIn', '#mondayTimeOut');
-  setTimeOut('#tuesdayTimeIn', '#tuesdayTimeOut');
-  setTimeOut('#wednesdayTimeIn', '#wednesdayTimeOut');
-  setTimeOut('#thursdayTimeIn', '#thursdayTimeOut');
-  setTimeOut('#fridayTimeIn', '#fridayTimeOut');
-  setTimeOut('#saturdayTimeIn', '#saturdayTimeOut');
-  setTimeOut('#sundayTimeIn', '#sundayTimeOut');
-
-  editsetTimeOut('#editmondaytimein', '#editmondaytimeout');
-  editsetTimeOut('#edittuesdaytimein', '#edittuesdaytimeout');
-  editsetTimeOut('#editwednesdaytimein', '#editwednesdaytimeout');
-  editsetTimeOut('#editthursdaytimein', '#editthursdaytimeout');
-  editsetTimeOut('#editfridaytimein', '#editfridaytimeout');
-  editsetTimeOut('#editsaturdaytimein', '#editsaturdaytimeout');
-  editsetTimeOut('#editsundaytimein', '#editsundaytimeout');
+  editsetTimeOut("#editmondaytimein", "#editmondaytimeout");
+  editsetTimeOut("#edittuesdaytimein", "#edittuesdaytimeout");
+  editsetTimeOut("#editwednesdaytimein", "#editwednesdaytimeout");
+  editsetTimeOut("#editthursdaytimein", "#editthursdaytimeout");
+  editsetTimeOut("#editfridaytimein", "#editfridaytimeout");
+  editsetTimeOut("#editsaturdaytimein", "#editsaturdaytimeout");
+  editsetTimeOut("#editsundaytimein", "#editsundaytimeout");
 
   function formatTime(time) {
     if (!time) return "";
@@ -636,5 +854,4 @@
       }
     }
   }
-
 </script>

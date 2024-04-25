@@ -397,7 +397,7 @@ form select:not(#inputState) {
 /* Load Spinner */
 .loader-wrapper {
   width: 100vw;
-  height: 100vh;
+  height: 155vh;
   position: absolute;
   top: 0;
   left: 0;
@@ -604,15 +604,15 @@ form select:not(#inputState) {
 
 /*WENDELL CSS*/
 
-.green-row {
+/* .green-row {
   background-color: green;
-  color: white; /* Optional: Change text color for better visibility */
+  color: white;
 }
 
 .red-row {
   background-color: red;
-  color: white; /* Optional: Change text color for better visibility */
-}
+  color: white; 
+} */
 
 
 .coming_soon{

@@ -1,0 +1,721 @@
+<script>
+    $(document).ready(function () {
+      //let employeeid = "<%=employeeid%>";
+      let notificationId = "";
+      let notificationIdClicked = "";
+      let selectedEmployeeId = "";
+      loadNotifBadge();
+      //showEmployeeModal();
+      //sendEmployeeIDOnLoad();
+  
+      //#region SEARCH EMPLOYEE
+  
+      $("#searchForm").submit(function (e) {
+        e.preventDefault();
+        const searchValue = $("#searchInput").val().trim();
+        if (searchValue !== "") {
+          searchEmployees(searchValue);
+        }
+      });
+  
+      $("#searchInput").keyup(function () {
+        let searchValue = $(this).val().trim();
+        if (searchValue !== "") {
+          searchValue = adjustSearchTerm(searchValue);
+          searchEmployees(searchValue);
+        } else {
+          hideAutocompleteDropdown();
+        }
+      });
+  
+      function adjustSearchTerm(searchTerm) {
+        const names = searchTerm.split(" ");
+        if (names.length > 1) {
+          return `${names[names.length - 1]} ${names.slice(0, -1).join(" ")}`;
+        }
+        return searchTerm;
+      }
+  
+      function searchEmployees(searchTerm) {
+        $.ajax({
+          url: "/teamleadindex/searchemployee",
+          method: "POST",
+          data: { search: searchTerm },
+          success: function (response) {
+            if (response.msg === "success") {
+              populateAutocompleteDropdown(response.data);
+            } else {
+              console.error("Error:", response.data);
+              hideAutocompleteDropdown();
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error:", error);
+            hideAutocompleteDropdown();
+          },
+        });
+      }
+  
+      function showEmployeeModal(name, employeeId) {
+        $("#employeeprofilename").text(name);
+        $("#employeeprofileid").text(`Employee ID: ${employeeId}`);
+  
+        console.log("Showing employee modal for ID:", employeeId);
+        // $("#topbar_viewmodal").modal("show");
+  
+        // $("#topbar_viewmodal").on("shown.bs.modal", function () {
+        //   console.log("Modal is shown for employee ID:", employeeId);
+        //   loademployee(employeeId);
+        // });
+      }
+  
+      function populateAutocompleteDropdown(employees) {
+        const dropdown = $("#autocompleteDropdown");
+        dropdown.empty();
+        employees.forEach(function (employee) {
+          const imageUrl = `data:image/jpeg;base64,${employee.profilePic}`;
+          const dropdownItem = $(`
+        <a id="searchprofile" class="dropdown-item" data-toggle="modal" data-target="#profileModal" data-employeeid="${employee.employeeid}">
+          <img src="${imageUrl}" alt="Profile Picture" class="mr-2" style="width: 50px; height: 50px; border-radius: 50%;">
+          ${employee.name} ${employee.employeeid}
+        </a>`);
+          dropdownItem.click(function () {
+            selectedEmployeeId = employee.employeeid;
+            showEmployeeModal(employee.name, employee.employeeid);
+          });
+          dropdown.append(dropdownItem);
+        });
+        dropdown.show();
+      }
+  
+      function hideAutocompleteDropdown() {
+        $("#autocompleteDropdown").hide();
+      }
+  
+      $(document).on("click", "#searchprofile", function (event) {
+        console.log("HIT Employee ID:", selectedEmployeeId);
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profilepreview").attr(
+                  "src",
+                  "data:image/jpg;base64," + item.image
+                );
+                base64String = item.image;
+                $("#profileid").text(item.employeeid);
+                $("#profiltenure").text(item.tenure);
+                $("#profilefullname").text(item.fullname);
+                $("#profilefname").text(item.firstname);
+                $("#profilemidname").text(item.middlename);
+                $("#profilelastname").text(item.lastname);
+                $("#profilebday").text(item.birthday);
+                $("#profilebday2").text(item.birthdayformat);
+                $("#profilegender").text(item.gender);
+                $("#profilecicilstatus").text(item.civilstatus);
+                $("#profilephone").text(item.phone);
+                $("#profilephone2").text(item.phone);
+                $("#profileemail").text(item.email);
+                $("#profilehiredate").text(item.hiredate);
+                $("#profilejobstatus").text(item.jobstatus);
+                $("#profileemcontact").text(item.emergencycontact);
+                $("#profileemphone").text(item.emergencyphone);
+                $("#profiledepartment").text(item.department);
+                $("#profileposition").text(item.position);
+                $("#profileposition2").text(item.position);
+                $("#profileaddress").text(item.address);
+                $("#profileaddress2").text(item.address);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#showleavehistory", function () {
+        $(`#dataTableleaveprofile`).find("tr:gt(0)").remove();
+  
+        $.ajax({
+          type: "POST",
+          url: "/employee/getleave",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTableleaveprofile")) {
+              $("#dataTableleaveprofile").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById("dataTableleaveprofile");
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var LEAVE_TYPE = row.insertCell(0);
+              var START_DATE = row.insertCell(1);
+              var ENDDATE = row.insertCell(2);
+              var STATUS = row.insertCell(3);
+  
+              LEAVE_TYPE.innerHTML = item.leavetype;
+              START_DATE.innerHTML = item.startdate;
+              ENDDATE.innerHTML = item.enddate;
+              STATUS.innerHTML = item.status;
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profiledepartmentleave").text(item.department);
+                $("#profilepositionleave").text(item.position);
+                $("#profilebdayleave").text(item.birthday);
+                $("#profilecicilstatusleave").text(item.civilstatus);
+                $("#profileaddressleave").text(item.address);
+                $("#profilephoneleave").text(item.phone);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#showgovprofile", function () {
+        $(`#dataTablegovermentidprofile`).find("tr:gt(0)").remove();
+        $.ajax({
+          type: "POST",
+          url: "/employee/getgovid",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTablegovermentidprofile")) {
+              $("#dataTablegovermentidprofile").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById(
+              "dataTablegovermentidprofile"
+            );
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var ID_TYPE = row.insertCell(0);
+              var ID_NUMBER = row.insertCell(1);
+              var ISSUE_DATE = row.insertCell(2);
+  
+              ID_TYPE.innerHTML = item.idtype;
+              ID_NUMBER.innerHTML = item.idnumber;
+              ISSUE_DATE.innerHTML = item.issuedate;
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profiledepartmentgov").text(item.department);
+                $("#profilepositiongov").text(item.position);
+                $("#profilebdaygov").text(item.birthday);
+                $("#profilecicilstatusgov").text(item.civilstatus);
+                $("#profileaddressgov").text(item.address);
+                $("#profilephonegov").text(item.phone);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#showhealthprofile", function () {
+        $(`#dataTablehealthrecordprofile`).find("tr:gt(0)").remove();
+  
+        $.ajax({
+          type: "POST",
+          url: "/employee/gethealth",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTablehealthrecordprofile")) {
+              $("#dataTablehealthrecordprofile").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById(
+              "dataTablehealthrecordprofile"
+            );
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var BLOOD_TYPE = row.insertCell(0);
+              var MEDICAL_CONDITION = row.insertCell(1);
+              var PRESCRIBED_CONDITION = row.insertCell(2);
+              var LAST_CHECKUP = row.insertCell(3);
+              var INSURANCE = row.insertCell(4);
+              var INSURANCE_NUMBER = row.insertCell(5);
+  
+              BLOOD_TYPE.innerHTML = item.bloodtype;
+              MEDICAL_CONDITION.innerHTML = item.medicalcondition;
+              PRESCRIBED_CONDITION.innerHTML = item.prescribemedications;
+              LAST_CHECKUP.innerHTML = item.lastcheckup;
+              INSURANCE.innerHTML = item.insurance;
+              INSURANCE_NUMBER.innerHTML = item.insurancenumber;
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profiledepartmenthealth").text(item.department);
+                $("#profilepositionhealth").text(item.position);
+                $("#profilebdayhealth").text(item.birthday);
+                $("#profilecicilstatushealth").text(item.civilstatus);
+                $("#profileaddresshealth").text(item.address);
+                $("#profilephonehealth").text(item.phone);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#showtrainingprofile", function () {
+        $(`#dataTabletrainingprofile`).find("tr:gt(0)").remove();
+  
+        $.ajax({
+          type: "POST",
+          url: "/employee/gettraining",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTabletrainingprofile")) {
+              $("#dataTabletrainingprofile").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById(
+              "dataTabletrainingprofile"
+            );
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var NAME = row.insertCell(0);
+              var START_DATE = row.insertCell(1);
+              var END_DATE = row.insertCell(2);
+              var LOCATION = row.insertCell(3);
+              var STATUS = row.insertCell(4);
+  
+              NAME.innerHTML = item.name;
+              START_DATE.innerHTML = item.startdate;
+              END_DATE.innerHTML = item.enddate;
+              LOCATION.innerHTML = item.location;
+              STATUS.innerHTML = item.status;
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profiledepartmenttraining").text(item.department);
+                $("#profilepositiontraining").text(item.position);
+                $("#profilebdaytraining").text(item.birthday);
+                $("#profilecicilstatustraining").text(item.civilstatus);
+                $("#profileaddresstraining").text(item.address);
+                $("#profilephonetraining").text(item.phone);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#showdisciplinaryprofile", function () {
+        $(`#dataTabledisciplianaryprofile`).find("tr:gt(0)").remove();
+  
+        $.ajax({
+          type: "POST",
+          url: "/employee/getdisciplinary",
+          data: {
+            employeeid: employeeid,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTabledisciplianaryprofile")) {
+              $("#dataTabledisciplianaryprofile").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById("dataTabledisciplianaryprofile");
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var ACTION_CODE = row.insertCell(0);
+              var OFFENSE_ID = row.insertCell(1);
+              var DESCRIPTION = row.insertCell(2);
+              var DATE = row.insertCell(3);
+              var STATUS = row.insertCell(4);
+  
+              ACTION_CODE.innerHTML = item.actioncode;
+              OFFENSE_ID.innerHTML = item.offenseid;
+              DESCRIPTION.innerHTML = item.description;
+              DATE.innerHTML = item.date;
+              STATUS.innerHTML = item.status;
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+        $.ajax({
+          type: "POST",
+          url: "/employeeprofile/loademployee",
+          data: {
+            employeeid: selectedEmployeeId,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $.each(existingData, (key, item) => {
+                $("#profiledepartmentdisciplinary").text(item.department);
+                $("#profilepositiondisciplinary").text(item.position);
+                $("#profilebdaydisciplinary").text(item.birthday);
+                $("#profilecicilstatusdisciplinary").text(item.civilstatus);
+                $("#profileaddressdisciplinary").text(item.address);
+                $("#profilephonedisciplinary").text(item.phone);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      //#endregion
+  
+      //#region NOTIFICATION
+  
+      // function sendEmployeeIDOnLoad() {
+      //   console.log(employeeid);
+      //   $.ajax({
+      //     type: "POST",
+      //     url: "/eportalindex/generatenotification",
+      //     data: {
+      //       employeeid: employeeid,
+      //     },
+      //     success: function (response) {
+      //       console.log("Employee ID sent successfully on page load.");
+      //     },
+      //     error: function (err) {
+      //       console.error("Error sending employee ID on page load:", err);
+      //     },
+      //   });
+      // }
+  
+      function loadNotifBadge() {
+        $.ajax({
+          type: "GET",
+          url: "/countunreadbadge",
+          success: function (result) {
+            if (result.msg === "success") {
+              const totalUnread = result.data[0].Unreadcount;
+              $("#badge-counter").text(totalUnread);
+            } else {
+              console.error("Error fetching data:", result.msg);
+            }
+          },
+          error: function (err) {
+            console.error("AJAX error:", err.statusText);
+          },
+        });
+      }
+  
+      $(document).on("click", "#alertsDropdown", function () {
+        console.log("HIT");
+        $.ajax({
+          type: "GET",
+          url: "/loadnotif",
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              console.log(existingData);
+              $("#notifdropdown").not("#dp-header, #notiftextcenter").remove();
+              existingData.forEach((item) => {
+                $.ajax({
+                  type: "POST",
+                  url: "/markread",
+                  data: {
+                    notificationId: item.notificationid,
+                  },
+                  success: function (response) {
+                    const notificationClass =
+                      response.data.isread === "NO" ? "font-weight-bold" : "";
+                    const dropdownItem = `<a id="notif-${item.notificationid}" class="dropdown-item d-flex align-items-center ${notificationClass}" data-bs-toggle="modal" data-bs-target="#modal-backdrop-dark">
+                  <div class="mr-3" id="viewbtn">
+                    <div class="icon-circle bg-primary" id="viewbtn">
+                      <i class="fas fa-file-alt text-green" id="viewbtn"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500" id="viewbtn">${item.date}</div>
+                    <span class="${notificationClass}" id="viewbtn">${item.tittle}</span>
+                    <div class="small text-gray-550" style="visibility: hidden;" id="viewbtn">${item.notificationid}</div>
+                  </div>
+                </a>`;
+                    $("#notifmenu").append(dropdownItem);
+                  },
+                  error: function (err) {
+                    swal(
+                      "An error occurred while checking notification status",
+                      err,
+                      "error"
+                    );
+                  },
+                });
+              });
+  
+              const modalElement = document.querySelector("#modal-backdrop-dark");
+              if (modalElement) {
+                $(modalElement).modal("hide");
+              }
+            } else {
+              swal("Error fetching notifications", "success");
+              console.log("No data received from the API.");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching notifications", err, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "[data-bs-target='#modal-backdrop-dark']",
+        function () {
+          notificationId = $(this).find(".small.text-gray-550").text().trim();
+          console.log("Modal Trigger - Notification ID:", notificationId);
+        }
+      );
+  
+      $(document).on("click", "#notifmenu #viewbtn", function () {
+        console.log("View Button Clicked");
+        console.log("View Button - Notification ID:", notificationId);
+  
+        const notificationIdClicked = $(this)
+          .siblings(
+            ".small.text-gray-550",
+            ".small text-gray-500",
+            ".font-weight-bold"
+          )
+          .text()
+          .trim();
+        console.log("Clicked Notification ID:", notificationIdClicked);
+        $.ajax({
+          type: "POST",
+          url: "/viewnotif",
+          data: {
+            notificationIdClicked: notificationIdClicked,
+          },
+          success: function (result) {
+            console.log("API Response:", result);
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              console.log("Existing Data:", existingData);
+  
+              $.each(existingData, (key, item) => {
+                $("#notiftittle").text(item.tittle);
+                $("#notifdescription").text(item.description);
+                $("#notifsubdescription").text(item.subdescription);
+                // $("#editpreview").attr(
+                //   "src",
+                //   "data:image/jpg;base64," + item.image
+                // );
+                $("#notifdate").text(item.date);
+              });
+            } else {
+              swal("Error fetching employee data", "success");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", err, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#isRead", function () {
+        let id = notificationId;
+        $.ajax({
+          type: "POST",
+          url: "/readnotif",
+          data: {
+            notificationId: id,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Read Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                location.reload();
+                //loadNotifBadge();
+              });
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#siDeleate", function () {
+        let id = notificationId;
+        $.ajax({
+          type: "POST",
+          url: "/deleatenotif",
+          data: {
+            notificationId: id,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Deleate Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                location.reload();
+                //loadNotifBadge();
+              });
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal("Data already exists!", "You clicked the button!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      });
+  
+      //#endregion
+  
+      //#region FUNCTION
+  
+      // JavaScript code to handle the modal displa
+  
+      // $(document).on("change", "#editannouncementimage", function (e) {
+      //   const input = document.getElementById("editannouncementimage");
+      //   const file = input.files[0];
+  
+      //   const reader = new FileReader();
+      //   reader.readAsDataURL(file);
+      //   reader.onloadend = function () {
+      //     const preview = document.getElementById("editpreview");
+      //     preview.src = reader.result;
+      //   };
+      //   editimage();
+      // });
+  
+      // function editimage() {
+      //   const input = document.getElementById("editannouncementimage");
+      //   const file = input.files[0];
+  
+      //   var reader = new FileReader();
+  
+      //   reader.onload = function () {
+      //     base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+  
+      //     imageBase64Stringsep = base64String;
+      //   };
+      //   reader.readAsDataURL(file);
+      // }
+  
+      //#endregion
+    });
+  </script>
+  

@@ -18,8 +18,13 @@ Decrypter('2772eba30ffb6be45bed019b31e7e74c', (err, encrypted) => {
 // Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
-
 // });
+
+Encrypter('Mysql_5L12345', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+
+});
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
@@ -232,6 +237,14 @@ exports.Select = (sql, table, callback) => {
 
       if (table == "Admin_Notification") {
         callback(null, model.Admin_Notification(results));
+      }
+
+      if (table == "TeamLeader_User") {
+        callback(null, model.TeamLeader_User(results));
+      }
+
+      if (table == "Master_Shift_Settings") {
+        callback(null, model.Master_Shift_Settings(results));
       }
     });
   } catch (error) {}
@@ -941,6 +954,24 @@ exports.InsertTable = (tablename, data, callback) => {
       pd_startdate,
       pd_enddate,
       pd_payrolldate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "teamlead_user") {
+    let sql = `INSERT INTO teamlead_user(
+       tu_employeeid,
+       tu_username,
+       tu_password,
+       tu_accesstype,
+       tu_createby,
+       tu_createdate,
+       tu_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

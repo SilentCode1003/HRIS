@@ -22,12 +22,15 @@
           </lord-icon>
           <span><b>Clock In/Out</b></span></a>
         </div> -->
+        <div class="card-header" id="clock-header">
+          <h6 class="time-title">Hello <span><%= fullname%></span>!</h6>
+          <p class="time-p">Don't forget to CLOCK-IN and OUT..</p>
+        </div>
         <div class="card-body">
           <!-- <lord-icon src="https://cdn.lordicon.com/lzgqzxrq.json" trigger="loop"
             colors="primary:#000000,secondary:#d1f3fa,tertiary:#66a1ee,quaternary:#f24c00" id="clock-lordicon">
           </lord-icon> -->
-          <h6 class="time-title">Hello <span><%= fullname%></span>!</h6>
-          <p class="time-p">Select clock-in to start work..</p>
+          
           <img class="img-profile rounded-circle time-profile-img" src="data:image/jpg;base64,<%= image%>">
           
           <!-- <div class="card-header ch-time">
@@ -45,23 +48,24 @@
       </div>
     </div>
 
+
     <div class="col-4">
       <div class="card" id="card-attendance">
         <div class="card-header ch-attendance">
           <lord-icon src="https://cdn.lordicon.com/svsiboke.json" stroke="bold"
-            colors="primary:#000000,secondary:#faf9d1,tertiary:#66d7ee,quaternary:#c71f16,quinary:#e8e230,senary:#000000"
+            colors="primary:#ffffff,secondary:#faddd1,tertiary:#eee966,quaternary:#c67d53,quinary:#c71f16,senary:#3a3347"
             class="ojt-icon ">
           </lord-icon>
           <span><b>Attendance</b></span></a>
         </div>
         <div class="card-body">
           <div class="table-responsive" id="table-attendance">
-            <table class="table table-light table-bordered" id="attendanceTable">
+            <table class="table table-light" id="attendanceTable">
               <thead class="attendance-th">
                 <tr>
-                  <th>Date</th>
+                  <th class="tr-left-attendance">Date</th>
                   <th>Type</th>
-                  <th>Time</th>
+                  <th class="tr-right-attendance">Time</th>
                 </tr>
               </thead>
             </table>
@@ -79,7 +83,7 @@
           </lord-icon>
           <span><b>Birthday</b></span></a>
         </div>
-        <div class="card-body">
+        <div class="card-body cb-birthday">
           <div aria-labelledby="nav-profile-tab">
             <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
               <div class="carousel-inner"></div>
@@ -99,7 +103,7 @@
       <div class="card" id="card-map">
         <div class="card-header ch-map">
           <lord-icon src="https://cdn.lordicon.com/tdtlrbly.json" stroke="bold"
-            colors="primary:#000000,secondary:#e83a30" class="ojt-icon">
+            colors="primary:#107c91,secondary:#9ce5f4" class="ojt-icon">
           </lord-icon>
           <span><b>Map</b></span></a>
         </div>

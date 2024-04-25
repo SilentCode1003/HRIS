@@ -1,0 +1,187 @@
+<script>
+    let leaveid = '';
+    $(document).ready(function () {
+      LoadTable();
+      searchTable();
+  
+      $(document).on('keyup', '#myInput2', function () {
+        searchTable();
+      });
+  
+  
+      function LoadTable() {
+        $("#dataTableapprovedleave").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/approvedleave/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#approvedmodal"><i class="fas fa-fw fa-pen"></i></button>
+                     `;
+  
+                finalData.push({
+                  employeeid: item.employeeid,
+                  leavetype: item.leavetype,
+                  leavestartdate: item.leavestartdate,
+                  leaveenddate: item.leaveenddate,
+                  reason: item.reason,
+                  applieddate: item.applieddate,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            { data: "employeeid" },
+            { data: "leavetype" },
+            { data: "leavestartdate" },
+            { data: "leaveenddate" },
+            { data: "reason" },
+            { data: "applieddate" },
+            { data: "action" },
+          ],
+          initComplete: function () {
+          },
+        });
+      }
+  
+      $("#dataTableapprovedleave tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+        leaveid = dataRow[0];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/allleave/getleavedashboard",
+          data: {
+            leaveid: leaveid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#id").val(item.leaveid);
+                $("#pendingleavename").val(item.employeeid);
+                $("#pendingleaveemail").val(item.email);
+                $("#pendingleavegender").val(item.gender);
+                $("#pendingleavephone").val(item.phone);
+                $("#pendingleavetype").val(item.leavetype);
+                $("#pendingleaveapplydate").val(item.applieddate);
+                $("#pendingleavestart").val(item.leavestartdate);
+                $("#pendingleaveend").val(item.leaveenddate);
+                $("#pendingleavereason").val(item.reason);
+                $("#pendingleaveaction").val(item.status);
+              });
+            } else {
+              swal("Error fetching employee data", "success");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", err, "error");
+          },
+        });
+      });
+      $(document).on("click", "#pendingleavesavebtn", function () {
+        let id = leaveid
+        let status = $("#pendingleaveaction").val();
+        let comment = $("#pendingleaveremarks").val();
+  
+        var message = "";
+  
+  
+        if (status === "") {
+          message += "status is required. ";
+        }
+  
+        if (comment === "") {
+          message += "status is required. ";
+        }
+  
+  
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/allleave/update",
+            data: {
+              leaveid: id,
+              status: status,
+              comment: comment,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal("Save Successfully", "You clicked the button!", "success",)
+                  .then(results => {
+                    window.location.reload();
+                  });
+                LoadTable();
+              }
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+          });
+        }
+      });
+  
+    });
+  
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableapprovedleave");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  
+  
+  </script>

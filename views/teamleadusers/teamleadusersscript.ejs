@@ -1,5 +1,5 @@
 <script>
-    let userid = "";
+    let tluserid = "";
   
     $(document).ready(function () {
       LoadTable();
@@ -79,11 +79,32 @@
             { data: "action" },
           ],
           createdRow: function (row, data, dataIndex) {
-            $("td", row).each(function (index) {
-              this.style.textAlign = "center";
-              this.style.verticalAlign = "middle";
-            });
-          },
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+       
+          var statusText = data.status;
+         
+          var statusClass = "";
+         
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = ""; 
+          }
+          
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+         
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
           initComplete: function () {
           },
         });
@@ -206,15 +227,15 @@
           .each(function () {
             dataRow.push($(this).text());
           });
-        userid = dataRow[1];
+          tluserid = dataRow[0];
       });
   
       $(document).on("click", "#editBtn", function () {
         $.ajax({
           type: "POST",
-          url: "/users/getusers",
+          url: "/teamleadusers/getusers",
           data: {
-            userid: userid,
+            tluserid: tluserid,
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -224,7 +245,7 @@
                 $("#editdepartmentid").val(item.userid);
                 $("#editusername").val(item.username);
                 //$("#editpassword").val(item.password);
-                $("#editusersaccesstype").val(item.accesstype);
+                // $("#editusersaccesstype").val(item.accesstype);
                 $("#editusersstatus").val(item.status);
               });
             } else {
@@ -238,10 +259,10 @@
       });
   
       $(document).on("click", "#edituserssavebtn", function () {
-        let id = userid
+        let id = tluserid
         let username = $("#editusername").val();
         //let password = $("#editpassword").val();
-        let accesstype = $("#editusersaccesstype").val();
+        // let accesstype = $("#editusersaccesstype").val();
         let status = $("#editusersstatus").val();
   
         var message = "";
@@ -254,9 +275,9 @@
         //message += "status is required. ";
         //}
   
-        if (accesstype === "") {
-          message += "departmentname is required. ";
-        }
+        // if (accesstype === "") {
+        //   message += "departmentname is required. ";
+        // }
   
         if (status === "") {
           message += "status is required. ";
@@ -267,12 +288,12 @@
         } else {
           $.ajax({
             type: "POST",
-            url: "/users/update",
+            url: "/teamleadusers/update",
             data: {
-              userid: id,
+              tluserid: id,
               username: username,
               //password: password,
-              accesstype: accesstype,
+              // accesstype: accesstype,
               status: status,
             },
             success: function (result) {
