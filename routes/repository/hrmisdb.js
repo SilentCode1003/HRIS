@@ -242,6 +242,10 @@ exports.Select = (sql, table, callback) => {
       if (table == "TeamLeader_User") {
         callback(null, model.TeamLeader_User(results));
       }
+
+      if (table == "Master_Shift_Settings") {
+        callback(null, model.Master_Shift_Settings(results));
+      }
     });
   } catch (error) {}
 };
