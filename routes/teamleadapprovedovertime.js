@@ -30,7 +30,10 @@ router.get("/load", (req, res) => {
     FROM payroll_approval_ot
 	INNER JOIN
 	master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    WHERE me_department = '${departmentid}' AND pao_status = 'Approved'`;
+    WHERE me_department = '${departmentid}' AND pao_status = 'Approved'
+    AND pao_employeeid NOT IN (
+      SELECT tu_employeeid FROM teamlead_user
+  );`;
 
     mysql.Select(sql, "Payroll_Approval_Ot" ,(err, result) => {
       if (err) console.error("Error", err);

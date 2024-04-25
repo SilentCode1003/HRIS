@@ -15,6 +15,7 @@
     loadCashBadge();
     loadOvertimeBadge();
     loadCOABadge();
+    loadattendanceBadge();
     loadregularCard();
     loadprobitionaryCard();
     loadresignedCard();
@@ -1107,6 +1108,24 @@
       });
     }
 
+    function loadattendanceBadge() {
+      $.ajax({
+        type: "GET",
+        url: "/countattendancebadge",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalLATE = result.data.LATECount;
+            $("#loadattendanceBadge").text(totalLATE);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
     //#endregion
 
     //#region Announcement and Bday Folks
@@ -2101,6 +2120,46 @@
       }
     });
 
+    //status attendance section-->>>>
+    $(document).on("click", "#nav-status-tab", function () {
+      $.ajax({
+        type: "GET",
+        url: "/attendancestatus",
+        success: function (result) {
+          let latestatus = "";
+          if (result.msg === "success") {
+            const existingData = result.data;
+            if (existingData.length === 0) {
+              latestatus += '<div class="p-3">No late arrivals today.</div>';
+            } else {
+              let counter = 0;
+              $.each(existingData, (key, item) => {
+                counter++;
+                latestatus += `<div class="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
+                  <div class="dropdown-list-image mr-3">
+                      <img id="profilepreview${counter}" src="data:image/jpg;base64,${item.image}" class="rounded-circle" alt="" />
+                  </div>
+                  <div class="font-weight-bold mr-3">
+                      <div class="text-truncate" id="latestatusname${counter}">${item.FullName} Is Late in ${item.minutes_late} Minutes</div>
+                      <div class="small" id="latestatusclockin${counter}">${item.actual_clockin}</div>
+                      <span class="text-muted" id="latestatuslate${counter}">Late in ${item.minutes_late} Minutes</span>
+                  </div>
+              </div>`;
+              });
+            }
+          } else {
+            latestatus = '<div class="p-3">Error fetching employee data.</div>';
+          }
+          $("#nav-status").html(latestatus);
+        },
+        error: function (err) {
+          $("#nav-status").html(
+            '<div class="p-3">An error occurred while fetching employee data.</div>'
+          );
+        },
+      });
+    });
+    
     //#endregion
 
     //#region Graph Functions

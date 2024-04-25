@@ -152,6 +152,9 @@ var roleacess = [
       {
         layout: "teamleaduserslayout",
       },
+      {
+        layout: "shiftsettingslayout",
+      },
     ],
   },
   {
@@ -247,6 +250,9 @@ var roleacess = [
       },
       {
         layout: "teamleadapprovedleavelayout",
+      },
+      {
+        layout: "teamleadgeofencelayout",
       },
     ],
   },

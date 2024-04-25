@@ -28,7 +28,9 @@ router.get('/load', (req, res,) => {
     from leaves
     left join master_employee on leaves.l_employeeid = me_id
     where l_leavestatus = 'Pending'
-    AND me_department = '${departmentid}'`;
+    AND me_department = '${departmentid}'
+    AND l_employeeid NOT IN (
+      SELECT tu_employeeid FROM teamlead_user)`;
     
     mysql.Select(sql, 'Leaves', (err, result) => {
       if (err) console.error('Error: ', err);

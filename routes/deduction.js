@@ -18,7 +18,6 @@ module.exports = router;
 router.get('/load', (req, res) => {
   try {
     let sql =  `SELECT
-    me_profile_pic,
     gd_id,
     CONCAT(me_lastname, ' ', me_firstname) AS gd_employeeid,
     mg_idtype AS gd_idtype,
