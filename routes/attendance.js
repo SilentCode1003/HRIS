@@ -389,3 +389,52 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
+
+router.post("/exportfileperemployee", async (req, res) => {
+  try {
+    let startdate = req.body.startdate;
+    let enddate = req.body.enddate;
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.ExportAttendancePerEmployee('${startdate}', '${enddate}', '${employeeid}')`;
+
+    const result = await mysql.mysqlQueryPromise(sql);
+
+    const jsonData = JSON.parse(JSON.stringify(result[0]));
+
+    if (jsonData.length === 0) {
+      return res.status(404).json({ msg: "No data found" });
+    }
+
+    const headers = Object.keys(jsonData[0]);
+
+    const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
+    const workbook = XLSX.utils.book_new();
+    const worksheetName = `${startdate}_${enddate}`;
+    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+
+    const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
+    worksheet["!cols"] = [];
+    for (let i = 0; i < columnCount; i++) {
+      if (i === 0) {
+        worksheet["!cols"].push({ wch: 30 }); 
+      } else {
+        worksheet["!cols"].push({ wch: 20 }); 
+      }
+    }
+    const excelBuffer = XLSX.write(workbook, { type: "buffer" });
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );    
+    res.send(excelBuffer);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ msg: "error", data: error });
+  }
+});

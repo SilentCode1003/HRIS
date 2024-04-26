@@ -419,117 +419,235 @@
               $("#editshiftid").val(item.shiftid);
               $("#editshiftemployee").val(item.employeeid);
               $("#editshiftdepartment").val(item.department);
+              // Monday
               $("#editmondaytimein").val(item.monday_time_in);
               $("#editmondaytimeout").val(item.monday_time_out);
-              $("#edittuesdaytimein").val(item.tuesday_time_in);
-              $("#edittuesdaytimeout").val(item.tuesday_time_out);
-              $("#editwednesdaytimein").val(item.wednesday_time_in);
-              $("#editwednesdaytimeout").val(item.wednesday_time_out);
-              $("#editthursdaytimein").val(item.thursday_time_in);
-              $("#editthursdaytimeout").val(item.thursday_time_out);
-              $("#editfridaytimein").val(item.friday_time_in);
-              $("#editfridaytimeout").val(item.friday_time_out);
-              $("#editsaturdaytimein").val(item.saturday_time_in);
-              $("#editsaturdaytimeout").val(item.saturday_time_out);
-              $("#editsundaytimein").val(item.sunday_time_in);
-              $("#editsundaytimeout").val(item.sunday_time_out);
-              // monday -->
+
               if (
                 item.monday_time_in === "Rest Day" &&
                 item.monday_time_out === "Rest Day"
               ) {
-                $("#editmondaytimein").prop("disabled", true); 
-                $("#editmondaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true); 
+                $("#editmondaytimein").prop("disabled", true);
+                $("#editmondaytimeout").prop("disabled", true);
+                $("#editmondayrestday").prop("checked", true);
+                $("#editmondayexempted").prop("checked", false);
+                $("#editmondayrestday").prop("disabled", false);
+                $("#editmondayexempted").prop("disabled", false);
               } else if (
                 item.monday_time_in === "Exempted" &&
                 item.monday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true); 
+                $("#editmondaytimein").prop("disabled", true);
+                $("#editmondaytimeout").prop("disabled", true);
+                $("#editmondayrestday").prop("checked", false);
+                $("#editmondayexempted").prop("checked", true);
+                $("#editmondayrestday").prop("disabled", false);
+                $("#editmondayexempted").prop("disabled", false);
+              } else {
+                $("#editmondaytimein").prop("disabled", false);
+                $("#editmondaytimeout").prop("disabled", false);
+                $("#editmondayrestday").prop("checked", false);
+                $("#editmondayexempted").prop("checked", false);
+                $("#editmondayrestday").prop("disabled", false);
+                $("#editmondayexempted").prop("disabled", false);
               }
-              // tuesday -->
+
+              // Tuesday
+              $("#edittuesdaytimein").val(item.tuesday_time_in);
+              $("#edittuesdaytimeout").val(item.tuesday_time_out);
+
               if (
                 item.tuesday_time_in === "Rest Day" &&
                 item.tuesday_time_out === "Rest Day"
               ) {
-                $("#edittuesdaytimein").prop("disabled", true); 
-                $("#edittuesdaytimeout").prop("disabled", true); 
-                $("#edittuesdayrestday").prop("checked", true); 
+                $("#edittuesdaytimein").prop("disabled", true);
+                $("#edittuesdaytimeout").prop("disabled", true);
+                $("#edittuesdayrestday").prop("checked", true);
+                $("#edittuesdayexempted").prop("checked", false);
+                $("#edittuesdayrestday").prop("disabled", false);
+                $("#edittuesdayexempted").prop("disabled", false);
               } else if (
                 item.tuesday_time_in === "Exempted" &&
                 item.tuesday_time_out === "Exempted"
               ) {
-                $("#edittuesdexmepted").prop("checked", true); 
+                $("#edittuesdaytimein").prop("disabled", true);
+                $("#edittuesdaytimeout").prop("disabled", true);
+                $("#edittuesdayrestday").prop("checked", false);
+                $("#edittuesdayexempted").prop("checked", true);
+                $("#edittuesdayrestday").prop("disabled", false);
+                $("#edittuesdayexempted").prop("disabled", false);
+              } else {
+                $("#edittuesdaytimein").prop("disabled", false);
+                $("#edittuesdaytimeout").prop("disabled", false);
+                $("#edittuesdayrestday").prop("checked", false);
+                $("#edittuesdayexempted").prop("checked", false);
+                $("#edittuesdayrestday").prop("disabled", false);
+                $("#edittuesdayexempted").prop("disabled", false);
               }
-               // wednesday -->
-               if (
+
+              // Wednesday
+              $("#editwednesdaytimein").val(item.wednesday_time_in);
+              $("#editwednesdaytimeout").val(item.wednesday_time_out);
+
+              if (
                 item.wednesday_time_in === "Rest Day" &&
                 item.wednesday_time_out === "Rest Day"
               ) {
                 $("#editwednesdaytimein").prop("disabled", true);
-                $("#editwednesdaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true); 
+                $("#editwednesdaytimeout").prop("disabled", true);
+                $("#editwednesdayrestday").prop("checked", true);
+                $("#editwednesdayexempted").prop("checked", false);
+                $("#editwednesdayrestday").prop("disabled", false);
+                $("#editwednesdayexempted").prop("disabled", false);
               } else if (
                 item.wednesday_time_in === "Exempted" &&
                 item.wednesday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true);
+                $("#editwednesdaytimein").prop("disabled", true);
+                $("#editwednesdaytimeout").prop("disabled", true);
+                $("#editwednesdayrestday").prop("checked", false);
+                $("#editwednesdayexempted").prop("checked", true);
+                $("#editwednesdayrestday").prop("disabled", false);
+                $("#editwednesdayexempted").prop("disabled", false);
+              } else {
+                $("#editwednesdaytimein").prop("disabled", false);
+                $("#editwednesdaytimeout").prop("disabled", false);
+                $("#editwednesdayrestday").prop("checked", false);
+                $("#editwednesdayexempted").prop("checked", false);
+                $("#editwednesdayrestday").prop("disabled", false);
+                $("#editwednesdayexempted").prop("disabled", false);
               }
-               // thursday -->
-               if (
+
+              // Thursday
+              $("#editthursdaytimein").val(item.thursday_time_in);
+              $("#editthursdaytimeout").val(item.thursday_time_out);
+
+              if (
                 item.thursday_time_in === "Rest Day" &&
                 item.thursday_time_out === "Rest Day"
               ) {
-                $("#editthursdaytimein").prop("disabled", true); 
-                $("#editthursdaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true);
+                $("#editthursdaytimein").prop("disabled", true);
+                $("#editthursdaytimeout").prop("disabled", true);
+                $("#editthursdayrestday").prop("checked", true);
+                $("#editthursdayexempted").prop("checked", false);
+                $("#editthursdayrestday").prop("disabled", false);
+                $("#editthursdayexempted").prop("disabled", false);
               } else if (
-                item.thursday_time_out === "Exempted" &&
+                item.thursday_time_in === "Exempted" &&
                 item.thursday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true); 
+                $("#editthursdaytimein").prop("disabled", true);
+                $("#editthursdaytimeout").prop("disabled", true);
+                $("#editthursdayrestday").prop("checked", false);
+                $("#editthursdayexempted").prop("checked", true);
+                $("#editthursdayrestday").prop("disabled", false);
+                $("#editthursdayexempted").prop("disabled", false);
+              } else {
+                $("#editthursdaytimein").prop("disabled", false);
+                $("#editthursdaytimeout").prop("disabled", false);
+                $("#editthursdayrestday").prop("checked", false);
+                $("#editthursdayexempted").prop("checked", false);
+                $("#editthursdayrestday").prop("disabled", false);
+                $("#editthursdayexempted").prop("disabled", false);
               }
-               // friday -->
-               if (
+
+              // Friday
+              $("#editfridaytimein").val(item.friday_time_in);
+              $("#editfridaytimeout").val(item.friday_time_out);
+
+              if (
                 item.friday_time_in === "Rest Day" &&
                 item.friday_time_out === "Rest Day"
               ) {
-                $("#editfridaytimein").prop("disabled", true); 
-                $("#editfridaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true); 
+                $("#editfridaytimein").prop("disabled", true);
+                $("#editfridaytimeout").prop("disabled", true);
+                $("#editfridayrestday").prop("checked", true);
+                $("#editfridayexempted").prop("checked", false);
+                $("#editfridayrestday").prop("disabled", false);
+                $("#editfridayexempted").prop("disabled", false);
               } else if (
                 item.friday_time_in === "Exempted" &&
                 item.friday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true); 
+                $("#editfridaytimein").prop("disabled", true);
+                $("#editfridaytimeout").prop("disabled", true);
+                $("#editfridayrestday").prop("checked", false);
+                $("#editfridayexempted").prop("checked", true);
+                $("#editfridayrestday").prop("disabled", false);
+                $("#editfridayexempted").prop("disabled", false);
+              } else {
+                $("#editfridaytimein").prop("disabled", false);
+                $("#editfridaytimeout").prop("disabled", false);
+                $("#editfridayrestday").prop("checked", false);
+                $("#editfridayexempted").prop("checked", false);
+                $("#editfridayrestday").prop("disabled", false);
+                $("#editfridayexempted").prop("disabled", false);
               }
-               // saturday -->
-               if (
+
+              // Saturday
+              $("#editsaturdaytimein").val(item.saturday_time_in);
+              $("#editsaturdaytimeout").val(item.saturday_time_out);
+
+              if (
                 item.saturday_time_in === "Rest Day" &&
                 item.saturday_time_out === "Rest Day"
               ) {
-                $("#editsaturdaytimein").prop("disabled", true); 
-                $("#editsaturdaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true); 
+                $("#editsaturdaytimein").prop("disabled", true);
+                $("#editsaturdaytimeout").prop("disabled", true);
+                $("#editsaturdayrestday").prop("checked", true);
+                $("#editsaturdayexempted").prop("checked", false);
+                $("#editsaturdayrestday").prop("disabled", false);
+                $("#editsaturdayexempted").prop("disabled", false);
               } else if (
                 item.saturday_time_in === "Exempted" &&
                 item.saturday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true);
+                $("#editsaturdaytimein").prop("disabled", true);
+                $("#editsaturdaytimeout").prop("disabled", true);
+                $("#editsaturdayrestday").prop("checked", false);
+                $("#editsaturdayexempted").prop("checked", true);
+                $("#editsaturdayrestday").prop("disabled", false);
+                $("#editsaturdayexempted").prop("disabled", false);
+              } else {
+                $("#editsaturdaytimein").prop("disabled", false);
+                $("#editsaturdaytimeout").prop("disabled", false);
+                $("#editsaturdayrestday").prop("checked", false);
+                $("#editsaturdayexempted").prop("checked", false);
+                $("#editsaturdayrestday").prop("disabled", false);
+                $("#editsaturdayexempted").prop("disabled", false);
               }
-               // sunday -->
-               if (
+
+              // Sunday
+              $("#editsundaytimein").val(item.sunday_time_in);
+              $("#editsundaytimeout").val(item.sunday_time_out);
+
+              if (
                 item.sunday_time_in === "Rest Day" &&
                 item.sunday_time_out === "Rest Day"
               ) {
-                $("#editsundaytimein").prop("disabled", true); 
-                $("#editsundaytimeout").prop("disabled", true); 
-                $("input[type='checkbox']:first").prop("checked", true); 
+                $("#editsundaytimein").prop("disabled", true);
+                $("#editsundaytimeout").prop("disabled", true);
+                $("#editsundayrestday").prop("checked", true);
+                $("#editsundayexempted").prop("checked", false);
+                $("#editsundayrestday").prop("disabled", false);
+                $("#editsundayexempted").prop("disabled", false);
               } else if (
                 item.sunday_time_in === "Exempted" &&
                 item.sunday_time_out === "Exempted"
               ) {
-                $("input[type='checkbox']:last").prop("checked", true); 
+                $("#editsundaytimein").prop("disabled", true);
+                $("#editsundaytimeout").prop("disabled", true);
+                $("#editsundayrestday").prop("checked", false);
+                $("#editsundayexempted").prop("checked", true);
+                $("#editsundayrestday").prop("disabled", false);
+                $("#editsundayexempted").prop("disabled", false);
+              } else {
+                $("#editsundaytimein").prop("disabled", false);
+                $("#editsundaytimeout").prop("disabled", false);
+                $("#editsundayrestday").prop("checked", false);
+                $("#editsundayexempted").prop("checked", false);
+                $("#editsundayrestday").prop("disabled", false);
+                $("#editsundayexempted").prop("disabled", false);
               }
             });
           } else {
@@ -540,6 +658,152 @@
           swal("An error occurred while fetching employee data", err, "error");
         },
       });
+    });
+
+    $("#editmondayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editmondaytimein").prop("disabled", false).val("");
+        $("#editmondaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editmondaytimein").prop("disabled", true).val("");
+        $("#editmondaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editmondayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editmondaytimein").prop("disabled", false).val("11:11");
+        $("#editmondaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editmondaytimein").prop("disabled", true).val("11:11");
+        $("#editmondaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Tuesday
+    $("#edittuesdayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#edittuesdaytimein").prop("disabled", false).val("");
+        $("#edittuesdaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#edittuesdaytimein").prop("disabled", true).val("");
+        $("#edittuesdaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#edittuesdayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#edittuesdaytimein").prop("disabled", false).val("11:11");
+        $("#edittuesdaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#edittuesdaytimein").prop("disabled", true).val("11:11");
+        $("#edittuesdaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Wednesday
+    $("#editwednesdayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editwednesdaytimein").prop("disabled", false).val("");
+        $("#editwednesdaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editwednesdaytimein").prop("disabled", true).val("");
+        $("#editwednesdaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editwednesdayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editwednesdaytimein").prop("disabled", false).val("11:11");
+        $("#editwednesdaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editwednesdaytimein").prop("disabled", true).val("11:11");
+        $("#editwednesdaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Thursday
+    $("#editthursdayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editthursdaytimein").prop("disabled", false).val("");
+        $("#editthursdaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editthursdaytimein").prop("disabled", true).val("");
+        $("#editthursdaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editthursdayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editthursdaytimein").prop("disabled", false).val("11:11");
+        $("#editthursdaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editthursdaytimein").prop("disabled", true).val("11:11");
+        $("#editthursdaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Friday
+    $("#editfridayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editfridaytimein").prop("disabled", false).val("");
+        $("#editfridaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editfridaytimein").prop("disabled", true).val("");
+        $("#editfridaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editfridayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editfridaytimein").prop("disabled", false).val("11:11");
+        $("#editfridaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editfridaytimein").prop("disabled", true).val("11:11");
+        $("#editfridaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Saturday
+    $("#editsaturdayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editsaturdaytimein").prop("disabled", false).val("");
+        $("#editsaturdaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editsaturdaytimein").prop("disabled", true).val("");
+        $("#editsaturdaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editsaturdayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editsaturdaytimein").prop("disabled", false).val("11:11");
+        $("#editsaturdaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editsaturdaytimein").prop("disabled", true).val("11:11");
+        $("#editsaturdaytimeout").prop("disabled", true).val("11:11");
+      }
+    });
+
+    // Sunday
+    $("#editsundayrestday").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editsundaytimein").prop("disabled", false).val("");
+        $("#editsundaytimeout").prop("disabled", false).val("");
+      } else {
+        $("#editsundaytimein").prop("disabled", true).val("");
+        $("#editsundaytimeout").prop("disabled", true).val("");
+      }
+    });
+
+    $("#editsundayexempted").on("click", function () {
+      if (!$(this).prop("checked")) {
+        $("#editsundaytimein").prop("disabled", false).val("11:11");
+        $("#editsundaytimeout").prop("disabled", false).val("11:11");
+      } else {
+        $("#editsundaytimein").prop("disabled", true).val("11:11");
+        $("#editsundaytimeout").prop("disabled", true).val("11:11");
+      }
     });
 
     $(document).on("click", "#editshiftsavebtn", function () {
@@ -558,6 +822,22 @@
       let saturdayTimeout = $("#editsaturdaytimeout").val();
       let sundayTimein = $("#editsundaytimein").val();
       let sundayTimeout = $("#editsundaytimeout").val();
+
+      console.log("Shift ID:", id);
+      console.log("Monday Time In:", mondayTimein);
+      console.log("Monday Time Out:", mondayTimeout);
+      console.log("Tuesday Time In:", tuesdayTimein);
+      console.log("Tuesday Time Out:", tuesdayTimeout);
+      console.log("Wednesday Time In:", wednesdayTimein);
+      console.log("Wednesday Time Out:", wednesdayTimeout);
+      console.log("Thursday Time In:", thursdayTimein);
+      console.log("Thursday Time Out:", thursdayTimeout);
+      console.log("Friday Time In:", fridayTimein);
+      console.log("Friday Time Out:", fridayTimeout);
+      console.log("Saturday Time In:", saturdayTimein);
+      console.log("Saturday Time Out:", saturdayTimeout);
+      console.log("Sunday Time In:", sundayTimein);
+      console.log("Sunday Time Out:", sundayTimeout);
 
       var message = "";
 
@@ -623,17 +903,9 @@
 
         const formatTimeForDatabase = (timeStr) => {
           switch (timeStr) {
-            case "Rest Day":
+            case "":
               return "00:00:00";
-            case "05:00 PM":
-              return "17:00:00";
-            case "06:00 PM":
-              return "18:00:00";
-            case "08:00 AM":
-              return "08:00:00";
-            case "09:00 AM":
-              return "09:00:00";
-            case "Exempted":
+            case "11:11":
               return "Exempted";
             default:
               return convertTimeTo24Format(timeStr);
