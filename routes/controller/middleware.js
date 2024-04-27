@@ -155,6 +155,9 @@ var roleacess = [
       {
         layout: "shiftsettingslayout",
       },
+      {
+        layout: "empbackgroundlayout",
+      },
     ],
   },
   {

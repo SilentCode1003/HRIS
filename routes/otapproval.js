@@ -167,6 +167,49 @@ router.post('/getotapproval', (req, res) => {
 });
 
 
+
+
+router.post('/getotapprovalforapp', (req, res) => {
+  try {
+    let approveid = req.body.approveid;
+    let sql = `select 
+    pao_fullname,
+    DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
+    TIME_FORMAT(pao_clockin, '%H:%i:%s')  as pao_clockin,
+    TIME_FORMAT(pao_clockout, '%H:%i:%s')  as pao_clockout,
+    (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
+    pao_night_differentials,
+    pao_early_ot,
+    pao_normal_ot,
+    pao_night_pay,
+    pao_normal_pay,
+    pao_early_ot_pay,
+    pao_total_ot_net_pay,
+    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
+    pao_reason,
+    pao_status
+    from payroll_approval_ot
+    where pao_id = '${approveid}'`;
+
+    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      console.log(result);
+
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
 // router.post('/loadforapp', (req, res) =>{
 //   try {
 //     let employeeid = req.body.employeeid;
