@@ -1,329 +1,451 @@
 <script>
+  let shiftsettingsid = "";
 
-    $(document).ready(function () {
-        console.log('Initialize');
-        LoadTable();
-        populateYearsDropdown();
-        $(document).on('keyup', '#myInput', function () {
-            searchTable();
-        });
+  $(document).ready(function () {
+    console.log("Initialize");
+    LoadTable();
+    //populateYearsDropdown();
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+    function LoadTable() {
+      $("#dataTableshiftSettings").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/shiftsettings/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
 
-        function LoadTable() {
-            $("#dataTableshiftSettings").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                serverMethod: "GET",
-                ajax: {
-                    url: "/shiftsettings/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
-
-                        console.log(data);
-                        $.each(data, (key, item) => {
-                            var action = "";
-                            var status = item.status;
-
-                            action = `
+              action = `
                         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editshift"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
-                            finalData.push({
-                                shiftsettingsid: item.shiftsettingsid,
-                                shiftname: item.shiftname,
-                                startshift: item.startshift,
-                                endshift: item.endshift,
-                                restday: item.restday,
-                                createdate: item.createdate,
-                                createby: item.createby,
-                                status: item.status,
-                                action: action,
-                            });
-                        });
-
-                        return finalData;
-                    },
-                },
-                columnDefs: [
-                    {
-                        targets: 1,
-                        className: "td-indent",
-                    },
-                ],
-                columns: [
-                    { data: "shiftsettingsid" },
-                    { data: "shiftname" },
-                    { data: "startshift" },
-                    { data: "endshift" },
-                    { data: "restday" },
-                    { data: "createdate" },
-                    { data: "createby" },
-                    { data: "status" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                    var payroll_startdateCell = $(row).find("td:eq(3)");
-                    var payroll_enddateCell = $(row).find("td:eq(4)");
-                    var payrolldateCell = $(row).find("td:eq(5)");
-                
-                    payroll_startdateCell.wrapInner("<span class='payroll_startdate-text'></span>");
-                    payroll_enddateCell.wrapInner("<span class='payroll_enddate-text'></span>");
-                    payrolldateCell.wrapInner("<span class='payrolldate-text'></span>");
-
-                    $("td", row).each(function (index) {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
-                    });
-                },
-                initComplete: function () {
-                    console.log('Done');
-                },
+              finalData.push({
+                shiftsettingsid: item.shiftsettingsid,
+                shiftname: item.shiftname,
+                startshift: item.startshift,
+                endshift: item.endshift,
+                restday: item.restday,
+                exemptedday: item.exemptedday,
+                createdate: item.createdate,
+                createby: item.createby,
+                status: item.status,
+                action: action,
+              });
             });
-        }
 
-        $(document).on("click", "#payrollsavebtn", function () {
-            let year = $("#payrollyear").val();
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "shiftsettingsid" },
+          { data: "shiftname" },
+          { data: "startshift" },
+          { data: "endshift" },
+          { data: "restday" },
+          { data: "exemptedday" },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var payroll_startdateCell = $(row).find("td:eq(3)");
+          var payroll_enddateCell = $(row).find("td:eq(4)");
+          var payrolldateCell = $(row).find("td:eq(5)");
 
-            var message = "";
+          payroll_startdateCell.wrapInner(
+            "<span class='payroll_startdate-text'></span>"
+          );
+          payroll_enddateCell.wrapInner(
+            "<span class='payroll_enddate-text'></span>"
+          );
+          payrolldateCell.wrapInner("<span class='payrolldate-text'></span>");
 
-            if (year == "") {
-                message += "Select A Year Please!!! ";
-            }
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
 
-            if (message !== "") {
-                swal("Validation Error", message, "error");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/setpayrolldate/generate",
-                    data: {
-                        year: year,
-                    },
-                    success: function (result) {
-                        if (result.msg == "success") {
-                            swal({
-                                title: "Generate Successfully",
-                                text: "You clicked the button!",
-                                icon: "success",
-                                button: "OK!",
-                            }).then(result => {
-                                window.location.reload();
-                            });
-                            LoadTable();
-                        } else {
-                            swal({
-                                title: "Exist",
-                                text: "Data already exists!",
-                                icon: "warning",
-                                button: "OK!",
-                            }).then(result => {
-                                window.location.reload();
-                            });
-                            LoadTable();
-                        }
-                    },
-                    error: function (err) {
-                        swal("Error", "An error occurred while saving data.", "error");
-                        console.error("Error saving data:", err);
-                    },
-                });
-            }
-        });
+    $(document).on("click", "#shiftsavebtn", function () {
+      let shiftname = $("#shiftname").val();
+      let startshift = $("#startshift").val();
+      let endshift = $("#endshift").val();
+      let restday = getCheckedDays(
+        "mondayCheckbox",
+        "tuesdayCheckbox",
+        "wednesdayCheckbox",
+        "thursdayCheckbox",
+        "fridayCheckbox",
+        "saturdayCheckbox",
+        "sundayCheckbox"
+      );
+      let exemptedday = getCheckedDays(
+        "mondayExemptedCheckbox",
+        "tuesdayExemptedCheckbox",
+        "wednesdayExemptedCheckbox",
+        "thursdayExemptedCheckbox",
+        "fridayExemptedCheckbox",
+        "saturdayExemptedCheckbox",
+        "sundayExemptedCheckbox"
+      );
 
-        function LoadListEmp() {
-            $.ajax({
-                type: "GET",
-                url: "/employee/load",
-                success: function (result) {
-                    console.log(result.data);
-                    var data = result.data;
-
-                    $.each(data, function (key, item) {
-                        var options = new Option(item.newEmployeeId, item.newEmployeeId);
-                        $(options).html(item.firstname);
-                        $("#salaryemp").append(options);
-                        console.log(item.firstname);
-                    });
-                },
-                error: function (result) {
-                    alert("error: " + result.data);
-                },
+      console.log("Shift Name:", shiftname);
+      console.log("Start Shift:", startshift);
+      console.log("End Shift:", endshift);
+      console.log("Rest Day:", restday);
+      console.log("Exempted Day:", exemptedday);
+      $.ajax({
+        type: "POST",
+        url: "/shiftsettings/save",
+        data: {
+          shiftname: shiftname,
+          startshift: startshift,
+          endshift: endshift,
+          restday: restday,
+          exemptedday: exemptedday,
+        },
+        success: function (result) {
+          console.log("API Response:", result);
+          if (result.msg === "success") {
+            swal({
+              title: "Generate Successfully",
+              text: "You clicked the button!",
+              icon: "success",
+              button: "OK!",
+            }).then((result) => {
+              window.location.reload();
             });
-        }
-
-        function LoadeditListEmp() {
-            $.ajax({
-                type: "GET",
-                url: "/employee/loadedit",
-                success: function (result) {
-                    console.log(result.data);
-                    var data = result.data;
-
-                    $.each(data, function (key, item) {
-                        var options = new Option(item.newEmployeeId, item.newEmployeeId);
-                        $(options).html(item.firstname);
-                        $("#editsalaryemp").append(options);
-                        console.log(item.firstname);
-                    });
-                },
-                error: function (result) {
-                    alert("error: " + result.data);
-                },
+            LoadTable();
+          } else {
+            swal({
+              title: "Exist",
+              text: "Data already exists!",
+              icon: "warning",
+              button: "OK!",
+            }).then((result) => {
+              window.location.reload();
             });
-        }
-
-
-        $("#dataTablesalary tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-                .closest("tr")
-                .find("td")
-                .each(function () {
-                    dataRow.push($(this).text());
-                });
-            console.log(dataRow);
-            salaryid = dataRow[1];
-        });
-
-        $(document).on("click", "#editBtn", function () {
-            console.log('hit');
-            $.ajax({
-                type: "POST",
-                url: "/salary/getsalary",
-                data: {
-                    salaryid: salaryid,
-                },
-                success: function (result) {
-                    if (result.msg === "success") {
-                        const existingData = result.data;
-
-                        $.each(existingData, (key, item) => {
-                            $("#editdepartmentid").val(item.salaryid);
-                            $("#editsalaryemp").val(item.employeeid);
-                            $("#editmsemp").val(formatCurrencyValue(item.monthly));
-                            $("#editallowances").val(formatCurrencyValue(item.allowances));
-                        });
-                    } else {
-                        swal("Error fetching employee data", message, "error");
-                    }
-                },
-                error: function (err) {
-                    swal("An error occurred while fetching employee data", message, "error");
-                },
-            });
-        });
-
-        $(document).on("click", "#editsalarysavebtsn", function () {
-            console.log("Save button clicked");
-            let id = salaryid;
-            let employeeid = $("#editsalaryemp").val();
-            let monthly = $("#editmsemp").val().replace(/[^\d.-]/g, '');
-            let allowances = $("#editallowances").val().replace(/[^\d.-]/g, '');
-
-            var message = "";
-
-            if (employeeid === "") {
-                message += "employeeid is required. ";
-            }
-
-            if (monthly === "") {
-                message += "monthly is required. ";
-            }
-
-            if (allowances === "") {
-                message += "allowances is required. ";
-            }
-
-            if (message !== "") {
-                swal("Validation Error", message, "error");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/salary/update",
-                    data: {
-                        salaryid: id,
-                        employeeid: employeeid,
-                        monthly: parseFloat(monthly),
-                        allowances: parseFloat(allowances),
-                    },
-                    success: function (result) {
-                        if (result.msg == "success") {
-                            swal({
-                                title: "Update Successfully",
-                                text: "You clicked the button!",
-                                icon: "success",
-                                button: "OK!",
-                            }).then(result => {
-                                window.location.reload();
-                            });
-                            LoadTable();
-                        } else if (result.msg == "exist") {
-                            swal({
-                                title: "Exist",
-                                text: "Data already exists!",
-                                icon: "warning",
-                                button: "OK!",
-                            });
-                        } else {
-                            swal("Data already exists!", "You clicked the button!", "warning");
-                        }
-                    },
-                    error: function (err) {
-                        swal("Error", "An error occurred while saving data.", "error");
-                    },
-                });
-            }
-        });
-
-
-
+            LoadTable();
+          }
+        },
+        error: function (err) {
+          swal("Error", "An error occurred while saving data.", "error");
+          console.error("Error saving data:", err);
+        },
+      });
     });
 
-    //#region FUNCTIONS 
-
-
-    function populateYearsDropdown() {
-        var select = document.getElementById("payrollyear");
-        var currentYear = new Date().getFullYear();
-
-        for (var i = 0; i < 6; i++) {
-            var option = document.createElement("option");
-            option.text = currentYear + i;
-            option.value = currentYear + i;
-            select.add(option);
+    function getCheckedDays(...checkboxIds) {
+      let checkedDays = [];
+      checkboxIds.forEach((id) => {
+        if ($("#" + id).prop("checked")) {
+          checkedDays.push(
+            $("#" + id)
+              .next()
+              .text()
+          );
         }
+      });
+      return checkedDays.join(", ");
     }
 
+    function LoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
 
-    function searchTable() {
-        var input, filter, found, table, tr, td, i, j;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("dataTablepayrolldate");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            for (j = 0; j < td.length; j++) {
-                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                }
-            }
-            if (found) {
-                tr[i].style.display = "";
-                found = false;
-            } else {
-                tr[i].style.display = "none";
-            }
-        }
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#salaryemp").append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
     }
 
-    //#endregion
+    function LoadeditListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/loadedit",
+        success: function (result) {
+          console.log(result.data);
+          var data = result.data;
 
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#editsalaryemp").append(options);
+            console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableshiftSettings tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      shiftsettingsid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      console.log("hit");
+      $.ajax({
+        type: "POST",
+        url: "/shiftsettings/getshiftsettings",
+        data: {
+          shiftsettingsid: shiftsettingsid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data[0];
+            $("#editshiftname").val(existingData.shiftname);
+            $("#editstartshift").val(existingData.startshift);
+            $("#editendshift").val(existingData.endshift);
+            updateCheckbox(
+              "#editmondayCheckbox",
+              existingData.restday,
+              "Monday"
+            );
+            updateCheckbox(
+              "#edittuesdayCheckbox",
+              existingData.restday,
+              "Tuesday"
+            );
+            updateCheckbox(
+              "#editwednesdayCheckbox",
+              existingData.restday,
+              "Wednesday"
+            );
+            updateCheckbox(
+              "#editthursdayCheckbox",
+              existingData.restday,
+              "Thursday"
+            );
+            updateCheckbox(
+              "#editfridayCheckbox",
+              existingData.restday,
+              "Friday"
+            );
+            updateCheckbox(
+              "#editsaturdayCheckbox",
+              existingData.restday,
+              "Saturday"
+            );
+            updateCheckbox(
+              "#editsundayCheckbox",
+              existingData.restday,
+              "Sunday"
+            );
+
+            updateCheckbox(
+              "#mondayeditCheckbox",
+              existingData.exemptedday,
+              "Monday"
+            );
+            updateCheckbox(
+              "#tuesdayeditCheckbox",
+              existingData.exemptedday,
+              "Tuesday"
+            );
+            updateCheckbox(
+              "#wednesdayeditCheckbox",
+              existingData.exemptedday,
+              "Wednesday"
+            );
+            updateCheckbox(
+              "#thursdayeditCheckbox",
+              existingData.exemptedday,
+              "Thursday"
+            );
+            updateCheckbox(
+              "#fridayeditCheckbox",
+              existingData.exemptedday,
+              "Friday"
+            );
+            updateCheckbox(
+              "#saturdayeditCheckbox",
+              existingData.exemptedday,
+              "Saturday"
+            );
+            updateCheckbox(
+              "#sundayeditCheckbox",
+              existingData.exemptedday,
+              "Sunday"
+            );
+          } else {
+            swal("Error fetching employee data", result.message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            err.message,
+            "error"
+          );
+        },
+      });
+    });
+
+    function updateCheckbox(checkboxId, daysString, dayToCheck) {
+      // Check if daysString is not undefined and not null before using includes
+      if (daysString && daysString.includes(dayToCheck)) {
+        $(checkboxId).prop("checked", true);
+      } else {
+        $(checkboxId).prop("checked", false);
+      }
+    }
+
+    $(document).on("click", "#editshiftsavebtn", function () {
+      let id = shiftsettingsid
+      let shiftname = $("#editshiftname").val();
+      let startshift = $("#editstartshift").val();
+      let endshift = $("#editendshift").val();
+      let shiftstatus = $("#editstatus").val();
+      let restday = getCheckedDays(
+        "editmondayCheckbox",
+        "edittuesdayCheckbox",
+        "editwednesdayCheckbox",
+        "editthursdayCheckbox",
+        "editfridayCheckbox",
+        "editsaturdayCheckbox",
+        "editsundayCheckbox"
+      );
+      let exemptedday = getCheckedDays(
+        "mondayeditCheckbox",
+        "tuesdayeditCheckbox",
+        "wednesdayeditCheckbox",
+        "thursdayeditCheckbox",
+        "fridayeditCheckbox",
+        "saturdayeditCheckbox",
+        "sundayeditCheckbox"
+      );
+
+      console.log("Shift Name:", shiftname);
+      console.log("Start Shift:", startshift);
+      console.log("End Shift:", endshift);
+      console.log("Rest Day:", restday);
+      console.log("Exempted Day:", exemptedday);
+      $.ajax({
+        type: "POST",
+        url: "/shiftsettings/update",
+        data: {
+          shiftsettingsid: id,
+          shiftname: shiftname,
+          startshift: startshift,
+          endshift: endshift,
+          restday: restday,
+          exemptedday: exemptedday,
+          shiftstatus: shiftstatus,
+        },
+        success: function (result) {
+          console.log("API Response:", result);
+          if (result.msg === "success") {
+            swal({
+              title: "Generate Successfully",
+              text: "You clicked the button!",
+              icon: "success",
+              button: "OK!",
+            }).then((result) => {
+              window.location.reload();
+            });
+            LoadTable();
+          } else {
+            swal({
+              title: "Exist",
+              text: "Data already exists!",
+              icon: "warning",
+              button: "OK!",
+            }).then((result) => {
+              window.location.reload();
+            });
+            LoadTable();
+          }
+        },
+        error: function (err) {
+          swal("Error", "An error occurred while saving data.", "error");
+          console.error("Error saving data:", err);
+        },
+      });
+    });
+  });
+
+  //#region FUNCTIONS
+
+  //   function populateYearsDropdown() {
+  //     var select = document.getElementById("payrollyear");
+  //     var currentYear = new Date().getFullYear();
+
+  //     for (var i = 0; i < 6; i++) {
+  //       var option = document.createElement("option");
+  //       option.text = currentYear + i;
+  //       option.value = currentYear + i;
+  //       select.add(option);
+  //     }
+  //   }
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableshiftSettings");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  //#endregion
 </script>
