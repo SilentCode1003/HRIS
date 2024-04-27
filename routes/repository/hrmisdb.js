@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('b6fc9f41d3b85ec568464ac97a0466c7', (err, encrypted) => {
+Decrypter('97b1658adae301177bba5f775972b020b58229f1876b445c56ed6d711ef4e376', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -20,7 +20,8 @@ Decrypter('b6fc9f41d3b85ec568464ac97a0466c7', (err, encrypted) => {
 //   console.log(encrypted);
 // });
 
-Encrypter('Mysql_5L12345', (err, encrypted) => {
+
+Encrypter('5lsolutions101520', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 
@@ -972,6 +973,25 @@ exports.InsertTable = (tablename, data, callback) => {
        tu_createby,
        tu_createdate,
        tu_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_shift_settings") {
+    let sql = `INSERT INTO master_shift_settings(
+       mss_shiftname,
+       mss_startshift,
+       mss_endshift,
+       mss_restday,
+       mss_exemptedday,
+       mss_createdate,
+       mss_createby,
+       mss_shiftstatus) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

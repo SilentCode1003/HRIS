@@ -915,6 +915,7 @@ exports.Master_Shift_Settings = (data) => {
       startshift: key.mss_startshift,
       endshift: key.mss_endshift,
       restday: key.mss_restday,
+      exemptedday: key.mss_exemptedday,
       createdate: key.mss_createdate,
       createby: key.mss_createby,
       status: key.mss_shiftstatus,

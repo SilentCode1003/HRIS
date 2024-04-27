@@ -88,6 +88,7 @@ var teamleadpendingleaveRouter = require('./routes/teamleadpendingleave');
 var teamleadapprovedleaveRouter = require('./routes/teamleadapprovedleave');
 var teamleadgeofenceRouter = require('./routes/teamleadgeofence');
 var shiftsettingsRouter = require('./routes/shiftsettings');
+var empbackgroundRouter = require('./routes/empbackground');
 
 var app = express();
 
@@ -186,7 +187,7 @@ app.use('/teamleadpendingleave' , teamleadpendingleaveRouter);
 app.use('/teamleadapprovedleave' , teamleadapprovedleaveRouter);
 app.use('/teamleadgeofence', teamleadgeofenceRouter);
 app.use('/shiftsettings' , shiftsettingsRouter);
-
+app.use('/empbackground' , empbackgroundRouter);
 
 
 
