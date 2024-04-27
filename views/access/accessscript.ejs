@@ -99,17 +99,11 @@
 
     $(document).on("click", "#accesssavebtn", function () {
       let accessname = $("#accessname").val();
-      let status = $("#accessstatus").val();
 
       var message = "";
 
       if (accessname == "") {
         message += "TITTLE ";
-      }
-
-
-      if (status == "") {
-        message += "POSITION NAME ";
       }
 
       if (message !== "") {
@@ -120,8 +114,6 @@
           url: "/access/save",
           data: {
             accessname: accessname,
-            status: status,
-
           },
           success: function (result) {
             if (result.msg == "success") {

@@ -343,36 +343,108 @@ router.post("/gethomestatus2", (req, res) => {
 });
 
 
+// router.post("/exportfile", async (req, res) => {
+//   try {
+//     let startdate = req.body.startdate;
+//     let enddate = req.body.enddate;
+//     let sql = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
+
+//     const result = await mysql.mysqlQueryPromise(sql);
+
+//     const jsonData = JSON.parse(JSON.stringify(result[0]));
+
+//     if (jsonData.length === 0) {
+//       return res.status(404).json({ msg: "No data found" });
+//     }
+
+//     const headers = Object.keys(jsonData[0]);
+
+//     const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
+//     const workbook = XLSX.utils.book_new();
+//     const worksheetName = `${startdate}_${enddate}`;
+//     XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+
+//     const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
+//     worksheet["!cols"] = [];
+//     for (let i = 0; i < columnCount; i++) {
+//       if (i === 0) {
+//         worksheet["!cols"].push({ wch: 30 }); 
+//       } else {
+//         worksheet["!cols"].push({ wch: 20 }); 
+//       }
+//     }
+//     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
+
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`
+//     );
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );    
+//     res.send(excelBuffer);
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).json({ msg: "error", data: error });
+//   }
+// });
+
+
 router.post("/exportfile", async (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
-    let sql = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
+    let sqlExportAttendance = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
+    let sqlExportAttendanceDetailed = `call hrmis.ExportAttendanceDetailed('${startdate}', '${enddate}');`;
 
-    const result = await mysql.mysqlQueryPromise(sql);
+    const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
+    const resultExportAttendanceDetailed = await mysql.mysqlQueryPromise(sqlExportAttendanceDetailed);
 
-    const jsonData = JSON.parse(JSON.stringify(result[0]));
+    const jsonDataExportAttendance = JSON.parse(JSON.stringify(resultExportAttendance[0]));
+    const jsonDataExportAttendanceDetailed = JSON.parse(JSON.stringify(resultExportAttendanceDetailed[0]));
 
-    if (jsonData.length === 0) {
-      return res.status(404).json({ msg: "No data found" });
+    if (jsonDataExportAttendance.length === 0) {
+      return res.status(404).json({ msg: "No data found for ExportAttendance" });
     }
 
-    const headers = Object.keys(jsonData[0]);
+    if (jsonDataExportAttendanceDetailed.length === 0) {
+      return res.status(404).json({ msg: "No data found for ExportAttendanceDetailed" });
+    }
 
-    const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
+    const headersExportAttendance = Object.keys(jsonDataExportAttendance[0]);
+    const headersExportAttendanceDetailed = Object.keys(jsonDataExportAttendanceDetailed[0]);
+
+    const worksheetExportAttendance = XLSX.utils.json_to_sheet(jsonDataExportAttendance, { header: headersExportAttendance });
+    const worksheetExportAttendanceDetailed = XLSX.utils.json_to_sheet(jsonDataExportAttendanceDetailed, { header: headersExportAttendanceDetailed });
+
     const workbook = XLSX.utils.book_new();
-    const worksheetName = `${startdate}_${enddate}`;
-    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+    const worksheetNameExportAttendance = `Summarized_Data`;
+    const worksheetNameExportAttendanceDetailed = `Data`;
 
-    const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
-    worksheet["!cols"] = [];
-    for (let i = 0; i < columnCount; i++) {
+    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendance, worksheetNameExportAttendance);
+    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendanceDetailed, worksheetNameExportAttendanceDetailed);
+
+    const columnCountExportAttendance = XLSX.utils.decode_range(worksheetExportAttendance["!ref"]).e.c + 1;
+    worksheetExportAttendance["!cols"] = [];
+    for (let i = 0; i < columnCountExportAttendance; i++) {
       if (i === 0) {
-        worksheet["!cols"].push({ wch: 30 }); 
+        worksheetExportAttendance["!cols"].push({ wch: 30 }); 
       } else {
-        worksheet["!cols"].push({ wch: 20 }); 
+        worksheetExportAttendance["!cols"].push({ wch: 20 }); 
       }
     }
+
+    const columnCountExportAttendanceDetailed = XLSX.utils.decode_range(worksheetExportAttendanceDetailed["!ref"]).e.c + 1;
+    worksheetExportAttendanceDetailed["!cols"] = [];
+    for (let i = 0; i < columnCountExportAttendanceDetailed; i++) {
+      if (i === 0) {
+        worksheetExportAttendanceDetailed["!cols"].push({ wch: 30 }); 
+      } else {
+        worksheetExportAttendanceDetailed["!cols"].push({ wch: 20 }); 
+      }
+    }
+
     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
 
     res.setHeader(
@@ -389,6 +461,7 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
 
 
 router.post("/exportfileperemployee", async (req, res) => {
