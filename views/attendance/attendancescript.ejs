@@ -7,6 +7,7 @@
   $(document).ready(function () {
     searchTable();
     LoadTable();
+    LoadListEmp();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -43,7 +44,6 @@
               // imgElement.style.width = "80px";
               // imgElement.style.height = "80px";
 
-<<<<<<< Updated upstream
               finalData.push({
                 //image: imgElement.outerHTML,
                 attendanceid: item.attendanceid,
@@ -56,59 +56,6 @@
                 totalhours: item.totalhours,
                 action: action,
               });
-=======
-                            finalData.push({
-                                //image: imgElement.outerHTML,
-                                attendanceid: item.attendanceid,
-                                employeeid: item.employeeid,
-                                attendancedate: item.attendancedate,
-                                clockin: item.clockin,
-                                clockout: item.clockout,
-                                devicein: item.devicein,
-                                deviceout: item.deviceout,
-                                totalhours: item.totalhours,
-                                action: action,
-                            });
-                        });
-
-                        return finalData;
-                    },
-                },
-                columnDefs: [
-                    {
-                        targets: 1,
-                        className: "td-indent",
-                    },
-                ],
-                columns: [
-                    //{ data: "image" },
-                    { data: "attendanceid" },
-                    { data: "employeeid" },
-                    { data: "attendancedate" },
-                    { data: "clockin" },
-                    { data: "clockout" },
-                    { data: "devicein" },
-                    { data: "deviceout" },
-                    { data: "totalhours" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                    var clockinCell = $(row).find("td:eq(3)");
-                    var clockoutCell = $(row).find("td:eq(4)");
-                    var totalhoursCell = $(row).find("td:eq(7)");
-
-                    clockinCell.wrapInner("<span class='clockin-text'></span>");
-                    clockoutCell.wrapInner("<span class='clockout-text'></span>");
-                    totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
-
-                    $("td", row).each(function (index) {
-                        this.style.textAlign = "center";
-                        this.style.verticalAlign = "middle";
-                    });
-                },
-                initComplete: function () {
-                },
->>>>>>> Stashed changes
             });
 
             return finalData;
@@ -133,6 +80,14 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          var clockinCell = $(row).find("td:eq(3)");
+          var clockoutCell = $(row).find("td:eq(4)");
+          var totalhoursCell = $(row).find("td:eq(7)");
+
+          clockinCell.wrapInner("<span class='clockin-text'></span>");
+          clockoutCell.wrapInner("<span class='clockout-text'></span>");
+          totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
@@ -141,15 +96,6 @@
         initComplete: function () {},
       });
     }
-
-    $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
-      $("#loaddate").click(function () {
-        showspinner();
-        let startDate = picker.startDate.format("YYYY-MM-DD");
-        let endDate = picker.endDate.format("YYYY-MM-DD");
-        LoadDateRange(startDate, endDate);
-      });
-    });
 
     function LoadDateRange(startDate, endDate) {
       $("#dataTableattendance").DataTable({
@@ -232,7 +178,6 @@
       hidespinner();
     }
 
-
     $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
       $("#checklogs").click(function () {
         showspinner();
@@ -241,7 +186,6 @@
         loadmissedlogs(startDate, endDate);
       });
     });
-    
 
     function loadmissedlogs(startDate, endDate) {
       $("#dataTableattendance").DataTable({
@@ -405,6 +349,79 @@
       });
     });
 
+    $("#datepickermodal").on("apply.daterangepicker", function (ev, picker) {
+      $("#exportemployeeattendance").click(function () {
+        let employeeid = $("#employeename").val();
+        let startDate = picker.startDate.format("YYYY-MM-DD");
+        let endDate = picker.endDate.format("YYYY-MM-DD");
+        exportempattendance(employeeid, startDate, endDate);
+      });
+    });
+
+    function exportempattendance(employeeid, startDate, endDate) {
+      $.ajax({
+        url: "/attendance/exportfileperemployee",
+        type: "POST",
+        data: {
+          employeeid: employeeid,
+          startdate: startDate,
+          enddate: endDate,
+        },
+        xhrFields: {
+          responseType: "blob",
+        },
+        success: function (response) {
+          if (response) {
+            swal({
+              title: "Download Employee Attendance",
+              text: "Are you sure you want to download the Attendance data?",
+              confirm: "#28a745",
+              cancel: "#dc3545",
+              buttons: {
+                confirm: "Yes, download it!",
+                cancel: "No, cancel",
+              },
+              dangerMode: true,
+            }).then((result) => {
+              if (result) {
+                var blob = response;
+
+                var url = URL.createObjectURL(blob);
+
+                var link = document.createElement("a");
+                link.href = url;
+                link.download = `Attendance_data_of_${employeeid}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+              } else {
+                swal(
+                  "Cancelled",
+                  "Payroll data download cancelled :)",
+                  "error"
+                );
+              }
+            });
+          } else {
+            console.error("Error: Empty response");
+            swal(
+              "Error",
+              "Failed to export payroll data. Please try again later.",
+              "error"
+            );
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error:", error);
+          swal(
+            "Error",
+            "Failed to export payroll data. Please try again later.",
+            "error"
+          );
+        },
+      });
+    }
+
     $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
       $("#exportBtn").click(function () {
         let startDate = picker.startDate.format("YYYY-MM-DD");
@@ -472,6 +489,27 @@
             "Failed to export payroll data. Please try again later.",
             "error"
           );
+        },
+      });
+    }
+
+    function LoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          // console.log(result.data);
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#employeename").append(options);
+            //console.log(item.firstname);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
         },
       });
     }
@@ -614,6 +652,22 @@
       function (start, end, label) {
         console.log(
           "A new date selection was made: " +
+            start.format("YYYY-MM-DD") +
+            " to " +
+            end.format("YYYY-MM-DD")
+        );
+      }
+    );
+  });
+
+  $(function () {
+    $('input[name="daterangemodal"]').daterangepicker(
+      {
+        opens: "middle",
+      },
+      function (start, end, label) {
+        console.log(
+          "A bagong date selection was made: " +
             start.format("YYYY-MM-DD") +
             " to " +
             end.format("YYYY-MM-DD")

@@ -86,6 +86,8 @@ var teamleadappliedovertimeRouter = require('./routes/teamleadappliedovertime');
 var teamleadapprovedovertimeRouter = require('./routes/teamleadapprovedovertime');
 var teamleadpendingleaveRouter = require('./routes/teamleadpendingleave');
 var teamleadapprovedleaveRouter = require('./routes/teamleadapprovedleave');
+var teamleadgeofenceRouter = require('./routes/teamleadgeofence');
+var shiftsettingsRouter = require('./routes/shiftsettings');
 
 var app = express();
 
@@ -182,6 +184,8 @@ app.use('/teamleadappliedovertime' , teamleadappliedovertimeRouter);
 app.use('/teamleadapprovedovertime' , teamleadapprovedovertimeRouter);
 app.use('/teamleadpendingleave' , teamleadpendingleaveRouter);
 app.use('/teamleadapprovedleave' , teamleadapprovedleaveRouter);
+app.use('/teamleadgeofence', teamleadgeofenceRouter);
+app.use('/shiftsettings' , shiftsettingsRouter);
 
 
 

@@ -2482,7 +2482,7 @@
     let geofence;
     $.ajax({
       type: "GET",
-      url: "/geofencesettings/load",
+      url: "/teamleadgeofence/load",
       success: function (result) {
         let data = result.data;
         $.each(data, (key, item) => {

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <%- include("teamleadheader.ejs")%>
+  <%- include("header.ejs")%>
 </head>
 
 <body id="page-top">
@@ -10,21 +10,21 @@
 
   <div id="wrapper">
     <!-- Sidebar -->
-    <%- include("teamleadteamleadsidebar.ejs")%>
+    <%- include("sidebar.ejs")%>
       <!-- End of Sidebar -->
+
       <!-- Topbar -->
       <%- include("topbar.ejs")%>
-        <!-- End of Topbar -->
-  
-        <!-- Content Wrapper -->
-        <div id="content-wrapper">
+      <!-- End of Topbar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper">
           <div class="content">
-              <%- include("./teamleadapprovedleave/teamleadapprovedleave.ejs")%>
-          </div>
-  
+            <%- include("./shiftsettings/shiftsettings.ejs")%>
+          </div>    
           
-        </div>
-        <!-- End of Content Wrapper -->
+      </div>
+       <!-- End of Content Wrapper -->
   
   </div>
 
@@ -36,8 +36,8 @@
 
   <!-- Bootstrap core JavaScript-->
   <%- include("./scripts.ejs")%>
-  <%- include("./teamleadtopbarscript.ejs")%>
-    <%- include("./teamleadapprovedleave/teamleadapprovedleavescript.ejs")%>
+  <%- include("./topbarscript.ejs")%>
+    <%- include("./shiftsettings/shiftsettingsscript.ejs")%>
 </body>
 
 </html>

@@ -395,3 +395,56 @@ WHERE
   }
 });
 
+
+router.post('/searchemployee', (req, res) => {
+  try {
+    const { search } = req.body;
+    let departmentid = req.session.departmentid;
+    let firstName = '';
+    let lastName = '';
+
+    const lastSpaceIndex = search.lastIndexOf(' ');
+    if (lastSpaceIndex !== -1) {
+      firstName = search.substring(0, lastSpaceIndex);
+      lastName = search.substring(lastSpaceIndex + 1);
+    } else {
+      firstName = search;
+    }
+
+    let sql = `SELECT me_id, me_firstname, me_lastname, me_profile_pic FROM master_employee WHERE 1 AND me_department = '${departmentid}'`;
+
+    if (firstName) {
+      sql += ` AND me_firstname LIKE '%${firstName}%'`;
+    }
+
+    if (lastName) {
+      sql += ` AND me_lastname LIKE '%${lastName}%'`;
+    }
+
+    mysql.mysqlQueryPromise(sql)
+      .then((result) => {
+        const employees = result.map((employee) => ({
+          employeeid: employee.me_id,
+          name: `${employee.me_firstname} ${employee.me_lastname}`,
+          profilePic: employee.me_profile_pic,
+        }));
+        res.json({
+          msg: 'success',
+          data: employees,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: 'error',
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    });
+  }
+});
+
+

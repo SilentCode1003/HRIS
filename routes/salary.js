@@ -130,6 +130,8 @@ router.post('/update', (req ,res) => {
     ms_payrolltype = '${payrolltype}'
     where ms_id = '${salaryid}'`;
 
+    console.log(sqlupdate);
+
 
     mysql.Update(sqlupdate)
       .then((result) =>{

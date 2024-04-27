@@ -1,4 +1,4 @@
-var express = require("express");
+ var express = require("express");
 var router = express.Router();
 const { Validator } = require("./controller/middleware");
 const mysql  = require("./repository/hrmisdb");
@@ -10,7 +10,7 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
+  
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT

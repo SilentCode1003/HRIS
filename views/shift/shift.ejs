@@ -36,244 +36,43 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
+<div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <h3 class="modal-title fs-5" id="exampleModalLabel">SHIFT</h3>
+        <h3 class="modal-title fs-5" id="exampleModalLabel">Add Shift For Employees </h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
-        <form>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="employeeshift" name="employeeshift"
-                  aria-label="Floating label select example">
-                  <option>Employee</option>
-                </select>
-                <label for="floatingSelectGrid">Employee Name</label>
+          <form>
+              <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select border-form-modal" id="employeeshift" name="employeeshift" aria-label="Floating label select example">
+                        <option selected>Choose..</option>
+                      </select>
+                      <label for="floatingSelectGrid">Employee</label>
+                  </div>
               </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="shiftdepartment" name="shiftdepartment"
-                  aria-label="Floating label select example">
-                  <option>Department</option>
-                </select>
-                <label for="floatingSelectGrid">Department</label>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                    <select class="form-select border-form-modal" id="shiftdepartment" name="shiftdepartment">
+                      <option selected>Choose..</option>
+                    </select>
+                    <label for="floatingSelectGrid">Department Name</label>
+                </div>
               </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="mondayTimeIn" name="mondayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Monday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="mondayTimeIn">Monday Time In</label>
+             <br>      
+              <div class="col">
+                <div class="form-floating">
+                    <select class="form-select border-form-modal" id="shiftsettingsid" name="shiftdepartment">
+                      <option selected>Choose..</option>
+                    </select>
+                    <label for="floatingSelectGrid">Shift Name</label>
+                </div>
               </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="mondayTimeOut" name="mondayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Monday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="mondayTimeOut">Monday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="tuesdayTimeIn" name="tuesdayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Tuesday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="tuesdayTimeIn">Tuesday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="tuesdayTimeOut" name="tuesdayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Tuesday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="tuesdayTimeOut">Tuesday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="wednesdayTimeIn" name="wednesdayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Wednesday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="wednesdayTimeIn">Wednesday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="wednesdayTimeOut" name="wednesdayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Wednesday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="wednesdayTimeOut">Wednesday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="thursdayTimeIn" name="thursdayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Thursday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="thursdayTimeIn">Thursday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="thursdayTimeOut" name="thursdayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Thursday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="thursdayTimeOut">Thursday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="fridayTimeIn" name="fridayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Friday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="fridayTimeIn">Friday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="fridayTimeOut" name="fridayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Friday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="fridayTimeOut">Friday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="saturdayTimeIn" name="saturdayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Saturday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="saturdayTimeIn">Saturday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="saturdayTimeOut" name="saturdayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Saturday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="saturdayTimeOut">Saturday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="sundayTimeIn" name="sundayTimeIn"
-                  aria-label="Floating label select example">
-                  <option selected>Sunday Time In</option>
-                  <option value="08:00:00">8:00 AM</option>
-                  <option value="09:00:00">9:00 AM</option>
-                  <option value="00:00:00 restday">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="sundayTimeIn">Sunday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="sundayTimeOut" name="sundayTimeOut"
-                  aria-label="Floating label select example">
-                  <option selected>Sunday Time Out</option>
-                  <option value="17:00:00">5:00 PM</option>
-                  <option value="18:00:00">6:00 PM</option>
-                  <option value="00:00:00">Rest Day</option>
-                  <option value="Exempted">Exempted</option>
-                </select>
-                <label for="sundayTimeOut">Sunday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-        </form>
+            <br>       
+          </form>
       </div>
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -283,239 +82,97 @@
   </div>
 </div>
 
+
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="shiftModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shiftModalLabel">Shift Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Edit Modal -->
 <div class="modal fade" id="editshiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog  modal-lg">
+  <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
         <h3 class="modal-title fs-5" id="exampleModalLabel">SHIFT</h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
-        <form>
-          <div class="row">
-            <div class="col">
-              <label for="editshiftemployee">Employee Name</label>
-              <div class="form-floating">
-                <input type="text" class="form-control border-form-modal" id="editshiftemployee" disabled>
-            </div>
-          </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <label for="editshiftdepartment">Department</label>
-              <div class="form-floating">
-                <input type="text" class="form-control border-form-modal" id="editshiftdepartment" disabled>
-            </div>
-          </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editmondaytimein" name="editmondaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Monday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editmondaytimein">Monday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editmondaytimeout" name="editmondaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Monday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editmondaytimeout">Monday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="edittuesdaytimein" name="edittuesdaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Tuesday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="edittuesdaytimein">Tuesday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="edittuesdaytimeout" name="edittuesdaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Tuesday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="edittuesdaytimeout">Tuesday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editwednesdaytimein" name="editwednesdaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Wednesday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editwednesdaytimein">Wednesday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editwednesdaytimeout" name="editwednesdaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Wednesday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editwednesdaytimeout">Wednesday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editthursdaytimein" name="editthursdaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Thursday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editthursdaytimein">Thursday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editthursdaytimeout" name="editthursdaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Thursday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editthursdaytimeout">Thursday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editfridaytimein" name="editfridaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Friday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editfridaytimein">Friday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editfridaytimeout" name="editfridaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Friday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editfridaytimeout">Friday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editsaturdaytimein" name="editsaturdaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Saturday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editsaturdaytimein">Saturday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editsaturdaytimeout" name="editsaturdaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Saturday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editsaturdaytimeout">Saturday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editsundaytimein" name="editsundaytimein"
-                  aria-label="Floating label select example">
-                  <option selected>Sunday Time In</option>
-                  <option>08:00 AM</option>
-                  <option>09:00 AM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editsundaytimein">Sunday Time In</label>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-floating">
-                <select class="form-select border-form-modal" id="editsundaytimeout" name="editsundaytimeout"
-                  aria-label="Floating label select example">
-                  <option selected>Sunday Time Out</option>
-                  <option>05:00 PM</option>
-                  <option>06:00 PM</option>
-                  <option>Rest Day</option>
-                  <option>Exempted</option>
-                </select>
-                <label for="editsundaytimeout">Sunday Time Out</label>
-              </div>
-            </div>
-          </div>
-          <br>
-        </form>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Day</th>
+              <th scope="col">Start Shift</th>
+              <th scope="col">End Shift</th>
+              <th scope="col">Rest Day</th>
+              <th scope="col">Exempted Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Monday</th>
+              <td><input type="time" class="form-control" id="editmondaytimein"></td>
+              <td><input type="time" class="form-control" id="editmondaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editmondayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editmondayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Tuesday</th>
+              <td><input type="time" class="form-control" id="edittuesdaytimein"></td>
+              <td><input type="time" class="form-control" id="edittuesdaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="edittuesdayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="edittuesdayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Wednesday</th>
+              <td><input type="time" class="form-control" id="editwednesdaytimein"></td>
+              <td><input type="time" class="form-control" id="editwednesdaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editwednesdayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editwednesdayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Thursday</th>
+              <td><input type="time" class="form-control" id="editthursdaytimein"></td>
+              <td><input type="time" class="form-control" id="editthursdaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editthursdayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editthursdayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Friday</th>
+              <td><input type="time" class="form-control" id="editfridaytimein"></td>
+              <td><input type="time" class="form-control" id="editfridaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editfridayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editfridayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Saturday</th>
+              <td><input type="time" class="form-control" id="editsaturdaytimein"></td>
+              <td><input type="time" class="form-control" id="editsaturdaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editsaturdayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editsaturdayexempted"></td>
+            </tr>
+            <tr>
+              <th scope="row">Sunday</th>
+              <td><input type="time" class="form-control" id="editsundaytimein"></td>
+              <td><input type="time" class="form-control" id="editsundaytimeout"></td>
+              <td><input type="checkbox" class="form-check-input" id="editsundayrestday"></td>
+              <td><input type="checkbox" class="form-check-input" id="editsundayexempted"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -524,3 +181,5 @@
     </div>
   </div>
 </div>
+
+
