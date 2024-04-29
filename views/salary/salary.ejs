@@ -53,7 +53,7 @@
                  <div class="col">
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="msemp" name="msemp"
-                          placeholder="Monthly Salary">
+                          placeholder="Monthly Salary" oninput="formatPrice(event, this)">
                       <label for="msemp">Monthly Or Daily Salary</label>
                   </div>
               </div>                                       
@@ -61,7 +61,7 @@
               <div class="col">
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="allowances" name="allowances"
-                          placeholder="Monthly Allowances">
+                          placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
                       <label for="allowances">Monthly Allowances</label>
                   </div>
               </div>                 
@@ -69,7 +69,7 @@
               <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control border-form-modal" id="adjustments" name="adjustments"
-                        placeholder="Adjustments">
+                        placeholder="Adjustments" oninput="formatPrice(event, this)">
                     <label for="editallowances">Adjustments</label>
                 </div>
             </div>                 
@@ -116,16 +116,16 @@
                  <br>
                  <div class="col">
                   <div class="form-floating">
-                      <input type="text" class="form-control border-form-modal" id="editmsemp" name="editmsemp"
-                          placeholder="Monthly Salary">
-                      <label for="editmsemp">Edit Monthly Or Daily Salary</label>
-                  </div>
+                    <input type="text" class="form-control border-form-modal" id="editmsemp" 
+                    name="editmsemp" placeholder="Monthly Salary" oninput="formatPrice(event, this)">
+                    <label for="editmsemp">Edit Monthly Or Daily Salary</label>
+                </div>
               </div>                                       
               <br>
               <div class="col">
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="editallowances" name="editallowances"
-                          placeholder="Monthly Allowances">
+                          placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
                       <label for="editallowances">Edit Monthly Allowances</label>
                   </div>
               </div>                 
@@ -134,7 +134,7 @@
                 <div class="form-floating">
                     <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
                         placeholder="Adjustments">
-                    <label for="editallowances">Edit Adjustments</label>
+                    <label for="editallowances" oninput="formatPrice(event, this)">Edit Adjustments</label>
                 </div>
             </div>                 
             <br> 

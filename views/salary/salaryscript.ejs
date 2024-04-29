@@ -386,158 +386,241 @@
 
   //#region FUNCTIONS
 
-  $("#msemp").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  // $("#msemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
 
-  function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
 
-  function formatCurrency(input, blur) {
-    var input_val = input.val();
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
 
-    var numeric_val = input_val.replace(/\D/g, "");
+  //   var numeric_val = input_val.replace(/\D/g, "");
 
-    if (numeric_val === "" || numeric_val === "00") {
-      return;
-    }
-    var formatted_val = formatNumber(numeric_val);
-    formatted_val = "₱" + formatted_val;
-    if (blur) {
-      formatted_val += ".00";
-    }
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
 
-    input.val(formatted_val);
-  }
+  //   // Extract the whole number and decimal parts
+  //   var wholeNumber = numeric_val.slice(0, -2);
+  //   var decimalPart = numeric_val.slice(-2);
 
-  $("#editmsemp").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  //   var formatted_val = formatNumber(wholeNumber);
+  //   formatted_val = "₱" + formatted_val;
 
-  function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  //   // Add the decimal part if present
+  //   if (decimalPart.length > 0) {
+  //     formatted_val += "." + decimalPart;
+  //   } else if (blur) {
+  //     formatted_val += ".00"; // Add .00 if there are no decimal parts and it's blurred
+  //   }
 
-  function formatCurrency(input, blur) {
-    var input_val = input.val();
-    var numeric_val = input_val.replace(/\D/g, "");
-    if (numeric_val === "" || numeric_val === "00") {
-      return;
-    }
-    var formatted_val = formatNumber(numeric_val);
-    formatted_val = "₱" + formatted_val;
-    if (blur) {
-      formatted_val += ".00";
-    }
-    input.val(formatted_val);
-  }
+  //   input.val(formatted_val);
+  // }
 
-  $("#adjustments").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  // $("#msemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
 
-  $("#editadjustments").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
 
-  function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
 
-  function formatCurrency(input, blur) {
-    var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
 
-    var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += "₱0.00";
+  //   }
 
-    if (numeric_val === "" || numeric_val === "00") {
-      return;
-    }
-    var formatted_val = formatNumber(numeric_val);
-    formatted_val = "₱" + formatted_val;
-    if (blur) {
-      formatted_val += ".00";
-    }
+  //   input.val(formatted_val);
+  // }
 
-    input.val(formatted_val);
-  }
+  // $("#editmsemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
 
-  $("#allowances").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
 
-  function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
 
-  function formatCurrency(input, blur) {
-    var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
 
-    var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
 
-    if (numeric_val === "" || numeric_val === "00") {
-      return;
-    }
-    var formatted_val = formatNumber(numeric_val);
-    formatted_val = "₱" + formatted_val;
-    if (blur) {
-      formatted_val += ".00";
-    }
+  //   // Extract the whole number and decimal parts
+  //   var wholeNumber = numeric_val.slice(0, -2);
+  //   var decimalPart = numeric_val.slice(-2);
 
-    input.val(formatted_val);
-  }
+  //   console.log("Whole Number:", wholeNumber);
+  //   console.log("Decimal Part:", decimalPart);
 
-  $("#editallowances").on({
-    input: function () {
-      formatCurrency($(this));
-    },
-    blur: function () {
-      formatCurrency($(this), true);
-    },
-  });
+  //   var formatted_val = formatNumber(wholeNumber);
+  //   formatted_val = "₱" + formatted_val;
 
-  function formatNumber(n) {
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  //   // Add the decimal part if present
+  //   if (decimalPart.length > 0) {
+  //     formatted_val += "." + decimalPart;
+  //   } else if (blur) {
+  //     formatted_val += ".00";
+  //   }
 
-  function formatCurrency(input, blur) {
-    var input_val = input.val();
-    var numeric_val = input_val.replace(/\D/g, "");
-    if (numeric_val === "" || numeric_val === "00") {
-      return;
-    }
-    var formatted_val = formatNumber(numeric_val);
-    formatted_val = "₱" + formatted_val;
-    if (blur) {
-      formatted_val += ".00";
-    }
-    input.val(formatted_val);
-  }
+  //   console.log("Formatted Value:", formatted_val);
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#editmsemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+  //   input.val(formatted_val);
+  // }
+
+  // $("#adjustments").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // $("#editadjustments").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#allowances").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#editallowances").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+  //   input.val(formatted_val);
+  // }
 
   function searchTable() {
     var input, filter, found, table, tr, td, i, j;
