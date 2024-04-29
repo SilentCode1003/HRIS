@@ -138,30 +138,81 @@ router.post("/loadshiftforapp", (req, res) => {
 //   }
 // });
 
-router.post('/save', (req ,res) => {
+// router.post('/save', (req ,res) => {
+//   try {
+//     let employeeName = req.body.employeeName;
+//     let department = req.body.department;
+//     let shiftsettingsid = req.body.shiftsettingsid;
+//     let sql = `call hrmis.InsertShift(
+//     '${employeeName}', '${department}', '${shiftsettingsid}')`;
+
+//     mysql.StoredProcedure(sql , (err, result) => {
+//       if (err) console.error("Error :", err)
+
+//       console.log(result);
+//       res.json({
+//         msg:'success',
+//         data: result,
+//       });
+//     });
+//   } catch (error) {
+//     res.json({
+//       msg:'error',
+//       data: error,
+//     });
+//   }
+// });
+
+router.post('/save', async (req, res) => {
   try {
     let employeeName = req.body.employeeName;
     let department = req.body.department;
     let shiftsettingsid = req.body.shiftsettingsid;
-    let sql = `call hrmis.InsertShift(
-    '${employeeName}', '${department}', '${shiftsettingsid}')`;
+  
+    let checkSql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
+    
+    mysql.Select(checkSql, "Master_Shift" , (err ,result) => {
+      if (err) {
+        console.error("Error checking data:", err);
+        return res.json({
+          msg: 'error',
+          data: err,
+        });
+      }
 
-    mysql.StoredProcedure(sql , (err, result) => {
-      if (err) console.error("Error :", err)
+      if (result.length > 0) {
+        return res.json({
+          msg: 'exist',
+          data: result,
+        });
+      }
+      let sql = `call hrmis.InsertShift('${employeeName}', '${department}', '${shiftsettingsid}')`;
 
-      console.log(result);
-      res.json({
-        msg:'success',
-        data: result,
+      mysql.StoredProcedure(sql, (err, result) => {
+        if (err) {
+          console.error("Error inserting data:", err);
+          return res.json({
+            msg: 'error',
+            data: err,
+          });
+        }
+
+        console.log(result);
+        res.json({
+          msg: 'success',
+          data: result,
+        });
       });
     });
   } catch (error) {
+    console.error("Error:", error);
     res.json({
-      msg:'error',
+      msg: 'error',
       data: error,
     });
   }
 });
+
 
 
 router.post("/update", (req, res) => {
