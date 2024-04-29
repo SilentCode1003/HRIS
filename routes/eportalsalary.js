@@ -212,3 +212,15 @@ router.post("/generatepdf", async (req, res) => {
 });
 
 
+router.post('/loginsalary', (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
