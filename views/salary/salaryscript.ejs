@@ -207,7 +207,7 @@
     function LoadListEmp() {
       $.ajax({
         type: "GET",
-        url: "/employee/load",
+        url: "/employee/selectdistinct",
         success: function (result) {
           console.log(result.data);
           var data = result.data;

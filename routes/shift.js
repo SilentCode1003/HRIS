@@ -168,7 +168,9 @@ router.post('/save', async (req, res) => {
     let employeeName = req.body.employeeName;
     let department = req.body.department;
     let shiftsettingsid = req.body.shiftsettingsid;
-  
+
+    console.log(employeeName, department, shiftsettingsid);
+
     let checkSql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
     
     mysql.Select(checkSql, "Master_Shift" , (err ,result) => {
@@ -186,6 +188,7 @@ router.post('/save', async (req, res) => {
           data: result,
         });
       }
+
       let sql = `call hrmis.InsertShift('${employeeName}', '${department}', '${shiftsettingsid}')`;
 
       mysql.StoredProcedure(sql, (err, result) => {
@@ -212,6 +215,7 @@ router.post('/save', async (req, res) => {
     });
   }
 });
+
 
 
 

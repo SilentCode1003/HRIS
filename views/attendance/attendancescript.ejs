@@ -97,6 +97,15 @@
       });
     }
 
+    $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+      $("#loaddate").click(function () {
+        showspinner();
+        let startDate = picker.startDate.format("YYYY-MM-DD");
+        let endDate = picker.endDate.format("YYYY-MM-DD");
+        LoadDateRange(startDate, endDate);
+      });
+    });
+
     function LoadDateRange(startDate, endDate) {
       $("#dataTableattendance").DataTable({
         destroy: true,

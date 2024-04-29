@@ -239,15 +239,15 @@
 
       let message = "";
 
-      if (employeeName === "") {
+      if (employeeName === "Choose..") {
         message += "Employee name is required. ";
       }
 
-      if (department === "") {
+      if (department === "Choose..") {
         message += "Department is required. ";
       }
 
-      if (shiftsettingsid === "") {
+      if (shiftsettingsid === "Choose..") {
         message += "Shift settings ID is required. ";
       }
 
@@ -270,7 +270,7 @@
           success: function (result) {
             if (result.msg == "success") {
               swal({
-                title: "Insert Successfully",
+                title: "Save Shift Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK",
@@ -344,10 +344,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(
-              item.shiftsettingsid,
-              item.shiftsettingsid
-            );
+            var options = new Option(item.shiftsettingsid, item.shiftsettingsid);
             $(options).html(item.shiftname);
             $("#shiftsettingsid").append(options);
           });

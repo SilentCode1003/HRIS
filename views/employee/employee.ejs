@@ -7,11 +7,13 @@
       <b>Upload</b>
     </button>
     <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
-      <b>+ Add</b>
+      <b>Add New Employee</b>
+    </button>
+    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addemployeemodal">
+      <b>Add Old Employee</b>
     </button>
 
     <!-- Upload Modal -->
-
     <div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -59,8 +61,202 @@
 
 </div>
 
-<!-- Modal -->
+
+<!-- OLD employee Modal-->
 <div class="modal fade" id="addemployeemodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">ADD OLD EMPLOYEE</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="employeeprofile" id="employeeprofile" class="form-control border-form-modal"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeeid" name="oldemployeeid"
+                      placeholder="First Name">
+                    <label for="floatingInput">Old Employee Id</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeefname" name="oldemployeefname"
+                      placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeelname" name="oldemployeelname"
+                      placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeemname" name="oldemployeemname"
+                      placeholder="Middle Name">
+                    <label for="floatingInput">Middle Name</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="oldemployeegender" name="oldemployeegender"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="oldemployeecivilstatus" name="oldemployeecivilstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Separated">Separated</option>
+                      <option value="Widow">Widow</option>
+                    </select>
+                    <label for="floatingSelectGrid">Civil Status</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="oldemployeeaddress" name="oldemployeeaddress"
+                      placeholder="Address">
+                    <label for="floatingInput">Address</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="oldemployeebirthday" name="oldemployeebirthday">
+                    <label for="floatingInput">Birthday</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="oldemployeephone" name="oldemployeephone"
+                      placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="email" class="form-control border-form-modal" id="oldemployeeemail" name="oldemployeeemail"
+                      placeholder="Email">
+                    <label for="floatingInput">Email</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="oldemployeehiredate" name="oldemployeehiredate">
+                    <label for="floatingInput">Hire Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="oldemployeedepartment" name="oldemployeedepartment"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="employeedepartment">Department</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="oldemployeeposition" name="oldemployeeposition"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="floatingSelectGrid">Position</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="oldemployeejobstatus" name="oldemployeejobstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option value="regular">Regular</option>
+                      <option value="probitionary">Probitionary</option>
+                      <option value="project Based" >Project Based</option>
+                      <option value="apprentice">Apprentice</option>
+                    </select>
+                    <label for="floatingSelectGrid">Job Status</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="oldemployeeemergencyname" name="oldemployeeemergencyname"
+                      placeholder="Emergency Contact Name">
+                    <label for="floatingInput">Emergency Contact Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="oldemployeeemergencyphone" name="oldemployeeemergencyphone"
+                      placeholder="Emergency Contact Phone">
+                    <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="oldemployeesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addoldemployee" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">

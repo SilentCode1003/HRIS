@@ -125,8 +125,8 @@
 
     $(document).on("click", "#ojtsavebtn", function () {
       let image = base64String;
-      let firstname = $("#ojtfname").val();
-      let lastname = $("#ojtlname").val();
+      let firstname = $("#ojtfname").val().toUpperCase();
+      let lastname = $("#ojtlname").val().toUpperCase();
       let address = $("#ojtaddress").val();
       let status = $("#ojtstatus").val();
       let birthday = $("#ojtbirthday").val();
@@ -345,8 +345,8 @@
       console.log("Save button clicked");
       let id = ojtid;
       let image = base64String;
-      let firstname = $("#editojtfname").val();
-      let lastname = $("#editojtlname").val();
+      let firstname = $("#editojtfname").val().toUpperCase();
+      let lastname = $("#editojtlname").val().toUpperCase();
       let address = $("#editojtaddress").val();
       let status = $("#editojtstatus").val();
       let birthday = $("#editojtbirthday").val();
