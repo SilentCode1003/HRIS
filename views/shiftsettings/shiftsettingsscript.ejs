@@ -95,8 +95,8 @@
 
     $(document).on("click", "#shiftsavebtn", function () {
       let shiftname = $("#shiftname").val();
-      let startshift = $("#startshift").val();
-      let endshift = $("#endshift").val();
+      let startshift = $("#startshift").val() + ":00";
+      let endshift = $("#endshift").val() + ":00";
       let restday = getCheckedDays(
         "mondayCheckbox",
         "tuesdayCheckbox",
@@ -116,50 +116,63 @@
         "sundayExemptedCheckbox"
       );
 
-      console.log("Shift Name:", shiftname);
-      console.log("Start Shift:", startshift);
-      console.log("End Shift:", endshift);
-      console.log("Rest Day:", restday);
-      console.log("Exempted Day:", exemptedday);
-      $.ajax({
-        type: "POST",
-        url: "/shiftsettings/save",
-        data: {
-          shiftname: shiftname,
-          startshift: startshift,
-          endshift: endshift,
-          restday: restday,
-          exemptedday: exemptedday,
-        },
-        success: function (result) {
-          console.log("API Response:", result);
-          if (result.msg === "success") {
-            swal({
-              title: "Generate Successfully",
-              text: "You clicked the button!",
-              icon: "success",
-              button: "OK!",
-            }).then((result) => {
-              window.location.reload();
-            });
-            LoadTable();
-          } else {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
-            }).then((result) => {
-              window.location.reload();
-            });
-            LoadTable();
-          }
-        },
-        error: function (err) {
-          swal("Error", "An error occurred while saving data.", "error");
-          console.error("Error saving data:", err);
-        },
-      });
+      let message = "";
+
+      if (shiftname === "") {
+        message += "Shift Name is required. ";
+      }
+
+      if (startshift === "") {
+        message += "Start Shift time is required. ";
+      }
+
+      if (endshift === "") {
+        message += "End Shift time is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/shiftsettings/save",
+          data: {
+            shiftname: shiftname,
+            startshift: startshift,
+            endshift: endshift,
+            restday: restday,
+            exemptedday: exemptedday,
+          },
+          success: function (result) {
+            console.log("API Response:", result);
+            if (result.msg === "success") {
+              swal({
+                title: "Generate Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+            console.error("Error saving data:", err);
+          },
+        });
+      }
     });
 
     function getCheckedDays(...checkboxIds) {
@@ -338,10 +351,10 @@
     }
 
     $(document).on("click", "#editshiftsavebtn", function () {
-      let id = shiftsettingsid
+      let id = shiftsettingsid;
       let shiftname = $("#editshiftname").val();
-      let startshift = $("#editstartshift").val();
-      let endshift = $("#editendshift").val();
+      let startshift = $("#editstartshift").val() + ":00";
+      let endshift = $("#editendshift").val() + ":00";
       let shiftstatus = $("#editstatus").val();
       let restday = getCheckedDays(
         "editmondayCheckbox",
@@ -362,52 +375,66 @@
         "sundayeditCheckbox"
       );
 
-      console.log("Shift Name:", shiftname);
-      console.log("Start Shift:", startshift);
-      console.log("End Shift:", endshift);
-      console.log("Rest Day:", restday);
-      console.log("Exempted Day:", exemptedday);
-      $.ajax({
-        type: "POST",
-        url: "/shiftsettings/update",
-        data: {
-          shiftsettingsid: id,
-          shiftname: shiftname,
-          startshift: startshift,
-          endshift: endshift,
-          restday: restday,
-          exemptedday: exemptedday,
-          shiftstatus: shiftstatus,
-        },
-        success: function (result) {
-          console.log("API Response:", result);
-          if (result.msg === "success") {
-            swal({
-              title: "Generate Successfully",
-              text: "You clicked the button!",
-              icon: "success",
-              button: "OK!",
-            }).then((result) => {
-              window.location.reload();
-            });
-            LoadTable();
-          } else {
-            swal({
-              title: "Exist",
-              text: "Data already exists!",
-              icon: "warning",
-              button: "OK!",
-            }).then((result) => {
-              window.location.reload();
-            });
-            LoadTable();
-          }
-        },
-        error: function (err) {
-          swal("Error", "An error occurred while saving data.", "error");
-          console.error("Error saving data:", err);
-        },
-      });
+      // Initialize the validation message
+      let message = "";
+
+      if (shiftname === "") {
+        message += "Shift name is required. ";
+      }
+
+      if (startshift === "") {
+        message += "Start shift time is required. ";
+      }
+
+      if (endshift === "") {
+        message += "End shift time is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/shiftsettings/update",
+          data: {
+            shiftsettingsid: id,
+            shiftname: shiftname,
+            startshift: startshift,
+            endshift: endshift,
+            restday: restday,
+            exemptedday: exemptedday,
+            shiftstatus: shiftstatus,
+          },
+          success: function (result) {
+            console.log("API Response:", result);
+            if (result.msg === "success") {
+              swal({
+                title: "Generate Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+            console.error("Error saving data:", err);
+          },
+        });
+      }
     });
   });
 

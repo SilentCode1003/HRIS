@@ -9,15 +9,202 @@
     LoadModal();
     LoadModalPosition();
     searchTable();
+    OldLoadList();
+    OldLoadPosition();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
 
+    $(document).on("click", "#oldemployeesavebtn", function () {
+      let oldemployeeid = $("#oldemployeeid").val();
+      let firstname = $("#oldemployeefname").val().toUpperCase();
+      let middlename = $("#oldemployeemname").val().toUpperCase();
+      let lastname = $("#oldemployeelname").val().toUpperCase();
+      let birthday = $("#oldemployeebirthday").val();
+      let gender = $("#oldemployeegender").val();
+      let civilstatus = $("#oldemployeecivilstatus").val();
+      let phone = $("#oldemployeephone").val();
+      let email = $("#oldemployeeemail").val();
+      let hiredate = $("#oldemployeehiredate").val();
+      let jobstatus = $("#oldemployeejobstatus").val();
+      let ercontactname = $("#oldemployeeemergencyname").val();
+      let ercontactphone = $("#oldemployeeemergencyphone").val();
+      let departmentName = $("#oldemployeedepartment").val();
+      let positionName = $("#oldemployeeposition").val();
+      let address = $("#oldemployeeaddress").val();
+      let profilePicturePath = base64String;
+
+      var message = "";
+
+      if (oldemployeeid == "") {
+        message += "First Name is required. ";
+      }
+
+      if (firstname == "") {
+        message += "First Name is required. ";
+      }
+
+      if (middlename == "") {
+        message += "First Name is required. ";
+      }
+
+      if (lastname == "") {
+        message += "Last Name is required. ";
+      }
+
+      if (birthday == "") {
+        message += "Birthday is required. ";
+      }
+
+      if (gender == "") {
+        message += "Gender is required. ";
+      }
+
+      if (civilstatus == "") {
+        message += "Gender is required. ";
+      }
+
+      if (phone == "") {
+        message += "Phone is required. ";
+      }
+
+      if (email == "") {
+        message += "Email is required. ";
+      }
+
+      if (hiredate == "") {
+        message += "Hire Date is required. ";
+      }
+
+      if (jobstatus == "") {
+        message += "Job Status is required. ";
+      }
+
+      if (ercontactname == "") {
+        message += "Emergency Contact Name is required. ";
+      }
+
+      if (ercontactphone == "") {
+        message += "Emergency Contact Phone is required. ";
+      }
+
+      if (departmentName == "") {
+        message += "Department is required. ";
+      }
+
+      if (positionName == "") {
+        message += "Position is required. ";
+      }
+
+      if (address == "") {
+        message += "Address is required. ";
+      }
+
+      if (profilePicturePath == "") {
+        message += "Profile is required. ";
+      }
+
+      if (message != "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/employee/saveold",
+          data: {
+            oldemployeeid: oldemployeeid,
+            firstname: firstname,
+            middlename: middlename,
+            lastname: lastname,
+            birthday: birthday,
+            gender: gender,
+            civilstatus: civilstatus,
+            phone: phone,
+            email: email,
+            hiredate: hiredate,
+            jobstatus: jobstatus,
+            ercontactname: ercontactname,
+            ercontactphone: ercontactphone,
+            departmentName: departmentName,
+            positionName: positionName,
+            address: address,
+            profilePicturePath: profilePicturePath,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              showSweetAlert(
+                "Success",
+                "Log in Successfully",
+                "success",
+                "Let's go!"
+              );
+              window.location.reload();
+              LoadTable();
+            }
+            if (result.msg === "exist") {
+              showSweetAlert(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+            if (result.msg === "existoldid") {
+              showSweetAlert(
+                "Old Id already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function OldLoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#oldemployeedepartment").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function OldLoadPosition() {
+      $.ajax({
+        type: "GET",
+        url: "/position/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.positionid, item.positionid);
+            $(options).html(item.positionname);
+            $("#oldemployeeposition").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#employeesavebtn", function () {
-      let firstname = $("#employeefname").val();
-      let middlename = $("#employeemname").val();
-      let lastname = $("#employeelname").val();
+      let firstname = $("#employeefname").val().toUpperCase();
+      let middlename = $("#employeemname").val().toUpperCase();
+      let lastname = $("#employeelname").val().toUpperCase();
       let birthday = $("#employeebirthday").val();
       let gender = $("#employeegender").val();
       let civilstatus = $("#employeecivilstatus").val();
@@ -391,9 +578,9 @@
 
     $(document).on("click", "#editsavebtn", function () {
       let newEmployeeId = employeeid;
-      let firstname = $("#editemployeefname").val();
-      let middlename = $("#editemployeemname").val();
-      let lastname = $("#editemployeelname").val();
+      let firstname = $("#editemployeefname").val().toUpperCase();
+      let middlename = $("#editemployeemname").val().toUpperCase();
+      let lastname = $("#editemployeelname").val().toUpperCase();
       let birthday = $("#editemployeebday").val();
       let gender = $("#editemployeegender").val();
       let civilstatus = $("#editemployeecivilstatus").val();

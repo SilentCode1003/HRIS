@@ -204,22 +204,14 @@ router.post("/loadpayslipsummaryforapp", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `call hrmis.LoadPayslipSummaryForApp('${payrolldate}', '${employeeid}')`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
+    mysql.StoredProcedure(sql, (err, result) => {
+      if (err) console.error("Error: ", err);
 
-        console.log(result);
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
+      res.json({
+        msg: "success",
+        data: result,
       });
+    });
   } catch (error) {
     res.json({
       msg: "error",
