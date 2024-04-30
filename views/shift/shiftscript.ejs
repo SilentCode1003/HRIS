@@ -237,19 +237,27 @@
       let department = $("#shiftdepartment").val();
       let shiftsettingsid = $("#shiftsettingsid").val();
 
-      var message = "";
+      let message = "";
 
-      if (employeeName == "Employee") {
-        message += "Employee name is required\n";
+      if (employeeName === "Choose..") {
+        message += "Employee name is required. ";
       }
-      if (department == "Department") {
-        message += "Department is required\n";
+
+      if (department === "Choose..") {
+        message += "Department is required. ";
       }
-      if (shiftsettingsid == "Department") {
-        message += "Department is required\n";
+
+      if (shiftsettingsid === "Choose..") {
+        message += "Shift settings ID is required. ";
       }
+
       if (message !== "") {
-        swal("Validation Error", message, "error");
+        swal({
+          title: "Validation Error",
+          text: message,
+          icon: "error",
+          button: "OK",
+        });
       } else {
         $.ajax({
           type: "POST",
@@ -262,10 +270,10 @@
           success: function (result) {
             if (result.msg == "success") {
               swal({
-                title: "Insert Successfully",
+                title: "Save Shift Successfully",
                 text: "You clicked the button!",
                 icon: "success",
-                button: "OK!",
+                button: "OK",
               }).then((result) => {
                 window.location.reload();
               });
@@ -275,7 +283,7 @@
                 title: "Exist",
                 text: "Data already exists!",
                 icon: "warning",
-                button: "OK!",
+                button: "OK",
               }).then((result) => {
                 window.location.reload();
               });
@@ -336,10 +344,7 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(
-              item.shiftsettingsid,
-              item.shiftsettingsid
-            );
+            var options = new Option(item.shiftsettingsid, item.shiftsettingsid);
             $(options).html(item.shiftname);
             $("#shiftsettingsid").append(options);
           });

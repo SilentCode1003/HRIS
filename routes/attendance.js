@@ -88,7 +88,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-
 router.post("/missedlogs", (req, res) => {
   try {
     let startdate = req.body.startdate;
@@ -110,28 +109,27 @@ router.post("/missedlogs", (req, res) => {
     WHERE ma_attendancedate BETWEEN 
     '${startdate}' AND '${enddate}' AND ma_clockout IS NULL OR ma_clockin IS NULL`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
 
 router.post("/daterange", (req, res) => {
   try {
@@ -154,28 +152,27 @@ router.post("/daterange", (req, res) => {
     WHERE ma_attendancedate BETWEEN 
     '${startdate}' AND '${enddate}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
 
 router.post("/getloadforapp", (req, res) => {
   try {
@@ -342,7 +339,6 @@ router.post("/gethomestatus2", (req, res) => {
   }
 });
 
-
 // router.post("/exportfile", async (req, res) => {
 //   try {
 //     let startdate = req.body.startdate;
@@ -368,9 +364,9 @@ router.post("/gethomestatus2", (req, res) => {
 //     worksheet["!cols"] = [];
 //     for (let i = 0; i < columnCount; i++) {
 //       if (i === 0) {
-//         worksheet["!cols"].push({ wch: 30 }); 
+//         worksheet["!cols"].push({ wch: 30 });
 //       } else {
-//         worksheet["!cols"].push({ wch: 20 }); 
+//         worksheet["!cols"].push({ wch: 20 });
 //       }
 //     }
 //     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
@@ -382,14 +378,13 @@ router.post("/gethomestatus2", (req, res) => {
 //     res.setHeader(
 //       "Content-Type",
 //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );    
+//     );
 //     res.send(excelBuffer);
 //   } catch (error) {
 //     console.error("Error:", error);
 //     res.status(500).json({ msg: "error", data: error });
 //   }
 // });
-
 
 router.post("/exportfile", async (req, res) => {
   try {
@@ -412,38 +407,45 @@ router.post("/exportfile", async (req, res) => {
       return res.status(404).json({ msg: "No data found for ExportAttendanceDetailed" });
     }
 
-    const headersExportAttendance = Object.keys(jsonDataExportAttendance[0]);
-    const headersExportAttendanceDetailed = Object.keys(jsonDataExportAttendanceDetailed[0]);
-
-    const worksheetExportAttendance = XLSX.utils.json_to_sheet(jsonDataExportAttendance, { header: headersExportAttendance });
-    const worksheetExportAttendanceDetailed = XLSX.utils.json_to_sheet(jsonDataExportAttendanceDetailed, { header: headersExportAttendanceDetailed });
-
     const workbook = XLSX.utils.book_new();
-    const worksheetNameExportAttendance = `Summarized_Data`;
-    const worksheetNameExportAttendanceDetailed = `Data`;
-
-    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendance, worksheetNameExportAttendance);
-    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendanceDetailed, worksheetNameExportAttendanceDetailed);
-
-    const columnCountExportAttendance = XLSX.utils.decode_range(worksheetExportAttendance["!ref"]).e.c + 1;
-    worksheetExportAttendance["!cols"] = [];
+    const worksheetExportAttendanceFirst = XLSX.utils.json_to_sheet(jsonDataExportAttendance, { header: Object.keys(jsonDataExportAttendance[0]) });
+    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendanceFirst, 'Attendance Summary');
+    const columnCountExportAttendance = XLSX.utils.decode_range(worksheetExportAttendanceFirst["!ref"]).e.c + 1;
+    worksheetExportAttendanceFirst["!cols"] = [];
     for (let i = 0; i < columnCountExportAttendance; i++) {
       if (i === 0) {
-        worksheetExportAttendance["!cols"].push({ wch: 30 }); 
+        worksheetExportAttendanceFirst["!cols"].push({ wch: 30 });
       } else {
-        worksheetExportAttendance["!cols"].push({ wch: 20 }); 
+        worksheetExportAttendanceFirst["!cols"].push({ wch: 20 });
       }
     }
 
-    const columnCountExportAttendanceDetailed = XLSX.utils.decode_range(worksheetExportAttendanceDetailed["!ref"]).e.c + 1;
-    worksheetExportAttendanceDetailed["!cols"] = [];
-    for (let i = 0; i < columnCountExportAttendanceDetailed; i++) {
-      if (i === 0) {
-        worksheetExportAttendanceDetailed["!cols"].push({ wch: 30 }); 
-      } else {
-        worksheetExportAttendanceDetailed["!cols"].push({ wch: 20 }); 
+    const groupedData = {};
+    jsonDataExportAttendanceDetailed.forEach((employeeData) => {
+      const employeeId = employeeData.EmployeeId;
+      if (!groupedData[employeeId]) {
+        groupedData[employeeId] = [];
       }
-    }
+      groupedData[employeeId].push(employeeData);
+    });
+
+    Object.keys(groupedData).forEach((employeeId) => {
+      const sheetName = `Employee_${employeeId}`;
+      const worksheet = XLSX.utils.json_to_sheet(groupedData[employeeId], { header: Object.keys(groupedData[employeeId][0]) });
+
+
+      const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
+      worksheet["!cols"] = [];
+      for (let i = 0; i < columnCount; i++) {
+        if (i === 0) {
+          worksheet["!cols"].push({ wch: 30 });
+        } else {
+          worksheet["!cols"].push({ wch: 20 });
+        }
+      }
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    });
 
     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
 
@@ -454,13 +456,17 @@ router.post("/exportfile", async (req, res) => {
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );    
+    );
     res.send(excelBuffer);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
+
+
+
 
 
 
@@ -490,9 +496,9 @@ router.post("/exportfileperemployee", async (req, res) => {
     worksheet["!cols"] = [];
     for (let i = 0; i < columnCount; i++) {
       if (i === 0) {
-        worksheet["!cols"].push({ wch: 30 }); 
+        worksheet["!cols"].push({ wch: 30 });
       } else {
-        worksheet["!cols"].push({ wch: 20 }); 
+        worksheet["!cols"].push({ wch: 20 });
       }
     }
     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
@@ -504,7 +510,7 @@ router.post("/exportfileperemployee", async (req, res) => {
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );    
+    );
     res.send(excelBuffer);
   } catch (error) {
     console.error("Error:", error);
