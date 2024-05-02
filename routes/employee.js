@@ -25,7 +25,137 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+router.post("/saveold", async (req, res) => {
+  try {
+    const {
+      oldemployeeid,
+      firstname,
+      middlename,
+      lastname,
+      birthday,
+      gender,
+      civilstatus,
+      phone,
+      email,
+      hiredate,
+      jobstatus,
+      ercontactname,
+      ercontactphone,
+      departmentName,
+      positionName,
+      address,
+      profilePicturePath,
+    } = req.body;
+
+    const employeeExists = await checkEmployeeExists(firstname, lastname);
+
+    if (employeeExists) {
+      return res.json({ msg: "exist" });
+    }
+
+    const oldemployeeExists = await checkOldIdExists(oldemployeeid);
+
+    if (oldemployeeExists) {
+      return res.json({ msg: "existoldid" });
+    }
+
+    let username, password;
+
+    ({ username, password } = generateUsernameAndPasswordforemployee({
+      me_firstname: firstname,
+      me_lastname: lastname,
+      me_id: oldemployeeid,
+      me_birthday: birthday,
+    }));
+
+    const employeeData = [
+      [
+        oldemployeeid,
+        firstname,
+        middlename,
+        lastname,
+        birthday,
+        gender,
+        civilstatus,
+        phone,
+        email,
+        hiredate,
+        jobstatus,
+        ercontactname,
+        ercontactphone,
+        departmentName,
+        positionName,
+        address,
+        profilePicturePath,
+      ],
+    ];
+
+    mysql.InsertTable(
+      "master_employee",
+      employeeData,
+      async (insertErr, insertResult) => {
+        if (insertErr) {
+          console.error("Error inserting employee record: ", insertErr);
+          return res.json({ msg: "insert_failed" });
+        }
+
+        console.log("Employee record inserted: ", insertResult);
+
+        Encrypter(password, async (encryptErr, encryptedPassword) => {
+          if (encryptErr) {
+            console.error("Error encrypting password: ", encryptErr);
+            return res.json({ msg: "encrypt_error" });
+          }
+          const userSaveResult = await saveUserRecord(
+            req,
+            oldemployeeid,
+            username,
+            encryptedPassword
+          );
+
+          if (userSaveResult.msg === "success") {
+            return res.json({ msg: "success" });
+          } else {
+            console.error("Error saving user record: ", userSaveResult.msg);
+            return res.json({ msg: "user_save_error" });
+          }
+        });
+      }
+    );
+  } catch (error) {
+    console.error("Error in /save route: ", error);
+    return res.json({ msg: "error" });
+  }
+});
+
 router.get("/selectdistinct", (req, res) => {
+  try {
+    let sql = `SELECT DISTINCT
+    me_id,
+    concat(me_lastname,' ',me_firstname) as me_firstname
+    FROM master_employee
+    LEFT JOIN master_shift ON master_employee.me_id = master_shift.ms_employeeid
+    WHERE master_shift.ms_employeeid IS NULL
+    AND me_jobstatus IN ('regular', 'probitionary','apprentice')`;
+
+    mysql.Select(sql, "Master_Employee", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.get("/selectdistinctsalary", (req, res) => {
   try {
     let sql = `SELECT DISTINCT
     me_id,
@@ -1302,7 +1432,7 @@ function GetPosition(name, callback) {
   });
 }
 
-async function saveUserRecord(req, employeeId, username, encryptedPassword) {
+async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
     const createdate = moment().format("YYYY-MM-DD");
     const createby = req.session ? req.session.fullname : null;
@@ -1316,7 +1446,7 @@ async function saveUserRecord(req, employeeId, username, encryptedPassword) {
       let accessid = result[0].accessid;
       const data = [
         [
-          employeeId,
+          oldemployeeid,
           username,
           encryptedPassword,
           accessid,
@@ -1342,6 +1472,28 @@ async function saveUserRecord(req, employeeId, username, encryptedPassword) {
 function checkEmployeeExists(firstname, lastname) {
   return new Promise((resolve, reject) => {
     const checkQuery = `SELECT COUNT(*) AS count FROM master_employee WHERE me_firstname = '${firstname}' AND me_lastname = '${lastname}'`;
+
+    mysql
+      .mysqlQueryPromise(checkQuery)
+      .then((result) => {
+        const count = parseInt(result[0].count);
+
+        if (count > 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+
+function checkOldIdExists(oldemployeeid) {
+  return new Promise((resolve, reject) => {
+    const checkQuery = `SELECT COUNT(*) AS count FROM master_employee WHERE me_id = '${oldemployeeid}'`;
 
     mysql
       .mysqlQueryPromise(checkQuery)

@@ -6,8 +6,8 @@ $(document).ready(function () {
 
     $(document).on("click", "#ojtsavebtn", function () {
       let image = base64String;
-      let firstname = $("#ojtfname").val();
-      let lastname = $("#ojtlname").val();
+      let firstname = $("#ojtfname").val().toUpperCase();
+      let lastname = $("#ojtlname").val().toUpperCase();
       let address = $("#ojtaddress").val();
       let birthday = $("#ojtbirthday").val();
       let gender = $("#ojtgender").val();
