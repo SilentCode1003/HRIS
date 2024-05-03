@@ -307,9 +307,9 @@ table th {
   background-color: #7a1818  !important;
   color: white !important;
 }
-.card .card-header {
+/* .card .card-header {
   height: 50px;
-}
+} */
 
 .bunga {
   width: 90%;
@@ -354,10 +354,6 @@ table th {
   }
 
   table td::before {
-    /*
-      * aria-label has no advantage, it won't be read inside a table
-      content: attr(aria-label);
-      */
     content: attr(data-label);
     float: left;
     font-weight: bold;
@@ -629,6 +625,13 @@ form select:not(#inputState) {
   background-repeat: no-repeat;
 }
 
+/* .attendance-status {
+  background-image: url(/images/img/nolate.gif.gif);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
 body{
   background: #eaeaea;
   margin-top:20px;
@@ -645,8 +648,8 @@ body{
 }
 .profile-info-list > li.title {
   font-size: 0.625rem;
-  font-weight: 700;
-  color: #8a8a8f;
+  /* font-weight: 700;
+  color: #8a8a8f; */
   padding: 0 0 0.3125rem;
 }
 .profile-info-list > li + li.title {
@@ -655,12 +658,55 @@ body{
 .profile-info-list > li {
   padding: 0.625rem 0;
 }
-.profile-info-list > li .field {
+/* .profile-info-list > li .field {
   font-weight: 700;
+  color: #7a1818 !important;
+  font-family: 'Arial';
+} */
+
+.work-field {
+  font-family: "Sedan", serif;
+  font-weight: 700;
+  /* font-style: italic; */
+  color: rgb(99, 6, 6) !important;
+  font-size: 14px;
+  letter-spacing: 1px;
+  /* text-shadow: 1px 1px 2px black !important; */
 }
-.profile-info-list > li .value {
+
+.work-title {
+ font-size: 14px;
+ font-family: 'Arial';
+ font-weight: 550;
+}
+
+.personal-title {
+  font-size: 14px;
+  font-family: "Sedan", serif;
+  font-weight: 700;
+  color: #691111 !important;
+}
+
+.personal-field {
+  font-size: 14px;
+  font-family: 'Arial';
+  font-weight: 700;
+  color: #691111 !important;
+}
+
+.work-subtitle {
+  font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 1px;
+  color: #403d3d !important;
+  font-size: 12px;
+}
+
+/* .profile-info-list > li .value {
   color: #666;
-}
+} */
 .profile-info-list > li.img-list a {
   display: inline-block;
 }
@@ -677,34 +723,49 @@ body{
 .profile-header-img img {
   max-width: 100%;
 }
-.table.table-profile th {
+/* .table.table-profile th {
   border: none;
   color: #000;
   padding-bottom: 0.3125rem;
   padding-top: 0;
+} */
+
+.work-header {
+  padding: 5px !important;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-family: "Sedan", serif;
+  font-weight: 400;
 }
 .table.table-profile td {
   border-color: #c8c7cc;
 }
-.table.table-profile tbody + thead > tr > th {
+/* .table.table-profile tbody + thead > tr > th {
   padding-top: 1.5625rem;
-}
-.table.table-profile .field {
+} */
+/* .table.table-profile .field {
   color: #666;
   font-weight: 600;
   width: 25%;
   text-align: right;
-}
-.table.table-profile .value {
+} */
+/* .table.table-profile .value {
   font-weight: 500;
-}
+} */
+
 .profile-header {
   position: relative;
   overflow: hidden;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .profile-header .profile-header-cover {
-  background: url(https://bootdey.com/img/Content/bg1.jpg) center no-repeat;
-  background-size: 100% auto;
+  /* background: url(https://bootdey.com/img/Content/bg1.jpg) center no-repeat; */
+  background-image: url(/images/img/profile-cover.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* background-color: #7a1818 !important; */
   position: absolute;
   left: 0;
   right: 0;
@@ -718,7 +779,7 @@ body{
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0, rgba(0, 0, 0, 0.85) 100%);
+  background: linear-gradient(to bottom, rgba(76, 76, 76, 0.25) 0, rgba(34, 33, 33, 0.85) 100%);
 }
 .profile-header .profile-header-content,
 .profile-header .profile-header-tab,
@@ -727,46 +788,56 @@ body .fc-icon {
   position: relative;
 }
 .profile-header .profile-header-tab {
-  background: #fff;
+  background: #7a1818 !;
   list-style-type: none;
   margin: -1.25rem 0 0;
   padding: 0 0 0 8.75rem;
-  border-bottom: 1px solid #c8c7cc;
+  border-bottom: 1px solid white !important;
   white-space: nowrap;
 }
 .profile-header .profile-header-tab > li {
   display: inline-block;
-  margin: 0;
+  /* margin: 0; */
+  margin-left: 1%;
 }
 .profile-header .profile-header-tab > li > a {
   display: block;
-  color: #000;
+  color: white !important;
   line-height: 1.25rem;
   padding: 0.625rem 1.25rem;
   text-decoration: none;
   font-weight: 700;
-  font-size: 0.75rem;
-  border: none;
+  font-size: 9.5px;
+  font-family: 'Verdana';
 }
 .profile-header .profile-header-tab > li.active > a,
 .profile-header .profile-header-tab > li > a.active {
-  color: #007aff;
+  color: #7a1818 !important;
+  font-family: "Jersey 15", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
+
 .profile-header .profile-header-content:after,
 .profile-header .profile-header-content:before {
   content: "";
   display: table;
   clear: both;
 }
+
 .profile-header .profile-header-content {
   color: #fff;
   padding: 1.25rem;
 }
+
 body .fc th a,
 body .fc-ltr .fc-basic-view .fc-day-top .fc-day-number,
 body .fc-widget-header a {
   color: #000;
 }
+
 .profile-header-img {
   float: left;
   width: 7.5rem;
@@ -778,14 +849,39 @@ body .fc-widget-header a {
   -webkit-border-radius: 0.25rem;
   -moz-border-radius: 0.25rem;
   border-radius: 0.25rem;
-  background: #8B2525;
+  background: rgb(161, 11, 11) !important;
+  border: 4px solid white !important;
   background-size: cover;
   background-position: center;
 }
 .profile-header-info h4 {
-  font-weight: 500;
+  margin-left: 8%;
+  font-family: "PT Serif", serif;
+  font-weight: 700;
+  font-style: normal;
   margin-bottom: 0.3125rem;
+  letter-spacing: 2px;
+  text-shadow: 2px 4px 8px rgb(61, 57, 57) !important;
 }
+
+.m-b-sm {
+  font-family: 'Arial';
+  font-weight: 400;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.m-t-sm {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
+  font-style: normal;
+  /* font-size: 14px; */
+  letter-spacing: 3px;
+  font-size: 20px;
+  text-shadow: 2px 4px 8px rgb(61, 57, 57) !important;
+}
+
 .profile-container {
   padding: 1.5625rem;
 }
@@ -803,6 +899,7 @@ body .fc-widget-header a {
       padding-left: 0;
   }
 }
+
 @media (max-width: 767px) {
   .profile-header .profile-header-cover {
       background-position: top;
@@ -832,43 +929,51 @@ body .fc-widget-header a {
       width: auto;
   }
 }
+
 .profile-info-list {
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
+
 .friend-list,
 .img-grid-list {
   margin: -1px;
   list-style-type: none;
 }
+
 .profile-info-list > li.title {
   font-size: 0.625rem;
-  font-weight: 700;
-  color: #8a8a8f;
+  /* font-weight: 700;
+  color: #8a8a8f; */
   padding: 0 0 0.3125rem;
 }
+
 .profile-info-list > li + li.title {
   padding-top: 1.5625rem;
 }
+
 .profile-info-list > li {
   padding: 0.625rem 0;
 }
-.profile-info-list > li .field {
+/* .profile-info-list > li .field {
   font-weight: 700;
-}
-.profile-info-list > li .value {
+} */
+/* .profile-info-list > li .value {
   color: #666;
-}
+} */
+
 .profile-info-list > li.img-list a {
   display: inline-block;
 }
+
 .profile-info-list > li.img-list a img {
   max-width: 2.25rem;
   -webkit-border-radius: 2.5rem;
   -moz-border-radius: 2.5rem;
   border-radius: 2.5rem;
 }
+
 .coming-soon-cover img,
 .email-detail-attachment .email-attachment .document-file img,
 .email-sender-img img,
@@ -876,35 +981,41 @@ body .fc-widget-header a {
 .profile-header-img img {
   max-width: 100%;
 }
+
 .table.table-profile th {
   border: none;
   color: #000;
   padding-bottom: 0.3125rem;
   padding-top: 0;
 }
+
 .table.table-profile td {
   border-color: #c8c7cc;
 }
+
 .table.table-profile tbody + thead > tr > th {
   padding-top: 1.5625rem;
 }
-.table.table-profile .field {
+
+/* .table.table-profile .field {
   color: #666;
   font-weight: 600;
   width: 25%;
   text-align: right;
-}
-.table.table-profile .value {
+} */
+/* .table.table-profile .value {
   font-weight: 500;
-}
+} */
 
 .friend-list {
   padding: 0;
 }
+
 .friend-list > li {
   float: left;
   width: 50%;
 }
+
 .friend-list > li > a {
   display: block;
   text-decoration: none;
@@ -913,12 +1024,14 @@ body .fc-widget-header a {
   margin: 1px;
   background: #fff;
 }
+
 .friend-list > li > a:after,
 .friend-list > li > a:before {
   content: "";
   display: table;
   clear: both;
 }
+
 .friend-list .friend-img {
   float: left;
   width: 3rem;
@@ -926,14 +1039,17 @@ body .fc-widget-header a {
   overflow: hidden;
   background: #efeff4;
 }
+
 .friend-list .friend-info {
   margin-left: 3.625rem;
 }
+
 .friend-list .friend-info h4 {
   margin: 0.3125rem 0;
   font-size: 0.875rem;
   font-weight: 600;
 }
+
 .friend-list .friend-info p {
   color: #666;
   margin: 0;

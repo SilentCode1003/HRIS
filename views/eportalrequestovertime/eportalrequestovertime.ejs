@@ -11,7 +11,7 @@
         </button> -->
     </div>
     <div class="card-body cbody-requestleave">
-        <table class="table table-light table-striped" id="dataTableapplyOvertime">
+        <table class="table table-light table-bordered" id="dataTableapplyOvertime">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -109,59 +109,59 @@
 <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Overtime</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" id="modal-header">
+                <h5 class="modal- fs-5" id="exampleModalLabel">Edit Overtime</h5>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <form>
                     <div class="row g-3">
                         <div class="col">
                             <label for="editattendancedate" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="editattendancedate" name="editattendancedate" disabled>
+                            <input type="date" class="form-control border-form-modal" id="editattendancedate" name="editattendancedate" disabled>
                         </div>
                         <div class="col">
                             <label for="editclockin" class="form-label">Date Time In</label>
-                            <input type="datetime-local" class="form-control" id="editclockin" name="editclockin" disabled>
+                            <input type="datetime-local" class="form-control border-form-modal" id="editclockin" name="editclockin" disabled>
                         </div>
                         <div class="col">
                             <label for="editclockout" class="form-label">Date Time Out</label>
-                            <input type="datetime-local" class="form-control" id="editclockout" name="editclockout" disabled>
+                            <input type="datetime-local" class="form-control border-form-modal" id="editclockout" name="editclockout" disabled>
                         </div>                    
                     </div>
                     <div class="row g-3">
                         <div class="col">
                             <label for="message-text" class="col-form-label">Total Hours</label>
-                            <input type="number" class="form-control" id="edittotalhours" name="edittotalhours">
+                            <input type="number" class="form-control border-form-modal" id="edittotalhours" name="edittotalhours">
                         </div>
                         <div class="col">
                             <label for="message-text" class="col-form-label">Night Differrentials</label>
-                            <input type="number" class="form-control" id="editnightot" name="editnightot">
+                            <input type="number" class="form-control border-form-modal" id="editnightot" name="editnightot">
                         </div>
                         <div class="col">
                             <label for="message-text" class="col-form-label">Normal Overtime</label>
-                            <input type="number" class="form-control" id="editnormalot" name="editnormalot">
+                            <input type="number" class="form-control border-form-modal" id="editnormalot" name="editnormalot">
                         </div>
                         <div class="col">
                             <label for="message-text" class="col-form-label">Early Overtime</label>
-                            <input type="number" class="form-control" id="editearlyot" name="editearlyot">
+                            <input type="number" class="form-control border-form-modal" id="editearlyot" name="editearlyot">
                         </div>
                     </div>
                     <div class="row g-3">
                         <div class="col">
                             <label for="editreason" class="form-label">Reason :</label>
-                            <textarea class="form-control" id="editreason" name="editreason"></textarea>
+                            <textarea class="form-control border-form-modal" id="editreason" name="editreason"></textarea>
                         </div>
                     </div>
                     <br>
                     <div class="row g-3">
                         <div class="col">
                             <label for="editpayrolldate" class="form-label">Payroll Date</label>
-                            <input type="date" class="form-control" id="editpayrolldate" name="editpayrolldate" disabled>
+                            <input type="date" class="form-control border-form-modal" id="editpayrolldate" name="editpayrolldate" disabled>
                         </div>
                         <div class="col">
                             <label for="editstatus" class="form-label">Status</label>
-                            <select class="form-control" id="editstatus" name="editstatus">
+                            <select class="form-control border-form-modal" id="editstatus" name="editstatus">
                                 <option>Appllied</option>
                                 <option>Approved</option>
                                 <option>Pending</option>
@@ -171,9 +171,9 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="applyovertimesavebtn">Save</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="applyovertimesavebtn">Save</button>
             </div>
         </div>
     </div>
