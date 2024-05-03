@@ -11,7 +11,7 @@
         </button>
     </div>
     <div class="card-body cbody-requestleave">
-        <table class="table table-light table-striped" id="dataTablereqCOA">
+        <table class="table table-light table-bordered" id="dataTablereqCOA">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -85,28 +85,28 @@
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Pending COA</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header" id="modal-header">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Pending COA</h5>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-body">
                 <form>
                     <div class="row g-3">
                         <div class="col">
                             <label for="editemail" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="editattendancedate" name="editattendancedate">
+                            <input type="date" class="form-control border-form-modal" id="editattendancedate" name="editattendancedate">
                         </div>
                         <div class="col">
                             <label for="edittimein" class="form-label">Date Time In</label>
-                            <input type="datetime-local" class="form-control" id="edittimein" name="edittimein">
+                            <input type="datetime-local" class="form-control border-form-modal" id="edittimein" name="edittimein">
                         </div>
                         <div class="col">
                             <label for="edittimeout" class="form-label">Date Time Out</label>
-                            <input type="datetime-local" class="form-control" id="edittimeout" name="edittimeout">
+                            <input type="datetime-local" class="form-control border-form-modal" id="edittimeout" name="edittimeout">
                         </div>     
                         <div class="col">
                             <label for="editpassword" class="form-label">Status</label>
-                            <select class="form-control" id="editcoastatus" name="editcoastatus">
+                            <select class="form-control border-form-modal" id="editcoastatus" name="editcoastatus">
                                 <option value="Pending" selected>Pending</option>
                                 <option value="Approved">Approved</option>
                                 <option value="Cancel">Cancel</option>
@@ -116,7 +116,7 @@
                     <div class="row g-3">
                         <div class="mb-3">
                             <label for="message-text" class="col-form-label">Reason:</label>
-                            <textarea class="form-control" id="editcoareason" name="editcoareason"></textarea>
+                            <textarea class="form-control border-form-modal" id="editcoareason" name="editcoareason"></textarea>
                         </div>
                     </div>
                     <div class="row g-3">
@@ -127,15 +127,15 @@
                           <br>
                           <div class="text-center">
                             <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
-                              class="rounded" alt="placeholder">
+                              class="rounded border-form-modal" alt="placeholder">
                           </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="editcOAsavebtn">Save</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="editcOAsavebtn">Save</button>
             </div>
         </div>
     </div>

@@ -76,6 +76,28 @@
             { data: "action" },
           ],
           createdRow: function (row, data, dataIndex) {
+              //miyaka
+            var requeststatusCell = $(row).find("td:eq(8)");
+
+            var requeststatusText = data.requeststatus;
+
+            var requeststatusClass = "";
+
+            switch (requeststatusText.toLowerCase()) {
+              case "approved":
+                requeststatusClass = "approved-status";
+                break;
+              case "cancel":
+                requeststatusClass = "cancel-status";
+                break;
+              case "pending":
+                requeststatusClass = "pending-status";
+                break;
+              default:
+                requeststatusClass = "";
+            }
+
+            requeststatusCell.html(`<span class="${requeststatusClass}">${requeststatusText}</span>`);
             $("td", row).each(function (index) {
               this.style.textAlign = "center";
               this.style.verticalAlign = "middle";

@@ -107,9 +107,28 @@
                 createdRow: function (row, data, dataIndex) {
                     var monthlyCell = $(row).find("td:eq(3)");
                     var allowancesCell = $(row).find("td:eq(4)");
+                    var adjustmentsCell = $(row).find("td:eq(5)");
+                    var payrolltypeCell = $(row).find("td:eq(6)");
+
+                    var payrolltypeText = data.payrolltype;
+
+                    var payrolltypeClass = "";
+
+                    switch (payrolltypeText.toLowerCase()) {
+                        case "daily":
+                            payrolltypeClass = "daily-payrolltype";
+                            break;
+                        case "monthly":
+                            payrolltypeClass = "monthly-payrolltype";
+                            break;
+                        default:
+                            payrolltypeClass = "";
+                    }
 
                     monthlyCell.wrapInner("<span class='monthly-text'></span>");
                     allowancesCell.wrapInner("<span class='allowances-text'></span>");
+                    adjustmentsCell.wrapInner("<span class='adjustments-text'></span>");
+                    payrolltypeCell.html(`<span class="${payrolltypeClass}">${payrolltypeText}</span>`);
 
                     $("td", row).each(function (index) {
                         this.style.textAlign = "center";
