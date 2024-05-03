@@ -29,7 +29,7 @@ body{
 } */
 
 .searchbar-hrmis {
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
 }
 
 .searchbar-bg {
@@ -38,7 +38,7 @@ body{
 
 .btn-search-hrmis {
   background-color: #E41717 !important;
-  border: 2.5px solid #fcf0d7  !important;
+  border: 2.5px solid #fef8ea  !important;
   color: white !important;
 }
 
@@ -55,8 +55,15 @@ body{
   margin-top: 2%;
 }
 #map {
-  height: 400px;
+  height: 420px;
   z-index: 1;
+  border: 2px solid rgb(210, 208, 208) !important;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-radius: 5px;
+  width: 100%;
 }
 #content-wrapper {
   background-color: white !important;
@@ -111,7 +118,7 @@ body{
 
 #dp-header {
     background-color: #7a1818 !important;
-    border: 3px solid #fcf0d7 !important;
+    border: 3px solid #fef8ea !important;
 }
 
 .dropdown-item {
@@ -120,7 +127,7 @@ body{
 }
 
 .navbar-search {
-    border: 2.5px solid #fcf0d7 !important;
+    border: 2.5px solid #fef8ea !important;
     border-radius: 8px;
 }
 
@@ -140,7 +147,7 @@ body{
     height: 38px;
     width: 40px;
     padding-left: 8px;
-    border: 2.5px solid #fcf0d7  !important;
+    border: 2.5px solid #fef8ea  !important;
     border-radius: 6px;
     background-color: #E41717 !important;
     color: white !important;
@@ -189,7 +196,7 @@ body{
 }
 
 .sidebar-item:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   font-weight: bold;
 }
 
@@ -207,11 +214,11 @@ body{
   width: 100;
   margin-left: 2%;
   margin-right: 2%;
-  background-color:  #fcf0d7 !important;
+  background-color:  #fef8ea !important;
 }
 
 .modal-dialog #modal-body {
-    background-color: #fcf0d7 !important;
+    background-color: #fef8ea !important;
 }
 #employeeid, #loanid {
     height: 36px;
@@ -367,31 +374,34 @@ tr:hover {
 .btn-color, .btn-attendance {
     background-color: #436c92 !important;
     color: white !important;
+    text-shadow: 1px 1px 1px black !important;
     float: right;
     margin-left: 5px;
     border-radius: 8px;
     height: 33px;
-    border: 2px solid #fcf0d7 !important;
+    border: 2px solid #fef8ea !important;
+    letter-spacing: 1px;
 }
 
 .btn-color:hover, .btn-attendance:hover {
-    background-color: #103e68 !important;
+    background-color: #02407b !important;
     color: white !important;
+    transform: scale(1.1);
 }
 .btn-generate-holiday {
   height: 33px;
   background-color: #436c92 !important;
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
   color: white !important;
 }
 .btn-add-holiday {
   height: 33px;
   background-color: #53c24e !important;
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
   color: white !important;
 }
 #yearInput {
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
   height: 33px;
 }
 .btn-add-color, .btn-add-attendance {
@@ -399,9 +409,10 @@ tr:hover {
   margin-right: 8px;
   border-radius: 8px;
   height: 33px;
-  background-color: #53c24e !important;
-  border: 2px solid #fcf0d7 !important;
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
   color: white !important;
+  text-shadow: 1px 1px 1px black !important;
 }
 
 .btn-add-attendance {
@@ -410,15 +421,16 @@ tr:hover {
   margin-left: 15px;
   border-radius: 8px;
   height: 33px;
-  background-color: #53c24e !important;
-  border: 2px solid #fcf0d7 !important;
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
   color: white !important;
+  text-shadow: 1px 1px 1px black !important;
 }
 
 
 .btn-add-color:hover, .btn-add-attendance:hover {
   background-color: #197214 !important;
-    color: white !important;
+    transform: scale(1.1);
 }
 
 .ch-coop {
@@ -457,7 +469,7 @@ tr:hover {
 .geofence-db:hover,
 .announcement-db:hover,
 .bday-db:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   border: 2px solid white !important;
   color: #7a1818 !important;
   font-weight: bold;
@@ -465,15 +477,35 @@ tr:hover {
 
 #totalEmployeeCard,#regularEmployeeCard, #resignedEmployeeCard, #probationaryEmployeeCard,
 #totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro, #totalempapprentice {
-  background-image: url(/images/img/employee.jpg);
+  background-image: url(/images/img/employee.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   box-shadow: 0 5px 8px #3d0404 !important;
+}
+
+#totalEmployeeCard::before,#regularEmployeeCard::before, #resignedEmployeeCard::before, #probationaryEmployeeCard::before,
+#totalADMIN::before, #totalIT::before, #totalCABLING::before, #totalempcandidate::before, #totalempbagapuro::before, #totalempapprentice::before {
+  background: linear-gradient(to top, rgba(255, 253, 253, 0.25) 0, rgba(129, 9, 9, 0.85) 100%);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 3px;
+  height: 100%;
+  width: 100%;
 }
 
 
 #totalCOACard,
 #totalovertimeCard,
 #totalleaveCard {
-  background-image: url(/images/img/employee.jpg);
+  background-image: url(/images/img/coa.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   box-shadow: 0 5px 8px #3d0404 !important;
   text-align: center;
   font-size: 24px;
@@ -484,8 +516,8 @@ tr:hover {
 
 .card-text-teamlead {
   margin-left: 8px;
-  color: white !important;
-  text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;
+  color: #7a1818 !important;
+  text-shadow: 3px 3px 3px gray !important;
   font-size: 24px;
 }
 
@@ -553,24 +585,27 @@ tr:hover {
   }
 
   .custom-mobile-table tbody tr:nth-child(even){
-      background-color: var(--grey-50) !important;
+      background-color: white !important;
   }
+
 }
+
 .card-text {
   margin-left: 8px;
   color: white !important;
-  text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;
+  text-shadow: 3px 3px 3px #4f0202 !important;
+  letter-spacing: 1px;
 }
 .card-icon {
   margin-right: 8px;
   color: white !important;
-  text-shadow: 3px 3px 3px rgb(78, 8, 8) !important;
+  text-shadow: 3px 3px 3px #4f0202 !important;
   font-size: 20px;
 }
 
 .db-modal-search {
   width: 155px;
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
   border-radius: 8px;
   float: right;
   margin-left: 65%;
@@ -579,6 +614,7 @@ tr:hover {
   color: white !important;
   font-size: 30px;
   margin: 0%;
+  background-color: transparent;
 }
 .bx-x:hover {
   border: 2px solid white !important;
@@ -593,24 +629,58 @@ tr:hover {
   border-radius: 8px;
 }
 .btn-modal-close {
+  background-color: #E74646 !important;
   color: white !important;
-  background-color: red !important;
-  border: 2px solid #fcf0d7 !important;
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 .btn-modal-close:hover {
-  background-color: #ff3535 !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #E72929 !important;
+  transform: scale(1.1);
 }
 .btn-modal-save {
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
   color: white !important;
-  background-color: green !important;
-   border: 2px solid #fcf0d7 !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 .btn-modal-save:hover {
-  background-color: #00B25A !important;
+  background-color: #197214 !important;
+  transform: scale(1.1);
+}
+.btn-logout-cancel {
+  background-color: #FFB72B !important;
   color: white !important;
+  border: 2px solid #fef8ea !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 1px black !important;
+  letter-spacing: 1px;
+}
+
+.btn-logout-cancel:hover {
+  background-color: #f68f00 !important;
   font-weight: bold;
+  transform: scale(1.1);
+}
+
+.btn-logout {
+  background-color: #FD5D5D !important;
+  color: white !important;
+  border: 2px solid #fef8ea !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 1px black !important;
+}
+
+.btn-logout:hover {
+  background-color: #ef3a3a !important;
+  font-weight: bold;
+  transform: scale(1.1);
 }
 
 /*-- Sidebar ---*/
@@ -667,7 +737,7 @@ tr:hover {
 .btn-modal-upload {
   background-color: green !important;
   color: white !important;
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
 }
 .btn-modal-upload:hover {
   background-color: #00B25A !important;
@@ -742,7 +812,7 @@ tr:hover {
   font-weight: bold !important;
 }
 .profile-box-db:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   color: #7a1818 !important;
   font-weight: bold !important;
 }
@@ -758,6 +828,8 @@ tr:hover {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
   height: 200px;
+  width: 33%;
+  margin-bottom: 20px;
 }
 
 #totalEMP:hover, #totalregularEMP:hover, #totalprobiEMP:hover, #totalresignedEMP:hover,
@@ -772,8 +844,8 @@ tr:hover {
 }
 
 .db-custom-cards  {
-  background-color: #fcf0d7 !important;
-  height: 512px;
+  background-color: #fef8ea !important;
+  height: 548px;
   overflow: auto;
   width: 100%;
   border-bottom-left-radius: 5px;
@@ -984,11 +1056,12 @@ tr:hover {
 /* mobile state */
 @media (max-width: 769px) {
   .content {
-    margin-left: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   .content-toggled {
-    margin-left: 0px !important;
+    margin-left: 10px !important;
   }
 
   .footer-toggled {
@@ -1006,7 +1079,8 @@ tr:hover {
   }
 
   /*--- employee page--*/
-  #myInput, #myInput2 {
+  #myInput,
+  #myInput2 {
     width: 35%;
   }
 
@@ -1017,9 +1091,10 @@ tr:hover {
     padding: 0px;
   }
 
-  .btn-add-attendance, .btn-attendance {
+  .btn-add-attendance,
+  .btn-attendance {
     font-size: 9px !important;
-    height:20%;
+    height: 20%;
     width: 25%;
     margin-right: 1.3%;
   }
@@ -1062,48 +1137,71 @@ tr:hover {
     margin-top: 15px !important;
   }
 
-  .card-app-edit, .card-app-add {
+  .card-app-edit,
+  .card-app-add {
     width: 90% !important;
   }
 
-    .label-cell {
-      display: block !important; /* Show labels in mobile view */
-      font-weight: bold; /* Optional: Bold font for labels */
-      float: left;
-      padding: 3px;
-    }
+  .label-cell {
+    display: block !important;
+    /* Show labels in mobile view */
+    font-weight: bold;
+    /* Optional: Bold font for labels */
+    float: left;
+    padding: 3px;
+  }
 
-    .data-cell {
-      display: inline-block;
-      text-align: right;
-      padding: 3px;
-    
-      /* Adjust spacing between label and data */
-    }
+  .data-cell {
+    display: inline-block;
+    text-align: right;
+    padding: 3px;
 
-    #datepicker {
-      width: 100%;
-      margin-bottom: 10px;
-      margin-top: 10px;
-      text-align: center;
-    }
+    /* Adjust spacing between label and data */
+  }
 
-    .btn-mobile {
-      margin-bottom: 5%;
-      width: 30%;
-    }
-
-   .btn-holiday {
+  #datepicker {
+    width: 100%;
+    margin-bottom: 10px;
     margin-top: 10px;
-   }
-   
-   .announcement-db, .bday-db {
-    font-size: 10px !important;
-   }
+    text-align: center;
+  }
 
-   .generate-profile {
+  .btn-mobile {
+    margin-bottom: 5%;
+    width: 30%;
+  }
+
+  .btn-holiday {
+    margin-top: 10px;
+  }
+
+  .announcement-db,
+  .bday-db {
+    font-size: 10px !important;
+  }
+
+  .generate-profile {
     font-size: 8px !important;
-   }
+  }
+
+  #totalCOA,
+  #totalovertime,
+  #totalleave {
+    width: 100%;
+  }
+
+  #map {
+    width: 100%;
+  }
+
+  .deduction-card {
+    margin-left: 0px !important;
+  }
+
+  .row .g-4 {
+    margin: 0%;
+  }
+
 }
 
 .label-cell {
@@ -1187,13 +1285,15 @@ tr:hover {
 .hrmis-img-announce {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  height: 200px;
+  border: 2px solid #7a1818 !important;
 }
 
 .announce-title {
   margin: 8%;
-  color: black !important;
+  color: #7a1818  !important;
   text-transform: uppercase;
-  font-weight: bold;
+  font-weight: bolder;
   text-align: center;
   font-family: 'Arial';
 }
@@ -1205,7 +1305,7 @@ tr:hover {
 }
 
 .a-date {
-  color: gray;
+  color: black !important;
   font-weight: bold;
   /* float: right; */
   margin-top: 2%;
@@ -1575,7 +1675,7 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .cell-rest {
-  background-color: rgb(228, 228, 228) !important;
+  background-color: #fef8ea !important;
 }
 .p-work, .p-number {
   color: white !important;
@@ -1769,7 +1869,7 @@ div.drp-buttons {
   font-family: Arial;
   font-size: 15px;
   padding: 10% !important;
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
 }
 
 .btn-out-body {
@@ -1781,7 +1881,7 @@ div.drp-buttons {
   border: 1px solid lightslategray !important;
 }
 
-.btn-logout-cancel {
+/* .btn-logout-cancel {
   background-color: rgb(6, 161, 244) !important;
   color: white !important;
   border: 1px solid rgb(4, 95, 145) !important;
@@ -1790,9 +1890,9 @@ div.drp-buttons {
 .btn-logout-cancel:hover {
   background-color: rgb(34, 129, 169) !important;
   font-weight: bold;
-}
+} */
 
-.btn-logout {
+/* .btn-logout {
   background-color: rgb(248, 65, 65) !important;
   color: white !important;
   border: 1px solid rgb(224, 35, 35) !important;
@@ -1801,7 +1901,7 @@ div.drp-buttons {
 .btn-logout:hover {
   background-color: rgb(225, 59, 59) !important;
   font-weight: bold;
-}
+} */
 
 .logout-footer {
   background-color: #7a1818 !important;
@@ -1826,7 +1926,7 @@ div.drp-buttons {
 }
 
 .settings-acc:hover, .settings-pw:hover {
-  background: #fcf0d7 !important;
+  background: #fef8ea !important;
   color: #881a1a !important;
   font-weight: 600;
   font-family: Arial;
@@ -1836,7 +1936,7 @@ div.drp-buttons {
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
 }
 .settings-body {
-  /* background-color: #fcf0d7 !important; */
+  /* background-color: #fef8ea !important; */
   background-image: url(/images/img/settings.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -1875,29 +1975,34 @@ div.drp-buttons {
 }
 
 .btn-notif-close {
-  background-color: blue !important;
+  background-color: #00A9FF !important;
   color: white !important;
   /* border: 2px solid darkblue !important; */
-  font-family: 'Calibri';
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 
 .btn-notif-close:hover {
-  background-color: rgb(2, 2, 142) !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #0494dd !important;
+  transform: scale(1.1);
 }
 
 .btn-notif-delete {
-  background-color: red !important;
+  background-color: #E74646 !important;
   color: white !important;
-  /* border: 2px solid darkred !important; */
-  font-family: 'Calibri';
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 
 .btn-notif-delete:hover {
-  background-color: rgb(136, 2, 2) !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #E72929 !important;
+  transform: scale(1.1);
 }
 
 /* Employee / Job Status */
@@ -2023,14 +2128,14 @@ div.drp-buttons {
 }
 
 .health-card-idtype {
-  color: white !important;
-  background-color: #117984 !important;
+  color: #365d12 !important;
+  background: linear-gradient(90deg, #9BCF53, #BFEA7C) !important;
   border-radius: 8px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid #135D66 !important;
+  border: 1px solid #416D19 !important;
   letter-spacing: 1px;
 }
 
@@ -2082,43 +2187,6 @@ div.drp-buttons {
   letter-spacing: 1px;
 }
 
-/*-- Attendance Script --*/
-.clockin-text {
-  color: white !important;
-  background-color: rgb(18, 156, 27) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(43, 176, 43)!important;
-  letter-spacing: 1px;
-}
-
-.clockout-text {
-  color: white !important;
-  background-color: rgb(182, 13, 13) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(176, 43, 43)!important;
-  letter-spacing: 1px;
-}
-
-.totalhours-text {
-  color: black !important;
-  text-shadow: 1px 1px 2px white;
-  background-color: rgb(153, 238, 224) !important;
-  border-radius: 8px;
-  padding: 5px;
-  /* text-transform: uppercase; */
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(43, 176, 174)!important;
-  letter-spacing: 1px;
-}
 
 .restday {
   color: darkgreen !important;
@@ -2435,14 +2503,14 @@ div.drp-buttons {
 }
 
 .idtype-text {
-  color: white !important;
-  background-color: #117984 !important;
+  color: #365d12 !important;
+  background: linear-gradient(90deg, #9BCF53, #BFEA7C) !important;
   border-radius: 8px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid #135D66 !important;
+  border: 1px solid #416D19 !important;
   letter-spacing: 1px;
 }
 
@@ -2472,14 +2540,14 @@ div.drp-buttons {
 }
 
 .payrolldate-text {
-  color: rgb(0, 37, 139) !important;
-  background-color: rgb(186, 201, 243) !important;
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
   border-radius: 8px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(13, 0, 255) !important;
+  border: 1px solid green !important;
   letter-spacing: 1px;
 }
 
@@ -2491,7 +2559,7 @@ div.drp-buttons {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(183, 183, 19) !important;
+  border: 1px solid rgb(146, 146, 14) !important;
   letter-spacing: 1px;
 }
 
@@ -2506,7 +2574,7 @@ div.drp-buttons {
   border: 1px solid red !important;
   letter-spacing: 1px;
 }
-
+/* 
 .approved-status {
   color: darkgreen !important;
   background-color: rgb(186, 243, 186) !important;
@@ -2517,7 +2585,7 @@ div.drp-buttons {
   font-size: 10px;
   border: 1px solid green !important;
   letter-spacing: 1px;
-}
+} */
 
 .rejected-status {
   color: white !important;
@@ -2591,3 +2659,210 @@ div.drp-buttons {
   border: 1px solid rgb(183, 183, 19) !important;
   letter-spacing: 1px;
 }
+
+.idnumber1-text {
+  color: rgb(73, 73, 5) !important;
+  background-color: #faf3cf !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 9.5px;
+  border: 1px solid rgb(180, 177, 9) !important;
+  letter-spacing: 1px;
+}
+
+.adjustments-text {
+  color: #b03b59 !important;
+  background-color: #FFCBCB !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #c76060 !important;
+  letter-spacing: 1px;
+}
+
+.daily-payrolltype {
+  color: white !important;
+  background-color: #1281b5 !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #85F4FF !important;
+  letter-spacing: 1px;
+}
+
+.monthly-payrolltype {
+  color: white !important;
+  background-color: #28854f !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #C1F4C5 !important;
+  letter-spacing: 1px;
+}
+
+.nolate-img {
+  height: 465px !important;
+  border-radius: 8px;
+  border: 2px solid gray !important;
+}
+
+#loadattendanceBadge {
+  height: 17px;
+  width: 17px;
+  border-radius: 5px;
+  background-color: #e74a3b !important;
+  font-size: 10px;
+  padding: 2px;
+  transform: scale(.7);
+  transform-origin: top right;
+  right: .25rem;
+  margin-top: -.25rem;
+  margin-left: 3px;
+}
+
+
+/*-- Deduction Payroll --*/
+.deduction-card {
+  background: linear-gradient(180deg, rgb(149, 51, 214), rgb(208, 146, 250))  !important;
+  border-radius: 8px;
+  height: 238px !important;
+  width: 250px !important;
+  margin-left: 30px;
+}
+
+.total-deduct {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 12px;
+  font-family: 'Arial Black';
+}
+
+.deduct-fee {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 30px;
+  font-family: 'Arial Black';
+  font-weight: bold;
+  padding: 12px;
+  padding-top: 50px;
+}
+
+.sss-card {
+  background: linear-gradient(180deg, #1c9bf6, #90d0fd) !important;
+  border-radius: 8px;
+}
+
+.phil-card {
+  background: linear-gradient(180deg, #25be20, #7ffd7a) !important;
+  border-radius: 8px;
+}
+
+.pag-ibig-card {
+  background: linear-gradient(180deg, #ef6d02, #fda760) !important;
+  border-radius: 8px;
+}
+
+.tin-card {
+  background: linear-gradient(180deg, #da1515, #f87373) !important;
+  border-radius: 8px;
+}
+
+.health-card-card {
+  background: linear-gradient(180deg, #39AEA9, #8ef8f2) !important;
+  border-radius: 8px;
+}
+
+.tax-card {
+  background: linear-gradient(180deg, #FFC300, #f6da7f) !important;
+  border-radius: 8px;
+}
+
+.absent-card {
+  background: linear-gradient(180deg, #783908, #E29C68) !important;
+  border-radius: 8px;
+}
+
+.late-card {
+  background: linear-gradient(180deg, #E01171, #fb7cb7) !important;
+  border-radius: 8px;
+}
+
+.sss-total,
+.phil-total,
+.pag-ibig-total,
+.tin-total,
+.health-total,
+.tax-total,
+.absent-total,
+.late-total {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 12px;
+  font-family: 'Arial Black';
+  letter-spacing: 1px;
+}
+
+.sss-subtotal,
+.phil-subtotal,
+.pag-ibig-subtotal,
+.tin-subtotal,
+.health-subtotal,
+.tax-subtotal,
+.absent-subtotal,
+.late-subtotal {
+  color: white !important;
+  font-family: 'Arial Black';
+  font-weight: bold;
+  padding: 12px;
+  font-size: 16px;
+  text-shadow: 1px 1px 2px black !important;
+  letter-spacing: 1px;
+}
+
+.late-deduction-header {
+  background-color: #DFD9CA !important;
+  color: black !important;
+  text-shadow: 1px 1px 2px white !important;
+  font-family: 'Arial Black';
+}
+
+.late-deduction-header h6 {
+  font-size: 13px !important;
+}
+
+.late-deduction-body {
+  background-color: #fbf9f6 !important;
+  color: black !important;
+}
+
+.sub-cards {
+  margin-left: 135px !important;
+}
+
+.holiday-fee {
+  font-family: "Sevillana", cursive;
+  font-weight: bold;
+  font-style: normal;
+  color: green !important;
+  text-shadow: 1px 1px 2px yellow !important;
+}
+
+.earn-fee {
+  font-family: "Sevillana", cursive;
+  font-weight: bold;
+  font-style: normal;
+  color: red !important;
+  text-shadow: 1px 1px 2px yellow !important;
+}
+
+
+
+

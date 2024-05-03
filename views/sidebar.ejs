@@ -35,19 +35,38 @@
   
         <div id="collapseemployee" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/employee">List of Employee</a>
-                <a class="collapse-item" href="/empbackground">Employee Background</a>
+                <div class="sidebar-heading">
+                    REGISTER:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/employee">Employees</a>
                 <a class="collapse-item" href="/shift">Shift</a>
                 <a class="collapse-item" href="/shiftsettings">Shift Settings</a>
                 <a class="collapse-item" href="/trainings">Trainings</a>
-                <a class="collapse-item" href="/candidate">COR</a>
                 <a class="collapse-item" href="/apprentice">Apprentice</a>
+                <br>
+                <div class="sidebar-heading">
+                    NOTIF:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/candidate">COR</a>
+                <br>
+                <div class="sidebar-heading">
+                    RECORDS:
+                </div>
+                <hr class="sidebar-divider my-0">
                 <a class="collapse-item" href="/performance">Performance</a>
                 <a class="collapse-item" href="/disciplinary">Disciplinary</a>
                 <a class="collapse-item" href="/healthrecord">Health Record</a>
-                <a class="collapse-item" href="/govermentid">Goverment ID</a>
-                <a class="collapse-item" href="/otherdeductionsID">Other Deductions ID</a>
                 <a class="collapse-item" href="/resigned">Resigned Employee</a>
+                <br>
+                <div class="sidebar-heading">
+                    DEDUCTIONS:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/govermentid">Goverment</a>
+                <a class="collapse-item" href="/otherdeductionsID">Other Deductions</a>
+                
             </div>
         </div>
     </li>
@@ -59,12 +78,14 @@
             aria-expanded="true" aria-controls="collapsemasteraccess">
             <lord-icon src="https://cdn.lordicon.com/veoexymv.json" trigger="loop" class="db-icon-hrmis">
             </lord-icon>
-           <span><b>Master Access</b></span>
+           <span><b>Master</b></span>
         </a>
 
         <div id="collapsemasteraccess" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/access">Access</a>
+                <a class="collapse-item" href="/department">Department</a>
+                <a class="collapse-item" href="/position">Position</a>
             </div>
         </div>
     </li>
@@ -74,11 +95,11 @@
             <lord-icon src="https://cdn.lordicon.com/ciqqqyun.json" trigger="loop" stroke="bold"
                 colors="primary:#ffffff,secondary:#9ce5f4,tertiary:#3a3347" class="db-icon-hrmis">
             </lord-icon>
-            <span><b>Apps</b></span></a>
+            <span><b>Mobile Applications</b></span></a>
 
         <div id="collapseapps" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/appsdetails">Apps</a>
+                <a class="collapse-item" href="/appsdetails">Software</a>
             </div>
         </div>
     </li>
@@ -89,17 +110,17 @@
                 colors="primary:#121331,secondary:#a5e830,tertiary:#f9c9c0,quaternary:#ad6836,quinary:#4faef9"
                 class="db-icon-hrmis">
             </lord-icon>
-            <span><b>User Control</b></span>
+            <span><b>Authentication</b></span>
         </a>
 
         <div id="collapseusercontrol" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/users">Users</a>
-                <a class="collapse-item" href="/teamleadusers">Team Lead Users</a>
+                <a class="collapse-item" href="/users">Employees</a>
+                <a class="collapse-item" href="/teamleadusers">Team Lead</a>
             </div>
         </div>
     </li>
-
+<!-- 
     <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedepartment"
             aria-expanded="true" aria-controls="collapsedepartment">
@@ -114,7 +135,7 @@
                 <a class="collapse-item" href="/position">Position</a>
             </div>
         </div>
-    </li> 
+    </li>  -->
     
     <li class="nav-item sidebar-item">
         <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsepayroll"
@@ -126,14 +147,35 @@
 
         <div id="collapsepayroll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/salary">Salary Settings</a>
-                <a class="collapse-item" href="/salaryhistory">Salary History</a>
+                <a class="collapse-item" href="/salary">Salary</a>
+                <a class="collapse-item" href="/salaryhistory">History</a>
+                <br>
+                <div class="sidebar-heading">
+                    SETTINGS:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/setpayrolldate">Set Payroll</a>
+                <br>
+                <div class="sidebar-heading">
+                    REQUEST:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/requestcashadvance">Cash Advance</a>
+                <br>
+                <div class="sidebar-heading">
+                    DEDUCTIONS:
+                </div>
+                <hr class="sidebar-divider my-0">
+                <a class="collapse-item" href="/deduction">Goverment</a>
+                <a class="collapse-item" href="/otherdeductions">Other Deduction</a>
+                <br>
+                <div class="sidebar-heading">
+                   REPORTS:
+                </div>
+                <hr class="sidebar-divider my-0">
                 <a class="collapse-item" href="/payslip">Payslip</a>
-                <a class="collapse-item" href="/generatepayroll">Generate Payroll Date</a>
-                <a class="collapse-item" href="/requestcashadvance">Request Cash Advance</a>
-                <a class="collapse-item" href="/deduction">Goverment Deduction</a>
-                <a class="collapse-item" href="/otherdeductions">Other Deductions</a>
-                <a class="collapse-item" href="/setpayrolldate">Set Payroll Date</a>
+                <a class="collapse-item" href="/generatepayroll">Generate Payroll</a>
+               
             </div>
         </div>
     </li>
@@ -188,9 +230,9 @@
 
         <div id="collapseojt" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/ojt">List Of Ojt</a>
-                <a class="collapse-item" href="/ojtuser">Users For Ojt</a>
-                <a class="collapse-item" href="/attendanceojt">Attendance For Ojt</a>
+                <a class="collapse-item" href="/ojt">OJT</a>
+                <a class="collapse-item" href="/ojtuser">Users</a>
+                <a class="collapse-item" href="/attendanceojt">Attendance</a>
             </div>
         </div>
     </li>
@@ -218,7 +260,7 @@
             <lord-icon src="https://cdn.lordicon.com/jxzkkoed.json" trigger="loop"
                 colors="primary:#121331,secondary:#ffc738,tertiary:#e83a30" class="db-icon-hrmis">
             </lord-icon>
-            <span><b>Deviation Notices</b></span></a>
+            <span><b>Infractions</b></span></a>
 
         <div id="collapsedeviation" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">

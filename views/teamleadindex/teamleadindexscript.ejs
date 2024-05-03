@@ -1200,7 +1200,7 @@
           if (result.msg === "success") {
             const existingData = result.data;
             if (existingData.length === 0) {
-              latestatus += '<div class="p-3">No late arrivals today.</div>';
+              latestatus += '<div><img src="/images/img/nolate.gif" class="d-block w-100 nolate-img" alt=""</div>';
             } else {
               let counter = 0;
               $.each(existingData, (key, item) => {
@@ -2592,10 +2592,7 @@
     //     timeout: 27000
     //   }
     // );
-    //<!-- Sticky Topbar & Sidebar -->
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
-      $(".navbar").toggleClass("navbar-toggled");
-    });
+
     //#endregion
   });
 </script>

@@ -251,6 +251,37 @@
           // { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var jobstatusCell = $(row).find("td:eq(4)");
+
+         
+          var jobstatusText = data.jobstatus;
+
+          
+          var jobstatusClass = "";
+
+          
+          switch (jobstatusText.toLowerCase()) {
+            case "regular":
+              jobstatusClass = "regular-status";
+              break;
+            case "probitionary":
+              jobstatusClass = "probationary-status";
+              break;
+            case "project Based":
+              jobstatusClass = "project-based-status";
+              break;
+            case "apprentice":
+              jobstatusClass = "apprentice-status";
+              break;
+            default:
+              jobstatusClass = ""; 
+          }
+
+          
+          jobstatusCell.html(`<span class="${jobstatusClass}">${jobstatusText}</span>`);
+
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";

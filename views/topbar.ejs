@@ -219,10 +219,9 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="profileModalLabel">Employee Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+            <div class="modal-header" id="modal-header">
+                <h5 class="modal-title fs-5" id="profileModalLabel">Employee Profile</h5>
+                <button type="button" class="bx bx-x" data-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
@@ -245,36 +244,36 @@
                         <ul class="profile-header-tab nav nav-tabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" data-bs-target="#profile-home" role="tab"
-                                    aria-controls="profile-home" class="nav-link active">PROFILE</a>
+                                    aria-controls="profile-home" class="nav-link active"><b>PROFILE</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-leave"
-                                    role="tab" aria-controls="profile-leave" class="nav-link ">LEAVE HISTORY</a>
+                                    role="tab" aria-controls="profile-leave" class="nav-link "><b>LEAVE HISTORY</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showdisciplinaryprofile"
                                     data-bs-target="#profile-disciplinary" role="tab"
-                                    aria-controls="profile-disciplinary" class="nav-link ">DISCIPLINARY</a>
+                                    aria-controls="profile-disciplinary" class="nav-link "><b>DISCIPLINARY</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-attendance"
-                                    role="tab" aria-controls="profile-attendance" class="nav-link ">ATTENDANCE</a>
+                                    role="tab" aria-controls="profile-attendance" class="nav-link"><b>ATTENDANCE</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showtrainingprofile" data-bs-target="#profile-trainings"
-                                    role="tab" aria-controls="profile-trainings" class="nav-link ">TRAININGS</a>
+                                    role="tab" aria-controls="profile-trainings" class="nav-link "><b>TRAININGS</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showhealthprofile" data-bs-target="#profile-healthdata"
-                                    role="tab" aria-controls="profile-healthdata" class="nav-link ">HEALTH DATA</a>
+                                    role="tab" aria-controls="profile-healthdata" class="nav-link "><b>HEALTH DATA</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showgovprofile" data-bs-target="#profile-govid" role="tab"
-                                    aria-controls="profile-govid" class="nav-link ">GOV ID</a>
+                                    aria-controls="profile-govid" class="nav-link "><b>GOV ID</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-cashadvance"
-                                    role="tab" aria-controls="profile-cashadvance" class="nav-link ">CASH ADVANCED</a>
+                                    role="tab" aria-controls="profile-cashadvance" class="nav-link "><b>CASH ADVANCED</b></a>
                             </li>
                         </ul>
                     </div>
@@ -291,118 +290,115 @@
                                                 <table class="table table-profile">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="2">WORK AND EDUCATION</th>
+                                                            <th colspan="2" class="work-header">WORK AND EDUCATION</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="field">Work</td>
+                                                            <td class="field text-left work-field">Work:</td>
                                                             <td class="value">
-                                                                <div class="m-b-5">
-                                                                    <b>Magnificient IT (2017)</b> <a href="#"
-                                                                        class="m-l-10">Edit</a><br />
-                                                                    <span class="text-muted">PHP Programmer</span>
-                                                                </div>
                                                                 <div>
-                                                                    <b>Neutrino IT (2012)</b> <a href="#"
-                                                                        class="m-l-10">Edit</a><br />
-                                                                    <span class="text-muted">UXUI / Frontend
-                                                                        Developer</span>
+                                                                    <h6 class="work-title">Magnificient IT (2017)</h6>
+                                                                    <!-- <a href="#"class="m-l-10">Edit</a> -->
+                                                                    <span class="text-muted work-subtitle">PHP Programmer</span>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="field">Education</td>
-                                                            <td class="value">
-                                                                <div class="m-b-5">
-                                                                    <b>University (2009)</b> <a href="#"
-                                                                        class="m-l-10">Edit</a><br />
-                                                                    <span class="text-muted">University of Georgia,
-                                                                        Athens,
-                                                                        GA</span>
-                                                                </div>
+                                                                <br>
                                                                 <div>
-                                                                    <b>High School (2006)</b> <a href="#"
-                                                                        class="m-l-10">Edit</a><br />
-                                                                    <span class="text-muted">Heritage High School, West
-                                                                        Chestter, PA</span>
+                                                                    <h6 class="work-title">Neutrino IT (2012)</h6>
+                                                                    <!-- <a href="#" class="m-l-10">Edit</a> -->
+                                                                    <span class="work-subtitle">UXUI / Frontend Developer</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    
+                                                            <td class="field text-left work-field">Education:</td>
+                                                            <td class="value">
+                                                                <div>
+                                                                    <h6 class="work-title">University (2009)</h6>
+                                                                        <!-- <a href="#"class="m-l-10">Edit</a> -->
+                                                                    <span class="work-subtitle">University of Georgia,Athens,GA</span>
+                                                                </div>
+                                                                <br>
+                                                                <div>
+                                                                    <h6 class="work-title">High School (2006)</h6>
+                                                                    <!-- <a href="#" class="m-l-10">Edit</a><br /> -->
+                                                                    <span class="work-subtitle">Heritage High School, West Chestter, PA</span>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Skills</td>
+                                                            <td class="field text-left work-field">Skills:</td>
                                                             <td class="value">
-                                                                C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
-                                                                Phonegap,
-                                                                Bootstrap, Angular JS, Angular JS, Asp.net
+                                                                <span class="work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</span>
+                                                              
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Tenure</td>
-                                                            <td class="value" id="profiltenure"></td>
+                                                            <td class="field text-left work-field">Tenure:</td>
+                                                            <td class="value work-subtitle" id="profiltenure">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Job Status</td>
-                                                            <td class="value" id="profilejobstatus"></td>
+                                                            <td class="field text-left work-field">Job Status:</td>
+                                                            <td class="value work-subtitle" id="profilejobstatus"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                                 <table class="table table-profile">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="2">CONTACT INFORMATION</th>
+                                                            <th colspan="2" class="work-header">CONTACT INFORMATION</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="field">Mobile Phones</td>
-                                                            <td class="value" id="profilephone2"></td>
+                                                            <td class="field text-left work-field">Mobile Phone Number:</td>
+                                                            <td class="value work-subtitle" id="profilephone2"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Email</td>
-                                                            <td class="value" id="profileemail"></td>
+                                                            <td class="field text-left work-field">Email:</td>
+                                                            <td class="value work-subtitle" id="profileemail"></td>
+                                                        </tr>
+                                                        <tr> 
+                                                            <td class="field text-left work-field">Emergency Contact Name:</td>
+                                                            <td class="value work-subtitle" id="profileemcontact"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Emergency Contact Name</td>
-                                                            <td class="value" id="profileemcontact"></td>
+                                                            <td class="field text-left work-field">Emergency Contact Number:</td>
+                                                            <td class="value work-subtitle" id="profileemphone"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Emergency Contact Number</td>
-                                                            <td class="value" id="profileemphone"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="field">Address</td>
-                                                            <td class="value" id="profileaddress2"></td>
+                                                            <td class="field text-left work-field">Address:</td>
+                                                            <td class="value work-subtitle" id="profileaddress2"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                                 <table class="table table-profile">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="2">BASIC INFORMATION</th>
+                                                            <th colspan="2" class="work-header">BASIC INFORMATION</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="field">Birth of Date</td>
-                                                            <td class="value" id="profilebday2"></td>
+                                                            <td class="field text-left work-field">Birth of Date:</td>
+                                                            <td class="value work-subtitle" id="profilebday2"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Gender</td>
-                                                            <td class="value" id="profilegender"></td>
+                                                            <td class="field text-left work-field">Gender:</td>
+                                                            <td class="value work-subtitle" id="profilegender"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Facebook</td>
-                                                            <td class="value">
-                                                                http://facebook.com/infinite.admin
-                                                                <a href="#" class="m-l-10">Edit</a>
+                                                            <td class="field text-left work-field">Facebook:</td>
+                                                            <td class="value work-subtitle">http://facebook.com/infinite.admin
+                                                                <!-- <a href="#" class="m-l-10">Edit</a> -->
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="field">Website</td>
-                                                            <td class="value">
-                                                                http://seantheme.com
-                                                                <a href="#" class="m-l-10">Edit</a>
+                                                            <td class="field text-left work-field">Website:</td>
+                                                            <td class="value work-subtitle">http://seantheme.com
+                                                                <!-- <a href="#" class="m-l-10">Edit</a> -->
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -413,31 +409,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartment"></div>
+                                                <div class="personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartment"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profileposition2"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebday"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebday"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatus"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatus"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddress">
                                                         <br />
                                                         <br />
@@ -445,8 +441,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephone">
+                                                <div class="field personal-title ">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephone">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -501,31 +497,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartmentleave"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartmentleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profilepositionleave"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profilepositionleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebdayleave"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebdayleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatusleave"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatusleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddressleave">
                                                         <br />
                                                         <br />
@@ -533,8 +529,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephoneleave">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephoneleave">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -590,31 +586,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartmentdisciplinary"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartmentdisciplinary"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profilepositiondisciplinary"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profilepositiondisciplinary"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebdaydisciplinary"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebdaydisciplinary"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatusdisciplinary"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatusdisciplinary"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddressdisciplinary">
                                                         <br />
                                                         <br />
@@ -622,8 +618,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephonedisciplinary">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephonedisciplinary">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -670,31 +666,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartment"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartment"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profileposition2"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebday"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebday"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatus"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatus"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddress">
                                                         <br />
                                                         <br />
@@ -702,8 +698,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephone">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephone">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -759,31 +755,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartmenttraining"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartmenttraining"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profilepositiontraining"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profilepositiontraining"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebdaytraining"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebdaytraining"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatustraining"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatustraining"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddresstraining">
                                                         <br />
                                                         <br />
@@ -791,8 +787,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephonetraining">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephonetraining">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -849,31 +845,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartmenthealth"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartmenthealth"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profilepositionhealth"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profilepositionhealth"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebdayhealth"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebdayhealth"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatushealth"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatushealth"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddresshealth">
                                                         <br />
                                                         <br />
@@ -881,8 +877,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephonehealth">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephonehealth">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -936,31 +932,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartmentgov"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartmentgov"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profilepositiongov"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profilepositiongov"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebdaygov"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebdaygov"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatusgov"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatusgov"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddressgov">
                                                         <br />
                                                         <br />
@@ -968,8 +964,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephonegov">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephonegov">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -1012,31 +1008,31 @@
 
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="title">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">PERSONAL INFORMATION</li>
                                             <li>
-                                                <div class="field">Department:</div>
-                                                <div class="value" id="profiledepartment"></div>
+                                                <div class="field personal-title">Department:</div>
+                                                <div class="value work-subtitle" id="profiledepartment"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Position:</div>
-                                                <div class="value" id="profileposition2"></div>
+                                                <div class="field personal-title">Position:</div>
+                                                <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Skills:</div>
-                                                <div class="value">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
+                                                <div class="field personal-title">Skills:</div>
+                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
                                             </li>
                                             <li>
-                                                <div class="field">Birth of Date:</div>
-                                                <div class="value" id="profilebday"></div>
+                                                <div class="field personal-title">Birth of Date:</div>
+                                                <div class="value work-subtitle" id="profilebday"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Civil Status:</div>
-                                                <div class="value" id="profilecicilstatus"></div>
+                                                <div class="field personal-title">Civil Status:</div>
+                                                <div class="value work-subtitle" id="profilecicilstatus"></div>
                                             </li>
                                             <li>
-                                                <div class="field">Address:</div>
-                                                <div class="value">
+                                                <div class="field personal-title">Address:</div>
+                                                <div class="value work-subtitle">
                                                     <address class="m-b-0" id="profileaddress">
                                                         <br />
                                                         <br />
@@ -1044,8 +1040,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="field">Phone No.:</div>
-                                                <div class="value" id="profilephone">
+                                                <div class="field personal-title">Phone No.:</div>
+                                                <div class="value work-subtitle" id="profilephone">
                                                 </div>
                                             </li>
                                             <!-- <li class="title">FRIEND LIST (9)</li>
@@ -1077,8 +1073,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
