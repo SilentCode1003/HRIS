@@ -158,6 +158,9 @@ var roleacess = [
       {
         layout: "empbackgroundlayout",
       },
+      {
+        layout: "leavesettingslayout",
+      },
     ],
   },
   {

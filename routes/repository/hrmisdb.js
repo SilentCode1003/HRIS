@@ -251,6 +251,10 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_Employee_Background") {
         callback(null, model.Master_Employee_Background(results));
       }
+
+      if (table == "Master_Leaves") {
+        callback(null, model.Master_Leaves(results));
+      }
     });
   } catch (error) {}
 };
@@ -298,7 +302,8 @@ exports.InsertTable = (tablename, data, callback) => {
         l_leavetype,
         l_leavereason,
         l_leavestatus,
-        l_leaveapplieddate) VALUES ?`;
+        l_leaveapplieddate,
+        l_leaveduration) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
