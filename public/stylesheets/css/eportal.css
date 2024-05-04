@@ -29,7 +29,7 @@
 }
 
 .searchbar-eportal {
-  border: 2px solid #fcf0d7 !important;
+  border: 2px solid #fef8ea !important;
 }
 
 .searchbar-bg {
@@ -38,7 +38,7 @@
 
 .btn-search-eportal {
   background-color: #E41717 !important;
-  border: 2.5px solid #fcf0d7  !important;
+  border: 2.5px solid #fef8ea  !important;
   color: white !important;
 }
 
@@ -201,7 +201,6 @@
     margin-right: 2%;
   }
 
-
   .content-toggled {
     margin-left: 15px !important;
     margin-right: 15px !important;
@@ -248,7 +247,34 @@
     margin: auto !important;
   }
 
+  #map {
+    width: 100%;
+  }
+
+  .deduction-card {
+    margin: auto !important;
+  }
+
+  .row .g-4 {
+    margin: 0%;
+  }
+
+  .col-xl-8.col-lg-7 {
+    margin-left: 0 !important;
+  }
+  
+  .modal-body .row {
+    flex-direction: column;
+    margin-left: 0 !important;
+  }
+
+  .modal-body .col {
+    width: 100%;
+    margin-top: 15px !important;
+  }
+
 }
+
 
 #accordionSidebar {
   background-color: #7a1818 !important;
@@ -451,7 +477,6 @@
 
 #map {
     height: 518px;
-    width: 100%;
     z-index: 1;
     border: 2px solid rgb(210, 208, 208) !important;
     border-top-left-radius: 8px;
@@ -459,6 +484,7 @@
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     border-radius: 5px;
+    width: 100%;
 }
 
 #card-map {
@@ -495,7 +521,7 @@
 }
 
 .cbody-salary, .cbody-attendance, .cbody-cashad, .cbody-requestleave, .cbody-da {
-    background-color: #fcf0d7;
+    background-color: #fef8ea;
 }
 
 .btn-eportal-color {
@@ -504,7 +530,7 @@
     border-radius: 8px;
     height: 33px;
     background-color: #53c24e !important;
-    border: 2px solid #fcf0d7 !important;
+    border: 2px solid #fef8ea !important;
     color: white !important;
 }
 
@@ -522,7 +548,7 @@
   height: 40px;
   width: 40px;
   padding-left: 8px;
-  border: 2.5px solid #fcf0d7  !important;
+  border: 2.5px solid #fef8ea  !important;
   border-radius: 3px;
   background-color: #E41717 !important;
   color: white !important;
@@ -550,7 +576,7 @@
 
 #dp-header {
   background-color: #7a1818 !important;
-  border: 3px solid #fcf0d7 !important;
+  border: 3px solid #fef8ea !important;
 }
 
 .profile-box-db {
@@ -560,7 +586,7 @@
 }
 
 .profile-box-db:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   color: #7a1818 !important;
   font-weight: bold !important;
 }
@@ -583,7 +609,7 @@
 }
 
 .sidebar-item:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   font-weight: bold;
 }
 
@@ -615,28 +641,7 @@ color: black !important;
 }
 
 .modal-dialog #modal-body {
-  background-color: #fcf0d7 !important;
-}
-
-.btn-modal-close {
-  color: white !important;
-  background-color: red !important;
-  border: 2px solid #fcf0d7 !important;
-}
-.btn-modal-close:hover {
-  background-color: #ff3535 !important;
-  color: white !important;
-  font-weight: bold;
-}
-.btn-modal-save {
-  color: white !important;
-  background-color: green !important;
-   border: 2px solid #fcf0d7 !important;
-}
-.btn-modal-save:hover {
-  background-color: #00B25A !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #fef8ea !important;
 }
 
 .bx-x {
@@ -665,7 +670,7 @@ color: black !important;
 }
 
 .db-custom-cards1 {
-  /* background-color: #fcf0d7 !important; */
+  /* background-color: #fef8ea !important; */
   height: 550px;
   overflow: auto;
   width: 100%;
@@ -830,7 +835,7 @@ color: black !important;
   font-family: Arial;
   font-size: 15px;
   padding: 10% !important;
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
 }
 
 .btn-out-body {
@@ -842,26 +847,59 @@ color: black !important;
   border: 1px solid lightslategray !important;
 }
 
-.btn-logout-cancel {
-  background-color: rgb(6, 161, 244) !important;
+.btn-modal-close {
+  background-color: #E74646 !important;
   color: white !important;
-  border: 1px solid rgb(4, 95, 145) !important;
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
+}
+.btn-modal-close:hover {
+  background-color: #E72929 !important;
+  transform: scale(1.1);
+}
+.btn-modal-save {
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
+  color: white !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+  letter-spacing: 1px;
+}
+.btn-modal-save:hover {
+  background-color: #197214 !important;
+  transform: scale(1.1);
+}
+.btn-logout-cancel {
+  background-color: #FFB72B !important;
+  color: white !important;
+  border: 2px solid #fef8ea !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 1px black !important;
+  letter-spacing: 1px;
 }
 
 .btn-logout-cancel:hover {
-  background-color: rgb(34, 129, 169) !important;
+  background-color: #f68f00 !important;
   font-weight: bold;
+  transform: scale(1.1);
 }
 
 .btn-logout {
-  background-color: rgb(248, 65, 65) !important;
+  background-color: #FD5D5D !important;
   color: white !important;
-  border: 1px solid rgb(224, 35, 35) !important;
+  border: 2px solid #fef8ea !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 1px black !important;
 }
 
 .btn-logout:hover {
-  background-color: rgb(225, 59, 59) !important;
+  background-color: #ef3a3a !important;
   font-weight: bold;
+  transform: scale(1.1);
 }
 
 .logout-footer {
@@ -887,7 +925,7 @@ color: black !important;
 }
 
 .settings-acc:hover, .settings-pw:hover {
-  background: #fcf0d7 !important;
+  background: #fef8ea !important;
   color: #881a1a !important;
   font-weight: 600;
   font-family: Arial;
@@ -897,7 +935,7 @@ color: black !important;
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
 }
 .settings-body {
-  /* background-color: #fcf0d7 !important; */
+  /* background-color: #fef8ea !important; */
   background-image: url(/images/img/settings.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -975,7 +1013,7 @@ color: black !important;
 }
 
 .cell-rest {
-  background-color: rgb(228, 228, 228) !important;
+  background-color: #fef8ea !important;
 }
 
 .db-icon-payslip {
@@ -1153,27 +1191,34 @@ color: black !important;
 }
 
 .btn-notif-close {
-  background-color: blue !important;
+  background-color: #00A9FF !important;
   color: white !important;
-  font-family: 'Calibri';
+  /* border: 2px solid darkblue !important; */
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 
 .btn-notif-close:hover {
-  background-color: rgb(2, 2, 142) !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #0494dd !important;
+  transform: scale(1.1);
 }
 
 .btn-notif-delete {
-  background-color: red !important;
+  background-color: #E74646 !important;
   color: white !important;
-  font-family: 'Calibri';
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
 }
 
 .btn-notif-delete:hover {
-  background-color: rgb(136, 2, 2) !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #E72929 !important;
+  transform: scale(1.1);
 }
 
 /*Eportal Bday*/
@@ -1292,7 +1337,7 @@ a.leaflet-control-zoom-in, a.leaflet-control-zoom-out {
 }
 
 a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
-  background-color: #fcf0d7 !important;
+  background-color: #fef8ea !important;
   color: #7a1818 !important;
   font-weight: bold !important;
   font-size: 30px !important;
@@ -1345,6 +1390,172 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
   font-weight: bold;
   font-size: 10px;
   border: 1px solid rgb(43, 176, 174)!important;
+  letter-spacing: 1px;
+}
+
+
+.late-deduction-header {
+  background-color: #DFD9CA !important;
+  color: black !important;
+  text-shadow: 1px 1px 2px white !important;
+  font-family: 'Arial Black';
+}
+
+.late-deduction-body {
+  background-color: #fbf9f6 !important;
+  color: black !important;
+}
+
+.deduction-card {
+  background: linear-gradient(180deg, rgb(149, 51, 214), rgb(208, 146, 250))  !important;
+  border-radius: 8px;
+  height: 238px !important;
+  width: 250px !important;
+  margin-left: 30px;
+}
+
+.total-deduct {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 12px;
+  font-family: 'Arial Black';
+}
+
+.deduct-fee {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 30px;
+  font-family: 'Arial Black';
+  font-weight: bold;
+  padding: 12px;
+  padding-top: 50px;
+}
+
+.sub-cards {
+  margin-left: 135px !important;
+}
+
+.holiday-fee {
+  font-family: "Sevillana", cursive;
+  font-weight: bold;
+  font-style: normal;
+  color: green !important;
+  text-shadow: 1px 1px 2px yellow !important;
+}
+
+.earn-fee {
+  font-family: "Sevillana", cursive;
+  font-weight: bold;
+  font-style: normal;
+  color: red !important;
+  text-shadow: 1px 1px 2px yellow !important;
+}
+
+.sss-card {
+  background: linear-gradient(180deg, #1c9bf6, #90d0fd) !important;
+  border-radius: 8px;
+}
+
+.phil-card {
+  background: linear-gradient(180deg, #25be20, #7ffd7a) !important;
+  border-radius: 8px;
+}
+
+.pag-ibig-card {
+  background: linear-gradient(180deg, #ef6d02, #fda760) !important;
+  border-radius: 8px;
+}
+
+.tin-card {
+  background: linear-gradient(180deg, #da1515, #f87373) !important;
+  border-radius: 8px;
+}
+
+.health-card-card {
+  background: linear-gradient(180deg, #39AEA9, #8ef8f2) !important;
+  border-radius: 8px;
+}
+
+.tax-card {
+  background: linear-gradient(180deg, #FFC300, #f6da7f) !important;
+  border-radius: 8px;
+}
+
+.absent-card {
+  background: linear-gradient(180deg, #783908, #E29C68) !important;
+  border-radius: 8px;
+}
+
+.late-card {
+  background: linear-gradient(180deg, #E01171, #fb7cb7) !important;
+  border-radius: 8px;
+}
+
+.sss-total,
+.phil-total,
+.pag-ibig-total,
+.tin-total,
+.health-total,
+.tax-total,
+.absent-total,
+.late-total {
+  color: white !important;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 12px;
+  font-family: 'Arial Black';
+  letter-spacing: 1px;
+}
+
+.sss-subtotal,
+.phil-subtotal,
+.pag-ibig-subtotal,
+.tin-subtotal,
+.health-subtotal,
+.tax-subtotal,
+.absent-subtotal,
+.late-subtotal {
+  color: white !important;
+  font-family: 'Arial Black';
+  font-weight: bold;
+  padding: 12px;
+  font-size: 16px;
+  text-shadow: 1px 1px 2px black !important;
+  letter-spacing: 1px;
+}
+
+.pending-status{
+  color: darkgoldenrod !important;
+  background-color: rgb(248, 248, 169) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid rgb(146, 146, 14) !important;
+  letter-spacing: 1px;
+}
+
+.cancel-status {
+  color: darkred !important;
+  background-color: rgb(243, 186, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid red !important;
+  letter-spacing: 1px;
+}
+
+.approved-status {
+  color: darkgreen !important;
+  background-color: rgb(186, 243, 186) !important;
+  border-radius: 8px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid green !important;
   letter-spacing: 1px;
 }
 

@@ -630,7 +630,7 @@
                                         <th class="col-sm-1">ID</th>
                                         <th class="col-26">Name</th>
                                         <th>Department</th>
-                                        <th>Hire Dte</th>
+                                        <th>Hire Date</th>
                                         <th>Position</th>
                                     </tr>
                                 </thead>
@@ -1085,28 +1085,28 @@
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Pending Cash Advance Request</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header" id="modal-header">
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Pending Cash Advance Request</h5>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body">
                     <form>
                         <div class="row g-3">
                             <input type="hidden" class="form-control" id="pendingleaveid" name="pendingleaveid"
                                 disabled>
                             <div class="col">
                                 <label for="pendingcaname" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="pendingcaname" name="pendingcaname"
+                                <input type="text" class="form-control border-form-modal" id="pendingcaname" name="pendingcaname"
                                     disabled>
                             </div>
                             <div class="col">
                                 <label for="pendingcaemail" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="pendingcaemail" name="pendingcaemail"
+                                <input type="text" class="form-control border-form-modal" id="pendingcaemail" name="pendingcaemail"
                                     disabled>
                             </div>
                             <div class="col">
                                 <label for="pendingcagender" class="form-label">Gender</label>
-                                <input type="text" class="form-control" id="pendingcagender" name="pendingcagender"
+                                <input type="text" class="form-control border-form-modal" id="pendingcagender" name="pendingcagender"
                                     disabled>
                             </div>
                         </div>
@@ -1114,12 +1114,12 @@
                         <div class="row g-3">
                             <div class="col">
                                 <label for="pendingcaphone" class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" id="pendingcaphone" name="pendingcaphone"
+                                <input type="text" class="form-control border-form-modal" id="pendingcaphone" name="pendingcaphone"
                                     disabled>
                             </div>
                             <div class="col">
                                 <label for="pendingreqdate" class="form-label">Request Date</label>
-                                <input type="text" class="form-control" id="pendingreqdate" name="pendingreqdate"
+                                <input type="text" class="form-control border-form-modal" id="pendingreqdate" name="pendingreqdate"
                                     disabled>
                             </div>
                         </div>
@@ -1127,17 +1127,17 @@
                         <div class="row g-3">
                             <div class="col">
                                 <label for="pendingamount" class="form-label">Amount</label>
-                                <input type="text" class="form-control" id="pendingamount" name="pendingamount"
+                                <input type="text" class="form-control border-form-modal" id="pendingamount" name="pendingamount"
                                     disabled>
                             </div>
                             <div class="col">
                                 <label for="pendingpurpose" class="form-label">Purpose</label>
-                                <input type="text" class="form-control" id="pendingpurpose" name="pendingpurpose"
+                                <input type="text" class="form-control border-form-modal" id="pendingpurpose" name="pendingpurpose"
                                     value="6" disabled>
                             </div>
                             <div class="col">
                                 <label for="pendingcastatus" class="form-label">Action</label>
-                                <select class="form-select" id="pendingcastatus" name="pendingcastatus">
+                                <select class="form-select border-form-modal" id="pendingcastatus" name="pendingcastatus">
                                     <option value="Pending">Pending</option>
                                     <option value="Approved">Approved</option>
                                     <option value="Rejected">Rejected</option>
@@ -1145,15 +1145,15 @@
                             </div>
                             <div class="col-md-8">
                                 <label for="pendingcaremarks" class="form-label">Remarks</label>
-                                <input type="email" class="form-control" id="pendingcaremarks" name="pendingcaremarks">
+                                <input type="email" class="form-control border-form-modal" id="pendingcaremarks" name="pendingcaremarks">
                             </div>
                         </div>
                         <br>
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" id="modal-footer">
                     <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="pendingcasavebtn">Save</button>
+                    <button type="button" class="btn btn-modal-save" id="pendingcasavebtn">Save</button>
                 </div>
             </div>
         </div>

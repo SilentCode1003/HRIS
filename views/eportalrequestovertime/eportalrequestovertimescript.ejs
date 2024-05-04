@@ -71,6 +71,35 @@
                     { data: "overtimestatus" },
                     { data: "action" },
                 ],
+                createdRow: function (row, data, dataIndex) {
+                //miyaka
+                var overtimestatusCell = $(row).find("td:eq(9)");
+
+                var overtimestatusText = data.overtimestatus;
+
+                var overtimestatusClass = "";
+
+                switch (overtimestatusText.toLowerCase()) {
+                  case "approved":
+                    overtimestatusClass = "approved-status";
+                    break;
+                  case "cancelled":
+                  overtimestatusClass = "cancelled-status";
+                    break;
+                  case "pending":
+                  overtimestatusClass = "pending-status";
+                    break;
+                  default:
+                    overtimestatusClass = "";
+                }
+
+                overtimestatusCell.html(`<span class="${overtimestatusClass}">${overtimestatusText}</span>`);
+
+                $("td", row).each(function (index) {
+                  this.style.textAlign = "center";
+                  this.style.verticalAlign = "middle";
+                });
+              },
                 initComplete: function () {
                     console.log('Done');
                 },

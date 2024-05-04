@@ -77,13 +77,6 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          var clockinCell = $(row).find("td:eq(3)");
-          var clockoutCell = $(row).find("td:eq(4)");
-          var totalhoursCell = $(row).find("td:eq(7)");
-
-          clockinCell.wrapInner("<span class='clockin-text'></span>");
-          clockoutCell.wrapInner("<span class='clockout-text'></span>");
-          totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

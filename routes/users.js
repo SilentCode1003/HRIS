@@ -184,6 +184,8 @@ router.post("/getusers", (req, res) => {
     mysql.Select(sql, "Master_User", (err, result) => {
       if (err) console.error("Error: ", err);
 
+      console.log(result);
+
       res.json({
         msg: "success",
         data: result,

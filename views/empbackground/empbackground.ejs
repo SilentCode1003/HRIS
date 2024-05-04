@@ -16,8 +16,9 @@
                     <tr>
                         <th class="col-sm-1">ID</th>
                         <th>Employee Name</th>
-                        <th>Employee Attainment</th>
+                        <th>Type</th>
                         <th>Tittle</th>
+                        <th>Employee Attainment</th>
                         <th>Status</th>
                         <th>Start</th>
                         <th>End</th>
@@ -30,85 +31,151 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
+
 <div class="modal fade" id="backgroundmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h3 class="modal-title fs-5" id="exampleModalLabel">Add Background</h3>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Background</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+          </div>
+          <div class="modal-body" id="modal-body">
+              <form>
                 <div class="row g-3">
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Employee Name</label>
-                        </div>
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="form-control border-form-modal" id="employeename" name="employeename" placeholder="Department Name">
+                      </select>
+                      <label for="floatingInput">Employee Name</label>
+                    </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row g-3 InitialEducationRow">
+                  <label for="floatingInput">Educational Attainment</label>
+                  <div class="col">
+                      <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="schoolname" name="schoolname" placeholder="schoolname">
+                      <label for="floatingInput">Name of School</label>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="col">
+                      <div class="form-floating">
+                      <select type="text" class="form-control border-form-modal" id="schoolattainment" name="schoolattainment" placeholder="schoolattainment">
+                          <option value="Primary Education">Primary Education</option>
+                          <option value="Junior High School">Junior High School</option>
+                          <option value="Senior High School">Senior High School</option>
+                          <option value="Vocational">Vocational</option>
+                          <option value="College Graduate">College Graduate</option>
+                          <option value="College Level">College Level</option>
+                          <option value="Masteral">Masteral Degree</option>
+                      </select>
+                      <label for="floatingInput">Attainment</label>
+                      </div>
+                  </div>
+              </div>
+              <br>
+              <div class="row g-3 InitialEducationRow2">
+                  <div class="col">
+                      <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="schoolachievements" name="schoolachievements" placeholder="schoolachievements">
+                      <label for="floatingInput">Achievements</label>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="schoolstart" name="schoolstart" placeholder="Start Year" min="1900" max="2100">
+                        <label for="schoolstart">Start Year</label>
                     </div>
                 </div>
                 <br>
-                <div class="row g-3">
-                    <label for="floatingInput">Educational Attainment</label>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Name of School</label>
-                        </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="schoolend" name="schoolend" placeholder="End Year" min="1900" max="2100">
+                        <label for="schoolend">End Year</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <select type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                            <option value="Primary Education">Primary Education</option>
-                            <option value="Junior High School">Junior High School</option>
-                            <option value="Senior High School">Senior High School</option>
-                            <option value="Vocational">Vocational</option>
-                            <option value="College Graduate">College Graduate</option>
-                            <option value="College Level">College Level</option>
-                            <option value="Masteral">Masteral Degree</option>
-                        </select>
-                        <label for="floatingInput">Attainment</label>
-                        </div>
+                </div>                
+              </div>
+              <br>
+              <div id="EducationContainer">
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <button type="button" class="btn btn-secondary" id="addeducationBtn">Add Education</button>
+                    <button type="button" class="btn btn-danger" id="removeEducationBtn">Remove Education</button>
+                    <button type="button" class="btn btn-danger" id="removeEducationBtnOne">Remove One Education</button>
+                </div>
+              </div>  
+              <div class="row g-3 InitialExperienceRow">
+                <label for="floatingInput">Work Experience</label>
+                <div class="col" >
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="companyname" name="companyname" placeholder="companyname">
+                    <label for="floatingInput">Name of Company</label>
                     </div>
                 </div>
                 <br>
-                <div class="row g-3">
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Employee Name</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Employee Name</label>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
-                        <label for="floatingInput">Employee Name</label>
-                        </div>
+                <div class="col" >
+                    <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="workattainment" name="workattainment" placeholder="workattainment">
+                        <option value="1st Career">1st Career</option>
+                        <option value="2nd Career">2nd Career</option>
+                        <option value="Last Career">Last Career</option>
+                    </select>
+                    <label for="floatingInput">Attainment</label>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="departmentsavebtn">Save</button>
-        </div>
+            </div>
+            <br>
+            <div class="row g-3 InitialExperienceRow2">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="worktittle" name="worktittle" placeholder="worktittle">
+                    <label for="floatingInput">Work Tittle</label>
+                    </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="month" class="form-control border-form-modal" id="startYear" name="startYear" placeholder="Start Year">
+                        <label for="startYear">Start Year</label>
+                    </div>
+                </div>
+                <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="month" class="form-control border-form-modal" id="endYear" name="endYear" placeholder="End Year">
+                        <label for="endYear">End Year</label>
+                    </div>
+                </div>                
+            </div>
+            <br>
+            <div id="workExperienceContainer">
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                  <button type="button" class="btn btn-secondary" id="addExperienceBtn">Add Work</button>
+                  <button type="button" class="btn btn-danger" id="removeExperienceField">Remove Work</button>
+                  <button type="button" class="btn btn-danger" id="removeOneExperienceField">Remove One Work</button>
+              </div>
+            </div>                        
+              </form>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="backgroundsavebtn">Save</button>
+          </div>
       </div>
-    </div>
   </div>
+</div>
 
   <!-- Edit Modal -->
-<div class="modal fade" id="editdepartmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="editbackground" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" >
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Department</h1>
@@ -116,38 +183,83 @@
         </div>
         <div class="modal-body" id="modal-body">
             <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="editdepartmentname" name="editdepartmentname" placeholder="Department Name" value="IT">
-                        <label for="floatingInput">Department Name</label>
-                        </div>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-control border-form-modal" id="editemployeename" name="employeename" placeholder="Department Name" disabled>
+                    </select>
+                    <label for="floatingInput">Employee Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-control border-form-modal" id="editbaxkgroundtype" name="editbaxkgroundtype" placeholder="Department Name"disabled>
+                      <option value="Work Background">Work Background</option>
+                      <option value="Educational Background">Educational Background</option>
+                    </select>
+                    <label for="floatingInput">Background Type</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="schoolnameorcompany" name="schoolnameorcompany" placeholder="schoolname">
+                    <label for="floatingInput">School/Company</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select border-form-modal" id="editdepartmenthead" name="editdepartmenthead" aria-label="Floating label select example">
-                              <option>Department Head</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department Head</label>
-                          </div>
+                </div>
+                <br>
+                <div class="col">
+                    <!-- <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="editschoolattainment" name="editschoolattainment" placeholder="schoolattainment">
+                        <option value="1st Career">1st Career</option>
+                        <option value="2nd Career">2nd Career</option>
+                        <option value="Last Career">Last Career</option>
+                        <option value="Primary Education">Primary Education</option>
+                        <option value="Junior High School">Junior High School</option>
+                        <option value="Senior High School">Senior High School</option>
+                        <option value="Vocational">Vocational</option>
+                        <option value="College Graduate">College Graduate</option>
+                        <option value="College Level">College Level</option>
+                        <option value="Masteral">Masteral Degree</option>
+                    </select>
+                    <label for="floatingInput">Attainment</label>
+                    </div> -->
+                    <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="editschoolattainment" name="editschoolattainment" placeholder="schoolachievements">
+                      <label for="floatingInput">Attainment</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select border-form-modal" id="editdepartmentstatus" name="editdepartmentstatus" aria-label="Floating label select example">
-                              <option>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department</label>
-                          </div>
+                </div>
+            </div>
+            <br>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editschoolachievements" name="editschoolachievements" placeholder="schoolachievements">
+                    <label for="floatingInput">Achievements/Status</label>
                     </div>
-                    <br>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="editschoolstart" name="editschoolstart" placeholder="Start Year" min="1900" max="2100">
+                      <label for="schoolstart">Start Year</label>
+                  </div>
+              </div>
+              <br>
+              <div class="col">
+                  <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="editschoolend" name="editschoolend" placeholder="End Year" min="1900" max="2100">
+                      <label for="schoolend">End Year</label>
+                  </div>
+              </div>                
+            </div>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
           <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="editdepartmentsavebtn">Save</button>
+          <button type="button" class="btn btn-modal-save" id="editbackgroundsavebtn">Save</button>
         </div>
       </div>
     </div>
