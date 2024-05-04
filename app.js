@@ -89,6 +89,7 @@ var teamleadapprovedleaveRouter = require('./routes/teamleadapprovedleave');
 var teamleadgeofenceRouter = require('./routes/teamleadgeofence');
 var shiftsettingsRouter = require('./routes/shiftsettings');
 var empbackgroundRouter = require('./routes/empbackground');
+var leavesettingsRouter = require('./routes/leavesettings');
 
 var app = express();
 
@@ -188,7 +189,7 @@ app.use('/teamleadapprovedleave' , teamleadapprovedleaveRouter);
 app.use('/teamleadgeofence', teamleadgeofenceRouter);
 app.use('/shiftsettings' , shiftsettingsRouter);
 app.use('/empbackground' , empbackgroundRouter);
-
+app.use('/leavesettings', leavesettingsRouter);
 
 
 // catch 404 and forward to error handler

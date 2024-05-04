@@ -946,6 +946,28 @@ exports.Master_Employee_Background = (data) => {
 };
 
 
+exports.Master_Leaves = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      leavesettingsid: key.ml_id,
+      employeeid: key.ml_employeeid,
+      tenure: key.ml_tenure,
+      leavetype: key.ml_leavetype,
+      yearleave: key.ml_year,
+      totalleave: key.ml_totalleavedays,
+      unusedleave: key.ml_unusedleavedays,
+      usedleave: key.ml_usedleavedays,
+      status: key.ml_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
 
 
 
