@@ -1,0 +1,19 @@
+<script>
+  $(document).ready(function () {
+    function populateYears() {
+        var startYear = 1900;
+        var endYear = new Date().getFullYear() + 10;
+
+        var selectYear = document.getElementById("yearleave");
+
+        for (var year = startYear; year <= endYear; year++) {
+            var option = document.createElement("option");
+            option.value = year;
+            option.text = year;
+            selectYear.appendChild(option);
+        }
+    }
+
+    populateYears();
+  });
+</script>
