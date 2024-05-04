@@ -933,9 +933,10 @@ exports.Master_Employee_Background = (data) => {
     dataResult.push({
       backgroundid: key.meb_id,
       employeeid: key.meb_employeeid,
+      type: key.meb_type,
       attainment: key.meb_attainment,
       tittle: key.meb_tittle,
-      status: key.meb_status,
+      backstatus: key.meb_status,
       start: key.meb_start,
       end: key.meb_end,
     });

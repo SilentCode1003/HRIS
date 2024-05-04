@@ -1,328 +1,641 @@
 <script>
-    let departmentid = "";
-  
-    $(document).ready(function () {
-      LoadTable();
+  let backgroundid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    //searchTable();
+    LoadList();
+    LoadListEdit();
+
+    let educationCount = 1;
+
+    $("#addeducationBtn").click(function () {
+      educationCount++;
+      addEducationField(educationCount);
+    });
+
+    $("#removeEducationBtn").click(function () {
+      removeLastEducationField();
+    });
+
+    $("#removeEducationBtnOne").click(function () {
+      removeOneEducationField();
+    });
+
+    function addEducationField(count) {
+      let newEducationField = `<div class="row g-3">
+      <label for="floatingInput" class="deletelabel">Educational Attainment ${educationCount}</label>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control border-form-modal" id="schoolname${educationCount}" name="schoolname${educationCount}" placeholder="schoolname">
+          <label for="floatingInput">Name of School</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <select type="text" class="form-control border-form-modal" id="schoolattainment${educationCount}" name="schoolattainment${educationCount}" placeholder="schoolattainment">
+            <option value="Primary Education">Primary Education</option>
+            <option value="Junior High School">Junior High School</option>
+            <option value="Senior High School">Senior High School</option>
+            <option value="Vocational">Vocational</option>
+            <option value="College Graduate">College Graduate</option>
+            <option value="College Level">College Level</option>
+            <option value="Masteral">Masteral Degree</option>
+          </select>
+          <label for="floatingInput">Attainment</label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row g-3">
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control border-form-modal" id="schoolachievements${educationCount}" name="schoolachievements${educationCount}" placeholder="schoolachievements">
+          <label for="floatingInput">Achievements</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <input type="number" class="form-control border-form-modal" id="schoolstart${educationCount}" name="schoolstart${educationCount}" placeholder="Start Year" min="1900" max="2100">
+          <label for="schoolstart">Start Year</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <input type="number" class="form-control border-form-modal" id="schoolend${educationCount}" name="schoolend${educationCount}" placeholder="End Year" min="1900" max="2100">
+          <label for="schoolend">End Year</label>
+        </div>
+      </div>                
+    </div>
+    <br>
+  `;
+      $("#EducationContainer").append(newEducationField);
+    }
+
+    function removeLastEducationField() {
+      let educationFieldToRemove = $(`#EducationContainer`);
+      let initialeducationFieldToRemove = $(`.InitialEducationRow`);
+      let initialeducationFieldToRemove2 = $(`.InitialEducationRow2`);
+      educationFieldToRemove.remove();
+      initialeducationFieldToRemove.remove();
+      initialeducationFieldToRemove2.remove();
+      educationCount--;
+    }
+
+    function removeOneEducationField() {
+      let educationFieldToRemove = $(`#EducationContainer`);
+      educationFieldToRemove.remove();
+      educationCount--;
+    }
+
+    let experienceCount = 1;
+
+    $("#addExperienceBtn").click(function () {
+      experienceCount++;
+      addExperienceField(experienceCount);
+    });
+
+    $("#removeExperienceField").click(function () {
+      removeAllExperienceField();
+    });
+
+    $("#removeOneExperienceField").click(function () {
+      removeOneExperienceField();
+    });
+
+    function addExperienceField(count) {
+      let newExperienceField = `
+        <div class="row g-3">
+      <label for="floatingInput">Work Experience ${experienceCount}</label>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control border-form-modal" id="companyname${experienceCount}" name="companyname${experienceCount}" placeholder="companyname">
+          <label for="floatingInput">Name of Company</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <select type="text" class="form-control border-form-modal" id="workattainment${experienceCount}" name="workattainment${experienceCount}" placeholder="workattainment">
+            <option value="1st Career">1st Career</option>
+            <option value="2nd Career">2nd Career</option>
+            <option value="Last Career">Last Career</option>
+          </select>
+          <label for="floatingInput">Attainment</label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row g-3">
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control border-form-modal" id="worktittle${experienceCount}" name="worktittle${experienceCount}" placeholder="worktittle">
+          <label for="floatingInput">Work Tittle</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <input type="month" class="form-control border-form-modal" id="startYear${experienceCount}" name="startYear${experienceCount}" placeholder="Start Year">
+          <label for="startYear">Start Year</label>
+        </div>
+      </div>
+      <br>
+      <div class="col">
+        <div class="form-floating">
+          <input type="month" class="form-control border-form-modal" id="endYear${experienceCount}" name="endYear${experienceCount}" placeholder="End Year">
+          <label for="endYear">End Year</label>
+        </div>
+      </div>                
+    </div>
+    <br>`;
+
+      $("#workExperienceContainer").append(newExperienceField);
+    }
+
+    function removeAllExperienceField() {
+      let allexperienceremove = $(`#workExperienceContainer`);
+      let InitialExperienceRow = $(`.InitialExperienceRow`);
+      let InitialExperienceRow2 = $(`.InitialExperienceRow2`);
+      allexperienceremove.remove();
+      InitialExperienceRow.remove();
+      InitialExperienceRow2.remove();
+      experienceCount--;
+    }
+
+    function removeOneExperienceField() {
+      let allexperienceremove = $(`#workExperienceContainer`);
+      allexperienceremove.remove();
+      experienceCount--;
+    }
+
+    $(document).on("keyup", "#myInput", function () {
       searchTable();
-      LoadList();
-      LoadListEdit();
-  
-      $(document).on('keyup', '#myInput', function () {
-        searchTable();
-      });
-  
-      function LoadTable() {
-        $("#dataTableemployeeBackground").DataTable({
-          destroy: true,
-          processing: true,
-          serverSide: true,
-          paging: false,
-          searching: false,
-          info: false,
-          scrollY: 400,
-          scrollCollapse: true,
-          serverMethod: "GET",
-          ajax: {
-            url: "/empbackground/load",
-            dataSrc: (json) => {
-              var finalData = [];
-              var data = json.data;
-              $.each(data, (key, item) => {
-                var action = "";
-                var status = item.status;
-  
-                action = `
-                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdepartmentmodal"><i class="fas fa-fw fa-pen"></i></button>
+    });
+
+    function LoadTable() {
+      $("#dataTableemployeeBackground").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/empbackground/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editbackground"><i class="fas fa-fw fa-pen"></i></button>
                  `;
-  
-                finalData.push({
-                    backgroundid: item.backgroundid,
-                    employeeid: item.employeeid,
-                    attainment: item.attainment,
-                    tittle: item.tittle,
-                    status: item.status,
-                    start: item.start,
-                    end: item.end,
-                    action: action,
-                });
+
+              finalData.push({
+                backgroundid: item.backgroundid,
+                employeeid: item.employeeid,
+                type: item.type,
+                attainment: item.attainment,
+                tittle: item.tittle,
+                backstatus: item.backstatus,
+                start: item.start,
+                end: item.end,
+                action: action,
               });
-  
-              return finalData;
-            },
-          },
-          columnDefs: [
-            {
-              targets: 1,
-              className: "td-indent",
-            },
-          ],
-          columns: [
-            { data: "backgroundid" },
-            { data: "employeeid" },
-            { data: "attainment" },
-            { data: "tittle" },
-            { data: "status" },
-            { data: "start" },
-            { data: "end" },
-            { data: "action" },
-          ],
-          createdRow: function (row, data, dataIndex) {
-            //miyaka
-            var statusCell = $(row).find("td:eq(5)");
-   
-            var statusText = data.status;
-  
-            var statusClass = "";
-   
-            switch (statusText.toLowerCase()) {
-              case "active":
-                statusClass = "active-status";
-                break;
-              case "inactive":
-                statusClass = "inactive-status";
-                break;
-              default:
-                statusClass = ""; 
-            }
-            
-            statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
-  
-            $("td", row).each(function (index) {
-              this.style.textAlign = "center";
-              this.style.verticalAlign = "middle";
             });
+
+            return finalData;
           },
-  
-          initComplete: function () {
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
           },
-        });
-      }
-  
-  
-      $(document).on("click", "#departmentsavebtn", function () {
-        let departmentname = $("#departmentname").val();
-        let departmenthead = $("#departhead").val();
-        let createdate = $("#departcreatedate").val();
-        var message = "";
-  
-        if (departmentname == "") {
-          message += "TITTLE ";
-        }
-  
-        if (departmenthead == "") {
-          message += "TITTLE ";
-        }
-  
-  
-        if (createdate == "") {
-          message += "DESCRIPTION ";
-        }
-  
-        if (message !== "") {
-          swal("Validation Error", message, "error");
-        } else {
-          $.ajax({
-            type: "POST",
-            url: "/department/save",
-            data: {
-              departmentname: departmentname,
-              departmenthead: departmenthead,
-              createdate: createdate,
-            },
-            success: function (result) {
-              if (result.msg == "success") {
-                swal({
-                  title: "Saved Successfully",
-                  text: "You clicked the button!",
-                  icon: "success",
-                  button: "OK!",
-                })
-                  .then(results => {
-                    window.location.reload();
-                  })
-                LoadTable();
-              }
-              else {
-                swal({
-                  title: "Exist",
-                  text: "Data already exists!",
-                  icon: "warning",
-                  button: "OK!",
-                });
-              }
-  
-            },
-            error: function (err) {
-              swal("Data already exist!", "You clicked the button!", "warning");
-            },
+        ],
+        columns: [
+          { data: "backgroundid" },
+          { data: "employeeid" },
+          { data: "type" },
+          { data: "attainment" },
+          { data: "tittle" },
+          { data: "backstatus" },
+          { data: "start" },
+          { data: "end" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          // var statusCell = $(row).find("td:eq(5)");
+
+          // var statusText = data.status;
+
+          // var statusClass = "";
+
+          // switch (statusText.toLowerCase()) {
+          //   case "active":
+          //     statusClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     statusClass = "inactive-status";
+          //     break;
+          //   default:
+          //     statusClass = "";
+          // }
+
+          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
           });
-        }
-  
+        },
+
+        initComplete: function () {},
       });
-  
-      function LoadList() {
-        $.ajax({
-          type: "GET",
-          url: "/totalbagapuroapi",
-          success: function (result) {
-            var data = result.data;
-  
-            $.each(data, function (key, item) {
-              var options = new Option(item.firstname, item.firstname);
-              $(options).html(item.firstname);
-              $("#departhead").append(options);
-            });
-          },
-          error: function (result) {
-            alert("error: " + result.data);
-          },
-        });
+    }
+
+    $(document).on("click", "#backgroundsavebtn", function () {
+      let employeeName = $("#employeename").val();
+      let initialDataEducation = {
+        schoolName: $("#schoolname").val(),
+        schoolAttainment: $("#schoolattainment").val(),
+        schoolAchievements: $("#schoolachievements").val(),
+        schoolStartYear: $("#schoolstart").val(),
+        schoolEndYear: $("#schoolend").val(),
+      };
+
+      let initialDataExperience = {
+        companyName: $("#companyname").val(),
+        workAttainment: $("#workattainment").val(),
+        workTittle: $("#worktittle").val(),
+        workStartYear: $("#startYear").val(),
+        workEndYear: $("#endYear").val(),
+      };
+
+      let educationDataList = [];
+      for (let i = 1; i <= educationCount; i++) {
+        let schoolName = $(`#schoolname${i}`).val();
+        let schoolAttainment = $(`#schoolattainment${i}`).val();
+        let schoolAchievements = $(`#schoolachievements${i}`).val();
+        let schoolStartYear = $(`#schoolstart${i}`).val();
+        let schoolEndYear = $(`#schoolend${i}`).val();
+
+        let educationData = {
+          schoolName: schoolName,
+          schoolAttainment: schoolAttainment,
+          schoolAchievements: schoolAchievements,
+          schoolStartYear: schoolStartYear,
+          schoolEndYear: schoolEndYear,
+        };
+        educationDataList.push(educationData);
       }
-  
-      function LoadListEdit() {
-        $.ajax({
-          type: "GET",
-          url: "/totalbagapuroapi",
-          success: function (result) {
-            var data = result.data;
-  
-            $.each(data, function (key, item) {
-              var options = new Option(item.firstname, item.firstname);
-              $(options).html(item.firstname);
-              $("#editdepartmenthead").append(options);
-            });
-          },
-          error: function (result) {
-            alert("error: " + result.data);
-          },
-        });
+
+      let workExperienceList = [];
+      for (let i = 1; i <= experienceCount; i++) {
+        let companyName = $(`#companyname${i}`).val();
+        let workAttainment = $(`#workattainment${i}`).val();
+        let workTittle = $(`#worktittle${i}`).val();
+        let workStartYear = $(`#startYear${i}`).val();
+        let workEndYear = $(`#endYear${i}`).val();
+
+        let workExperienceData = {
+          companyName: companyName,
+          workAttainment: workAttainment,
+          workTittle: workTittle,
+          workStartYear: workStartYear,
+          workEndYear: workEndYear,
+        };
+        workExperienceList.push(workExperienceData);
       }
-  
-  
-      $("#dataTabledepartment tbody").on("click", "tr", function () {
-        var dataRow = [];
-        $(this)
-          .closest("tr")
-          .find("td")
-          .each(function () {
-            dataRow.push($(this).text());
-          });
-        departmentid = dataRow[0];
-      });
-  
-      $(document).on("click", "#editBtn", function () {
+
+      let filteredEducationData = educationDataList.filter(
+        (edu) => Object.keys(edu).length > 0
+      );
+      let filteredExperienceData = workExperienceList.filter(
+        (exp) => Object.keys(exp).length > 0
+      );
+      let educationDataJSON = JSON.stringify(filteredEducationData);
+      let experienceDataJSON = JSON.stringify(filteredExperienceData);
+      if (
+        filteredEducationData.length === 0 &&
+        filteredExperienceData.length === 0
+      ) {
+        swal({
+          title: "Are you sure?",
+          text: "You haven't added any education or work experience. Are you sure you want to continue?",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willContinue) => {
+          if (willContinue) {
+            sendAjaxRequest(
+              employeeName,
+              initialDataEducation,
+              initialDataExperience,
+              educationDataJSON,
+              experienceDataJSON
+            );
+          } else {
+            swal(
+              "Cancelled",
+              "You can add education or work experience before saving.",
+              "info"
+            );
+          }
+        });
+      } else {
+        sendAjaxRequest(
+          employeeName,
+          initialDataEducation,
+          initialDataExperience,
+          educationDataJSON,
+          experienceDataJSON
+        );
+      }
+    });
+
+    function sendAjaxRequest(
+      employeeName,
+      initialDataEducation,
+      initialDataExperience,
+      educationDataJSON,
+      experienceDataJSON
+    ) {
+      let message = validateInitialData();
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
         $.ajax({
           type: "POST",
-          url: "/department/getdepartment",
+          url: "/empbackground/save",
           data: {
-            departmentid: departmentid,
+            employeeName: employeeName,
+            initialDataEducation: JSON.stringify(initialDataEducation),
+            initialDataExperience: JSON.stringify(initialDataExperience),
+            educationData: educationDataJSON,
+            experienceData: experienceDataJSON,
           },
           success: function (result) {
             if (result.msg === "success") {
-              const existingData = result.data;
-  
-              $.each(existingData, (key, item) => {
-                $("#editdepartmentid").val(item.departmentid);
-                $("#editdepartmentname").val(item.departmentname);
-                $("#editdepartmenthead").val(item.departmenthead);
-                $("#editdepartmentstatus").val(item.status);
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
               });
             } else {
-              swal("Error fetching employee data", message, "error");
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
             }
           },
           error: function (err) {
-            swal("An error occurred while fetching employee data", message, "error");
+            swal("Error", "Failed to save data!", "error");
           },
         });
-      });
-  
-      $(document).on("click", "#editdepartmentsavebtn", function () {
-        let id = departmentid
-        let departmentname = $("#editdepartmentname").val();
-        let departmenthead = $("#editdepartmenthead").val();
-        let status = $("#editdepartmentstatus").val();
-  
-        var message = "";
-  
-        if (departmentname === "") {
-          message += "departmentname is required. ";
-        }
-  
-        if (departmenthead === "") {
-          message += "departmenthead is required. ";
-        }
-  
-        if (status === "") {
-          message += "status is required. ";
-        }
-  
-        if (message !== "") {
-          swal("Validation Error", message, "error");
-        } else {
-          $.ajax({
-            type: "POST",
-            url: "department/update",
-            data: {
-              departmentid: id,
-              departmentname: departmentname,
-              departmenthead: departmenthead,
-              status: status,
-            },
-            success: function (result) {
-              if (result.msg == "success") {
-                swal({
-                  title: "Update Successfully",
-                  text: "You clicked the button!",
-                  icon: "success",
-                  button: "OK!",
-                })
-                  .then(results => {
-                    window.location.reload();
-                  });
-                LoadTable();
-              } else if (result.msg == "exist") {
-                swal({
-                  title: "Exist",
-                  text: "Data already exists!",
-                  icon: "warning",
-                  button: "OK!",
-                });
-              } else {
-                swal("Data already exists!", "You clicked the button!", "warning");
-              }
-            },
-            error: function (err) {
-              swal("Error", "An error occurred while saving data.", "error");
-            },
-          });
-        }
-      });
-  
-      function searchTable() {
-        var input, filter, found, table, tr, td, i, j;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("dataTabledepartment");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td");
-          for (j = 0; j < td.length; j++) {
-            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-              found = true;
-            }
-          }
-          if (found) {
-            tr[i].style.display = "";
-            found = false;
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
       }
-  
-  
+    }
+
+    function validateInitialData() {
+      let errorMessage = "";
+      if ($("#schoolname").length && $("#schoolname").val().trim() === "") {
+        errorMessage += "Name of School is required.\n";
+      }
+      if (
+        $("#schoolattainment").length &&
+        $("#schoolattainment").val().trim() === ""
+      ) {
+        errorMessage += "Attainment is required.\n";
+      }
+      if (
+        $("#schoolachievements").length &&
+        $("#schoolachievements").val().trim() === ""
+      ) {
+        errorMessage += "Achievements is required.\n";
+      }
+      if ($("#schoolstart").length && $("#schoolstart").val().trim() === "") {
+        errorMessage += "Start Year is required.\n";
+      }
+      if ($("#schoolend").length && $("#schoolend").val().trim() === "") {
+        errorMessage += "End Year is required.\n";
+      }
+      if ($("#companyname").length && $("#companyname").val().trim() === "") {
+        errorMessage += "Name of Company is required.\n";
+      }
+      if (
+        $("#workattainment").length &&
+        $("#workattainment").val().trim() === ""
+      ) {
+        errorMessage += "Attainment is required.\n";
+      }
+      if ($("#worktittle").length && $("#worktittle").val().trim() === "") {
+        errorMessage += "Work Tittle is required.\n";
+      }
+      if ($("#startYear").length && $("#startYear").val().trim() === "") {
+        errorMessage += "Start Year is required.\n";
+      }
+      if ($("#endYear").length && $("#endYear").val().trim() === "") {
+        errorMessage += "End Year is required.\n";
+      }
+      return errorMessage;
+    }
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#employeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#editemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableemployeeBackground tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+        backgroundid = dataRow[0];
+        console.log(dataRow);
     });
-  
-  
-  </script>
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/empbackground/getbackground",
+        data: {
+          backgroundid: backgroundid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editemployeename").val(item.employeeid);
+              $("#editbaxkgroundtype").val(item.type);
+              $("#editschoolachievements").val(item.backstatus);
+              $("#schoolnameorcompany").val(item.tittle);
+              $("#editschoolattainment").val(item.attainment);
+              $("#editschoolstart").val(item.start);
+              $("#editschoolend").val(item.end);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
+    });
+
+    $(document).on("click", "#editbackgroundsavebtn", function () {
+      let id = backgroundid;
+      let backstatus = $("#editschoolachievements").val();
+      let tittle = $("#schoolnameorcompany").val();
+      let attainment = $("#editschoolattainment").val();
+      let start = $("#editschoolstart").val();
+      let end = $("#editschoolend").val();
+
+      var message = "";
+
+      if (backstatus === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (tittle === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (attainment === "") {
+        message += "status is required. ";
+      }
+
+      if (start === "") {
+        message += "status is required. ";
+      }
+
+      if (end === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/empbackground/update",
+          data: {
+            backgroundid: id,
+            backstatus: backstatus,
+            tittle: tittle,
+            attainment: attainment,
+            start: start,
+            end: end,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    // function searchTable() {
+    //   var input, filter, found, table, tr, td, i, j;
+    //   input = document.getElementById("myInput");
+    //   filter = input.value.toUpperCase();
+    //   table = document.getElementById("dataTabledepartment");
+    //   tr = table.getElementsByTagName("tr");
+    //   for (i = 0; i < tr.length; i++) {
+    //     td = tr[i].getElementsByTagName("td");
+    //     for (j = 0; j < td.length; j++) {
+    //       if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+    //         found = true;
+    //       }
+    //     }
+    //     if (found) {
+    //       tr[i].style.display = "";
+    //       found = false;
+    //     } else {
+    //       tr[i].style.display = "none";
+    //     }
+    //   }
+    // }
+  });
+</script>
