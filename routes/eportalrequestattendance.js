@@ -66,7 +66,7 @@ router.post("/submit", async (req, res) => {
     const inputDate = new Date(attendancedate);
     if (inputDate > Datenow) {
       return res.json({
-        message: "nodate",
+        msg: "nodate",
         data: "Date is in the future",
       });
     }
@@ -75,7 +75,7 @@ router.post("/submit", async (req, res) => {
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
 
     if (employeeResult.length === 0) {
-      return res.json({ message: "Invalid employee ID" });
+      return res.json({ msg: "Invalid employee ID" });
     }
 
     const data = [
@@ -85,15 +85,15 @@ router.post("/submit", async (req, res) => {
     mysql.InsertTable("attendance_request", data, (insertErr, insertResult) => {
       if (insertErr) {
         console.error("Error inserting leave record: ", insertErr);
-        res.json({ message: "insert_failed" });
+        res.json({ msg: "insert_failed" });
       } else {
         console.log(insertResult);
-        res.json({ message: "success" });
+        res.json({ msg: "success" });
       }
     });
   } catch (error) {
     console.error("Error in /submit route: ", error);
-    res.json({ message: "error" });
+    res.json({ msg: "error" });
   }
 });
 
@@ -118,6 +118,7 @@ router.post("/getreqCOA", (req, res) => {
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
 
+      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -166,7 +167,8 @@ router.post("/update", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          msg: error,
+          msg: 'error',
+          data: error,
         });
       });
   } catch (error) {
