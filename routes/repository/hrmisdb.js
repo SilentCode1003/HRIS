@@ -1004,6 +1004,25 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+  if (tablename == "master_employee_background") {
+    let sql = `INSERT INTO master_employee_background(
+       meb_employeeid,
+       meb_type,
+       meb_attainment,
+       meb_tittle,
+       meb_status,
+       meb_start,
+       meb_end) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
 };
 
 exports.Update = async (sql) => {

@@ -129,12 +129,6 @@
       });
     });
 
-    $("#salaryLink").on("click", function (e) {
-      e.preventDefault();
-
-      $("#staticBackdrop5").modal("show");
-    });
-
     $(document).on("click", "#logoutBtn", function () {
       $.ajax({
         type: "POST",
