@@ -4,28 +4,220 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
-    <h3>Leave History</h3>
+    <h3>My Leaves</h3>
+    <div class="col-md-6">
+      <div> 
+        <span class="fw-bold text-white">Leave Type :</span>
+        <small class="ms-3 payslipemp text-white" id="leavetypeheader"></small>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div>
+        <span class="fw-bold text-white">Leave Total Per Year : </span>
+        <small class="ms-3 payslipemp text-white" id="leaveperyearheader"></small>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div>
+        <span class="fw-bold text-white">Leave Credits Unused : </span>
+        <small class="ms-3 payslipemp text-white" id="Unusedleaveheader"></small>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div>
+        <span class="fw-bold text-white">Leave Credits Used : </span>
+        <small class="ms-3 payslipemp text-white" id="UsedleaveHeader"></small>
+      </div>
+    </div>
     <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
       <h6>Apply Leave</h6>
     </button>
   </div>
-  <div class="card-body cbody-requestleave">
-  <table class="table table-light table-striped" id="dataTableapplyleave">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Date Started</th>
-        <th scope="col">Date Finished</th>
-        <th scope="col">Leave Type</th>
-        <th scope="col">Reason</th>
-        <th scope="col">Status</th>
-        <th scope="col">Applied Date</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-  </table>
-        </div>
+</div>
+
+<div class="col">
+  <div class="card">
+      <div class="card-header">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="true"><b>PENDING</b>
+                  </button>
+                  <button class="nav-link requestleave-db" id="nav-leave-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-request" type="button" role="tab" aria-controls="nav-home"
+                      aria-selected="false">
+                      <b>APPROVED</b>
+                      <span id="loadleaveBadge"
+                          class="position-sticky translate-middle badge rounded-pill bg-danger">
+                      </span>
+                  </button>
+                  <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false">
+                      <b>REJECTED</b>
+                      <span id="loadcaBadge"
+                          class="position-sticky translate-middle badge rounded-pill bg-danger">
+                      </span>
+                  </button>
+                  <button class="nav-link requestot-db" id="nav-ot-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-requestovertime" type="button" role="tab"
+                      aria-controls="nav-profile" aria-selected="false">
+                      <b>CANCELED</b>
+                      <span id="loadotBadge"
+                          class="position-sticky translate-middle badge rounded-pill bg-danger">
+                      </span>
+                  </button>
+              </div>
+          </nav>
       </div>
+      <!-- Leave  Request -->
+      <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="row">
+                      <div class="col-xl-12 col-lg-12">
+                          <div class="card shadow mb-4">
+                              <div class="card-header ch-coop">
+                                <table class="table table-light table-striped" id="dataTableapplyleave">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Date Started</th>
+                                      <th scope="col">Date Finished</th>
+                                      <th scope="col">Leave Type</th>
+                                      <th scope="col">Reason</th>
+                                      <th scope="col">Applied Date</th>
+                                      <th scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-request" role="tabpanel"
+                  aria-labelledby="nav-profile-tab">
+                  <div class="card-body">
+                      <div class="table-responsive" id="table-responsive-id">
+                          <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                              <thead>
+                                  <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Date Started</th>
+                                    <th scope="col">Date Finished</th>
+                                    <th scope="col">Leave Type</th>
+                                    <th scope="col">Reason</th>
+                                    <th scope="col">Applied Date</th>
+                                  </tr>
+                              </thead>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-cashadvance" role="tabpanel"
+                  aria-labelledby="nav-profile-tab">
+                  <div class="card-body">
+                      <div class="table-responsive" id="table-responsive-id">
+                          <table class="table table-light table-bordered" id="dataTablecashrequest">
+                              <thead>
+                                  <tr>
+                                      <th class="font-tb">Image</th>
+                                      <th class="font-tb">Cash Advance ID</th>
+                                      <th class="font-tb">Employee</th>
+                                      <th class="font-tb">Date</th>
+                                      <th class="font-tb">Amount</th>
+                                      <th class="col-25 font-tb">Purpose</th>
+                                      <th class="font-tb">Status</th>
+                                      <th class="font-tb">Action</th>
+                                  </tr>
+                              </thead>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-requestovertime" role="tabpanel"
+                  aria-labelledby="nav-profile-tab">
+                  <div class="card-body">
+                      <div class="table-responsive" id="table-responsive-id">
+                          <table class="table table-light table-bordered" id="dataTableovertimerequest">
+                              <thead>
+                                  <tr>
+                                      <th class="col-25 font-tb">Image</th>
+                                      <th class="font-tb">Overtime ID</th>
+                                      <th class="col-25 font-tb">Employee</th>
+                                      <th class="font-tb">Date</th>
+                                      <th class="font-tb">Payroll Date</th>
+                                      <th class="font-tb">Clock In</th>
+                                      <th class="font-tb">Clock Out</th>
+                                      <th class="font-tb">Total Hours</th>
+                                      <th class="font-tb">Action</th>
+                                  </tr>
+                              </thead>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-reqattendance" role="tabpanel"
+                  aria-labelledby="nav-profile-tab">
+                  <div class="card-body">
+                      <div class="table-responsive" id="table-responsive-id">
+                          <table class="table table-light table-bordered" id="dataTableattendancerequest">
+                              <thead>
+                                  <tr>
+                                      <th class="col-25 font-tb">Image</th>
+                                      <th class="font-tb">ID</th>
+                                      <th class="col-25 font-tb">Employee</th>
+                                      <th class="col-25 font-tb">Attendance Date</th>
+                                      <th class="col-25 font-tb">Time In</th>
+                                      <th class="col-25 font-tb">Time Out</th>
+                                      <th class="font-tb">Total Hours</th>
+                                      <th class="font-tb">Action</th>
+                                  </tr>
+                              </thead>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-status" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="card-body">
+                      <div class="box shadow-sm rounded bg-white mb-3">
+                          <div class="box-title border-bottom p-3">
+                              <h6 class="m-0">Recent</h6>
+                          </div>
+                          <div class="box-body p-0">
+                            
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-employee" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="row">
+                      <!-- attendance chart -->
+                      <div class="col-xl-6 col-lg-5">
+                          <div class="chart-container">
+                              <center>
+                                  <h3 class="fw-normal">Job Status</h3>
+                              </center>
+                              <canvas id="jobstatusChart" style="width: 600px; height: 600px;"></canvas>
+                          </div>
+                      </div>
+                      <!-- employee chart -->
+                      <div class="col-xl-6 col-lg-5">
+                          <div class="chart-container">
+                              <center>
+                                  <h3 class="fw-normal">Department</h3>
+                              </center>
+                              <canvas id="departmentChart" style="width: 600px; height: 600px;"></canvas>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
         <!-- Modal -->
         <div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -41,13 +233,13 @@
                       <div class="col">
                         <label for="editgender" class="form-label">Leave Type</label>
                         <select class="form-select border-form-modal" id="leavetype" name="leavetype">
-                          <option  selected>Choose...</option>
-                          <option value="Service Incentive Leave">Service Incentive Leave</option>
+                          <option  selected disabled>Choose...</option>
+                          <!-- <option value="Service Incentive Leave">Service Incentive Leave</option>
                           <option value="Vacation Leave">Vacation Leave</option>
                           <option value="Sick Leave">Sick Leave</option>
                           <option value="Maternity Leave">Maternity Leave</option>
                           <option value="Paternity Leave">Paternity Leave</option>
-                          <option value="Solo Parent Leave">Solo Parent Leave</option>
+                          <option value="Solo Parent Leave">Solo Parent Leave</option> -->
                         </select>
                       </div>
                       <div class="col">
