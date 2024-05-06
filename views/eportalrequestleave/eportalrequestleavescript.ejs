@@ -1,11 +1,12 @@
 <script>
-  let leaveid = "";
+  let leavesettingsid = "";
+  let employeeid = "<%= employeeid %>";
   $(document).ready(function () {
     console.log("Initialize");
-    let employeeid = "<%= employeeid %>";
     LoadTable();
     LoadList();
-    LoadHeader();
+    LoadListHeader();
+    LoadLeaveTypes();
 
     function LoadTable() {
       $("#dataTableapplyleave").DataTable({
@@ -79,6 +80,7 @@
         success: function (json) {
           var finalData = [];
           var data = json.data;
+          console.log(finalData);
 
           material_list_tbl = document.getElementById("dataTableleaveApproved");
 
@@ -144,16 +146,18 @@
       });
     });
 
-    function LoadHeader() {
+    function LoadListHeader(leavesettingsid) {
       $.ajax({
-        type: "GET",
+        type: "POST",
         url: "eportalrequestleave/loadheader",
+        data: {
+          leavesettingsid: leavesettingsid,
+          employeeid: employeeid,
+        },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-
             $.each(existingData, (key, item) => {
-              $("#leavetypeheader").text(item.leavetype);
               $("#leaveperyearheader").text(item.totalleave);
               $("#Unusedleaveheader").text(item.unused);
               $("#UsedleaveHeader").text(item.used);
@@ -163,10 +167,34 @@
           }
         },
         error: function (err) {
-          swal("An Error Occured", msg, "error");
+          swal("An Error Occurred", msg, "error");
         },
       });
-    };
+    }
+
+    function LoadLeaveTypes() {
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadleavetype",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.leavetype, item.leavesettingsid);
+            $(options).html(item.leavetype);
+            $("#leavetypeheader").append(options);
+          });
+        },
+        error: function (result) {
+          alert("Error: " + result.data);
+        },
+      });
+    }
+
+    $("#leavetypeheader").change(function () {
+      var selectedLeavesettingsid = $(this).val();
+      LoadListHeader(selectedLeavesettingsid);
+    });
 
     function LoadList() {
       $.ajax({
@@ -176,7 +204,10 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.leavesettingsid, item.leavesettingsid);
+            var options = new Option(
+              item.leavesettingsid,
+              item.leavesettingsid
+            );
             $(options).html(item.leavetype);
             $("#leavetype").append(options);
           });

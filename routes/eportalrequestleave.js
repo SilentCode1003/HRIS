@@ -13,16 +13,18 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.get('/loadheader', (req,res) => {
+router.post('/loadheader', (req,res) => {
   try {
-    let employeeid = req.session.employeeid;
+    let leavesettingsid = req.body.leavesettingsid;
+    let employeeid = req.body.employeeid;
     let sql =  `select 
     ml_leavetype as leavetype,
     ml_unusedleavedays as unused,
     ml_totalleavedays as totalleave,
     ml_usedleavedays as used
     from master_leaves
-    where ml_employeeid = '${employeeid}'`;
+    where ml_employeeid = '${employeeid}' 
+    and ml_id = '${leavesettingsid}'`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {

@@ -1014,6 +1014,7 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_employee_background(
        meb_employeeid,
        meb_type,
+       meb_courseandstatus,
        meb_attainment,
        meb_tittle,
        meb_status,

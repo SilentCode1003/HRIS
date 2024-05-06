@@ -7,8 +7,10 @@
     <h3>My Leaves</h3>
     <div class="col-md-6">
       <div> 
-        <span class="fw-bold text-white">Leave Type :</span>
-        <small class="ms-3 payslipemp text-white" id="leavetypeheader"></small>
+        <label for="pendingleavename" class="form-label fw-bold text-white">Leave Type :</label>
+        <select class="form-select ms-3 payslipemp" id="leavetypeheader">
+          <option selected disabled>Select Leave Type First</option>  
+        </select>
       </div>
     </div>
     <div class="col-md-6">
@@ -219,131 +221,135 @@
   </div>
 </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header" id="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Leave</h1>
-                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+ <!-- Modal -->
+<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Leave</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+            <div class="row g-3">
+              <div class="col">
+                <label for="editgender" class="form-label">Leave Type</label>
+                <select class="form-select border-form-modal" id="leavetype" name="leavetype">
+                  <option  selected disabled>Choose...</option>
+                </select>
               </div>
-              <div class="modal-body" id="modal-body">
-                <form>
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="editgender" class="form-label">Leave Type</label>
-                        <select class="form-select border-form-modal" id="leavetype" name="leavetype">
-                          <option  selected disabled>Choose...</option>
-                          <!-- <option value="Service Incentive Leave">Service Incentive Leave</option>
-                          <option value="Vacation Leave">Vacation Leave</option>
-                          <option value="Sick Leave">Sick Leave</option>
-                          <option value="Maternity Leave">Maternity Leave</option>
-                          <option value="Paternity Leave">Paternity Leave</option>
-                          <option value="Solo Parent Leave">Solo Parent Leave</option> -->
-                        </select>
-                      </div>
-                      <div class="col">
-                        <label for="editemail" class="form-label">Start Leave Date</label>
-                        <input type="date" class="form-control border-form-modal" id="startldate" name="startldate">
-                      </div>
-                      <div class="col">
-                        <label for="editpassword" class="form-label">End Leave Date</label>
-                        <input type="date" class="form-control border-form-modal" id="endldate" name="endldate">
-                      </div>
-                      </div>
-                        <div class="row g-3">
-                          <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Reason:</label>
-                            <textarea class="form-control border-form-modal" id="leavereason" name="leavereason"></textarea>
-                          </div>
-                          </div>
-                </form>
+              <div class="col">
+                <label for="editemail" class="form-label">Start Leave Date</label>
+                <input type="date" class="form-control border-form-modal" id="startldate" name="startldate">
               </div>
-              <div class="modal-footer" id="modal-footer">
-                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-modal-save" id="pendingleavesavebtn">Save</button>
+              <div class="col">
+                <label for="editpassword" class="form-label">End Leave Date</label>
+                <input type="date" class="form-control border-form-modal" id="endldate" name="endldate">
               </div>
-            </div>
+              </div>
+              <div class="row g-3">
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Reason:</label>
+                  <textarea class="form-control border-form-modal" id="leavereason" name="leavereason"></textarea>
+                </div>
+              </div>
+              <div class="row g-3">
+                <div class="col">
+                  <label for="message-text" class="col-form-label">Attached File:</label>
+                  <input type="file" class="form-control border-form-modal" id="leavereason" name="leavereason">
+                </div>
+                <div class="col">
+                  <label for="message-text" class="col-form-label">Duration Days</label>
+                  <input type="text" class="form-control border-form-modal" id="leavereason" name="leavereason">
+                </div>
+              </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="pendingleavesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--canccelled modal-->
+<div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Pending Leave</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="row g-3">
+            <input type="hidden" class="form-control border-form-modal" id="pendingleaveid" name="pendingleaveid" disabled>
+          <div class="col">
+            <label for="pendingleavename" class="form-label">Full Name</label>
+            <input type="text" class="form-control border-form-modal" id="pendingleavename" name="pendingleavename" disabled>
           </div>
-        </div>
-        <!--canccelled modal-->
-        <div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-              <div class="modal-header" id="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Pending Leave</h1>
-                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-              </div>
-              <div class="modal-body" id="modal-body">
-                <form>
-                  <div class="row g-3">
-                    <input type="hidden" class="form-control border-form-modal" id="pendingleaveid" name="pendingleaveid" disabled>
-                  <div class="col">
-                    <label for="pendingleavename" class="form-label">Full Name</label>
-                    <input type="text" class="form-control border-form-modal" id="pendingleavename" name="pendingleavename" disabled>
-                  </div>
-                  <div class="col">
-                    <label for="pendingleaveemail" class="form-label">Email</label>
-                    <input type="text" class="form-control border-form-modal" id="pendingleaveemail" name="pendingleaveemail" disabled>
-                  </div>
-                  <div class="col">
-                    <label for="pendingleavegender" class="form-label">Gender</label>
-                    <input type="text" class="form-control border-form-modal" id="pendingleavegender" name="pendingleavegender" disabled>
-                  </div>
-                  </div>
-                  <br>
-                  <div class="row g-3">
-                    <div class="col">
-                      <label for="pendingleavephone" class="form-label">Phone Number</label>
-                      <input type="text" class="form-control border-form-modal" id="pendingleavephone" name="pendingleavephone" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="pendingleavetype" class="form-label">Leave Type</label>
-                      <input type="text" class="form-control border-form-modal" id="pendingleavetype" name="pendingleavetype" disabled>
-                    </div>
-                    <div class="col">
-                      <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
-                      <input type="text" class="form-control border-form-modal" id="pendingleaveapplydate" name="pendingleaveapplydate" disabled>
-                    </div>
-                    </div>
-                    <br>
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
-                        <input type="text" class="form-control border-form-modal" id="pendingleaveapplynodays" name="pendingleaveapplynodays" disabled>
-                      </div>
-                      <div class="col">
-                        <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
-                        <input type="text" class="form-control border-form-modal" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
-                      </div>
-                      <div class="col">
-                        <label for="pendingleavestart" class="form-label">Leave Start</label>
-                        <input type="text" class="form-control border-form-modal" id="pendingleavestart" name="pendingleavestart"  disabled>
-                      </div>
-                      <div class="col">
-                        <label for="pendingleaveend" class="form-label">Leave End</label>
-                        <input type="text" class="form-control border-form-modal" id="pendingleaveend" name="pendingleaveend" disabled>
-                      </div>
-                      </div>
-                      <div class="row g-3">
-                        <div class="mb-3">
-                          <label for="pendingleavereason" class="col-form-label">Reason:</label>
-                          <textarea class="form-control border-form-modal" id="pendingleavereason" name="pendingleavereason" disabled></textarea>
-                        </div>
-                        <div class="col">
-                          <label for="pendingleaveaction" class="form-label">Action</label>
-                          <select class="form-select border-form-modal" id="pendingleaveaction" name="pendingleaveaction">
-                            <option value="Cancel">Cancel</option>
-                          </select>
-                        </div>
-                        </div>
-                        <br>
-                </form>
-              </div>
-              <div class="modal-footer" id="modal-footer">
-                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-modal-save" id="pendingleavesavebtn">Save</button>
-              </div>
-            </div>
+          <div class="col">
+            <label for="pendingleaveemail" class="form-label">Email</label>
+            <input type="text" class="form-control border-form-modal" id="pendingleaveemail" name="pendingleaveemail" disabled>
           </div>
-        </div>
+          <div class="col">
+            <label for="pendingleavegender" class="form-label">Gender</label>
+            <input type="text" class="form-control border-form-modal" id="pendingleavegender" name="pendingleavegender" disabled>
+          </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <label for="pendingleavephone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control border-form-modal" id="pendingleavephone" name="pendingleavephone" disabled>
+            </div>
+            <div class="col">
+              <label for="pendingleavetype" class="form-label">Leave Type</label>
+              <input type="text" class="form-control border-form-modal" id="pendingleavetype" name="pendingleavetype" disabled>
+            </div>
+            <div class="col">
+              <label for="pendingleaveapplydate" class="form-label">Apply Date</label>
+              <input type="text" class="form-control border-form-modal" id="pendingleaveapplydate" name="pendingleaveapplydate" disabled>
+            </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="pendingleaveapplynodays" class="form-label">Applied No. of Days</label>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveapplynodays" name="pendingleaveapplynodays" disabled>
+              </div>
+              <div class="col">
+                <label for="pendingleaveavailabledays" class="form-label">Available No. of Days</label>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveavailabledays" name="pendingleaveavailabledays" value="6" disabled>
+              </div>
+              <div class="col">
+                <label for="pendingleavestart" class="form-label">Leave Start</label>
+                <input type="text" class="form-control border-form-modal" id="pendingleavestart" name="pendingleavestart"  disabled>
+              </div>
+              <div class="col">
+                <label for="pendingleaveend" class="form-label">Leave End</label>
+                <input type="text" class="form-control border-form-modal" id="pendingleaveend" name="pendingleaveend" disabled>
+              </div>
+              </div>
+              <div class="row g-3">
+                <div class="mb-3">
+                  <label for="pendingleavereason" class="col-form-label">Reason:</label>
+                  <textarea class="form-control border-form-modal" id="pendingleavereason" name="pendingleavereason" disabled></textarea>
+                </div>
+                <div class="col">
+                  <label for="pendingleaveaction" class="form-label">Action</label>
+                  <select class="form-select border-form-modal" id="pendingleaveaction" name="pendingleaveaction">
+                    <option value="Cancel">Cancel</option>
+                  </select>
+                </div>
+                </div>
+                <br>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="pendingleavesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
