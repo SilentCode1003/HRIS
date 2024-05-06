@@ -1,225 +1,335 @@
 <script>
-    let leaveid = '';
-    $(document).ready(function () {
-        console.log('Initialize');
-        let employeeid = "<%= employeeid %>";
-        LoadTable();
+  let leaveid = "";
+  $(document).ready(function () {
+    console.log("Initialize");
+    let employeeid = "<%= employeeid %>";
+    LoadTable();
+    LoadList();
+    LoadHeader();
 
-        function LoadTable() {
-            $("#dataTableapplyleave").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                type: "GET", 
-                ajax: {
-                    url: "/eportalrequestleave/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
+    function LoadTable() {
+      $("#dataTableapplyleave").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalrequestleave/loadpending",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
-                        console.log(data);
-                        $.each(data, (key, item) => {
-                            var action = "";
-                            var status = item.status;
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
 
-                            action = `
+              action = `
                       <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
-                            finalData.push({
-                                leaveid: item.leaveid,
-                                leavestartdate: item.leavestartdate,
-                                leaveenddate: item.leaveenddate,
-                                leavetype: item.leavetype,
-                                reason: item.reason,
-                                status: item.status,
-                                applieddate: item.applieddate,
-                                action: action,
-                            });
-                        });
-
-                        console.log(finalData);
-
-                        return finalData;
-                    },
-
-                },
-                columnDefs: [
-                    {
-                        targets: 1,
-                        className: "td-indent",
-                    },
-                ],
-                columns: [
-                    { data: "leaveid" },
-                    { data: "leavestartdate" },
-                    { data: "leaveenddate" },
-                    { data: "leavetype" },
-                    { data: "reason" },
-                    { data: "status" },
-                    { data: "applieddate" },
-                    { data: "action" },
-                ],
-                initComplete: function () {
-                    console.log('Done');
-                },
+              finalData.push({
+                leaveid: item.leaveid,
+                leavestartdate: item.leavestartdate,
+                leaveenddate: item.leaveenddate,
+                leavetype: item.leavetype,
+                reason: item.reason,
+                applieddate: item.applieddate,
+                action: action,
+              });
             });
-        }
 
-        $(document).on("click", "#pendingleavesavebtn", function () {
-            let startdate = $("#startldate").val();
-            let enddate = $("#endldate").val();
-            let leavetype = $("#leavetype").val();
-            let reason = $("#leavereason").val();
+            console.log(finalData);
 
-            var message = "";
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "leaveid" },
+          { data: "leavestartdate" },
+          { data: "leaveenddate" },
+          { data: "leavetype" },
+          { data: "reason" },
+          { data: "applieddate" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
 
-            if (startdate == "") {
-                message += "shiftname is required ";
-            }
+    $(document).on("click", "#nav-request", function () {
+      $("#dataTableleaveApproved").find("tr:gt(0)").remove();
 
-            if (enddate == "") {
-                message += "status is required ";
-            }
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadapproved",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
 
-            if (leavetype == "") {
-                message += "department is required ";
-            }
+          material_list_tbl = document.getElementById("dataTableleaveApproved");
 
-            if (reason == "") {
-                message += "createby is required ";
-            }
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var LEAVE_ID = row.insertCell(0);
+            var LEAVE_STARTDADTE = row.insertCell(1);
+            var LEAVE_ENDATE = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var REASON = row.insertCell(4);
+            var APPLIEDDATE = row.insertCell(5);
+            // var ACTION = row.insertCell(8);
 
-            if (message !== "") {
-                swal("Validation Error", message, "error");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/eportalrequestleave/submit",
-                    data: {
-                        employeeid: employeeid,
-                        startdate: startdate,
-                        enddate: enddate,
-                        leavetype: leavetype,
-                        reason: reason,
-                    },
-                    success: function (result) {
-                        if (result.msg == "success") {
-                          swal("Update Successfully","You clicked the button!","success",)
-                            .then(results => {
-                              window.location.reload();
-                            });
-                          LoadTable();
-                        } else if (result.msg == "exist") {
-                          swal("Exist","Data already exists!","warning",);
-                        }
-                    },
-                    error: function (err) {
-                      swal("Error", "An error occurred while saving data.", "error");
-                    },
-                });
-                
-            }
+            // var action = document.createElement("button");
+            // action.id = "editBtn";
+            // action.className = "btn text-primary view-btn";
+            // action.setAttribute("data-bs-toggle", "modal");
+            // action.setAttribute("data-bs-target", "#allleavemodal");
+            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            // action.onclick = function () {
+            //   var dataRow = [];
+            //   $(this)
+            //     .closest("tr")
+            //     .find("td")
+            //     .each(function () {
+            //       dataRow.push($(this).text());
+            //     });
+            //     leaveid = dataRow[1];
+            // };
 
-        });
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-        $("#dataTableapplyleave tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-            .closest("tr")
-            .find("td")
-            .each(function () {
-              dataRow.push($(this).text());
-            });
-          console.log(dataRow);
-          leaveid = dataRow[0];
+            // IMAGE.appendChild(imgElement);
+            LEAVE_ID.innerHTML = item.leaveid;
+            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
+            LEAVE_ENDATE.innerHTML = item.leaveenddate;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            REASON.innerHTML = item.reason;
+            APPLIEDDATE.innerHTML = item.applieddate;
+            // ACTION.appendChild(action);
+
+            $.each(
+              [
+                LEAVE_ID,
+                LEAVE_STARTDADTE,
+                LEAVE_ENDATE,
+                LEAVE_TYPE,
+                REASON,
+                APPLIEDDATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
           });
-        $(document).on("click", "#editBtn", function () {
-            $.ajax({
-              type: "POST",
-              url: "/allleave/getleavedashboard",
-              data: {
-                leaveid: leaveid,
-              },
-              success: function (result) {
-                if (result.msg === "success") {
-                  const existingData = result.data;
-          
-                  $.each(existingData, (key, item) => {
-                    $("#id").val(item.leaveid); 
-                    $("#pendingleavename").val(item.employeeid); 
-                    $("#pendingleaveemail").val(item.email);
-                    $("#pendingleavegender").val(item.gender);
-                    $("#pendingleavephone").val(item.phone);
-                    $("#pendingleavetype").val(item.leavetype);
-                    $("#pendingleaveapplydate").val(item.applieddate);
-                    $("#pendingleavestart").val(item.leavestartdate);
-                    $("#pendingleaveend").val(item.leaveenddate);
-                    $("#pendingleavereason").val(item.reason);
-                    $("#pendingleaveaction").val(item.status);
-                  });
-                } else {
-                  swal("Error fetching employee data", "success");
-                }
-              },
-              error: function (err) {
-                swal("An error occurred while fetching employee data", err, "error");
-              },
-            });
-          });
-          $(document).on("click", "#pendingleavesavebtn", function () {
-            console.log("Save button clicked");
-            let id = leaveid
-            let status = $("#pendingleaveaction").val();
-        
-            var message = "";
-                
-          
-            if (status === "") {
-              message += "status is required. ";
-            }
-
-         
-          
-          
-            if (message !== "") {
-              swal("Validation Error", message, "error");
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "/allleave/update",
-              data: { 
-                leaveid: id,
-                status: status,
-              },
-              success: function (result) {
-                if (result.msg == "success") {
-                  swal("Save Successfully","You clicked the button!","success",)
-                    .then(results => {
-                      window.location.reload();
-                    });
-                  LoadTable();
-                } 
-            },
-            error: function (err) {
-              swal("Error", "An error occurred while saving data.", "error");
-            },
-              error: function (err) {
-                swal("Error", "An error occurred while saving data.", "error");
-              },
-            });
-          }
-          });
-          
+        },
+        error: function (xhr, status, error) {},
+      });
     });
 
+    function LoadHeader() {
+      $.ajax({
+        type: "GET",
+        url: "eportalrequestleave/loadheader",
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
 
+            $.each(existingData, (key, item) => {
+              $("#leavetypeheader").text(item.leavetype);
+              $("#leaveperyearheader").text(item.totalleave);
+              $("#Unusedleaveheader").text(item.unused);
+              $("#UsedleaveHeader").text(item.used);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An Error Occured", msg, "error");
+        },
+      });
+    };
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadleavetype",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.leavesettingsid, item.leavesettingsid);
+            $(options).html(item.leavetype);
+            $("#leavetype").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#pendingleavesavebtn", function () {
+      let startdate = $("#startldate").val();
+      let enddate = $("#endldate").val();
+      let leavetype = $("#leavetype").val();
+      let reason = $("#leavereason").val();
+
+      var message = "";
+
+      if (startdate == "") {
+        message += "shiftname is required ";
+      }
+
+      if (enddate == "") {
+        message += "status is required ";
+      }
+
+      if (leavetype == "") {
+        message += "department is required ";
+      }
+
+      if (reason == "") {
+        message += "createby is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestleave/submit",
+          data: {
+            employeeid: employeeid,
+            startdate: startdate,
+            enddate: enddate,
+            leavetype: leavetype,
+            reason: reason,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $("#dataTableapplyleave tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      leaveid = dataRow[0];
+    });
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/allleave/getleavedashboard",
+        data: {
+          leaveid: leaveid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.leaveid);
+              $("#pendingleavename").val(item.employeeid);
+              $("#pendingleaveemail").val(item.email);
+              $("#pendingleavegender").val(item.gender);
+              $("#pendingleavephone").val(item.phone);
+              $("#pendingleavetype").val(item.leavetype);
+              $("#pendingleaveapplydate").val(item.applieddate);
+              $("#pendingleavestart").val(item.leavestartdate);
+              $("#pendingleaveend").val(item.leaveenddate);
+              $("#pendingleavereason").val(item.reason);
+              $("#pendingleaveaction").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#pendingleavesavebtn", function () {
+      console.log("Save button clicked");
+      let id = leaveid;
+      let status = $("#pendingleaveaction").val();
+
+      var message = "";
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/allleave/update",
+          data: {
+            leaveid: id,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
 </script>
-
-
-   
