@@ -1,17 +1,182 @@
 <script>
   $(document).ready(function () {
-    function populateYears() {
-        var startYear = 1900;
-        var endYear = new Date().getFullYear() + 10;
+    LoadTable();
+    searchTable();
 
-        var selectYear = document.getElementById("yearleave");
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
 
-        for (var year = startYear; year <= endYear; year++) {
-            var option = document.createElement("option");
-            option.value = year;
-            option.text = year;
-            selectYear.appendChild(option);
+    function LoadTable() {
+      $("#dataTableLeaveSettings").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/leavesettings/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+              finalData.push({
+                leavesettingsid: item.leavesettingsid,
+                employeeid: item.employeeid,
+                tenure: item.tenure,
+                leavetype: item.leavetype,
+                yearleave: item.yearleave,
+                totalleave: item.totalleave,
+                unusedleave: item.unusedleave,
+                usedleave: item.usedleave,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "leavesettingsid" },
+          { data: "employeeid" },
+          { data: "tenure" },
+          { data: "leavetype" },
+          { data: "yearleave" },
+          { data: "totalleave" },
+          { data: "unusedleave" },
+          { data: "usedleave" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var leavestartdateCell = $(row).find("td:eq(3)");
+          var leaveenddateCell = $(row).find("td:eq(4)");
+          var applieddateCell = $(row).find("td:eq(6)");
+
+          leavestartdateCell.wrapInner(
+            "<span class='leavestartdate-text'></span>"
+          );
+          leaveenddateCell.wrapInner("<span class='leaveenddate-text'></span>");
+          applieddateCell.wrapInner("<span class='applieddate-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $(document).on("click", "#leavesavebtn", function () {
+      let totalleave = $("#numberofdays").val();
+      let yearleave = $("#yearleave").val();
+      let leavetype = $("#leavetype").val();
+
+      var message = "";
+
+      if (totalleave === "") {
+        message += "status is required. ";
+      }
+
+      if (yearleave === "") {
+        message += "status is required. ";
+      }
+
+      if (leavetype === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/setleave",
+          data: {
+            totalleave: totalleave,
+            yearleave: yearleave,
+            leavetype: leavetype,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableLeaveSettings");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
         }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function populateYears() {
+      var startYear = 1900;
+      var endYear = new Date().getFullYear() + 10;
+
+      var selectYear = document.getElementById("yearleave");
+
+      for (var year = startYear; year <= endYear; year++) {
+        var option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        selectYear.appendChild(option);
+      }
     }
 
     populateYears();

@@ -14,7 +14,18 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `SELECT * FROM master_leave`;
+    let sql = `SELECT
+    ml_id, 
+    concat(me_lastname,' ',me_firstname) as ml_employeeid,
+    ml_tenure,
+    ml_leavetype,
+    ml_year,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_status
+    FROM master_leaves
+    inner join master_employee on master_leaves.ml_employeeid = me_id`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
@@ -63,7 +74,6 @@ router.post("/setleave", (req, res) => {
                 data: err,
               });
             } else {
-              //console.log(result);
               res.json({
                 msg: "success",
                 data: result,

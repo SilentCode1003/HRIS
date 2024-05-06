@@ -13,14 +13,141 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+router.get('/loadheader', (req,res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql =  `select 
+    ml_leavetype as leavetype,
+    ml_unusedleavedays as unused,
+    ml_totalleavedays as totalleave,
+    ml_usedleavedays as used
+    from master_leaves
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/loadheaderforapp', (req,res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql =  `select 
+    ml_leavetype as leavetype,
+    ml_totalleavedays as totalleave,
+    ml_unusedleavedays as unused,
+    ml_usedleavedays as used,
+    (select 
+    count(l_leavestatus) as Pending
+    from leaves
+    where l_leavestatus = 'Pending') as Pending
+    from master_leaves
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql.mysqlQueryPromise(sql)
+    .then((result) => {
+      res.json({
+        msg:'success',
+        data: result,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        msg:'error',
+        data: error,
+      });
+    })
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+router.get('/loadpending' , (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `select 
+    l_leaveid,
+    l_leavestartdate,
+    l_leaveenddate,
+    ml_leavetype as l_leavetype,
+    l_leavereason,
+    l_leaveapplieddate
+    from leaves
+    left join master_employee on leaves.l_employeeid = me_id
+    inner join master_leaves on leaves.l_leavetype = ml_id
+    where l_leavestatus = 'Pending' AND l_employeeid = '${employeeid}'`;
+    
+    mysql.Select(sql, 'Leaves', (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      res.json({
+        msg: 'success', data: result
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.get('/loadapproved' , (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `select 
+    l_leaveid,
+    l_leavestartdate,
+    l_leaveenddate,
+    ml_leavetype as l_leavetype,
+    l_leavereason,
+    l_leaveapplieddate
+    from leaves
+    left join master_employee on leaves.l_employeeid = me_id
+    inner join master_leaves on leaves.l_leavetype = ml_id
+    where l_leavestatus = 'Approved' AND l_employeeid = '${employeeid}'`;
+    
+    mysql.Select(sql, 'Leaves', (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      res.json({
+        msg: 'success', data: result
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.post("/submit", async (req, res) => {
   try {
-    const employeeid = req.body.employeeid; 
+    const employeeid = req.body.employeeid;
     const { startdate, enddate, leavetype, reason } = req.body;
     const createdate = currentDate.format("YYYY-MM-DD");
-    const status = "Pending"; 
-    console.log(startdate, enddate, leavetype, reason, employeeid);
+    const status = "Pending";
+    const durationDays = Math.ceil(
+      (new Date(enddate) - new Date(startdate)) / (1000 * 60 * 60 * 24)
+    );
 
+    console.log(startdate, enddate, leavetype, reason, employeeid, durationDays);
 
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
@@ -30,7 +157,16 @@ router.post("/submit", async (req, res) => {
     }
 
     const data = [
-      [employeeid, startdate, enddate, leavetype, reason, status, createdate],
+      [
+        employeeid,
+        startdate,
+        enddate,
+        leavetype,
+        reason,
+        status,
+        createdate,
+        durationDays
+      ],
     ];
 
     mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
@@ -48,26 +184,27 @@ router.post("/submit", async (req, res) => {
   }
 });
 
-router.get("/load", (req, res) => {
-  try {
-    let employeeid = req.session.employeeid;
-    let sql = `SELECT * FROM leaves WHERE l_employeeid = '${employeeid}'`;
 
-    mysql.Select(sql, "Leaves", (err, result) => {
-      if (err) console.error("Error: ", err);
+// router.get("/load", (req, res) => {
+//   try {
+//     let employeeid = req.session.employeeid;
+//     let sql = `SELECT * FROM leaves WHERE l_employeeid = '${employeeid}'`;
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      error,
-    });
-  }
-});
+//     mysql.Select(sql, "Leaves", (err, result) => {
+//       if (err) console.error("Error: ", err);
+
+//       res.json({
+//         msg: "success",
+//         data: result,
+//       });
+//     });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       error,
+//     });
+//   }
+// });
 
 router.post("/getleave", (req, res) => {
   try {
@@ -146,4 +283,72 @@ router.post("/update", (req, res) => {
   }
 });
 
-module.exports = router;
+router.get("/loadleavetype", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
+    ml_id, 
+    concat(me_lastname,' ',me_firstname) as ml_employeeid,
+    ml_tenure,
+    ml_leavetype,
+    ml_year,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_status
+    FROM master_leaves
+    inner join master_employee on master_leaves.ml_employeeid = me_id
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+
+router.post("/loadleavetypeforapp", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT
+    ml_id, 
+    concat(me_lastname,' ',me_firstname) as ml_employeeid,
+    ml_tenure,
+    ml_leavetype,
+    ml_year,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_status
+    FROM master_leaves
+    inner join master_employee on master_leaves.ml_employeeid = me_id
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
