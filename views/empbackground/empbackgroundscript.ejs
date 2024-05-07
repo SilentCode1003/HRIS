@@ -118,13 +118,12 @@
     let currentIndex = 0;
 
     function addActionButtons(row, index, type) {
-      let editButton = $("<button>")
-        .addClass("btn btn-primary btn-sm")
-        .text("Edit");
+      // let editButton = $("<button>")
+      //   .addClass("btn btn-primary btn-sm")
+      //   .text("Edit");
       let deleteButton = $("<button>")
         .addClass("btn btn-danger btn-sm")
         .text("Delete");
-      editButton.click(function () {});
 
       deleteButton.click(function () {
         row.remove();
@@ -135,48 +134,49 @@
         }
       });
 
-      editButton.click(function () {
-        var index = $(this).closest("tr").index();
-        var rowData = {};
-        $(this)
-          .closest("tr")
-          .find("td")
-          .each(function (i) {
-            switch (i) {
-              case 0:
-                rowData.employeeName = $(this).text();
-                break;
-              case 2:
-                rowData.schoolName = $(this).text();
-                break;
-              case 3:
-                rowData.schoolAttainment = $(this).text();
-                break;
-              case 4:
-                rowData.schoolAchievements = $(this).text();
-                break;
-              case 5:
-                rowData.startYear = $(this).text();
-                break;
-              case 6:
-                rowData.endYear = $(this).text();
-                break;
-              default:
-                break;
-            }
-          });
+      // editButton.click(function () {
+      //   var index = $(this).closest("tr").index();
+      //   var rowData = {};
+      //   $(this)
+      //     .closest("tr")
+      //     .find("td")
+      //     .each(function (i) {
+      //       switch (i) {
+      //         case 0:
+      //           rowData.employeeName = $(this).text();
+      //           break;
+      //         case 2:
+      //           rowData.schoolName = $(this).text();
+      //           break;
+      //         case 3:
+      //           rowData.schoolAttainment = $(this).text();
+      //           break;
+      //         case 4:
+      //           rowData.schoolAchievements = $(this).text();
+      //           break;
+      //         case 5:
+      //           rowData.startYear = $(this).text();
+      //           break;
+      //         case 6:
+      //           rowData.endYear = $(this).text();
+      //           break;
+      //         default:
+      //           break;
+      //       }
+      //     });
 
-        $("#educationname").val(rowData.employeeName);
-        $("#schoolname").val(rowData.schoolName);
-        $("#schoolattainment").val(rowData.schoolAttainment);
-        $("#schoolachievements").val(rowData.schoolAchievements);
-        $("#schoolstart").val(rowData.startYear);
-        $("#schoolend").val(rowData.endYear);
-        $("#educationmodal").modal("show");
-      });
+      //   $("#educationname").val(rowData.employeeName);
+      //   $("#schoolname").val(rowData.schoolName);
+      //   $("#schoolattainment").val(rowData.schoolAttainment);
+      //   $("#schoolachievements").val(rowData.schoolAchievements);
+      //   $("#schoolstart").val(rowData.startYear);
+      //   $("#schoolend").val(rowData.endYear);
+      //   $("#educationmodal").modal("show");
+      // });
 
       row.prepend($("<td>").text(index + 1));
-      row.append($("<td>").append(editButton).append(deleteButton));
+      row.append($("<td>").append(deleteButton));
+      // row.append($("<td>").append(editButton).append(deleteButton));
     }
 
     function addRowToPreviewTable(data, type) {
