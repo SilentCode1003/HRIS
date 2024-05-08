@@ -1,11 +1,16 @@
 <script>
-  let leaveid = "";
+  let base64String = "";
+  let leavesettingsid = "";
+  let employeeid = "<%= employeeid %>";
+  let totalLeaveGlobal = 0;
+  let unusedLeaveGlobal = "";
+  let totalusedGlobal = 0;
   $(document).ready(function () {
     console.log("Initialize");
-    let employeeid = "<%= employeeid %>";
     LoadTable();
     LoadList();
-    LoadHeader();
+    LoadListHeader();
+    LoadLeaveTypes();
 
     function LoadTable() {
       $("#dataTableapplyleave").DataTable({
@@ -70,7 +75,8 @@
       });
     }
 
-    $(document).on("click", "#nav-request", function () {
+    $(document).on("click", "#nav-approved", function () {
+      console.log('Hit');
       $("#dataTableleaveApproved").find("tr:gt(0)").remove();
 
       $.ajax({
@@ -79,6 +85,7 @@
         success: function (json) {
           var finalData = [];
           var data = json.data;
+          console.log(finalData);
 
           material_list_tbl = document.getElementById("dataTableleaveApproved");
 
@@ -90,39 +97,13 @@
             var LEAVE_TYPE = row.insertCell(3);
             var REASON = row.insertCell(4);
             var APPLIEDDATE = row.insertCell(5);
-            // var ACTION = row.insertCell(8);
 
-            // var action = document.createElement("button");
-            // action.id = "editBtn";
-            // action.className = "btn text-primary view-btn";
-            // action.setAttribute("data-bs-toggle", "modal");
-            // action.setAttribute("data-bs-target", "#allleavemodal");
-            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
-            // action.onclick = function () {
-            //   var dataRow = [];
-            //   $(this)
-            //     .closest("tr")
-            //     .find("td")
-            //     .each(function () {
-            //       dataRow.push($(this).text());
-            //     });
-            //     leaveid = dataRow[1];
-            // };
-
-            // var imgElement = document.createElement("img");
-            // imgElement.src = "data:image/jpg;base64," + item.image;
-            // imgElement.alt = "Profile Image";
-            // imgElement.style.width = "70px";
-            // imgElement.style.height = "70px";
-
-            // IMAGE.appendChild(imgElement);
             LEAVE_ID.innerHTML = item.leaveid;
             LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
             LEAVE_ENDATE.innerHTML = item.leaveenddate;
             LEAVE_TYPE.innerHTML = item.leavetype;
             REASON.innerHTML = item.reason;
             APPLIEDDATE.innerHTML = item.applieddate;
-            // ACTION.appendChild(action);
 
             $.each(
               [
@@ -144,29 +125,58 @@
       });
     });
 
-    function LoadHeader() {
+    function LoadListHeader(leavesettingsid) {
       $.ajax({
-        type: "GET",
+        type: "POST",
         url: "eportalrequestleave/loadheader",
+        data: {
+          leavesettingsid: leavesettingsid,
+          employeeid: employeeid,
+        },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-
             $.each(existingData, (key, item) => {
-              $("#leavetypeheader").text(item.leavetype);
               $("#leaveperyearheader").text(item.totalleave);
               $("#Unusedleaveheader").text(item.unused);
               $("#UsedleaveHeader").text(item.used);
+              totalLeaveGlobal = parseFloat(item.totalleave);
+              unusedLeaveGlobal = parseFloat(item.unused);
+              totalusedGlobal = parseFloat(item.used);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
           }
         },
         error: function (err) {
-          swal("An Error Occured", msg, "error");
+          swal("An Error Occurred", msg, "error");
         },
       });
-    };
+    }
+
+    function LoadLeaveTypes() {
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadleavetype",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.leavetype, item.leavesettingsid);
+            $(options).html(item.leavetype);
+            $("#leavetypeheader").append(options);
+          });
+        },
+        error: function (result) {
+          alert("Error: " + result.data);
+        },
+      });
+    }
+
+    $("#leavetypeheader").change(function () {
+      var selectedLeavesettingsid = $(this).val();
+      LoadListHeader(selectedLeavesettingsid);
+    });
 
     function LoadList() {
       $.ajax({
@@ -175,40 +185,103 @@
         success: function (result) {
           var data = result.data;
 
+          //$("#leavetype").empty();
+
           $.each(data, function (key, item) {
-            var options = new Option(item.leavesettingsid, item.leavesettingsid);
+            var options = new Option(
+              item.leavesettingsid,
+              item.leavesettingsid
+            );
             $(options).html(item.leavetype);
             $("#leavetype").append(options);
           });
+          if (data.length > 0) {
+            var initialUnusedLeave = data[0].unusedleave;
+            $("#unusedleave").val(initialUnusedLeave);
+          }
         },
         error: function (result) {
-          alert("error: " + result.data);
+          alert("Error: " + result.data);
+        },
+      });
+      $("#leavetype").change(function () {
+        var selectedLeaveType = $(this).val();
+        updateUnusedLeave(selectedLeaveType);
+      });
+
+      $("#loadListBtn").click(function () {
+        LoadList();
+      });
+    }
+
+    function updateUnusedLeave(selectedLeaveType) {
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestleave/getunusedleave",
+        data: { leavetype: selectedLeaveType },
+        success: function (result) {
+          var data = result.data;
+          if (Array.isArray(data) && data.length > 0) {
+            unusedLeaveGlobal = data[0].unusedleave;
+            $("#unusedleave").val(unusedLeaveGlobal);
+
+            if (unusedLeaveGlobal !== "") {
+              console.log("Unused leave value:", unusedLeaveGlobal);
+            } else {
+              console.log("Unused leave value is not set.");
+            }
+          } else {
+            console.error("Error: No data or incorrect data format.");
+            alert("Error fetching total unused leave. Please try again.");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching total unused leave:", error);
+          alert("Error fetching total unused leave. Please try again.");
         },
       });
     }
+
+    console.log("unused", unusedLeaveGlobal);
+
+    $("#loadListBtn").click(function () {
+      LoadList();
+    });
 
     $(document).on("click", "#pendingleavesavebtn", function () {
       let startdate = $("#startldate").val();
       let enddate = $("#endldate").val();
       let leavetype = $("#leavetype").val();
       let reason = $("#leavereason").val();
+      let paidDays = $("#paiddays").val();
+      let image = base64String;
 
       var message = "";
 
       if (startdate == "") {
-        message += "shiftname is required ";
+        message += "Start Date is required ";
       }
 
       if (enddate == "") {
-        message += "status is required ";
+        message += "End Date is required ";
       }
 
       if (leavetype == "") {
-        message += "department is required ";
+        message += "Leave Type is required ";
       }
 
       if (reason == "") {
-        message += "createby is required ";
+        message += "Reason is required ";
+      }
+
+      if (paidDays == "") {
+        message += "Paid Days is required ";
+      } else if (paidDays <= 0) {
+        message += "Paid Days must be greater than 0 ";
+      }
+
+      if (image == "") {
+        message += "Image is required ";
       }
 
       if (message !== "") {
@@ -223,6 +296,8 @@
             enddate: enddate,
             leavetype: leavetype,
             reason: reason,
+            durationDays: paidDays,
+            image: image,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -230,7 +305,7 @@
                 "Update Successfully",
                 "You clicked the button!",
                 "success"
-              ).then((results) => {
+              ).then((result) => {
                 window.location.reload();
               });
               LoadTable();
@@ -243,6 +318,28 @@
           },
         });
       }
+    });
+
+    function calculateUnpaidDays(durationDays) {
+      let unusedDays = parseFloat(unusedLeaveGlobal);
+      let unpaidDays = durationDays - unusedDays;
+      return unpaidDays < 0 ? 0 : unpaidDays;
+    }
+
+    $("#startldate, #endldate").change(function () {
+      let startLDate = new Date($("#startldate").val());
+      let endLDate = new Date($("#endldate").val());
+      let durationDays = Math.floor(
+        (endLDate - startLDate) / (1000 * 60 * 60 * 24)
+      );
+
+      let unpaidDays = calculateUnpaidDays(durationDays);
+      let paidDays =
+        durationDays < unusedLeaveGlobal ? durationDays : unusedLeaveGlobal;
+
+      $("#durationdays").val(durationDays);
+      $("#paiddays").val(paidDays);
+      $("#unpaiddays").val(unpaidDays);
     });
 
     $("#dataTableapplyleave tbody").on("click", "tr", function () {
@@ -332,4 +429,58 @@
       }
     });
   });
+
+  $(document).on("change", "#uploadimage", function (e) {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("preview");
+      preview.src = reader.result;
+    };
+    imageUploaded();
+  });
+
+  function imageUploaded() {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#editcoafile", function (e) {
+    const input = document.getElementById("editcoafile");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("editpreviewfile");
+      preview.src = reader.result;
+    };
+    EditImage();
+  });
+
+  function EditImage() {
+    const input = document.getElementById("editcoafile");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
 </script>
