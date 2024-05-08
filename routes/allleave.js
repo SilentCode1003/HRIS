@@ -35,10 +35,15 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/update", (req, res) => {
+  console.log('HIT');
   try {
     let leaveid = req.body.leaveid;
     let status = req.body.status;
     let comment = req.body.comment;
+
+    console.log(leaveid);
+    console.log(status);
+    console.log(comment);
 
     let sqlupdate = `UPDATE 
     leaves SET l_leavestatus = '${status}', 
@@ -49,7 +54,6 @@ router.post("/update", (req, res) => {
       .Update(sqlupdate)
       .then((result) => {
         console.log(sqlupdate);
-
         res.json({
           msg: "success",
           data: result,
@@ -57,7 +61,8 @@ router.post("/update", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          msg: error,
+          msg: 'error',
+          data: error,
         });
       });
   } catch (error) {
