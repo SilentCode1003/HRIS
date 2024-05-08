@@ -301,6 +301,7 @@ exports.InsertTable = (tablename, data, callback) => {
         l_leaveenddate,
         l_leavetype,
         l_leavereason,
+        l_image,
         l_leavestatus,
         l_leaveapplieddate,
         l_leaveduration) VALUES ?`;

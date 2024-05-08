@@ -142,12 +142,10 @@ router.get('/loadapproved' , (req, res) => {
 router.post("/submit", async (req, res) => {
   try {
     const employeeid = req.body.employeeid;
-    const { startdate, enddate, leavetype, reason } = req.body;
+    const { startdate, enddate, leavetype, reason, image } = req.body;
     const createdate = currentDate.format("YYYY-MM-DD");
     const status = "Pending";
-    const durationDays = Math.ceil(
-      (new Date(enddate) - new Date(startdate)) / (1000 * 60 * 60 * 24)
-    );
+    const durationDays = req.body.durationDays;
 
     console.log(startdate, enddate, leavetype, reason, employeeid, durationDays);
 
@@ -165,6 +163,7 @@ router.post("/submit", async (req, res) => {
         enddate,
         leavetype,
         reason,
+        image,
         status,
         createdate,
         durationDays
@@ -185,28 +184,6 @@ router.post("/submit", async (req, res) => {
     res.json({ msg: "error" });
   }
 });
-
-
-// router.get("/load", (req, res) => {
-//   try {
-//     let employeeid = req.session.employeeid;
-//     let sql = `SELECT * FROM leaves WHERE l_employeeid = '${employeeid}'`;
-
-//     mysql.Select(sql, "Leaves", (err, result) => {
-//       if (err) console.error("Error: ", err);
-
-//       res.json({
-//         msg: "success",
-//         data: result,
-//       });
-//     });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       error,
-//     });
-//   }
-// });
 
 router.post("/getleave", (req, res) => {
   try {
@@ -300,7 +277,33 @@ router.get("/loadleavetype", (req, res) => {
     ml_status
     FROM master_leaves
     inner join master_employee on master_leaves.ml_employeeid = me_id
-    where ml_employeeid = '${employeeid}'`;
+    where ml_employeeid = '${employeeid}'
+    and ml_year = YEAR(CURDATE())`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/getunusedleave", (req, res) => {
+  try {
+    let leavetype = req.body.leavetype;
+    let sql = `SELECT
+    ml_unusedleavedays
+    FROM master_leaves
+    WHERE ml_id = '${leavetype}'`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
