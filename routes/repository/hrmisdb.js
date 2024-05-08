@@ -301,6 +301,7 @@ exports.InsertTable = (tablename, data, callback) => {
         l_leaveenddate,
         l_leavetype,
         l_leavereason,
+        l_image,
         l_leavestatus,
         l_leaveapplieddate,
         l_leaveduration) VALUES ?`;
@@ -1014,6 +1015,7 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_employee_background(
        meb_employeeid,
        meb_type,
+       meb_courseandstatus,
        meb_attainment,
        meb_tittle,
        meb_status,

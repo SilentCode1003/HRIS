@@ -1439,7 +1439,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "http://localhost:3005/getleave",
+        url: "/getleave",
         data: {
           leaveid: leaveid,
         },
