@@ -46,9 +46,17 @@
                       data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
                       aria-selected="true"><b>PENDING</b>
                   </button>
-                  <button class="nav-link geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
-                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                  <button class="nav-link geofence-db" id="approvedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
                       aria-selected="false"><b>APPROVED</b>
+                  </button>
+                  <button class="nav-link geofence-db" id="rejectedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>REJECTED</b>
+                  </button>
+                  <button class="nav-link geofence-db" id="cancelledtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>CANCELLED</b>
                   </button>
               </div>
           </nav>
@@ -76,26 +84,66 @@
                                 </table>
                               </div>
                           </div>
-                          <div class="card shadow mb-4">
-                            <div class="card-header ch-coop">
-                              <table class="table table-light table-striped" id="dataTableapplyleave">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Date Started</th>
-                                    <th scope="col">Date Finished</th>
-                                    <th scope="col">Leave Type</th>
-                                    <th scope="col">Reason</th>
-                                    <th scope="col">Applied Date</th>
-                                    <th scope="col">Action</th>
-                                  </tr>
-                                </thead>
-                              </table>
-                            </div>
-                        </div>
                       </div>
                   </div>
               </div>
+              <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
           </div>
       </div>
   </div>

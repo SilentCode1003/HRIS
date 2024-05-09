@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('05c2bd45dbfb666d785d7c9323ba3674', (err, encrypted) => {
+Decrypter('5b4a29a163bcc0598eaa263c49831349d0c4e308b242f6d39996a724eb79aa14', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -304,7 +304,9 @@ exports.InsertTable = (tablename, data, callback) => {
         l_image,
         l_leavestatus,
         l_leaveapplieddate,
-        l_leaveduration) VALUES ?`;
+        l_leaveduration,
+        l_leavepaiddays,
+        l_leaveunpaiddays) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -1021,6 +1023,26 @@ exports.InsertTable = (tablename, data, callback) => {
        meb_status,
        meb_start,
        meb_end) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_leaves") {
+    let sql = `INSERT INTO master_leaves(
+      ml_employeeid,
+      ml_tenure,
+      ml_leavetype,
+      ml_year,
+      ml_totalleavedays,
+      ml_unusedleavedays,
+      ml_usedleavedays,
+      ml_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

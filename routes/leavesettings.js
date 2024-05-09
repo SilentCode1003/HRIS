@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const e = require("express");
 var router = express.Router();
 
 /* GET home page. */
@@ -44,49 +45,170 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/setleave", (req, res) => {
-    try {
-      let totalleave = req.body.totalleave;
-      let yearleave = req.body.yearleave;
-      let leavetype = req.body.leavetype;
+router.post("/setleave", async (req, res) => {
+  try {
+    let totalleave = req.body.totalleave;
+    let yearleave = req.body.yearleave;
+    let leavetype = req.body.leavetype;
 
-      console.log(yearleave);
-      console.log(leavetype);
-  
-      let checkSql = `SELECT COUNT(*) AS count FROM master_leaves WHERE ml_year = '${yearleave}' AND ml_leavetype = '${leavetype}'`;
-  
-      mysql.Select(checkSql, "Master_Leaves", (err, result) => {
-        if (err) console.error('Error: ', err);
+    console.log(yearleave);
+    console.log(leavetype);
 
+    const checkQuery = `SELECT COUNT(*) AS count FROM master_leaves WHERE ml_year = '${yearleave}' AND ml_leavetype = '${leavetype}'`;
 
-        if (result.length != 1) {
+    const existingRecord = await mysql.mysqlQueryPromise(checkQuery);
+
+    if (existingRecord.length > 0 && existingRecord[0].count > 0) {
+      res.json({ msg: 'exist' });
+    } else {
+      let sql = `CALL hrmis.CreateLeave(${totalleave}, ${yearleave}, '${leavetype}')`;
+
+      mysql.StoredProcedure(sql, (err, result) => {
+        if (err) {
+          console.error("Error calling stored procedure: ", err);
           res.json({
-            msg: "exist"
+            msg: "error",
+            data: err,
           });
         } else {
-          let sql = `CALL hrmis.CreateLeave(${totalleave}, ${yearleave}, '${leavetype}')`;
-  
-          mysql.StoredProcedure(sql, (err, result) => {
-            if (err) {
-              console.error("Error calling stored procedure: ", err);
-              res.json({
-                msg: "error",
-                data: err,
-              });
-            } else {
-              res.json({
-                msg: "success",
-                data: result,
-              });
-            }
+          res.json({
+            msg: "success",
+            data: result,
           });
         }
       });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        data: error,
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+
+router.post("/setleaveperemployee", async (req, res) => {
+  try {
+    let totalleave = req.body.totalleave;
+    let yearleave = req.body.yearleave;
+    let leavetype = req.body.leavetype;
+    let employeeid = req.body.employeeid;
+
+    console.log(yearleave);
+    console.log(leavetype);
+
+    const checkQuery = `SELECT COUNT(*) AS count FROM master_leaves 
+    WHERE ml_year = '${yearleave}' 
+    AND ml_leavetype = '${leavetype}'
+    AND ml_employeeid = '${employeeid}'`;
+
+    const existingRecord = await mysql.mysqlQueryPromise(checkQuery);
+
+    if (existingRecord.length > 0 && existingRecord[0].count > 0) {
+      res.json({ msg: 'exist' });
+    } else {
+      let sql = `call hrmis.CreateLeavePerEmployee
+      (${totalleave}, ${yearleave}, '${leavetype}', '${employeeid}')`;
+
+      mysql.StoredProcedure(sql, (err, result) => {
+        if (err) {
+          console.error("Error calling stored procedure: ", err);
+          res.json({
+            msg: "error",
+            data: err,
+          });
+        } else {
+          res.json({
+            msg: "success",
+            data: result,
+          });
+        }
       });
     }
-  });
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.post("/getleavesettings", (req, res) => {
+  try {
+    let leavesettingsid = req.body.leavesettingsid;
+    let sql = `select * from master_leaves
+    where ml_id = '${leavesettingsid}'`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.post('/update', (req, res) => {
+  try {
+    let leavesettingsid = req.body.leavesettingsid;
+    let employeeid = req.body.employeeid;
+    let leavetype = req.body.leavetype;
+    let yearleave = req.body.yearleave;
+    let totalleave = req.body.totalleave;
+    let unusedleave = req.body.unusedleave;
+    let usedleave = req.body.usedleave;
+    
+    let sqlupdate = `UPDATE master_leaves SET   
+    ml_employeeid = '${employeeid}',
+    ml_leavetype  = '${leavetype}',
+    ml_year = '${yearleave}',
+    ml_totalleavedays = '${totalleave}',
+    ml_unusedleavedays = '${unusedleave}',
+    ml_usedleavedays = '${usedleave}'
+    WHERE ml_id ='${leavesettingsid}'`;
+
+    mysql.Update(sqlupdate)
+    .then((result) =>{
+      res.json({
+        msg: 'success',
+        data : result,
+      });
+    })
+    .catch((error) =>{
+      res.json({
+        msg:'error',
+        data: error,
+      })
+      
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error',
+      data: error,
+    })
+  }
+});
+
+
+
+
+
   
+
+
+
+
+

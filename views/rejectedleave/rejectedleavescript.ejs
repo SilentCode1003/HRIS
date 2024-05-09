@@ -25,12 +25,6 @@
             var data = json.data;
 
             $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
-
-              action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#dashboardleavemodal"><i class="fas fa-fw fa-pen"></i></button>
-                   `;
 
               finalData.push({
                 employeeid: item.employeeid,
@@ -59,7 +53,6 @@
           { data: "leaveenddate" },
           { data: "reason" },
           { data: "applieddate" },
-          { data: "action" },
         ],
         initComplete: function () {
         },
