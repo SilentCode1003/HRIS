@@ -26,13 +26,6 @@
             var data = json.data;
 
             $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
-
-              action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-                   `;
-
               finalData.push({
                 leaveid: item.leaveid,
                 employeeid: item.employeeid,
@@ -42,7 +35,6 @@
                 reason: item.reason,
                 status: item.status,
                 applieddate: item.applieddate,
-                action: action,
               });
             });
 
@@ -64,7 +56,6 @@
           { data: "reason" },
           { data: "status" },
           { data: "applieddate" },
-          { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
@@ -121,7 +112,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/allleave/getleavedashboard",
+        url: "/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -130,19 +121,25 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#id").val(item.leaveid);
-              $("#pendingleavename").val(item.employeeid);
-              $("#pendingleaveemail").val(item.email);
-              $("#pendingleavegender").val(item.gender);
-              $("#pendingleavephone").val(item.phone);
-              $("#pendingleavetype").val(item.leavetype);
-              $("#pendingleaveapplydate").val(item.applieddate);
-              $("#pendingleavestart").val(item.leavestartdate);
-              $("#pendingleaveend").val(item.leaveenddate);
-              $("#pendingleavereason").val(item.reason);
-              $("#pendingleaveaction").val(item.status);
-              $("#pendingleaveremarks").val(item.comment);
-
+              $("#pendingleaveid").val(item.leaveid);
+              $("#leaveemployeename").val(item.employee);
+              $("#leavetype").val(item.leavetype);
+              $("#leavestartdate").val(item.leavestartdate);
+              $("#leaveenddate").val(item.leaveenddate);
+              $("#leavereason").val(item.leavereason);
+              $("#leaveapplieddate").val(item.leaveapplieddate);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.leaveimage
+              );
+              $("#leavedays").val(item.totalleavedays);
+              $("#unusedleave").val(item.unusedleave);
+              $("#usedleave").val(item.usedleave);
+              $("#leaveyear").val(item.leaveyear);
+              $("#leavestatus").val(item.leavestatus);
+              $("#leaveduration").val(item.leaveduration);
+              $("#paiddays").val(item.leavepaiddays);
+              $("#unpaiddays").val(item.leaveunpaiddays);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -153,30 +150,77 @@
         },
       });
     });
-    $(document).on("click", "#pendingleavesavebtn", function () {
-      let id = leaveid
-      let status = $("#pendingleaveaction").val();
-      let comment = $("#pendingleaveremarks").val();
+
+    $(document).on(
+      "change",
+      "#leavestartdate, #leaveenddate, #paiddays",
+      function () {
+        let startDate = $("#leavestartdate").val();
+        let endDate = $("#leaveenddate").val();
+        let paidDays = parseFloat($("#paiddays").val());
+        let unusedLeave = parseFloat($("#unusedleave").val());
+        let duration = calculateLeaveDuration(startDate, endDate);
+
+        if (duration > unusedLeave) {
+          let unpaidDays = duration - unusedLeave;
+          $("#paiddays").val(unusedLeave);
+          $("#unpaiddays").val(unpaidDays);
+        } else {
+          $("#leaveduration").val(duration);
+          $("#paiddays").val(duration);
+          $("#unpaiddays").val(0);
+        }
+      }
+    );
+
+    function calculateLeaveDuration(startDate, endDate) {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      let difference = end - start;
+      let durationDays = difference / (1000 * 60 * 60 * 24);
+      return Math.round(durationDays);
+    }
+
+    $(document).on("click", "#leavesavebutton", function () {
+      let id = leaveid;
+      let status = $("#leavestatus").val();
+      let leavestartdate = $("#leavestartdate").val();
+      let leaveenddate = $("#leaveenddate").val();
+      let leaveduration = $("#leaveduration").val();
+      let leavepaidays = $("#paiddays").val();
+      let leaveunpaiddays = $("#unpaiddays").val();
+      let comment = $("#leavecomment").val();
+
 
       var message = "";
-
-
-      if (status === "") {
-        message += "status is required. ";
-      }
 
       if (status === "Pending") {
         message += "status is required. ";
       }
 
-      if (status === "Cancel") {
+      if (leavestartdate === "") {
+        message += "status is required. ";
+      }
+
+      if (leaveenddate === "") {
         message += "Youre not Allowed to Cancel The Employee Request";
+      }
+
+      if (leaveduration === "") {
+        message += "comment is required. ";
+      }
+
+      if (leavepaidays === "") {
+        message += "comment is required. ";
+      }
+
+      if (leaveunpaiddays === "") {
+        message += "comment is required. ";
       }
 
       if (comment === "") {
         message += "comment is required. ";
       }
-
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -187,37 +231,44 @@
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        })
-          .then((willApprove) => {
-            if (willApprove) {
-              $.ajax({
-                type: "POST", 
-                url: "/allleave/update",
-                data: {
-                  leaveid: id,
-                  status: status,
-                  comment: comment,
-                },
-                success: function (result) {
-                  if (result.msg == "success") {
-                    swal("Save Successfully", "You clicked the button!", "success",)
-                      .then(results => {
-                        window.location.reload();
-                      });
-                    LoadTable();
-                  }
-                },
-                error: function (err) {
-                  swal("Error", "An error occurred while saving data.", "error");
-                },
-                error: function (err) {
-                  swal("Error", "An error occurred while saving data.", "error");
-                },
-              });
-            } else {
-              swal("Action Canceled", "", "info");
-            }
-          });
+        }).then((willApprove) => {
+          if (willApprove) {
+            $.ajax({
+              type: "POST",
+              url: "/allleave/update",
+              data: {
+                leaveid: id,
+                status: status,
+                leavestartdate: leavestartdate,
+                leaveenddate: leaveenddate,
+                leaveduration: leaveduration,
+                leavepaidays: leavepaidays,
+                leaveunpaiddays: leaveunpaiddays,
+                comment: comment,
+              },
+              success: function (result) {
+                if (result.msg == "success") {
+                  swal(
+                    "Save Successfully",
+                    "You clicked the button!",
+                    "success"
+                  ).then((results) => {
+                    window.location.reload();
+                  });
+                  LoadTable();
+                }
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+            });
+          } else {
+            swal("Action Canceled", "", "info");
+          }
+        });
       }
     });
 

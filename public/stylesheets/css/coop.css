@@ -768,6 +768,13 @@ tr:hover {
 }
 
 /*Attendance*/
+
+#previewleave {
+  margin-top: 100px;
+  width: 250px;
+  height: 250px;
+}
+
 #previewold {
   margin-top: 100px;
   width: 250px;
@@ -1107,6 +1114,12 @@ tr:hover {
 
   .col-xl-2.col-lg-4 {
     margin-left: 0%;
+  }
+
+
+  #previewleave {
+    height: 150px;
+    width: 150px;
   }
 
   #previewold {
