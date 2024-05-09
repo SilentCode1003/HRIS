@@ -53,20 +53,29 @@ router.get("/load", (req, res) => {
 router.post("/getleave", (req, res) => {
   try {
     let leaveid = req.body.leaveid;
-    let sql = `select 
-    concat(me_firstname,' ',me_lastname) as employeeid,
-    me_email as email,
-    me_gender as gender,
-    me_phone as phone,
-    l_leavetype as leavetype,
-    l_leaveapplieddate as applieddate,
+    let sql = `SELECT DISTINCT
+    l_leaveid as leaveid,
+    l_employeeid as employee,
+    ml_leavetype as leavetype,
     l_leavestartdate as leavestartdate,
     l_leaveenddate as leaveenddate,
-    l_leavereason as reason,
-    l_leavestatus as status,
-    l_comment as comment
-    from leaves
-    right join master_employee on leaves.l_employeeid = me_id
+    l_leavereason as leavereason,
+    l_leaveapplieddate as leaveapplieddate,
+    l_image as leaveimage,
+    ml_totalleavedays as totalleavedays,
+    ml_unusedleavedays as unusedleave,
+    ml_usedleavedays as usedleave,
+    ml_year as leaveyear,
+    l_leavestatus as leavestatus,
+    l_leaveduration as leaveduration,
+    l_leavepaiddays as leavepaiddays,
+    l_leaveunpaiddays as leaveunpaiddays
+    FROM
+    leaves 
+    INNER JOIN
+    master_leaves  ON l_leavetype = ml_id
+    INNER JOIN
+    master_employee  ON l_employeeid = me_id
     where l_leaveid = '${leaveid}'`;
 
     mysql

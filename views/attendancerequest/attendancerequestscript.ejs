@@ -78,11 +78,11 @@
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var requeststatusCell = $(row).find("td:eq(8)");
-         
+
           var requeststatusText = data.requeststatus;
-         
+
           var requeststatusClass = "";
-          
+
           switch (requeststatusText.toLowerCase()) {
             case "pending":
               requeststatusClass = "pending-requeststatus";
@@ -90,21 +90,23 @@
             case "approved":
               requeststatusClass = "approved-requeststatus";
               break;
-              case "cancel":
+            case "cancel":
               requeststatusClass = "cancel-requeststatus";
               break;
             default:
-              requeststatusClass = ""; 
+              requeststatusClass = "";
           }
 
-          requeststatusCell.html(`<span class="${requeststatusClass}">${requeststatusText}</span>`);
+          requeststatusCell.html(
+            `<span class="${requeststatusClass}">${requeststatusText}</span>`
+          );
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () { },
+        initComplete: function () {},
       });
     }
 
@@ -119,7 +121,6 @@
       console.log(dataRow);
       requestid = dataRow[1];
     });
-
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
@@ -144,7 +145,7 @@
               $("#edittimeout").val(item.timeout);
               $("#coatotalhours").val(item.total);
               $("#coacreatedate").val(item.createdate);
-              $("#coarequeststatus").val(item.requeststatus);
+              $("#editcoastatus").val(item.requeststatus);
               $("#editcoareason").val(item.reason);
               $("#editpreviewfile").attr(
                 "src",
@@ -161,9 +162,79 @@
       });
     });
 
+    // $(document).on("click", "#editcOAsavebtn", function () {
+    //   console.log('hit');
+    //   let id = requestid;
+    //   let emp_id = $("#empid").val();
+    //   let attendancedate = $("#editattendancedate").val();
+    //   let timein = $("#edittimein").val();
+    //   let timeout = $("#edittimeout").val();
+    //   let requeststatus = $("#editcoastatus").val();
+
+    //   var message = "";
+
+    //   if (attendancedate == "") {
+    //     message += "Attendance date is required. ";
+    //   }
+
+    //   if (timein == "") {
+    //     message += "Time in is required. ";
+    //   }
+
+    //   if (timeout == "") {
+    //     message += "Time out is required. ";
+    //   }
+
+    //   if (requeststatus === "") {
+    //     message += "Status is required. ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Oops!!!", message, "error");
+    //   } else {
+    //     if (requeststatus === "Approved") {
+    //       $.ajax({
+    //         type: "POST",
+    //         url: "/attendancerequest/updateMasterAttendance",
+    //         data: {
+    //           emp_id: emp_id,
+    //           attendancedate: attendancedate,
+    //           timein: timein,
+    //           timeout: timeout,
+    //         },
+    //         success: function (masterResult) {
+    //           if (masterResult.msg == "success") {
+    //             $.ajax({
+    //               type: "POST",
+    //               url: "/attendancerequest/updateAttendanceRequest",
+    //               data: {
+    //                 requestid: requestid,
+    //               },
+    //               success: function (attendanceResult) {
+    //                 if (attendanceResult.msg == "success") {
+    //                   swal("Save Successfully", "You clicked the button!", "success")
+    //                     .then(results => {
+    //                       window.location.reload();
+    //                     });
+    //                   LoadTable();
+    //                 }
+    //               },
+    //               error: function (attendanceErr) {
+    //                 swal("Error", "An error occurred while updating attendance request.", "error");
+    //               },
+    //             });
+    //           }
+    //         },
+    //         error: function (masterErr) {
+    //           swal("Error", "An error occurred while updating master attendance.", "error");
+    //         },
+    //       });
+    //     }
+    //   }
+    // });
 
     $(document).on("click", "#editcOAsavebtn", function () {
-      console.log('hit');
+      console.log("hit");
       let id = requestid;
       let emp_id = $("#empid").val();
       let attendancedate = $("#editattendancedate").val();
@@ -212,21 +283,58 @@
                   },
                   success: function (attendanceResult) {
                     if (attendanceResult.msg == "success") {
-                      swal("Save Successfully", "You clicked the button!", "success")
-                        .then(results => {
-                          window.location.reload();
-                        });
+                      swal(
+                        "Save Successfully",
+                        "You clicked the button!",
+                        "success"
+                      ).then((results) => {
+                        window.location.reload();
+                      });
                       LoadTable();
                     }
                   },
                   error: function (attendanceErr) {
-                    swal("Error", "An error occurred while updating attendance request.", "error");
+                    swal(
+                      "Error",
+                      "An error occurred while updating attendance request.",
+                      "error"
+                    );
                   },
                 });
               }
             },
             error: function (masterErr) {
-              swal("Error", "An error occurred while updating master attendance.", "error");
+              swal(
+                "Error",
+                "An error occurred while updating master attendance.",
+                "error"
+              );
+            },
+          });
+        } else if (requeststatus === "Rejected") {
+          $.ajax({
+            type: "POST",
+            url: "/attendancerequest/updateAttendanceRequestRejected",
+            data: {
+              requestid: requestid,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Status Updated",
+                  "The request status has been updated to Rejected.",
+                  "success"
+                ).then((results) => {
+                  window.location.reload();
+                });
+              }
+            },
+            error: function (err) {
+              swal(
+                "Error",
+                "An error occurred while updating request status to Rejected.",
+                "error"
+              );
             },
           });
         }
@@ -256,7 +364,6 @@
         base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
         imageBase64Stringsep = base64String;
-
       };
       reader.readAsDataURL(file);
     }
@@ -287,7 +394,6 @@
       }
     }
     //#endregion
-    
   });
   //#region FUNCTIONS
 </script>
