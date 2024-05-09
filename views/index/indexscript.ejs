@@ -7,6 +7,7 @@
     let bdaydiv = "";
     let approveot_id = "";
     let requestid = "";
+    LoadEditEmp();
     LoadList();
     //LoadTable();
     loadtotalCard();
@@ -143,17 +144,17 @@
             $("<td>", {
               text: item.jobstatus,
               "data-label": "Job Status",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -228,7 +229,7 @@
             $("<td>", {
               text: item.me_position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -298,12 +299,12 @@
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -368,17 +369,17 @@
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.reason,
               "data-label": "Reason",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.dateresigned,
@@ -388,7 +389,7 @@
             $("<td>", {
               text: item.createdate,
               "data-label": "Create Date",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -453,17 +454,17 @@
             $("<td>", {
               text: item.email,
               "data-label": "Email",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.tenure,
               "data-label": "Tenure",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -528,16 +529,18 @@
             $("<td>", {
               text: item.email,
               "data-label": "Email",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
-               text: item.position,
-               "data-label": "Position",
-                class: "custom-mobile-align" }),
-            $("<td>", { 
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
               text: item.tenure,
               "data-label": "Tenure",
-               class: "custom-mobile-align" })
+              class: "custom-mobile-align",
+            })
           );
 
           tableBody.append(tr);
@@ -601,17 +604,17 @@
             $("<td>", {
               text: item.email,
               "data-label": "Email",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.tenure,
               "data-label": "Tenure",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -671,21 +674,22 @@
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
-            $("<td>", { 
+            $("<td>", {
               text: item.hiredate,
               "data-label": "Hire Date",
-               class: "custom-mobile-align" }),
+              class: "custom-mobile-align",
+            }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.tenure,
               "data-label": "Tenure",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -745,22 +749,22 @@
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.hiredate,
               "data-label": "Hire Date",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.tenure,
               "data-label": "Tenure",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -820,17 +824,17 @@
             $("<td>", {
               text: item.department,
               "data-label": "Department",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.hiredate,
               "data-label": "Hire Date",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             }),
             $("<td>", {
               text: item.position,
               "data-label": "Position",
-              class: "custom-mobile-align"
+              class: "custom-mobile-align",
             })
           );
 
@@ -1344,7 +1348,6 @@
     //   });
     // }
 
-
     //Leave Section>>>>>>>>>>>>>>>>>>
     $(document).on("click", "#nav-leave-tab", function () {
       $("#dataTableleaverequest").find("tr:gt(0)").remove();
@@ -1384,7 +1387,7 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-                leaveid = dataRow[1];
+              leaveid = dataRow[1];
             };
 
             var imgElement = document.createElement("img");
@@ -1425,17 +1428,6 @@
       });
     });
 
-    // $("#dataTableleaverequest tbody").on("click", "tr", function () {
-    //   var dataRow = [];
-    //   $(this)
-    //     .closest("tr")
-    //     .find("td")
-    //     .each(function () {
-    //       dataRow.push($(this).text());
-    //     });
-    //   leaveid = dataRow[1];
-    // });
-
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
@@ -1449,17 +1441,24 @@
 
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
-              $("#pendingleavename").val(item.employeeid);
-              $("#pendingleaveemail").val(item.email);
-              $("#pendingleavegender").val(item.gender);
-              $("#pendingleavephone").val(item.phone);
-              $("#pendingleavetype").val(item.leavetype);
-              $("#pendingleaveapplydate").val(item.applieddate);
-              $("#pendingleavestart").val(item.leavestartdate);
-              $("#pendingleaveend").val(item.leaveenddate);
-              $("#pendingleavereason").val(item.reason);
-              $("#pendingleaveaction").val(item.status);
-              $("#pendingleaveremarks").val(item.comment);
+              $("#leaveemployeename").val(item.employee);
+              $("#leavetype").val(item.leavetype);
+              $("#leavestartdate").val(item.leavestartdate);
+              $("#leaveenddate").val(item.leaveenddate);
+              $("#leavereason").val(item.leavereason);
+              $("#leaveapplieddate").val(item.leaveapplieddate);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.leaveimage
+              );
+              $("#leavedays").val(item.totalleavedays);
+              $("#unusedleave").val(item.unusedleave);
+              $("#usedleave").val(item.usedleave);
+              $("#leaveyear").val(item.leaveyear);
+              $("#leavestatus").val(item.leavestatus);
+              $("#leaveduration").val(item.leaveduration);
+              $("#paiddays").val(item.leavepaiddays);
+              $("#unpaiddays").val(item.leaveunpaiddays);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -1470,23 +1469,72 @@
         },
       });
     });
-    $(document).on("click", "#pendingleavesavebtn", function () {
+
+    $(document).on(
+      "change",
+      "#leavestartdate, #leaveenddate, #paiddays",
+      function () {
+        let startDate = $("#leavestartdate").val();
+        let endDate = $("#leaveenddate").val();
+        let paidDays = parseFloat($("#paiddays").val());
+        let unusedLeave = parseFloat($("#unusedleave").val());
+        let duration = calculateLeaveDuration(startDate, endDate);
+
+        if (duration > unusedLeave) {
+          let unpaidDays = duration - unusedLeave;
+          $("#paiddays").val(unusedLeave);
+          $("#unpaiddays").val(unpaidDays);
+        } else {
+          $("#leaveduration").val(duration);
+          $("#paiddays").val(duration);
+          $("#unpaiddays").val(0);
+        }
+      }
+    );
+
+    function calculateLeaveDuration(startDate, endDate) {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      let difference = end - start;
+      let durationDays = difference / (1000 * 60 * 60 * 24) + 1;
+      return Math.round(durationDays);
+    }
+
+    $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
-      let status = $("#pendingleaveaction").val();
-      let comment = $("#pendingleaveremarks").val();
+      let status = $("#leavestatus").val();
+      let leavestartdate = $("#leavestartdate").val();
+      let leaveenddate = $("#leaveenddate").val();
+      let leaveduration = $("#leaveduration").val();
+      let leavepaidays = $("#paiddays").val();
+      let leaveunpaiddays = $("#unpaiddays").val();
+      let comment = $("#leavecomment").val();
+
 
       var message = "";
-
-      if (status === "") {
-        message += "status is required. ";
-      }
 
       if (status === "Pending") {
         message += "status is required. ";
       }
 
-      if (status === "Cancel") {
+      if (leavestartdate === "") {
+        message += "status is required. ";
+      }
+
+      if (leaveenddate === "") {
         message += "Youre not Allowed to Cancel The Employee Request";
+      }
+
+      if (leaveduration === "") {
+        message += "comment is required. ";
+      }
+
+      if (leavepaidays === "") {
+        message += "comment is required. ";
+      }
+
+      if (leaveunpaiddays === "") {
+        message += "comment is required. ";
       }
 
       if (comment === "") {
@@ -1510,6 +1558,11 @@
               data: {
                 leaveid: id,
                 status: status,
+                leavestartdate: leavestartdate,
+                leaveenddate: leaveenddate,
+                leaveduration: leaveduration,
+                leavepaidays: leavepaidays,
+                leaveunpaiddays: leaveunpaiddays,
                 comment: comment,
               },
               success: function (result) {
@@ -1665,7 +1718,6 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        // Ask for confirmation before proceeding
         swal({
           title: "Are you sure?",
           text: `Do you want to '${status}' this request?`,
@@ -1797,6 +1849,25 @@
         error: function (xhr, status, error) {},
       });
     });
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#leaveemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
 
     function LoadList() {
       $.ajax({
@@ -2116,6 +2187,32 @@
               );
             },
           });
+        } else if (requeststatus === "Rejected") {
+          $.ajax({
+            type: "POST",
+            url: "/attendancerequest/updateAttendanceRequestRejected",
+            data: {
+              requestid: requestid,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Status Updated",
+                  "The request status has been updated to Rejected.",
+                  "success"
+                ).then((results) => {
+                  window.location.reload();
+                });
+              }
+            },
+            error: function (err) {
+              swal(
+                "Error",
+                "An error occurred while updating request status to Rejected.",
+                "error"
+              );
+            },
+          });
         }
       }
     });
@@ -2159,7 +2256,7 @@
         },
       });
     });
-    
+
     //#endregion
 
     //#region Graph Functions
@@ -2174,6 +2271,19 @@
         preview.src = reader.result;
       };
       imageUploaded();
+    });
+
+    $(document).on("change", "#announcementimage", function (e) {
+      const input = document.getElementById("announcementimage");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("previewleave");
+        preview.src = reader.result;
+      };
+      imageUploadedleave();
     });
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -2790,7 +2900,7 @@
     //     timeout: 27000
     //   }
     // );
-    
+
     //#endregion
   });
 </script>

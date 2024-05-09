@@ -39,16 +39,34 @@ router.post("/update", (req, res) => {
   try {
     let leaveid = req.body.leaveid;
     let status = req.body.status;
+    let leavestartdate = req.body.leavestartdate;
+    let leaveenddate = req.body.leaveenddate;
+    let leaveduration = req.body.leaveduration;
+    let leavepaidays = req.body.leavepaidays;
+    let leaveunpaiddays = req.body.leaveunpaiddays;
     let comment = req.body.comment;
 
-    console.log(leaveid);
-    console.log(status);
-    console.log(comment);
+    console.log("Received Parameters:");
+    console.log("leaveid:", leaveid);
+    console.log("status:", status);
+    console.log("leavestartdate:", leavestartdate);
+    console.log("leaveenddate:", leaveenddate);
+    console.log("leaveduration:", leaveduration);
+    console.log("leavepaidays:", leavepaidays);
+    console.log("leaveunpaiddays:", leaveunpaiddays);
+    console.log("comment:", comment);
 
     let sqlupdate = `UPDATE 
-    leaves SET l_leavestatus = '${status}', 
-    l_comment = '${comment}'  
+    leaves SET l_leavestatus = '${status}',
+    l_leavestartdate = '${leavestartdate}',
+    l_leaveenddate = '${leaveenddate}',
+    l_leaveduration = '${leaveduration}',
+    l_leavepaiddays = '${leavepaidays}',
+    l_leaveunpaiddays = '${leaveunpaiddays}',
+    l_comment = '${comment}' 
     WHERE l_leaveid = '${leaveid}'`;
+
+    console.log(sqlupdate);
 
     mysql
       .Update(sqlupdate)

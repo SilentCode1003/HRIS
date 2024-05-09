@@ -75,8 +75,8 @@
       });
     }
 
-    $(document).on("click", "#nav-approved", function () {
-      console.log('Hit');
+    $(document).on("click", "#approvedtable", function () {
+      console.log("Hit");
       $("#dataTableleaveApproved").find("tr:gt(0)").remove();
 
       $.ajax({
@@ -88,6 +88,108 @@
           console.log(finalData);
 
           material_list_tbl = document.getElementById("dataTableleaveApproved");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var LEAVE_ID = row.insertCell(0);
+            var LEAVE_STARTDADTE = row.insertCell(1);
+            var LEAVE_ENDATE = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var REASON = row.insertCell(4);
+            var APPLIEDDATE = row.insertCell(5);
+
+            LEAVE_ID.innerHTML = item.leaveid;
+            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
+            LEAVE_ENDATE.innerHTML = item.leaveenddate;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            REASON.innerHTML = item.reason;
+            APPLIEDDATE.innerHTML = item.applieddate;
+
+            $.each(
+              [
+                LEAVE_ID,
+                LEAVE_STARTDADTE,
+                LEAVE_ENDATE,
+                LEAVE_TYPE,
+                REASON,
+                APPLIEDDATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#rejectedtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveRejected").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadrejected",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById("dataTableleaveRejected");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var LEAVE_ID = row.insertCell(0);
+            var LEAVE_STARTDADTE = row.insertCell(1);
+            var LEAVE_ENDATE = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var REASON = row.insertCell(4);
+            var APPLIEDDATE = row.insertCell(5);
+
+            LEAVE_ID.innerHTML = item.leaveid;
+            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
+            LEAVE_ENDATE.innerHTML = item.leaveenddate;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            REASON.innerHTML = item.reason;
+            APPLIEDDATE.innerHTML = item.applieddate;
+
+            $.each(
+              [
+                LEAVE_ID,
+                LEAVE_STARTDADTE,
+                LEAVE_ENDATE,
+                LEAVE_TYPE,
+                REASON,
+                APPLIEDDATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#cancelledtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveCancelled").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestleave/loadcancelled",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableleaveCancelled"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -253,7 +355,9 @@
       let enddate = $("#endldate").val();
       let leavetype = $("#leavetype").val();
       let reason = $("#leavereason").val();
+      let durationDays = $("#durationdays").val();
       let paidDays = $("#paiddays").val();
+      let unpaidDays = $("#unpaiddays").val();
       let image = base64String;
 
       var message = "";
@@ -268,6 +372,10 @@
 
       if (leavetype == "") {
         message += "Leave Type is required ";
+      }
+
+      if (durationDays == "") {
+        message += "Reason is required ";
       }
 
       if (reason == "") {
@@ -296,7 +404,9 @@
             enddate: enddate,
             leavetype: leavetype,
             reason: reason,
-            durationDays: paidDays,
+            durationDays: durationDays,
+            paidDays: paidDays,
+            unpaidDays: unpaidDays,
             image: image,
           },
           success: function (result) {
@@ -329,9 +439,9 @@
     $("#startldate, #endldate").change(function () {
       let startLDate = new Date($("#startldate").val());
       let endLDate = new Date($("#endldate").val());
-      let durationDays = Math.floor(
-        (endLDate - startLDate) / (1000 * 60 * 60 * 24)
-      );
+      
+      let durationDays =
+        Math.floor((endLDate - startLDate) / (1000 * 60 * 60 * 24)) + 1;
 
       let unpaidDays = calculateUnpaidDays(durationDays);
       let paidDays =

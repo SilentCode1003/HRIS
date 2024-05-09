@@ -158,13 +158,22 @@
                 window.location.reload();
               });
               LoadTable();
-            } else if (result.msg == "error") {
+            } else if (result.msg == "nodate") {
               swal({
-                title: "Exist",
-                text: "Data already exists!",
+                title: "Wrong Date",
+                text: "Your Request Date is in the Future",
                 icon: "warning",
                 button: "OK!",
               });
+              LoadTable();
+            } else if (result.msg == "error") {
+              swal({
+                title: "Error",
+                text: "Something Wrong",
+                icon: "Error",
+                button: "OK!",
+              });
+              LoadTable();
             }
           },
           error: function (err) {

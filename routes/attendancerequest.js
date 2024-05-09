@@ -209,3 +209,31 @@ router.post("/updateAttendanceRequest", (req, res) => {
     });
   }
 });
+
+
+router.post("/updateAttendanceRequestRejected", (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+
+    let sql = `UPDATE attendance_request SET ar_status = 'Rejected' WHERE ar_requestid = '${requestid}'`;
+
+    mysql.Update(sql)
+      .then((result) => {
+        res.json({
+          msg: 'success',
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: 'error',
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
