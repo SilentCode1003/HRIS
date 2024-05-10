@@ -5,58 +5,76 @@
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
     <h3>My Leaves</h3>
-    <div class="col-md-6">
-      <div> 
-        <label for="pendingleavename" class="form-label fw-bold text-white">Leave Type :</label>
-        <select class="form-select ms-3 payslipemp" id="leavetypeheader">
-          <option selected disabled>Select Leave Type First</option>  
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="input-group input-group-sm mb-3">
+          <label for="pendingleavename" class="form-label fw-bold text-white" style="margin-right: 5%;">Leave Type :</label>
+        <select class="form-select payslipemp" id="leavetypeheader">
+          <option selected disabled>Select Leave Type First</option> 
+           
         </select>
+        </div>
+      </div>
+      <div class="col" style="margin-left: 5%;">
+        <div>
+          <label class="fw-bold text-white">Leave Total Per Year : </label>
+          <small class="payslipemp text-white" id="leaveperyearheader"></small>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div>
-        <span class="fw-bold text-white">Leave Total Per Year : </span>
-        <small class="ms-3 payslipemp text-white" id="leaveperyearheader"></small>
+
+    <div class="row g-2">
+      <div class="col-md-6"></div>
+        <div class="col" style="margin-left: 5%;">
+          <div>
+            <span class="fw-bold text-white">Leave Credits Unused : </span>
+            <small class="ms-3 payslipemp text-white" id="Unusedleaveheader"></small>
+          </div>
+        </div>
+    </div>
+
+    <div class="row g-2">
+      <div class="col-md-6"></div>
+      <div class="col" style="margin-left: 5%;">
+        <div>
+          <span class="fw-bold text-white">Leave Credits Used : </span>
+          <small class="ms-3 payslipemp text-white" id="UsedleaveHeader"></small>
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div>
-        <span class="fw-bold text-white">Leave Credits Unused : </span>
-        <small class="ms-3 payslipemp text-white" id="Unusedleaveheader"></small>
+  
+    <div class="row g-2">
+      <div class="col"></div>
+      <div class="col-sm-2">
+        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
+          <h6>Apply Leave</h6>
+        </button>
       </div>
     </div>
-    <div class="col-md-6">
-      <div>
-        <span class="fw-bold text-white">Leave Credits Used : </span>
-        <small class="ms-3 payslipemp text-white" id="UsedleaveHeader"></small>
-      </div>
-    </div>
-    <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-      <h6>Apply Leave</h6>
-    </button>
+  
   </div>
 </div>
 
 <div class="col">
   <div class="card">
-      <div class="card-header">
+      <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button class="nav-link active geofence-db" id="nav-profile-tab" data-bs-toggle="tab"
+                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
                       data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="true"><b>PENDING</b>
+                      aria-selected="true"><b>Pending</b>
                   </button>
-                  <button class="nav-link geofence-db" id="approvedtable" data-bs-toggle="tab"
+                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
                       data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>APPROVED</b>
+                      aria-selected="false"><b>Approved</b>
                   </button>
-                  <button class="nav-link geofence-db" id="rejectedtable" data-bs-toggle="tab"
+                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
                       data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>REJECTED</b>
+                      aria-selected="false"><b>Rejected</b>
                   </button>
-                  <button class="nav-link geofence-db" id="cancelledtable" data-bs-toggle="tab"
+                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
                       data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>CANCELLED</b>
+                      aria-selected="false"><b>Cancelled</b>
                   </button>
               </div>
           </nav>
@@ -69,7 +87,7 @@
                       <div class="col-xl-12 col-lg-12">
                           <div class="card shadow mb-4">
                               <div class="card-header ch-coop">
-                                <table class="table table-light table-striped" id="dataTableapplyleave">
+                                <table class="table table-light table-bordered" id="dataTableapplyleave">
                                   <thead>
                                     <tr>
                                       <th scope="col">ID</th>
