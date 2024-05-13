@@ -4,14 +4,21 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
         <h3 class="title-card-table">Attendance</h3>
-      <button type="button" class="btn btn-add-attendance" data-bs-toggle="modal" data-bs-target="#">
-        <b>Export</b>
-      </button>
-
-      <button class="btn btn-attendance" data-bs-toggle="modal" data-bs-target="#openModalButton">
-        <b>Import</b>
-      </button>
-        <input id='myInput'  type='text' placeholder="  Search....">
+        <div class="row g-3">
+            <div class="col">
+                <input id='myInput'  type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button class="btn btn-attendance" data-bs-toggle="modal" data-bs-target="#openModalButton">
+                    <b>Import</b>
+                  </button>
+            </div>
+            <div class="col-sm-1 col-add">
+                <button type="button" class="btn btn-add-attendance" data-bs-toggle="modal" data-bs-target="#">
+                    <b>Export</b>
+                  </button>
+            </div>
+        </div> 
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -46,7 +53,7 @@
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
                 <div>
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
+                    <h1 class="modal-title" id="exampleModalToggleLabel">
                        Logs
                     </h1>
                 </div>
@@ -87,7 +94,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header" id="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">BATCH UPLOAD</h1>
+            <lord-icon src="https://cdn.lordicon.com/hwpjjkev.json" class="db-hrmis"></lord-icon>
+            <h1 class="modal-title" id="exampleModalLabel">BATCH UPLOAD</h1>
             <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body modal-batch-body" id="modal-body">
@@ -99,7 +107,7 @@
         </div>
         <div class="modal-footer" id="modal-footer">
             <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-modal-upload" id="uploadButton">Upload</button>
+            <button type="button" class="btn btn-modal-save" id="uploadButton">Upload</button>
         </div>
         </div>
     </div>

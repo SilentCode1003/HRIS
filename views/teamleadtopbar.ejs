@@ -174,29 +174,33 @@
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-md" id="notiftittle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="isRead" aria-label="Close"></button>
+            <div class="modal-header" id="modal-header">
+                <lord-icon src="https://cdn.lordicon.com/ujxzdfjx.json" stroke="bold"
+                colors="primary:#000000,secondary:#eee966" class="db-hrmis">
+            </lord-icon>
+                <h5 class="modal-title" id="notiftittle"></h5>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" id="isRead" aria-label="Close"></button> -->
+                <i class='bx bx-x' data-bs-dismiss="modal" id="isRead" aria-label="CLose"></i>
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <p id="notifdescription"></p>
+                    <p id="notifdescription" class="notifdescription"></p>
                 </div>
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <p id="notifsubdescription"></p>
+                    <p id="notifsubdescription" class="notifsubdescription"></p>
                 </div>
             </div>
             <div class="modal-body">
                 <div class="p-4 text-center">
-                    <p id="notifdate"></p>
+                    <p id="notifdate" class="notifdate"></p>
                 </div>
             </div>
             <br>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="isRead">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="siDeleate">Delete</button>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-notif-close" data-bs-dismiss="modal" id="isRead">Close</button>
+                <button type="button" class="btn btn-notif-delete" data-bs-dismiss="modal" id="siDeleate">Delete</button>
             </div>
         </div>
     </div>
