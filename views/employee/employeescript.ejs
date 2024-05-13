@@ -537,6 +537,7 @@
                 "src",
                 "data:image/jpg;base64," + item.profilePicturePath
               );
+              // $("#").val(item.totalleaveofdays);
               $("#editemployeeposition").val(`${item.position}`);
               base64String = item.profilePicturePath;
             });
@@ -908,6 +909,40 @@
       };
       reader.readAsDataURL(file);
     }
+
+    $(document).on("click", "#showleavehistory", function () {
+      $(`#dataTabledepartment`).find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "/employee/getleave",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+
+          if ($.fn.DataTable.isDataTable("#dataTabledepartment")) {
+            $("#dataTabledepartment").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("dataTabledepartment");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var LEAVE_TYPE = row.insertCell(0);
+            var START_DATE = row.insertCell(1);
+            var ENDDATE = row.insertCell(2);
+            var STATUS = row.insertCell(3);
+
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            START_DATE.innerHTML = item.startdate;
+            ENDDATE.innerHTML = item.enddate;
+            STATUS.innerHTML = item.status;
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
 
     $(document).on("click", "#showgov", function () {
       $(`#dataTablegovermentid`).find("tr:gt(0)").remove();
