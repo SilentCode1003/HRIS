@@ -615,18 +615,20 @@ background-color: rgb(6, 97, 3) !important;
 }
 
 .btn-eportal-color {
-    float: right;
-    padding: 5px !important;
-    border-radius: 8px;
-    height: 33px;
-    background-color: #53c24e !important;
-    border: 2px solid #fcf0d7 !important;
-    color: white !important;
+  float: right;
+  border-radius: 8px;
+  width: 100%;
+  height: 33px;
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
+  color: white !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-size: 15px !important;
 }
 
 .btn-eportal-color:hover {
-  background-color: #348730 !important;
-  color: white !important;
+  background-color: #197214 !important;
+  transform: scale(1.1);
 }
 
 .btn-eportal-color h6 {

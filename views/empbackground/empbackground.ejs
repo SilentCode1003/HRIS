@@ -4,13 +4,24 @@
 <div class="card" id="tablecard">
   <div class="card-header ch-coop">
     <h3 class="title-card-table">Data Entry Preview</h3>
-    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#educationmodal">
-      <b>+ Add Education</b>
-    </button>
-    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#workmodal">
-      <b>+ Add Work Experience</b>
-    </button>
+    <div class="row g-2">
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#educationmodal">
+          <b>+ Add Education</b>
+        </button>
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#workmodal">
+          <b>+ Add Work Experience</b>
+        </button>
+      </div>
+      <div class="col">
+        <button type="button" class="btn btn-delete-close" id="DeleteAll">Delete All</button>
+        <button type="button" class="btn btn-insert-save" id="TotalSavebtn">Insert</button>
+      </div>
+    </div>
 </div>
+
 <div class="card-body">
     <div class="table-responsive">
         <table class="table table-striped table-bordered" id="dataTablePreview">
@@ -31,39 +42,42 @@
             <tbody>
             </tbody>
         </table>
-    </div>
-    <div class="modal-footer" id="modal-footer">
-      <button type="button" class="btn btn-modal-close" id="DeleteAll">Delete All</button>
-      <button type="button" class="btn btn-modal-save" id="TotalSavebtn">Insert</button>
-  </div>
+    </div> 
+</div>
+<!-- <div class="modal-footer" id="modal-footer">
+  
+</div> -->
 </div>
 
 <br>
-    <div class="card-header ch-coop">
-      <h3 class="title-card-table">Employee Background</h3>
-        <input id='myInput' type='text' placeholder="  Search....">
+<br>
+
+<div class="card" id="tablecard">
+<div class="card-header ch-coop">
+  <h3 class="title-card-table">Employee Background</h3>
+    <input id='myInput' type='text' placeholder="  Search....">
+</div>
+<div class="card-body">
+    <div class="table-responsive"  id="table-responsive-id">
+        <table class="table table-light table-bordered" id="dataTableemployeeBackground">
+            <thead>
+                <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Employee Name</th>
+                    <th>Type</th>
+                    <th>Tittle</th>
+                    <th>Employee Attainment</th>
+                    <th>Status</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th class="col-sm-1">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTableemployeeBackground">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee Name</th>
-                        <th>Type</th>
-                        <th>Tittle</th>
-                        <th>Employee Attainment</th>
-                        <th>Status</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
 </div>
 
 <!--Education Modal-->
@@ -71,7 +85,9 @@
   <div class="modal-dialog modal-xl">
       <div class="modal-content">
           <div class="modal-header" id="modal-header">
-              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Education</h3>
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+              colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+              <h3 class="modal-title" id="exampleModalLabel">Add Education</h3>
               <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
           </div>
           <div class="modal-body" id="modal-body">
@@ -157,7 +173,9 @@
   <div class="modal-dialog modal-xl">
       <div class="modal-content">
           <div class="modal-header" id="modal-header">
-              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Work Experience</h3>
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+              colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+              <h3 class="modal-title" id="exampleModalLabel">Add Work Experience</h3>
               <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
           </div>
           <div class="modal-body" id="modal-body">
@@ -236,7 +254,10 @@
     <div class="modal-dialog modal-xl" >
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Department</h1>
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h1 class="modal-title" id="exampleModalLabel">Department</h1>
           <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">

@@ -129,9 +129,10 @@ body{
 }
 
 .dropdown-item:hover {
-  background-color: #7a1818 !important;
-  color: white !important;
-  font-weight: bold;
+  background-color: #fef8ea !important;
+  color: black !important;
+  text-shadow: 1px 1px 2px white !important;
+  font-family: 'Arial Black';
 }
 
 .drop-search {
@@ -141,7 +142,6 @@ body{
   font-size: 12px !important;
   font-weight: 700;
 }
-
 
 .navbar-search {
     border: 2.5px solid #fef8ea !important;
@@ -487,7 +487,7 @@ tr:hover {
   border-radius: 8px;
   width: 100%;
   height: 33px;
-  background-color: #f633ab !important;
+  background-color: #14837a !important;
   border: 2px solid #fef8ea !important;
   color: white !important;
   text-shadow: 1px 1px 1px black !important;
@@ -495,7 +495,7 @@ tr:hover {
 }
 
 .btn-per-color:hover {
-  background-color: #d52792 !important;
+  background-color: #085b54 !important;
   transform: scale(1.1);
 }
 
@@ -715,6 +715,24 @@ tr:hover {
   border-left: 4px solid #751a1a !important;
   border-radius: 8px;
 }
+
+.btn-delete-close {
+  float: right;
+  background-color: #E74646 !important;
+  color: white !important;
+  font-family: 'Arial';
+  border: 2px solid #fef8ea !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-weight: bold !important;
+  letter-spacing: 1px;
+  font-size: 12px !important;
+}
+
+.btn-delete-close:hover {
+  background-color: #E72929 !important;
+  transform: scale(1.1);
+}
+
 .btn-modal-close {
   background-color: #E74646 !important;
   color: white !important;
@@ -729,6 +747,25 @@ tr:hover {
   background-color: #E72929 !important;
   transform: scale(1.1);
 }
+
+.btn-insert-save {
+  float: right;
+  background-color: #30a32a !important;
+  border: 2px solid #fef8ea !important;
+  color: white !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+  letter-spacing: 1px;
+  font-size: 12px !important;
+  margin-right: 1%;
+}
+
+.btn-insert-save:hover {
+  background-color: #197214 !important;
+  transform: scale(1.1);
+}
+
 .btn-modal-save {
   background-color: #30a32a !important;
   border: 2px solid #fef8ea !important;
@@ -739,6 +776,7 @@ tr:hover {
   letter-spacing: 1px;
   font-size: 12px !important;
 }
+
 .btn-modal-save:hover {
   background-color: #197214 !important;
   transform: scale(1.1);
@@ -851,11 +889,7 @@ tr:hover {
 .modal-dialog .modal-batch-body {
   height: 135px;
 }
-.title-card-table {
-  font-family: Times New Roman;
-  color: white !important;
-  margin-bottom: 2% !important;
-}
+
 
 /*Attendance*/
 
@@ -931,8 +965,8 @@ tr:hover {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
   height: 200px;
-  width: 33%;
   margin-bottom: 20px;
+  margin: 3%;
 }
 
 #totalEMP:hover, #totalregularEMP:hover, #totalprobiEMP:hover, #totalresignedEMP:hover,
@@ -940,6 +974,7 @@ tr:hover {
   #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover,
   #totalCOA:hover, #totalovertime:hover, #totalleave:hover {
   transform: scale(1.1);
+
 }
 
 .db-wholecard {
@@ -3063,6 +3098,35 @@ div.drp-buttons {
   color: white !important;
   background-color: #05a0ed !important;
 }
+
+/* .ch-emp-bg {
+  background-color: #8ef8f2 !important;
+} */
+
+.title-card-table {
+  font-family: 'Times New Roman';
+  color: white !important;
+  margin-bottom: 2% !important;
+}
+
+.text-gray-500#viewbtn {
+  color: rgb(105, 105, 105) !important;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+
+span#viewbtn {
+  font-weight: 500;
+}
+
+.notif-hrmis {
+  width: 30px;
+  height: 30px; 
+}
+
+
+
 
 
 
