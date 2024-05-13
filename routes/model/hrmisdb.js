@@ -934,6 +934,7 @@ exports.Master_Employee_Background = (data) => {
       backgroundid: key.meb_id,
       employeeid: key.meb_employeeid,
       type: key.meb_type,
+      coursestatus: key.meb_courseandstatus,
       attainment: key.meb_attainment,
       tittle: key.meb_tittle,
       backstatus: key.meb_status,

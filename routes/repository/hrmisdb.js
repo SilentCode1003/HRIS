@@ -391,6 +391,7 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_department(
         md_departmentname,
         md_departmenthead,
+        md_departmenticon,
         md_createdby,
         md_createddate,
         md_status) VALUES ?`;

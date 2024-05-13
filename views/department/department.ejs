@@ -47,21 +47,36 @@
         </div>
         <div class="modal-body" id="modal-body">
             <form>
-                    <div class="col">
+                    <div class="row g-3">
+                      <div class="col">
                         <div class="form-floating">
                         <input type="text" class="form-control border-form-modal" id="departmentname" name="departmentname" placeholder="Department Name">
                         <label for="floatingInput">Department Name</label>
                         </div>
                     </div>
                     <br>
-                    <div class="col">
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
                         <div class="form-floating">
                             <select class="form-select border-form-modal" id="departhead" name="departhead" aria-label="Floating label select example">
                             </select>
                             <label for="floatingSelectGrid">Department Head</label>
                           </div>
                     </div>
+                    </div>
                     <br>
+                    <div class="form-floating">
+                      <label class="form-label" for="EditFile"></label>
+                      <input type="file" name="addicon" id="addicon" class="form-control border-form-modal"
+                        accept="image/*">
+                    </div>
+                    <div class="text-center">
+                      <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                        class="rounded border-form-modal" alt="placeholder">
+                    </div>
+                  <br>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
@@ -85,33 +100,47 @@
         </div>
         <div class="modal-body" id="modal-body">
             <form>
-                    <div class="col">
-                        <div class="form-floating">
-                        <input type="text" class="form-control border-form-modal" id="editdepartmentname" name="editdepartmentname" placeholder="Department Name" value="IT">
-                        <label for="floatingInput">Department Name</label>
-                        </div>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editdepartmentname" name="editdepartmentname" placeholder="Department Name">
+                  <label for="floatingInput">Department Name</label>
+                  </div>
+              </div>
+              <br>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select border-form-modal" id="editdepartmenthead" name="editdepartmenthead" aria-label="Floating label select example">
+                      </select>
+                      <label for="floatingSelectGrid">Department Head</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select border-form-modal" id="editdepartmenthead" name="editdepartmenthead" aria-label="Floating label select example">
-                              <option>Department Head</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department Head</label>
-                          </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select border-form-modal" id="editdepartmentstatus" name="editdepartmentstatus" aria-label="Floating label select example">
+                        <option>Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                      </select>
+                      <label for="floatingSelectGrid">Department</label>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select class="form-select border-form-modal" id="editdepartmentstatus" name="editdepartmentstatus" aria-label="Floating label select example">
-                              <option>Status</option>
-                              <option value="Active">Active</option>
-                              <option value="Inactive">Inactive</option>
-                            </select>
-                            <label for="floatingSelectGrid">Department</label>
-                          </div>
-                    </div>
-                    <br>
+                </div>
+              </div>
+              <br>
+              <div class="form-floating">
+                <label class="form-label" for="EditFile"></label>
+                <input type="file" name="editicon" id="editicon" class="form-control border-form-modal"
+                  accept="image/*">
+              </div>
+              <div class="text-center">
+                <img id="editpreview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                  class="rounded border-form-modal" alt="placeholder">
+              </div>
+             <br>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">
