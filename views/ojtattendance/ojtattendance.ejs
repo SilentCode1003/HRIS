@@ -5,10 +5,17 @@
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header cheader-attendance">
         <h3>Attendance</h3>
-        <button type="button" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
-           <h6>Export Attendance</h6>
-        </button>
-        <input id='myInput' type='text' placeholder="  Search....">
+        <div class="row g-2">
+            <div class="col">
+                <input id='myInput' type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+                    <b>Export Attendance</b>
+                 </button>
+            </div>
+        </div>
+
     </div>
     <div class="card-body cbody-attendance">
         <div class="table-responsive" id="table-responsive-id">
