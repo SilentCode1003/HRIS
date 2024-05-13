@@ -68,3 +68,98 @@ router.post('/loademployee', (req, res) => {
     });
   }
 });
+
+router.post('/loadleavestatus', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select
+    ml_leavetype,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_status
+    from master_leaves
+    where ml_employeeid = '${employeeid}'
+    and ml_year = year(curdate());`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg:'success',
+        data: result,
+      })
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/loadwork', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `	select
+    meb_attainment,
+    meb_tittle,
+    meb_status,
+    meb_start,
+    meb_end
+    from master_employee_background
+    inner join master_employee on master_employee_background.meb_employeeid = me_id
+    where meb_employeeid = '${employeeid}'
+    and meb_type = 'Work Background'`;
+
+    mysql.Select(sql, "Master_Employee_Background", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg:'success',
+        data: result,
+      })
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+
+
+router.post('/loadeduc', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = ` select
+    meb_attainment,
+    meb_tittle,
+    meb_status,
+    meb_start,
+    meb_end
+    from master_employee_background
+    inner join master_employee on master_employee_background.meb_employeeid = me_id
+    where meb_employeeid = '${employeeid}'
+    and meb_type = 'Educational Background'`;
+
+    mysql.Select(sql, "Master_Employee_Background", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      console.log(result);
+      res.json({
+        msg:'success',
+        data: result,
+      })
+    });
+  } catch (error) {
+    res.json({
+      msg:'error',
+      data: error,
+    });
+  }
+});
+

@@ -436,15 +436,11 @@
          $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
-
-            // Get the total hours from the row data
             var totalHours = parseFloat(data.Total_Hours);
-
-            // Check the condition and apply styling accordingly
             if (totalHours === 9) {
-              this.style.color = "green"; // Set text color to green
+              this.style.color = "green";
             } else if (totalHours < 9) {
-              this.style.color = "red"; // Set text color to red
+              this.style.color = "red"; 
             }
           });
         },
@@ -567,6 +563,7 @@
               );
               $("#payrolldate").text(formatDate(item.PayrollDate));
               $("#salary").text(formatToCurrency(item.Salary));
+              $("#basicadjustments").text(formatToCurrency(item.Basic_Adjustments));
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Compensation));

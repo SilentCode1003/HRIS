@@ -423,7 +423,7 @@ router.post("/exportfile", async (req, res) => {
     const groupedData = {};
     jsonDataExportAttendanceDetailed.forEach((employeeData) => {
       const employeeId = employeeData.EmployeeId;
-      if (!groupedData[employeeId]) {
+      if (!groupedData[employeeId]) {  
         groupedData[employeeId] = [];
       }
       groupedData[employeeId].push(employeeData);
@@ -463,12 +463,6 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
-
-
-
-
-
-
 
 router.post("/exportfileperemployee", async (req, res) => {
   try {

@@ -250,7 +250,7 @@
                                     aria-controls="profile-home" class="nav-link active"><b>PROFILE</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-leave"
+                                <a data-bs-toggle="pill" id="showleavehistorysearch" data-bs-target="#profile-leave"
                                     role="tab" aria-controls="profile-leave" class="nav-link "><b>LEAVE HISTORY</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -259,7 +259,7 @@
                                     aria-controls="profile-disciplinary" class="nav-link "><b>DISCIPLINARY</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a data-bs-toggle="pill" id="showleavehistory" data-bs-target="#profile-attendance"
+                                <a data-bs-toggle="pill" id="showattendancesearch " data-bs-target="#profile-attendance"
                                     role="tab" aria-controls="profile-attendance" class="nav-link"><b>ATTENDANCE</b></a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -300,43 +300,28 @@
                                                         <tr>
                                                             <td class="field text-left work-field">Work:</td>
                                                             <td class="value">
-                                                                <div>
-                                                                    <h6 class="work-title">Magnificient IT (2017)</h6>
-                                                                    <!-- <a href="#"class="m-l-10">Edit</a> -->
-                                                                    <span class="text-muted work-subtitle">PHP Programmer</span>
-                                                                </div>
+                                                                <div id="backgroundWorkContainer">
+                                                                   
+                                                                  </div>
                                                                 <br>
-                                                                <div>
-                                                                    <h6 class="work-title">Neutrino IT (2012)</h6>
-                                                                    <!-- <a href="#" class="m-l-10">Edit</a> -->
-                                                                    <span class="work-subtitle">UXUI / Frontend Developer</span>
-                                                                </div>
+                                                              
                                                             </td>
-                                                        </tr>
-                                                    
-                                                            <td class="field text-left work-field">Education:</td>
+                                                        </tr>                                                   
+                                                        <td class="field text-left work-field">Education:</td>
                                                             <td class="value">
-                                                                <div>
-                                                                    <h6 class="work-title">University (2009)</h6>
-                                                                        <!-- <a href="#"class="m-l-10">Edit</a> -->
-                                                                    <span class="work-subtitle">University of Georgia,Athens,GA</span>
-                                                                </div>
+                                                                <div id="backgroundEducationContainer">
+                                                                  </div>
                                                                 <br>
-                                                                <div>
-                                                                    <h6 class="work-title">High School (2006)</h6>
-                                                                    <!-- <a href="#" class="m-l-10">Edit</a><br /> -->
-                                                                    <span class="work-subtitle">Heritage High School, West Chestter, PA</span>
-                                                                </div>
                                                             </td>
                                                         </tr>
-                                                        <tr>
+                                                        <!-- <tr>
                                                             <td class="field text-left work-field">Skills:</td>
                                                             <td class="value">
                                                                 <span class="work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</span>
                                                               
                                                             </td>
-                                                        </tr>
+                                                        </tr> -->
                                                         <tr>
                                                             <td class="field text-left work-field">Tenure:</td>
                                                             <td class="value work-subtitle" id="profiltenure">
@@ -421,11 +406,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebday"></div>
@@ -482,7 +467,7 @@
                                     <div class="col-md-8">
                                         <div class="tab-content p-0">
                                             <div class="tab-pane active show" id="profile-about">
-                                                <table class="table table-striped" id="dataTableleaveprofile">
+                                                <table class="table table-striped" id="dataTableleaveprofilesearch">
                                                     <thead>
                                                         <tr>
                                                             <th>Date Started</th>
@@ -497,66 +482,29 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-md-4 hidden-xs hidden-sm">
                                         <ul class="profile-info-list">
-                                            <li class="personal-field">PERSONAL INFORMATION</li>
+                                            <li class="personal-field">LEAVE STATUS</li>
                                             <li>
-                                                <div class="field personal-title">Department:</div>
-                                                <div class="value work-subtitle" id="profiledepartmentleave"></div>
+                                                <div class="field personal-title">Leave Type:</div>
+                                                <div class="value work-subtitle" id="leavetype"></div>
                                             </li>
                                             <li>
-                                                <div class="field personal-title">Position:</div>
-                                                <div class="value work-subtitle" id="profilepositionleave"></div>
+                                                <div class="field personal-title">Total Leave Days</div>
+                                                <div class="value work-subtitle" id="totalleavedays"></div>
                                             </li>
                                             <li>
-                                                <div class="field personal-title">Skills:</div>
-                                                <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
-                                                    Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
+                                                <div class="field personal-title">Total Unused Leaves:</div>
+                                                <div class="value work-subtitle" id="totalunusedleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field personal-title">Birth of Date:</div>
-                                                <div class="value work-subtitle" id="profilebdayleave"></div>
+                                                <div class="field personal-title">Total Used Leaves</div>
+                                                <div class="value work-subtitle" id="totaluseddleave"></div>
                                             </li>
                                             <li>
-                                                <div class="field personal-title">Civil Status:</div>
-                                                <div class="value work-subtitle" id="profilecicilstatusleave"></div>
+                                                <div class="field personal-title">Leave Status</div>
+                                                <div class="value work-subtitle" id="leavestatus"></div>
                                             </li>
-                                            <li>
-                                                <div class="field personal-title">Address:</div>
-                                                <div class="value work-subtitle">
-                                                    <address class="m-b-0" id="profileaddressleave">
-                                                        <br />
-                                                        <br />
-                                                    </address>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="field personal-title">Phone No.:</div>
-                                                <div class="value work-subtitle" id="profilephoneleave">
-                                                </div>
-                                            </li>
-                                            <!-- <li class="title">FRIEND LIST (9)</li>
-                                            <li class="img-list">
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" /></a>
-                                                <a href="#" class="m-b-5"><img
-                                                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" /></a>
-                                            </li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -598,11 +546,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profilepositiondisciplinary"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebdaydisciplinary"></div>
@@ -678,11 +626,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebday"></div>
@@ -767,11 +715,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profilepositiontraining"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebdaytraining"></div>
@@ -857,11 +805,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profilepositionhealth"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebdayhealth"></div>
@@ -944,11 +892,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profilepositiongov"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebdaygov"></div>
@@ -1020,11 +968,11 @@
                                                 <div class="field personal-title">Position:</div>
                                                 <div class="value work-subtitle" id="profileposition2"></div>
                                             </li>
-                                            <li>
+                                            <!-- <li>
                                                 <div class="field personal-title">Skills:</div>
                                                 <div class="value work-subtitle">C++, PHP, HTML5, CSS, jQuery, MYSQL, Ionic, Laravel,
                                                     Phonegap, Bootstrap, Angular JS, Angular JS, Asp.net</div>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <div class="field personal-title">Birth of Date:</div>
                                                 <div class="value work-subtitle" id="profilebday"></div>

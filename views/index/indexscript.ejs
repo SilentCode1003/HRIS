@@ -37,6 +37,7 @@
     searchbagapuroTable();
     searchapprenticeTable();
     GenerateAnouncement();
+    fetchDepartmentCards();
 
     //#endregion
 
@@ -81,6 +82,122 @@
     $(document).on("keyup", "#myInputtotalapprentice", function () {
       searchapprenticeTable();
     });
+
+    //#endregion
+
+    //#region department card
+
+    function fetchDepartmentCards() {
+      $.ajax({
+        type: "GET",
+        url: "/department/loaddepartmentcard",
+        success: function (response) {
+          if (response.msg === "success") {
+            const departmentData = response.data;
+            renderDepartmentCards(departmentData);
+          } else {
+            console.error("Error fetching department data:", response.data);
+          }
+        },
+        error: function (err) {
+          console.error("Error fetching department data:", err);
+        },
+      });
+    }
+
+    function renderDepartmentCards(departmentData) {
+      const departmentCardsContainer = $("#departmentCardsContainer");
+      departmentCardsContainer.empty();
+
+      departmentData.forEach((department, index) => {
+        if (
+          department &&
+          department.DepartmentName &&
+          department.EmployeeCount !== undefined &&
+          department.Icon &&
+          department.DepartmentID
+        ) {
+          const employeeCount =
+            department.EmployeeCount > 0 ? department.EmployeeCount : 0;
+
+          const cardHtml = `
+        <div data-toggle="modal" id="department${index}" data-target="#${department.DepartmentID}Modal"
+          class="card-link col-xl-2 col-md-6 mb-4 datacard" data-department-id="${department.DepartmentID}">
+          <div id="total${department.DepartmentID}" class="card h-100 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
+                    ${department.DepartmentName}
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold card-text">${employeeCount}</div>
+                </div>
+                <div class="col-auto">
+                  <img src="data:image/png;base64,${department.Icon}" class="card-icon" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+          departmentCardsContainer.append(cardHtml);
+        } else {
+          console.error(
+            "Error: Incomplete department data at index",
+            index,
+            ":",
+            department
+          );
+        }
+      });
+
+      $(document).on("click", '.datacard', function () {
+        const departmentId = $(this).data("department-id");
+
+        console.log(departmentId, "id");
+
+        $.ajax({
+          type: "POST",
+          url: "/department/loadmodal",
+          data: {
+            departmentid: departmentId,
+          },
+          success: function (response) {
+            if (response.msg === "success") {
+              renderDepartmentModal(response.data);
+              $('#totalCablingModal .h3').text(response.data.departmentName);
+            } else {
+              console.error("Error fetching department data:", response.data);
+            }
+          },
+          error: function (err) {
+            console.error("Error fetching department data:", err);
+          },
+        });
+      });
+
+      function renderDepartmentModal (modalData) {
+        const departmentName = modalData[0].departmentName;
+        $("#alldepartmentname").text(departmentName);
+        console.log(departmentName);
+        $("#totalcablingtable tbody").empty();
+        modalData.forEach((employee) => {
+          const row = `
+            <tr>
+                <td>${employee.newEmployeeId}</td>
+                <td>${employee.firstname}</td>
+                <td>${employee.phone}</td>
+                <td>${employee.email}</td>
+                <td>${employee.position}</td>
+                <td>${employee.tenure}</td>
+            </tr>
+        `;
+          $("#totalcablingtable tbody").append(row);
+        });
+        $("#totalCablingModal").modal("show");
+      }
+    }
 
     //#endregion
 
@@ -1274,80 +1391,6 @@
     //#endregion
 
     //#region Load All Requset Table
-    // function LoadTable() {
-    //   $("#dataTableleaverequest").DataTable({
-    //     destroy: true,
-    //     processing: true,
-    //     serverSide: true,
-    //     paging: false,
-    //     searching: false,
-    //     info: false,
-    //     scrollY: 400,
-    //     scrollCollapse: true,
-    //     serverMethod: "GET",
-    //     ajax: {
-    //       url: "/load",
-    //       dataSrc: (json) => {
-    //         var finalData = [];
-    //         var data = json.data;
-
-    //         $.each(data, (key, item) => {
-    //           var action = "";
-    //           var status = item.status;
-
-    //           action = `
-    //                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-    //                  `;
-
-    //           var imgElement = document.createElement("img");
-    //           imgElement.src = "data:image/jpg;base64," + item.image;
-    //           imgElement.alt = "Profile Image";
-    //           imgElement.style.width = "100px";
-    //           imgElement.style.height = "100px";
-
-    //           finalData.push({
-    //             image: imgElement.outerHTML,
-    //             leaveid: item.leaveid,
-    //             firstname: item.firstname,
-    //             leavestartdate: item.leavestartdate,
-    //             leaveenddate: item.leaveenddate,
-    //             leavetype: item.leavetype,
-    //             reason: item.reason,
-    //             applieddate: item.applieddate,
-    //             action: action,
-    //           });
-    //         });
-
-    //         return finalData;
-    //       },
-    //     },
-    //     columnDefs: [
-    //       {
-    //         targets: 1,
-    //         className: "td-indent",
-    //       },
-    //     ],
-    //     columns: [
-    //       { data: "image" },
-    //       { data: "leaveid" },
-    //       { data: "firstname" },
-    //       { data: "leavestartdate" },
-    //       { data: "leaveenddate" },
-    //       { data: "leavetype" },
-    //       { data: "reason" },
-    //       { data: "applieddate" },
-    //       { data: "action" },
-    //     ],
-    //     createdRow: function (row, data, dataIndex) {
-    //       $("td", row).each(function (index) {
-    //         this.style.textAlign = "center";
-    //         this.style.verticalAlign = "middle";
-    //       });
-    //     },
-    //     initComplete: function () {},
-    //   });
-    // }
-
     //Leave Section>>>>>>>>>>>>>>>>>>
     $(document).on("click", "#nav-leave-tab", function () {
       $("#dataTableleaverequest").find("tr:gt(0)").remove();
@@ -1442,7 +1485,7 @@
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
               $("#leaveemployeename").val(item.employee);
-              $("#leavetype").val(item.leavetype);
+              $("#reqleavetype").val(item.leavetype);
               $("#leavestartdate").val(item.leavestartdate);
               $("#leaveenddate").val(item.leaveenddate);
               $("#leavereason").val(item.leavereason);
@@ -1455,7 +1498,7 @@
               $("#unusedleave").val(item.unusedleave);
               $("#usedleave").val(item.usedleave);
               $("#leaveyear").val(item.leaveyear);
-              $("#leavestatus").val(item.leavestatus);
+              $("#reqleavestatus").val(item.leavestatus);
               $("#leaveduration").val(item.leaveduration);
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
@@ -1502,14 +1545,13 @@
 
     $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
-      let status = $("#leavestatus").val();
+      let status = $("#reqleavestatus").val();
       let leavestartdate = $("#leavestartdate").val();
       let leaveenddate = $("#leaveenddate").val();
       let leaveduration = $("#leaveduration").val();
       let leavepaidays = $("#paiddays").val();
       let leaveunpaiddays = $("#unpaiddays").val();
       let comment = $("#leavecomment").val();
-
 
       var message = "";
 
@@ -2110,7 +2152,6 @@
     });
 
     $(document).on("click", "#editcOAsavebtn", function () {
-      console.log("hit");
       let id = requestid;
       let emp_id = $("#empid").val();
       let attendancedate = $("#editattendancedate").val();
