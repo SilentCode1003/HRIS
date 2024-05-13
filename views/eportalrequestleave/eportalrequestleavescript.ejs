@@ -439,7 +439,7 @@
     $("#startldate, #endldate").change(function () {
       let startLDate = new Date($("#startldate").val());
       let endLDate = new Date($("#endldate").val());
-      
+
       let durationDays =
         Math.floor((endLDate - startLDate) / (1000 * 60 * 60 * 24)) + 1;
 
@@ -452,6 +452,8 @@
       $("#unpaiddays").val(unpaidDays);
     });
 
+    //Edit Section
+
     $("#dataTableapplyleave tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -463,10 +465,11 @@
       console.log(dataRow);
       leaveid = dataRow[0];
     });
+
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/allleave/getleavedashboard",
+        url: "/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -475,17 +478,25 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#id").val(item.leaveid);
-              $("#pendingleavename").val(item.employeeid);
-              $("#pendingleaveemail").val(item.email);
-              $("#pendingleavegender").val(item.gender);
-              $("#pendingleavephone").val(item.phone);
-              $("#pendingleavetype").val(item.leavetype);
-              $("#pendingleaveapplydate").val(item.applieddate);
-              $("#pendingleavestart").val(item.leavestartdate);
-              $("#pendingleaveend").val(item.leaveenddate);
-              $("#pendingleavereason").val(item.reason);
-              $("#pendingleaveaction").val(item.status);
+              $("#editpendingleaveid").val(item.leaveid);
+              $("#editleaveemployeename").val(item.employee);
+              $("#editleavetype").val(item.leavetype);
+              $("#editleavestartdate").val(item.leavestartdate);
+              $("#editleaveenddate").val(item.leaveenddate);
+              $("#editleavereason").val(item.leavereason);
+              $("#editleaveapplieddate").val(item.leaveapplieddate);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.leaveimage
+              );
+              $("#editleavedays").val(item.totalleavedays);
+              $("#editunusedleave").val(item.unusedleave);
+              $("#editusedleave").val(item.usedleave);
+              $("#editleaveyear").val(item.leaveyear);
+              $("#editleavestatus").val(item.leavestatus);
+              $("#editleaveduration").val(item.leaveduration);
+              $("#editpaiddays").val(item.leavepaiddays);
+              $("#editunpaiddays").val(item.leaveunpaiddays);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -496,10 +507,49 @@
         },
       });
     });
-    $(document).on("click", "#pendingleavesavebtn", function () {
-      console.log("Save button clicked");
+
+    $(document).on(
+      "change",
+      "#editleavestartdate, #editleaveenddate, #editpaiddays",
+      function () {
+        let startDate = $("#editleavestartdate").val();
+        let endDate = $("#editleaveenddate").val();
+        let paidDays = parseFloat($("#editpaiddays").val());
+        let unusedLeave = parseFloat($("#editunusedleave").val());
+        let duration = calculateLeaveDuration(startDate, endDate);
+
+        if (duration > unusedLeave) {
+          let unpaidDays = duration - unusedLeave;
+          $("#editpaiddays").val(unusedLeave);
+          $("#editunpaiddays").val(unpaidDays);
+        } else {
+          $("#editleaveduration").val(duration);
+          $("#editpaiddays").val(duration);
+          $("#editunpaiddays").val(0);
+        }
+      }
+    );
+
+    function calculateLeaveDuration(startDate, endDate) {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      let difference = end - start;
+      let durationDays = difference / (1000 * 60 * 60 * 24) + 1;
+      return Math.round(durationDays);
+    }
+
+    $(document).on("click", "#editleavesavebutton", function () {
       let id = leaveid;
-      let status = $("#pendingleaveaction").val();
+      let status = $("#editleavestatus").val();
+      let leavetype = $().val("#editleavetype");
+      let leavestartdate = $("#editleavestartdate").val();
+      let leaveenddate = $("#editleaveenddate").val();
+      let leaveduration = $("#editleaveduration").val();
+      let leavepaidays = $("#editpaiddays").val();
+      let leaveunpaiddays = $("#editunpaiddays").val();
+      let comment = $("#editleavecomment").val();
+      let leaveimage = base64String;
+
 
       var message = "";
 
@@ -507,38 +557,112 @@
         message += "status is required. ";
       }
 
+      if (leavetype === "") {
+        message += "Leave Type is Required is required. ";
+      }
+
+      if (leavestartdate === "") {
+        message += "Startdate is required. ";
+      }
+
+      if (leaveenddate === "") {
+        message += "Enddate is required";
+      }
+
+      if (leaveduration === "") {
+        message += "leaveduration is required. ";
+      }
+
+      if (leavepaidays === "") {
+        message += "leavepaidays is required. ";
+      }
+
+      if (leaveunpaiddays === "") {
+        message += "leaveunpaiddays is required. ";
+      }
+
+      if (comment === "") {
+        message += "comment is required. ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        $.ajax({
-          type: "POST",
-          url: "/allleave/update",
-          data: {
-            leaveid: id,
-            status: status,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willApprove) => {
+          if (willApprove) {
+            $.ajax({
+              type: "POST",
+              url: "/allleave/update",
+              data: {
+                leaveid: id,
+                status: status,
+                leavestartdate: leavestartdate,
+                leaveenddate: leaveenddate,
+                leaveduration: leaveduration,
+                leavepaidays: leavepaidays,
+                leaveunpaiddays: leaveunpaiddays,
+                comment: comment,
+                leaveimage: leaveimage,
+              },
+              success: function (result) {
+                if (result.msg == "success") {
+                  swal(
+                    "Save Successfully",
+                    "You clicked the button!",
+                    "success"
+                  ).then((results) => {
+                    window.location.reload();
+                  });
+                  LoadTable();
+                }
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+            });
+          } else {
+            swal("Action Canceled", "", "info");
+          }
         });
       }
     });
   });
+
+  $(document).on("change", "#edituploadimage", function (e) {
+    const input = document.getElementById("edituploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("previewleave");
+      preview.src = reader.result;
+    };
+    imageUploadedleave();
+  });
+
+  function imageUploadedleave() {
+    const input = document.getElementById("edituploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
 
   $(document).on("change", "#uploadimage", function (e) {
     const input = document.getElementById("uploadimage");
@@ -555,33 +679,6 @@
 
   function imageUploaded() {
     const input = document.getElementById("uploadimage");
-    const file = input.files[0];
-
-    var reader = new FileReader();
-
-    reader.onload = function () {
-      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-
-      imageBase64Stringsep = base64String;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  $(document).on("change", "#editcoafile", function (e) {
-    const input = document.getElementById("editcoafile");
-    const file = input.files[0];
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = function () {
-      const preview = document.getElementById("editpreviewfile");
-      preview.src = reader.result;
-    };
-    EditImage();
-  });
-
-  function EditImage() {
-    const input = document.getElementById("editcoafile");
     const file = input.files[0];
 
     var reader = new FileReader();

@@ -5,8 +5,6 @@
     let notificationIdClicked = "";
     let selectedEmployeeId = "";
     loadNotifBadge();
-    //showEmployeeModal();
-    //sendEmployeeIDOnLoad();
 
     //#region SEARCH EMPLOYEE
 
@@ -92,6 +90,57 @@
       $("#autocompleteDropdown").hide();
     }
 
+    // $(document).on("click", "#searchprofile", function (event) {
+    //   console.log("HIT Employee ID:", selectedEmployeeId);
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employeeprofile/loademployee",
+    //     data: {
+    //       employeeid: selectedEmployeeId,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+    //         console.log(existingData);
+    //         $.each(existingData, (key, item) => {
+    //           $("#profilepreview").attr(
+    //             "src",
+    //             "data:image/jpg;base64," + item.image
+    //           );
+    //           base64String = item.image;
+    //           $("#profileid").text(item.employeeid);
+    //           $("#profiltenure").text(item.tenure);
+    //           $("#profilefullname").text(item.fullname);
+    //           $("#profilefname").text(item.firstname);
+    //           $("#profilemidname").text(item.middlename);
+    //           $("#profilelastname").text(item.lastname);
+    //           $("#profilebday").text(item.birthday);
+    //           $("#profilebday2").text(item.birthdayformat);
+    //           $("#profilegender").text(item.gender);
+    //           $("#profilecicilstatus").text(item.civilstatus);
+    //           $("#profilephone").text(item.phone);
+    //           $("#profilephone2").text(item.phone);
+    //           $("#profileemail").text(item.email);
+    //           $("#profilehiredate").text(item.hiredate);
+    //           $("#profilejobstatus").text(item.jobstatus);
+    //           $("#profileemcontact").text(item.emergencycontact);
+    //           $("#profileemphone").text(item.emergencyphone);
+    //           $("#profiledepartment").text(item.department);
+    //           $("#profileposition").text(item.position);
+    //           $("#profileposition2").text(item.position);
+    //           $("#profileaddress").text(item.address);
+    //           $("#profileaddress2").text(item.address);
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", msg, "error");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", msg, "error");
+    //     },
+    //   });
+    // });
+
     $(document).on("click", "#searchprofile", function (event) {
       console.log("HIT Employee ID:", selectedEmployeeId);
       $.ajax({
@@ -133,18 +182,208 @@
               $("#profileaddress").text(item.address);
               $("#profileaddress2").text(item.address);
             });
+            $.ajax({
+              type: "POST",
+              url: "/employeeprofile/loadwork",
+              data: {
+                employeeid: selectedEmployeeId,
+              },
+              success: function (backgroundResult) {
+                if (backgroundResult.msg === "success") {
+                  const WorkbackgroundData = backgroundResult.data;
+                  console.log(WorkbackgroundData);
+                  $("#backgroundWorkContainer").empty();
+                  WorkbackgroundData.forEach((bgItem, index) => {
+                    const WorkbackgroundHTML = `
+                  <br>
+                  <div class="background-item">
+                    <h4 class="work-title" id="workbackgroundattianment${index}">${bgItem.attainment}</h4>
+                    <h6 class="work-title" id="workbackgroundtittle${index}">${bgItem.tittle}</h6>
+                    <span class="text-muted work-subtitle" id="workbackgroundrange${index}">${bgItem.start} - ${bgItem.end}</span>
+                  </div>
+                  <br>
+                `;
+                    $("#backgroundWorkContainer").append(WorkbackgroundHTML);
+                  });
+                  $.ajax({
+                    type: "POST",
+                    url: "/employeeprofile/loadeduc",
+                    data: {
+                      employeeid: selectedEmployeeId,
+                    },
+                    success: function (backgroundResult) {
+                      if (backgroundResult.msg === "success") {
+                        const EdicationbackgroundData = backgroundResult.data;
+                        console.log(EdicationbackgroundData);
+                        $("#backgroundEducationContainer").empty();
+                        EdicationbackgroundData.forEach((bgItem, index) => {
+                          const EducationbackgroundHTML = `
+                        <br>
+                        <div class="background-item">
+                          <h4 class="work-title" id="educbackgroundattianment${index}">${bgItem.attainment}</h4>
+                          <h6 class="work-title" id="educbackgroundtittle${index}">${bgItem.tittle}</h6>
+                          <span class="text-muted work-subtitle" id="educbackgroundrange${index}">${bgItem.start} - ${bgItem.end}</span>
+                          <h6 class="work-title" id="educbackgroundachievements${index}">${bgItem.backstatus}</h6>
+                        </div>
+                        <br>
+                      `;
+                          $("#backgroundEducationContainer").append(
+                            EducationbackgroundHTML
+                          );
+                        });
+                      } else {
+                        swal(
+                          "Error fetching background data",
+                          backgroundResult.msg,
+                          "error"
+                        );
+                      }
+                    },
+                    error: function (err) {
+                      swal(
+                        "An error occurred while fetching background data",
+                        err,
+                        "error"
+                      );
+                    },
+                  });
+                } else {
+                  swal(
+                    "Error fetching background data",
+                    backgroundResult.msg,
+                    "error"
+                  );
+                }
+              },
+              error: function (err) {
+                swal(
+                  "An error occurred while fetching background data",
+                  err,
+                  "error"
+                );
+              },
+            });
           } else {
-            swal("Error fetching employee data", msg, "error");
+            swal("Error fetching employee data", result.msg, "error");
           }
         },
         error: function (err) {
-          swal("An error occurred while fetching employee data", msg, "error");
+          swal("An error occurred while fetching employee data", err, "error");
         },
       });
     });
 
-    $(document).on("click", "#showleavehistory", function () {
-      $(`#dataTableleaveprofile`).find("tr:gt(0)").remove();
+    // $(document).on("click", "#searchprofile", function (event) {
+    //   console.log("HIT Employee ID:", selectedEmployeeId);
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employeeprofile/loademployee",
+    //     data: {
+    //       employeeid: selectedEmployeeId,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+    //         console.log(existingData);
+    //         $.each(existingData, (key, item) => {
+    //           $("#profilepreview").attr(
+    //             "src",
+    //             "data:image/jpg;base64," + item.image
+    //           );
+    //           base64String = item.image;
+    //           $("#profileid").text(item.employeeid);
+    //           $("#profiltenure").text(item.tenure);
+    //           $("#profilefullname").text(item.fullname);
+    //           $("#profilefname").text(item.firstname);
+    //           $("#profilemidname").text(item.middlename);
+    //           $("#profilelastname").text(item.lastname);
+    //           $("#profilebday").text(item.birthday);
+    //           $("#profilebday2").text(item.birthdayformat);
+    //           $("#profilegender").text(item.gender);
+    //           $("#profilecicilstatus").text(item.civilstatus);
+    //           $("#profilephone").text(item.phone);
+    //           $("#profilephone2").text(item.phone);
+    //           $("#profileemail").text(item.email);
+    //           $("#profilehiredate").text(item.hiredate);
+    //           $("#profilejobstatus").text(item.jobstatus);
+    //           $("#profileemcontact").text(item.emergencycontact);
+    //           $("#profileemphone").text(item.emergencyphone);
+    //           $("#profiledepartment").text(item.department);
+    //           $("#profileposition").text(item.position);
+    //           $("#profileposition2").text(item.position);
+    //           $("#profileaddress").text(item.address);
+    //           $("#profileaddress2").text(item.address);
+    //         });
+    //         $.ajax({
+    //           type: "POST",
+    //           url: "/employeeprofile/loadwork",
+    //           data: {
+    //             employeeid: selectedEmployeeId,
+    //           },
+    //           success: function (backgroundResult) {
+    //             if (backgroundResult.msg === "success") {
+    //               const WorkbackgroundData = backgroundResult.data;
+    //               console.log(WorkbackgroundData);
+    //               $("#backgroundWorkContainer").empty();
+    //               WorkbackgroundData.forEach((bgItem, index) => {
+    //                 const WorkbackgroundHTML = `
+    //     <div class="background-item">
+    //       <h4 class="work-title" id="workbackgroundattianment${index}">${bgItem.attainment}</h4>
+    //       <h6 class="work-title" id="workbackgroundtittle${index}">${bgItem.tittle}</h6>
+    //       <span class="text-muted work-subtitle" id="workbackgroundrange${index}">${bgItem.start} - ${bgItem.end}</span>
+    //     </div>
+    //   `;
+    //                 $("#backgroundWorkContainer").append(WorkbackgroundHTML);
+    //               });
+    //               $.ajax({
+    //           type: "POST",
+    //           url: "/employeeprofile/loadeduc",
+    //           data: {
+    //             employeeid: selectedEmployeeId,
+    //           },
+    //           success: function (backgroundResult) {
+    //             if (backgroundResult.msg === "success") {
+    //               const EdicationbackgroundData = backgroundResult.data;
+    //               console.log(EdicationbackgroundData);
+    //               $("#backgroundEducationContainer").empty();
+    //               EdicationbackgroundData.forEach((bgItem, index) => {
+    //                 const EducationbackgroundHTML = `
+    //     <div class="background-item">
+    //       <h4 class="work-title" id="educbackgroundattianment${index}">${bgItem.attainment}</h4>
+    //       <h6 class="work-title" id="educbackgroundtittle${index}">${bgItem.tittle}</h6>
+    //       <span class="text-muted work-subtitle" id="educbackgroundrange${index}">${bgItem.start} - ${bgItem.end}</span>
+    //     </div>
+    //   `;
+    //                 $("#backgroundEducationContainer").append(EducationbackgroundHTML);
+    //               });
+    //             } else {
+    //               swal(
+    //                 "Error fetching background data",
+    //                 backgroundResult.msg,
+    //                 "error"
+    //               );
+    //             }
+    //           },
+    //           error: function (err) {
+    //             swal(
+    //               "An error occurred while fetching background data",
+    //               err,
+    //               "error"
+    //             );
+    //           },
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", result.msg, "error");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", err, "error");
+    //     },
+    //   });
+    // });
+
+    $(document).on("click", "#showleavehistorysearch", function () {
+      $(`#dataTableleaveprofilesearch`).find("tr:gt(0)").remove();
 
       $.ajax({
         type: "POST",
@@ -156,10 +395,12 @@
           var finalData = [];
           var data = json.data;
 
-          if ($.fn.DataTable.isDataTable("#dataTableleaveprofile")) {
-            $("#dataTableleaveprofile").DataTable().destroy();
+          if ($.fn.DataTable.isDataTable("#dataTableleaveprofilesearch")) {
+            $("#dataTableleaveprofilesearch").DataTable().destroy();
           }
-          material_list_tbl = document.getElementById("dataTableleaveprofile");
+          material_list_tbl = document.getElementById(
+            "dataTableleaveprofilesearch"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -178,7 +419,7 @@
       });
       $.ajax({
         type: "POST",
-        url: "/employeeprofile/loademployee",
+        url: "/employeeprofile/loadleavestatus",
         data: {
           employeeid: selectedEmployeeId,
         },
@@ -187,12 +428,11 @@
             const existingData = result.data;
             console.log(existingData);
             $.each(existingData, (key, item) => {
-              $("#profiledepartmentleave").text(item.department);
-              $("#profilepositionleave").text(item.position);
-              $("#profilebdayleave").text(item.birthday);
-              $("#profilecicilstatusleave").text(item.civilstatus);
-              $("#profileaddressleave").text(item.address);
-              $("#profilephoneleave").text(item.phone);
+              $("#leavetype").text(item.leavetype);
+              $("#totalleavedays").text(item.totalleave);
+              $("#totalunusedleave").text(item.unusedleave);
+              $("#totaluseddleave").text(item.usedleave);
+              $("#leavestatus").text(item.status);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -412,7 +652,9 @@
           if ($.fn.DataTable.isDataTable("#dataTabledisciplianaryprofile")) {
             $("#dataTabledisciplianaryprofile").DataTable().destroy();
           }
-          material_list_tbl = document.getElementById("dataTabledisciplianaryprofile");
+          material_list_tbl = document.getElementById(
+            "dataTabledisciplianaryprofile"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -557,7 +799,9 @@
       });
     });
 
-    $(document).on("click", "[data-bs-target='#modal-backdrop-dark']",
+    $(document).on(
+      "click",
+      "[data-bs-target='#modal-backdrop-dark']",
       function () {
         notificationId = $(this).find(".small.text-gray-550").text().trim();
         console.log("Modal Trigger - Notification ID:", notificationId);

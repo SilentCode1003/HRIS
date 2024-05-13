@@ -59,6 +59,14 @@
     background-color: #7a1818 !important;
 }
 
+/*wendell*/
+#previewleave {
+  margin-top: 100px;
+  width: 250px;
+  height: 250px;
+}
+
+
 /* .dropd-eportal {
   color: white !important;
   font-weight: bold !important;
@@ -179,6 +187,13 @@
 
 /*mobile-view/sidebar*/
 @media (max-width: 769px) {
+
+  /*wendell*/
+  #previewleave {
+    height: 150px;
+    width: 150px;
+  }
+
 
   .table td {
     padding: 1rem !important;

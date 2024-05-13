@@ -128,7 +128,7 @@
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
               $("#leaveemployeename").val(item.employee);
-              $("#leavetype").val(item.leavetype);
+              $("#reqleavetype").val(item.leavetype);
               $("#leavestartdate").val(item.leavestartdate);
               $("#leaveenddate").val(item.leaveenddate);
               $("#leavereason").val(item.leavereason);
@@ -141,7 +141,7 @@
               $("#unusedleave").val(item.unusedleave);
               $("#usedleave").val(item.usedleave);
               $("#leaveyear").val(item.leaveyear);
-              $("#leavestatus").val(item.leavestatus);
+              $("#reqleavestatus").val(item.leavestatus);
               $("#leaveduration").val(item.leaveduration);
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
@@ -188,7 +188,7 @@
 
     $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
-      let status = $("#leavestatus").val();
+      let status = $("#reqleavestatus").val();
       let leavestartdate = $("#leavestartdate").val();
       let leaveenddate = $("#leaveenddate").val();
       let leaveduration = $("#leaveduration").val();

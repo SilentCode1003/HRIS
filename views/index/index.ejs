@@ -88,78 +88,41 @@
             </div>
         </div>
 
-        <!-- Total Admin Card -->
-        <div data-toggle="modal" id="totaladminEMP" data-target="#totaladminemployeeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalADMIN" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Admin Department </div>
-                            <div class="h5 mb-0 font-weight-bold card-text"></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-buildings-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total IT Department Card -->
-        <div data-toggle="modal" id="totalitEMP" data-target="#totalitModal" class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalIT" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                IT Department</div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-building-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Cabling Department Card -->
-        <div data-toggle="modal" id="totalcablingEMP" data-target="#totalCablingModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalCABLING" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Cabling Department </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-wrench-adjustable-circle card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Total Candidate For Rgular Card -->
+         <!-- Total Candidate For Rgular Card -->
         <div data-toggle="modal" id="totalcandidate" data-target="#totalCandidateModal"
+         class="card-link col-xl-2 col-md-6 mb-4">
+         <div id="totalempcandidate" class="card h-100 py-2 db-card">
+             <div class="card-body">
+                 <div class="row no-gutters align-items-center">
+                     <div class="col mr-2">
+                         <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
+                             Candidate for Regularization </div>
+                         <div class="h5 mb-0 font-weight-bold card-text">
+                         </div>
+                     </div>
+                     <div class="col-auto">
+                         <i class="bi bi-calendar-check card-icon"></i>
+                     </div>
+                 </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- Total Apprentice Card -->
+        <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempcandidate" class="card h-100 py-2 db-card">
+            <div id="totalempapprentice" class="card h-100 py-2 db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Candidate for Regularization </div>
+                                Apprentice Sheet
+                            </div>
                             <div class="h5 mb-0 font-weight-bold card-text">
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="bi bi-calendar-check card-icon"></i>
+                            <i class="bi bi-person-vcard-fill card-icon"></i>
                         </div>
                     </div>
                 </div>
@@ -187,28 +150,7 @@
             </div>
         </div>
 
-
-        <!-- Total Apprentice Card -->
-        <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
-            class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempapprentice" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Apprentice Sheet
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold card-text">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-person-vcard-fill card-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <div id="departmentCardsContainer" class="row"></div>
     </div>
 
     <!---- MODAL-->
@@ -454,7 +396,6 @@
                             <table class="table custom-mobile-table table-bordered table-light" id="totalittable">
                                 <thead class="table-header">
                                     <tr>
-                                        <!-- <th>Image</th> -->
                                         <th class="col-sm-1">ID</th>
                                         <th class="col-26">Name</th>
                                         <th>Contact</th>
@@ -464,7 +405,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -479,14 +419,14 @@
 
 
 
-    <!-- Total Cabling Department Modal -->
+    <!-- All Department Modal -->
     <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
         aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
                     <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Cabling Department</h3>
+                        <h3 class="modal-title admin-ttitle" id="alldepartmentname"></h3>
                     </div>
                     <br>
                     <input id='myInputtotalcabling' class="db-modal-search"  type='text'
@@ -499,7 +439,6 @@
                             <table class="table custom-mobile-table table-bordered table-light" id="totalcablingtable">
                                 <thead class="table-header">
                                     <tr>
-                                        <!-- <th>Image</th> -->
                                         <th class="col-sm-1">ID</th>
                                         <th class="col-26">Name</th>
                                         <th>Contact</th>
@@ -509,7 +448,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -1014,7 +952,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-floating">
-                                      <input type="text" class="form-control border-form-modal" id="leavetype" name="leavetype" disabled>
+                                      <input type="text" class="form-control border-form-modal" id="reqleavetype" name="reqleavetype" disabled>
                                       <label for="floatingInput">Leave Type</label>
                                     </div>
                                 </div>  
@@ -1093,7 +1031,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-floating">
-                                      <select class="form-select border-form-modal" id="leavestatus" name="leavestatus"
+                                      <select class="form-select border-form-modal" id="reqleavestatus" name="reqleavestatus"
                                       aria-label="Floating label select example">
                                       <option value="Approved">Approved</option>
                                       <option value="Rejected">Rejected</option>
