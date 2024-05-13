@@ -252,13 +252,19 @@
 
 
 #myInput2 {
-  float: left;
+  /* float: left;
   border: none;
   height: 33px;
   width: 300px;
   margin-right: 5px;
   border-radius: 8px;
-  border: 2px solid #F5E0B3 !important;
+  border: 2px solid #F5E0B3 !important; */
+  float: left;
+  border: none;
+  height: 33px;
+  margin-right: 5px;
+  border-radius: 8px;
+  border: 2px solid #fcf0d7 !important;
 }
 
 #myInput3 {
@@ -316,9 +322,6 @@ table th {
   margin-left: 5%;
 }
 
-/* #applybtn{
-    margin-left: 1%;
-  } */
 
 @media screen and (max-width: 1000px) {
   table {
@@ -499,7 +502,7 @@ form select:not(#inputState) {
 .custom-dropdown {
   display: none;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 2px solid #555454;
   max-height: 100px;
   overflow-y: auto;
   position: absolute;
@@ -507,6 +510,7 @@ form select:not(#inputState) {
   width: 36.7vw;
   z-index: 1000;
   border-radius: 0.275rem;
+  text-align: center;
 }
 
 .dropdown-option {
@@ -665,7 +669,8 @@ body{
 } */
 
 .work-field {
-  font-family: "Sedan", serif;
+  /* font-family: "Sedan", serif; */
+  font-family: 'Arial';
   font-weight: 700;
   /* font-style: italic; */
   color: rgb(99, 6, 6) !important;
@@ -682,7 +687,8 @@ body{
 
 .personal-title {
   font-size: 14px;
-  font-family: "Sedan", serif;
+  font-family: 'Arial';
+  /* font-family: "Sedan", serif; */
   font-weight: 700;
   color: #691111 !important;
 }
@@ -695,10 +701,11 @@ body{
 }
 
 .work-subtitle {
-  font-family: "Lora", serif;
+  /* font-family: "Lora", serif; */
+  font-family: 'Arial';
   font-optical-sizing: auto;
   font-weight: 700;
-  font-style: italic;
+  /* font-style: italic; */
   letter-spacing: 1px;
   color: #403d3d !important;
   font-size: 12px;
@@ -734,9 +741,12 @@ body{
   padding: 5px !important;
   font-size: 13px;
   letter-spacing: 2px;
-  font-family: "Sedan", serif;
+  /* font-family: "Sedan", serif; */
+  font-family: 'Arial';
   font-weight: 400;
 }
+
+
 .table.table-profile td {
   border-color: #c8c7cc;
 }

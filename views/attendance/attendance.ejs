@@ -4,14 +4,28 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
         <h3 class="title-card-table">Attendance</h3>
-        <input id="datepicker"  type="text" name="daterange" />
-        <button id="checklogs" class="btn btn-add-color"><b>Check Logs</b></button>
-        <button id="exportBtn" class="btn btn-add-color"><b>Export All</b></button>
-        <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
-            <b>Export Per Employee</b>
-        </button>
-        <button id="loaddate" class="btn btn-add-color"><b>Load Date</b></button>
-      <input id='myInput'  type='text' placeholder="  Search....">
+        <div class="row g-4">
+            <div class="col">
+                <input id='myInput'  type='text' placeholder="  Search....">
+            </div>
+            <div class="col-md-2">
+                <input id="datepicker"  type="text" name="daterange">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+            </div>
+            <div class="col-sm-2 col-add">
+                <button id="checklogs" class="btn btn-add-color"><b>Check Logs</b></button>
+            </div>
+            <div class="col-sm-2 col-add">
+                <button class="btn btn-per-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+                    <b>Export Per Employee</b>
+                </button>
+            </div>
+            <div class="col-sm-2 col-add">
+                <button id="exportBtn" class="btn btn-export-color"><b>Export All</b></button>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -43,10 +57,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" id="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Export Employee Attendance</h1>
+          <h1 class="modal-title" id="exampleModalLabel">Export Employee Attendance</h1>
           <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
-        <div class="modal-body modal-batch-body" id="modal-body">
+        <div class="modal-body" id="modal-body">
           <form>
             <div class="row g-3">
                 <div class="col">
@@ -83,7 +97,7 @@
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
                 <div>
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
+                    <h1 class="modal-title" id="exampleModalToggleLabel">
                        Logs
                     </h1>
                 </div>

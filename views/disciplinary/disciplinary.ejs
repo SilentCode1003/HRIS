@@ -4,10 +4,16 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
       <h3 class="title-card-table">Disciplinary</h3>
-      <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
-        <b>+ Add</b>
-      </button>
-        <input id='myInput'  type='text' placeholder="  Search....">
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput'  type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
@@ -43,7 +49,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <h3 class="modal-title fs-5" id="exampleModalLabel">DISCIPLINARY</h3>
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Add DISCIPLINARY</h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
@@ -114,6 +122,9 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
         <h3 class="modal-title" id="exampleModalLabel">Disciplinary Action</h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
