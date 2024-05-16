@@ -1,0 +1,126 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">Attendance</h3>
+        <div class="row g-4">
+            <div class="col">
+                <input id='myInput'  type='text' placeholder="  Search....">
+            </div>
+            <div class="col-md-2">
+                <input id="datepicker"  type="text" name="daterange">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+            </div>
+            <div class="col-sm-2 col-add">
+                <button class="btn btn-per-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+                    <b>Export Per Employee</b>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableattendance">
+                <thead>
+                        <!-- <th>Image</th> -->
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-25">Name</th>
+                        <th>Date</th>
+                        <th class="col-sm-1">Time In</th>
+                        <th class="col-sm-1">Time Out</th>
+                        <th>Device In</th>
+                        <th>Device Out</th>
+                        <th class="col-sm-1">Total Hours</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!--Export Employee Modal-->
+<div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title" id="exampleModalLabel">Export Employee Attendance</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <form>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                      <select class="form-select border-form-modal" id="employeename" name="employeename"
+                        aria-label="Floating label select example">
+                        <option selected>Choose</option>
+                      </select>
+                      <label for="floatingSelectGrid">Select Employee</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input id="datepickermodal" class="form-select border-form-modal" type="text" name="daterangemodal" />
+                        <label for="floatingSelectGrid">Select Date</label>
+                    </div>
+                </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-upload" id="exportemployeeattendance">Download</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--MODAL-->
+
+<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <div>
+                    <h1 class="modal-title" id="exampleModalToggleLabel">
+                       Logs
+                    </h1>
+                </div>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-light table-striped" id="dataTableattendancelogs">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th class="col-25">Full Name</th>
+                                <th>Date</th>
+                                <th class="col-sm-1">Time</th>
+                                <th>Log Type</th>
+                                <th>Latitude</th>
+                                <th>Lonitude</th>
+                                <th class="col-sm-1">Device</th>
+                                <th class="col-25">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

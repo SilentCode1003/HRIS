@@ -255,6 +255,14 @@ exports.Select = (sql, table, callback) => {
       if (table == "Master_Leaves") {
         callback(null, model.Master_Leaves(results));
       }
+
+      if (table == "Subgroup") {
+        callback(null, model.Subgroup(results));
+      }
+
+      if (table == "Approval_Stage_Settings") {
+        callback(null, model.Approval_Stage_Settings(results));
+      }
     });
   } catch (error) {}
 };
@@ -951,7 +959,9 @@ exports.InsertTable = (tablename, data, callback) => {
       ar_createby,
       ar_status,
       ar_reason,
-      ar_file) VALUES ?`;
+      ar_file,
+      ar_approvedcount,
+      ar_rejectcount) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -1044,6 +1054,24 @@ exports.InsertTable = (tablename, data, callback) => {
       ml_unusedleavedays,
       ml_usedleavedays,
       ml_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request_activity") {
+    let sql = `INSERT INTO attendance_request_activity(
+      ara_employeeid,
+      ara_departmentid,
+      ara_requestid,
+      ara_subgroupid,
+      ara_status,
+      ara_date) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

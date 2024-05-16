@@ -7,6 +7,7 @@ var router = express.Router();
 const currentDate = moment();
 const XLSX = require("xlsx");
 
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('attendancelayout', { title: 'Express' });
@@ -67,7 +68,7 @@ router.get("/load", (req, res) => {
         ) AS totalhours
         FROM master_attendance
         LEFT JOIN master_employee ON ma_employeeid = me_id
-        ORDER BY ma_attendancedate DESC`;
+        ORDER BY ma_attendanceid DESC`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -463,6 +464,8 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
+
 
 router.post("/exportfileperemployee", async (req, res) => {
   try {

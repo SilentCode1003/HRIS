@@ -161,6 +161,9 @@ var roleacess = [
       {
         layout: "leavesettingslayout",
       },
+      {
+        layout: "approval_stage_settinglayout",
+      },
     ],
   },
   {
@@ -222,6 +225,47 @@ var roleacess = [
     ],
   },
   {
+    role: "Super Visor",
+    routes: [
+      {
+        layout: "teamleadindexlayout",
+      },
+      {
+        layout: "teamleademployeelayout",
+      },
+      {
+        layout: "teamleadcoalayout",
+      },
+      {
+        layout: "teamleadovertimelayout",
+      },
+      {
+        layout: "teamleadleavelayout",
+      },
+      {
+        layout: "teamleadpendingcoalayout",
+      },
+      {
+        layout: "teamleadapprovedcoalayout",
+      },
+      {
+        layout: "teamleadappliedovertimelayout",
+      },
+      {
+        layout: "teamleadapprovedovertimelayout",
+      },
+      {
+        layout: "teamleadpendingleavelayout",
+      },
+      {
+        layout: "teamleadapprovedleavelayout",
+      },
+      {
+        layout: "teamleadgeofencelayout",
+      },
+    ],
+  },
+  {
     role: "Team Leader",
     routes: [
       {
@@ -259,6 +303,9 @@ var roleacess = [
       },
       {
         layout: "teamleadgeofencelayout",
+      },
+      {
+        layout: "teamleadattendancelayout",
       },
     ],
   },
@@ -415,7 +462,7 @@ exports.ValidatorForTeamLead = function (req, res, layout) {
   console.log("Layout:", layout);
   
   if (
-    (req.session.accesstype == "Team Leader" && layout == "teamleadindexlayout")
+    (req.session.accesstype == "Team Leader" || "Super Visor" && layout == "teamleadindexlayout")
   ) {
     console.log(req.session.accesstype);
     console.log("hit");
@@ -426,6 +473,8 @@ exports.ValidatorForTeamLead = function (req, res, layout) {
       accesstype: req.session.accesstype,
       geofenceid: req.session.geofenceid,
       departmentid: req.session.departmentid,
+      subgroupid: req.session.subgroupid,
+      accesstypeid: req.session.accesstypeid,
     });
   } else {
     roleacess.forEach((key, item) => {
@@ -446,6 +495,8 @@ exports.ValidatorForTeamLead = function (req, res, layout) {
             departmentname: req.session.departmentname,
             position: req.session.position,
             geofenceid: req.session.geofenceid,
+            subgroupid: req.session.subgroupid,
+            accesstypeid: req.session.accesstypeid,
           });
         }
       });

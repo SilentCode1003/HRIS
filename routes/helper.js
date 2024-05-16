@@ -100,6 +100,8 @@ exports.TeamLeadLogin = (result, callback) => {
         position: row.position,
         jobstatus: row.jobstatus,
         geofenceid: row.geofenceid,
+        subgroupid: row.subgroupid,
+        accesstypeid: row.accesstypeid,
       });
     });
 
