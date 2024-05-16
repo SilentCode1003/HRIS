@@ -68,7 +68,7 @@
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var jobStatusCell = $(row).find("td:eq(5)");
-          var hiredateCell = $(row).find("td:eq(4)");
+        
           var jobStatusText = data.jobstatus;
           var jobStatusClass = "";
 
@@ -92,7 +92,7 @@
           jobStatusCell.html(
             `<span class="${jobStatusClass}">${jobStatusText}</span>`
           );
-          hiredateCell.wrapInner("<span class='hiredate-text'></span>");
+        
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

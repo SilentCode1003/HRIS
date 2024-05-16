@@ -69,11 +69,9 @@
                 ],
                 createdRow: function (row, data, dataIndex) {
                     var appnameCell = $(row).find("td:eq(2)");
-                    var appdateCell = $(row).find("td:eq(5)");
-
+                   
                     appnameCell.wrapInner("<span class='appname-text'></span>");
-                    appdateCell.wrapInner("<span class='appdate-text'></span>");
-
+                    
                     $("td", row).each(function (index) {
                         this.style.textAlign = "center";
                         this.style.verticalAlign = "middle";
