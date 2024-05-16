@@ -27,7 +27,7 @@ module.exports = router;
 router.post("/save", async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let accesstype = '5';
+    let accesstype = 5;
     let status = 'Active';
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
@@ -63,7 +63,7 @@ router.post("/save", async (req, res) => {
                 employeeid,
                 username,
                 encrypted,
-                accesstype,
+                5,
                 createby,
                 createdate,
                 status,
@@ -180,6 +180,27 @@ router.post("/getusers", (req, res) => {
         where tu_userid = '${tluserid}'`;
 
     mysql.Select(sql, "TeamLeader_User", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error,
+    });
+  }
+});
+
+
+router.get("/subgroupload", (req, res) => {
+  try {
+    let sql = `select * from subgroup`;
+
+    mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error: ", err);
 
       res.json({

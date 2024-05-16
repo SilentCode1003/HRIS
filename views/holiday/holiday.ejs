@@ -43,34 +43,59 @@
 </div>
 
 
-<!--Modal-->
-<!-- <div class="modal fade" id="holidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+<!--Modal Edit-->
+<div class="modal fade" id="editholidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Generate Holidays</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Edit Holiday?</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
-      <div class="row g-3">
-        <div class="modal-body">
+      <div class="modal-body" id="modal-body">
           <form>
-            <div class="col">
+            <br>
               <div class="col">
                 <div class="form-floating">
-                <input type="number" class="form-control" id="yearInput" name="yearInput">
-                <label for="floatingInput">Enter Year</label>
+                  <input type="date" class="form-control border-form-modal" id="editholidaydate" name="editholidaydate" placeholder="Created By">
+                  <label for="floatingInput">Holiday Date</label>
+                </div>
               </div>
-            </div>
-            </div>
-            <br>
-          </form>
-        </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editholidayday" name="editholidayday" placeholder="Created By" disabled>
+                  <label for="floatingInput">Holiday Day</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editholidayname" name="editholidayname" placeholder="Created By">
+                  <label for="floatingInput">Holiday Name</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select border-form-modal" id="editholidaytype" name="editholidaytype" aria-label="Floating label select example">
+                    <option selected disabled>Choose....</option>
+                    <option value="Non-Working Holiday">Non-Working Holiday</option>
+                    <option value="Regular Holiday">Regular Holiday</option>
+                    <option value="Special Holiday">Special Holiday</option>
+                  </select>
+                  <label for="floatingSelectGrid">Holiday Type</label>
+                </div>
+              </div>
+              <br>
+      </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="generateHolidaysBtn">Generate Holidays</button>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editholidaybtn">Save</button>
       </div>
     </div>
   </div>
-</div> -->
+</div>
