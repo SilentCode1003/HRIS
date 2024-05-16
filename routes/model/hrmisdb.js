@@ -895,6 +895,7 @@ exports.TeamLeader_User = (data) => {
       username: key.tu_username,
       password: key.tu_password,
       accesstype: key.tu_accesstype,
+      subgroupid: key.tu_subgroupid,
       createby: key.tu_createby,
       createdate: key.tu_createdate,
       status: key.tu_status,

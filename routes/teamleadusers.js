@@ -27,6 +27,7 @@ module.exports = router;
 router.post("/save", async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let subgroupid = req.body.subgroupid;
     let accesstype = 5;
     let status = 'Active';
     let createby = req.session.fullname;
@@ -64,6 +65,7 @@ router.post("/save", async (req, res) => {
                 username,
                 encrypted,
                 5,
+                subgroupid,
                 createby,
                 createdate,
                 status,
@@ -132,8 +134,7 @@ router.post("/update", async (req, res) => {
   try {
     let tluserid = req.body.tluserid;
     let username = req.body.username;
-    //let password = req.body.password;
-    // let accesstype = req.body.accesstype;
+    let subgroupid = req.body.subgroupid;
     let status = req.body.status;
 
     // Wrap the Encrypter function in a promise
@@ -148,9 +149,11 @@ router.post("/update", async (req, res) => {
     //   });
     // });
 
-    let sqlupdate = `UPDATE teamlead_user SET 
+    let sqlupdate = `        
+    UPDATE teamlead_user SET 
     tu_username = '${username}',
-    tu_status ='${status}'
+    tu_status ='${status}',
+    tu_subgroupid = '${subgroupid}'
     WHERE tu_userid ='${tluserid}'`;
 
     const updateResult = await mysql.Update(sqlupdate);
@@ -175,8 +178,10 @@ router.post("/getusers", (req, res) => {
     SELECT 
         tu_username,
         tu_password,
-        tu_status
+        tu_status,
+        s_name as tu_subgroupid
         from teamlead_user
+        inner join subgroup on teamlead_user.tu_subgroupid = s_id
         where tu_userid = '${tluserid}'`;
 
     mysql.Select(sql, "TeamLeader_User", (err, result) => {
