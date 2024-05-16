@@ -71,11 +71,9 @@
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var statusCell = $(row).find("td:eq(4)");
-          var dateresignedCell = $(row).find("td:eq(3)");
          
           var statusText = data.status;
 
-          
           var statusClass = "";
 
           
@@ -98,7 +96,6 @@
 
           
           statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
-          dateresignedCell.wrapInner("<span class='dateresigned-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

@@ -123,7 +123,7 @@
           const cardHtml = `
         <div data-toggle="modal" id="department${index}" data-target="#${department.DepartmentID}Modal"
           class="card-link col-xl-2 col-md-6 mb-4 datacard" data-department-id="${department.DepartmentID}">
-          <div id="total${department.DepartmentID}" class="card h-100 py-2 db-card">
+          <div id="total${department.DepartmentID}" class="card h-100 py-2 db-card department-card">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
@@ -133,7 +133,7 @@
                   <div class="h5 mb-0 font-weight-bold card-text">${employeeCount}</div>
                 </div>
                 <div class="col-auto">
-                  <img src="data:image/png;base64,${department.Icon}" class="card-icon" />
+                  <img src="data:image/png;base64,${department.Icon}" class="department-icon" />
                 </div>
               </div>
             </div>

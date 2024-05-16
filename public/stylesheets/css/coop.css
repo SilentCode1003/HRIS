@@ -564,8 +564,16 @@ tr:hover {
   font-weight: bold;
 }
 
-#totalEmployeeCard,#regularEmployeeCard, #resignedEmployeeCard, #probationaryEmployeeCard,
-#totalADMIN, #totalIT, #totalCABLING, #totalempcandidate, #totalempbagapuro, #totalempapprentice {
+#totalEmployeeCard,
+#regularEmployeeCard,
+#resignedEmployeeCard,
+#probationaryEmployeeCard,
+#totalADMIN,
+#totalIT,
+#totalCABLING,
+#totalempcandidate,
+#totalempbagapuro,
+#totalempapprentice, .department-card  {
   background-image: url(/images/img/employee.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -573,8 +581,18 @@ tr:hover {
   box-shadow: 0 5px 8px #3d0404 !important;
 }
 
-#totalEmployeeCard::before,#regularEmployeeCard::before, #resignedEmployeeCard::before, #probationaryEmployeeCard::before,
-#totalADMIN::before, #totalIT::before, #totalCABLING::before, #totalempcandidate::before, #totalempbagapuro::before, #totalempapprentice::before {
+
+#totalEmployeeCard::before,
+#regularEmployeeCard::before,
+#resignedEmployeeCard::before,
+#probationaryEmployeeCard::before,
+#totalADMIN::before,
+#totalIT::before,
+#totalCABLING::before,
+#totalempcandidate::before,
+#totalempbagapuro::before,
+#totalempapprentice::before,
+.department-card:before {
   background: linear-gradient(to top, rgba(255, 253, 253, 0.25) 0, rgba(129, 9, 9, 0.85) 100%);
   content: "";
   position: absolute;
@@ -586,7 +604,6 @@ tr:hover {
   height: 100%;
   width: 100%;
 }
-
 
 #totalCOACard,
 #totalovertimeCard,
@@ -953,9 +970,18 @@ tr:hover {
   color: #7a1818 !important;
   font-weight: bold !important;
 }
-#totalEMP, #totalregularEMP, #totalprobiEMP, #totalresignedEMP,
- #totaladminEMP, #totalitEMP, #totalcablingEMP,
-#totalcandidate, #totalbagapuro, #totalapprentice {
+
+#totalEMP,
+#totalregularEMP,
+#totalprobiEMP,
+#totalresignedEMP,
+#totaladminEMP,
+#totalitEMP,
+#totalcablingEMP,
+#totalcandidate,
+#totalbagapuro,
+#totalapprentice,
+.department-card {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }
@@ -969,12 +995,21 @@ tr:hover {
   margin: 3%;
 }
 
-#totalEMP:hover, #totalregularEMP:hover, #totalprobiEMP:hover, #totalresignedEMP:hover,
- #totaladminEMP:hover, #totalitEMP:hover, #totalcablingEMP:hover,
-  #totalcandidate:hover, #totalbagapuro:hover, #totalapprentice:hover,
-  #totalCOA:hover, #totalovertime:hover, #totalleave:hover {
+#totalEMP:hover,
+#totalregularEMP:hover,
+#totalprobiEMP:hover,
+#totalresignedEMP:hover,
+#totaladminEMP:hover,
+#totalitEMP:hover,
+#totalcablingEMP:hover,
+#totalcandidate:hover,
+#totalbagapuro:hover,
+#totalapprentice:hover,
+#totalCOA:hover,
+#totalovertime:hover,
+#totalleave:hover,
+.department-card:hover {
   transform: scale(1.1);
-
 }
 
 .db-wholecard {
@@ -1061,7 +1096,7 @@ tr:hover {
   /* background-color: #baebfcc2 !important; */
   border: 3px solid #7a1818 !important;
   border-radius: 5px;
-  background-image: url(/images/img/card.png);
+  background-image: url(/images/img/red.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1071,7 +1106,7 @@ tr:hover {
    /* background-color: #baebfcc2 !important; */
    border: 3px solid #7a1818 !important;
    border-radius: 5px;
-   background-image: url(/images/img/card.png);
+   background-image: url(/images/img/red.png);
    background-position: center;
    background-repeat: no-repeat;
    background-size: cover;
@@ -1741,7 +1776,7 @@ span.prev-bday, span.next-bday {
   height: 500px;
   width: 500px;
   /* background-color: white !important; */
-  background-image: url(/images/img/card-add.png);
+  background-image: url(/images/img/red.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1755,7 +1790,7 @@ span.prev-bday, span.next-bday {
   height: 500px;
   width: 500px;
   /* background-color: white !important; */
-  background-image: url(/images/img/card-add.png);
+  background-image: url(/images/img/red.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -3123,6 +3158,15 @@ span#viewbtn {
   width: 30px;
   height: 30px; 
 }
+
+.department-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid white !important;
+  margin-right: 8px;
+}
+
 
 
 
