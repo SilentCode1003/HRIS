@@ -17,6 +17,7 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
+    let subgroupid = req.session.subgroupid;
     let sql = `SELECT 
     me_profile_pic,
     ar_requestid,
@@ -30,7 +31,7 @@ router.get("/load", (req, res) => {
   FROM attendance_request
   INNER JOIN
   master_employee ON attendance_request.ar_employeeid = me_id
-  WHERE me_department = '${departmentid}'
+  WHERE me_department = '${departmentid}' and ar_subgroupid = '${subgroupid}'
   AND ar_employeeid NOT IN (
     SELECT tu_employeeid FROM teamlead_user)`;
 

@@ -23,12 +23,14 @@ router.post("/login", (req, res) => {
       tu_employeeid AS employeeid,
       CONCAT(me_firstname, ' ', me_lastname) AS fullname,
       ma_accessname AS accesstype,
+      ma_accessid as accesstypeid,
       tu_status AS status,
       me_profile_pic AS image,
       me_jobstatus AS jobstatus,
       md_departmentid AS departmentid,
       md_departmentname AS departmentname,
-      mp_positionname AS position
+      mp_positionname AS position,
+      tu_subgroupid as subgroupid
       FROM teamlead_user
       INNER JOIN master_access ON tu_accesstype = ma_accessid
       LEFT JOIN master_employee ON tu_employeeid = me_id
@@ -55,11 +57,13 @@ router.post("/login", (req, res) => {
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
+                  req.session.accesstypeid = user.accesstypeid;
                   req.session.image = user.image;
                   req.session.departmentid = user.departmentid;
                   req.session.departmentname = user.departmentname;
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
+                  req.session.subgroupid = user.subgroupid;
                 });
 
                 console.log('accesstype',req.session.accesstype);

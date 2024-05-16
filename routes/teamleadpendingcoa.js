@@ -17,6 +17,7 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
+    let subgroupid = req.session.subgroupid;
     let sql = `SELECT 
     me_profile_pic,
     ar_requestid,
@@ -30,7 +31,7 @@ router.get("/load", (req, res) => {
   FROM attendance_request
   INNER JOIN
   master_employee ON attendance_request.ar_employeeid = me_id
-  WHERE me_department = '${departmentid}' AND ar_status = 'Pending'
+  WHERE me_department = '${departmentid}' AND ar_status = 'Pending' and ar_subgroupid = '${subgroupid}'
   AND ar_employeeid NOT IN (
     SELECT tu_employeeid FROM teamlead_user)`;
 
@@ -47,5 +48,66 @@ router.get("/load", (req, res) => {
       msg: "error",
       data: error,
     });
+  }
+});
+
+
+router.get("/loadactionname", (req, res) => {
+  try {
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `select
+    ats_approvename,
+    ats_rejectname
+    from aprroval_stage_settings
+    where ats_accessid = '${accesstypeid}'`;
+
+    console.log(accesstypeid,'id');
+
+    mysql.Select(sql, "Approval_Stage_Settings", (err, result) => {
+      if (err) console.error("Error Fetching Data: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+router.post('/attendanceaction', (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let departmentid = req.session.departmentid;
+    let subgroupid = req.session.subgroupid;
+    let requestid = req.body.requestid;
+    let status = req.body.status;
+    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+
+  
+    let data = [];
+  
+    data.push([
+      employeeid, departmentid, requestid, subgroupid, status, createdate,
+    ])
+    
+    mysql.InsertTable('attendance_request_activity', data, (err, result) => {
+      if (err) console.error('Error: ', err);
+
+      console.log(result);
+
+      res.json({
+        msg: 'success'
+      })
+    });
+  } catch (error) {
+    res.json({
+      msg: 'error'
+    })
   }
 });

@@ -968,6 +968,41 @@ exports.Master_Leaves = (data) => {
 };
 
 
+exports.Subgroup = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      subgroupid: key.s_id,
+      departmentid: key.s_departmentid,
+      subgroupname: key.s_name,
+      createby: key.s_createby,
+      createdate: key.s_createdate,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Approval_Stage_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approvalstage: key.ats_id,
+      accessid: key.ats_accessid,
+      approvalcount: key.ats_count,
+      approvename: key.ats_approvename,
+      rejectname: key.ats_rejectname,
+      createby: key.ats_createdby,
+      createdate: key.ats_createddate,
+    });
+  });
+
+  return dataResult;
+};
+
+
 
 
 
