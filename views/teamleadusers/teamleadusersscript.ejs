@@ -8,6 +8,7 @@
       LoadEditAccess();
       searchTable();
       LoadSubgroup();
+      LoadEditSubgroup();
   
       $(document).on('keyup', '#myInput', function () {
         searchTable();
@@ -205,6 +206,26 @@
           },
         });
       }
+
+
+      function LoadEditSubgroup() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadusers/subgroupload",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.subgroupid, item.subgroupid);
+              $(options).html(item.subgroupname);
+              $("#editsubgroupid").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
   
       function LoadAccess() {
         $.ajax({
@@ -254,6 +275,7 @@
             dataRow.push($(this).text());
           });
           tluserid = dataRow[0];
+          console.log(dataRow);
       });
   
       $(document).on("click", "#editBtn", function () {
@@ -270,9 +292,9 @@
               $.each(existingData, (key, item) => {
                 $("#editdepartmentid").val(item.userid);
                 $("#editusername").val(item.username);
-                //$("#editpassword").val(item.password);
-                // $("#editusersaccesstype").val(item.accesstype);
+                $("#editsubgroupid").val(item.subgroupid);
                 $("#editusersstatus").val(item.status);
+                console.log(item.subgroupid);
               });
             } else {
               swal("Error fetching employee data", message, "error");
@@ -287,8 +309,7 @@
       $(document).on("click", "#edituserssavebtn", function () {
         let id = tluserid
         let username = $("#editusername").val();
-        //let password = $("#editpassword").val();
-        // let accesstype = $("#editusersaccesstype").val();
+        let subgroupid = $("#editsubgroupid").val();
         let status = $("#editusersstatus").val();
   
         var message = "";
@@ -296,14 +317,10 @@
         if (username === "") {
           message += "departmentname is required. ";
         }
-  
-        //if (password === "") {
-        //message += "status is required. ";
-        //}
-  
-        // if (accesstype === "") {
-        //   message += "departmentname is required. ";
-        // }
+
+        if (subgroupid === "") {
+          message += "departmentname is required. ";
+        }
   
         if (status === "") {
           message += "status is required. ";
@@ -318,8 +335,7 @@
             data: {
               tluserid: id,
               username: username,
-              //password: password,
-              // accesstype: accesstype,
+              subgroupid: subgroupid,
               status: status,
             },
             success: function (result) {
