@@ -993,6 +993,7 @@ exports.InsertTable = (tablename, data, callback) => {
        tu_username,
        tu_password,
        tu_accesstype,
+       tu_subgroupid,
        tu_createby,
        tu_createdate,
        tu_status) VALUES ?`;
