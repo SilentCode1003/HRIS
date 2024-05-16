@@ -7,6 +7,7 @@
       LoadAccess();
       LoadEditAccess();
       searchTable();
+      LoadSubgroup();
   
       $(document).on('keyup', '#myInput', function () {
         searchTable();
@@ -113,10 +114,15 @@
   
       $(document).on("click", "#userssavebtn", function () {
         let employeeid = $("#usersname").val();
+        let subgroupid = $("#subgroupid").val();
   
         var message = "";
   
         if (employeeid == "") {
+          message += "TITTLE ";
+        }
+
+        if (subgroupid == "") {
           message += "TITTLE ";
         }
   
@@ -128,6 +134,7 @@
             url: "/teamleadusers/save",
             data: {
               employeeid: employeeid,
+              subgroupid: subgroupid,
             },
             success: function (result) {
               if (result.msg == "success") {
@@ -172,6 +179,25 @@
               var options = new Option(item.newEmployeeId, item.newEmployeeId);
               $(options).html(item.firstname);
               $("#usersname").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+
+      function LoadSubgroup() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadusers/subgroupload",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.subgroupid, item.subgroupid);
+              $(options).html(item.subgroupname);
+              $("#subgroupid").append(options);
             });
           },
           error: function (result) {

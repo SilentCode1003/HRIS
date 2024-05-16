@@ -27,7 +27,7 @@
               if (result.msg === "success") {
                 swal("Save Successfully", "You clicked the button!", "success")
                   .then(results => {
-                    if (result.data[0].accesstype === 'Team Leader') {
+                    if (result.data[0].accesstype === 'Team Leader'||'Super Visor') {
                       location.replace("/teamleadindex");
                     } else {
                       location.replace("/teamleadlogin");

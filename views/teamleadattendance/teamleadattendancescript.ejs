@@ -1,0 +1,714 @@
+<script>
+    let map;
+    let attendanceid = "";
+    let startdate = "";
+    let enddate = "";
+  
+    $(document).ready(function () {
+      searchTable();
+      LoadTable();
+      LoadListEmp();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableattendance").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/teamleadattendance/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+                 `;
+  
+                // var imgElement = document.createElement("img");
+                // imgElement.src = "data:image/jpg;base64," + item.image;
+                // imgElement.alt = "Profile Image";
+                // imgElement.style.width = "80px";
+                // imgElement.style.height = "80px";
+  
+                finalData.push({
+                  //image: imgElement.outerHTML,
+                  attendanceid: item.attendanceid,
+                  employeeid: item.employeeid,
+                  attendancedate: item.attendancedate,
+                  clockin: item.clockin,
+                  clockout: item.clockout,
+                  devicein: item.devicein,
+                  deviceout: item.deviceout,
+                  totalhours: item.totalhours,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            //{ data: "image" },
+            { data: "attendanceid" },
+            { data: "employeeid" },
+            { data: "attendancedate" },
+            { data: "clockin" },
+            { data: "clockout" },
+            { data: "devicein" },
+            { data: "deviceout" },
+            { data: "totalhours" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            var clockinCell = $(row).find("td:eq(3)");
+            var clockoutCell = $(row).find("td:eq(4)");
+            var totalhoursCell = $(row).find("td:eq(7)");
+  
+            clockinCell.wrapInner("<span class='clockin-text'></span>");
+            clockoutCell.wrapInner("<span class='clockout-text'></span>");
+            totalhoursCell.wrapInner("<span class='totalhours-text'></span>");
+  
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+        $("#loaddate").click(function () {
+          showspinner();
+          let startDate = picker.startDate.format("YYYY-MM-DD");
+          let endDate = picker.endDate.format("YYYY-MM-DD");
+          LoadDateRange(startDate, endDate);
+        });
+      });
+  
+      function LoadDateRange(startDate, endDate) {
+        $("#dataTableattendance").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "POST",
+          ajax: {
+            url: "/attendance/daterange",
+            data: {
+              startdate: startDate,
+              enddate: endDate,
+            },
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+                 `;
+  
+                // var imgElement = document.createElement("img");
+                // imgElement.src = "data:image/jpg;base64," + item.image;
+                // imgElement.alt = "Profile Image";
+                // imgElement.style.width = "80px";
+                // imgElement.style.height = "80px";
+  
+                finalData.push({
+                  //image: imgElement.outerHTML,
+                  attendanceid: item.attendanceid,
+                  employeeid: item.employeeid,
+                  attendancedate: item.attendancedate,
+                  clockin: item.clockin,
+                  clockout: item.clockout,
+                  devicein: item.devicein,
+                  deviceout: item.deviceout,
+                  totalhours: item.totalhours,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            //{ data: "image" },
+            { data: "attendanceid" },
+            { data: "employeeid" },
+            { data: "attendancedate" },
+            { data: "clockin" },
+            { data: "clockout" },
+            { data: "devicein" },
+            { data: "deviceout" },
+            { data: "totalhours" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+        hidespinner();
+      }
+  
+      $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+        $("#checklogs").click(function () {
+          showspinner();
+          let startDate = picker.startDate.format("YYYY-MM-DD");
+          let endDate = picker.endDate.format("YYYY-MM-DD");
+          loadmissedlogs(startDate, endDate);
+        });
+      });
+  
+      function loadmissedlogs(startDate, endDate) {
+        $("#dataTableattendance").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "POST",
+          ajax: {
+            url: "/attendance/missedlogs",
+            data: {
+              startdate: startDate,
+              enddate: endDate,
+            },
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+                 `;
+  
+                // var imgElement = document.createElement("img");
+                // imgElement.src = "data:image/jpg;base64," + item.image;
+                // imgElement.alt = "Profile Image";
+                // imgElement.style.width = "80px";
+                // imgElement.style.height = "80px";
+  
+                finalData.push({
+                  //image: imgElement.outerHTML,
+                  attendanceid: item.attendanceid,
+                  employeeid: item.employeeid,
+                  attendancedate: item.attendancedate,
+                  clockin: item.clockin,
+                  clockout: item.clockout,
+                  devicein: item.devicein,
+                  deviceout: item.deviceout,
+                  totalhours: item.totalhours,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            //{ data: "image" },
+            { data: "attendanceid" },
+            { data: "employeeid" },
+            { data: "attendancedate" },
+            { data: "clockin" },
+            { data: "clockout" },
+            { data: "devicein" },
+            { data: "deviceout" },
+            { data: "totalhours" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+        hidespinner();
+      }
+  
+      $("#dataTableattendance tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+        attendanceid = dataRow[0];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $(`#dataTableattendancelogs`).find("tr:gt(0)").remove();
+        $.ajax({
+          type: "POST",
+          url: "/attendance/logs",
+          data: {
+            attendanceid: attendanceid,
+          },
+          success: function (json) {
+            var finalData = [];
+            var data = json.data;
+  
+            if ($.fn.DataTable.isDataTable("#dataTableattendancelogs")) {
+              $("#dataTableattendancelogs").DataTable().destroy();
+            }
+            material_list_tbl = document.getElementById(
+              "dataTableattendancelogs"
+            );
+  
+            $.each(data, function (key, item) {
+              var row = material_list_tbl.insertRow(1);
+              var IMAGE = row.insertCell(0);
+              var FULLNAME = row.insertCell(1);
+              var LOGDATE = row.insertCell(2);
+              var LOGTIME = row.insertCell(3);
+              var LOGTYPE = row.insertCell(4);
+              var LATITUDE = row.insertCell(5);
+              var LONGITUDE = row.insertCell(6);
+              var DEVICE = row.insertCell(7);
+              var LOCATION = row.insertCell(8);
+  
+              var imgElement = document.createElement("img");
+              imgElement.src = "data:image/jpg;base64," + item.image;
+              imgElement.alt = "Profile Image";
+              imgElement.style.width = "80px";
+              imgElement.style.height = "80px";
+  
+              IMAGE.appendChild(imgElement);
+  
+              FULLNAME.innerHTML = item.fullname;
+              LOGDATE.innerHTML = item.logdate;
+              LOGTIME.innerHTML = item.logtime;
+              LOGTYPE.innerHTML = item.logtype;
+              LATITUDE.innerHTML = item.latitude;
+              LONGITUDE.innerHTML = item.longitude;
+              DEVICE.innerHTML = item.device;
+              LOCATION.innerHTML = item.location;
+  
+              $.each(
+                [
+                  FULLNAME,
+                  LOGDATE,
+                  LOGTIME,
+                  LOGTYPE,
+                  LATITUDE,
+                  LONGITUDE,
+                  DEVICE,
+                  LOCATION,
+                ],
+                function (_, cell) {
+                  cell.style.textAlign = "center";
+                  cell.style.verticalAlign = "middle";
+                }
+              );
+            });
+          },
+          error: function (xhr, status, error) {},
+        });
+      });
+  
+      $("#datepickermodal").on("apply.daterangepicker", function (ev, picker) {
+        $("#exportemployeeattendance").click(function () {
+          let employeeid = $("#employeename").val();
+          let startDate = picker.startDate.format("YYYY-MM-DD");
+          let endDate = picker.endDate.format("YYYY-MM-DD");
+          exportempattendance(employeeid, startDate, endDate);
+        });
+      });
+  
+      function exportempattendance(employeeid, startDate, endDate) {
+        $.ajax({
+          url: "/attendance/exportfileperemployee",
+          type: "POST",
+          data: {
+            employeeid: employeeid,
+            startdate: startDate,
+            enddate: endDate,
+          },
+          xhrFields: {
+            responseType: "blob",
+          },
+          success: function (response) {
+            if (response) {
+              swal({
+                title: "Download Employee Attendance",
+                text: "Are you sure you want to download the Attendance data?",
+                confirm: "#28a745",
+                cancel: "#dc3545",
+                buttons: {
+                  confirm: "Yes, download it!",
+                  cancel: "No, cancel",
+                },
+                dangerMode: true,
+              }).then((result) => {
+                if (result) {
+                  var blob = response;
+  
+                  var url = URL.createObjectURL(blob);
+  
+                  var link = document.createElement("a");
+                  link.href = url;
+                  link.download = `Attendance_data_of_${employeeid}.xlsx`;
+                  document.body.appendChild(link);
+                  link.click();
+                  URL.revokeObjectURL(url);
+                } else {
+                  swal(
+                    "Cancelled",
+                    "Payroll data download cancelled :)",
+                    "error"
+                  );
+                }
+              });
+            } else {
+              console.error("Error: Empty response");
+              swal(
+                "Error",
+                "Failed to export payroll data. Please try again later.",
+                "error"
+              );
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error:", error);
+            swal(
+              "Error",
+              "Failed to export payroll data. Please try again later.",
+              "error"
+            );
+          },
+        });
+      }
+  
+      $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+        $("#exportBtn").click(function () {
+          let startDate = picker.startDate.format("YYYY-MM-DD");
+          let endDate = picker.endDate.format("YYYY-MM-DD");
+          exportPayroll(startDate, endDate);
+        });
+      });
+  
+      function exportPayroll(startDate, endDate) {
+        $.ajax({
+          url: "/attendance/exportfile",
+          type: "POST",
+          data: {
+            startdate: startDate,
+            enddate: endDate,
+          },
+          xhrFields: {
+            responseType: "blob",
+          },
+          success: function (response) {
+            if (response) {
+              swal({
+                title: "Download Payroll Data",
+                text: "Are you sure you want to download the payroll data?",
+                confirm: "#28a745",
+                cancel: "#dc3545",
+                buttons: {
+                  confirm: "Yes, download it!",
+                  cancel: "No, cancel",
+                },
+                dangerMode: true,
+              }).then((result) => {
+                if (result) {
+                  var blob = response;
+  
+                  var url = URL.createObjectURL(blob);
+  
+                  var link = document.createElement("a");
+                  link.href = url;
+                  link.download = `Attendance_data_${startDate}_${endDate}.xlsx`;
+                  document.body.appendChild(link);
+                  link.click();
+                  URL.revokeObjectURL(url);
+                } else {
+                  swal(
+                    "Cancelled",
+                    "Payroll data download cancelled :)",
+                    "error"
+                  );
+                }
+              });
+            } else {
+              console.error("Error: Empty response");
+              swal(
+                "Error",
+                "Failed to export payroll data. Please try again later.",
+                "error"
+              );
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error:", error);
+            swal(
+              "Error",
+              "Failed to export payroll data. Please try again later.",
+              "error"
+            );
+          },
+        });
+      }
+  
+      function LoadListEmp() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadattendance/loadexport",
+          success: function (result) {
+            // console.log(result.data);
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.newEmployeeId, item.newEmployeeId);
+              $(options).html(item.firstname);
+              $("#employeename").append(options);
+              //console.log(item.firstname);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      // Click event handler for the "editBtn" button
+      // $(document).on("click", "#editBtn", function () {
+      //     $("#dataTableattendancelogs").DataTable({
+      //         destroy: true,
+      //         processing: true,
+      //         serverSide: true,
+      //         paging: false,
+      //         searching: false,
+      //         info: false,
+      //         scrollY: 400,
+      //         scrollCollapse: true,
+      //         serverMethod: "POST",
+      //         ajax: {
+      //             url: "/attendance/logs",
+      //             data: {
+      //                 attendanceid: attendanceid,
+      //             },
+      //             dataSrc: (json) => {
+      //                 var finalData = [];
+      //                 var data = json.data;
+  
+      //                 $.each(data, (key, item) => {
+      //             //         var action = `
+      //             //     <button class="btn text-primary editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"
+      //             //             data-attendanceid="${item.attendanceid}" data-employeeid="${item.employeeid}">
+      //             //         <i class="fas fa-fw fa-pen"></i>
+      //             //     </button>
+      //             // `;
+  
+      //                     finalData.push({
+      //                         fullname: item.fullname,
+      //                         logdatetime: item.logdatetime,
+      //                         logtype: item.logtype,
+      //                         latitude: item.latitude,
+      //                         longitude: item.longitude,
+      //                         device: item.device,
+      //                         location: item.location,
+      //                     });
+      //                 });
+  
+      //                 return finalData;
+      //             },
+      //         },
+      //         columnDefs: [
+      //             {
+      //                 targets: 1,
+      //                 className: "td-indent",
+      //             },
+      //         ],
+      //         columns: [
+      //             { data: "fullname" },
+      //             { data: "logdatetime" },
+      //             { data: "logtype" },
+      //             { data: "latitude" },
+      //             { data: "longitude" },
+      //             { data: "device" },
+      //             { data: "location" },
+      //         ],
+      //         initComplete: function () {
+      //         },
+      //     });
+      // });
+  
+      // $(document).on("click", "#editBtn", function () {
+      //     $.ajax({
+      //         type: "POST",
+      //         url: "/attendance/logs",
+      //         data: {
+      //             logid: logid,
+      //         },
+      //         success: function (result) {
+      //             if (result.msg === "success") {
+      //                 const existingData = result.data;
+  
+      //                 $.each(existingData, (key, item) => {
+      //                     $("#editdepartmentid").val(item.fullname);
+      //                     $("#editdepartmentname").val(item.logdatetime);
+      //                     $("#editdepartmenthead").val(item.logtype);
+      //                     $("#editdepartmentstatus").val(item.latitude);
+      //                     $("#editdepartmentid").val(item.longitude);
+      //                     $("#editdepartmentname").val(item.device);
+      //                     $("#editdepartmenthead").val(item.location);
+      //                 });
+      //             } else {
+      //                 swal("Error fetching employee data", message, "error");
+      //             }
+      //         },
+      //         error: function (err) {
+      //             swal("An error occurred while fetching employee data", message, "error");
+      //         },
+      //     });
+      // });
+  
+      // Initialize the map
+      function initMap() {
+        map = L.map("map").setView([0, 0], 2);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+  
+        const marker = L.marker([0, 0]).addTo(map);
+        map.on("click", function (e) {
+          const { lat, lng } = e.latlng;
+          marker.setLatLng([lat, lng]);
+          $("#latitude").val(lat.toFixed(6));
+          $("#longitude").val(lng.toFixed(6));
+        });
+      }
+      $("#geoFenceModal").on("shown.bs.modal", function () {
+        initMap();
+      });
+  
+      function setGeoFence() {
+        const latitude = $("#latitude").val();
+        const longitude = $("#longitude").val();
+        const radius = $("#radius").val();
+        $.ajax({
+          type: "POST",
+          url: `/attendance/set-geofence?geofenceLatitude=${latitude}&geofenceLongitude=${longitude}&geofenceRadius=${radius}`,
+          contentType: "application/json",
+          success: function (data) {
+            $("#geoFenceModal").modal("hide");
+          },
+          error: function (error) {
+            console.error("Error:", error);
+          },
+        });
+      }
+    });
+  
+    $(function () {
+      $('input[name="daterange"]').daterangepicker(
+        {
+          opens: "middle",
+        },
+        function (start, end, label) {
+          console.log(
+            "A new date selection was made: " +
+              start.format("YYYY-MM-DD") +
+              " to " +
+              end.format("YYYY-MM-DD")
+          );
+        }
+      );
+    });
+  
+    $(function () {
+      $('input[name="daterangemodal"]').daterangepicker(
+        {
+          opens: "middle",
+        },
+        function (start, end, label) {
+          console.log(
+            "A bagong date selection was made: " +
+              start.format("YYYY-MM-DD") +
+              " to " +
+              end.format("YYYY-MM-DD")
+          );
+        }
+      );
+    });
+  
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableattendance");
+      tr = table.getElementsByTagName("tr");
+  
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+  
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+  
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+  

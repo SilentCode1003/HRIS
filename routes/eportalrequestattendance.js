@@ -57,10 +57,13 @@ router.post("/submit", async (req, res) => {
     let createdate = currentDate.format("YYYY-MM-DD");
     let status = "Pending";
     let createby = 'On Process';
+    let approvedcount = '0';
+    let rejectcount = '0';
 
     let total = calculateTotalHours(timein, timeout);
 
-    console.log(attendancedate, timein, timeout, reason, employeeid, file);
+    console.log(attendancedate, timein, timeout, reason, 
+      employeeid, file, approvedcount, rejectcount);
 
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
@@ -79,7 +82,9 @@ router.post("/submit", async (req, res) => {
     }
 
     const data = [
-      [employeeid, attendancedate, timein, timeout, total, createdate, createby, status, reason, file],
+      [employeeid, attendancedate, timein, timeout, total, createdate, createby, status, reason, file,
+        approvedcount, rejectcount
+      ],
     ];
 
     mysql.InsertTable("attendance_request", data, (insertErr, insertResult) => {
