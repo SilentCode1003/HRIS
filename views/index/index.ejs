@@ -149,6 +149,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- Total 1 Year -->
+        <div data-toggle="modal" id="total1year" data-target="#total1YearModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="total1Year" class="card h-100 py-2 db-card">
+              <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
+                                Total 1 Year
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold card-text">
+                            </div>
+                        </div>
+                     <div class="col-auto">
+                        <i class="bi bi-highlighter card-icon"></i>
+                    </div>
+                  </div>
+              </div>
+           </div>
+        </div>
         
     
         
@@ -418,8 +439,6 @@
         </div>
     </div>
 
-
-
     <!-- All Department Modal -->
     <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
         aria-hidden="true">
@@ -544,7 +563,46 @@
         </div>
     </div>
 
-
+    <!-- Total 1 Year Modal -->
+    <div class="modal fade" id="total1YearModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div>
+                        <h3 class="modal-title" id="exampleModalToggleLabel">Bagapuro Family</h3>
+                    </div>
+                    <br>
+                    <input id='myInputtotal1year' class="db-modal-search" type='text' placeholder="  Search....">
+                    <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="total1yeartable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Department</th>
+                                        <th>Hire Dte</th>
+                                        <th>Position</th>
+                                        <th>Tenure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Total Apprentice  Modal -->
     <div class="modal fade" id="totalaApprenticeModal" tabindex="-1" role="dialog"

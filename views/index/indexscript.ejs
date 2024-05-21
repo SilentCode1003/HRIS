@@ -26,6 +26,7 @@
     loadtotalcandidateCard();
     loadtotalbagapuroCard();
     loadtotalapprenticeCard();
+    load1YearCard();
     searchEmployeeTable();
     searchRegularTable();
     searchprobaTable();
@@ -36,6 +37,7 @@
     searchcandidateTable();
     searchbagapuroTable();
     searchapprenticeTable();
+    search1yearTable();
     GenerateAnouncement();
     fetchDepartmentCards();
 
@@ -81,6 +83,10 @@
 
     $(document).on("keyup", "#myInputtotalapprentice", function () {
       searchapprenticeTable();
+    });
+
+    $(document).on("keyup", "#myInputtotal1year", function () {
+      search1yearTable();
     });
 
     //#endregion
@@ -890,6 +896,81 @@
       }
     }
 
+    //#1 Year
+    $(document).on("click", "#total1year", function () {
+      $(`#total1year`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/total1yearemployee",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          populatetotal1yeartable(data);
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function populatetotal1yeartable(data) {
+      const tableBody = $("#total1yeartable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            // $("<td>", {
+            //   html: item.profilePicturePath
+            //     ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+            //     : "No Image",
+            //   "data-label": "Product Image",
+            // }),
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Name",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.hiredate,
+              "data-label": "Hire Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align",
+            })
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
     //#Apprentice Modal
     $(document).on("click", "#totalapprentice", function () {
       $(`#totalapprenticetable`).find("tr:gt(0)").remove();
@@ -1145,6 +1226,24 @@
           if (result.msg === "success") {
             const totalApprentice = result.data.ApprenticeCount;
             $("#totalempapprentice .h5").text(totalApprentice);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    function load1YearCard() {
+      $.ajax({
+        type: "GET",
+        url: "/count1year",
+        success: function (result) {
+          if (result.msg === "success") {
+            const total1year = result.data.Years1Count;
+            $("#total1Year .h5").text(total1year);
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -2733,6 +2832,32 @@
       input = document.getElementById("myInputtotalbagapuro");
       filter = input.value.toUpperCase();
       table = document.getElementById("totalbagapurotable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function search1yearTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotal1year");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("total1yeartable");
       tr = table.getElementsByTagName("tr");
 
       for (i = 1; i < tr.length; i++) {
