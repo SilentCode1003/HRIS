@@ -573,6 +573,7 @@ tr:hover {
 #totalCABLING,
 #totalempcandidate,
 #totalempbagapuro,
+#total1Year,
 #totalempapprentice, .department-card  {
   background-image: url(/images/img/employee.png);
   background-position: center;
@@ -592,6 +593,7 @@ tr:hover {
 #totalempcandidate::before,
 #totalempbagapuro::before,
 #totalempapprentice::before,
+#total1Year::before,
 .department-card:before {
   background: linear-gradient(to top, rgba(255, 253, 253, 0.25) 0, rgba(129, 9, 9, 0.85) 100%);
   content: "";
@@ -981,6 +983,7 @@ tr:hover {
 #totalcandidate,
 #totalbagapuro,
 #totalapprentice,
+#total1year,
 .department-card {
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
@@ -1008,6 +1011,7 @@ tr:hover {
 #totalCOA:hover,
 #totalovertime:hover,
 #totalleave:hover,
+#total1year:hover,
 .department-card:hover {
   transform: scale(1.1);
 }
