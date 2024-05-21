@@ -1,0 +1,156 @@
+<script>
+  let leaverequestid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableLeaveActivity").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/leave_request_activity/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                            <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#attendanceactivitymodal"><i class="fas fa-fw fa-pen"></i></button>
+                        `;
+              finalData.push({
+                leaverequestid: item.leaverequestid,
+                employeeid: item.employeeid,
+                leavestartdate: item.leavestartdate,
+                leaveenddate: item.leaveenddate,
+                leavetype: item.leavetype,
+                leaveapplieddate: item.leaveapplieddate,
+                approver: item.approver,
+                actiondate: item.actiondate,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "leaverequestid" },
+          { data: "employeeid" },
+          { data: "leavestartdate" },
+          { data: "leaveenddate" },
+          { data: "leavetype" },
+          { data: "leaveapplieddate" },
+          { data: "approver" },
+          { data: "actiondate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var appnameCell = $(row).find("td:eq(2)");
+
+          appnameCell.wrapInner("<span class='appname-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $("#dataTableLeaveActivity tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      leaverequestid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/leave_request_activity/getleaveactivity",
+        data: {
+          leaverequestid: leaverequestid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#activityleavename").val(item.employeeid);
+              $("#activitystartdate").val(item.leavestartdate);
+              $("#activityenddate").val(item.leaveenddate);
+              $("#leavetypeactivity").val(item.leavetype);
+              $("#leavereason").val(item.leavereason);
+              $("#applieddateactivity").val(item.leaveapplieddate);
+              $("#leaveduration").val(item.leaveduration);
+              $("#leavedurationactivity").val(item.status);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              $("#activitypaiddays").val(item.leavepaiddays);
+              $("#activityunpaidays").val(item.leaveunpaiddays);
+              $("#leaveapprover").val(item.approver);
+              $("#actiondate").val(item.actiondate);
+              $("#totalapproved").val(item.approvecount);
+              $("#leavecomment").val(item.actioncomment);
+              $("#subgroupname").val(item.subgroupname);
+
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableLeaveActivity");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

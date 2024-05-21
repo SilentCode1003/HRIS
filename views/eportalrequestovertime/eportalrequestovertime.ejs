@@ -4,6 +4,16 @@
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header ch-requestleave">
         <h3>Request Overtime</h3>
+        <div class="row g-2">
+            <div class="col">
+              <input id='myInput' type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-1 col-add">
+              <button type="button" class="btn btn-add-color bg-primary" data-bs-toggle="modal" data-bs-target="#addmodal">
+                <b>+ Add</b>
+              </button>
+            </div>
+        </div>
     </div>
     <div class="card-body cbody-requestleave">
         <table class="table table-light table-bordered" id="dataTableapplyOvertime">
@@ -15,8 +25,8 @@
                     <th scope="col">Clock Out</th>
                     <th scope="col">Total Hours</th>
                     <th scope="col">Night OT</th>
-                    <th scope="col">Normal OT</th>
                     <th scope="col">Early OT</th>
+                    <th scope="col">Normal OT</th>
                     <th scope="col">Payroll Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -26,67 +36,105 @@
     </div>
 </div>
 
-<!--action modal-->
-<div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+
+<!--Add Modal-->
+<div class="modal fade" id="appliedot" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
-                <h5 class="modal- fs-5" id="exampleModalLabel">Edit Overtime</h5>
-                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Add Overtime</h5>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
             </div>
             <div class="modal-body" id="modal-body">
                 <form>
-                    <div class="row g-3">
-                        <div class="col">
-                            <label for="editattendancedate" class="form-label">Date</label>
-                            <input type="date" class="form-control border-form-modal" id="editattendancedate" name="editattendancedate" disabled>
+                    <div class="row card-overtime">
+                        <div class="col-md-3 col-sm-12 p-0 box">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <table class="spaced-table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="field text-left work-field">Name:</td>
+                                                <td class="value" id="otfullname"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field text-left work-field">Position:</td>
+                                                <td class="value" id="otpositionname"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field text-left work-field">Department:</td>
+                                                <td class="value" id="otdepartmentname"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field text-left work-field">Date Submitted:</td>
+                                                <td class="value" id="datesubmitted"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="field text-left work-field">Shift Schedule:</td>
+                                                <td class="value" id="otshiftscheduled"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label for="editclockin" class="form-label">Date Time In</label>
-                            <input type="datetime-local" class="form-control border-form-modal" id="editclockin" name="editclockin" disabled>
-                        </div>
-                        <div class="col">
-                            <label for="editclockout" class="form-label">Date Time Out</label>
-                            <input type="datetime-local" class="form-control border-form-modal" id="editclockout" name="editclockout" disabled>
-                        </div>                    
-                    </div>
-                    <div class="row g-3">
-                        <div class="col">
-                            <label for="message-text" class="col-form-label">Total Hours</label>
-                            <input type="number" class="form-control border-form-modal" id="edittotalhours" name="edittotalhours">
-                        </div>
-                        <div class="col">
-                            <label for="message-text" class="col-form-label">Night Differrentials</label>
-                            <input type="number" class="form-control border-form-modal" id="editnightot" name="editnightot">
-                        </div>
-                        <div class="col">
-                            <label for="message-text" class="col-form-label">Normal Overtime</label>
-                            <input type="number" class="form-control border-form-modal" id="editnormalot" name="editnormalot">
-                        </div>
-                        <div class="col">
-                            <label for="message-text" class="col-form-label">Early Overtime</label>
-                            <input type="number" class="form-control border-form-modal" id="editearlyot" name="editearlyot">
-                        </div>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col">
-                            <label for="editreason" class="form-label">Reason :</label>
-                            <textarea class="form-control border-form-modal" id="editreason" name="editreason"></textarea>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-3">
-                        <div class="col">
-                            <label for="editpayrolldate" class="form-label">Payroll Date</label>
-                            <input type="date" class="form-control border-form-modal" id="editpayrolldate" name="editpayrolldate" disabled>
-                        </div>
-                        <div class="col">
-                            <label for="editstatus" class="form-label">Status</label>
-                            <select class="form-control border-form-modal" id="editstatus" name="editstatus">
-                                <option>Appllied</option>
-                                <option>Approved</option>
-                                <option>Cancel</option>
-                            </select>
+                        <div class="col-md-9 col-sm-12 p-0 box">
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="editattendancedate" class="form-label">Day</label>
+                                    <input type="text" class="form-control border-form-modal" id="appliedday" name="appliedday" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="editclockout" class="form-label">Shift from:</label>
+                                    <input type="datetime-local" class="form-control border-form-modal" id="appliedotstart" name="appliedotstart">
+                                </div>    
+                                <div class="col">
+                                    <label for="editclockout" class="form-label">To:</label>
+                                    <input type="datetime-local" class="form-control border-form-modal" id="appliedotend" name="appliedotend">
+                                </div>             
+                            </div>
+                            <br>
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="message-text" class="col-form-label">Total Hours</label>
+                                    <input type="number" class="form-control border-form-modal" id="appliedottotal" name="appliedottotal" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="message-text" class="col-form-label">Night Differentials</label>
+                                    <input type="number" class="form-control border-form-modal" id="appliednightdif" name="appliednightdif" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="message-text" class="col-form-label">Normal Overtime</label>
+                                    <input type="number" class="form-control border-form-modal" id="appliednormal" name="appliednormal" disabled>
+                                </div>
+                                <div class="col">
+                                    <label for="message-text" class="col-form-label">Early Overtime</label>
+                                    <input type="number" class="form-control border-form-modal" id="appliedeaarlyot" name="appliedeaarlyot" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="editpayrolldate" class="form-label">Payroll Date</label>
+                                    <select class="form-control border-form-modal" id="appliedpayroldateot" name="appliedpayroldateot">
+                                        <option selected disabled>Select Payroll Date</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="editstatus" class="form-label">Status</label>
+                                    <select class="form-control border-form-modal" id="appliedstatusot" name="appliedstatusot">
+                                        <option value="Applied">Applied</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Cancel">Cancel</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col">
+                                    <label for="editreason" class="form-label">Reason :</label>
+                                    <textarea class="form-control border-form-modal" id="appliedotreason" name="appliedotreason"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

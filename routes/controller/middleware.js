@@ -162,7 +162,19 @@ var roleacess = [
         layout: "leavesettingslayout",
       },
       {
-        layout: "approval_stage_settinglayout",
+        layout: "approval_stage_settingslayout",
+      },
+      {
+        layout: "request_approval_settingslayout",
+      },
+      {
+        layout: "subgrouplayout",
+      },
+      {
+        layout: "attendance_request_activitylayout",
+      },
+      {
+        layout: "leave_request_activitylayout",
       },
     ],
   },

@@ -1,302 +1,337 @@
 <script>
-    let approveot_id = '';
-    $(document).ready(function () {
-        console.log('Initialize');
-        let employeeid = "<%= employeeid %>";
-        LoadTable();
+  let approveot_id = "";
+  $(document).ready(function () {
+    console.log("Initialize");
+    let employeeid = "<%= employeeid %>";
+    LoadTable();
+    LoadPayrollDate();
 
-        function LoadTable() {
-            $("#dataTableapplyOvertime").DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                paging: false,
-                searching: false,
-                info: false,
-                scrollY: 400,
-                scrollCollapse: true,
-                type: "GET", 
-                ajax: {
-                    url: "/eportalrequestovertime/load",
-                    dataSrc: (json) => {
-                        var finalData = [];
-                        var data = json.data;
+    function LoadTable() {
+      $("#dataTableapplyOvertime").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalrequestovertime/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
 
-                        console.log(data);
-                        $.each(data, (key, item) => {
-                            var action = "";
-                            var status = item.status;
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
 
-                            action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editmodal"><i class="fas fa-fw fa-pen"></i></button>
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#appliedot"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
-                            finalData.push({
-                                approveot_id: item.approveot_id,
-                                attendancedate: formatDate(item.attendancedate),
-                                clockin: formatDateTime(item.clockin),
-                                clockout: formatDateTime(item.clockout),
-                                totalhours: item.totalhours,
-                                night_ot: item.night_ot,
-                                earlyot: item.earlyot,
-                                normal_ot: item.normal_ot,
-                                payrolldate: formatDate(item.payrolldate),
-                                overtimestatus: item.overtimestatus,
-                                action: action,
-                            });
-                        });
-
-                        console.log(finalData);
-
-                        return finalData;
-                    },
-
-                },
-                columnDefs: [
-                    {
-                        targets: 1,
-                        className: "td-indent",
-                    },
-                ],
-                columns: [
-                    { data: "approveot_id" },
-                    { data: "attendancedate" },
-                    { data: "clockin" },
-                    { data: "clockout" },
-                    { data: "totalhours" },
-                    { data: "night_ot" },
-                    { data: "earlyot" },
-                    { data: "normal_ot" },
-                    { data: "payrolldate" },
-                    { data: "overtimestatus" },
-                    { data: "action" },
-                ],
-                createdRow: function (row, data, dataIndex) {
-                //miyaka
-                var overtimestatusCell = $(row).find("td:eq(9)");
-
-                var overtimestatusText = data.overtimestatus;
-
-                var overtimestatusClass = "";
-
-                switch (overtimestatusText.toLowerCase()) {
-                  case "approved":
-                    overtimestatusClass = "approved-status";
-                    break;
-                  case "cancelled":
-                  overtimestatusClass = "cancelled-status";
-                    break;
-                  case "pending":
-                  overtimestatusClass = "pending-status";
-                    break;
-                  default:
-                    overtimestatusClass = "";
-                }
-
-                overtimestatusCell.html(`<span class="${overtimestatusClass}">${overtimestatusText}</span>`);
-
-                $("td", row).each(function (index) {
-                  this.style.textAlign = "center";
-                  this.style.verticalAlign = "middle";
-                });
-              },
-                initComplete: function () {
-                    console.log('Done');
-                },
+              finalData.push({
+                approveot_id: item.approveot_id,
+                attendancedate: item.attendancedate,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                totalhours: item.totalhours,
+                night_ot: item.night_ot,
+                earlyot: item.earlyot,
+                normal_ot: item.normal_ot,
+                payrolldate: item.payrolldate,
+                overtimestatus: item.overtimestatus,
+                action: action,
+              });
             });
-        }
 
-        $(document).on("click", "#pendingleavesavebtn", function () {
-            let startdate = $("#startldate").val();
-            let enddate = $("#endldate").val();
-            let leavetype = $("#leavetype").val();
-            let reason = $("#leavereason").val();
+            console.log(finalData);
 
-            var message = "";
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "approveot_id" },
+          { data: "attendancedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "totalhours" },
+          { data: "night_ot" },
+          { data: "earlyot" },
+          { data: "normal_ot" },
+          { data: "payrolldate" },
+          { data: "overtimestatus" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var overtimestatusCell = $(row).find("td:eq(9)");
 
-            if (startdate == "") {
-                message += "shiftname is required ";
-            }
+          var overtimestatusText = data.overtimestatus;
 
-            if (enddate == "") {
-                message += "status is required ";
-            }
+          var overtimestatusClass = "";
 
-            if (leavetype == "") {
-                message += "department is required ";
-            }
-
-            if (reason == "") {
-                message += "createby is required ";
-            }
-
-            if (message !== "") {
-                swal("Validation Error", message, "error");
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "/eportalrequestleave/submit",
-                    data: {
-                        employeeid: employeeid,
-                        startdate: startdate,
-                        enddate: enddate,
-                        leavetype: leavetype,
-                        reason: reason,
-                    },
-                    success: function (result) {
-                        if (result.msg == "success") {
-                          swal("Update Successfully","You clicked the button!","success",)
-                            .then(results => {
-                              window.location.reload();
-                            });
-                          LoadTable();
-                        } else if (result.msg == "exist") {
-                          swal("Exist","Data already exists!","warning",);
-                        }
-                    },
-                    error: function (err) {
-                      swal("Error", "An error occurred while saving data.", "error");
-                    },
-                });
-                
-            }
-
-        });
-
-        $("#dataTableapplyOvertime tbody").on("click", "tr", function () {
-            var dataRow = [];
-            $(this)
-            .closest("tr")
-            .find("td")
-            .each(function () {
-              dataRow.push($(this).text());
-            });
-          console.log(dataRow);
-          approveot_id = dataRow[0];
-          });
-        $(document).on("click", "#editBtn", function () {
-            $.ajax({
-              type: "POST",
-              url: "/eportalrequestovertime/getovertime",
-              data: {
-                approveot_id: approveot_id,
-              },
-              success: function (result) {
-                if (result.msg === "success") {
-                  const existingData = result.data;
-          
-                  $.each(existingData, (key, item) => {
-                    $("#id").val(item.approveot_id); 
-                    $("#editattendancedate").val(formatDate(item.attendancedate)); 
-                    $("#editclockin").val(formatDateTime(item.clockin));
-                    $("#editclockout").val(formatDateTime(item.clockout));
-                    $("#edittotalhours").val(item.totalhours);
-                    $("#editnightot").val(item.night_ot);
-                    $("#editnormalot").val(item.normal_ot);
-                    $("#editearlyot").val(item.earlyot);
-                    $("#editreason").val(item.reason);
-                    $("#editpayrolldate").val(formatDate(item.payrolldate));
-                    $("#editstatus").val(item.overtimestatus);
-                  });
-                } else {
-                  swal("Error fetching employee data", "success");
-                }
-              },
-              error: function (err) {
-                swal("An error occurred while fetching employee data", err, "error");
-              },
-            });
-          });
-          $(document).on("click", "#applyovertimesavebtn", function () {
-            console.log("Save button clicked");
-            let id = approveot_id
-            let totalhours = $("#edittotalhours").val();
-            let night_ot = $("#editnightot").val();
-            let normal_ot = $("#editnormalot").val();
-            let earlyot = $("#editearlyot").val();
-            let reason = $("#editreason").val();
-            let overtimestatus = $("#editstatus").val();
-        
-            var message = "";
-                
-          
-            if (totalhours === "") {
-              message += "status is required. ";
-            }
-            
-            if (night_ot === "") {
-              message += "status is required. ";
-            }
-
-            if (normal_ot === "") {
-              message += "status is required. ";
-            }
-
-            if (earlyot === "") {
-              message += "status is required. ";
-            }
-
-            if (reason === "") {
-              message += "status is required. ";
-            }
-
-            if (overtimestatus === "") {
-              message += "status is required. ";
-            }
-
-            if (overtimestatus === "Approved") {
-              message += "You Are Not Allowed to Approved You're Request";
-            }
-          
-            if (message !== "") {
-              swal("Validation Error", message, "error");
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "/eportalrequestovertime/update",
-              data: { 
-                approveot_id: id,
-                totalhours: totalhours,
-                night_ot: night_ot,
-                normal_ot: normal_ot,
-                earlyot: earlyot,
-                reason: reason,
-                overtimestatus: overtimestatus,
-              },
-              success: function (result) {
-                if (result.msg == "success") {
-                  swal("Save Successfully","You clicked the button!","success",)
-                    .then(results => {
-                      window.location.reload();
-                    });
-                  LoadTable();
-                } 
-            },
-            error: function (err) {
-              swal("Error", "An error occurred while saving data.", "error");
-            },
-              error: function (err) {
-                swal("Error", "An error occurred while saving data.", "error");
-              },
-            });
+          switch (overtimestatusText.toLowerCase()) {
+            case "approved":
+              overtimestatusClass = "approved-status";
+              break;
+            case "cancelled":
+              overtimestatusClass = "cancelled-status";
+              break;
+            case "pending":
+              overtimestatusClass = "pending-status";
+              break;
+            default:
+              overtimestatusClass = "";
           }
+
+          overtimestatusCell.html(
+            `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
+          );
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
           });
-          
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    $(document).on("click", "#pendingleavesavebtn", function () {
+      let startdate = $("#startldate").val();
+      let enddate = $("#endldate").val();
+      let leavetype = $("#leavetype").val();
+      let reason = $("#leavereason").val();
+
+      var message = "";
+
+      if (startdate == "") {
+        message += "shiftname is required ";
+      }
+
+      if (enddate == "") {
+        message += "status is required ";
+      }
+
+      if (leavetype == "") {
+        message += "department is required ";
+      }
+
+      if (reason == "") {
+        message += "createby is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestleave/submit",
+          data: {
+            employeeid: employeeid,
+            startdate: startdate,
+            enddate: enddate,
+            leavetype: leavetype,
+            reason: reason,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
     });
 
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      const year = date.getFullYear();
-      let month = (date.getMonth() + 1).toString().padStart(2, "0");
-      let day = date.getDate().toString().padStart(2, "0");
-      return `${year}-${month}-${day}`;
+    $("#dataTableapplyOvertime tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      approveot_id = dataRow[0];
+    });
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestovertime/getovertime",
+        data: {
+          approveot_id: approveot_id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const currentDate = new Date();
+            const DateSubmmitted = currentDate.toISOString().split("T")[0];
+
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.approveot_id);
+              let combinedTime;
+              if (item.start_time === item.end_time) {
+                combinedTime = item.start_time;
+              } else {
+                combinedTime = `${item.start_time} - ${item.end_time}`;
+              }
+              $("#otshiftscheduled").text(combinedTime);
+              $("#otpositionname").text(item.positionname);
+              $("#otdepartmentname").text(item.departmentname);
+              $("#otfullname").text(item.fullname);
+              $("#appliedday").val(item.attendancedate);
+              $("#appliedotstart").val(item.clockin);
+              $("#appliedotend").val(item.clockout);
+              $("#appliedottotal").val(item.totalhours);
+              $("#appliednightdif").val(item.nightdiff);
+              $("#appliednormal").val(item.normalot);
+              $("#appliedeaarlyot").val(item.earlyot);
+              $("#appliedotreason").val(item.reason);
+              $("#appliedpayroldateot").val(item.payrolldate);
+              $("#appliedstatusot").val(item.status);
+              $("#datesubmitted").text(DateSubmmitted);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#appliedpayroldateot").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
     }
 
-    function formatDateTime(dateTime) {
-      const formattedDateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
-      return formattedDateTime;
-    }
 
+    $(document).on("click", "#applyovertimesavebtn", function () {
+      console.log("Save button clicked");
+      let id = approveot_id;
+      let totalhours = $("#edittotalhours").val();
+      let night_ot = $("#editnightot").val();
+      let normal_ot = $("#editnormalot").val();
+      let earlyot = $("#editearlyot").val();
+      let reason = $("#editreason").val();
+      let overtimestatus = $("#editstatus").val();
 
+      var message = "";
+
+      if (totalhours === "") {
+        message += "status is required. ";
+      }
+
+      if (night_ot === "") {
+        message += "status is required. ";
+      }
+
+      if (normal_ot === "") {
+        message += "status is required. ";
+      }
+
+      if (earlyot === "") {
+        message += "status is required. ";
+      }
+
+      if (reason === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "Approved") {
+        message += "You Are Not Allowed to Approved You're Request";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestovertime/update",
+          data: {
+            approveot_id: id,
+            totalhours: totalhours,
+            night_ot: night_ot,
+            normal_ot: normal_ot,
+            earlyot: earlyot,
+            reason: reason,
+            overtimestatus: overtimestatus,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatDateTime(dateTime) {
+    const formattedDateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
+    return formattedDateTime;
+  }
 </script>
-
