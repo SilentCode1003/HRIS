@@ -221,15 +221,21 @@
             </div>
             <br>
             <div class="row g-3">
-              <div class="form-floating">
+              <div class="col">
                 <label class="form-label" for="EditFile"></label>
                 <input type="file" name="uploadimage" id="uploadimage" class="form-control border-form-modal"
-                  accept="image/*">
-                <br>
+                accept="image/*">
+              </div>
+              <div class="col">
                 <div class="text-center">
                   <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
                     class="rounded border-form-modal" alt="placeholder">
                 </div>
+              </div>
+              <div class="col">
+                <label for="timeout" class="form-label">Sub Group</label>
+                <select type="text" class="form-control border-form-modal" id="leavesubgroup" name="leavesubgroup">
+                </select>
               </div>
             </div>
         </form>
