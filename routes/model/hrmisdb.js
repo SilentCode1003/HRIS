@@ -979,6 +979,7 @@ exports.Subgroup = (data) => {
       subgroupname: key.s_name,
       createby: key.s_createby,
       createdate: key.s_createdate,
+      status: key.s_status,
     });
   });
 
@@ -993,8 +994,6 @@ exports.Approval_Stage_Settings = (data) => {
       approvalstage: key.ats_id,
       accessid: key.ats_accessid,
       approvalcount: key.ats_count,
-      approvename: key.ats_approvename,
-      rejectname: key.ats_rejectname,
       createby: key.ats_createdby,
       createdate: key.ats_createddate,
     });
@@ -1002,6 +1001,45 @@ exports.Approval_Stage_Settings = (data) => {
 
   return dataResult;
 };
+
+
+exports.Request_Approval_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approvalsettings: key.ras_is,
+      departmentid: key.ras_departmentid,
+      settingscount: key.ras_count,
+      createby: key.ras_createdby,
+      createdate: key.ras_createdate,
+      status: key.ras_status,
+    });
+  });
+
+  return dataResult;
+};
+
+
+
+exports.Attendance_Request_Activity = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      attendanceactid: key.ara_id,
+      employeeid: key.ara_employeeid,
+      departmentid: key.ara_departmentid,
+      requestid: key.ara_requestid,
+      subgroupid: key.ara_subgroupid,
+      status: key.ara_status,
+      date: key.ara_date,
+    });
+  });
+
+  return dataResult;
+};
+
 
 
 

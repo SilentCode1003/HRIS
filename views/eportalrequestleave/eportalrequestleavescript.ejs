@@ -11,6 +11,7 @@
     LoadList();
     LoadListHeader();
     LoadLeaveTypes();
+    LoadListEmp();
 
     function LoadTable() {
       $("#dataTableapplyleave").DataTable({
@@ -28,7 +29,6 @@
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
-
             console.log(data);
             $.each(data, (key, item) => {
               var action = "";
@@ -71,6 +71,25 @@
         ],
         initComplete: function () {
           console.log("Done");
+        },
+      });
+    }
+
+    function LoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#leavesubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
         },
       });
     }
@@ -359,11 +378,16 @@
       let paidDays = $("#paiddays").val();
       let unpaidDays = $("#unpaiddays").val();
       let image = base64String;
+      let subgroup = $("#leavesubgroup").val();
 
       var message = "";
 
       if (startdate == "") {
         message += "Start Date is required ";
+      }
+
+      if (subgroup == "") {
+        message += "subgroup is required ";
       }
 
       if (enddate == "") {
@@ -408,6 +432,7 @@
             paidDays: paidDays,
             unpaidDays: unpaidDays,
             image: image,
+            subgroup: subgroup,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -549,7 +574,6 @@
       let leaveunpaiddays = $("#editunpaiddays").val();
       let comment = $("#editleavecomment").val();
       let leaveimage = base64String;
-
 
       var message = "";
 

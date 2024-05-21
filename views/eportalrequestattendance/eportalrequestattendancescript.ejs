@@ -5,6 +5,7 @@
     console.log("Initialize");
     let employeeid = "<%= employeeid %>";
     LoadTable();
+    LoadListEmp();
 
     function LoadTable() {
       $("#dataTablereqCOA").DataTable({
@@ -109,12 +110,17 @@
       let timein = $("#timein").val();
       let timeout = $("#timeout").val();
       let reason = $("#coareason").val();
+      let subgroupid = $("#coasubgroup").val();
       let file = base64String;
 
       var message = "";
 
       if (attendancedate == "") {
         message += "shiftname is required ";
+      }
+
+      if (subgroupid == "") {
+        message += "subgroupid is required ";
       }
 
       if (timein == "") {
@@ -144,6 +150,7 @@
             attendancedate: attendancedate,
             timein: timein,
             timeout: timeout,
+            subgroupid: subgroupid,
             reason: reason,
             file: file,
           },
@@ -182,6 +189,27 @@
         });
       }
     });
+
+    function LoadListEmp() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadusers/subgroupload",
+          success: function (result) {
+            // console.log(result.data);
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.subgroupid, item.subgroupid);
+              $(options).html(item.subgroupname);
+              $("#coasubgroup").append(options);
+              //console.log(item.firstname);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+     }
 
     $("#dataTablereqCOA tbody").on("click", "tr", function () {
       var dataRow = [];

@@ -179,7 +179,7 @@ router.post("/getusers", (req, res) => {
         tu_username,
         tu_password,
         tu_status,
-        s_name as tu_subgroupid
+        tu_subgroupid
         from teamlead_user
         inner join subgroup on teamlead_user.tu_subgroupid = s_id
         where tu_userid = '${tluserid}'`;

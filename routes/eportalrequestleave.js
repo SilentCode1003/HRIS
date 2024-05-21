@@ -198,12 +198,13 @@ router.get('/loadcancelled' , (req, res) => {
 router.post("/submit", async (req, res) => {
   try {
     const employeeid = req.body.employeeid;
-    const { startdate, enddate, leavetype, reason, image } = req.body;
-    const createdate = currentDate.format("YYYY-MM-DD");
+    const { startdate, enddate, leavetype, reason, image, subgroup } = req.body;
+    const createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     const status = "Pending";
     const durationDays = req.body.durationDays;
     const paidDays = req.body.paidDays;
     const unpaidDays = req.body.unpaidDays;
+    const approvedcount = '0';
 
     console.log(startdate, enddate, leavetype, reason, employeeid, durationDays, paidDays, unpaidDays);
 
@@ -226,7 +227,9 @@ router.post("/submit", async (req, res) => {
         createdate,
         durationDays,
         paidDays,
-        unpaidDays
+        unpaidDays,
+        subgroup,
+        approvedcount
       ],
     ];
 

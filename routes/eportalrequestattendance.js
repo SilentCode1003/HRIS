@@ -52,18 +52,18 @@ router.post("/submit", async (req, res) => {
     let attendancedate = req.body.attendancedate;
     let timein = req.body.timein;
     let timeout = req.body.timeout;
+    let subgroupid = req.body.subgroupid;
     let reason = req.body.reason;
     let file = req.body.file;
-    let createdate = currentDate.format("YYYY-MM-DD");
+    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     let status = "Pending";
     let createby = 'On Process';
     let approvedcount = '0';
-    let rejectcount = '0';
 
     let total = calculateTotalHours(timein, timeout);
 
     console.log(attendancedate, timein, timeout, reason, 
-      employeeid, file, approvedcount, rejectcount);
+      employeeid, file, approvedcount);
 
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
@@ -82,8 +82,18 @@ router.post("/submit", async (req, res) => {
     }
 
     const data = [
-      [employeeid, attendancedate, timein, timeout, total, createdate, createby, status, reason, file,
-        approvedcount, rejectcount
+      [employeeid, 
+       attendancedate, 
+       timein,
+       timeout, 
+       total, 
+       subgroupid, 
+       reason, 
+       file, 
+       createdate, 
+       createby, 
+       status,
+       approvedcount
       ],
     ];
 

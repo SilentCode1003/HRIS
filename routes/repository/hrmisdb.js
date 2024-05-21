@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('5b4a29a163bcc0598eaa263c49831349d0c4e308b242f6d39996a724eb79aa14', (err, encrypted) => {
+Decrypter('c05fc7386d05dbdf96facffebb8c2eb2', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -263,6 +263,14 @@ exports.Select = (sql, table, callback) => {
       if (table == "Approval_Stage_Settings") {
         callback(null, model.Approval_Stage_Settings(results));
       }
+
+      if (table == "Request_Approval_Settings") {
+        callback(null, model.Request_Approval_Settings(results));
+      }
+
+      if (table == "Attendance_Request_Activity") {
+        callback(null, model.Attendance_Request_Activity(results));
+      }
     });
   } catch (error) {}
 };
@@ -314,7 +322,9 @@ exports.InsertTable = (tablename, data, callback) => {
         l_leaveapplieddate,
         l_leaveduration,
         l_leavepaiddays,
-        l_leaveunpaiddays) VALUES ?`;
+        l_leaveunpaiddays,
+        l_subgroupid,
+        l_approvalcount) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -955,13 +965,13 @@ exports.InsertTable = (tablename, data, callback) => {
       ar_timein,
       ar_timeout,
       ar_total,
+      ar_subgroupid,
+      ar_reason,
+      ar_file,
       ar_createdate,
       ar_createby,
       ar_status,
-      ar_reason,
-      ar_file,
-      ar_approvedcount,
-      ar_rejectcount) VALUES ?`;
+      ar_approvalcount) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -1073,6 +1083,75 @@ exports.InsertTable = (tablename, data, callback) => {
       ara_subgroupid,
       ara_status,
       ara_date) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "aprroval_stage_settings") {
+    let sql = `INSERT INTO aprroval_stage_settings(
+      ats_accessid,
+      ats_count,
+      ats_createdby,
+      ats_createddate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "request_approval_settings") {
+    let sql = `INSERT INTO request_approval_settings(
+      ras_departmentid,
+      ras_count,
+      ras_createdby,
+      ras_createdate,
+      ras_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "subgroup") {
+    let sql = `INSERT INTO subgroup(
+      s_departmentid,
+      s_name,
+      s_createby,
+      s_createdate,
+      s_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "leave_request_activity") {
+    let sql = `INSERT INTO leave_request_activity(
+      lra_employeeid,
+      lra_departmentid,
+      lra_leaveid,
+      lra_subgroupid,
+      lra_status,
+      lra_date,
+      lra_comment) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
