@@ -167,7 +167,8 @@ router.get("/loaddepartmentcard", (req, res) => {
     LEFT JOIN 
     master_employee  ON me_department = md_departmentid
     WHERE 
-    md_status = 'Active'
+    md_status = 'Active' 
+    AND me_jobstatus IN ('regular', 'probitionary','apprentice')
     GROUP BY 
     md_departmentname, md_departmenticon, md_departmentid
     ORDER BY 

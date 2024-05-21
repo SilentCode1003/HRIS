@@ -91,6 +91,11 @@ var teamleadgeofenceRouter = require('./routes/teamleadgeofence');
 var shiftsettingsRouter = require('./routes/shiftsettings');
 var empbackgroundRouter = require('./routes/empbackground');
 var leavesettingsRouter = require('./routes/leavesettings');
+var approval_stage_settingsRouter = require('./routes/approval_stage_settings');
+var request_approval_settingsRouter = require('./routes/request_approval_settings');
+var subgroupRouter = require('./routes/subgroup');
+var attendance_request_activityRouter = require('./routes/attendance_request_activity');
+var leave_request_activityRouter = require('./routes/leave_request_activity');
 
 var app = express();
 
@@ -192,6 +197,11 @@ app.use('/teamleadattendance', teamleadattendanceRouter);
 app.use('/shiftsettings' , shiftsettingsRouter);
 app.use('/empbackground' , empbackgroundRouter);
 app.use('/leavesettings', leavesettingsRouter);
+app.use('/approval_stage_settings', approval_stage_settingsRouter);
+app.use('/request_approval_settings', request_approval_settingsRouter);
+app.use('/subgroup', subgroupRouter);
+app.use('/attendance_request_activity', attendance_request_activityRouter);
+app.use('/leave_request_activity', leave_request_activityRouter);
 
 
 // catch 404 and forward to error handler

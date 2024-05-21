@@ -53,7 +53,7 @@ router.get("/loadreq", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_payrolldate >= CURDATE() 
+    pd_enddate >= CURDATE() OR pd_enddate IS NULL
     ORDER BY 
     pd_startdate
     LIMIT 5`;
