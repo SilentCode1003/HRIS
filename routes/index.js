@@ -1246,58 +1246,6 @@ WHERE
 });
 
 
-router.get("/total1yearemployee", (req, res) => {
-  try {
-    let sql = `select
-    newEmployeeId,
-    firstname,
-    department,
-    hiredate,
-    position,
-    contact,
-    tenure
-    from (
-    SELECT 
-       me_id AS newEmployeeId,
-       CONCAT(me_firstname, ' ', me_lastname) AS firstname,
-       md_departmentname AS department,
-       me_hiredate AS hiredate,
-       mp_positionname AS position,
-       me_phone AS contact,
-       CONCAT(
-           TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years '
-       ) AS tenure
-       FROM 
-       master_employee
-       LEFT JOIN 
-       master_department md ON master_employee.me_department = md_departmentid
-       LEFT JOIN 
-       master_position ON master_employee.me_position = mp_positionid
-       where me_jobstatus in ('regular')) as result
-       where tenure = '1 Years '`;
-
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
-
 router.get('/apprenticemodal', (req, res) => {
   try {
     let sql = `select
