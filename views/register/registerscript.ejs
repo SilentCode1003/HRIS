@@ -1,7 +1,6 @@
 <script>
-
-$(document).ready(function () {
-    console.log('Initialize');
+  $(document).ready(function () {
+    console.log("Initialize");
     LoadList();
 
     $(document).on("click", "#ojtsavebtn", function () {
@@ -69,7 +68,12 @@ $(document).ready(function () {
         message += "DESCRIPTION ";
       }
 
-      if (hours != "") {
+      if (hours.length > 3) {
+        message += "Total Hours Must Be 3 Digit Only";
+        $(this).val(hours.slice(0, 3));
+      }
+
+      if (hours !== "") {
         hours = convertToHoursFormat(hours);
       }
 
@@ -102,10 +106,9 @@ $(document).ready(function () {
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              })
-                .then(results => {
-                  window.location.reload();
-                })
+              }).then((results) => {
+                window.location.reload();
+              });
               //LoadTable();
             }
             if (result.msg === "exist") {
@@ -118,11 +121,14 @@ $(document).ready(function () {
             }
           },
           error: function (err) {
-            showSweetAlert("Data already exist!", "You clicked the button!", "warning");
+            showSweetAlert(
+              "Data already exist!",
+              "You clicked the button!",
+              "warning"
+            );
           },
         });
       }
-
     });
 
     function LoadList() {
@@ -147,21 +153,23 @@ $(document).ready(function () {
     }
 
     function convertToHoursFormat(hours) {
-    if (isNaN(hours)) {
-        return 'Invalid input';
-    }
+      if (isNaN(hours)) {
+        return "Invalid input";
+      }
 
-    // Convert the number to an integer
-    hours = parseInt(hours);
+      // Convert the number to an integer
+      hours = parseInt(hours);
 
-    // Calculate hours and minutes
-    const formattedHours = Math.floor(hours);
-    const minutes = Math.round((hours - formattedHours) * 60);
+      // Calculate hours and minutes
+      const formattedHours = Math.floor(hours);
+      const minutes = Math.round((hours - formattedHours) * 60);
 
-    // Format the result as HH:mm
-    const formattedTime = `${formattedHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      // Format the result as HH:mm
+      const formattedTime = `${formattedHours
+        .toString()
+        .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 
-    return formattedTime;
+      return formattedTime;
     }
 
     $(document).on("change", "#ojtprofileimage", function (e) {
@@ -195,6 +203,5 @@ $(document).ready(function () {
       };
       reader.readAsDataURL(file);
     }
-
   });
 </script>

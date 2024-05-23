@@ -102,23 +102,12 @@
   
   
       $(document).on("click", "#userssavebtn", function () {
-        let employeeid = $("#usersname").val();
-        // let accesstype = $("#usersaccesstype").val();
-        let status = $("#usersstatus").val();
+        let ojtID = $("#ojtid").val();
   
         var message = "";
   
-        if (employeeid == "") {
+        if (ojtID == "") {
           message += "TITTLE ";
-        }
-  
-        // if (accesstype == "") {
-        //   message += "DESCRIPTION ";
-        // }
-  
-  
-        if (status == "") {
-          message += "POSITION NAME ";
         }
   
         if (message !== "") {
@@ -128,10 +117,7 @@
             type: "POST",
             url: "/ojtuser/save",
             data: {
-              employeeid: employeeid,
-              // accesstype: accesstype,
-              status: status,
-  
+              ojtID: ojtID,
             },
             success: function (result) {
               if (result.msg == "success") {
@@ -161,23 +147,22 @@
             },
           });
         }
-  
       });
   
   
       function LoadListEmp() {
         $.ajax({
           type: "GET",
-          url: "/ojt/load",
+          url: "/ojt/selectdistinct",
           success: function (result) {
             console.log(result.data);
             var data = result.data;
   
             $.each(data, function (key, item) {
-              var options = new Option(item.id, item.id);
-              $(options).html(item.Name);
-              $("#usersname").append(options);
-              console.log(item.Name);
+              var options = new Option(item.ojtid, item.ojtid);
+              $(options).html(item.ojtname);
+              $("#ojtid").append(options);
+              console.log(item.ojtname);
             });
           },
           error: function (result) {

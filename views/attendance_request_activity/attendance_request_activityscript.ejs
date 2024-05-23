@@ -115,6 +115,7 @@
               );
                 $("#totalapproved").val(item.approvalcount);
                 $("#subgroupname").val(item.subgroupname);
+                $("#approvalstatus").val(item.approval_status);
               });
             } else {
               swal("Error fetching employee data", msg, "error");
