@@ -25,6 +25,51 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+
+router.get("/filtertenure", (req, res) => {
+  try {
+    let sql = `  SELECT 
+    me_id AS newEmployeeId,
+    CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+    md_departmentname AS department,
+    me_hiredate AS hiredate,
+    mp_positionname AS position,
+    me_phone AS contact,
+    CONCAT(
+        TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years ',
+        TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) % 12, ' Months ',
+        DATEDIFF(CURRENT_DATE, DATE_ADD(me_hiredate, INTERVAL TIMESTAMPDIFF(MONTH, me_hiredate, CURRENT_DATE) MONTH)), ' Days'
+    ) AS tenure
+    FROM 
+    master_employee
+    LEFT JOIN 
+    master_department md ON master_employee.me_department = md_departmentid
+    LEFT JOIN 
+    master_position ON master_employee.me_position = mp_positionid
+    where me_jobstatus in ('regular', 'probitionary','apprentice')`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
 router.post("/saveold", async (req, res) => {
   try {
     const {

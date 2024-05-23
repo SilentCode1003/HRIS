@@ -112,5 +112,83 @@ router.get('/load', (req, res) => {
       });
     }
   });
+
+
   
+
+  router.post("/save", async (req, res) => {
+    try {
+      let ojtID = req.body.ojtID;
+      let accesstype = '4';
+      let createby = req.session.fullname;
+      const createdate = currentDate.format("YYYY-MM-DD");
+
+      console.log(ojtID,'ID');
+  
+      const existingUserQuery = `SELECT * FROM ojt_user WHERE ou_ojtid = '${ojtID}' AND ou_accesstype = '${accesstype}'`;
+      const existingUserResult = await mysql.mysqlQueryPromise(
+        existingUserQuery,
+        [ojtID, accesstype]
+      );
+  
+      if (existingUserResult.length > 0) {
+        return res.json({ msg: "exist" });
+      }
+  
+      const employeeQuery = `SELECT mo_id, mo_name, mo_lastname, mo_birthday FROM master_ojt WHERE mo_id = '${ojtID}'`;
+  
+      try {
+        const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [
+          ojtID,
+        ]);
+  
+        if (employeeresult.length > 0) {
+          const ojt = employeeresult[0];
+          const { username, password } = generateUsernameAndPasswordforOjt(ojt);
+  
+          Encrypter(password, async (err, encrypted) => {
+            if (err) {
+              console.error("Error: ", err);
+              res.json({ msg: "error" });
+            } else {
+              const data = [
+                [
+                  ojtID,
+                  username,
+                  encrypted,
+                  4,
+                  createby,
+                  createdate,
+                  "Active",
+                ],
+              ];
+  
+              mysql.InsertTable(
+                "ojt_user",
+                data,
+                (inserterr, insertresult) => {
+                  if (inserterr) {
+                    console.error("Error inserting record: ", inserterr);
+                    res.json({ msg: "insert failed" });
+                  } else {
+                    console.log(insertresult);
+                    res.json({ msg: "success" });
+                  }
+                }
+              );
+            }
+          });
+        } else {
+          console.error("No employee found with that ID");
+          res.json({ msg: "No employee found with that ID" });
+        }
+      } catch (employeeerror) {
+        console.error("Error querying employee: ", employeeerror);
+        res.json({ msg: "error" });
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      res.json({ msg: "error" });
+    }
+  });
   

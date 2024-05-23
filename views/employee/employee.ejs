@@ -8,6 +8,11 @@
         <input id='myInput' type='text' placeholder="  Search....">
       </div>
       <div class="col-sm-2">
+        <button class="btn btn-color" id="total1year" data-bs-toggle="modal" data-bs-target="#total1YearModal">
+            <i class="fas fa-filter"><b>Filter</b></i>
+        </button>
+      </div>    
+      <div class="col-sm-2">
         <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addnewemployee">
           <b>+ Add New Employee</b>
         </button>
@@ -72,6 +77,69 @@
   </div>
 
 </div>
+
+<!-- Total 1 Year Modal -->
+<div class="modal fade" id="total1YearModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+aria-hidden="true">
+<div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <div>
+                <h3 class="modal-title" id="exampleModalToggleLabel">Filter Tenure Employee</h3>
+            </div>
+            <br>
+            <input id='myInputtotal1year' class="db-modal-search" type='text' placeholder="  Search....">
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+                <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                    <table class="table custom-mobile-table table-bordered table-light" id="total1yeartable">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="col-sm-1">ID</th>
+                                <th class="col-26">Name</th>
+                                <th>Department</th>
+                                <th>Hire Date</th>
+                                <th>Position</th>
+                                <th>Tenure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="exportExcelBtn">Export</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="fileNameModal" tabindex="-1" role="dialog" aria-labelledby="fileNameModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileNameModalLabel">Enter File Name</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="fileNameInput" type="text" class="form-control" placeholder="Enter file name">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="confirmFileNameBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- OLD employee Modal-->

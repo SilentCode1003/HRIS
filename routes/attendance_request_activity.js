@@ -69,12 +69,14 @@ router.post("/getattendanceactivity", (req, res) => {
     ara.ara_status as status,
     ar.ar_file as file,
     ar.ar_approvalcount as approvalcount,
-    s_name as subgroupname
+    s_name as subgroupname,
+    CONCAT(ar_approvalcount,' out of ', ras_count) AS approval_status
     FROM attendance_request_activity ara
     INNER JOIN attendance_request ar ON ara.ara_requestid = ar.ar_requestid
     INNER JOIN master_employee me_request ON ar.ar_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id
     INNER JOIN subgroup on ara.ara_subgroupid = s_id
+	JOIN request_approval_settings  ON ara_departmentid = ras_departmentid
     WHERE ara_id = '${requsetid}'`;
 
     mysql.mysqlQueryPromise(sql)

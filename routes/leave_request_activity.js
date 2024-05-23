@@ -29,7 +29,7 @@ router.get("/load", (req, res) => {
     INNER JOIN leaves l ON lra.lra_leaveid = l.l_leaveid
     INNER JOIN master_employee me_request ON l.l_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON lra.lra_employeeid = me_activity.me_id
-    INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id;`;
+    INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id`;
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
@@ -74,13 +74,15 @@ router.post("/getleaveactivity", (req, res) => {
     lra.lra_status AS status,
     s.s_name as subgroupname,
     l_approvalcount as approvecount,
+    CONCAT(l_approvalcount,' out of ', ras_count) AS approval_status,
     lra.lra_comment AS actioncomment
     FROM leave_request_activity lra
+    JOIN request_approval_settings  ON lra_departmentid = ras_departmentid
     INNER JOIN leaves l ON lra.lra_leaveid = l.l_leaveid
     INNER JOIN master_employee me_request ON l.l_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON lra.lra_employeeid = me_activity.me_id
     INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id
-	INNER JOIN subgroup s on lra.lra_subgroupid = s.s_id
+	  INNER JOIN subgroup s on lra.lra_subgroupid = s.s_id
     WHERE lra_id = '${leaverequestid}'`;
 
     mysql.mysqlQueryPromise(sql)
