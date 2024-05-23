@@ -206,13 +206,22 @@
               $("#appliedotstart").val(item.clockin);
               $("#appliedotend").val(item.clockout);
               $("#appliedottotal").val(item.totalhours);
-              $("#appliednightdif").val(item.nightdiff);
+              $("#appliednightdiff").val(item.nightdiff);
               $("#appliednormal").val(item.normalot);
               $("#appliedeaarlyot").val(item.earlyot);
               $("#appliedotreason").val(item.reason);
-              $("#appliedpayroldateot").val(item.payrolldate);
+              $("#payrolldateot").val(item.payrolldate);
               $("#appliedstatusot").val(item.status);
               $("#datesubmitted").text(DateSubmmitted);
+              $("#nightotpay").val(item.nightotpay);
+              $("#normalotpay").val(item.normalotpay);
+              $("#earlyotpay").val(item.earlyotpay);
+              $("#totalotnetpay").val(item.totalotpay);
+              $("#schedtimein").val(item.scheduledtimein);
+              $("#schedtimeout").val(item.scheduledtimeout);
+
+              console.log(item.clockin);
+              console.log(item.clockout);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -224,6 +233,73 @@
       });
     });
 
+
+    // $("#appliedotstart, #appliedotend").change(function () {
+    //   let startshift = new Date($("#appliedotstart").val());
+    //   let endshift = new Date($("#appliedotend").val());
+    //   let scheduledTimeParts = $("#schedtimeout").val().split(":");
+
+    //   let scheduledTimeout = new Date(endshift);
+    //   scheduledTimeout.setHours(parseInt(scheduledTimeParts[0], 10));
+    //   scheduledTimeout.setMinutes(parseInt(scheduledTimeParts[1], 10));
+    //   scheduledTimeout.setSeconds(parseInt(scheduledTimeParts[2], 10));
+
+    //   console.log("Start Shift:", startshift);
+    //   console.log("End Shift:", endshift);
+    //   console.log("Scheduled Timeout:", scheduledTimeout);
+
+    //   if (
+    //     !startshift ||
+    //     !endshift ||
+    //     isNaN(startshift) ||
+    //     isNaN(endshift) ||
+    //     isNaN(scheduledTimeout)
+    //   ) {
+    //     console.error("Invalid date-time values provided.");
+    //     $("#appliedottotal").val("");
+    //     $("#appliednormal").val("");
+    //     $("#appliednightdiff").val("");
+    //     return;
+    //   }
+
+    //   let durationMs = endshift - startshift;
+    //   let totalMinutes = durationMs / (1000 * 60);
+
+    //   if (totalMinutes === 0) {
+    //     console.error("Total minutes is zero.");
+    //     $("#appliedottotal").val("");
+    //     $("#appliednormal").val("");
+    //     $("#appliednightdiff").val("");
+    //     return;
+    //   }
+
+    //   let hours = Math.floor(totalMinutes / 60);
+    //   let minutes = totalMinutes % 60;
+    //   let fractionalHours = (minutes / 60).toFixed(2);
+
+    //   let normalOTHours = 0;
+    //   let nightDiffHours = 0;
+
+    //   if (endshift.getHours() >= 22) {
+    //     console.log(endshift,'end');
+    //     let normalOTMs = endshift - scheduledTimeout;
+    //     normalOTHours = normalOTMs / (1000 * 60 * 60);
+    //     let nightDiffMs = endshift - scheduledTimeout;
+    //     nightDiffHours = nightDiffMs / (1000 * 60 * 60);
+    //   } else {
+    //     let normalOTMs = endshift - scheduledTimeout;
+    //     normalOTHours = normalOTMs / (1000 * 60 * 60);
+    //   }
+
+    //   console.log("Normal OT Hours:", normalOTHours);
+    //   console.log("Night Differentials Hours:", nightDiffHours);
+
+    //   let totalDuration = (hours + parseFloat(fractionalHours)).toFixed(2);
+    //   $("#appliedottotal").val(totalDuration);
+    //   $("#appliednormal").val(normalOTHours);
+    //   $("#appliednightdiff").val(nightDiffHours);
+    // }); 
+    
     function LoadPayrollDate() {
       $.ajax({
         type: "GET",
@@ -234,7 +310,7 @@
           $.each(data, function (key, item) {
             var options = new Option(item.payrolldate, item.payrolldate);
             $(options).html(item.payrolldate);
-            $("#appliedpayroldateot").append(options);
+            $("#payrolldateot").append(options);
           });
         },
         error: function (result) {
@@ -242,7 +318,6 @@
         },
       });
     }
-
 
     $(document).on("click", "#applyovertimesavebtn", function () {
       console.log("Save button clicked");

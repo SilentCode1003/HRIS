@@ -62,6 +62,38 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.get("/selectdistinct", (req, res) => {
+  try {
+    let sql = `
+    SELECT DISTINCT 
+concat(mo_lastname,' ',mo_name) as ojtname,
+mo_id as ojtid
+FROM master_ojt
+LEFT JOIN ojt_user ON master_ojt.mo_id = ojt_user.ou_ojtid
+WHERE ojt_user.ou_ojtid IS NULL`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
 router.post("/save", async (req, res) => {
   try {
     const {

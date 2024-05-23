@@ -1,4 +1,5 @@
 <script src="/javascripts/js/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
   let base64String = "";
   let employeeid = "";
@@ -11,10 +12,141 @@
     searchTable();
     OldLoadList();
     OldLoadPosition();
+    search1yearTable();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
+
+    $(document).on("keyup", "#myInputtotal1year", function () {
+      search1yearTable();
+    });
+
+    $(document).on("click", "#total1year", function () {
+      $(`#total1year`).find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "employee/filtertenure",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          populatetotal1yeartable(data);
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function populatetotal1yeartable(data) {
+      const tableBody = $("#total1yeartable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.newEmployeeId,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.firstname,
+              "data-label": "Name",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.department,
+              "data-label": "Department",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.hiredate,
+              "data-label": "Hire Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.position,
+              "data-label": "Position",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.tenure,
+              "data-label": "Tenure",
+              class: "custom-mobile-align",
+            })
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    function exportTableToExcel(tableID, filename = "", callback) {
+      let table = document.getElementById(tableID);
+      let wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+      let ws = wb.Sheets["Sheet1"];
+      let range = XLSX.utils.decode_range(ws["!ref"]);
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        let address = XLSX.utils.encode_cell({ c: C, r: 1 });
+        if (!ws[address]) continue;
+        ws[address].s = {
+          font: {
+            bold: true,
+          },
+        };
+      }
+
+      // Set column widths
+      ws["!cols"] = [
+        { wpx: 200 }, // A
+        { wpx: 220 }, // B
+        { wpx: 200 }, // C
+        { wpx: 200 }, // D
+        { wpx: 200 }, // E
+        { wpx: 220 }, // F
+      ];
+
+      let wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        var view = new Uint8Array(buf); //create uint8array as viewer
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff; //convert to octet
+        return buf;
+      }
+
+      let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+
+      saveAs(blob, filename);
+
+      if (callback && typeof callback === "function") {
+        callback();
+      }
+    }
+
+    document
+      .getElementById("exportExcelBtn")
+      .addEventListener("click", function () {
+        exportTableToExcel("total1yeartable", "employees.xlsx", function () {
+          swal(
+            "Update Successfully",
+            "You clicked the button!",
+            "success"
+          ).then((results) => {
+            window.location.reload();
+          });
+          LoadTable();
+        });
+      });
 
     $(document).on("click", "#oldemployeesavebtn", function () {
       let oldemployeeid = $("#oldemployeeid").val();
@@ -441,13 +573,10 @@
           //miyaka
           var jobStatusCell = $(row).find("td:eq(4)");
 
-         
           var jobStatusText = data.jobstatus;
 
-          
           var jobStatusClass = "";
 
-          
           switch (jobStatusText.toLowerCase()) {
             case "regular":
               jobStatusClass = "regular-status";
@@ -462,12 +591,12 @@
               jobStatusClass = "apprentice-status";
               break;
             default:
-              jobStatusClass = ""; 
+              jobStatusClass = "";
           }
 
-          
-          jobStatusCell.html(`<span class="${jobStatusClass}">${jobStatusText}</span>`);
-
+          jobStatusCell.html(
+            `<span class="${jobStatusClass}">${jobStatusText}</span>`
+          );
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -1235,6 +1364,32 @@
       if (found) {
         tr[i].style.display = "";
         found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  function search1yearTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInputtotal1year");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("total1yeartable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      found = false;
+
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+        tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
       }
