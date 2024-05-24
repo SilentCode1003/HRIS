@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include("./components/registerheader.ejs")%>
+  </head>
 
-<head>
-<%- include("registerheader.ejs")%>
+  <body id="page-top">
+    <%- include("./page/register/register.ejs")%>
 
-</head>
-
-<body id="page-top">   
-                <%- include("./register/register.ejs")%>
-                  
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
+      <i class="fas fa-angle-up"></i>
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <%- include("scripts.ejs")%>
-    <%- include("./register/registerscript.ejs")%>
-</body>
-
+    <%- include("./components/scripts.ejs")%> <%-
+    include("./page/register/registerscript.ejs")%>
+  </body>
 </html>

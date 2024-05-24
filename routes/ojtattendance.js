@@ -9,7 +9,7 @@ const { Attendance_Logs } = require("./model/hrmisdb");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('eportalindexlayout', { title: 'Express' });
-  ValidatorforOjt(req, res, "ojtattendancelayout");
+  ValidatorforOjt(req, res, "ojtattendancelayout", "ojtattendance");
 });
 
 module.exports = router;
@@ -58,7 +58,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-
 router.post("/loadforapp", (req, res) => {
   try {
     let ojtid = req.body.ojtid;
@@ -103,7 +102,6 @@ router.post("/loadforapp", (req, res) => {
     });
   }
 });
-
 
 router.post("/getloadforapp", (req, res) => {
   try {
@@ -195,7 +193,6 @@ router.post("/filterforapp", (req, res) => {
     console.log("error", error);
   }
 });
-
 
 router.post("/gethomestatus2", (req, res) => {
   try {

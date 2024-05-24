@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('shiftlayout', { title: 'Express' });
-  Validator(req, res, "shiftlayout");
+  Validator(req, res, "shiftlayout", "shift");
 });
 
 module.exports = router;
@@ -163,7 +163,7 @@ router.post("/loadshiftforapp", (req, res) => {
 //   }
 // });
 
-router.post('/save', async (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     let employeeName = req.body.employeeName;
     let department = req.body.department;
@@ -172,19 +172,19 @@ router.post('/save', async (req, res) => {
     console.log(employeeName, department, shiftsettingsid);
 
     let checkSql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
-    
-    mysql.Select(checkSql, "Master_Shift" , (err ,result) => {
+
+    mysql.Select(checkSql, "Master_Shift", (err, result) => {
       if (err) {
         console.error("Error checking data:", err);
         return res.json({
-          msg: 'error',
+          msg: "error",
           data: err,
         });
       }
 
       if (result.length > 0) {
         return res.json({
-          msg: 'exist',
+          msg: "exist",
           data: result,
         });
       }
@@ -195,14 +195,14 @@ router.post('/save', async (req, res) => {
         if (err) {
           console.error("Error inserting data:", err);
           return res.json({
-            msg: 'error',
+            msg: "error",
             data: err,
           });
         }
 
         console.log(result);
         res.json({
-          msg: 'success',
+          msg: "success",
           data: result,
         });
       });
@@ -210,14 +210,11 @@ router.post('/save', async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
-
 
 router.post("/update", (req, res) => {
   try {
@@ -257,7 +254,7 @@ router.post("/update", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });
@@ -267,4 +264,3 @@ router.post("/update", (req, res) => {
     });
   }
 });
-

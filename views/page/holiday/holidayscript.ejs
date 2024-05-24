@@ -1,0 +1,421 @@
+<script>
+  let holidayid = "";
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+    LoadList();
+    activePositions = [];
+
+    $(document).on("keyup", "#myInput2", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableholiday").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/holiday/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editholidaymodal"><i class="fas fa-fw fa-pen"></i></button>
+               `;
+
+              finalData.push({
+                holidayid: item.holidayid,
+                day: item.day,
+                name: item.name,
+                date: item.date,
+                type: item.type,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "holidayid" },
+          { data: "day" },
+          { data: "name" },
+          { data: "date" },
+          { data: "type" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(5)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "finished":
+              statusClass = "finished-status";
+              break;
+            case "incoming":
+              statusClass = "incoming-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    function generateHolidays() {
+      const year = $("#yearInput").val();
+      var message = "";
+
+      if (year === "") {
+        message += "Year is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          url: "/holiday/generateholiday?year=" + year,
+          type: "POST",
+        })
+          .done(function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Generate Successfully",
+                text: "Year added",
+                icon: "success",
+                button: "OK!",
+              }).then(function () {
+                window.location.reload();
+                LoadTable();
+              });
+            } else if (result.msg === "exist") {
+              swal({
+                title: "Existing Year",
+                text: "That year is already generated",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          })
+          .fail(function () {
+            swal(
+              "Error",
+              "Failed to generate holidays. Please try again.",
+              "error"
+            );
+          });
+      }
+    }
+    $(document).on("click", "#generateHolidaysBtn", function (e) {
+      const year = $("#yearInput").val();
+      var message = "";
+
+      if (year === "") {
+        message += "Year is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          url: "/holiday/generateholiday?year=" + year,
+          type: "POST",
+        })
+          .done(function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Generate Successfully",
+                text: "Year added",
+                icon: "success",
+                button: "OK!",
+              }).then(function () {
+                window.location.reload();
+                LoadTable();
+              });
+            } else if (result.msg === "exist") {
+              swal({
+                title: "Existing Year",
+                text: "That year is already generated",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          })
+          .fail(function () {
+            swal("Data already exists!", "You clicked the button!", "warning");
+          });
+      }
+    });
+
+    $("#dataTableholiday tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      holidayid = dataRow[0];
+      console.log(dataRow, "holiday");
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/holiday/getholiday",
+        data: {
+          holidayid: holidayid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editholidayday").val(item.day);
+              $("#editholidaydate").val(item.date);
+              $("#editholidayname").val(item.name);
+              $("#editholidaytype").val(item.type);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    function getDayName(dateString) {
+      const date = new Date(dateString);
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      return days[date.getUTCDay()];
+    }
+
+    $("#editholidaydate").on("change", function () {
+      const selectedDate = $(this).val();
+      if (selectedDate) {
+        const dayName = getDayName(selectedDate);
+        $("#editholidayday").val(dayName);
+      } else {
+        $("#editholidayday").val("");
+      }
+    });
+
+    $(document).on("click", "#editholidaybtn", function () {
+      let id = holidayid;
+      let day = $("#editholidayday").val();
+      let date = $("#editholidaydate").val();
+      let name = $("#editholidayname").val();
+      let type = $("#editholidaytype").val();
+
+      var message = "";
+
+      if (day === "") {
+        message += "day is required. ";
+      }
+
+      if (date === "") {
+        message += "date is required. ";
+      }
+
+      if (name === "") {
+        message += "name is required. ";
+      }
+
+      if (type === "") {
+        message += "type is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/holiday/update",
+          data: {
+            holidayid: id,
+            day: day,
+            date: date,
+            name: name,
+            type: type,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/holiday/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            //if (item.status == "ACTIVE") {
+            activePositions.push(item.date);
+            var options = new Option(item.date, item.date);
+            $(options).html(item.date);
+            $("#yearInput").append(options);
+            //}
+          });
+          populateCustomDropdown();
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    }
+
+    function populateCustomDropdown() {
+      for (const position of activePositions) {
+        addOption("positionDropdown", position);
+      }
+    }
+
+    function setupCustomDropdown(inputId, dropdownId, optionClass) {
+      const inputElement = document.getElementById(inputId);
+      const dropdownElement = document.getElementById(dropdownId);
+      const options = dropdownElement.getElementsByClassName(optionClass);
+
+      inputElement.addEventListener("click", function () {
+        dropdownElement.style.display = "block";
+      });
+
+      for (const option of options) {
+        option.addEventListener("click", function () {
+          inputElement.value = option.textContent;
+          dropdownElement.style.display = "none";
+        });
+      }
+
+      inputElement.addEventListener("input", function () {
+        const value = inputElement.value.toUpperCase();
+        for (const option of options) {
+          if (option.textContent.toUpperCase().includes(value)) {
+            option.style.display = "block";
+          } else {
+            option.style.display = "none";
+          }
+        }
+        dropdownElement.style.display = "block";
+      });
+
+      document.addEventListener("click", function (event) {
+        const target = event.target;
+        if (!dropdownElement.contains(target) && target !== inputElement) {
+          dropdownElement.style.display = "none";
+        }
+      });
+    }
+
+    function addOption(dropdownId, optionText) {
+      const dropdownElement = document.getElementById(dropdownId);
+      const newOption = document.createElement("div");
+      newOption.className = "dropdown-option";
+      newOption.textContent = optionText;
+
+      newOption.addEventListener("click", function () {
+        const inputElement = document.getElementById("yearInput");
+        inputElement.value = optionText;
+        dropdownElement.style.display = "none";
+      });
+
+      dropdownElement.appendChild(newOption);
+    }
+
+    setupCustomDropdown("yearInput", "positionDropdown", "dropdown-option");
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableholiday");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

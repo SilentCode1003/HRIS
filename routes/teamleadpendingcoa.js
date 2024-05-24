@@ -1,15 +1,19 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorForTeamLead } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorForTeamLead } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, 'teamleadpendingcoalayout');
+  ValidatorForTeamLead(
+    req,
+    res,
+    "teamleadpendingcoalayout",
+    "teamleadpendingcoa"
+  );
 });
 
 module.exports = router;
@@ -18,7 +22,7 @@ module.exports = router;
 //   try {
 //     let departmentid = req.session.departmentid;
 //     let subgroupid = req.session.subgroupid;
-//     let sql = `SELECT 
+//     let sql = `SELECT
 //     me_profile_pic,
 //     ar_requestid,
 //     concat(me_lastname,' ',me_firstname) as ar_employeeid,
@@ -50,7 +54,6 @@ module.exports = router;
 //     });
 //   }
 // });
-
 
 router.get("/load", (req, res) => {
   try {
@@ -96,8 +99,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-
-
 router.get("/loadactionname", (req, res) => {
   try {
     let accesstypeid = req.session.accesstypeid;
@@ -107,7 +108,7 @@ router.get("/loadactionname", (req, res) => {
     from aprroval_stage_settings
     where ats_accessid = '${accesstypeid}'`;
 
-    console.log(accesstypeid,'id');
+    console.log(accesstypeid, "id");
 
     mysql.Select(sql, "Approval_Stage_Settings", (err, result) => {
       if (err) console.error("Error Fetching Data: ", err);
@@ -125,8 +126,7 @@ router.get("/loadactionname", (req, res) => {
   }
 });
 
-
-router.post('/attendanceaction', (req, res) => {
+router.post("/attendanceaction", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
@@ -135,25 +135,29 @@ router.post('/attendanceaction', (req, res) => {
     let status = req.body.status;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 
-  
     let data = [];
-  
+
     data.push([
-      employeeid, departmentid, requestid, subgroupid, status, createdate,
-    ])
-    
-    mysql.InsertTable('attendance_request_activity', data, (err, result) => {
-      if (err) console.error('Error: ', err);
+      employeeid,
+      departmentid,
+      requestid,
+      subgroupid,
+      status,
+      createdate,
+    ]);
+
+    mysql.InsertTable("attendance_request_activity", data, (err, result) => {
+      if (err) console.error("Error: ", err);
 
       console.log(result);
 
       res.json({
-        msg: 'success'
-      })
+        msg: "success",
+      });
     });
   } catch (error) {
     res.json({
-      msg: 'error'
-    })
+      msg: "error",
+    });
   }
 });

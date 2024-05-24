@@ -1,22 +1,22 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorForTeamLead } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorForTeamLead } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, 'teamleadappliedovertimelayout');
+  ValidatorForTeamLead(req, res, "teamleadappliedovertimelayout"),
+    "teamleadappliedovertime";
 });
 
 module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let departmentid = req.session.departmentid; 
+    let departmentid = req.session.departmentid;
     let sql = `SELECT
     pao_image,
     pao_id,
@@ -35,11 +35,11 @@ router.get("/load", (req, res) => {
       SELECT tu_employeeid FROM teamlead_user
   );`;
 
-    mysql.Select(sql, "Payroll_Approval_Ot" ,(err, result) => {
+    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
@@ -51,7 +51,7 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post('/getotapproval', (req, res) => {
+router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
@@ -80,18 +80,14 @@ router.post('/getotapproval', (req, res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
-
-

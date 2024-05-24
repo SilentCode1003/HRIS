@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalrequestovertimelayout', { title: 'Express' });
-  Validator(req, res, "eportalrequestovertimelayout");
+  Validator(req, res, "eportalrequestovertimelayout", "eportalrequestovertime");
 });
 
 module.exports = router;
@@ -218,8 +218,6 @@ WHERE pao_id = '${approveot_id}'`;
     });
   }
 });
-
-
 
 router.post("/addrequstot", (req, res) => {
   try {

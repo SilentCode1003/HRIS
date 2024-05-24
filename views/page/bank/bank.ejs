@@ -1,0 +1,155 @@
+<div class="card">
+  <div class="card-header">Bank</div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">Bank</span>
+          <input
+            id="bank"
+            name="bank"
+            type="text"
+            class="form-control"
+            placeholder="Bank Name"
+            aria-label="Bank Name"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+      </div>
+
+      <div class="row justify-content-end">
+        <div class="col-md-4 mt-1 text-right">
+          <button
+            id="addBtn"
+            name="addBtn"
+            class="btn btn-primary d-none d-sm-inline-block custom-btn cw-7rem shadow-sm"
+            type="button"
+          >
+            <i class="fa fa-plus" aria-hidden="true"></i> ADD
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-sm-2 col-md-2 col-xl-3">Bank Table</div>
+        <div class="col-sm-4 col-md-4 col-xl-6">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"
+              ><i class="fa fa-solid fa-search"> Search</i></span
+            >
+            <input
+              id="search"
+              name="search"
+              type="text"
+              class="form-control"
+              placeholder="search"
+              aria-label="search"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table
+          id="data-table"
+          class="table align-middle table-sm table-bordered table-hover"
+        >
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Created By</th>
+              <th>Created Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="modal fade bd-example-modal-lg"
+    id="editModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    data-keyboard="false"
+    data-backdrop="static"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Edit Bank
+          </h5>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-2">
+            <div class="col-lg-12">
+              <div class="card-body">
+                <div class="row mb-2">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2">ID</span>
+                    <input
+                      id="idmodal"
+                      name="idmodal"
+                      type="text"
+                      class="form-control"
+                      placeholder="ID"
+                      aria-label="ID"
+                      aria-describedby="basic-addon2"
+                      disabled="true"
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon2"
+                      >Bank</span
+                    >
+                    <input
+                      id="bankmodal"
+                      name="bankmodal"
+                      type="text"
+                      class="form-control"
+                      placeholder="Bank Name"
+                      aria-label="Bank Name"
+                      aria-describedby="basic-addon2"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="cw-7rem clr-warning shadow-sm"
+            data-bs-dismiss="modal"
+          >
+            <i class="fa fa-times" aria-hidden="true"></i> Close
+          </button>
+          <button
+            type="button"
+            id="saveBtn"
+            class="cw-7rem clr-success shadow-sm"
+          >
+            <i class="fa fa-check" aria-hidden="true"></i> Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

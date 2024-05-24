@@ -1,23 +1,21 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPassword } = require('./helper');
-const { Validator } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Encrypter } = require("./repository/crytography");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('settingslayout', { title: 'Express' });
 
-  Validator(req, res, 'settingslayout');
+  Validator(req, res, "settingslayout", "settings");
 });
 
 module.exports = router;
 
-router.post('/update', async (req, res) => {
+router.post("/update", async (req, res) => {
   try {
     let userid = req.body.userid;
     let username = req.body.username;
@@ -49,12 +47,12 @@ router.post('/update', async (req, res) => {
     console.log(updateResult);
 
     res.json({
-      msg: 'success'
+      msg: "success",
     });
   } catch (error) {
     console.error("Error: ", error);
     res.json({
-      msg: 'error'
+      msg: "error",
     });
   }
 });

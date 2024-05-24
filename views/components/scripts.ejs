@@ -1,0 +1,339 @@
+<!-- LOADER -->
+<div class="loader-wrapper">
+  <div class="spinner"></div>
+</div>
+<!-- LOADER -->
+<div class="loader-wrapper">
+  <span class="loader"><span class="loader-inner"></span></span>
+</div>
+
+<!-- Logout Modal-->
+<div
+  class="modal fade"
+  id="logoutModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header logout-header">
+        <h6 class="modal-title fs-5" id="exampleModalLabel">
+          <b>Ready to leave?</b>
+        </h6>
+        <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button> -->
+        <i class="bx bx-x" data-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body logout-body">
+        <h5>
+          Select <span class="btn-out-body">Log Out</span> below if you are
+          ready to end your current session.
+        </h5>
+      </div>
+      <div class="modal-footer logout-footer">
+        <button
+          class="btn btn-logout-cancel"
+          type="button"
+          data-dismiss="modal"
+        >
+          Cancel
+        </button>
+        <button class="btn btn-logout" id="logoutBtn" name="logoutBtn">
+          Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Core bootstrap-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+
+<!-- Custom scripts for all pages-->
+<!-- <script src="/javascripts/js/sb-admin-2.js"></script> -->
+<!-- <script src="/javascripts/js/sb-admin-2.js"></script> -->
+<script src="/javascripts/js/sb-admin-2.min.js"></script>
+
+<!-- PCreated by level plugins -->
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="/vendor/chart.js/Chart.min.js"></script> -->
+
+<!-- PCreated by level custom scripts -->
+<!-- <script src="/javascripts/javascripts/js/demo/datatables-demo.js"></script>
+<script src="/javascripts/js/demo/chart-area-demo.js"></script>
+<script src="/javascripts/js/demo/chart-pie-demo.js"></script> -->
+
+<!-- swal-->
+<script src="/javascripts/js/sweetalert.min.js"></script>
+
+<script src="/javascripts/js/scripts.js"></script>
+
+<!-- XLSX -->
+<script src="/javascripts/js/xlsx.mini.min.js"></script>
+
+<!-- Page level custom scripts -->
+<!-- <script src="/javascripts/js/demo/datatables-demo.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
+
+<!-- google map -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Leaflet CSS and JS -->
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!--Date Picker-->
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+></script>
+
+<!--PDF DOWNLOADER-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $(document).on("click", "#logoutBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/login/logout",
+        success: function (result) {
+          swal({
+            title: "Ba Bye!!!",
+            text: "Log out Successfully",
+            icon: "success",
+            button: "Ba bye!!",
+          }).then((results) => {
+            window.location.reload();
+            location.replace("/");
+          });
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    });
+
+    $(document).on("click", "#logoutBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/ojtlogin/logout",
+        success: function (result) {
+          swal({
+            title: "Ba Bye!!!",
+            text: "Log out Successfully",
+            icon: "success",
+            button: "Ba bye!!",
+          }).then((results) => {
+            window.location.reload();
+            location.replace("/");
+          });
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    });
+  });
+</script>
+
+<script>
+  function formatPrice(event, input) {
+    event.preventDefault();
+
+    const cursorPosition = input.selectionStart;
+    const originalValue = input.value;
+    const defaultValue = "₱0.00";
+    const currentValue = originalValue || defaultValue;
+
+    let value = currentValue.replace(/[^0-9.]/g, "");
+    let number = parseFloat(value);
+
+    if (!isNaN(number)) {
+      const formattedValue = number.toLocaleString("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+      input.value = formattedValue;
+
+      let newPosition =
+        cursorPosition +
+        (formattedValue.indexOf(".") > currentValue.indexOf(".") ? 1 : 0);
+
+      // Set the new cursor position
+      input.setSelectionRange(newPosition, newPosition);
+    } else {
+      input.value = defaultValue;
+    }
+  }
+  hidespinner();
+  function showspinner() {
+    console.log("show loader");
+    $(".loader-wrapper").show();
+  }
+
+  function hidespinner() {
+    console.log("hide loader");
+    setTimeout(() => {
+      $(".loader-wrapper").hide();
+    }, 1000);
+  }
+
+  function showSweetAlert(title, text, icon, buttonText) {
+    swal({
+      title: title,
+      text: text,
+      icon: icon,
+      button: buttonText,
+    });
+  }
+
+  function getDeviceInformation() {
+    return new Promise((resolve, reject) => {
+      if (typeof navigator !== "undefined") {
+        resolve(navigator.userAgent || "web");
+      } else {
+        reject(new Error("Navigator object not available."));
+      }
+    });
+  }
+
+  function formatToCurrency(value) {
+    return (
+      "₱" +
+      parseFloat(value).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+    );
+  }
+
+  function formatCurrencyValue(amount) {
+    var formattedAmount = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+    }).format(amount);
+    return formattedAmount;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatDateTime(dateTime) {
+    const formattedDateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
+    return formattedDateTime;
+  }
+
+  function formatTime(dateTimeString) {
+    if (!dateTimeString) return "";
+    const dateTimeParts = dateTimeString.split("T");
+    if (dateTimeParts.length !== 2) return "";
+    const timeString = dateTimeParts[1];
+    const timeParts = timeString.split(":");
+    if (timeParts.length !== 2) return "";
+    const hours = timeParts[0];
+    const minutes = timeParts[1];
+    return `${hours}:${minutes}`;
+  }
+
+  // $("#sidebarToggleTop").on("click", function (e) {
+  //   $(".navbar").toggleClass("navbar-toggled");
+  // });
+
+  //   $(document).ready(function () {
+  //   let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true';
+
+  //   function updateSidebarState() {
+  //     $("body").toggleClass("sidebar-toggled", isSidebarOpen);
+  //     $(".sidebar").toggleClass("toggled", isSidebarOpen);
+
+  //     if (isSidebarOpen) {
+  //       $('.sidebar .collapse').collapse('hide');
+  //       $('#content').toggleClass('content-toggled');
+  //       $('.sticky-footer').toggleClass('footer-toggled');
+  //     } else {
+  //       $('#content').removeClass('content-toggled');
+  //       $('.navbar').removeClass('navbar-toggled');
+  //       $('.sticky-footer').removeClass('footer-toggled');
+  //     }
+  //   }
+
+  //   updateSidebarState();
+
+  //   $("#sidebarToggle", "#sidebarToggleTop").on('click', function (e) {
+  //     isSidebarOpen = !isSidebarOpen;
+
+  //     localStorage.setItem('isSidebarOpen', isSidebarOpen);
+
+  //     updateSidebarState();
+  //   });
+  // });
+
+  function toggleSidebarAndNavbar() {
+    $("body").toggleClass("sidebar-toggled"); // Toggle class for body
+    $(".sidebar").toggleClass("toggled"); // Toggle class for sidebar
+    // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
+    $(".navbar").toggleClass("navbar-toggled"); // Toggle class for navbar
+    $(".content").toggleClass("content-toggled"); // Toggle class for content
+  }
+
+  $(document).ready(function () {
+    $("#sidebarToggleTop").on("click", function () {
+      toggleSidebarAndNavbar();
+    });
+  });
+
+  function filterTableRows(tablename, colcount, searchid) {
+    console.log("triggered search");
+
+    const searchQuery = $(searchid).val().trim().toLowerCase();
+    let foundMatches = false;
+
+    $("#no-match-row").remove();
+
+    $(tablename + " tbody tr").each(function () {
+      const rowData = $(this).text().toLowerCase();
+      if (rowData.includes(searchQuery)) {
+        $(this).show();
+        foundMatches = true;
+      } else {
+        $(this).hide();
+      }
+    });
+
+    if (!foundMatches) {
+      const noMatchRow = $("<tr>").append(
+        $("<td>", {
+          colspan: colcount,
+          class: "text-center",
+          text: "No Data Matched",
+        })
+      );
+      $(tablename + " tbody").append(noMatchRow);
+      noMatchRow.attr("id", "no-match-row");
+    }
+  }
+</script>

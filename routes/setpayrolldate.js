@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('salarylayout', { title: 'Express' });
-  Validator(req, res, "setpayrolldatelayout");
+  Validator(req, res, "setpayrolldatelayout"), "setpayrolldate";
 });
 
 module.exports = router;
@@ -75,9 +75,6 @@ router.get("/loadreq", (req, res) => {
   }
 });
 
-
-
-
 router.post("/generate", (req, res) => {
   try {
     const { year } = req.body;
@@ -126,17 +123,17 @@ router.post("/generate", (req, res) => {
       ]);
     }
 
-    let sql =  `SELECT * FROM payroll_date WHERE YEAR(pd_payrolldate) = '${year}'`;
+    let sql = `SELECT * FROM payroll_date WHERE YEAR(pd_payrolldate) = '${year}'`;
 
-    mysql.Select(sql, "Payroll_Date", (err, result) =>{
+    mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) {
         console.error("Error", err);
-        res.json({ msg: 'error'});
+        res.json({ msg: "error" });
         return;
-      };
+      }
 
       if (result.length != 0) {
-        res.json({ msg: "exist"});
+        res.json({ msg: "exist" });
         return;
       }
 

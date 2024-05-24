@@ -1,24 +1,22 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorForTeamLead } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorForTeamLead } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, 'teamleademployeelayout');
+  ValidatorForTeamLead(req, res, "teamleademployeelayout", "teamleademployee");
 });
 
 module.exports = router;
 
-
 router.get("/load", (req, res) => {
-    try {
-      let departmentid = req.session.departmentid;
-      let sql = ` 
+  try {
+    let departmentid = req.session.departmentid;
+    let sql = ` 
       SELECT 
       me_id as newEmployeeId,
       CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
@@ -34,24 +32,24 @@ router.get("/load", (req, res) => {
       WHERE me_department = '${departmentid}'
       AND
       me_jobstatus IN ('regular', 'probitionary','apprentice')`;
-  
-      mysql
-        .mysqlQueryPromise(sql)
-        .then((result) => {
-          res.json({
-            msg: "success",
-            data: result,
-          });
-        })
-        .catch((error) => {
-          res.json({
-            msg: "error",
-            data: error,
-          });
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
         });
-    } catch (error) {
-      res
-        .status(500)
-        .json({ msg: "Internal server error", error: error.message });
-    }
-  });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Internal server error", error: error.message });
+  }
+});

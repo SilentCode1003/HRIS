@@ -9,7 +9,7 @@ const currentDate = moment();
 router.get("/", function (req, res, next) {
   //res.render('candidatelayout', { title: 'Express' });
 
-  Validator(req, res, "attendancerequestlayout");
+  Validator(req, res, "attendancerequestlayout", "attendancerequest");
 });
 
 module.exports = router;
@@ -84,7 +84,6 @@ router.post("/getattendancerequest", (req, res) => {
   }
 });
 
-
 router.post("/updateMasterAttendance", (req, res) => {
   try {
     let emp_id = req.body.emp_id;
@@ -104,17 +103,20 @@ router.post("/updateMasterAttendance", (req, res) => {
     console.log(data);
 
     let selectQuery = `SELECT * FROM master_attendance WHERE ma_employeeid = '${emp_id}' AND ma_attendancedate = '${attendancedate}'`;
-    mysql.Select(selectQuery, "Master_Attendance", (selectErr, selectResult) => {
-      if (selectErr) {
-        console.error("Error checking attendance record:", selectErr);
-        return res.json({
-          msg: 'error',
-          data: selectErr,
-        });
-      }
+    mysql.Select(
+      selectQuery,
+      "Master_Attendance",
+      (selectErr, selectResult) => {
+        if (selectErr) {
+          console.error("Error checking attendance record:", selectErr);
+          return res.json({
+            msg: "error",
+            data: selectErr,
+          });
+        }
 
-      if (selectResult.length > 0) {
-        let updateSql = `UPDATE master_attendance SET 
+        if (selectResult.length > 0) {
+          let updateSql = `UPDATE master_attendance SET 
         ma_employeeid = '${emp_id}', 
         ma_attendancedate = '${attendancedate}',
         ma_clockin = '${timein}', 
@@ -129,51 +131,57 @@ router.post("/updateMasterAttendance", (req, res) => {
         ma_deviceout = '${deviceout}' 
         WHERE ma_employeeid = '${emp_id}' 
         AND ma_attendancedate = '${attendancedate}'`;
-        mysql.Update(updateSql)
-          .then((result) => {
-            res.json({
-              msg: 'success',
-              data: result,
+          mysql
+            .Update(updateSql)
+            .then((result) => {
+              res.json({
+                msg: "success",
+                data: result,
+              });
+            })
+            .catch((error) => {
+              res.json({
+                msg: "error",
+                data: error,
+              });
             });
-          })
-          .catch((error) => {
-            res.json({
-              msg: 'error',
-              data: error,
-            });
-          });
-      } else {
-        data.push([
-          emp_id,
-          attendancedate,
-          timein,
-          timeout,
-          latitudein,
-          latitudeout,
-          longitudein,
-          longitudeout,
-          geofencein,
-          geofenceout,
-          devicein,
-          deviceout
-        ]);
+        } else {
+          data.push([
+            emp_id,
+            attendancedate,
+            timein,
+            timeout,
+            latitudein,
+            latitudeout,
+            longitudein,
+            longitudeout,
+            geofencein,
+            geofenceout,
+            devicein,
+            deviceout,
+          ]);
 
-        mysql.InsertTable("master_attendance_request", data, (insertErr, insertResult) => {
-          if (insertErr) {
-            console.error("Error Insert Attendance: ", insertErr);
-            return res.json({
-              msg: 'error',
-              data: insertErr,
-            });
-          }
+          mysql.InsertTable(
+            "master_attendance_request",
+            data,
+            (insertErr, insertResult) => {
+              if (insertErr) {
+                console.error("Error Insert Attendance: ", insertErr);
+                return res.json({
+                  msg: "error",
+                  data: insertErr,
+                });
+              }
 
-          res.json({
-            msg: 'success',
-            data: insertResult,
-          });
-        });
+              res.json({
+                msg: "success",
+                data: insertResult,
+              });
+            }
+          );
+        }
       }
-    });
+    );
   } catch (error) {
     res.json({
       msg: "error",
@@ -182,23 +190,23 @@ router.post("/updateMasterAttendance", (req, res) => {
   }
 });
 
-
 router.post("/updateAttendanceRequest", (req, res) => {
   try {
     let requestid = req.body.requestid;
 
     let sql = `UPDATE attendance_request SET ar_status = 'Approved' WHERE ar_requestid = '${requestid}'`;
 
-    mysql.Update(sql)
+    mysql
+      .Update(sql)
       .then((result) => {
         res.json({
-          msg: 'success',
+          msg: "success",
           data: result,
         });
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });
@@ -210,23 +218,23 @@ router.post("/updateAttendanceRequest", (req, res) => {
   }
 });
 
-
 router.post("/updateAttendanceRequestRejected", (req, res) => {
   try {
     let requestid = req.body.requestid;
 
     let sql = `UPDATE attendance_request SET ar_status = 'Rejected' WHERE ar_requestid = '${requestid}'`;
 
-    mysql.Update(sql)
+    mysql
+      .Update(sql)
       .then((result) => {
         res.json({
-          msg: 'success',
+          msg: "success",
           data: result,
         });
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });

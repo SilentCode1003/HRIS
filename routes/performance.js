@@ -1,18 +1,17 @@
-const { Validator } = require('./controller/middleware');
-const mysql = require('./repository/hrmisdb');
-var express = require('express');
+const { Validator } = require("./controller/middleware");
+const mysql = require("./repository/hrmisdb");
+var express = require("express");
 var router = express.Router();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('performancelayout', { title: 'Express' });
-  Validator(req, res, 'performancelayout');
+  Validator(req, res, "performancelayout", "performance");
 });
 
 module.exports = router;
 
-router.post('/getperformance', (req, res) => {
+router.post("/getperformance", (req, res) => {
   try {
     let performanceid = req.body.performanceid;
     let sql = `SELECT
@@ -24,34 +23,35 @@ router.post('/getperformance', (req, res) => {
       FROM master_performance_emp
       WHERE mpe_performanceid = '${performanceid}'`;
 
-    mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
             msg: "success",
-            data: result
+            data: result,
           });
         } else {
           res.status(404).json({
-            msg: "Department not found"
+            msg: "Department not found",
           });
         }
       })
       .catch((error) => {
         res.status(500).json({
           msg: "Error fetching department data",
-          error: error
+          error: error,
         });
       });
   } catch (error) {
     res.status(500).json({
       msg: "Internal server error",
-      error: error
+      error: error,
     });
   }
 });
 
-router.get('/load', (req, res) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
     mpe_performanceid,
@@ -63,67 +63,60 @@ router.get('/load', (req, res) => {
    FROM master_performance_emp
     LEFT JOIN master_employee ON master_performance_emp.mpe_employeeid = me_id`;
 
-    mysql.Select(sql, 'Master_Performance_Emp', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Master_Performance_Emp", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:error
-    })
-    
+      msg: error,
+    });
   }
 });
 
-router.post('/save', (req, res) => {
+router.post("/save", (req, res) => {
   try {
-    
     let employeeid = req.body.employeeid;
     let appraisaldate = req.body.appraisaldate;
     let appraisaltype = req.body.appraisaltype;
     let rating = req.body.rating;
     let comments = req.body.comments;
 
-  
     let data = [];
-  
-    data.push([
-      employeeid, appraisaldate, appraisaltype, rating, comments,
-    ])
+
+    data.push([employeeid, appraisaldate, appraisaltype, rating, comments]);
     let query = `SELECT * FROM master_performance_emp WHERE mpe_employeeid = '${employeeid}'`;
-    mysql.Select(query, 'Master_Performance_Emp', (err, result) => {
+    mysql.Select(query, "Master_Performance_Emp", (err, result) => {
       if (err) console.error("Error: ", err);
 
       if (result.length != 0) {
         res.json({
-          msg: "exist"
+          msg: "exist",
         });
-      }
-      else {
-        mysql.InsertTable('master_performance_emp', data, (err, result) => {
-          if (err) console.error('Error: ', err);
+      } else {
+        mysql.InsertTable("master_performance_emp", data, (err, result) => {
+          if (err) console.error("Error: ", err);
 
           console.log(result);
 
           res.json({
-            msg: 'success'
-          })
-        })
+            msg: "success",
+          });
+        });
       }
     });
-
-    
   } catch (error) {
     res.json({
-      msg: 'error'
-    })
+      msg: "error",
+    });
   }
 });
 
-router.post('/update', (req, res) => {
+router.post("/update", (req, res) => {
   try {
     let performanceid = req.body.performanceid;
     let employeeid = req.body.employeeid;
@@ -131,7 +124,7 @@ router.post('/update', (req, res) => {
     let appraisaltype = req.body.appraisaltype;
     let rating = req.body.rating;
     let comments = req.body.comments;
-    
+
     let sqlupdate = `UPDATE master_performance_emp SET   
     mpe_employeeid ='${employeeid}', 
     mpe_appraisaldate ='${appraisaldate}', 
@@ -140,34 +133,33 @@ router.post('/update', (req, res) => {
     mpe_comments ='${comments}' 
     WHERE mpe_performanceid ='${performanceid}'`;
 
-    mysql.Update(sqlupdate)
-    .then((result) =>{
-      console.log(result);
-  
-      res.json({
-        msg: 'success'
+    mysql
+      .Update(sqlupdate)
+      .then((result) => {
+        console.log(result);
+
+        res.json({
+          msg: "success",
+        });
       })
-    })
-    .catch((error) =>{
-      res.json({
-        msg:error
-      })
-      
-    });
-    
+      .catch((error) => {
+        res.json({
+          msg: error,
+        });
+      });
+
     // mysql.Update(sqlupdate, (err,result) =>{
     //   if(err) console.error('Error: ', err);
-  
+
     //   console.log(result);
-  
+
     //   res.json({
     //     msg: 'success'
     //   })
     // })
-  
   } catch (error) {
     res.json({
-      msg: 'error'
-    })
+      msg: "error",
+    });
   }
 });
