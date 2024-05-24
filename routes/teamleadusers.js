@@ -2,24 +2,24 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Encrypter } = require("./repository/crytography");
-const { generateUsernameAndPassword } = require("./helper");
 const { Validator } = require("./controller/middleware");
+const { generateUsernameAndPassword } = require("./repository/helper");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-//   req.session.fullname = "DEV42";
-//   req.session.employeeid = "999999";
-//   req.session.accesstype = "Admin";
+  //   req.session.fullname = "DEV42";
+  //   req.session.employeeid = "999999";
+  //   req.session.accesstype = "Admin";
 
-//   res.render("userslayout", {
-//     image: req.session.image,
-//     employeeid: "999999",
-//     fullname: "DEV42",
-//     accesstype: "Admin",
-//   });
-  Validator(req, res, 'teamleaduserslayout');
+  //   res.render("userslayout", {
+  //     image: req.session.image,
+  //     employeeid: "999999",
+  //     fullname: "DEV42",
+  //     accesstype: "Admin",
+  //   });
+  Validator(req, res, "teamleaduserslayout", "teamleadusers");
 });
 
 module.exports = router;
@@ -29,7 +29,7 @@ router.post("/save", async (req, res) => {
     let employeeid = req.body.employeeid;
     let subgroupid = req.body.subgroupid;
     let accesstype = 5;
-    let status = 'Active';
+    let status = "Active";
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
 
@@ -199,7 +199,6 @@ router.post("/getusers", (req, res) => {
     });
   }
 });
-
 
 router.get("/subgroupload", (req, res) => {
   try {

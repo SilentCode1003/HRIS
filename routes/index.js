@@ -7,7 +7,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  Validator(req, res, "indexlayout");
+  // Validator(req, res, "indexlayout");
+
+  Validator(req, res, "indexlayout", "index");
 });
 
 module.exports = router;
@@ -142,7 +144,6 @@ router.get("/loadCA", (req, res) => {
   }
 });
 
-
 router.get("/loadreqOT", (req, res) => {
   try {
     let sql = `   
@@ -158,15 +159,14 @@ router.get("/loadreqOT", (req, res) => {
     FROM payroll_approval_ot
     WHERE pao_status = 'Appllied'`;
 
-    mysql.Select(sql, "Payroll_Approval_Ot" , (err, result) => {
+    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error: ", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
-
   } catch (error) {
     res.json({
       msg: error,
@@ -189,22 +189,20 @@ router.get("/loadreqattendance", (req, res) => {
     INNER JOIN master_employee on ar_employeeid = me_id
     WHERE ar_status = 'Pending'`;
 
-    mysql.Select(sql, "Attendance_Request" , (err, result) => {
+    mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
-
   } catch (error) {
     res.json({
       msg: error,
     });
   }
 });
-
 
 router.get("/getbulletin", (req, res) => {
   try {
@@ -246,7 +244,7 @@ router.get("/getbulletin", (req, res) => {
   }
 });
 
-router.get('/attendancestatus', (req , res) => {
+router.get("/attendancestatus", (req, res) => {
   try {
     let sql = `
     SELECT
@@ -307,27 +305,27 @@ WHERE
 ORDER BY
     minutes_late DESC`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
 
 router.get("/countattendancebadge", (req, res) => {
   try {
@@ -391,7 +389,6 @@ WHERE
 });
 
 //#endregion
-
 
 //#region DASH BOARD CARD
 
@@ -500,7 +497,6 @@ router.get("/countovertimeot", (req, res) => {
   }
 });
 
-
 router.get("/countCOA", (req, res) => {
   try {
     let sql = `    
@@ -535,7 +531,6 @@ router.get("/countCOA", (req, res) => {
     console.log(error);
   }
 });
-
 
 router.get("/countactive", (req, res) => {
   try {
@@ -868,7 +863,6 @@ router.get("/countbagapuro", (req, res) => {
   }
 });
 
-
 router.get("/countapprentice", (req, res) => {
   try {
     let sql = `    
@@ -899,7 +893,6 @@ router.get("/countapprentice", (req, res) => {
     });
   }
 });
-
 
 router.get("/count1year", (req, res) => {
   try {
@@ -950,18 +943,13 @@ router.get("/count1year", (req, res) => {
   }
 });
 
-
-
-
-
 //#endregion
 
+//#region MODAL DASH BOARD
 
-//#region MODAL DASH BOARD 
-
-router.get('/getbday' , (req, res)=> {
+router.get("/getbday", (req, res) => {
   try {
-    let sql =  ` SELECT 
+    let sql = ` SELECT 
     me_profile_pic,
     CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
     DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
@@ -974,24 +962,24 @@ router.get('/getbday' , (req, res)=> {
     me_birthday`;
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
-      if (err) console.log("Error" , err);
+      if (err) console.log("Error", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-router.get('/getbdaytoday' , (req, res)=> {
+router.get("/getbdaytoday", (req, res) => {
   try {
-    let sql =`SELECT 
+    let sql = `SELECT 
     me_profile_pic,
     CONCAT(me_firstname, ' ', me_lastname) AS me_firstname,
     DATE_FORMAT(me_birthday, '%M %e') AS me_birthday
@@ -1004,18 +992,17 @@ WHERE
 ORDER BY 
     me_birthday`;
 
-
     mysql.Select(sql, "Master_Employee", (err, result) => {
-      if (err) console.log("Error" , err);
+      if (err) console.log("Error", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
@@ -1245,8 +1232,59 @@ WHERE
   }
 });
 
+router.get("/total1yearemployee", (req, res) => {
+  try {
+    let sql = `select
+    newEmployeeId,
+    firstname,
+    department,
+    hiredate,
+    position,
+    contact,
+    tenure
+    from (
+    SELECT 
+       me_id AS newEmployeeId,
+       CONCAT(me_firstname, ' ', me_lastname) AS firstname,
+       md_departmentname AS department,
+       me_hiredate AS hiredate,
+       mp_positionname AS position,
+       me_phone AS contact,
+       CONCAT(
+           TIMESTAMPDIFF(YEAR, me_hiredate, CURRENT_DATE), ' Years '
+       ) AS tenure
+       FROM 
+       master_employee
+       LEFT JOIN 
+       master_department md ON master_employee.me_department = md_departmentid
+       LEFT JOIN 
+       master_position ON master_employee.me_position = mp_positionid
+       where me_jobstatus in ('regular')) as result
+       where tenure = '1 Years '`;
 
-router.get('/apprenticemodal', (req, res) => {
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.get("/apprenticemodal", (req, res) => {
   try {
     let sql = `select
     me_id, 
@@ -1262,34 +1300,32 @@ router.get('/apprenticemodal', (req, res) => {
 
     mysql.Select(sql, "Master_Employee", (err, result) => {
       if (err) console.error("Error :", err);
-      
+
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
-      data:error,
+      msg: "error",
+      data: error,
     });
   }
 });
 
 //#endregion
 
-
 //#region ADMIN NOTIFICATION
 
-
-router.post('/viewnotif', (req,res) => {
+router.post("/viewnotif", (req, res) => {
   try {
     let notificationIdClicked = req.body.notificationIdClicked;
     let sql = `select *
     from admin_notification
     where an_notificationid = '${notificationIdClicked}'`;
 
-    console.log("notif_id",notificationIdClicked);
+    console.log("notif_id", notificationIdClicked);
 
     mysql.Select(sql, "Admin_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
@@ -1297,21 +1333,21 @@ router.post('/viewnotif', (req,res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
-router.get('/loadnotif', (req, res) => {
+router.get("/loadnotif", (req, res) => {
   try {
-    let sql =  `SELECT * FROM admin_notification
+    let sql = `SELECT * FROM admin_notification
     WHERE an_isDeleate = 'NO'
     ORDER BY an_date DESC`;
 
@@ -1319,19 +1355,19 @@ router.get('/loadnotif', (req, res) => {
       if (err) console.error("Error: ", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
-router.post('/markread', (req, res) => {
+router.post("/markread", (req, res) => {
   try {
     let notificationId = req.body.notificationId;
     let sql = `SELECT
@@ -1345,7 +1381,7 @@ router.post('/markread', (req, res) => {
       if (err) {
         console.error("Error: ", err);
         res.json({
-          msg: 'error',
+          msg: "error",
           data: err,
         });
         return;
@@ -1354,27 +1390,26 @@ router.post('/markread', (req, res) => {
       if (result.length > 0) {
         const isread = result[0].isread;
         res.json({
-          msg: 'success',
+          msg: "success",
           data: {
             isread: isread,
           },
         });
       } else {
         res.json({
-          msg: 'error',
-          data: 'Notification not found',
+          msg: "error",
+          data: "Notification not found",
         });
       }
     });
   } catch (error) {
     console.error("Error: ", error);
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
 
 router.get("/countunreadbadge", (req, res) => {
   try {
@@ -1391,7 +1426,7 @@ router.get("/countunreadbadge", (req, res) => {
         if (result.length > 0) {
           res.status(200).json({
             msg: "success",
-            data:result
+            data: result,
           });
         } else {
           res.status(404).json({
@@ -1410,8 +1445,7 @@ router.get("/countunreadbadge", (req, res) => {
   }
 });
 
-
-router.post('/readnotif', (req, res) => {
+router.post("/readnotif", (req, res) => {
   try {
     let notificationId = req.body.notificationId;
     let sql = `UPDATE admin_notification SET 
@@ -1419,31 +1453,29 @@ router.post('/readnotif', (req, res) => {
     an_isRead = 'YES'
     WHERE an_notificationid = '${notificationId}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
-
-
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/deleatenotif', (req, res) => {
+router.post("/deleatenotif", (req, res) => {
   try {
     let notificationId = req.body.notificationId;
     let sql = `UPDATE admin_notification SET 
@@ -1452,35 +1484,29 @@ router.post('/deleatenotif', (req, res) => {
     an_isDeleate = 'YES'
     WHERE an_notificationid = '${notificationId}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-
-
-
-
-
 //#endregion
-
 
 //#region TOPBAR SEARCH EMPLOYEE
 
@@ -1565,14 +1591,13 @@ router.post('/deleatenotif', (req, res) => {
 //   }
 // });
 
-
-router.post('/searchemployee', (req, res) => {
+router.post("/searchemployee", (req, res) => {
   try {
     const { search } = req.body;
-    let firstName = '';
-    let lastName = '';
+    let firstName = "";
+    let lastName = "";
 
-    const lastSpaceIndex = search.lastIndexOf(' ');
+    const lastSpaceIndex = search.lastIndexOf(" ");
     if (lastSpaceIndex !== -1) {
       firstName = search.substring(0, lastSpaceIndex);
       lastName = search.substring(lastSpaceIndex + 1);
@@ -1590,7 +1615,8 @@ router.post('/searchemployee', (req, res) => {
       sql += ` AND me_lastname LIKE '%${lastName}%'`;
     }
 
-    mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         const employees = result.map((employee) => ({
           employeeid: employee.me_id,
@@ -1598,23 +1624,22 @@ router.post('/searchemployee', (req, res) => {
           profilePic: employee.me_profile_pic,
         }));
         res.json({
-          msg: 'success',
+          msg: "success",
           data: employees,
         });
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
 
 //#endregion

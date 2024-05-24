@@ -1,9 +1,8 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorforOjt } = require('./controller/middleware');
-const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPasswordforOjt } = require("./helper");
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorforOjt } = require("./controller/middleware");
+const { Encrypter } = require("./repository/crytography");
 var router = express.Router();
 const currentDate = moment();
 
@@ -11,9 +10,9 @@ const currentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorforOjt(req, res, 'ojtindexlayout');
+  ValidatorforOjt(req, res, "ojtindexlayout", "ojtindex");
 });
 
 module.exports = router;
@@ -95,7 +94,6 @@ router.post("/clockin", (req, res) => {
 
   console.log(checkMissingClockOutQuery);
 
-
   const executeSequentialQueries = (queries) =>
     queries.reduce(
       (promise, query) =>
@@ -107,17 +105,22 @@ router.post("/clockin", (req, res) => {
       Promise.resolve([])
     );
 
-  executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
+  executeSequentialQueries([
+    checkExistingClockInQuery,
+    checkMissingClockOutQuery,
+  ])
     .then(([resultClockIn, resultMissingClockOut]) => {
       if (resultClockIn.length > 0) {
         res.json({
           status: "exist",
-          message: "Clock-in not allowed. Employee already clocked in on the same day.",
+          message:
+            "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (resultMissingClockOut.length > 0) {
         res.json({
           status: "disabled",
-          message: "Clock-in not allowed. Missing clock-out on the previous day.",
+          message:
+            "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -133,25 +136,21 @@ router.post("/clockin", (req, res) => {
           ],
         ];
 
-        mysql.InsertTable(
-          "ojt_attendance",
-          attendanceData,
-          (err, result) => {
-            if (err) {
-              console.error("Error inserting record:", err);
-              return res.status(500).json({
-                status: "error",
-                message: "Failed to insert attendance. Please try again.",
-              });
-            }
-
-            console.log("Insert result:", result);
-            res.json({
-              status: "success",
-              message: "Clock-in successful.",
+        mysql.InsertTable("ojt_attendance", attendanceData, (err, result) => {
+          if (err) {
+            console.error("Error inserting record:", err);
+            return res.status(500).json({
+              status: "error",
+              message: "Failed to insert attendance. Please try again.",
             });
           }
-        );
+
+          console.log("Insert result:", result);
+          res.json({
+            status: "success",
+            message: "Clock-in successful.",
+          });
+        });
       }
     })
     .catch((error) => {
@@ -163,7 +162,6 @@ router.post("/clockin", (req, res) => {
       });
     });
 });
-
 
 router.post("/clockout", (req, res) => {
   const ojt_id = req.body.ojtid;
@@ -238,7 +236,7 @@ router.post("/clockout", (req, res) => {
     });
 });
 
-router.post('/emplogs', (req, res) => {
+router.post("/emplogs", (req, res) => {
   try {
     let = ojtid = req.body.ojtid;
     let sql = `        
@@ -250,24 +248,24 @@ router.post('/emplogs', (req, res) => {
  WHERE oal_ojtid = '${ojtid}'
  order by oal_logdatetime desc`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-

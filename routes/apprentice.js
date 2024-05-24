@@ -4,9 +4,9 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
-const { generateUsernameAndPasswordforemployee } = require("./helper");
 const { Encrypter } = require("./repository/crytography");
 const { error } = require("jquery");
+const { generateUsernameAndPasswordforemployee } = require("./repository/helper");
 
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
@@ -15,7 +15,7 @@ const currentMonth = moment().format("MM");
 router.get("/", function (req, res, next) {
   //res.render('announcementlayout', { title: 'Express' });
 
-  Validator(req, res, "apprenticelayout");
+  Validator(req, res, "apprenticelayout",'apprentice');
 });
 
 module.exports = router;

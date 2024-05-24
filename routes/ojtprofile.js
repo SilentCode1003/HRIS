@@ -1,9 +1,8 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorforOjt } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorforOjt } = require("./controller/middleware");
 const { Encrypter, Decrypter } = require("./repository/crytography");
-const { generateUsernameAndPasswordforOjt } = require("./helper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -11,14 +10,14 @@ const currentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorforOjt(req, res, 'ojtprofilelayout');
+  ValidatorforOjt(req, res, "ojtprofilelayout", "ojtprofile");
 });
 
 module.exports = router;
 
-router.post('/load', (req, res) => {
+router.post("/load", (req, res) => {
   try {
     let ojtid = req.body.ojtid;
     let sql = ` select
@@ -48,28 +47,29 @@ LEFT JOIN
 
     console.log(ojtid);
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
-router.post('/updatepassword', async (req, res) => {
+router.post("/updatepassword", async (req, res) => {
   try {
     let ojtid = req.body.ojtid;
     let currentPass = req.body.currentPass;
@@ -80,60 +80,65 @@ router.post('/updatepassword', async (req, res) => {
 
     if (newPass !== confirmPass) {
       return res.json({
-        msg: 'error',
-        description: 'New password and confirm password do not match',
+        msg: "error",
+        description: "New password and confirm password do not match",
       });
     }
 
-    const userData = await mysql.mysqlQueryPromise(`SELECT ou_password FROM ojt_user WHERE ou_ojtid = '${ojtid}'`);
+    const userData = await mysql.mysqlQueryPromise(
+      `SELECT ou_password FROM ojt_user WHERE ou_ojtid = '${ojtid}'`
+    );
 
     if (userData.length !== 1) {
       return res.json({
-        msg: 'error',
-        description: 'Employee not found',
+        msg: "error",
+        description: "Employee not found",
       });
     }
 
     const encryptedStoredPassword = userData[0].ou_password;
 
-    Decrypter(encryptedStoredPassword, async (decryptError, decryptedStoredPassword) => {
-      if (decryptError) {
-        return res.json({
-          msg: 'error',
-          description: 'Error decrypting the stored password',
-        });
-      }
-
-      
-      if (currentPass !== decryptedStoredPassword) {
-        return res.json({
-          msg: 'error',
-          description: 'Current password is incorrect',
-        });
-      }
-
-
-      Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
-        if (encryptError) {
+    Decrypter(
+      encryptedStoredPassword,
+      async (decryptError, decryptedStoredPassword) => {
+        if (decryptError) {
           return res.json({
-            msg: 'error',
-            description: 'Error encrypting the new password',
+            msg: "error",
+            description: "Error decrypting the stored password",
           });
         }
 
-        await mysql.Update(`UPDATE ojt_user SET ou_password = '${encryptedNewPassword}' WHERE ou_ojtid = '${ojtid}'`);
+        if (currentPass !== decryptedStoredPassword) {
+          return res.json({
+            msg: "error",
+            description: "Current password is incorrect",
+          });
+        }
 
-        return res.json({
-          msg: 'success',
-          description: 'Password updated successfully',
+        Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
+          if (encryptError) {
+            return res.json({
+              msg: "error",
+              description: "Error encrypting the new password",
+            });
+          }
+
+          await mysql.Update(
+            `UPDATE ojt_user SET ou_password = '${encryptedNewPassword}' WHERE ou_ojtid = '${ojtid}'`
+          );
+
+          return res.json({
+            msg: "success",
+            description: "Password updated successfully",
+          });
         });
-      });
-    });
+      }
+    );
   } catch (error) {
     console.error(error);
     return res.json({
-      msg: 'error',
-      description: error.message || 'Internal server error',
+      msg: "error",
+      description: error.message || "Internal server error",
     });
   }
 });

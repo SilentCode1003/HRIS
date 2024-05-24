@@ -6,18 +6,17 @@ const { json } = require("body-parser");
 var router = express.Router();
 const currentDate = moment();
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   // res.render('deductionlayout', { title: 'Express' });
-  Validator(req, res, 'deductionlayout');
+  Validator(req, res, "deductionlayout", "deduction");
 });
 
 module.exports = router;
 
-router.get('/load', (req, res) => {
+router.get("/load", (req, res) => {
   try {
-    let sql =  `SELECT
+    let sql = `SELECT
     gd_id,
     CONCAT(me_lastname, ' ', me_firstname) AS gd_employeeid,
     mg_idtype AS gd_idtype,
@@ -39,7 +38,7 @@ router.get('/load', (req, res) => {
       if (err) console.error("Error", err);
 
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
@@ -50,7 +49,7 @@ router.get('/load', (req, res) => {
   }
 });
 
-router.post('/save', (req, res) => {
+router.post("/save", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let type = req.body.type;
@@ -102,10 +101,10 @@ router.post('/save', (req, res) => {
   }
 });
 
-router.post('/getdeduction' , (req, res) => {
+router.post("/getdeduction", (req, res) => {
   try {
     let govdeduct = req.body.govdeduct;
-    let sql =  `select 
+    let sql = `select 
     gd_employeeid,
     gd_idtype,
     gd_amount,
@@ -113,28 +112,26 @@ router.post('/getdeduction' , (req, res) => {
     gd_cutoff
     from government_deductions
     where gd_id = '${govdeduct}'`;
-    
+
     mysql.Select(sql, "Government_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
 
       console.log(result);
 
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
-   res.json({
-    msg:'error',
-    data: error,
-   }); 
+    res.json({
+      msg: "error",
+      data: error,
+    });
   }
 });
 
-
-
-router.post('/update', (req, res)=> {
+router.post("/update", (req, res) => {
   try {
     let govdeduct = req.body.govdeduct;
     let employeeid = req.body.employeeid;
@@ -143,7 +140,7 @@ router.post('/update', (req, res)=> {
     let period = req.body.period;
     let cutoff = req.body.cutoff;
 
-    let sqlupdate =  `update government_deductions set
+    let sqlupdate = `update government_deductions set
     gd_employeeid = '${employeeid}',
     gd_idtype = '${type}',
     gd_amount = '${amount}',
@@ -153,22 +150,23 @@ router.post('/update', (req, res)=> {
 
     console.log(sqlupdate);
 
-    mysql.Update(sqlupdate)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sqlupdate)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }

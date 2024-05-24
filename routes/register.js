@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 const currentDate = moment();
 const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPasswordforOjt } = require("./helper");
+const { generateUsernameAndPasswordforOjt } = require('./repository/helper');
 
 const currentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");

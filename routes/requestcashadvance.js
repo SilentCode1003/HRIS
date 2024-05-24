@@ -7,7 +7,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //res.render('requestcashadvancelayout', { title: 'Express' });
-  Validator(req, res, 'requestcashadvancelayout');
+  Validator(req, res, 'requestcashadvancelayout','requestcashadvance');
 });
 
 module.exports = router;

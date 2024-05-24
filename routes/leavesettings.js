@@ -8,7 +8,7 @@ var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('interestlayout', { title: 'Express' });
-  Validator(req, res, "leavesettingslayout");
+  Validator(req, res, "leavesettingslayout", "leavesettings");
 });
 
 module.exports = router;
@@ -59,7 +59,7 @@ router.post("/setleave", async (req, res) => {
     const existingRecord = await mysql.mysqlQueryPromise(checkQuery);
 
     if (existingRecord.length > 0 && existingRecord[0].count > 0) {
-      res.json({ msg: 'exist' });
+      res.json({ msg: "exist" });
     } else {
       let sql = `CALL hrmis.CreateLeave(${totalleave}, ${yearleave}, '${leavetype}')`;
 
@@ -87,8 +87,6 @@ router.post("/setleave", async (req, res) => {
   }
 });
 
-
-
 router.post("/setleaveperemployee", async (req, res) => {
   try {
     let totalleave = req.body.totalleave;
@@ -107,7 +105,7 @@ router.post("/setleaveperemployee", async (req, res) => {
     const existingRecord = await mysql.mysqlQueryPromise(checkQuery);
 
     if (existingRecord.length > 0 && existingRecord[0].count > 0) {
-      res.json({ msg: 'exist' });
+      res.json({ msg: "exist" });
     } else {
       let sql = `call hrmis.CreateLeavePerEmployee
       (${totalleave}, ${yearleave}, '${leavetype}', '${employeeid}')`;
@@ -136,7 +134,6 @@ router.post("/setleaveperemployee", async (req, res) => {
   }
 });
 
-
 router.post("/getleavesettings", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
@@ -160,8 +157,7 @@ router.post("/getleavesettings", (req, res) => {
   }
 });
 
-
-router.post('/update', (req, res) => {
+router.post("/update", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
     let employeeid = req.body.employeeid;
@@ -170,7 +166,7 @@ router.post('/update', (req, res) => {
     let totalleave = req.body.totalleave;
     let unusedleave = req.body.unusedleave;
     let usedleave = req.body.usedleave;
-    
+
     let sqlupdate = `UPDATE master_leaves SET   
     ml_employeeid = '${employeeid}',
     ml_leavetype  = '${leavetype}',
@@ -180,35 +176,24 @@ router.post('/update', (req, res) => {
     ml_usedleavedays = '${usedleave}'
     WHERE ml_id ='${leavesettingsid}'`;
 
-    mysql.Update(sqlupdate)
-    .then((result) =>{
-      res.json({
-        msg: 'success',
-        data : result,
-      });
-    })
-    .catch((error) =>{
-      res.json({
-        msg:'error',
-        data: error,
+    mysql
+      .Update(sqlupdate)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-      
-    });
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
-
-
-
-
-
-  
-
-
-
-
-

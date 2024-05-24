@@ -8,7 +8,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //res.render('rejectedleavelayout', { title: 'Express' });
-  Validator(req, res, 'rejectedleavelayout');
+  Validator(req, res, 'rejectedleavelayout','rejectedleave');
 });
 
 module.exports = router;

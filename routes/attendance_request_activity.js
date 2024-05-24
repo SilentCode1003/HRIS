@@ -8,7 +8,12 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "attendance_request_activitylayout");
+  Validator(
+    req,
+    res,
+    "attendance_request_activitylayout",
+    "attendance_request_activity"
+  );
 });
 
 module.exports = router;
@@ -30,19 +35,20 @@ router.get("/load", (req, res) => {
     INNER JOIN master_employee me_request ON ar.ar_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: "error",
@@ -50,7 +56,6 @@ router.get("/load", (req, res) => {
     });
   }
 });
-
 
 router.post("/getattendanceactivity", (req, res) => {
   try {
@@ -79,19 +84,20 @@ router.post("/getattendanceactivity", (req, res) => {
 	JOIN request_approval_settings  ON ara_departmentid = ras_departmentid
     WHERE ara_id = '${requsetid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: "error",
@@ -99,5 +105,3 @@ router.post("/getattendanceactivity", (req, res) => {
     });
   }
 });
-
-

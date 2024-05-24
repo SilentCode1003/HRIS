@@ -1,20 +1,24 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { ValidatorForTeamLead } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { ValidatorForTeamLead } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('pendingleavelayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, 'teamleadpendingleavelayout');
+  ValidatorForTeamLead(
+    req,
+    res,
+    "teamleadpendingleavelayout",
+    "teamleadpendingleave"
+  );
 });
 
 module.exports = router;
 
-
-router.get('/load', (req, res,) => {
+router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
@@ -39,12 +43,13 @@ router.get('/load', (req, res,) => {
         FROM aprroval_stage_settings
         WHERE ats_accessid = '${accesstypeid}'
     )`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -52,10 +57,8 @@ router.get('/load', (req, res,) => {
   }
 });
 
-
-
-router.post('/leaveaction', (req, res) => {
-  console.log('HIT');
+router.post("/leaveaction", (req, res) => {
+  console.log("HIT");
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
@@ -64,9 +67,9 @@ router.post('/leaveaction', (req, res) => {
     let status = req.body.status;
     let comment = req.body.comment;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-  
+
     let data = [];
-  
+
     data.push([
       employeeid,
       departmentid,
@@ -75,21 +78,21 @@ router.post('/leaveaction', (req, res) => {
       status,
       createdate,
       comment,
-    ])
-    
+    ]);
+
     mysql.InsertTable("leave_request_activity", data, (err, result) => {
-      if (err) console.error('Error: ', err);
+      if (err) console.error("Error: ", err);
 
       console.log(result);
 
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
-      })
+      });
     });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }

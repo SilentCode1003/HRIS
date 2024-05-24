@@ -16,7 +16,7 @@ const currentDate = moment();
 router.get("/", function (req, res, next) {
   //res.render('attendancelayout', { title: 'Express' });
 
-  Validator(req, res, "attendanceojtlayout");
+  Validator(req, res, "attendanceojtlayout", "attendanceojt");
 });
 
 module.exports = router;

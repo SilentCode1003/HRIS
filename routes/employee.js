@@ -8,8 +8,12 @@ const XLSX = require("xlsx");
 const { Validator } = require("./controller/middleware");
 const { convertExcelDate } = require("./repository/customhelper");
 const { Encrypter } = require("./repository/crytography");
-const { generateUsernameAndPasswordForApprentice } = require("./helper");
-const { generateUsernameAndPasswordforemployee } = require("./helper");
+const {
+  generateUsernameAndPasswordForApprentice,
+} = require("./repository/helper");
+const {
+  generateUsernameAndPasswordforemployee,
+} = require("./repository/helper");
 const { sq } = require("date-fns/locale");
 
 const apprenticecurrentYear = moment().format("YYYY");
@@ -20,7 +24,7 @@ const currentMonth = moment().format("MM");
 router.get("/", function (req, res, next) {
   // res.render('employeelayout', { title: 'Express' });
 
-  Validator(req, res, "employeelayout");
+  Validator(req, res, "employeelayout", "employee");
 });
 
 module.exports = router;
@@ -198,7 +202,6 @@ router.get("/selectdistinct", (req, res) => {
     });
   }
 });
-
 
 router.get("/selectdistinctsalary", (req, res) => {
   try {
@@ -1240,7 +1243,6 @@ function checkEmployeeExists(firstname, lastname) {
       });
   });
 }
-
 
 function checkOldIdExists(oldemployeeid) {
   return new Promise((resolve, reject) => {

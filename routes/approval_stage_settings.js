@@ -8,7 +8,12 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "approval_stage_settingslayout");
+  Validator(
+    req,
+    res,
+    "approval_stage_settingslayout",
+    "approval_stage_settings"
+  );
 });
 
 module.exports = router;
@@ -123,7 +128,7 @@ router.post("/update", (req, res) => {
     let checkexist = `SELECT * FROM aprroval_stage_settings 
     WHERE ats_accessid = '${accessid}' AND ats_count = '${approvalcount}'`;
 
-    console.log(checkexist,'sql');
+    console.log(checkexist, "sql");
 
     mysql.Select(checkexist, "Approval_Stage_Settings", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -140,7 +145,7 @@ router.post("/update", (req, res) => {
     ats_createddate = '${createdate}'
     WHERE ats_id = '${approvalstage}'`;
 
-    console.log(sql,'sql');
+        console.log(sql, "sql");
 
         mysql
           .Update(sql)

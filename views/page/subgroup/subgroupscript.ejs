@@ -1,0 +1,291 @@
+<script>
+  let subgroupid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    searchTable();
+    LoadListEdit();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableSubgroup").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/subgroup/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                              <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editassmodal"><i class="fas fa-fw fa-pen"></i></button>
+                          `;
+              finalData.push({
+                subgroupid: item.subgroupid,
+                departmentid: item.departmentid,
+                subgroupname: item.subgroupname,
+                createby: item.createby,
+                createdate: item.createdate,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "subgroupid" },
+          { data: "departmentid" },
+          { data: "subgroupname" },
+          { data: "createby" },
+          { data: "createdate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var appnameCell = $(row).find("td:eq(2)");
+
+          appnameCell.wrapInner("<span class='appname-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $(document).on("click", "#subgroupsavebtn", function () {
+      let departmentid = $("#departmentname").val();
+      let subgroupname = $("#subgroupname").val();
+
+      var message = "";
+
+      if (departmentid == "") {
+        message += "departmentid is required ";
+      }
+
+      if (subgroupname == "") {
+        message += "subgroupname is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/subgroup/save",
+          data: {
+            departmentid: departmentid,
+            subgroupname: subgroupname,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Maybe The Department and Approver Count combination already exists.",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#departmentname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#editdepartmentname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableSubgroup tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      subgroupid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/subgroup/getsubgroup",
+        data: {
+          subgroupid: subgroupid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editdepartmentname").val(item.departmentid);
+              $("#editsubgroupname").val(item.subgroupname);
+              $("#editsubgroupstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#subgroupeditbtn", function () {
+      let id = subgroupid;
+      let departmentid = $("#editdepartmentname").val();
+      let subgroupname = $("#editsubgroupname").val();
+      let status = $("#editsubgroupstatus").val();
+
+      let message = "";
+
+      if (departmentid === "") {
+        message += "departmentid ID is required. ";
+      }
+
+      if (subgroupname === "") {
+        message += "subgroupname count is required. ";
+      }
+
+      if (status === "") {
+        message += "status count is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/subgroup/update",
+          data: {
+            subgroupid: id,
+            departmentid: departmentid,
+            subgroupname: subgroupname,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Maybe The Department and Approver Count combination already exists.",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableSubgroup");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

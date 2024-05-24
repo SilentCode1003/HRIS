@@ -7,14 +7,12 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('announcementlayout', { title: 'Express' });
-
-  Validator(req, res, "announcementlayout");
+  Validator(req, res, "announcementlayout", "announcement");
 });
 
 module.exports = router;
 
-router.post('/getannouncement', (req ,res) => {
+router.post("/getannouncement", (req, res) => {
   try {
     let bulletinid = req.body.bulletinid;
     let sql = `SELECT
@@ -28,22 +26,23 @@ router.post('/getannouncement', (req ,res) => {
     FROM master_bulletin
     WHERE mb_bulletinid = '${bulletinid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
@@ -88,8 +87,6 @@ router.post("/loadforapp", (req, res) => {
   }
 });
 
-
-
 router.post("/save", (req, res) => {
   try {
     let image = req.body.image;
@@ -99,11 +96,20 @@ router.post("/save", (req, res) => {
     let description = req.body.description;
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD");
-    let status = 'Active';
+    let status = "Active";
 
     let data = [];
 
-    data.push([image, tittle, type, targetdate, description, createby, createdate, status]);
+    data.push([
+      image,
+      tittle,
+      type,
+      targetdate,
+      description,
+      createby,
+      createdate,
+      status,
+    ]);
     let query = `SELECT * FROM master_bulletin WHERE mb_description = '${description}'`;
     mysql.Select(query, "Master_Bulletin", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -174,7 +180,7 @@ router.post("/update", (req, res) => {
   }
 });
 
-router.post('/loadannouncements' , (req, res) => {
+router.post("/loadannouncements", (req, res) => {
   try {
     let sql = `SELECT 
     mb_image,
@@ -187,44 +193,44 @@ router.post('/loadannouncements' , (req, res) => {
     WHERE mb_status = 'Active' 
     AND (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-router.post('/getnotif', (req, res) => {
+router.post("/getnotif", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `call hrmis.GetNotification('${employeeid}')`;
 
-    mysql.StoredProcedure(sql ,(err, result) => {
+    mysql.StoredProcedure(sql, (err, result) => {
       if (err) console.log(err);
       console.log(result);
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
-    
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }

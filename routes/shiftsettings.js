@@ -9,7 +9,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('shiftlayout', { title: 'Express' });
-  Validator(req, res, "shiftsettingslayout");
+  Validator(req, res, "shiftsettingslayout", "shiftsettings");
 });
 
 module.exports = router;
