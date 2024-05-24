@@ -1,0 +1,435 @@
+<script>
+  let leavesettingsid = "";
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    EditLoadList();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableLeaveSettings").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/leavesettings/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editleave"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+              finalData.push({
+                leavesettingsid: item.leavesettingsid,
+                employeeid: item.employeeid,
+                tenure: item.tenure,
+                leavetype: item.leavetype,
+                yearleave: item.yearleave,
+                totalleave: item.totalleave,
+                unusedleave: item.unusedleave,
+                usedleave: item.usedleave,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "leavesettingsid" },
+          { data: "employeeid" },
+          { data: "tenure" },
+          { data: "leavetype" },
+          { data: "yearleave" },
+          { data: "totalleave" },
+          { data: "unusedleave" },
+          { data: "usedleave" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          // var statusCell = $(row).find("td:eq(8)");
+
+          // var statusText = data.status;
+
+          // var statusClass = "";
+
+          // switch (statusText.toLowerCase()) {
+          //   case "Claimed":
+          //     statusClass = "Claimed-status";
+          //     break;
+          //   case "Unclaimed":
+          //     statusClass = "Unclaimed-status";
+          //     break;
+          //   default:
+          //     statusClass = "";
+          // }
+
+          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $(document).on("click", "#leavesavebtn", function () {
+      let totalleave = $("#numberofdays").val();
+      let yearleave = $("#yearleave").val();
+      let leavetype = $("#leavetypename").val();
+
+      var message = "";
+
+      if (totalleave === "") {
+        message += "Total Leave is required. ";
+      }
+
+      if (yearleave === "") {
+        message += "Year Leave is required. ";
+      }
+
+      if (leavetype === "Choose Type of Leave") {
+        message += "Leave Type is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/setleave",
+          data: {
+            totalleave: totalleave,
+            yearleave: yearleave,
+            leavetype: leavetype,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#leavesavebtnperemployee", function () {
+      let totalleave = $("#numberofdaysperemployee").val();
+      let yearleave = $("#yearleaveperemployee").val();
+      let leavetype = $("#leavetypeperemployee").val();
+      let employeeid = $("#leaveperemployee").val();
+
+      var message = "";
+
+      if (totalleave === "") {
+        message += "Total Leave is required. ";
+      }
+
+      if (yearleave === "") {
+        message += "Year Leave is required. ";
+      }
+
+      if (leavetype === "Choose Type of Leave") {
+        message += "Leave Type is required. ";
+      }
+
+      if (employeeid === "") {
+        message += "Select Employee";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/setleaveperemployee",
+          data: {
+            totalleave: totalleave,
+            yearleave: yearleave,
+            leavetype: leavetype,
+            employeeid: employeeid,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#editleaveperemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#leaveperemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableLeaveSettings tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      leavesettingsid = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/leavesettings/getleavesettings",
+        data: {
+          leavesettingsid: leavesettingsid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editleaveperemployee").val(item.employeeid);
+              $("#editleavetypeperemployee").val(item.leavetype);
+              $("#edityearleaveperemployee").val(item.yearleave);
+              $("#editnumberofdaysperemployee").val(item.totalleave);
+              $("#editunusedleaveperemployee").val(item.unusedleave);
+              $("#editusedleaveperemp").val(item.usedleave);
+              $("#edithealthrecordinsurance").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#editsavebtn", function () {
+      let id = leavesettingsid;
+      let employeeid = $("#editleaveperemployee").val();
+      let leavetype = $("#editleavetypeperemployee").val();
+      let yearleave = $("#edityearleaveperemployee").val();
+      let totalleave = $("#editnumberofdaysperemployee").val();
+      let unusedleave = $("#editunusedleaveperemployee").val();
+      let usedleave = $("#editusedleaveperemp").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (leavetype === "") {
+        message += "status is required. ";
+      }
+
+      if (yearleave === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (totalleave === "") {
+        message += "status is required. ";
+      }
+
+      if (unusedleave === "") {
+        message += "status is required. ";
+      }
+
+      if (usedleave === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/update",
+          data: {
+            leavesettingsid: id,
+            employeeid: employeeid,
+            leavetype: leavetype,
+            yearleave: yearleave,
+            totalleave: totalleave,
+            unusedleave: unusedleave,
+            usedleave: usedleave,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableLeaveSettings");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function populateYears() {
+      var startYear = 2000;
+      var endYear = new Date().getFullYear() + 10;
+
+      var selectYear = document.getElementById("yearleave");
+
+      for (var year = startYear; year <= endYear; year++) {
+        var option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        selectYear.appendChild(option);
+      }
+    }
+
+    populateYears();
+
+    function editpopulateYears() {
+      var startYear = 2000;
+      var endYear = new Date().getFullYear() + 10;
+
+      var editselectYear = document.getElementById("yearleaveperemployee");
+
+      for (var year = startYear; year <= endYear; year++) {
+        var option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        editselectYear.appendChild(option);
+      }
+    }
+
+    editpopulateYears();
+
+    function editpopulateYears2() {
+      var startYear = 2000;
+      var endYear = new Date().getFullYear() + 10;
+
+      var editselectYear = document.getElementById("edityearleaveperemployee");
+
+      for (var year = startYear; year <= endYear; year++) {
+        var option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        editselectYear.appendChild(option);
+      }
+    }
+
+    editpopulateYears2();
+  });
+</script>

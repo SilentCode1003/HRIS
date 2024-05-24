@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('approvedleavelayout', { title: 'Express' });
-  Validator(req, res, "appsdetailslayout");
+  Validator(req, res, "appsdetailslayout", "appsdetails");
 });
 
 module.exports = router;
@@ -153,19 +153,20 @@ router.post("/update", (req, res) => {
     ad_createby = '${appcreateby}'
     WHERE ad_id = '${appid}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
       msg: "error",

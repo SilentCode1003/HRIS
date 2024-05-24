@@ -1,54 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include("./components/ojtheader.ejs")%>
+  </head>
 
-<head>
-<%- include("ojtheader.ejs")%>
-
-</head>
-
-<body id="page-top">
-
+  <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
+      <!-- Sidebar -->
+      <%- include("./components/ojtsidebar.ejs")%>
+      <!-- End of Sidebar -->
 
-        <!-- Sidebar -->
-        <%- include("ojtsidebar.ejs")%>
-            <!-- End of Sidebar -->
-        
-        
-            <!-- Topbar -->
-            <%- include("ojttopbar.ejs")%>
-                <!-- End of Topbar -->
+      <!-- Topbar -->
+      <%- include("./components/ojttopbar.ejs")%>
+      <!-- End of Topbar -->
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper">
-
-            <!-- Main Content -->
-            <div class="content">
-                <!-- Begin Page Content -->
-                <%- include("./ojtattendance/ojtattendance.ejs")%>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <!-- End of Footer -->
-
+      <!-- Content Wrapper -->
+      <div id="content-wrapper">
+        <!-- Main Content -->
+        <div class="content">
+          <!-- Begin Page Content -->
+          <%- include("./page/ojtattendance/ojtattendance.ejs")%>
+          <!-- /.container-fluid -->
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
 
+        <!-- Footer -->
+        <!-- End of Footer -->
+      </div>
+      </div>
+      
+      <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
+      <i class="fas fa-angle-up"></i>
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <%- include("ojtglobalscript.ejs")%>
-    <%- include("./ojtattendance/ojtattendancescript.ejs")%>
-</body>
-
+    <%- include("./components/ojtglobalscript.ejs")%> <%-
+    include("./page/ojtattendance/ojtattendancescript.ejs")%>
+  </body>
 </html>

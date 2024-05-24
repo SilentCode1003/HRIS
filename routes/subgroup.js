@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "subgrouplayout");
+  Validator(req, res, "subgrouplayout", "subgroup");
 });
 
 module.exports = router;

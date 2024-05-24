@@ -7,8 +7,7 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('accesslayout', { title: 'Express' });
-  Validator(req, res, "accesslayout");
+  Validator(req, res, "accesslayout", "access");
 });
 
 module.exports = router;
@@ -16,28 +15,29 @@ module.exports = router;
 router.post("/getaccess", (req, res) => {
   try {
     let accessid = req.body.accessid;
-    let sql =  ` select 
+    let sql = ` select 
     ma_accessname as accessname,
     ma_status as status 
     from master_access
     where ma_accessid = '${accessid}'`;
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error
-      });
-    });
   } catch (error) {
     res.json({
       msg: "error",
-      data: error
+      data: error,
     });
   }
 });
@@ -66,7 +66,7 @@ router.post("/save", (req, res) => {
     let accessname = req.body.accessname;
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD");
-    let status = 'Active';
+    let status = "Active";
 
     let data = [[accessname, createby, createdate, status]];
 

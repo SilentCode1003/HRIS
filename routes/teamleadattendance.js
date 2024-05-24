@@ -9,7 +9,12 @@ const XLSX = require("xlsx");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, "teamleadattendancelayout");
+  ValidatorForTeamLead(
+    req,
+    res,
+    "teamleadattendancelayout",
+    "teamleadattendance"
+  );
 });
 
 module.exports = router;

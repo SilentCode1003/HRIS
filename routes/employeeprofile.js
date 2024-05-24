@@ -1,20 +1,19 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('employeeprofilelayout', { title: 'Express' });
 
-  Validator(req, res, 'employeeprofilelayout');
+  Validator(req, res, "employeeprofilelayout", "employeeprofile");
 });
 
 module.exports = router;
 
-
-router.post('/loademployee', (req, res) => {
+router.post("/loademployee", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -46,30 +45,31 @@ router.post('/loademployee', (req, res) => {
     master_employee 
     inner join master_department on master_employee.me_department = md_departmentid
     inner join master_position on master_employee.me_position = mp_positionid
-    where me_id = '${employeeid}'`
+    where me_id = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) =>{
-      res.json({
-        msg:'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.jsonp({
-        msg:'error',
-        data: error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.jsonp({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-router.post('/loadleavestatus', (req, res) => {
+router.post("/loadleavestatus", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select
@@ -87,20 +87,19 @@ router.post('/loadleavestatus', (req, res) => {
 
       console.log(result);
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
-      })
+      });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/loadwork', (req, res) => {
+router.post("/loadwork", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `	select
@@ -119,20 +118,19 @@ router.post('/loadwork', (req, res) => {
 
       console.log(result);
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
-      })
+      });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/loadeduc', (req, res) => {
+router.post("/loadeduc", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = ` select
@@ -151,15 +149,14 @@ router.post('/loadeduc', (req, res) => {
 
       console.log(result);
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
-      })
+      });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-

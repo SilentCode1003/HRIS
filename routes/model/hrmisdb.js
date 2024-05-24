@@ -1,4 +1,4 @@
-const { OJTAttendanceModel } = require("./model");
+const { OJTAttendanceModel, DataModel, RawDataModel } = require("./model");
 
 exports.Master_Employee = (data) => {
   let dataResult = [];
@@ -708,7 +708,6 @@ exports.Ojt_Attendance_Logs = (data) => {
   return dataResult;
 };
 
-
 exports.Apps_Details = (data) => {
   let dataResult = [];
 
@@ -726,7 +725,6 @@ exports.Apps_Details = (data) => {
 
   return dataResult;
 };
-
 
 exports.Payroll_Approval_Ot = (data) => {
   let dataResult = [];
@@ -759,8 +757,6 @@ exports.Payroll_Approval_Ot = (data) => {
   return dataResult;
 };
 
-
-
 exports.Payroll_Date = (data) => {
   let dataResult = [];
 
@@ -777,7 +773,6 @@ exports.Payroll_Date = (data) => {
 
   return dataResult;
 };
-
 
 exports.Other_Deductions = (data) => {
   let dataResult = [];
@@ -797,7 +792,6 @@ exports.Other_Deductions = (data) => {
   return dataResult;
 };
 
-
 exports.Master_Deductions = (data) => {
   let dataResult = [];
 
@@ -816,7 +810,6 @@ exports.Master_Deductions = (data) => {
 
   return dataResult;
 };
-
 
 exports.Attendance_Request = (data) => {
   let dataResult = [];
@@ -863,7 +856,6 @@ exports.Master_Notification = (data) => {
   return dataResult;
 };
 
-
 exports.Admin_Notification = (data) => {
   let dataResult = [];
 
@@ -905,7 +897,6 @@ exports.TeamLeader_User = (data) => {
   return dataResult;
 };
 
-
 exports.Master_Shift_Settings = (data) => {
   let dataResult = [];
 
@@ -925,7 +916,6 @@ exports.Master_Shift_Settings = (data) => {
 
   return dataResult;
 };
-
 
 exports.Master_Employee_Background = (data) => {
   let dataResult = [];
@@ -947,7 +937,6 @@ exports.Master_Employee_Background = (data) => {
   return dataResult;
 };
 
-
 exports.Master_Leaves = (data) => {
   let dataResult = [];
 
@@ -967,7 +956,6 @@ exports.Master_Leaves = (data) => {
 
   return dataResult;
 };
-
 
 exports.Subgroup = (data) => {
   let dataResult = [];
@@ -1002,7 +990,6 @@ exports.Approval_Stage_Settings = (data) => {
   return dataResult;
 };
 
-
 exports.Request_Approval_Settings = (data) => {
   let dataResult = [];
 
@@ -1019,8 +1006,6 @@ exports.Request_Approval_Settings = (data) => {
 
   return dataResult;
 };
-
-
 
 exports.Attendance_Request_Activity = (data) => {
   let dataResult = [];
@@ -1040,14 +1025,24 @@ exports.Attendance_Request_Activity = (data) => {
   return dataResult;
 };
 
+exports.DataModeling = (data, prefix) => {
+  let result = [];
 
+  data.forEach((d) => {
+    result.push(new DataModel(d, prefix));
+  });
 
+  return result;
+};
 
+exports.RawData = (data) => {
+  let result = [];
 
-
-
-
-
+  data.forEach((d) => {
+    result.push(new RawDataModel(d));
+  });
+  return result;
+};
 
 //#region Remodeling
 

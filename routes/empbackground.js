@@ -1,21 +1,20 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
-const e = require('express');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Validator } = require("./controller/middleware");
+const e = require("express");
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('employeeprofilelayout', { title: 'Express' });
 
-  Validator(req, res, 'empbackgroundlayout');
+  Validator(req, res, "empbackgroundlayout", "empbackground");
 });
 
 module.exports = router;
 
-
-router.get('/load' , (req, res) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
     meb_id,
@@ -31,26 +30,25 @@ router.get('/load' , (req, res) => {
     INNER JOIN
     master_employee  ON meb_employeeid = me_id`;
 
-    mysql.Select(sql , "Master_Employee_Background", (err, result) => {
-      if (err) console.error("Error :" , err);
+    mysql.Select(sql, "Master_Employee_Background", (err, result) => {
+      if (err) console.error("Error :", err);
 
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/save', (req, res) => {
+router.post("/save", (req, res) => {
   try {
     let educationData = JSON.parse(req.body.educationData);
     let experienceData = JSON.parse(req.body.experienceData);
@@ -104,30 +102,32 @@ router.post('/save', (req, res) => {
     }
 
     if (employeeRecords.length === 0) {
-      res.json({ msg: 'nodata' });
+      res.json({ msg: "nodata" });
       return;
     }
 
-    mysql.InsertTable("master_employee_background", employeeRecords, (err, result) => {
-      if (err) {
-        console.error('Error inserting records: ', err);
-        res.json({ msg: 'Insert failed' });
-      } else {
-        console.log(result);
-        res.json({ msg: 'success' });
+    mysql.InsertTable(
+      "master_employee_background",
+      employeeRecords,
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting records: ", err);
+          res.json({ msg: "Insert failed" });
+        } else {
+          console.log(result);
+          res.json({ msg: "success" });
+        }
       }
-    });
+    );
   } catch (error) {
     res.json({
-      msg: 'Error',
+      msg: "Error",
       data: error,
     });
   }
 });
 
-
-
-router.post('/getbackground' , (req, res) => {
+router.post("/getbackground", (req, res) => {
   try {
     let backgroundid = req.body.backgroundid;
     let sql = `SELECT
@@ -145,26 +145,25 @@ router.post('/getbackground' , (req, res) => {
     master_employee  ON meb_employeeid = me_id
     where meb_id = '${backgroundid}'`;
 
-    mysql.Select(sql , "Master_Employee_Background", (err, result) => {
-      if (err) console.error("Error :" , err);
+    mysql.Select(sql, "Master_Employee_Background", (err, result) => {
+      if (err) console.error("Error :", err);
 
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/update', (req, res) => {
+router.post("/update", (req, res) => {
   try {
     let backgroundid = req.body.backgroundid;
     let backstatus = req.body.backstatus;
@@ -181,28 +180,24 @@ router.post('/update', (req, res) => {
     meb_end = '${end}'
     WHERE meb_id = '${backgroundid}'`;
 
-    mysql.Update(sql)
-      .then((result) =>{
+    mysql
+      .Update(sql)
+      .then((result) => {
         console.log(result);
-    
+
         res.json({
-          msg: 'success'
-        })
+          msg: "success",
+        });
       })
-      .catch((error) =>{
+      .catch((error) => {
         res.json({
-          msg:error
-        })
-        
+          msg: error,
+        });
       });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
-
-

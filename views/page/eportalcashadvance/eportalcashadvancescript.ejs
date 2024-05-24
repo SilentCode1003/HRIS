@@ -1,0 +1,196 @@
+<script>
+  let cashadvanceid = "";
+  $(document).ready(function () {
+    console.log("Initialize");
+    let employeeid = "<%= employeeid %>";
+    LoadTable();
+
+    function LoadTable() {
+      $("#dataTableapplycashadvance").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalcashadvance/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#reqcacancelmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    `;
+
+              finalData.push({
+                cashadvanceid: item.cashadvanceid,
+                requestdate: item.requestdate,
+                amount: item.amount,
+                purpose: item.purpose,
+                status: item.status,
+                approvaldate: item.approvaldate,
+                action: action,
+              });
+            });
+
+            console.log(finalData);
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "cashadvanceid" },
+          { data: "requestdate" },
+          { data: "amount" },
+          { data: "purpose" },
+          { data: "status" },
+          { data: "approvaldate" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    $(document).on("click", "#reqcasave", function () {
+      let amount = $("#reqcaamount").val();
+      let purpose = $("#reqcapurpose").val();
+
+      var message = "";
+
+      if (amount == "") {
+        message += "shiftname is required ";
+      }
+
+      if (purpose == "") {
+        message += "status is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/eportalcashadvance/submit",
+          data: {
+            amount: amount,
+            purpose: purpose,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+    $("#dataTableapplycashadvance tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      cashadvanceid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/eportalcashadvance/getca",
+        data: {
+          cashadvanceid: cashadvanceid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#id").val(item.cashadvanceid);
+              $("#editreqcaamount").val(item.amount);
+              $("#editreqcapurpose").val(item.purpose);
+              $("#pendingcaaction").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#editreqcasave", function () {
+      console.log("Save button clicked");
+      let id = cashadvanceid;
+      let status = $("#pendingcaaction").val();
+
+      var message = "";
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/eportalcashadvance/update",
+          data: {
+            cashadvanceid: id,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+</script>

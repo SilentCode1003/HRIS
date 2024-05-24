@@ -1,0 +1,515 @@
+<script>
+  let backgroundid = "";
+  let backgroundidpreview = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+    LoadListWork();
+    LoadListEducation();
+    LoadListEdit();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableemployeeBackground").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/empbackground/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editbackground"><i class="fas fa-fw fa-pen"></i></button>
+                 `;
+
+              finalData.push({
+                backgroundid: item.backgroundid,
+                employeeid: item.employeeid,
+                type: item.type,
+                attainment: item.attainment,
+                tittle: item.tittle,
+                backstatus: item.backstatus,
+                start: item.start,
+                end: item.end,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "backgroundid" },
+          { data: "employeeid" },
+          { data: "type" },
+          { data: "attainment" },
+          { data: "tittle" },
+          { data: "backstatus" },
+          { data: "start" },
+          { data: "end" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          // var statusCell = $(row).find("td:eq(5)");
+
+          // var statusText = data.status;
+
+          // var statusClass = "";
+
+          // switch (statusText.toLowerCase()) {
+          //   case "active":
+          //     statusClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     statusClass = "inactive-status";
+          //     break;
+          //   default:
+          //     statusClass = "";
+          // }
+
+          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    $("#dataTablePreview tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      backgroundidpreview = dataRow[0];
+      console.log(dataRow);
+    });
+
+    let educationData = [];
+    let workData = [];
+    let currentIndex = 0;
+
+    function addActionButtons(row, index, type) {
+      // let editButton = $("<button>")
+      //   .addClass("btn btn-primary btn-sm")
+      //   .text("Edit");
+      let deleteButton = $("<button>")
+        .addClass("btn btn-danger btn-sm")
+        .text("Delete");
+
+      deleteButton.click(function () {
+        row.remove();
+        if (type === "education") {
+          educationData.splice(index, 1);
+        } else if (type === "work") {
+          workData.splice(index, 1);
+        }
+      });
+
+      // editButton.click(function () {
+      //   var index = $(this).closest("tr").index();
+      //   var rowData = {};
+      //   $(this)
+      //     .closest("tr")
+      //     .find("td")
+      //     .each(function (i) {
+      //       switch (i) {
+      //         case 0:
+      //           rowData.employeeName = $(this).text();
+      //           break;
+      //         case 2:
+      //           rowData.schoolName = $(this).text();
+      //           break;
+      //         case 3:
+      //           rowData.schoolAttainment = $(this).text();
+      //           break;
+      //         case 4:
+      //           rowData.schoolAchievements = $(this).text();
+      //           break;
+      //         case 5:
+      //           rowData.startYear = $(this).text();
+      //           break;
+      //         case 6:
+      //           rowData.endYear = $(this).text();
+      //           break;
+      //         default:
+      //           break;
+      //       }
+      //     });
+
+      //   $("#educationname").val(rowData.employeeName);
+      //   $("#schoolname").val(rowData.schoolName);
+      //   $("#schoolattainment").val(rowData.schoolAttainment);
+      //   $("#schoolachievements").val(rowData.schoolAchievements);
+      //   $("#schoolstart").val(rowData.startYear);
+      //   $("#schoolend").val(rowData.endYear);
+      //   $("#educationmodal").modal("show");
+      // });
+
+      row.prepend($("<td>").text(index + 1));
+      row.append($("<td>").append(deleteButton));
+      //row.append($("<td>").append(editButton).append(deleteButton));
+    }
+
+    function addRowToPreviewTable(data, type) {
+      let newRow = $("<tr>");
+      newRow.append($("<td>").text(data.employeeName));
+      newRow.append(
+        $("<td>").text(
+          type === "education" ? "Educational Background" : "Work Background"
+        )
+      );
+      newRow.append($("<td>").text(data.schoolName || data.companyName));
+      newRow.append($("<td>").text(data.course || data.workstatus));
+      newRow.append(
+        $("<td>").text(data.schoolAttainment || data.workAttainment)
+      );
+      newRow.append($("<td>").text(data.schoolAchievements || data.workTittle));
+      newRow.append($("<td>").text(data.startYear || data.workStartYear));
+      newRow.append($("<td>").text(data.endYear || data.workEndYear));
+
+      addActionButtons(newRow, currentIndex, type);
+      currentIndex++;
+
+      $("#dataTablePreview tbody").append(newRow);
+    }
+
+    function clearModalFields(modalId) {
+      $(modalId + " input, " + modalId + " select").val("");
+    }
+
+    $("#educationsavebtn").click(function () {
+      var employeeName = $("#educationname").val();
+      var schoolName = $("#schoolname").val();
+      var course = $("#schoolcourse").val();
+      var schoolAttainment = $("#schoolattainment").val();
+      var schoolAchievements = $("#schoolachievements").val();
+      var startYear = $("#schoolstart").val();
+      var endYear = $("#schoolend").val();
+      if (
+        employeeName.trim() === "" ||
+        schoolName.trim() === "" ||
+        course.trim() === "" ||
+        schoolAttainment.trim() === "" ||
+        schoolAchievements.trim() === "" ||
+        startYear.trim() === "" ||
+        endYear.trim() === ""
+      ) {
+        swal("Error", "Please fill in all fields.", "error");
+        return;
+      }
+      educationData.push({
+        employeeName: employeeName,
+        schoolName: schoolName,
+        course: course,
+        schoolAttainment: schoolAttainment,
+        schoolAchievements: schoolAchievements,
+        startYear: startYear,
+        endYear: endYear,
+      });
+      addRowToPreviewTable(
+        educationData[educationData.length - 1],
+        "education"
+      );
+      clearModalFields("#educationmodal");
+    });
+
+    $("#worksavebtn").click(function () {
+      var employeeName = $("#workemployeename").val();
+      var companyName = $("#companyname").val();
+      var workstatus = $("#companystatus").val();
+      var workAttainment = $("#workattainment").val();
+      var workTittle = $("#worktittle").val();
+      var workStartYear = $("#startYear").val();
+      var workEndYear = $("#endYear").val();
+      if (
+        employeeName.trim() === "" ||
+        companyName.trim() === "" ||
+        workstatus.trim() === "" ||
+        workAttainment.trim() === "" ||
+        workTittle.trim() === "" ||
+        workStartYear.trim() === "" ||
+        workEndYear.trim() === ""
+      ) {
+        swal("Error", "Please fill in all fields.", "error");
+        return;
+      }
+      workData.push({
+        employeeName: employeeName,
+        companyName: companyName,
+        workstatus: workstatus,
+        workAttainment: workAttainment,
+        workTittle: workTittle,
+        workStartYear: workStartYear,
+        workEndYear: workEndYear,
+      });
+      addRowToPreviewTable(workData[workData.length - 1], "work");
+      clearModalFields("#workmodal");
+    });
+
+    $("#TotalSavebtn").click(function () {
+      $.ajax({
+        url: "/empbackground/save",
+        type: "POST",
+        data: {
+          educationData: JSON.stringify(educationData),
+          experienceData: JSON.stringify(workData),
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            swal(
+              "Update Successfully",
+              "You clicked the button!",
+              "success"
+            ).then((results) => {
+              window.location.reload();
+            });
+            LoadTable();
+          } else if (result.msg == "nodata") {
+            swal("No Data", "No valid data to insert", "warning");
+          }
+        },
+        error: function (err) {
+          swal("Error", "An error occurred while saving data.", "error");
+        },
+      });
+    });
+
+    $("#DeleteAll").click(function () {
+      $("#dataTablePreview tbody").empty();
+      educationData = [];
+      workData = [];
+      currentIndex = 0;
+    });
+
+    function LoadListEducation() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#educationname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListWork() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#workemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#editemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableemployeeBackground tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      backgroundid = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/empbackground/getbackground",
+        data: {
+          backgroundid: backgroundid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editemployeename").val(item.employeeid);
+              $("#editbaxkgroundtype").val(item.type);
+              $("#editschoolachievements").val(item.backstatus);
+              $("#schoolnameorcompany").val(item.tittle);
+              $("#editschoolattainment").val(item.attainment);
+              $("#editschoolstart").val(item.start);
+              $("#editschoolend").val(item.end);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
+    });
+
+    $(document).on("click", "#editbackgroundsavebtn", function () {
+      let id = backgroundid;
+      let backstatus = $("#editschoolachievements").val();
+      let tittle = $("#schoolnameorcompany").val();
+      let attainment = $("#editschoolattainment").val();
+      let start = $("#editschoolstart").val();
+      let end = $("#editschoolend").val();
+
+      var message = "";
+
+      if (backstatus === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (tittle === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (attainment === "") {
+        message += "status is required. ";
+      }
+
+      if (start === "") {
+        message += "status is required. ";
+      }
+
+      if (end === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/empbackground/update",
+          data: {
+            backgroundid: id,
+            backstatus: backstatus,
+            tittle: tittle,
+            attainment: attainment,
+            start: start,
+            end: end,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableemployeeBackground");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

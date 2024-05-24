@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalrequestleavelayout', { title: 'Express' });
-  Validator(req, res, "eportalrequestleavelayout");
+  Validator(req, res, "eportalrequestleavelayout",'eportalrequestleave');
 });
 
 module.exports = router;

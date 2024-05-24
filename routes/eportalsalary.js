@@ -9,7 +9,7 @@ const e = require("express");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalsalarylayout', { title: 'Express' });
-  Validator(req, res, "eportalsalarylayout");
+  Validator(req, res, "eportalsalarylayout", "eportalsalary");
 });
 
 module.exports = router;
@@ -64,38 +64,40 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 router.post("/generatepdf", async (req, res) => {
   try {
-    const { employeeid, 
-    payrolldate, 
-    globalSSSID,
-    globalTINID,
-    globalPhilHealthID,
-    globalPagIbigID,
-    globalEmployeeFullName,
-    globalPositionName,
-    globalDepartment,
-    globalStartDate,
-    globalEnddate,
-    globalSalary,
-    globalPer_Day,
-    globalAllowances,
-    globalApprovedOt,
-    globalApprovedNightDiffOt,
-    globalApprovedNormalOt,
-    globalApprovedEarlyOt,
-    globalRegular_Holiday_Compensation,
-    globalSpecial_Holiday_Compensation,
-    globalRegularHolidayOT,
-    globalSpecialHolidayOT,
-    globalOverall_Net_Pay,
-    globalSSS,
-    globalPagIbig,
-    globalPhilHealth,
-    globalTIN,
-    globalAbsent_Deductions,
-    globalHealth_Card,
-    globalLate_Deductions,
-    globalTotal_AllDeductions,
-    globalTotal_Netpay } = req.body;
+    const {
+      employeeid,
+      payrolldate,
+      globalSSSID,
+      globalTINID,
+      globalPhilHealthID,
+      globalPagIbigID,
+      globalEmployeeFullName,
+      globalPositionName,
+      globalDepartment,
+      globalStartDate,
+      globalEnddate,
+      globalSalary,
+      globalPer_Day,
+      globalAllowances,
+      globalApprovedOt,
+      globalApprovedNightDiffOt,
+      globalApprovedNormalOt,
+      globalApprovedEarlyOt,
+      globalRegular_Holiday_Compensation,
+      globalSpecial_Holiday_Compensation,
+      globalRegularHolidayOT,
+      globalSpecialHolidayOT,
+      globalOverall_Net_Pay,
+      globalSSS,
+      globalPagIbig,
+      globalPhilHealth,
+      globalTIN,
+      globalAbsent_Deductions,
+      globalHealth_Card,
+      globalLate_Deductions,
+      globalTotal_AllDeductions,
+      globalTotal_Netpay,
+    } = req.body;
 
     const docDefinition = {
       content: [
@@ -118,7 +120,7 @@ router.post("/generatepdf", async (req, res) => {
         { text: "Payslip", style: "header" },
         {
           text: "From: " + globalStartDate + " To: " + globalEnddate,
-          style: "header"
+          style: "header",
         },
         {
           text: "Payroll Date: " + payrolldate,
@@ -131,8 +133,8 @@ router.post("/generatepdf", async (req, res) => {
               width: "50%",
               stack: [
                 { text: "EMP Code: " + employeeid, bold: true },
-                { text: "SSS ID: " + globalSSSID , bold: true },
-                { text: "TIN ID: " + globalTINID , bold: true },
+                { text: "SSS ID: " + globalSSSID, bold: true },
+                { text: "TIN ID: " + globalTINID, bold: true },
                 { text: "Philhealth ID: " + globalPhilHealthID, bold: true },
                 { text: "PAG IBIG ID: " + globalPagIbigID, bold: true },
                 { text: "Remaining SL: ", bold: true },
@@ -145,8 +147,8 @@ router.post("/generatepdf", async (req, res) => {
                 { text: "EMP Name: " + globalEmployeeFullName, bold: true },
                 { text: "Position: " + globalPositionName, bold: true },
                 { text: "Department: " + globalDepartment, bold: true },
-                { text: "Health Card: "+ globalHealth_Card, bold: true },
-                { text: "Total Net Pay:  ₱"+ globalTotal_Netpay, bold: true },
+                { text: "Health Card: " + globalHealth_Card, bold: true },
+                { text: "Total Net Pay:  ₱" + globalTotal_Netpay, bold: true },
                 { text: "Authorised Signatory: ", bold: true },
               ],
             },
@@ -163,18 +165,73 @@ router.post("/generatepdf", async (req, res) => {
                 { text: "Deductions", style: "tableHeader", bold: true },
                 { text: "Amount", style: "tableHeader", bold: true },
               ],
-              ["Basic", "₱"+ globalSalary, "SSS", "₱"+ globalSSS],
-              ["Daily Rate", "₱"+ globalPer_Day, "Philhealth", "₱"+ globalPhilHealth],
-              ["Allowances", "₱"+ globalAllowances, "HDMF", "₱"+ globalPagIbig ],
-              ["Total Approve Overtime", "₱"+ globalApprovedOt, "Tax", "₱"+ globalTIN],
-              ["Night Differrentials", "₱"+ globalApprovedNightDiffOt , "Absent", "₱"+ globalAbsent_Deductions],
-              ["Normal Overtime", "₱"+ globalApprovedNormalOt , "Health Card", "₱"+ globalHealth_Card],
-              ["Early Overtime", "₱"+ globalApprovedEarlyOt, "Late", "₱"+ globalLate_Deductions],
-              ["Special Holiday Overtime", "₱"+ globalSpecialHolidayOT, "", ""],
-              ["Regular Holiday Overtime", "₱"+ globalRegularHolidayOT, "", ""],
-              ["Special Holiday", "₱"+ globalSpecial_Holiday_Compensation, "", ""],
-              ["Regular Holiday", "₱"+ globalRegular_Holiday_Compensation, "", ""],
-              ["Total Compensation", "₱"+ globalOverall_Net_Pay, "Total Deductions", "₱" + globalTotal_AllDeductions],
+              ["Basic", "₱" + globalSalary, "SSS", "₱" + globalSSS],
+              [
+                "Daily Rate",
+                "₱" + globalPer_Day,
+                "Philhealth",
+                "₱" + globalPhilHealth,
+              ],
+              [
+                "Allowances",
+                "₱" + globalAllowances,
+                "HDMF",
+                "₱" + globalPagIbig,
+              ],
+              [
+                "Total Approve Overtime",
+                "₱" + globalApprovedOt,
+                "Tax",
+                "₱" + globalTIN,
+              ],
+              [
+                "Night Differrentials",
+                "₱" + globalApprovedNightDiffOt,
+                "Absent",
+                "₱" + globalAbsent_Deductions,
+              ],
+              [
+                "Normal Overtime",
+                "₱" + globalApprovedNormalOt,
+                "Health Card",
+                "₱" + globalHealth_Card,
+              ],
+              [
+                "Early Overtime",
+                "₱" + globalApprovedEarlyOt,
+                "Late",
+                "₱" + globalLate_Deductions,
+              ],
+              [
+                "Special Holiday Overtime",
+                "₱" + globalSpecialHolidayOT,
+                "",
+                "",
+              ],
+              [
+                "Regular Holiday Overtime",
+                "₱" + globalRegularHolidayOT,
+                "",
+                "",
+              ],
+              [
+                "Special Holiday",
+                "₱" + globalSpecial_Holiday_Compensation,
+                "",
+                "",
+              ],
+              [
+                "Regular Holiday",
+                "₱" + globalRegular_Holiday_Compensation,
+                "",
+                "",
+              ],
+              [
+                "Total Compensation",
+                "₱" + globalOverall_Net_Pay,
+                "Total Deductions",
+                "₱" + globalTotal_AllDeductions,
+              ],
             ],
           },
         },
@@ -184,11 +241,13 @@ router.post("/generatepdf", async (req, res) => {
           border: [false, true, true, true],
         },
         {
-          text: "Employee Name: " + globalEmployeeFullName + 
-          "\n\n Signature ____________________________",
+          text:
+            "Employee Name: " +
+            globalEmployeeFullName +
+            "\n\n Signature ____________________________",
           margin: [0, 50, 0, 0],
           border: [false, true, true, true],
-        }        
+        },
       ],
       styles: {
         header: {
@@ -211,16 +270,12 @@ router.post("/generatepdf", async (req, res) => {
   }
 });
 
-
-router.post('/loginsalary', (req, res) => {
+router.post("/loginsalary", (req, res) => {
   try {
-    
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-

@@ -10,7 +10,7 @@ const holidaysPH = new Holidays("PH");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('holidaylayout', { title: 'Express' });
-  Validator(req, res, "holidaylayout");
+  Validator(req, res, "holidaylayout", "holiday");
 });
 
 module.exports = router;
@@ -133,9 +133,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-
-
-
 router.post("/getholiday", (req, res) => {
   try {
     let holidayid = req.body.holidayid;
@@ -158,9 +155,6 @@ router.post("/getholiday", (req, res) => {
   }
 });
 
-
-
-
 router.post("/update", (req, res) => {
   try {
     let holidayid = req.body.holidayid;
@@ -177,20 +171,21 @@ router.post("/update", (req, res) => {
 
     console.log(sql);
 
-    mysql.Update(sql)
-    .then((result) => {
-      console.log(result);
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
       msg: error,

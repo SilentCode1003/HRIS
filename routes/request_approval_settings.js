@@ -2,13 +2,23 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { Select } = require("./repository/dbconnect");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "request_approval_settingslayout");
+  Validator(
+    req,
+    res,
+    "request_approval_settingslayout",
+    "request_approval_settings"
+  );
 });
 
 module.exports = router;
@@ -106,6 +116,7 @@ router.post("/getapprovesettings", (req, res) => {
       });
     });
   } catch (error) {
+    console.error(error);
     res.json({
       msg: "error",
       data: error,
@@ -129,7 +140,6 @@ router.post("/update", (req, res) => {
     ras_createdate = '${createdate}',
     ras_status = '${status}'
     WHERE ras_is = '${approvalsettings}'`;
-
 
     mysql
       .Update(sql)
