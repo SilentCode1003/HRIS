@@ -9,7 +9,7 @@ const XLSX = require("xlsx");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('govermentidlayout', { title: 'Express' });
-  Validator(req, res, "generatepayrolllayout");
+  Validator(req, res, "generatepayrolllayout", "generatepayroll");
 });
 
 module.exports = router;
@@ -50,12 +50,11 @@ router.post("/generateandaoadaayroll", (req, res) => {
   }
 });
 
-
-router.post('/checkmissedlogs' , (req, res) => {
+router.post("/checkmissedlogs", (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
-    let sql =  `SELECT * 
+    let sql = `SELECT * 
     FROM master_attendance 
     WHERE ma_attendancedate BETWEEN 
     '${startdate}' AND '${enddate}' AND ma_clockout IS NULL OR ma_clockin IS NULL`;
@@ -64,15 +63,15 @@ router.post('/checkmissedlogs' , (req, res) => {
       if (err) console.error("Error: ", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
 
@@ -245,9 +244,9 @@ router.post("/exportfile", async (req, res) => {
     worksheet["!cols"] = [];
     for (let i = 0; i < columnCount; i++) {
       if (i === 0) {
-        worksheet["!cols"].push({ wch: 30 }); 
+        worksheet["!cols"].push({ wch: 30 });
       } else {
-        worksheet["!cols"].push({ wch: 20 }); 
+        worksheet["!cols"].push({ wch: 20 });
       }
     }
     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
@@ -259,7 +258,7 @@ router.post("/exportfile", async (req, res) => {
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );    
+    );
     res.send(excelBuffer);
   } catch (error) {
     console.error("Error:", error);

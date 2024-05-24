@@ -5,21 +5,21 @@ const { Validator } = require("./controller/middleware");
 const { Encrypter, Decrypter } = require("./repository/crytography");
 var router = express.Router();
 const currentDate = moment();
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('settingslayout', { title: 'Express' });
 
-  Validator(req, res, 'eportalsettingslayout');
+  Validator(req, res, "eportalsettingslayout", "eportalsettings");
 });
 
 module.exports = router;
 
-router.post('/getsettingsaccount', (req, res) => {
+router.post("/getsettingsaccount", (req, res) => {
   try {
-   let employeeid = req.session.employeeid;
-   let sql =`SELECT
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
    me.me_profile_pic as profilePicturePath, 
    me.me_id as employeeid,
    mu.mu_username as username,
@@ -35,20 +35,21 @@ router.post('/getsettingsaccount', (req, res) => {
    master_user mu ON me.me_id = mu.mu_employeeid
    where me_id = '${employeeid}'`;
 
-   mysql.mysqlQueryPromise(sql)
-   .then((result) => {
-    console.log(result);
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
 
-    res.json({
-      msg: "success",
-      data: result,
-    });
-   })
-   .catch((error) => {
-    return res.json({
-      msg: error,
-    });
-   });
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
+      });
   } catch (error) {
     console.error("Error: ", error);
     res.json({
@@ -58,9 +59,7 @@ router.post('/getsettingsaccount', (req, res) => {
   }
 });
 
-
-
-router.post('/updatepassword', async (req, res) => {
+router.post("/updatepassword", async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let currentPass = req.body.currentPass;
@@ -71,64 +70,65 @@ router.post('/updatepassword', async (req, res) => {
 
     if (newPass !== confirmPass) {
       return res.json({
-        msg: 'error',
-        description: 'New password and confirm password do not match',
+        msg: "error",
+        description: "New password and confirm password do not match",
       });
     }
 
-    const userData = await mysql.mysqlQueryPromise(`SELECT mu_password FROM master_user WHERE mu_employeeid = '${employeeid}'`);
+    const userData = await mysql.mysqlQueryPromise(
+      `SELECT mu_password FROM master_user WHERE mu_employeeid = '${employeeid}'`
+    );
 
     if (userData.length !== 1) {
       return res.json({
-        msg: 'error',
-        description: 'Employee not found',
+        msg: "error",
+        description: "Employee not found",
       });
     }
 
     const encryptedStoredPassword = userData[0].mu_password;
 
-    Decrypter(encryptedStoredPassword, async (decryptError, decryptedStoredPassword) => {
-      if (decryptError) {
-        return res.json({
-          msg: 'error',
-          description: 'Error decrypting the stored password',
-        });
-      }
-
-      
-      if (currentPass !== decryptedStoredPassword) {
-        return res.json({
-          msg: 'error',
-          description: 'Current password is incorrect',
-        });
-      }
-
-
-      Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
-        if (encryptError) {
+    Decrypter(
+      encryptedStoredPassword,
+      async (decryptError, decryptedStoredPassword) => {
+        if (decryptError) {
           return res.json({
-            msg: 'error',
-            description: 'Error encrypting the new password',
+            msg: "error",
+            description: "Error decrypting the stored password",
           });
         }
 
-        await mysql.Update(`UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}'`);
+        if (currentPass !== decryptedStoredPassword) {
+          return res.json({
+            msg: "error",
+            description: "Current password is incorrect",
+          });
+        }
 
-        return res.json({
-          msg: 'success',
-          description: 'Password updated successfully',
+        Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
+          if (encryptError) {
+            return res.json({
+              msg: "error",
+              description: "Error encrypting the new password",
+            });
+          }
+
+          await mysql.Update(
+            `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}'`
+          );
+
+          return res.json({
+            msg: "success",
+            description: "Password updated successfully",
+          });
         });
-      });
-    });
+      }
+    );
   } catch (error) {
     console.error(error);
     return res.json({
-      msg: 'error',
-      description: error.message || 'Internal server error',
+      msg: "error",
+      description: error.message || "Internal server error",
     });
   }
 });
-
-
-
-

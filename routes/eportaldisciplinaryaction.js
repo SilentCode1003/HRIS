@@ -1,18 +1,21 @@
-const mysql = require('./repository/hrmisdb');
+const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 //const currentDate = moment();
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('eportaldisciplinaryactionlayout', { title: 'Express' });
-  Validator(req, res, 'eportaldisciplinaryactionlayout');
+  Validator(
+    req,
+    res,
+    "eportaldisciplinaryactionlayout",
+    "eportaldisciplinaryaction"
+  );
 });
 
-
-
-router.get('/load',(req , res) => {
+router.get("/load", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `        
@@ -32,23 +35,23 @@ router.get('/load',(req , res) => {
      LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid
    WHERE oda_employeeid = '${employeeid}'`;
 
-    mysql.Select(sql, 'Offense_Disciplinary_Actions', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Offense_Disciplinary_Actions", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
         msg: "success",
         data: result,
       });
-    })
+    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
 });
 
-router.post('/loadforapp',(req , res) => {
+router.post("/loadforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `        
@@ -70,21 +73,20 @@ router.post('/loadforapp',(req , res) => {
    WHERE oda_employeeid = '${employeeid}'
    order by oda_disciplinaryid desc`;
 
-    mysql.Select(sql, 'Offense_Disciplinary_Actions', (err, result) => {
-      if (err) console.error('Error: ', err);
+    mysql.Select(sql, "Offense_Disciplinary_Actions", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
         msg: "success",
         data: result,
       });
-    })
+    });
   } catch (error) {
     res.json({
-      msg: 'error', error
-    })
-    
+      msg: "error",
+      error,
+    });
   }
-})
-
+});
 
 module.exports = router;

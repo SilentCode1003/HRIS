@@ -7,8 +7,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('allleavelayout', { title: 'Express' });
-  Validator(req, res, "allleavelayout");
+  Validator(req, res, "allleavelayout", "allleave");
 });
 
 module.exports = router;
@@ -35,7 +34,7 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/update", (req, res) => {
-  console.log('HIT');
+  console.log("HIT");
   try {
     let leaveid = req.body.leaveid;
     let status = req.body.status;
@@ -79,7 +78,7 @@ router.post("/update", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });

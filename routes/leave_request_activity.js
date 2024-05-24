@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "leave_request_activitylayout");
+  Validator(req, res, "leave_request_activitylayout", "leave_request_activity");
 });
 
 module.exports = router;
@@ -31,19 +31,20 @@ router.get("/load", (req, res) => {
     INNER JOIN master_employee me_activity ON lra.lra_employeeid = me_activity.me_id
     INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: "error",
@@ -51,7 +52,6 @@ router.get("/load", (req, res) => {
     });
   }
 });
-
 
 router.post("/getleaveactivity", (req, res) => {
   try {
@@ -85,19 +85,20 @@ router.post("/getleaveactivity", (req, res) => {
 	  INNER JOIN subgroup s on lra.lra_subgroupid = s.s_id
     WHERE lra_id = '${leaverequestid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
       msg: "error",
@@ -105,5 +106,3 @@ router.post("/getleaveactivity", (req, res) => {
     });
   }
 });
-
-

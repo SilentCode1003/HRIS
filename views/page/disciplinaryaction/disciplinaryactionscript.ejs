@@ -1,0 +1,327 @@
+<script>
+  let disciplinaryactionid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    LoadEditoffenses();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTabledisciplinaryaction").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/disciplinaryaction/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editdisciplinaryactionmodal"><i class="fas fa-fw fa-pen"></i></button>
+                   `;
+
+              finalData.push({
+                actionid: item.actionid,
+                actioncode: item.actioncode,
+                offenseid: item.offenseid,
+                description: item.description,
+                createdate: item.createdate,
+                createby: item.createby,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "actionid" },
+          { data: "actioncode" },
+          { data: "offenseid" },
+          { data: "description" },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    $(document).on("click", "#disciplinaryactionsavebtn", function () {
+      let actioncode = $("#disciplinaryactionactioncode").val();
+      let offenseid = $("#disciplinaryactionoffenseid").val();
+      let description = $("#disciplinaryactiondescription").val();
+
+      var message = "";
+
+      if (actioncode == "") {
+        message += "shiftname is required ";
+      }
+
+      if (offenseid == "") {
+        message += "status is required ";
+      }
+
+      if (description == "") {
+        message += "department is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/disciplinaryaction/save",
+          data: {
+            actioncode: actioncode,
+            offenseid: offenseid,
+            description: description,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              showSweetAlert(
+                "Success",
+                "Log in Successfully",
+                "success",
+                "Let's go!"
+              );
+              window.location.reload();
+              LoadTable();
+            }
+            if (result.msg === "incorrect") {
+              showSweetAlert(
+                "Incorrect",
+                "Incorrect Credentials. Please try again!",
+                "error",
+                "AWW NO!!"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/offenses/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.offensename, item.offensename);
+            $(options).html(item.offensename);
+            $("#disciplinaryactionoffenseid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditoffenses() {
+      $.ajax({
+        type: "GET",
+        url: "/offenses/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.offenseid, item.offenseid);
+            $(options).html(item.offensename);
+            $("#editdisciplinaryactionoffenseid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTabledisciplinaryaction tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      disciplinaryactionid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/disciplinaryaction/getdisciplinaryaction",
+        data: {
+          disciplinaryactionid: disciplinaryactionid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editshiftid").val(item.disciplinaryactionid);
+              $("#editdisciplinaryactionactioncode").val(item.actioncode);
+              $("#editdisciplinaryactionoffenseid").val(item.offenseid);
+              $("#editdisciplinaryactiondescription").val(item.description);
+              $("#editdisciplinaryactionstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#disciplinaryactioneditbtn", function () {
+      let id = disciplinaryactionid;
+      let actioncode = $("#editdisciplinaryactionactioncode").val();
+      let offenseid = $("#editdisciplinaryactionoffenseid").val();
+      let description = $("#editdisciplinaryactiondescription").val();
+      let status = $("#editdisciplinaryactionstatus").val();
+
+      var message = "";
+
+      if (actioncode === "") {
+        message += "departmentname is required. ";
+      }
+
+      if (offenseid === "") {
+        message += "status is required. ";
+      }
+
+      if (description === "") {
+        message += "departmenthead is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "disciplinaryaction/update",
+          data: {
+            disciplinaryactionid: id,
+            actioncode: actioncode,
+            offenseid: offenseid,
+            description: description,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTabledisciplinaryaction");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

@@ -1,20 +1,19 @@
-const mysql = require('./repository/hrmisdb');
+const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 //const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('pendingleavelayout', { title: 'Express' });
-  Validator(req, res, 'pendingleavelayout');
+  Validator(req, res, "pendingleavelayout", "pendingleave");
 });
 
 module.exports = router;
 
-
-router.get('/load', (req, res,) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `SELECT DISTINCT
     l_leaveid,
@@ -38,12 +37,13 @@ router.get('/load', (req, res,) => {
     INNER JOIN
     master_employee  ON l_employeeid = me_id
     where l_leavestatus = 'Pending'`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -51,10 +51,7 @@ router.get('/load', (req, res,) => {
   }
 });
 
-
-
-
-router.post('/getleavedashboard', (req, res) => {
+router.post("/getleavedashboard", (req, res) => {
   try {
     let leaveid = req.body.leaveid;
     let sql = `select 
@@ -72,31 +69,30 @@ router.post('/getleavedashboard', (req, res) => {
     right join master_employee on leaves.l_employeeid = me_id
     where l_leaveid = '${leaveid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    //console.log(sql)
-    .then((result) => {
-      if (result.length > 0) {
-        res.status(200).json({
-          msg: "success",
-          data: result
+    mysql
+      .mysqlQueryPromise(sql)
+      //console.log(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: result,
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
         });
-      } else {
-        res.status(404).json({
-          msg: "Department not found"
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        msg: "Error fetching department data",
-        error: error
       });
-    });  
   } catch (error) {
     res.json({
-      msg:error
-    })
-    
+      msg: error,
+    });
   }
 });
-

@@ -1,16 +1,16 @@
- var express = require("express");
+var express = require("express");
 var router = express.Router();
 const { Validator } = require("./controller/middleware");
-const mysql  = require("./repository/hrmisdb");
+const mysql = require("./repository/hrmisdb");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('paymentlayout', { title: 'Express' });
-  Validator(req, res, "otapprovallayout");
+  Validator(req, res, "otapprovallayout", "otapproval");
 });
 
 module.exports = router;
-  
+
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
@@ -25,11 +25,11 @@ router.get("/load", (req, res) => {
     pao_status
     FROM payroll_approval_ot`;
 
-    mysql.Select(sql, "Payroll_Approval_Ot" ,(err, result) => {
+    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
@@ -40,8 +40,6 @@ router.get("/load", (req, res) => {
     });
   }
 });
-
-
 
 router.post("/update", (req, res) => {
   try {
@@ -63,19 +61,20 @@ router.post("/update", (req, res) => {
     pao_status = '${overtimestatus}' 
     WHERE pao_id = '${approveot_id}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
       msg: "error",
@@ -84,8 +83,7 @@ router.post("/update", (req, res) => {
   }
 });
 
-
-router.post('/updateforapp', (req,res) => {
+router.post("/updateforapp", (req, res) => {
   try {
     let night_ot = req.body.night_ot;
     let earlyot = req.body.earlyot;
@@ -103,29 +101,29 @@ router.post('/updateforapp', (req,res) => {
     pao_status = '${overtimestatus}' 
     WHERE pao_id = '${approveot_id}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       date: error,
     });
   }
 });
 
-
-router.post('/getotapproval', (req, res) => {
+router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
@@ -154,22 +152,19 @@ router.post('/getotapproval', (req, res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-
-
-router.post('/getotapprovalforapp', (req, res) => {
+router.post("/getotapprovalforapp", (req, res) => {
   try {
     let approveid = req.body.approveid;
     let sql = `select 
@@ -197,23 +192,22 @@ router.post('/getotapprovalforapp', (req, res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
 // router.post('/loadforapp', (req, res) =>{
 //   try {
 //     let employeeid = req.body.employeeid;
-//     let sql = `select * 
+//     let sql = `select *
 //     from payroll_approval_ot
 //     where pao_employeeid = '${employeeid}'`;
 
@@ -233,9 +227,7 @@ router.post('/getotapprovalforapp', (req, res) => {
 //   }
 // });
 
-
-
-router.post('/forapp', (req, res) => {
+router.post("/forapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT
@@ -254,15 +246,14 @@ router.post('/forapp', (req, res) => {
       if (err) console.error("Error: ", err);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
-    })
+    });
   }
 });
-

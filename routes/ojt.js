@@ -3,7 +3,7 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Encrypter } = require("./repository/crytography");
-const { generateUsernameAndPasswordforOjt } = require("./helper");
+const { generateUsernameAndPasswordforOjt } = require("./repository/helper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -13,7 +13,7 @@ const currentMonth = moment().format("MM");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtlayout', { title: 'Express' });
-  Validator(req, res, "ojtlayout");
+  Validator(req, res, "ojtlayout", "ojt");
 });
 
 module.exports = router;

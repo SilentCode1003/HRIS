@@ -1,20 +1,24 @@
-const mysql = require('./repository/hrmisdb');
+const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
-var express = require('express');
-const { ValidatorForTeamLead } = require('./controller/middleware');
+var express = require("express");
+const { ValidatorForTeamLead } = require("./controller/middleware");
 var router = express.Router();
 //const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('approvedleavelayout', { title: 'Express' });
-  ValidatorForTeamLead(req, res, 'teamleadapprovedleavelayout');
+  ValidatorForTeamLead(
+    req,
+    res,
+    "teamleadapprovedleavelayout",
+    "teamleadapprovedleave"
+  );
 });
 
 module.exports = router;
 
-
-router.get('/load', (req, res,) => {
+router.get("/load", (req, res) => {
   try {
     let sql = `select 
     concat(me_firstname,'',me_lastname) as l_employeeid,
@@ -29,15 +33,16 @@ router.get('/load', (req, res,) => {
     AND l_employeeid NOT IN (
       SELECT tu_employeeid FROM teamlead_user
   );`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     console.log(error);
   }
-})
+});

@@ -7,13 +7,12 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  ValidatorForTeamLead(req, res, "teamleadindexlayout");
+  ValidatorForTeamLead(req, res, "teamleadindexlayout", "teamleadindex");
 });
 
 module.exports = router;
 
-
-router.get('/attendancestatus', (req , res) => {
+router.get("/attendancestatus", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `
@@ -76,22 +75,23 @@ WHERE
 ORDER BY
     minutes_late DESC`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
@@ -136,7 +136,6 @@ router.get("/countcoacard", (req, res) => {
     console.log(error);
   }
 });
-
 
 router.get("/countovertimecard", (req, res) => {
   try {
@@ -218,7 +217,6 @@ router.get("/countleavecard", (req, res) => {
   }
 });
 
-
 router.get("/countattendancebadge", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
@@ -282,8 +280,7 @@ WHERE
   }
 });
 
-
-router.get('/totalcoa',(req ,res) => {
+router.get("/totalcoa", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `SELECT 
@@ -304,20 +301,19 @@ router.get('/totalcoa',(req ,res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.get('/totalot',(req ,res) => {
+router.get("/totalot", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `SELECT 
@@ -338,21 +334,19 @@ router.get('/totalot',(req ,res) => {
       console.log(result);
 
       res.json({
-        msg:'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-
-router.get('/totalleave',(req ,res) => {
+router.get("/totalleave", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `SELECT 
@@ -374,36 +368,36 @@ WHERE
     l_leavestatus = 'Pending'
     AND me_department = '${departmentid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/searchemployee', (req, res) => {
+router.post("/searchemployee", (req, res) => {
   try {
     const { search } = req.body;
     let departmentid = req.session.departmentid;
-    let firstName = '';
-    let lastName = '';
+    let firstName = "";
+    let lastName = "";
 
-    const lastSpaceIndex = search.lastIndexOf(' ');
+    const lastSpaceIndex = search.lastIndexOf(" ");
     if (lastSpaceIndex !== -1) {
       firstName = search.substring(0, lastSpaceIndex);
       lastName = search.substring(lastSpaceIndex + 1);
@@ -421,7 +415,8 @@ router.post('/searchemployee', (req, res) => {
       sql += ` AND me_lastname LIKE '%${lastName}%'`;
     }
 
-    mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         const employees = result.map((employee) => ({
           employeeid: employee.me_id,
@@ -429,22 +424,20 @@ router.post('/searchemployee', (req, res) => {
           profilePic: employee.me_profile_pic,
         }));
         res.json({
-          msg: 'success',
+          msg: "success",
           data: employees,
         });
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-

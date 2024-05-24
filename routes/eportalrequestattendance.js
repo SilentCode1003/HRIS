@@ -8,7 +8,12 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalrequestleavelayout', { title: 'Express' });
-  Validator(req, res, "eportalrequestattendancelayout");
+  Validator(
+    req,
+    res,
+    "eportalrequestattendancelayout",
+    "eportalrequestattendance"
+  );
 });
 
 module.exports = router;
@@ -57,13 +62,20 @@ router.post("/submit", async (req, res) => {
     let file = req.body.file;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     let status = "Pending";
-    let createby = 'On Process';
-    let approvedcount = '0';
+    let createby = "On Process";
+    let approvedcount = "0";
 
     let total = calculateTotalHours(timein, timeout);
 
-    console.log(attendancedate, timein, timeout, reason, 
-      employeeid, file, approvedcount);
+    console.log(
+      attendancedate,
+      timein,
+      timeout,
+      reason,
+      employeeid,
+      file,
+      approvedcount
+    );
 
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
@@ -82,18 +94,19 @@ router.post("/submit", async (req, res) => {
     }
 
     const data = [
-      [employeeid, 
-       attendancedate, 
-       timein,
-       timeout, 
-       total, 
-       subgroupid, 
-       reason, 
-       file, 
-       createdate, 
-       createby, 
-       status,
-       approvedcount
+      [
+        employeeid,
+        attendancedate,
+        timein,
+        timeout,
+        total,
+        subgroupid,
+        reason,
+        file,
+        createdate,
+        createby,
+        status,
+        approvedcount,
       ],
     ];
 
@@ -111,7 +124,6 @@ router.post("/submit", async (req, res) => {
     res.json({ msg: "error" });
   }
 });
-
 
 router.post("/getreqCOA", (req, res) => {
   try {
@@ -147,7 +159,6 @@ router.post("/getreqCOA", (req, res) => {
   }
 });
 
-
 router.post("/update", (req, res) => {
   try {
     let requestid = req.body.requestid;
@@ -159,7 +170,6 @@ router.post("/update", (req, res) => {
     let total = calculateTotalHours(timein, timeout);
     let file = req.body.file;
 
-    
     let sqlupdate = `UPDATE attendance_request SET 
       ar_attendace_date = '${attendancedate}', 
       ar_timein = '${timein}',
@@ -182,7 +192,7 @@ router.post("/update", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          msg: 'error',
+          msg: "error",
           data: error,
         });
       });
@@ -192,7 +202,6 @@ router.post("/update", (req, res) => {
     });
   }
 });
-
 
 function calculateTotalHours(timein, timeout) {
   const datetimeIn = new Date(timein);

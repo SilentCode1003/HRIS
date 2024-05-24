@@ -7,12 +7,11 @@ var router = express.Router();
 const currentDate = moment();
 const XLSX = require("xlsx");
 
-
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('attendancelayout', { title: 'Express' });
 
-  Validator(req, res, "attendancelayout");
+  Validator(req, res, "attendancelayout", "attendance");
 });
 
 module.exports = router;
@@ -394,24 +393,44 @@ router.post("/exportfile", async (req, res) => {
     let sqlExportAttendance = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
     let sqlExportAttendanceDetailed = `call hrmis.ExportAttendanceDetailed('${startdate}', '${enddate}');`;
 
-    const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
-    const resultExportAttendanceDetailed = await mysql.mysqlQueryPromise(sqlExportAttendanceDetailed);
+    const resultExportAttendance = await mysql.mysqlQueryPromise(
+      sqlExportAttendance
+    );
+    const resultExportAttendanceDetailed = await mysql.mysqlQueryPromise(
+      sqlExportAttendanceDetailed
+    );
 
-    const jsonDataExportAttendance = JSON.parse(JSON.stringify(resultExportAttendance[0]));
-    const jsonDataExportAttendanceDetailed = JSON.parse(JSON.stringify(resultExportAttendanceDetailed[0]));
+    const jsonDataExportAttendance = JSON.parse(
+      JSON.stringify(resultExportAttendance[0])
+    );
+    const jsonDataExportAttendanceDetailed = JSON.parse(
+      JSON.stringify(resultExportAttendanceDetailed[0])
+    );
 
     if (jsonDataExportAttendance.length === 0) {
-      return res.status(404).json({ msg: "No data found for ExportAttendance" });
+      return res
+        .status(404)
+        .json({ msg: "No data found for ExportAttendance" });
     }
 
     if (jsonDataExportAttendanceDetailed.length === 0) {
-      return res.status(404).json({ msg: "No data found for ExportAttendanceDetailed" });
+      return res
+        .status(404)
+        .json({ msg: "No data found for ExportAttendanceDetailed" });
     }
 
     const workbook = XLSX.utils.book_new();
-    const worksheetExportAttendanceFirst = XLSX.utils.json_to_sheet(jsonDataExportAttendance, { header: Object.keys(jsonDataExportAttendance[0]) });
-    XLSX.utils.book_append_sheet(workbook, worksheetExportAttendanceFirst, 'Attendance Summary');
-    const columnCountExportAttendance = XLSX.utils.decode_range(worksheetExportAttendanceFirst["!ref"]).e.c + 1;
+    const worksheetExportAttendanceFirst = XLSX.utils.json_to_sheet(
+      jsonDataExportAttendance,
+      { header: Object.keys(jsonDataExportAttendance[0]) }
+    );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheetExportAttendanceFirst,
+      "Attendance Summary"
+    );
+    const columnCountExportAttendance =
+      XLSX.utils.decode_range(worksheetExportAttendanceFirst["!ref"]).e.c + 1;
     worksheetExportAttendanceFirst["!cols"] = [];
     for (let i = 0; i < columnCountExportAttendance; i++) {
       if (i === 0) {
@@ -424,7 +443,7 @@ router.post("/exportfile", async (req, res) => {
     const groupedData = {};
     jsonDataExportAttendanceDetailed.forEach((employeeData) => {
       const employeeId = employeeData.EmployeeId;
-      if (!groupedData[employeeId]) {  
+      if (!groupedData[employeeId]) {
         groupedData[employeeId] = [];
       }
       groupedData[employeeId].push(employeeData);
@@ -432,8 +451,9 @@ router.post("/exportfile", async (req, res) => {
 
     Object.keys(groupedData).forEach((employeeId) => {
       const sheetName = `Employee_${employeeId}`;
-      const worksheet = XLSX.utils.json_to_sheet(groupedData[employeeId], { header: Object.keys(groupedData[employeeId][0]) });
-
+      const worksheet = XLSX.utils.json_to_sheet(groupedData[employeeId], {
+        header: Object.keys(groupedData[employeeId][0]),
+      });
 
       const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
       worksheet["!cols"] = [];
@@ -464,8 +484,6 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
-
-
 
 router.post("/exportfileperemployee", async (req, res) => {
   try {

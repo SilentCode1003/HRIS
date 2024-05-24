@@ -7,7 +7,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //res.render('resignedlayout', { title: 'Express' });
-  Validator(req, res, 'resignedlayout');
+  Validator(req, res, 'resignedlayout','resigned');
 });
 
 module.exports = router;
