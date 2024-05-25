@@ -116,6 +116,7 @@ router.post("/upload", (req, res) => {
           key.latitude,
           key.longitude,
           key.device,
+          key.geofenceid,
         ]);
       } else {
         ojt_attendance_update.push({
@@ -125,6 +126,7 @@ router.post("/upload", (req, res) => {
           latitude: key.latitude,
           longitude: key.longitude,
           device: key.device,
+          geofenceid: key.geofenceid,
         });
       }
     });
@@ -162,26 +164,28 @@ router.post("/upload", (req, res) => {
 //#region FUNCTIONS
 function Insert_OJTAttendance(data) {
   return new Promise((resolve, reject) => {
-    if (data != 1) {
-      return resolve("success");
-    }
-    mysql.InsertTable("ojt_attendance", data, (err, result) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      }
-      console.log(result);
+    console.log(data);
+    if (data.length != 0) {
+      mysql.InsertTable("ojt_attendance", data, (err, result) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+        console.log(result);
 
-      resolve(result);
-    });
+        resolve(result);
+      });
+    } else {
+      return resolve("Not data to insert");
+    }
   });
 }
 
 function Update_OJTAttendance(data) {
-  return new Promise((resolve, result) => {
+  return new Promise((resolve, reject) => {
     let model = OJTAttendance(data);
     let sql =
-      "update ojt_attendance set oa_clockout = ?, oa_latitudeout = ?, oa_longitudeout = ?, oa_deviceout = ? where oa_ojtid=? and oa_attendancedate=?";
+      "update ojt_attendance set oa_clockout = ?, oa_latitudeout = ?, oa_longitudeout = ?, oa_deviceout = ?, oa_geofenceidOut=? where oa_ojtid=? and oa_attendancedate=?";
     let counter = 0;
 
     model.forEach((item) => {
@@ -190,6 +194,7 @@ function Update_OJTAttendance(data) {
         item.latitude,
         item.longitude,
         item.device,
+        item.geofenceid,
         item.id,
         item.date,
       ];
