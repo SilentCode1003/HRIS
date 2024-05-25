@@ -10,7 +10,7 @@ class MasterViolationModel {
 }
 
 class OJTAttendanceModel {
-  constructor(id, date, time, latitude, longitude, device, type) {
+  constructor(id, date, time, latitude, longitude, device, type,geofenceid) {
     this.id = id;
     this.date = date;
     this.time = time;
@@ -18,6 +18,7 @@ class OJTAttendanceModel {
     this.longitude = longitude;
     this.device = device;
     this.type = type;
+    this.geofenceid = geofenceid;
   }
 }
 
