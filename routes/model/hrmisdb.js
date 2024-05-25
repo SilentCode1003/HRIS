@@ -1057,6 +1057,7 @@ exports.OJTAttendance = (data) => {
       latitude: key.latitude,
       longitude: key.longitude,
       device: key.device,
+      geofenceid: key.geofenceid
     });
   });
 
@@ -1068,7 +1069,8 @@ exports.OJTAttendance = (data) => {
         key["time"],
         key["latitude"],
         key["longitude"],
-        key["device"]
+        key["device"],
+        key[' geofenceid']
       )
   );
 };
