@@ -59,9 +59,25 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          var appnameCell = $(row).find("td:eq(2)");
+          //miyaka
+          var statusCell = $(row).find("td:eq(5)");
 
-          appnameCell.wrapInner("<span class='appname-text'></span>");
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

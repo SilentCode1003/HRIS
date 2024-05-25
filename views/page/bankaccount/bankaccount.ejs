@@ -1,11 +1,13 @@
-<div class="card">
-  <div class="card-header">Bank</div>
-  <div class="card-body">
+<div class="card bank-card">
+  <div class="card-header" id="modal-header">
+    <h3 class="bank-card-title">Bank</h3>
+  </div>
+  <div class="card-body bank-body">
     <div class="row">
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
-          <label class="input-group-text" for="employee">Employee</label>
-          <select class="form-select" id="employee">
+          <label class="input-group-text bank-btn" for="employee">Employee</label>
+          <select class="form-select border-form-modal" id="employee">
             <option selected>--Select Employee--</option>
           </select>
         </div>
@@ -13,8 +15,8 @@
 
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
-          <label class="input-group-text" for="bank">Bank</label>
-          <select class="form-select" id="bank">
+          <label class="input-group-text bank-btn" for="bank">Bank</label>
+          <select class="form-select border-form-modal" id="bank">
             <option selected>--Select Bank--</option>
           </select>
         </div>
@@ -24,12 +26,12 @@
     <div class="row">
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Account Number</span>
+          <span class="input-group-text bank-btn" id="basic-addon1">Account Number</span>
           <input
             id="accountnumber"
             name="accountnumber"
             type="text"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Account Number"
             aria-label="Account Number"
             aria-describedby="basic-addon1"
@@ -39,12 +41,12 @@
 
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Card Number</span>
+          <span class="input-group-text bank-btn" id="basic-addon1">Card Number</span>
           <input
             id="cardnumber"
             name="cardnumber"
             type="text"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Card Number"
             aria-label="Card Number"
             aria-describedby="basic-addon1"
@@ -55,14 +57,14 @@
     <div class="row justify-content-center">
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1"
+          <span class="input-group-text bank-btn" id="basic-addon1"
             >Expiration Date</span
           >
           <input
             id="expirationdate"
             name="expirationdate"
             type="date"
-            class="form-control"
+            class="form-control border-form-modal"
             aria-describedby="basic-addon1"
           />
         </div>
@@ -70,25 +72,24 @@
     </div>
 
     <div class="row justify-content-end">
-      <div class="col-md-4 mt-1 text-right">
+      <div class="col-sm-1 col-add">
         <button
           id="addBtn"
           name="addBtn"
-          class="btn btn-primary d-none d-sm-inline-block custom-btn cw-7rem shadow-sm"
-          type="button"
-        >
-          <i class="fa fa-plus" aria-hidden="true"></i> ADD
-        </button>
+          class="btn btn-add-color"
+          type="button"><b>+ Add</b></button>
       </div>
     </div>
   </div>
-  <hr />
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-sm-2 col-md-2 col-xl-3">Bank Table</div>
-        <div class="col-sm-4 col-md-4 col-xl-6">
-          <div class="input-group mb-3">
+</div>
+
+<br>
+<br>
+  <div class="card bank-card-table">
+    <div class="card-header ch-coop">
+
+          <h3 class="bank-card-title">Bank Table</h3>
+          <div class="input-group mb-3 col-md-3 mt-3">
             <span class="input-group-text" id="basic-addon1"
               ><i class="fa fa-solid fa-search"> Search</i></span
             >
@@ -96,16 +97,15 @@
               id="search"
               name="search"
               type="text"
-              class="form-control"
+              class="form-control bank-search"
               placeholder="search"
               aria-label="search"
               aria-describedby="basic-addon1"
             />
           </div>
-        </div>
-      </div>
+
     </div>
-    <div class="card-body">
+    <div class="card-body bank-body">
       <div class="table-responsive">
         <table
           id="data-table"
@@ -144,21 +144,21 @@
   >
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" id="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Edit Bank</h5>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-body">
           <div class="row mb-2">
             <div class="col-lg-12">
               <div class="card-body">
                 <div class="row mb-2">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon2">ID</span>
+                    <span class="input-group-text bank-btn" id="basic-addon2">ID</span>
                     <input
                       id="idmodal"
                       name="idmodal"
                       type="text"
-                      class="form-control"
+                      class="form-control border-form-modal"
                       placeholder="ID"
                       aria-label="ID"
                       aria-describedby="basic-addon2"
@@ -168,18 +168,18 @@
                 </div>
                 <div class="row">
                   <div class="input-group mb-3">
-                    <label class="input-group-text" for="employeemodal"
+                    <label class="input-group-text bank-btn" for="employeemodal"
                       >Employee</label
                     >
-                    <select class="form-select" id="employeemodal" name="employeemodal">
+                    <select class="form-select border-form-modal" id="employeemodal" name="employeemodal">
                       <option selected>--Select Employee--</option>
                     </select>
                   </div>
                 </div>
                 <div class="row">
                   <div class="input-group mb-3">
-                    <label class="input-group-text" for="bankmodal">BANK</label>
-                    <select class="form-select" id="bankmodal" name="bankmodal">
+                    <label class="input-group-text bank-btn" for="bankmodal">BANK</label>
+                    <select class="form-select border-form-modal" id="bankmodal" name="bankmodal">
                       <option selected>--Select Bank--</option>
                     </select>
                   </div>
@@ -187,14 +187,14 @@
 
                 <div class="row">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"
+                    <span class="input-group-text bank-btn" id="basic-addon1"
                       >Account Number</span
                     >
                     <input
                       id="accountnumbermodal"
                       name="accountnumbermodal"
                       type="text"
-                      class="form-control"
+                      class="form-control border-form-modal"
                       placeholder="Account Number"
                       aria-label="Account Number"
                       aria-describedby="basic-addon1"
@@ -204,14 +204,14 @@
 
                 <div class="row">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"
+                    <span class="input-group-text bank-btn" id="basic-addon1"
                       >Card Number</span
                     >
                     <input
                       id="cardnumbermodal"
                       name="cardnumbermodal"
                       type="text"
-                      class="form-control"
+                      class="form-control border-form-modal "
                       placeholder="Card Number"
                       aria-label="Card Number"
                       aria-describedby="basic-addon1"
@@ -221,14 +221,14 @@
 
                 <div class="row">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"
+                    <span class="input-group-text bank-btn" id="basic-addon1"
                       >Expiration Date</span
                     >
                     <input
                       id="expirationdatemodal"
                       name="expirationdatemodal"
                       type="date"
-                      class="form-control"
+                      class="form-control border-form-modal"
                       aria-describedby="basic-addon1"
                     />
                   </div>
@@ -237,10 +237,10 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" id="modal-footer">
           <button
             type="button"
-            class="cw-7rem clr-warning shadow-sm"
+            class="btn btn-modal-close"
             data-bs-dismiss="modal"
           >
             <i class="fa fa-times" aria-hidden="true"></i> Close
@@ -248,7 +248,7 @@
           <button
             type="button"
             id="saveBtn"
-            class="cw-7rem clr-success shadow-sm"
+            class="btn btn-modal-save"
           >
             <i class="fa fa-check" aria-hidden="true"></i> Save
           </button>
@@ -256,4 +256,4 @@
       </div>
     </div>
   </div>
-</div>
+
