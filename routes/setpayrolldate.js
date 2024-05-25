@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('salarylayout', { title: 'Express' });
-  Validator(req, res, "setpayrolldatelayout"), "setpayrolldate";
+  Validator(req, res, "setpayrolldatelayout", "setpayrolldate");
 });
 
 module.exports = router;

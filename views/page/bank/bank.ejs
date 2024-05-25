@@ -1,15 +1,17 @@
-<div class="card">
-  <div class="card-header">Bank</div>
-  <div class="card-body">
+<div class="card bank-card">
+  <div class="card-header" id="modal-header">
+    <h3 class="bank-card-title">Bank</h3>
+  </div>
+  <div class="card-body bank-body">
     <div class="row">
       <div class="col-sm-12 col-lg-6 col-xl-6">
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Bank</span>
+        <div class="input-group mt-3">
+          <span class="input-group-text bank-btn" id="basic-addon1">Bank</span>
           <input
             id="bank"
             name="bank"
             type="text"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Bank Name"
             aria-label="Bank Name"
             aria-describedby="basic-addon1"
@@ -18,26 +20,26 @@
       </div>
 
       <div class="row justify-content-end">
-        <div class="col-md-4 mt-1 text-right">
+        <div class="col-sm-1 col-add">
           <button
             id="addBtn"
             name="addBtn"
-            class="btn btn-primary d-none d-sm-inline-block custom-btn cw-7rem shadow-sm"
-            type="button"
-          >
-            <i class="fa fa-plus" aria-hidden="true"></i> ADD
+            class="btn btn-add-color"
+            type="button">
+           <b>+ Add</b>
           </button>
         </div>
       </div>
     </div>
   </div>
-  <hr />
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-sm-2 col-md-2 col-xl-3">Bank Table</div>
-        <div class="col-sm-4 col-md-4 col-xl-6">
-          <div class="input-group mb-3">
+</div>
+
+<br>
+<br>
+  <div class="card bank-card-table">
+    <div class="card-header ch-coop">
+          <h3 class="bank-card-title">Bank Table</h3>
+          <div class="input-group mb-3 col-md-3 mt-3">
             <span class="input-group-text" id="basic-addon1"
               ><i class="fa fa-solid fa-search"> Search</i></span
             >
@@ -45,16 +47,16 @@
               id="search"
               name="search"
               type="text"
-              class="form-control"
+              class="form-control bank-search"
               placeholder="search"
               aria-label="search"
               aria-describedby="basic-addon1"
             />
           </div>
-        </div>
-      </div>
     </div>
-    <div class="card-body">
+
+    
+    <div class="card-body bank-body">
       <div class="table-responsive">
         <table
           id="data-table"
@@ -89,23 +91,23 @@
   >
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
+        <div class="modal-header" id="modal-header">
+          <h1 class="modal-title" id="exampleModalLabel">
             Edit Bank
-          </h5>
+          </h1>
         </div>
-        <div class="modal-body">
+        <div class="modal-body bank-body">
           <div class="row mb-2">
             <div class="col-lg-12">
               <div class="card-body">
                 <div class="row mb-2">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon2">ID</span>
+                    <span class="input-group-text bank-btn" id="basic-addon2">ID</span>
                     <input
                       id="idmodal"
                       name="idmodal"
                       type="text"
-                      class="form-control"
+                      class="form-control border-form-modal"
                       placeholder="ID"
                       aria-label="ID"
                       aria-describedby="basic-addon2"
@@ -115,14 +117,14 @@
                 </div>
                 <div class="row">
                   <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon2"
+                    <span class="input-group-text bank-btn" id="basic-addon2"
                       >Bank</span
                     >
                     <input
                       id="bankmodal"
                       name="bankmodal"
                       type="text"
-                      class="form-control"
+                      class="form-control border-form-modal"
                       placeholder="Bank Name"
                       aria-label="Bank Name"
                       aria-describedby="basic-addon2"
@@ -133,10 +135,10 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" id="modal-footer">
           <button
             type="button"
-            class="cw-7rem clr-warning shadow-sm"
+            class="btn btn-modal-close"
             data-bs-dismiss="modal"
           >
             <i class="fa fa-times" aria-hidden="true"></i> Close
@@ -144,7 +146,7 @@
           <button
             type="button"
             id="saveBtn"
-            class="cw-7rem clr-success shadow-sm"
+            class="btn btn-modal-save"
           >
             <i class="fa fa-check" aria-hidden="true"></i> Save
           </button>
@@ -152,4 +154,4 @@
       </div>
     </div>
   </div>
-</div>
+
