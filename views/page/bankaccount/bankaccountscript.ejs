@@ -1,0 +1,442 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let status = "";
+    let employeename = "";
+    let bankname = "";
+    let accountnumber = "";
+    let cardnumber = "";
+    let expiration = "";
+
+    LoadList();
+    LoadTable();
+    LoadListModal();
+
+    $(document).on("click", "#addBtn", function () {
+      let employee = $("#employee").val();
+      let bank = $("#bank").val();
+      let accountnumber = $("#accountnumber").val();
+      let cardnumber = $("#cardnumber").val();
+      let expiration = $("#expirationdate").val();
+
+      console.log(employee, bank, accountnumber, cardnumber, expiration);
+
+      let message = "";
+
+      if (employee == "--Select Employee--") {
+        message += "employee name, ";
+      }
+
+      if (bank == " --Select Bank--") {
+        message += "bank name, ";
+      }
+
+      if (accountnumber == "") {
+        message += "account number, ";
+      }
+
+      if (cardnumber == "") {
+        message += "card number, ";
+      }
+
+      if (expiration == "") {
+        message += "expiration date, ";
+      }
+
+      if (message != "") {
+        showSweetAlert(
+          "Required",
+          `${message.slice(0, -2)} is required!`,
+          "info",
+          "OK"
+        );
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/bankaccount/save",
+          data: {
+            employee: employee,
+            bank: bank,
+            accountnumber: accountnumber,
+            cardnumber: cardnumber,
+            expiration: expiration,
+          },
+          success: function (result) {
+            console.log(result);
+            if (result.msg == "success") {
+              LoadTable();
+              showSweetAlert("Success", "Added Successfully!", "success", "OK");
+            } else {
+              LoadTable();
+              showSweetAlert(
+                "Warning",
+                `${employee} ${result.msg}`,
+                "warning",
+                "OK"
+              );
+            }
+          },
+          error: function (error) {
+            showSweetAlert("Error", error, "error", "OK");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#idmodal").val(id);
+      $("#editModal").modal("show");
+      $("#accountnumbermodal").val(accountnumber);
+      $("#cardnumbermodal").val(cardnumber);
+      $("#expirationdatemodal").val(expiration);
+
+      console.log(employeename, bankname);
+
+      // Usage example
+      var employeevalue = getValueByText("employeemodal", `${employeename}`);
+      console.log(employeevalue); // Outputs the value of the option with display text 'Option 2'
+
+      $(`#employeemodal option[value="${employeevalue}"]`).attr(
+        "selected",
+        "selected"
+      );
+
+      // Usage example
+      var bankvalue = getValueByText("bankmodal", `${bankname}`);
+      console.log(bankvalue); // Outputs the value of the option with display text 'Option 2'
+
+      $(`#bankmodal option[value="${bankvalue}"]`).attr("selected", "selected");
+    });
+
+    //Edit Update
+    $(document).on("click", "#saveBtn", function () {
+      let employee = $("#employeemodal").val();
+      let bank = $("#bankmodal").val();
+      let accountnumber = $("#accountnumbermodal").val();
+      let cardnumber = $("#cardnumbermodal").val();
+      let expiration = $("#expirationdatemodal").val();
+
+      console.log(employee, bank, accountnumber, cardnumber, expiration, id);
+
+      var message = "";
+
+      if (
+        employee == "" ||
+        bank == "" ||
+        accountnumber == "" ||
+        cardnumber == "" ||
+        expiration == ""
+      ) {
+        message += "Please fill up atleast 1 field";
+      }
+
+      if (message != "") {
+        warning("Required", `${message}`);
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/bankaccount/edit",
+          data: {
+            employee: employee,
+            bank: bank,
+            accountnumber: accountnumber,
+            cardnumber: cardnumber,
+            expiration: expiration,
+            id: id,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              LoadTable();
+              $("#bankaccountmodal").val("");
+              $("#editModal").modal("hide");
+
+              showSweetAlert("Saved", "Edit Successfully!", "success", "OK");
+            }
+
+            if (result.msg == "exist") {
+              showSweetAlert(
+                "Exist",
+                `${employeename} ${bankname} already exist!`,
+                "info",
+                "OK"
+              );
+            }
+          },
+          error: function (err) {
+            showSweetAlert("Error", err, "error", "OK");
+          },
+        });
+      }
+    });
+
+    // Function to get the value of an option by its display text
+    function getValueByText(fieldName, displayText) {
+      // Find the select element by its name attribute
+      var selectElement = document.querySelector(`select[name="${fieldName}"]`);
+
+      // Check if the select element exists
+      if (selectElement) {
+        // Loop through the options to find the one that matches the display text
+        for (var i = 0; i < selectElement.options.length; i++) {
+          if (selectElement.options[i].text === displayText) {
+            return selectElement.options[i].value;
+          }
+        }
+      } else {
+        console.log("Select element not found");
+      }
+      return null; // Return null if no matching option is found
+    }
+
+    $("#search").on("input", function () {
+      filterTableRows("#datatable", 6, "#search");
+    });
+
+    $("#data-table tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      id = dataRow[0];
+      employeename = dataRow[1];
+      bankname = dataRow[2];
+      accountnumber = dataRow[3];
+      cardnumber = dataRow[4];
+      expiration = dataRow[5];
+      status = dataRow[7];
+    });
+
+    //Status Update
+    $(document).on("click", "#activeBtn", function () {
+      console.log(id);
+      console.log(status);
+      $.ajax({
+        type: "PUT",
+        url: "/bankaccount/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(id);
+      console.log(status);
+      $.ajax({
+        type: "PUT",
+        url: "/bankaccount/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    });
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 8, "#search");
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#employee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "/bank/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.name);
+            $("#bank").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListModal() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.newEmployeeId, item.newEmployeeId);
+            $(options).html(item.firstname);
+            $("#employeemodal").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "/bank/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.name);
+            $("#bankmodal").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/bankaccount/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            let action = "";
+
+            $.each(data, (key, item) => {
+              if (item.status === "ACTIVE") {
+                action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-bs-target="#editModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+              } else if (item.status === "INACTIVE") {
+                action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+              }
+
+              finalData.push({
+                id: item.id,
+                employeeid: item.employeeid,
+                bankid: item.bankid,
+                accountnumber: item.accountnumber,
+                cardnumber: item.cardnumber,
+                expiration: item.expiration,
+                createdby: item.createdby,
+                createddate: item.createddate,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "employeeid" },
+          { data: "bankid" },
+          { data: "accountnumber" },
+          { data: "cardnumber" },
+          { data: "expiration" },
+          { data: "createdby" },
+          { data: "createddate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(8)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "pending":
+              statusClass = "pending-status";
+              break;
+            case "cancelled":
+              statusClass = "cancelled-status";
+              break;
+            case "active":
+              statusClass = "approved-status";
+              break;
+            case "inactive":
+              statusClass = "rejected-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

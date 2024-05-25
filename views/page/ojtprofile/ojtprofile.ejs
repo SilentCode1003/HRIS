@@ -1,0 +1,131 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Profile</h1> -->
+<br>
+<br>
+<div class="container p-0">
+        <div class="col-md-9 col-xl-12">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="account" role="tabpanel">
+                    <div class="card card-ojt">
+                        <div class="card-header ch-ojt">
+                            <h5 class="card-title mb-0">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                      <button class="nav-link active ojt-acc" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Account</button>
+                                      <button class="nav-link ojt-pw" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Password</button>
+                                  </nav>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="ojtid" class="ojt-label">OJT ID</label>
+                                                    <input type="text" class="form-control fc-ojt ojt-id" id="ojtid" placeholder="Ojt ID" disabled>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="fullname" class="ojt-label">Fullname</label>
+                                                        <input type="text" class="form-control fc-ojt ojt-fullname" id="fullname" placeholder="Full Name" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="department" class="ojt-label">Department</label>
+                                                        <input type="text" class="form-control fc-ojt ojt-dept" id="department" placeholder="Department" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="school" class="ojt-label">School</label>
+                                                        <input type="text" class="form-control fc-ojt ojt-school" id="school" placeholder="School" disabled>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="datestart" class="ojt-label">Date Started</label>
+                                                        <input type="text" class="form-control fc-ojt ojt-date-started" id="datestart" placeholder="Date Started" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="totalhours" class="ojt-label">Total Hours</label>
+                                                    <input type="text" class="form-control fc-ojt ojt-total-hours" id="totalhours" placeholder="Total Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="totaltime" class="ojt-label">Accumulated Hours</label>
+                                                    <input type="text" class="form-control fc-ojt ojt-accumulated-hours" id="totaltime" placeholder="Accumulated Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="remaining" class="ojt-label">Remaining Hours</label>
+                                                    <input type="text" class="form-control fc-ojt ojt-remaining-hours" id="remaining" placeholder="Remaining Hours" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="endddate" class="ojt-label">End Date</label>
+                                                    <input type="text" class="form-control fc-ojt ojt-end-date" id="endddate" placeholder="End Date" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="text-center">
+                                                    <img id="editpreview" class="rounded rounded-circle img-ojt-round"
+                                                      alt="placeholder" disabled>
+                                                  </div>
+                                                  <br>
+                                                  <!-- <center>
+                                                    <div class="col">
+                                                      <div class="col g-6" style="width: 200px;">
+                                                      </div>
+                                                    </div>
+                                                  </center> -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="inputPasswordCurrent" class="ojt-label">Current password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordCurrent" placeholder="Enter current password">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div> -->
+                                            </div>
+                                            <!-- <small><a href="#">Forgot your password?</a></small> -->
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew" class="ojt-label">New password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordNew" placeholder="Enter new password">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew2" class="ojt-label">Confirm password</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control fc-ojt" id="inputPasswordNew2" placeholder="Enter confirm password">
+                                                <!-- <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary toggle-password fc-ojt" type="password">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>                                        
+                                        <button type="submit" id="saveBtn" class="btn btn-modal-save">Save</button>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
+                                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+                              </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+</div>

@@ -1,0 +1,101 @@
+<div id="loading" class="loading"></div>
+<br>
+
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table">Holiday</h3>
+    <div class="row g-2">
+      <div class="col">
+        <input id='myInput2'  type='text' placeholder="  Search....">
+      </div>
+      <div class="col-md-6 holiday-card-btn">
+        <div class="input-group btn-holiday">
+          <div class="input-group-prepend">
+              <span class="input-group-text btn-add-holiday"><b>Add</b></span>
+          </div>
+          <input class="form-control text-center custom-input" placeholder="Select/Input Year" name="yearInput" id="yearInput"/>
+          <span class="input-group-text btn-generate-holiday" id="generateHolidaysBtn"><b>Generate</b></span>
+      </div>
+      <div class="custom-dropdown employees-position" id="positionDropdown">
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-light table-bordered" id="dataTableholiday">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th>Day</th>
+            <th class="col-25">Name</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th class="col-sm-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal Edit-->
+<div class="modal fade" id="editholidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Edit Holiday?</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+          <form>
+            <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="date" class="form-control border-form-modal" id="editholidaydate" name="editholidaydate" placeholder="Created By">
+                  <label for="floatingInput">Holiday Date</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editholidayday" name="editholidayday" placeholder="Created By" disabled>
+                  <label for="floatingInput">Holiday Day</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editholidayname" name="editholidayname" placeholder="Created By">
+                  <label for="floatingInput">Holiday Name</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select border-form-modal" id="editholidaytype" name="editholidaytype" aria-label="Floating label select example">
+                    <option selected disabled>Choose....</option>
+                    <option value="Non-Working Holiday">Non-Working Holiday</option>
+                    <option value="Regular Holiday">Regular Holiday</option>
+                    <option value="Special Holiday">Special Holiday</option>
+                  </select>
+                  <label for="floatingSelectGrid">Holiday Type</label>
+                </div>
+              </div>
+              <br>
+      </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editholidaybtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

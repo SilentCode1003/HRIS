@@ -1,0 +1,148 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Leave History</h1> -->
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header ch-requestleave">
+        <h3>COA</h3>
+        <button type="button" id="applybtn" class="btn btn-eportal-color col-sm-2 col-add" data-bs-toggle="modal"
+            data-bs-target="#pendingmodal">
+            <b>Request Attendance</b>
+        </button>
+    </div>
+    <div class="card-body cbody-requestleave">
+        <table class="table table-light table-bordered" id="dataTablereqCOA">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Attendance Date</th>
+                    <th scope="col">Time In</th>
+                    <th scope="col">Time Out</th>
+                    <th scope="col">Total Hours</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Applied Date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Request COA</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="editemail" class="form-label">Date</label>
+                            <input type="date" class="form-control border-form-modal" id="attendancedate" name="attendancedate">
+                        </div>
+                        <div class="col">
+                            <label for="timein" class="form-label">Date Time In</label>
+                            <input type="datetime-local" class="form-control border-form-modal" id="timein" name="timein">
+                        </div>
+                        <div class="col">
+                            <label for="timeout" class="form-label">Date Time Out</label>
+                            <input type="datetime-local" class="form-control border-form-modal" id="timeout" name="timeout">
+                        </div>                    
+                    </div>
+                    <div class="row g-3">
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Reason:</label>
+                            <textarea class="form-control border-form-modal" id="coareason" name="coareason"></textarea>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                          <label class="form-label" for="customFile"></label>
+                          <input type="file" name="coafile" id="coafile" class="form-control border-form-modal"
+                            accept="image/*">
+                        </div>
+                        <div class="col">
+                          <div class="text-center">
+                            <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                                class="rounded border-form-modal" alt="placeholder">
+                          </div>
+                        </div>
+                        <div class="col">
+                            <label for="timeout" class="form-label">Sub Group</label>
+                            <select type="text" class="form-control border-form-modal" id="coasubgroup" name="coasubgroup">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="coasavebtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--canccelled modal-->
+<div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Pending COA</h5>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="editemail" class="form-label">Date</label>
+                            <input type="date" class="form-control border-form-modal" id="editattendancedate" name="editattendancedate">
+                        </div>
+                        <div class="col">
+                            <label for="edittimein" class="form-label">Date Time In</label>
+                            <input type="datetime-local" class="form-control border-form-modal" id="edittimein" name="edittimein">
+                        </div>
+                        <div class="col">
+                            <label for="edittimeout" class="form-label">Date Time Out</label>
+                            <input type="datetime-local" class="form-control border-form-modal" id="edittimeout" name="edittimeout">
+                        </div>     
+                        <div class="col">
+                            <label for="editpassword" class="form-label">Status</label>
+                            <select class="form-control border-form-modal" id="editcoastatus" name="editcoastatus">
+                                <option value="Pending" selected>Pending</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Cancel">Cancel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Reason:</label>
+                            <textarea class="form-control border-form-modal" id="editcoareason" name="editcoareason"></textarea>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="form-floating">
+                          <label class="form-label" for="EditFile"></label>
+                          <input type="file" name="editcoafile" id="editcoafile" class="form-control border-form-modal"
+                            accept="image/*">
+                          <br>
+                          <div class="text-center">
+                            <img id="editpreviewfile" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                              class="rounded border-form-modal" alt="placeholder">
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="editcOAsavebtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prestart": "npm install",
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -32,6 +32,10 @@
     "mysql": "^2.18.1",
     "node-cron": "^3.0.3",
     "node-linq": "^0.0.5",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.1.0",
+    "pdfkit": "^0.15.0",
+    "pdfmake": "^0.2.10",
     "popper.js": "^1.16.1",
     "xlsx": "^0.18.5"
   }

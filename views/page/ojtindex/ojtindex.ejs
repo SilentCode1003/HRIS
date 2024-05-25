@@ -1,0 +1,277 @@
+<!-- Button trigger modal -->
+<!-- <button type="button" id="clockinbtn" class="btn btn-danger">
+  Clock In
+</button>
+<br>
+<button type="button" id="clockoutbtn" class="btn btn-danger">
+  Clock Out
+</button>
+
+<div id="map"></div> -->
+
+<br>
+<br>
+<div class="container">
+  <div class="row">
+
+    <div class="col-4">
+      <div class="card" id="clockin-out">
+        <!-- <div class="card-header ch-clockin-out">
+          <lord-icon src="https://cdn.lordicon.com/wsdieofl.json" stroke="bold"
+            colors="primary:#121331,secondary:#ffffff,tertiary:#2516c7,quaternary:#f24c00" class="eportal-icon">
+          </lord-icon>
+          <span><b>Clock In/Out</b></span></a>
+        </div> -->
+        <div class="card-header" id="clock-header">
+          <h6 class="time-title">Hello <span><%= fullname%></span>!</h6>
+          <p class="time-p">Don't forget to CLOCK-IN and OUT..</p>
+        </div>
+        <div class="card-body">
+          <!-- <lord-icon src="https://cdn.lordicon.com/lzgqzxrq.json" trigger="loop"
+            colors="primary:#000000,secondary:#d1f3fa,tertiary:#66a1ee,quaternary:#f24c00" id="clock-lordicon">
+          </lord-icon> -->
+          
+          <img class="img-profile rounded-circle time-profile-img" src="data:image/jpg;base64,<%= image%>">
+          
+          <!-- <div class="card-header ch-time">
+            <h6 class="status-text">Status: <span class="status-time">IN</span></h6>
+            <h6 class="time-text">Time: <span class="time-clock">7:00 AM</span></h6>
+          </div> -->
+
+          <button type="button" class="btn btn-clockin" id="clockinbtn">
+            Clock-In
+          </button>
+          <button type="button" class="btn btn-clockout" id="clockoutbtn">
+            Clock-Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-4">
+      <div class="card" id="card-attendance">
+        <div class="card-header ch-attendance">
+          <lord-icon src="https://cdn.lordicon.com/svsiboke.json" stroke="bold"
+            colors="primary:#ffffff,secondary:#faddd1,tertiary:#eee966,quaternary:#c67d53,quinary:#c71f16,senary:#3a3347"
+            class="ojt-icon ">
+          </lord-icon>
+          <span><b>Attendance</b></span></a>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" id="table-attendance">
+            <table class="table table-light" id="attendanceTable">
+              <thead class="attendance-th">
+                <tr>
+                  <th class="tr-left-attendance">Date</th>
+                  <th>Type</th>
+                  <th class="tr-right-attendance">Time</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="card" id="card-birthday">
+        <div class="card-header ch-birthday">
+          <lord-icon src="https://cdn.lordicon.com/dkanzxbo.json" stroke="bold"
+            colors="primary:#000000,secondary:#e8308c,tertiary:#e8e230,quaternary:#30e8bd,quinary:#ebe6ef"
+            class="ojt-icon">
+          </lord-icon>
+          <span><b>Birthday</b></span></a>
+        </div>
+        <div class="card-body cb-birthday">
+          <div aria-labelledby="nav-profile-tab">
+            <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
+              <div class="carousel-inner"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--- end of row -->
+  </div>
+
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card" id="card-map">
+        <div class="card-header ch-map">
+          <lord-icon src="https://cdn.lordicon.com/tdtlrbly.json" stroke="bold"
+            colors="primary:#107c91,secondary:#9ce5f4" class="ojt-icon">
+          </lord-icon>
+          <span><b>Map</b></span></a>
+        </div>
+        <div class="card-body">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" id="card-announcement">
+        <div class="card-header ch-announcement">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+            colors="primary:#000000,secondary:#30c9e8,tertiary:#e83a30,quaternary:#e8e230" class="ojt-icon">
+          </lord-icon>
+          <span><b>Announcement</b></span></a>
+        </div>
+        <div class="card-body db-custom-cards1">
+          <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+
+
+
+<!-- Begin Page Content -->
+<!-- <div class="container"> -->
+
+    <!-- Page Heading -->
+    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">OJT Dashboard</h1>
+    </div> -->
+  
+  
+    <!-- Content Row -->
+    <!-- <div class="row"> -->
+      <!-- Announcement Row -->
+      <!-- <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+          <div class="card-header">
+            <h6 class="m-0">
+              <div class="announcement-icon-container">
+                <i class="fas fa-bullhorn"></i> Announcements
+              </div>
+            </h6>
+          </div>
+          <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner">  -->
+              
+              <!--- Dito nag-end-->
+              <!-- <div class="carousel-item active" data-bs-interval="2000">
+                    <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
+                        style="height: 470px;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Announcement</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
+                        style="height: 470px;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Announcements</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button"
+                    data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                    data-bs-target="#carouselannouncement" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button> -->
+            <!-- </div>
+          </div>
+        </div>
+      </div> -->
+  
+      <!-- Attendance Row -->
+      <!-- <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+          <div class="card-header">
+            <h6 class="m-0">
+              <i class="far fa-calendar-check"></i> Attendance
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="attendanceTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div> -->
+  
+  
+      <!-- Birthday Row -->
+      <!-- <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+          <div class="card-header">
+            <h6 class="m-0">
+              <i class="fas fa-birthday-cake"></i> Birthday
+            </h6>
+          </div>
+          <div aria-labelledby="nav-profile-tab">
+            <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
+              <div class="carousel-inner">  -->
+                
+                <!--- Dito nag-end-->
+                <!-- <div class="carousel-item active" data-bs-interval="2000">
+                        <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
+                            style="height: 470px;">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Birthday</h5>
+                            <p>Some representative placeholder content for the first slide.</p>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button"
+                        data-bs-target="#carouselannouncement" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button"
+                        data-bs-target="#carouselannouncement" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button> -->
+              <!-- </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+  
+  
+      <!-- Button trigger modal -->
+  <!-- <button type="button" id="clockinbtn" class="btn btn-danger">
+    Clock In
+  </button>
+  <br>
+  <button type="button" id="clockoutbtn" class="btn btn-danger">
+    Clock Out
+  </button>
+  
+      <div class="row">
+        <div class="col-xl-12 col-lg-12">
+          <div class="card shadow mb-4">
+            <div class="card-header">
+              <h6 class="m-0">
+                <i class="fas fa-birthday-cake"></i> Map
+              </h6>
+            </div>
+            <div id="map"></div>
+          </div>
+        </div>
+      </div> -->

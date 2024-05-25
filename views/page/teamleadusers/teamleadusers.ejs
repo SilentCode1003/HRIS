@@ -1,0 +1,128 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Team Lead Users</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#usersmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-bordered table-light" id="dataTableusers">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee Name</th>
+                        <th class="col-25">Username</th>
+                        <th>Access Type</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="usersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Team Leader</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select border-form-modal" id="usersname" name="usersname" aria-label="Floating label select example">
+                    <option selected>Choose....</option>
+                  </select>
+                  <label for="floatingSelectGrid">Employee ID</label>
+                </div>
+              </div>
+              <br>
+              <div class="col">
+                  <div class="form-floating">
+                      <select class="form-select border-form-modal" id="subgroupid" name="subgroupid" aria-label="Floating label select example">
+                      </select>
+                      <label for="floatingSelectGrid">Sub Group</label>
+                    </div>
+              </div>
+              <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="userssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editusersmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h1 class="modal-title" id="exampleModalLabel">Edit Users</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+              <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editusername" name="editusername" placeholder="Created By">
+                    <label for="floatingInput">Username</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <select type="text" class="form-select border-form-modal" id="editsubgroupid" name="editsubgroupid" aria-label="Floating label select example">
+                    </select>
+                      <label for="floatingSelectGrid">Sub Group</label>
+                    </div>
+              </div>
+              <br>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select border-form-modal" id="editusersstatus" name="editusersstatus" aria-label="Floating label select example">
+                          <option selected>Choose....</option>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
+                        </select>
+                        <label for="floatingSelectGrid">Status</label>
+                      </div>
+                </div>
+                <br>
+        </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="edituserssavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+<div id="loading" class="loading"></div>
+<br>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content content-loan-modal">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="staticBackdropLabel">Add LOAN</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+
+      <!--- Modal Body -->
+      <div class="modal-body loan-body" id="modal-body">
+        <select class="form-select border-form-modal" id="employeeid" aria-label="Default select example">
+          <option selected>Employee ID</option>
+           <option value="1">One</option>
+          <option value="2">Two</option>
+           <option value="3">Three</option>
+           </select>
+
+           <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating" id="requestdate">
+                <input type="date" class="form-control border-form-modal" id="floatingInputGrid" placeholder="" value="">
+                <label for="floatingInputGrid">Request Date</label>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="form-floating" id="datedue">
+                <input type="date" class="form-control border-form-modal" id="floatingInputGrid" placeholder="" value="">
+                <label for="floatingInputGrid">Date Due</label>
+              </div>
+            </div>
+         </div>
+
+         <div class="row g-2">
+          <div class="col-md">
+            <label for="exampleFormControlInput1" class="form-label" id="amount">Amount</label>
+            <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+        </div>
+          <div class="col-md">
+              <label for="21" class="form-label" id="interest">Interest</label>
+              <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="0%"> 
+          </div>
+              <div class="col-md">
+                      <label for="exampleFormControlInput1" class="form-label" id="amountdue">Amount Due</label>
+                      <input type="text" class="form-control border-form-modal" id="exampleFormControlInput2" placeholder="PHP 0.00"> 
+              </div>
+              <div class="col-md">
+                  <label for="quantity" class="form-label" id="period">Period</label>
+                  <input type="number" class="form-control border-form-modal" id="quantity" name="quantity" min="1" max="100" placeholder="0"> 
+              </div>
+         </div>
+         <div>
+          <label for="exampleFormControlInput" id="purpose">Purpose</label>
+          <textarea class="form-control border-form-modal" placeholder="Leave a comment here" id="exampleFormControlInput2"></textarea> 
+        </div>
+      </div>
+
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-save">Submit</button>
+      </div>
+      
+    </div>   
+  </div>
+</div>
+
+
+
+
+<!------ Table ------>
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table">Loan</h3>
+    <div class="row g-2">
+      <!---- Searchbar ----->
+      <div class="col">
+        <input id='myInput' type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 color-add">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          <b>+ Add</b>
+        </button>
+      </div>
+    </div>
+</div>
+
+<div class="card-body">
+  <div class="table-responsive" id="table-responsive-id">
+    <table class="table table-light table-striped" id="dataTableemployees">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th class="col-sm-1">Employee ID</th>
+            <th>Request Date</th>
+            <th>Amount</th>
+            <th>Interest</th>
+            <th>Amount Due</th>
+            <th>Date Due</th>
+            <th>Period</th>
+            <th>Status</th>
+            <th class="col-sm-1">Approved By</th>
+            <th class="col-sm-1">Approved Date</th>
+            <th class="col-25">Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+  </div>
+  </div>
+
+</div>
+
+
+
+
+

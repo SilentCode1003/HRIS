@@ -1,17 +1,14 @@
 <head>
-    <title>LOGIN</title>
-    <%- include("header.ejs")%> 
+    <%- include("./components/loginheader.ejs")%>
 </head>
 
 <body>
 
-                <!-- Begin Page Content -->
-                <%- include("./login/login.ejs")%>
-                <!-- /.container-fluid -->
-    <%- include("scripts.ejs")%>
-    <%- include("./login/loginscript.ejs")%>
+    <!-- Begin Page Content -->
+    <%- include("./page/login/login.ejs")%>
+        <!-- /.container-fluid -->
+    <%- include("./components/scripts.ejs")%>
+    <%- include("./page/login/loginscript.ejs")%>
 </body>
-<style>
-    
-</style>
+
 </html>

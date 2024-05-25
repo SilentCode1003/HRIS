@@ -1,42 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include("./components/eportalheader.ejs")%>
+  </head>
 
-<head>
-<%- include("eportalheader.ejs")%>
-
-</head>
-
-<body id="page-top">
-
+  <body id="page-top">
     <div id="wrapper">
+      <%- include("./components/eportalsidebar.ejs")%> <%-
+      include("./components/eportaltopbar.ejs")%>
 
-        <%- include("eportalsidebar.ejs")%>
-      
-        <div id="content-wrapper" class="d-flex flex-column">
-
-           
-            <div id="content">
-
-                <%- include("eportaltopbar.ejs")%>
-       
-
-                <%- include("./eportalsalary/eportalsalary.ejs")%>
-             
-
-            </div>
-
-
+      <div id="content-wrapper">
+        <div class="content">
+          <%- include("./page/eportalsalary/eportalsalary.ejs")%>
         </div>
-    
-
+      </div>
     </div>
 
     <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
+      <i class="fas fa-angle-up"></i>
     </a>
 
-    <%- include("scripts.ejs")%>
-    <%- include("./eportalsalary/eportalsalaryscript.ejs")%>
-</body>
-
+    <%- include("./components/scripts.ejs")%> <%-
+    include("./components/eportaltopbarscript.ejs")%> <%-
+    include("./page/eportalsalary/eportalsalaryscript.ejs")%>
+  </body>
 </html>

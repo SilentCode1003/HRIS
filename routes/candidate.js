@@ -1,22 +1,22 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('candidatelayout', { title: 'Express' });
 
-  Validator(req, res, 'candidatelayout');
+  Validator(req, res, "candidatelayout", "candidate");
 });
 
 module.exports = router;
 
-router.get('/load', (req , res) => {
+router.get("/load", (req, res) => {
   try {
-    let sql = `SELECT
+    let sql = `  SELECT
     me_profile_pic AS image,
     me_id AS id,
     CONCAT(me_lastname, ' ', me_firstname) AS name,
@@ -34,30 +34,31 @@ router.get('/load', (req , res) => {
     FROM master_employee
     left join master_department md ON master_employee.me_department = md_departmentid
     WHERE me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) > 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        mag:'success',
-        data: result,
-      })
-    }).catch((error) => {
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
         res.json({
-          msg:'error',
-          data:error,
-        })
+          mag: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
   } catch (error) {
-    res.json ({
-      msg:'error',
-      date: error
+    res.json({
+      msg: "error",
+      date: error,
     });
-    
   }
 });
 
-router.post('/getcandidate', (req, res) => {
+router.post("/getcandidate", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select
@@ -75,28 +76,29 @@ router.post('/getcandidate', (req, res) => {
     from master_employee
     where me_id = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    }).catch((error) =>{
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg:'error',
-      data:error
+      msg: "error",
+      data: error,
     });
-    
   }
 });
 
-router.post('/update', (req, res) => {
+router.post("/update", (req, res) => {
   try {
     let action = req.body.action;
     let employeeid = req.body.employeeid;
@@ -104,24 +106,24 @@ router.post('/update', (req, res) => {
     me_jobstatus = '${action}'
     WHERE me_id = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        error,
-      });
-    });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       error,
-    })
-    
+    });
   }
 });

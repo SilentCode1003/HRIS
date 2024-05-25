@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('salarylayout', { title: 'Express' });
-  Validator(req, res, "salaryhistorylayout");
+  Validator(req, res, "salaryhistorylayout",'salaryhistory');
 });
 
 module.exports = router;
@@ -16,12 +16,13 @@ module.exports = router;
 router.get('/load', (req, res) => {
     try {
         let sql = `select
-        me_profile_pic,
         sh_id, 
         sh_date,
         concat(me_lastname,' ',me_firstname) as sh_employeeid,
         sh_monthly,
-        sh_allowances
+        sh_allowances,
+        sh_basic_adjustments,
+        sh_payrolltype
        from salary_history
        inner join master_employee on salary_history.sh_employeeid = me_id
        order by sh_id desc`;

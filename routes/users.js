@@ -2,37 +2,36 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Encrypter } = require("./repository/crytography");
-const { generateUsernameAndPassword } = require("./helper");
 const { Validator } = require("./controller/middleware");
+const { generateUsernameAndPassword } = require("./repository/helper");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  req.session.fullname = "DEV42";
-  req.session.employeeid = "999999";
-  req.session.accesstype = "Admin";
+  // req.session.fullname = "DEV42";
+  // req.session.employeeid = "999999";
+  // req.session.accesstype = "Admin";
 
-  res.render("userslayout", {
-    image: req.session.image,
-    employeeid: "999999",
-    fullname: "DEV42",
-    accesstype: "Admin",
-  });
+  // res.render("userslayout", {
+  //   image: req.session.image,
+  //   employeeid: "999999",
+  //   fullname: "DEV42",
+  //   accesstype: "Admin",
+  // });
 
-  //Validator(req, res, 'userslayout');
+  Validator(req, res, "userslayout", "users");
 });
 
 module.exports = router;
 
 router.post("/save", async (req, res) => {
   try {
-    const { employeeid, accesstype,} = req.body;
-    let status = 'Active';
+    const { employeeid, accesstype } = req.body;
+    let status = "Active";
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
 
-    // Validate if the combination of employeeid and accesstype already exists
     const existingUserQuery = `SELECT * FROM master_user WHERE mu_employeeid = '${employeeid}' AND mu_accesstype = '${accesstype}'`;
     const existingUserResult = await mysql.mysqlQueryPromise(
       existingUserQuery,
@@ -40,7 +39,6 @@ router.post("/save", async (req, res) => {
     );
 
     if (existingUserResult.length > 0) {
-      // Combination already exists, return an error
       return res.json({ msg: "exist" });
     }
 
@@ -104,7 +102,6 @@ router.post("/save", async (req, res) => {
 router.get("/load", (req, res) => {
   try {
     let sql = `  SELECT 
-    me_profile_pic,
     mu_userid,
     concat(me_firstname,' ',me_lastname) as mu_employeeid,
     mu_username,
@@ -186,6 +183,8 @@ router.post("/getusers", (req, res) => {
 
     mysql.Select(sql, "Master_User", (err, result) => {
       if (err) console.error("Error: ", err);
+
+      console.log(result);
 
       res.json({
         msg: "success",

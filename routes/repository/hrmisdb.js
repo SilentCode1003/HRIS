@@ -6,26 +6,33 @@ require("dotenv").config();
 let password = "";
 Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
-  console.log(encrypted);
+  // console.log(encrypted);
   password = encrypted;
 });
 
-Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
+Decrypter('23705844140cedf953af1c822ef636db2910c520d77c00f5f0fc32c24ceb40d7', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
-})
+});
 
 // Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
+// });
 
-// })
+
+Encrypter('5lsolutions101520', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+
+});
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
   user: process.env._USER_ADMIN,
   password: password,
   database: process.env._DATABASE_ADMIN,
+  timezone: "PST",
 });
 
 exports.CheckConnection = () => {
@@ -200,6 +207,70 @@ exports.Select = (sql, table, callback) => {
       if (table == "Ojt_Attendance") {
         callback(null, model.Ojt_Attendance(results));
       }
+
+      if (table == "Apps_Details") {
+        callback(null, model.Apps_Details(results));
+      }
+
+      if (table == "Payroll_Approval_Ot") {
+        callback(null, model.Payroll_Approval_Ot(results));
+      }
+
+      if (table == "Payroll_Date") {
+        callback(null, model.Payroll_Date(results));
+      }
+
+      if (table == "Other_Deductions") {
+        callback(null, model.Other_Deductions(results));
+      }
+
+      if (table == "Master_Deductions") {
+        callback(null, model.Master_Deductions(results));
+      }
+
+      if (table == "Attendance_Request") {
+        callback(null, model.Attendance_Request(results));
+      }
+
+      if (table == "Master_Notification") {
+        callback(null, model.Master_Notification(results));
+      }
+
+      if (table == "Admin_Notification") {
+        callback(null, model.Admin_Notification(results));
+      }
+
+      if (table == "TeamLeader_User") {
+        callback(null, model.TeamLeader_User(results));
+      }
+
+      if (table == "Master_Shift_Settings") {
+        callback(null, model.Master_Shift_Settings(results));
+      }
+
+      if (table == "Master_Employee_Background") {
+        callback(null, model.Master_Employee_Background(results));
+      }
+
+      if (table == "Master_Leaves") {
+        callback(null, model.Master_Leaves(results));
+      }
+
+      if (table == "Subgroup") {
+        callback(null, model.Subgroup(results));
+      }
+
+      if (table == "Approval_Stage_Settings") {
+        callback(null, model.Approval_Stage_Settings(results));
+      }
+
+      if (table == "Request_Approval_Settings") {
+        callback(null, model.Request_Approval_Settings(results));
+      }
+
+      if (table == "Attendance_Request_Activity") {
+        callback(null, model.Attendance_Request_Activity(results));
+      }
     });
   } catch (error) {}
 };
@@ -246,8 +317,14 @@ exports.InsertTable = (tablename, data, callback) => {
         l_leaveenddate,
         l_leavetype,
         l_leavereason,
+        l_image,
         l_leavestatus,
-        l_leaveapplieddate) VALUES ?`;
+        l_leaveapplieddate,
+        l_leaveduration,
+        l_leavepaiddays,
+        l_leaveunpaiddays,
+        l_subgroupid,
+        l_approvalcount) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -287,6 +364,29 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+
+  if (tablename == "master_attendance_request") {
+    let sql = `INSERT INTO master_attendance(
+        ma_employeeid,
+        ma_attendancedate,
+        ma_clockin,
+        ma_clockout,
+        ma_latitudeIn,
+        ma_longitudein,
+        ma_latitudeout,
+        ma_longitudeout,
+        ma_gefenceidIn,
+        ma_geofenceidOut,
+        ma_devicein,
+        ma_deviceout) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
   if (tablename == "master_bulletin") {
     let sql = `INSERT INTO master_bulletin(
         mb_image,
@@ -309,6 +409,7 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_department(
         md_departmentname,
         md_departmenthead,
+        md_departmenticon,
         md_createdby,
         md_createddate,
         md_status) VALUES ?`;
@@ -474,11 +575,15 @@ exports.InsertTable = (tablename, data, callback) => {
   }
   if (tablename == "master_shift") {
     let sql = `INSERT INTO master_shift(
-        ms_shiftname,
+        ms_employeeid,
         ms_department,
-        ms_status,
-        ms_createby,
-        ms_createdate) VALUES ?`;
+        ms_monday,
+        ms_tuesday,
+        ms_wednesday,
+        ms_thursday,
+        ms_friday,
+        ms_saturday,
+        ms_sunday) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -573,7 +678,6 @@ exports.InsertTable = (tablename, data, callback) => {
     });
   }
 
-
   if (tablename == "salary") {
     let sql = `INSERT INTO salary(
         s_employeeid,
@@ -597,7 +701,6 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
-
 
   if (tablename == "master_resigned") {
     let sql = `INSERT INTO master_resigned(
@@ -760,7 +863,9 @@ exports.InsertTable = (tablename, data, callback) => {
     let sql = `INSERT INTO master_salary(
       ms_employeeid,
       ms_monthly,
-      ms_allowances) VALUES ?`;
+      ms_allowances,
+      ms_basic_adjustments,
+      ms_payrolltype) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -802,6 +907,260 @@ exports.InsertTable = (tablename, data, callback) => {
       callback(null, result);
     });
   }
+  if (tablename == "apps_details") {
+    let sql = `INSERT INTO apps_details(
+        ad_image,
+        ad_name,
+        ad_details,
+        ad_version,
+        ad_date,
+        ad_createby) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_deductions") {
+    let sql = `INSERT INTO master_deductions(
+        md_employeeid,
+        md_idtype,
+        md_idnumber,
+        md_issuedate,
+        md_createby,
+        md_createdate,
+        md_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "other_deductions") {
+    let sql = `INSERT INTO other_deductions(
+      od_employeeid,
+      od_idtype,
+      od_amount,
+      od_period,
+      od_cutoff) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request") {
+    let sql = `INSERT INTO attendance_request(
+      ar_employeeid,
+      ar_attendace_date,
+      ar_timein,
+      ar_timeout,
+      ar_total,
+      ar_subgroupid,
+      ar_reason,
+      ar_file,
+      ar_createdate,
+      ar_createby,
+      ar_status,
+      ar_approvalcount) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "payroll_date") {
+    let sql = `INSERT INTO payroll_date(
+      pd_name,
+      pd_cutoff,
+      pd_startdate,
+      pd_enddate,
+      pd_payrolldate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "teamlead_user") {
+    let sql = `INSERT INTO teamlead_user(
+       tu_employeeid,
+       tu_username,
+       tu_password,
+       tu_accesstype,
+       tu_subgroupid,
+       tu_createby,
+       tu_createdate,
+       tu_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_shift_settings") {
+    let sql = `INSERT INTO master_shift_settings(
+       mss_shiftname,
+       mss_startshift,
+       mss_endshift,
+       mss_restday,
+       mss_exemptedday,
+       mss_createdate,
+       mss_createby,
+       mss_shiftstatus) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_employee_background") {
+    let sql = `INSERT INTO master_employee_background(
+       meb_employeeid,
+       meb_type,
+       meb_courseandstatus,
+       meb_attainment,
+       meb_tittle,
+       meb_status,
+       meb_start,
+       meb_end) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "master_leaves") {
+    let sql = `INSERT INTO master_leaves(
+      ml_employeeid,
+      ml_tenure,
+      ml_leavetype,
+      ml_year,
+      ml_totalleavedays,
+      ml_unusedleavedays,
+      ml_usedleavedays,
+      ml_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "attendance_request_activity") {
+    let sql = `INSERT INTO attendance_request_activity(
+      ara_employeeid,
+      ara_departmentid,
+      ara_requestid,
+      ara_subgroupid,
+      ara_status,
+      ara_date) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "aprroval_stage_settings") {
+    let sql = `INSERT INTO aprroval_stage_settings(
+      ats_accessid,
+      ats_count,
+      ats_createdby,
+      ats_createddate) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "request_approval_settings") {
+    let sql = `INSERT INTO request_approval_settings(
+      ras_departmentid,
+      ras_count,
+      ras_createdby,
+      ras_createdate,
+      ras_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "subgroup") {
+    let sql = `INSERT INTO subgroup(
+      s_departmentid,
+      s_name,
+      s_createby,
+      s_createdate,
+      s_status) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
+
+  if (tablename == "leave_request_activity") {
+    let sql = `INSERT INTO leave_request_activity(
+      lra_employeeid,
+      lra_departmentid,
+      lra_leaveid,
+      lra_subgroupid,
+      lra_status,
+      lra_date,
+      lra_comment) VALUES ?`;
+
+    this.Insert(sql, data, (err, result) => {
+      if (err) {
+        callback(err, null);
+      }
+      console.log(err);
+      callback(null, result);
+    });
+  }
 };
 
 exports.Update = async (sql) => {
@@ -822,7 +1181,6 @@ exports.UpdateMultiple = async (sql, data, callback) => {
       if (error) {
         callback(error, null);
       }
-      // console.log('Rows affected:', results.affectedRows);
 
       callback(null, `Rows affected: ${results.affectedRows}`);
     });

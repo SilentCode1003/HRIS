@@ -1,0 +1,203 @@
+<br>
+<br>
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="bank-card-title">For Approval Over Time</h3>
+      <!-- <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button> -->
+      <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body bank-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableOtapproval">
+                <thead>
+                        <th>Image</th>
+                        <th>ID</th>
+                        <th>Employee Name</th>
+                        <th>Attendance Date</th>
+                        <th>Clock In</th>
+                        <th>Clock Out</th>
+                        <th>Total Overtime</th>
+                        <th>Payroll Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="otapprovalmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Approve This Overtime ?</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="otimage" id="otimage" class="form-control border-form-modal"
+                      accept="image/*" disabled>
+                  </div>
+                </div>
+                <br>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="otfullname" name="otfullname"
+                      placeholder="First Name" disabled>
+                    <label for="floatingInput">Full Name</label>
+                  </div>
+                </div>
+
+                    <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="otdate" name="otdate" disabled>
+                          <label for="floatingInput">Attendance Date</label>
+                        </div>
+                    </div>
+              </div>
+              
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="otclockin" name="otclockin" 
+                      placeholder="Address" disabled>
+                      <label for="floatingInput">Clock In</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="otclockout" name="otclockout" 
+                      placeholder="Address" disabled>
+                      <label for="floatingInput">Clock Out</label>
+                    </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ottotalothours" name="ottotalothours" 
+                    placeholder="Address" disabled>
+                    <label for="floatingInput">Total Hours</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="otnight" name="otnight">
+                    <label for="floatingInput">Night Differentials Hours</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="otnormal" name="otnormal">
+                    <label for="otnormal">Normal Overtime</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="otearly" name="otearly">
+                    <label for="otearly">Early Overtime</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="otnightpay" name="otnightpay"
+                      placeholder="Phone Number" disabled>
+                    <label for="floatingInput">Night Differentials Pay</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                      <input type="number" class="form-control border-form-modal" id="otearlypay" name="otearlypay"
+                      placeholder="Phone Number" disabled>
+                      <label for="floatingInput">Early Overtime Pay</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="otnormalpay" name="otnormalpay"
+                    placeholder="Phone Number" disabled>
+                    <label for="floatingInput">Normal Overtime Pay</label>
+                  </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="ottotalpay" name="ottotalpay"
+                        placeholder="Phone Number" disabled>
+                        <label for="floatingInput">Total Overtime Pay</label>
+                    </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="otpayrolldate" name="otpayrolldate"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="employeedepartment">Payroll Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="otstatus" name="otstatus"
+                    aria-label="Floating label select example">
+                    <option value="Approved">Approved</option>
+                    <option value="Appllied">Appllied</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                    <label for="floatingInput">Status</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="otreason" name="otreason"
+                      placeholder="Reason" disabled>
+                    <label for="floatingInput">Reason</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="otsavebutton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<script>
+  $(document).ready(function () {
+    let employeeId = "";
+
+    $(document).on("click", "#searchprofile", function (event) {
+      event.preventDefault();
+      const employeeId = $(this).data("employeeid");
+      console.log("Employee ID:", employeeId);
+      $.ajax({
+        type: "POST",
+        url: "/employeeprofile/loademployee",
+        data: {
+          employeeid: employeeId,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            console.log(existingData);
+            $.each(existingData, (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              base64String = item.image;
+              $("#profileid").text(item.employeeid);
+              $("#profiltenure").text(item.tenure);
+              $("#profilefname").text(item.firstname);
+              $("#profilemidname").text(item.middlename);
+              $("#profilelastname").text(item.lastname);
+              $("#profilebday").text(item.birthday);
+              $("#profilegender").text(item.gender);
+              $("#profilecicilstatus").text(item.civilstatus);
+              $("#profilephone").text(item.phone);
+              $("#profileemail").text(item.email);
+              $("#profilehiredate").text(item.hiredate);
+              $("#profilejobstatus").text(item.jobstatus);
+              $("#profileemcontact").text(item.emergencycontact);
+              $("#profileemphone").text(item.emergencyphone);
+              $("#profiledepartment").text(item.department);
+              $("#profileposition").text(item.position);
+              $("#profileaddress").text(item.address);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    // $(document).on("click", "#searchprofile", function () {
+    //   event.preventDefault();
+    //   const employeeId = $(this).data("employeeid");
+    //   //employeeId = $(this).data("employeeid"); // Get the employee ID from the clicked element
+    //   console.log("Employee ID:", employeeId);
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/employeeprofile/loademployee",
+    //     data: {
+    //       employeeid: employeeId,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+
+    //         console.log(existingData);
+    //         $.each(existingData, (key, item) => {
+    //           $("#editpreview").attr(
+    //             "src",
+    //             "data:image/jpg;base64," + item.image
+    //           );
+    //           base64String = item.image;
+    //           $("#profileid").text(item.employeeid);
+    //           $("#profiltenure").text(item.tenure);
+    //           $("#profilefname").text(item.firstname);
+    //           $("#profilemidname").text(item.middlename);
+    //           $("#profilelastname").text(item.lastname);
+    //           $("#profilebday").text(item.birthday);
+    //           $("#profilegender").text(item.gender);
+    //           $("#profilecicilstatus").text(item.civilstatus);
+    //           $("#profilephone").text(item.phone);
+    //           $("#profileemail").text(item.email);
+    //           $("#profilehiredate").text(item.hiredate);
+    //           $("#profilejobstatus").text(item.jobstatus);
+    //           $("#profileemcontact").text(item.emergencycontact);
+    //           $("#profileemphone").text(item.emergencyphone);
+    //           $("#profiledepartment").text(item.department);
+    //           $("#profileposition").text(item.position);
+    //           $("#profileaddress").text(item.address);
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", msg, "error");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       swal("An error occurred while fetching employee data", msg, "error");
+    //     },
+    //   });
+    // });
+  });
+</script>

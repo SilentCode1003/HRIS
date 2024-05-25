@@ -1,0 +1,370 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table">OJT</h3>
+    <div class="row g-2">
+      <div class="col">
+        <input id='myInput' type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 col-add">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addojtmodal">
+          <b>+ Add</b>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-light table-bordered" id="dataTableOjt">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date started</th>
+            <th>Total Hours</th>
+            <th>Acumulated Hours</th>
+            <th>Remaining Hours</th>
+            <th>End Date</th>
+            <th class="col-sm-1">Status</th>
+            <th class="col-sm-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addojtmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">ADD OJT</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="ojtprofileimage" id="ojtprofileimage" class="form-control border-form-modal"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtfname" name="ojtfname"
+                      placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtlname" name="ojtlname"
+                      placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtschool" name="ojtschool"
+                      placeholder="School">
+                    <label for="floatingInput"> School</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="ojtgender" name="ojtgender"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtaddress" name="ojtaddress" 
+                    placeholder="Address" >
+                    <label for="floatingInput">Address</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="ojthours" name="ojthours" >
+                    <label for="floatingInput">Total Hours</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="ojtstatus" name="ojtstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <label for="ojtstatus">Status</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="ojtphone" name="ojtphone"
+                      placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="ojtstartdate" name="ojtstartdate"
+                   >
+                    <label for="floatingInput">Start Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="ojtbirthday" name="ojtbirthday">
+                    <label for="floatingInput">Birthday</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="ojtdepartment" name="ojtdepartment"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                    </select>
+                    <label for="employeedepartment">Department</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtecname" name="ojtecname"
+                      placeholder="Emergency Contact Name">
+                    <label for="floatingInput">Emergency Contact Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="ojtecphone" name="ojtecphone"
+                      placeholder="Emergency Contact Phone">
+                    <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="ojtsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Modal-->
+
+<div class="modal fade" id="editojtmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">EDIT OJT</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4 modal-ojt-edit">
+            <div class="col g-6">
+              <div class="p-4 modal-form-edit">
+                <div class="text-center">
+                  <img id="editpreview" style=" width: 250px;
+                  height: 250px;" src="https://via.placeholder.com/250" class="rounded rounded-circle border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="editojtprofileimage" id="editojtprofileimage" class="form-control border-form-modal"
+                      accept="image/*">
+                  </div>
+                </div>
+                <br>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtfname" name="editojtfname"
+                      placeholder="First Name">
+                    <label for="floatingInput">First Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtlname" name="editojtlname"
+                      placeholder="Last Name">
+                    <label for="floatingInput">Last Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtschool" name="editojtschool"
+                      placeholder="School">
+                    <label for="floatingInput"> School</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="edditojtgender" name="edditojtgender"
+                      aria-label="Floating label select example">
+                      <option selected>Choose</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                    <label for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtaddress" name="editojtaddress" 
+                    placeholder="Address" >
+                    <label for="floatingInput">Address</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                      <input type="number" class="form-control border-form-modal" id="editojthours" name="editojthours" step="3600">
+                      <label for="floatingInput">Total Hours</label>
+                  </div>
+                </div>              
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="editojtstatus" name="editojtstatus"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <label for="floatingInput">Status</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="editojtphone" name="editojtphone"
+                      placeholder="Phone Number">
+                    <label for="floatingInput">Phone Number</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="editojtstartdate" name="editojtstartdate">
+                    <label for="floatingInput">Start Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="editojtbirthday" name="editojtbirthday">
+                    <label for="floatingInput">Birthday</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="editojtdepartment" name="editojtdepartment"
+                      aria-label="Floating label select example">
+                      <option selected>Choose...</option>
+                    </select>
+                    <label for="floatingInput">Department</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtecname" name="editojtecname"
+                      placeholder="Emergency Contact Name">
+                    <label for="floatingInput">Emergency Contact Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editojtecphone" name="editojtecphone"
+                      placeholder="Emergency Contact Phone">
+                    <label for="floatingInput">Emergency Contact Phone</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editojtsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,228 @@
+<div class="navbar navbar-expand navbar-expand-lg topbar">
+
+    <!-- Sidebar Toggle (Topbar) -->
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <!-- Topbar Search -->
+    <form
+        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group">
+            <input type="text" class="form-control searchbar-eportal" placeholder="Search for..."
+                aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn-search-topbar" type="button">
+                    <i class="bi bi-search-heart"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Topbar Navbar -->
+    <ul class="navbar-nav ml-auto">
+
+        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+        <li class="nav-item dropdown no-arrow d-sm-none">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw db-search-hrmis"></i>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in searchbar-bg"
+                aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control searchbar-eportal"
+                            placeholder="Search for..." aria-label="Search"
+                            aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-search-eportal" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+        <!-- Nav Item - Alerts -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <lord-icon src="https://cdn.lordicon.com/lznlxwtc.json" state="loop-bell" colors="primary:#e8e230" class="db-bell-eportal">
+                </lord-icon>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger" id="badge-counter"></span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div id="notifmenu" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header" id="dp-header">
+                    Alerts Center
+                </h6>
+                <a id="notiftextcenter" class="dropdown-item text-center small text-gray-500" 
+                href="#">Clear Notifications</a>
+            </div>
+        </li>
+
+        <!-- Nav Item - Messages -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <lord-icon src="https://cdn.lordicon.com/nqisoomz.json" colors="primary:#66d7ee,secondary:#3080e8,tertiary:#66d7ee,quaternary:#8b2525" class="db-message-eportal">
+                </lord-icon>
+                <!-- Counter - Messages -->
+                <span class="badge badge-danger badge-counter">7</span>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header" id="dp-header">
+                    Message Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                            alt="...">
+                        <div class="status-indicator bg-success"></div>
+                    </div>
+                    <div class="font-weight-bold">
+                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
+                            problem I've been having.</div>
+                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                            alt="...">
+                        <div class="status-indicator"></div>
+                    </div>
+                    <div>
+                        <div class="text-truncate">I have the photos that you ordered last month, how
+                            would you like them sent to you?</div>
+                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                            alt="...">
+                        <div class="status-indicator bg-warning"></div>
+                    </div>
+                    <div>
+                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                            the progress so far, keep up the good work!</div>
+                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                            alt="...">
+                        <div class="status-indicator bg-success"></div>
+                    </div>
+                    <div>
+                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                            told me that people say this to all dogs, even if they aren't good...</div>
+                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                    </div>
+                </a>
+                <a class="dropdown-item text-center dropdown-text-item" href="#">Read More Messages</a>
+            </div>
+        </li>
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline profilename-eportal"><%=fullname%></span>
+                <img class="img-profile rounded-circle" src="data:image/jpg;base64,<%= image%>">
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in dropdown-profile-eportal"
+                aria-labelledby="userDropdown">
+                <a class="dropdown-item profile-box-db" href="#">
+                    <lord-icon src="https://cdn.lordicon.com/fmasbomy.json" class="user-prof-icon">
+                    </lord-icon>
+                    Profile
+                </a>
+                <a class="dropdown-item profile-box-db" href="/eportalsettings">
+                    <lord-icon src="https://cdn.lordicon.com/dvqeipeg.json" class="settings-icon">
+                    </lord-icon>
+                    Settings
+                </a>
+                <a class="dropdown-item profile-box-db" href="#">
+                    <lord-icon src="https://cdn.lordicon.com/ujxzdfjx.json" class="log-icon">
+                    </lord-icon>
+                    Activity Log
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item profile-box-db" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class='bx bx-log-in-circle logout-icon'></i>
+                    Logout
+                </a>
+            </div>
+        </li>
+
+    </ul>
+
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="modal-backdrop-dark" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <lord-icon src="https://cdn.lordicon.com/ujxzdfjx.json" stroke="bold"
+                colors="primary:#000000,secondary:#eee966" class="db-hrmis">
+            </lord-icon>
+                <h1 class="modal-title" id="notiftittle"></h1>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body">
+                <div class="p-4 text-center">
+                    <p id="notifdescription" class="notifdescription"></p>
+                </div>
+                <div class="text-center">
+                    <p id="notifsubdescription" class="notifsubdescription"></p>
+                </div>
+            <div class="col">
+                <div class="form-floating">
+                  <label class="form-label" for="customFile"></label>
+                  <div class="text-center">
+                    <img id="editpreview" src="https://via.placeholder.com/250" style="width: 300px;; height: 300px;"
+                      class="rounded" alt="placeholder">
+                  </div>
+                </div>
+            </div>
+            <br>
+                <div class="p-4 text-center">
+                    <p id="notifdate" class="notifdate"></p>
+                </div>
+            </div>
+    
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-notif-close" data-bs-dismiss="modal" id="isRead">Close</button>
+                <button type="button" class="btn btn-notif-delete" data-bs-dismiss="modal" id="siDeleate">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-sm-6">
+                <button class="btn btn-white btn-block mb-2" data-toggle="modal" data-target="#modal-backdrop-dark">Open dark modal Dark</button> 
+                
+                
+            </div>
+        </div>
+    </div>
+</div> -->
+

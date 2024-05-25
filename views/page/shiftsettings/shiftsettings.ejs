@@ -1,0 +1,280 @@
+<br>
+<!-- Table -->
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table">Shift Settings</h3>
+   <div class="row g-2">
+      <div class="col">
+        <input id='myInput' type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 col-add">
+        <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#shiftmodal">
+          <b>+ Add</b>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive" id="table-responsive-id">
+      <table class="table table-light table-bordered" id="dataTableshiftSettings">
+        <thead>
+          <tr>
+            <th class="col-sm-1">ID</th>
+            <th>Shift Name</th>
+            <th>Start Shift</th>
+            <th>End Shift</th>
+            <th>Shift Rest Day</th>
+            <th>Exempted Day</th>
+            <th>Create Date</th>
+            <th>Create By</th>
+            <th>Shift Status</th>
+            <th class="col-sm-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="shiftmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Add Shift </h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+          <form>
+             <div class="row">
+                <div class="col">
+                    <label for="floatingSelectGrid">Shift Name</label>
+                    <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="shiftname">
+                        <label for="floatingSelectGrid">Shift Name</label>
+                    </div>
+                </div>   
+             </div>
+             <br>
+             <div class="row g-2">
+                <div class="col">
+                  <label for="floatingSelectGrid">Start Shift</label>
+                  <div class="form-floating">
+                    <input type="time" class="form-control border-form-modal" id="startshift">
+                    <label for="floatingSelectGrid">Start Shift</label>
+                  </div>
+                </div>
+               <br>      
+                <div class="col">
+                  <label for="floatingSelectGrid">End Shift</label>
+                  <div class="form-floating">
+                    <input type="time" class="form-control border-form-modal" id="endshift">
+                    <label for="floatingSelectGrid">End Shift</label>
+                  </div>
+                </div>
+             </div>
+             <br>
+                <label for="floatingSelectGrid">Rest Day</label>
+                <div class="row g-3 row-shift">
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="mondayCheckbox">
+                    <label class="form-check-label" for="mondayCheckbox">Monday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="tuesdayCheckbox">
+                    <label class="form-check-label" for="tuesdayCheckbox">Tuesday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="wednesdayCheckbox">
+                    <label class="form-check-label" for="wednesdayCheckbox">Wednesday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="thursdayCheckbox">
+                    <label class="form-check-label" for="thursdayCheckbox">Thursday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="fridayCheckbox">
+                    <label class="form-check-label" for="fridayCheckbox">Friday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="saturdayCheckbox">
+                    <label class="form-check-label" for="saturdayCheckbox">Saturday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="sundayCheckbox">
+                    <label class="form-check-label" for="sundayCheckbox">Sunday</label>
+                </div>
+            </div>  
+            <br>
+            <label for="floatingSelectGrid">Exempted Days</label>
+            <div class="row g-3 row-shift">
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="mondayExemptedCheckbox">
+                    <label class="form-check-label" for="mondayExemptedCheckbox">Monday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="tuesdayExemptedCheckbox">
+                    <label class="form-check-label" for="tuesdayExemptedCheckbox">Tuesday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="wednesdayExemptedCheckbox">
+                    <label class="form-check-label" for="wednesdayExemptedCheckbox">Wednesday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="thursdayExemptedCheckbox">
+                    <label class="form-check-label" for="thursdayExemptedCheckbox">Thursday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="fridayExemptedCheckbox">
+                    <label class="form-check-label" for="fridayExemptedCheckbox">Friday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="saturdayExemptedCheckbox">
+                    <label class="form-check-label" for="saturdayExemptedCheckbox">Saturday</label>
+                </div>
+                <div class="col">
+                    <input type="checkbox" class="form-check-input border-form-modal" id="sundayExemptedCheckbox">
+                    <label class="form-check-label" for="sundayExemptedCheckbox">Sunday</label>
+                </div>
+            </div>          
+          </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="shiftsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Edit Modal-->
+<div class="modal fade" id="editshift" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Edit Shift </h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+               <div class="row">
+                  <div class="col">
+                      <label for="floatingSelectGrid">Shift Name</label>
+                      <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="editshiftname">
+                          <label for="floatingSelectGrid">Shift Name</label>
+                      </div>
+                  </div>   
+               </div>
+               <br>
+               <div class="row g-2">
+                  <div class="col">
+                    <label for="floatingSelectGrid">Start Shift</label>
+                    <div class="form-floating">
+                      <input type="time" class="form-control border-form-modal" id="editstartshift">
+                      <label for="floatingSelectGrid">Start Shift</label>
+                    </div>
+                  </div>
+                 <br>      
+                  <div class="col">
+                    <label for="floatingSelectGrid">End Shift</label>
+                    <div class="form-floating">
+                      <input type="time" class="form-control border-form-modal" id="editendshift">
+                      <label for="floatingSelectGrid">End Shift</label>
+                    </div>
+                  </div>
+               </div>
+               <br>
+               <label for="floatingSelectGrid">Rest Day</label>
+               <div class="row g-3 row-shift">
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editmondayCheckbox">
+                      <label class="form-check-label" for="editmondayCheckbox">Monday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="edittuesdayCheckbox">
+                      <label class="form-check-label" for="edittuesdayCheckbox">Tuesday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editwednesdayCheckbox">
+                      <label class="form-check-label" for="editwednesdayCheckbox">Wednesday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editthursdayCheckbox">
+                      <label class="form-check-label" for="editthursdayCheckbox">Thursday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editfridayCheckbox">
+                      <label class="form-check-label" for="editfridayCheckbox">Friday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editsaturdayCheckbox">
+                      <label class="form-check-label" for="editsaturdayCheckbox">Saturday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="editsundayCheckbox">
+                      <label class="form-check-label" for="editsundayCheckbox">Sunday</label>
+                  </div>
+              </div>  
+              <br>
+              <label for="floatingSelectGrid">Exempted Days</label>
+              <div class="row g-3 row-shift">
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="mondayeditCheckbox">
+                      <label class="form-check-label" for="mondayeditCheckbox">Monday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="tuesdayeditCheckbox">
+                      <label class="form-check-label" for="tuesdayeditCheckbox">Tuesday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="wednesdayeditCheckbox">
+                      <label class="form-check-label" for="wednesdayeditCheckbox">Wednesday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="thursdayeditCheckbox">
+                      <label class="form-check-label" for="thursdayeditCheckbox">Thursday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="fridayeditCheckbox">
+                      <label class="form-check-label" for="fridayeditCheckbox">Friday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="saturdayeditCheckbox">
+                      <label class="form-check-label" for="saturdayeditCheckbox">Saturday</label>
+                  </div>
+                  <div class="col">
+                      <input type="checkbox" class="form-check-input border-form-modal" id="sundayeditCheckbox">
+                      <label class="form-check-label" for="sundayeditCheckbox">Sunday</label>
+                  </div>
+              </div>  
+              <br>
+              <div class="row">
+                <div class="col">
+                  <label class="form-check-label" for="editsundayCheckbox">Status</label>
+                  <select class="form-select border-form-modal" id="editstatus" name="editstatus" aria-label="Floating label select example">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>        
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editshiftsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

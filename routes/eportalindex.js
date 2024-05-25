@@ -9,7 +9,7 @@ const { Attendance_Logs } = require("./model/hrmisdb");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('eportalindexlayout', { title: 'Express' });
-  Validator(req, res, "eportalindexlayout");
+  Validator(req, res, "eportalindexlayout", "eportalindex");
 });
 
 module.exports = router;
@@ -31,8 +31,8 @@ function getLatestLog(employeeId) {
   });
 }
 
-function getDeviceInformation(req) {
-  if (typeof navigator === "undefined") {
+function getDeviceInformation(device) {
+  if (typeof device === "undefined" || " ") {
     return "app";
   } else {
     return "web";
@@ -58,7 +58,6 @@ router.post("/latestlog", (req, res) => {
     );
 });
 
-
 router.post("/latestlogforapp", (req, res) => {
   const employeeId = req.body.employeeid;
 
@@ -71,11 +70,9 @@ router.post("/latestlogforapp", (req, res) => {
     );
 });
 
-
 router.post("/clockin", (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
-
 
   if (!employee_id) {
     return res.status(401).json({
@@ -86,7 +83,9 @@ router.post("/clockin", (req, res) => {
 
   const { latitude, longitude } = req.body;
   const attendancedate = moment().format("YYYY-MM-DD");
-  const devicein = getDeviceInformation(req);
+  const devicein = getDeviceInformation(req.body.devicein);
+
+  console.log(employee_id);
 
   const checkExistingClockInQuery = `
     SELECT ma_employeeid
@@ -106,7 +105,6 @@ router.post("/clockin", (req, res) => {
 
   console.log(checkMissingClockOutQuery);
 
-
   const executeSequentialQueries = (queries) =>
     queries.reduce(
       (promise, query) =>
@@ -118,17 +116,22 @@ router.post("/clockin", (req, res) => {
       Promise.resolve([])
     );
 
-  executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
+  executeSequentialQueries([
+    checkExistingClockInQuery,
+    checkMissingClockOutQuery,
+  ])
     .then(([resultClockIn, resultMissingClockOut]) => {
       if (resultClockIn.length > 0) {
         res.json({
           status: "exist",
-          message: "Clock-in not allowed. Employee already clocked in on the same day.",
+          message:
+            "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (resultMissingClockOut.length > 0) {
         res.json({
           status: "disabled",
-          message: "Clock-in not allowed. Missing clock-out on the previous day.",
+          message:
+            "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -175,7 +178,6 @@ router.post("/clockin", (req, res) => {
     });
 });
 
-
 router.post("/clockout", (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
@@ -197,7 +199,7 @@ router.post("/clockout", (req, res) => {
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = getDeviceInformation(req);
+        const deviceout = getDeviceInformation(req.body.deviceout);
 
         const updateQuery = `
         UPDATE master_attendance
@@ -245,8 +247,7 @@ router.post("/clockout", (req, res) => {
     });
 });
 
-
-router.post('/emplogs', (req, res) => {
+router.post("/emplogs", (req, res) => {
   try {
     let = employeeid = req.body.employeeid;
     let sql = `   SELECT
@@ -255,25 +256,229 @@ router.post('/emplogs', (req, res) => {
     TIME(al_logdatetime) AS logtime
     FROM attendance_logs
     WHERE al_employeeid = '${employeeid}'
-    order by al_logdatetime desc`;
+    order by al_logdatetime desc
+    limit 4`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: 'success',
-        data: result,
-      });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
       })
-    })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
+
+//#region notification api
+
+router.post("/viewnotif", (req, res) => {
+  try {
+    let notificationIdClicked = req.body.notificationIdClicked;
+    let sql = `select *
+    from master_notification
+    where mn_notificationid = '${notificationIdClicked}'`;
+
+    console.log("notif_id", notificationIdClicked);
+
+    mysql.Select(sql, "Master_Notification", (err, result) => {
+      if (err) console.error("Error : ", err);
+
+      console.log(result);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/generatenotification", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `call hrmis.GetNotification('${employeeid}')`;
+
+    mysql.StoredProcedure(sql, (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/loadnotif", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT * FROM master_notification
+    WHERE mn_employeeid = '${employeeid}'
+    AND mn_isDeleate = 'NO'
+    ORDER BY mn_date DESC`;
+
+    console.log();
+
+    mysql.Select(sql, "Master_Notification", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/readnotif", (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES',
+    mn_isRead = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/recievednotif", (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/deleatenotif", (req, res) => {
+  try {
+    let notificationId = req.body.notificationId;
+    let sql = `UPDATE master_notification SET 
+    mn_isReceived = 'YES',
+    mn_isRead = 'YES',
+    mn_isDeleate = 'YES'
+    WHERE mn_notificationid = '${notificationId}'`;
+
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/countunreadbadge", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `    
+    SELECT count(*) AS Unreadcount
+    FROM master_notification 
+    WHERE mn_employeeid = '${employeeid}'
+    AND mn_isRead = 'NO'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: result,
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//#endregion

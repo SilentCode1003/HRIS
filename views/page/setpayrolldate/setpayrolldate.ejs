@@ -1,0 +1,69 @@
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Payroll Date</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput'  type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#resignedmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTablepayrolldate">
+                <thead>
+                    <tr>
+                        <th>Payroll ID</th>
+                        <th>Payroll Name</th>
+                        <th>Payroll Cut Off</th>
+                        <th>Payroll Start Date</th>
+                        <th>Payroll End Date</th>
+                        <th>Payroll Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="resignedmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Generate Payroll Date</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select border-form-modal" id="payrollyear" name="payrollyear" aria-label="Floating label select example">
+                        </select>
+                        <label for="floatingSelectGrid">Select Year</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="payrollsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+ 

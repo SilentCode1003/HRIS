@@ -1,0 +1,224 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:Calibri;
+}
+
+.hrmislogin-form {
+    position: relative;
+    height: 100%;
+    z-index: 0;
+    padding: 10px;
+    justify-content: center;
+    display: grid;
+    align-items: center;
+
+    /* grid-template-rows: 1fr auto 1fr; */
+    background-color: rgb(250, 245, 245) !important;
+}
+
+.hrmislogin-container {
+    max-width: 95%;
+    /* margin: 0 auto; */
+}
+
+.hrmislogin-form h2 {
+    line-height: 75px;
+    margin-bottom: 5px;
+    font-size: 25px;
+    font-weight: 500;
+    color: white !important;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Times New Roman';
+}
+
+.hrmislogin-form .hrmislogin-main {
+    position: relative;
+    display: flex;
+    margin: 30px 0;
+}
+
+.hrmislogin-content {
+    flex-basis: 50%;
+    padding: 3em 3em;
+    box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 6px;
+    color: white !important;
+
+
+    background-image: url(/images/img/5lreg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+}
+
+.hrmislogin-form-img {
+    flex-basis: 50%;
+    background-image: url(/images/img/hrmislogin3.png);
+    background-position: center;
+    background-size: cover;
+    /* height:600px; */
+    width: 500px;
+    /* text-align: center; */
+    /* padding: 10px; */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 6px;
+    align-items: center;
+    display: grid;
+}
+
+
+.hrmislogin-form-img img {
+    position: relative;
+    height: 130px;
+    width: 130px;
+    padding: 10px;
+    background-color: rgba(128, 0, 0, 0.555) !important;
+    border-radius: 50%; 
+    margin-top: 10%;
+    z-index: 1;
+    /* border: 3.5px solid rgba(37, 37, 37, 0.418) !important; */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0 !important;
+}
+
+.hrmislogin-p {
+    position: relative;
+    margin-top: 20px;
+    padding: 3px;
+    font-size: 18px;
+    font-weight: bolder;
+    color: white !important;
+    font-family: 'Times New Roman';
+    font-style: italic;
+    opacity: 2;
+    background: rgba(128, 0, 0, 0.555) !important;
+    z-index: 1;
+}
+
+.hrmislogin-form form {
+    margin: 30px 0;
+}
+
+.hrmislogin-form input {
+    outline: none;
+    margin-bottom: 15px;
+    font-stretch: 16px;
+    color: #999;
+    text-align: left;
+    padding: 14px 20px;
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    border: none;
+    background: #f7fafc;
+    transition: 0.3s ease;
+}
+
+.hrmislogin-main {
+    border: 3px solid rgb(88, 11, 11) !important;
+    border-radius: 10px;
+}
+
+.hrmislogin-form .hrmislogin-btn-login {
+    margin-top: 5px;
+    font-size: 18px;
+    color: white !important;
+    width: 100%;
+    background: rgba(63, 2, 2, 0.911) !important;
+    border: 3px solid rgb(112, 7, 7) !important;
+    padding: 14px 15px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.hrmislogin-form .hrmislogin-btn-login:hover {
+    background-color: #d11212 !important;
+    transition: 0.5s ease;
+}
+
+p {
+    color: white !important;
+    font-size: 16px;
+    line-height: 25px;
+    opacity: 0.6;
+    text-align: center;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+
+
+p.account {
+    color: white !important;
+}
+
+p.account:hover {
+    color: white !important;
+    text-decoration: underline;
+}
+
+.hrmislogin-logo {
+    width: 55px;
+    height: 55px;
+}
+
+.btn-ojt-pw {
+    border: 1px solid white !important;
+    color: white !important;
+  }
+
+/* .overlay {
+    z-index: 0;
+} */
+
+
+@media (max-width: 767px) {
+
+    .hrmislogin-form .hrmislogin-main {
+        flex-direction: column;
+    }
+
+    .hrmislogin-form form {
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+
+    .hrmislogin-form-img {
+        border-radius: 0;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        order: 2;
+        width: 100%;
+    }
+
+    .hrmislogin-form-img img {
+        margin-top: 20%;
+    }
+
+    .hrmislogin-p {
+        font-size: smaller;
+        margin-top: 5px;
+    }
+
+    .hrmislogin-content {
+        order: 1;
+        border-radius: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+}

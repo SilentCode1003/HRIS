@@ -1,0 +1,288 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let status = "";
+    let name = "";
+
+    LoadTable();
+    
+    $(document).on("click", "#addBtn", function () {
+      let bank = $("#bank").val();
+
+      let message = "";
+
+      console.log(bank);
+
+      if (bank == "") {
+        message += "bank name, ";
+      }
+
+      if (message != "") {
+        showSweetAlert(
+          "Required",
+          `${message.slice(0, -2)} is required!`,
+          "info",
+          "OK"
+        );
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/bank/save",
+          data: {
+            bank: bank,
+          },
+          success: function (result) {
+            console.log(result);
+            if (result.msg == "success") {
+              LoadTable();
+              showSweetAlert("Success", "Added Successfully!", "success", "OK");
+            } else {
+              LoadTable();
+              showSweetAlert(
+                "Warning",
+                `${bank} ${result.msg}`,
+                "warning",
+                "OK"
+              );
+            }
+          },
+          error: function (error) {
+            showSweetAlert("Error", error, "error", "OK");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#idmodal").val(id);
+      $("#editModal").modal("show");
+      $("#bankmodal").val(name);
+    });
+
+    //Edit Update
+    $(document).on("click", "#saveBtn", function () {
+      let bank = $("#bankmodal").val();
+
+      var message = "";
+
+      if (bank == "") {
+        message += "Please fill up atleast 1 field";
+      }
+
+      if (message != "") {
+        warning("Required", `${message}`);
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/bank/edit",
+          data: {
+            bank: bank,
+            id: id,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              LoadTable();
+              $("#bankmodal").val("");
+              $("#editModal").modal("hide");
+
+              showSweetAlert("Saved", "Edit Successfully!", "success", "OK");
+            }
+
+            if (result.msg == "exist") {
+              showSweetAlert("Exist", `${bank} already exist!`, "info", "OK");
+            }
+          },
+          error: function (err) {
+            showSweetAlert("Error", err, "error", "OK");
+          },
+        });
+      }
+    });
+
+    // Function to get the value of an option by its display text
+    function getValueByText(fieldName, displayText) {
+      // Find the select element by its name attribute
+      var selectElement = document.querySelector(`select[name="${fieldName}"]`);
+
+      // Check if the select element exists
+      if (selectElement) {
+        // Loop through the options to find the one that matches the display text
+        for (var i = 0; i < selectElement.options.length; i++) {
+          if (selectElement.options[i].text === displayText) {
+            return selectElement.options[i].value;
+          }
+        }
+      } else {
+        console.log("Select element not found");
+      }
+      return null; // Return null if no matching option is found
+    }
+
+    $("#search").on("input", function () {
+      filterTableRows("#datatable", 6, "#search");
+    });
+
+    $("#data-table tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      id = dataRow[0];
+      name = dataRow[1];
+      status = dataRow[4];
+    });
+
+    //Status Update
+    $(document).on("click", "#activeBtn", function () {
+      console.log(id);
+      console.log(status);
+      $.ajax({
+        type: "PUT",
+        url: "/bank/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(id);
+      console.log(status);
+      $.ajax({
+        type: "PUT",
+        url: "/bank/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    });
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 8, "#search");
+    });
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/bank/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            let action = "";
+
+            $.each(data, (key, item) => {
+              if (item.status === "ACTIVE") {
+                action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-bs-target="#editModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+              } else if (item.status === "INACTIVE") {
+                action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+              }
+
+              finalData.push({
+                id: item.id,
+                name: item.name,
+                createdby: item.createdby,
+                createddate: item.createddate,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "name" },
+          { data: "createdby" },
+          { data: "createddate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(4)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "pending":
+              statusClass = "pending-status";
+              break;
+            case "cancelled":
+              statusClass = "cancelled-status";
+              break;
+            case "active":
+              statusClass = "approved-status";
+              break;
+            case "inactive":
+              statusClass = "rejected-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

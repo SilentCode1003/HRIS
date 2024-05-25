@@ -469,3 +469,53 @@ exports.convertExcelDatetime = (serialDate) => {
   const result = format(resultDate, "yyyy-MM-dd HH:mm:ss");
   return result;
 };
+
+exports.InsertStatement = (tablename, prefix, columns) => {
+  let cols = "";
+
+  columns.forEach((col) => {
+    cols += `${prefix}_${col},`;
+  });
+
+  cols = cols.slice(0, -1);
+
+  let statement = `INSERT INTO ${tablename}(${cols}) VALUES ?`;
+
+  return statement;
+};
+
+exports.UpdateStatement = (tablename, prefix, columns, arguments) => {
+  let cols = "";
+  let agrs = "";
+
+  columns.forEach((col) => {
+    cols += `${prefix}_${col} = ?,`;
+  });
+
+  arguments.forEach((arg) => {
+    agrs += `${prefix}_${arg} = ? AND `;
+  });
+
+  cols = cols.slice(0, -1);
+  agrs = agrs.slice(0, -5);
+
+  let statement = `UPDATE ${tablename} 
+  SET ${cols}
+  WHERE ${agrs}`;
+
+  return statement;
+};
+
+exports.SelectStatement = (str, data) => {
+  let statement = "";
+  let found = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "?") {
+      statement += `'${data[found]}'`;
+      found += 1;
+    } else {
+      statement += str[i];
+    }
+  }
+  return statement;
+};

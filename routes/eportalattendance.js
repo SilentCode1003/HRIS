@@ -8,7 +8,7 @@ var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalattendancelayout', { title: 'Express' });
-  Validator(req, res, "eportalattendancelayout");
+  Validator(req, res, "eportalattendancelayout", "eportalattendance");
 });
 
 module.exports = router;
@@ -21,7 +21,7 @@ router.get("/load", (req, res) => {
       CONCAT(me_lastname, " ", me_firstname) as employeeid,
       DATE_FORMAT(ma_attendancedate, '%W, %M %e, %Y') AS attendancedate,
       TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
-      TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
+      TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout, 
       ma_devicein as devicein,
       ma_deviceout as deviceout,
       CONCAT(
@@ -31,7 +31,7 @@ router.get("/load", (req, res) => {
       FROM master_attendance
       LEFT JOIN master_employee ON ma_employeeid = me_id
        where ma_employeeid = '${employeeid}'
-      ORDER BY ma_attendanceid DESC;`;
+      ORDER BY ma_attendanceid DESC`;
 
     mysql
       .mysqlQueryPromise(sql)

@@ -1,8 +1,8 @@
 var express = require("express");
 const { Encrypter } = require("./repository/crytography");
 const mysql = require('./repository/hrmisdb');
-const { OjtLogin } = require("./helper");
 const { error } = require("jquery");
+const { OjtLogin } = require("./repository/helper");
 var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -54,8 +54,6 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
                     req.session.departmentid = user.departmentid;
                     req.session.status = user.status;
                 });
-    
-                // console.log('result',user);
     
                 return res.json({
                     msg:'success',

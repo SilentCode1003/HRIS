@@ -1,0 +1,176 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Attendance Request Activity</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <!-- <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#assmodal">
+            <b>+ Add</b>
+          </button> -->
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableattendanceActivity">
+                <thead>
+                  <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Employee Name</th>
+                    <th>Attendance Date</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Total Hours</th>
+                    <th>Name Of Approver</th>
+                    <th>Approve/Reject Date</th>
+                    <th>Status</th>
+                    <th class="col-sm-1">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="attendanceactivitymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">COA Request Activity</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="employeename" name="employeename" disabled>
+                          <label for="floatingInput">Employee Name</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="attendancedate" name="attendancedate" disabled>
+                            <label for="floatingInput">Attendance Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="timein" name="timein" disabled 
+                            placeholder="Address">
+                            <label for="floatingInput">Time In</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="timeout" name="timeout" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Time Out</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="totalhours" name="totalhours" disabled>
+                            <label for="floatingInput">Total Hours</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="datetime-local" class="form-control border-form-modal" id="applieddate" name="applieddate" disabled>
+                          <label for="floatingInput">Applied Date</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="approver" name="approver" disabled>
+                          <label for="otnormal">Authorized Approver</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="datetime-local" class="form-control border-form-modal" id="actiondate" name="actiondate" disabled>
+                          <label for="otearly">Approve/Reject Date</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="coastatus" name="coastatus" disabled>
+                          <label for="otearly">Status</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="totalapproved" name="totalapproved" disabled>
+                            <label for="otearly">Total Approved</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="subgroupname" name="subgroupname"
+                              placeholder="Phone Number" disabled>
+                              <label for="floatingInput">Sub Group Name</label>
+                          </div>
+                      </div>
+                    </div>
+                   <br>
+                  <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <textarea type="text" class="form-control border-form-modal" id="coareason" name="coareason"
+                            placeholder="Reason" disabled></textarea>
+                          <label for="floatingInput">Reason</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="approvalstatus" name="approvalstatus"
+                            placeholder="Phone Number" disabled>
+                            <label for="floatingInput">Approval Status</label>
+                        </div>
+                    </div>
+                  </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>

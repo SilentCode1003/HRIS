@@ -1,0 +1,527 @@
+<script>
+  let payrolldate = "";
+  let employeeid = "<%= employeeid %>";
+  let globalSSSID = "";
+  let globalTINID = "";
+  let globalPhilHealthID = "";
+  let globalPagIbigID = "";
+  let globalEmployeeFullName = "";
+  let globalPositionName = "";
+  let globalDepartment = "";
+  let globalStartDate = "";
+  let globalEnddate = "";
+  let globalSalary = "";
+  let globalPer_Day = "";
+  let globalAllowances = "";
+  let globalApprovedOt = "";
+  let globalApprovedNightDiffOt = "";
+  let globalApprovedNormalOt = "";
+  let globalApprovedEarlyOt = "";
+  let globalRegular_Holiday_Compensation = "";
+  let globalSpecial_Holiday_Compensation = "";
+  let globalRegularHolidayOT = "";
+  let globalSpecialHolidayOT = "";
+  let globalOverall_Net_Pay = "";
+  let globalSSS = "";
+  let globalPagIbig = "";
+  let globalPhilHealth = "";
+  let globalTIN = "";
+  let globalAbsent_Deductions = "";
+  let globalHealth_Card = "";
+  let globalLate_Deductions = "";
+  let globalTotal_AllDeductions = "";
+  let globalTotal_Netpay = "";
+
+  $(document).ready(function () {
+    console.log("Initializee");
+
+    LoadTable();
+    function LoadTable() {
+      $("#dataTablesalaryhistory").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalsalary/getpayrolldate",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+              <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#payslipmodal"><i class="fas fa-fw fa-eye"></i></button>
+              `;
+
+              finalData.push({
+                daterange: item.daterange,
+                payrolldate: item.payrolldate,
+                cutoff: item.cutoff,
+                salary: formatToCurrency(item.salary),
+                totalhours: item.totalhours,
+                nightdiff: item.nightdiff,
+                normal_ot: item.normal_ot,
+                early_ot: item.early_ot,
+                total_late_time: item.total_late_time,
+                action: action,
+              });
+            });
+
+            console.log(finalData);
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "daterange" },
+          { data: "payrolldate" },
+          { data: "cutoff" },
+          { data: "salary" },
+          { data: "totalhours" },
+          { data: "nightdiff" },
+          { data: "normal_ot" },
+          { data: "early_ot" },
+          { data: "total_late_time" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    $("#dataTablesalaryhistory tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      payrolldate = dataRow[1];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/loadpayslipsummary",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log(existingData);
+            $.each(existingData[0], (key, item) => {
+              // $("#editpreview").attr(
+              //   "src",
+              //   "data:image/jpg;base64," + item.Image
+              // );
+              base64String = item.Image;
+              $("#employeename").text(item.EmployeeFullName);
+              $("#position").text(item.PositionName);
+              $("#department").text(item.Department);
+              $("#payrollrange").text(
+                formatDate(item.StartDate) + " To " + formatDate(item.Enddate)
+              );
+              $("#payrolldate").text(formatDate(item.PayrollDate));
+              $("#salary").text(formatToCurrency(item.Salary));
+              $("#dailyrate").text(formatToCurrency(item.Per_Day));
+              $("#allowances").text(formatToCurrency(item.Allowances));
+              $("#compensation").text(formatToCurrency(item.Compensation));
+              $("#deductions").text(formatToCurrency(item.Total_AllDeductions));
+              $("#totalnetpay").text(formatToCurrency(item.Total_Netpay));
+              $("#workdays").text(item.Work_Days);
+              $("#restday").text(item.Rest_Day);
+              $("#present").text(item.Total_gp_status);
+              $("#absent").text(item.Absent);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#nav-payslip-tab", function () {
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/loadpayslipsummary",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log(existingData);
+            $.each(existingData[0], (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.Image
+              );
+              base64String = item.Image;
+              globalSSSID = item.SSSID;
+              $("#payslipSSSid").text(globalSSSID);
+              globalTINID = item.TINID;
+              $("#payslipTINid").text(globalTINID);
+              globalPhilHealthID = item.PhilHealthID;
+              $("#payslipphilhealthid").text(globalPhilHealthID);
+              globalPagIbigID = item.PhilHealthID;
+              $("#payslipdeppagibigid").text(globalPagIbigID);
+              $("#payslipid").text(item.EmployeeId);
+              globalEmployeeFullName = item.EmployeeFullName;
+              $("#payslipname").text(item.EmployeeFullName);
+              $("#payslipempname").text(item.EmployeeFullName);
+              globalPositionName = item.PositionName;
+              $("#payslipposition").text(item.PositionName);
+              globalDepartment = item.PositionName;
+              $("#payslipdepartment").text(item.Department);
+              globalStartDate = item.StartDate;
+              globalEnddate = item.Enddate;
+              $("#paysliprange").text(
+                formatDate(item.StartDate) +
+                  "- TO - " +
+                  formatDate(item.Enddate)
+              );
+              $("#payslipdate").text(formatDate(item.PayrollDate));
+              globalSalary = item.Salary;
+              $("#payslipbasic").text(formatToCurrency(item.Salary));
+              globalPer_Day = item.Per_Day;
+              $("#payslipperday").text(formatToCurrency(item.Per_Day));
+              globalAllowances = item.Allowances;
+              $("#payslipallowances").text(formatToCurrency(item.Allowances));
+              globalApprovedOt = item.ApprovedOt;
+              $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
+              globalApprovedNightDiffOt = item.ApprovedNightDiffOt;
+              $("#payslipndpay").text(
+                formatToCurrency(item.ApprovedNightDiffOt)
+              );
+              globalApprovedNormalOt = item.ApprovedNormalOt;
+              $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
+              globalApprovedEarlyOt = item.ApprovedEarlyOt;
+              $("#payslipearlypay").text(
+                formatToCurrency(item.ApprovedEarlyOt)
+              );
+              globalRegular_Holiday_Compensation =
+                item.Regular_Holiday_Compensation;
+              $("#payslipregular").text(
+                formatToCurrency(item.Regular_Holiday_Compensation)
+              );
+              globalSpecial_Holiday_Compensation =
+                item.Special_Holiday_Compensation;
+              $("#payslipspecial").text(
+                formatToCurrency(item.Special_Holiday_Compensation)
+              );
+              globalRegularHolidayOT = item.RegularHolidayOT;
+              $("#payslipregularovertime").text(
+                formatToCurrency(item.RegularHolidayOT)
+              );
+              globalSpecialHolidayOT = item.SpecialHolidayOT;
+              $("#payslipspecialovertime").text(
+                formatToCurrency(item.SpecialHolidayOT)
+              );
+              globalOverall_Net_Pay = item.Overall_Net_Pay;
+              $("#paysliptotal").text(formatToCurrency(item.Overall_Net_Pay));
+              globalSSS = item.SSS;
+              $("#payslipsss").text(formatToCurrency(item.SSS));
+              globalPagIbig = item.PagIbig;
+              $("#payslippagibig").text(formatToCurrency(item.PagIbig));
+              globalPhilHealth = item.PhilHealth;
+              $("#paysliphdmf").text(formatToCurrency(item.PhilHealth));
+              globalTIN = item.TIN;
+              $("#paysliptin").text(formatToCurrency(item.TIN));
+              globalAbsent_Deductions = item.Absent_Deductions;
+              $("#payslipabsent").text(
+                formatToCurrency(item.Absent_Deductions)
+              );
+              globalHealth_Card = item.Health_Card;
+              $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
+              globalLate_Deductions = item.Late_Deductions;
+              $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
+              globalTotal_AllDeductions = item.Total_AllDeductions;
+              $("#paysliptotaldeductions").text(
+                formatToCurrency(item.Total_AllDeductions)
+              );
+              globalTotal_Netpay = item.Total_Netpay;
+              $("#paysliptotalnetpay").text(
+                formatToCurrency(globalTotal_Netpay)
+              );
+              $("#totalNetPayWords").text(
+                convertCurrencyToWords(item.Total_Netpay)
+              );
+
+              const currencyAmount = Total_Netpay;
+              console.log(convertCurrencyToWords(currencyAmount));
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#nav-date-tab", function () {
+      $(`#dataTablePayslip`).find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "/generatepayroll/loadpayslipdetailed",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData[0], (key, item) => {
+              $("#datename").text(item.EmployeeFullName);
+            });
+          } else {
+            swal("Error fetching");
+          }
+
+          var finalData = [];
+          var data = result.data;
+
+          if ($.fn.DataTable.isDataTable("#dataTablePayslip")) {
+            $("#dataTablePayslip").DataTable().destroy();
+          }
+          material_list_tbl = document.getElementById("dataTablePayslip");
+
+          console.log(data);
+
+          $.each(data[0], function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var DATE = row.insertCell(0);
+            var ATTENDANCE_STATUS = row.insertCell(1);
+            var CLOCK_IN = row.insertCell(2);
+            var CLOCK_OUT = row.insertCell(3);
+            var LATE_MINUTES = row.insertCell(4);
+            var LATE_HOURS = row.insertCell(5);
+            var EARLY_OT = row.insertCell(6);
+            var NIGHT_DIFF = row.insertCell(7);
+            var NORMAL_OT = row.insertCell(8);
+            var TOTAL_HOURS = row.insertCell(9);
+            var TOTAL_MINUTES = row.insertCell(10);
+
+            DATE.innerHTML = formatDate(item.gp_attendancedate);
+            ATTENDANCE_STATUS.innerHTML = item.Attendance_Status;
+            CLOCK_IN.innerHTML = item.TimeIn;
+            CLOCK_OUT.innerHTML = item.TimeOut;
+            LATE_MINUTES.innerHTML = item.Late_Minutes;
+            LATE_HOURS.innerHTML = item.Late_Hours;
+            EARLY_OT.innerHTML = item.EarlyOt;
+            NIGHT_DIFF.innerHTML = item.NightDiff;
+            NORMAL_OT.innerHTML = item.NormalOt;
+            TOTAL_HOURS.innerHTML = item.Total_Hours;
+            TOTAL_MINUTES.innerHTML = item.Total_Minutes;
+
+            console.log(ATTENDANCE_STATUS);
+
+            $.each(
+              [
+                DATE,
+                ATTENDANCE_STATUS,
+                CLOCK_IN,
+                CLOCK_OUT,
+                LATE_MINUTES,
+                LATE_HOURS,
+                EARLY_OT,
+                NIGHT_DIFF,
+                NORMAL_OT,
+                TOTAL_HOURS,
+                TOTAL_MINUTES,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $("#downloadpfd").click(function () {
+      console.log("hit");
+      $.ajax({
+        url: "/eportalsalary/generatepdf",
+        type: "POST",
+        data: {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+          globalSSSID: globalSSSID,
+          globalTINID: globalTINID,
+          globalPhilHealthID: globalPhilHealthID,
+          globalPagIbigID: globalPagIbigID,
+          globalEmployeeFullName: globalEmployeeFullName,
+          globalPositionName: globalPositionName,
+          globalDepartment: globalDepartment,
+          globalStartDate: globalStartDate,
+          globalEnddate: globalEnddate,
+          globalSalary: globalSalary,
+          globalPer_Day: globalPer_Day,
+          globalAllowances: globalAllowances,
+          globalApprovedOt: globalApprovedOt,
+          globalApprovedNightDiffOt: globalApprovedNightDiffOt,
+          globalApprovedNormalOt: globalApprovedNormalOt,
+          globalApprovedEarlyOt: globalApprovedEarlyOt,
+          globalRegular_Holiday_Compensation:
+            globalRegular_Holiday_Compensation,
+          globalSpecial_Holiday_Compensation:
+            globalSpecial_Holiday_Compensation,
+          globalRegularHolidayOT: globalRegularHolidayOT,
+          globalSpecialHolidayOT: globalSpecialHolidayOT,
+          globalOverall_Net_Pay: globalOverall_Net_Pay,
+          globalSSS: globalSSS,
+          globalPagIbig: globalPagIbig,
+          globalPhilHealth: globalPhilHealth,
+          globalTIN: globalTIN,
+          globalAbsent_Deductions: globalAbsent_Deductions,
+          globalHealth_Card: globalHealth_Card,
+          globalLate_Deductions: globalLate_Deductions,
+          globalTotal_AllDeductions: globalTotal_AllDeductions,
+          globalTotal_Netpay: globalTotal_Netpay,
+        },
+        dataType: "text",
+        success: function (data) {
+          const blob = b64toBlob(data, "application/pdf");
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `"${payrolldate}"_payslip.pdf`;
+          document.body.appendChild(link);
+          link.click();
+
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+          swal({
+            icon: "success",
+            title: "PDF Downloaded!",
+            text: "The PDF has been downloaded successfully.",
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error downloading PDF:", error);
+          swal("Error downloading PDF");
+        },
+      });
+    });
+
+    // $("#downloadpfd").click(function () {
+    //   console.log("hit");
+    //   $.ajax({
+    //     url: "/eportalsalary/generatepdf",
+    //     type: "POST",
+    //     data: {
+    //       employeeid: employeeid,
+    //       payrolldate: payrolldate,
+    //     },
+    //     dataType: "text",
+    //     success: function (data) {
+    //       const blob = b64toBlob(data, "application/pdf");
+    //       const link = document.createElement("a");
+    //       link.href = URL.createObjectURL(blob);
+    //       link.download = "preview.pdf";
+    //       document.body.appendChild(link);
+    //       link.click();
+
+    //       document.body.removeChild(link);
+    //       URL.revokeObjectURL(link.href);
+    //       swal({
+    //         icon: "success",
+    //         title: "PDF Downloaded!",
+    //         text: "The PDF has been downloaded successfully.",
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {
+    //       console.error("Error downloading PDF:", error);
+    //       swal("Error downloading PDF");
+    //     },
+    //   });
+    // });
+
+    // Helper function to convert base64 to Blob
+    function b64toBlob(b64Data, contentType = "", sliceSize = 512) {
+      const byteCharacters = atob(b64Data);
+      const byteArrays = [];
+
+      for (
+        let offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+
+      const blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    }
+
+    //#region function
+    // $(document).on("change", "#editemployeeprofile", function (e) {
+    //   const input = document.getElementById("editemployeeprofile");
+    //   const file = input.files[0];
+
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(file);
+    //   reader.onloadend = function () {
+    //     const preview = document.getElementById("editpreview");
+    //     preview.src = reader.result;
+    //   };
+    //   editimage();
+    // });
+
+    // function editimage() {
+    //   const input = document.getElementById("editemployeeprofile");
+    //   const file = input.files[0];
+
+    //   var reader = new FileReader();
+    //   console.log("next");
+
+    //   reader.onload = function () {
+    //     base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+    //     imageBase64Stringsep = base64String;
+
+    //     console.log(base64String);
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+    //#endregion
+  });
+</script>

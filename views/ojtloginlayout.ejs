@@ -1,17 +1,13 @@
 <head>
-    <title>LOGIN</title>
-    <%- include("ojtheader.ejs")%> 
+    <%- include("./components/ojtheader.ejs")%> 
 </head>
 
-<body>
+<body class="body-ojt">
 
                 <!-- Begin Page Content -->
-                <%- include("./ojtlogin/ojtlogin.ejs")%>
+<%- include("./page/ojtlogin/ojtlogin.ejs")%>
                 <!-- /.container-fluid -->
-    <%- include("ojtglobalscript.ejs")%>
-    <%- include("./ojtlogin/ojtloginscript.ejs")%>
+    <%- include("./components/ojtglobalscript.ejs")%>
+    <%- include("./page/ojtlogin/ojtloginscript.ejs")%>
 </body>
-<style>
-    
-</style>
 </html>

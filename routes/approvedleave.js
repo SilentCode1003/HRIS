@@ -1,40 +1,52 @@
-const mysql = require('./repository/hrmisdb');
+const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
-var express = require('express');
-const { Validator } = require('./controller/middleware');
+var express = require("express");
+const { Validator } = require("./controller/middleware");
 var router = express.Router();
 //const currentDate = moment();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get("/", function (req, res, next) {
   //res.render('approvedleavelayout', { title: 'Express' });
-  Validator(req, res, 'approvedleavelayout');
+  Validator(req, res, "approvedleavelayout", "approvedleave");
 });
 
 module.exports = router;
 
-
-router.get('/load', (req, res,) => {
+router.get("/load", (req, res) => {
   try {
-    let sql = `select 
-    concat(me_firstname,'',me_lastname) as l_employeeid,
+    let sql = `SELECT DISTINCT
+    l_leaveid,
+    CONCAT(me_lastname, ' ', me_firstname) AS l_employeeid,
+    ml_leavetype as l_leavetype,
     l_leavestartdate,
     l_leaveenddate,
-    l_leavetype,
     l_leavereason,
-    l_leaveapplieddate
-    from leaves
-    left join master_employee on leaves.l_employeeid = me_id
+    l_leaveapplieddate,
+    l_image,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_year,
+    l_leavestatus,
+    l_leaveduration
+    FROM
+    leaves 
+    INNER JOIN
+    master_leaves  ON l_leavetype = ml_id
+    INNER JOIN
+    master_employee  ON l_employeeid = me_id
     where l_leavestatus = 'Approved'`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
     console.log(error);
   }
-})
+});

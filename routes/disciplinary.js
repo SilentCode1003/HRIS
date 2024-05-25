@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render("disciplinarylayout", { title: "Express" });
-  Validator(req, res, 'disciplinarylayout');
+  Validator(req, res, "disciplinarylayout", "disciplinary");
 });
 
 module.exports = router;
@@ -31,7 +31,6 @@ router.get("/load", (req, res) => {
     LEFT JOIN master_offense ON offense_disciplinary_actions.oda_offenseid = mo_offenseid
     LEFT JOIN master_disciplinary_action ON offense_disciplinary_actions.oda_actionid = mda_actionid
     LEFT JOIN master_violation ON offense_disciplinary_actions.oda_violation = mv_violationid`;
-
 
     mysql.Select(sql, "Offense_Disciplinary_Actions", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -167,7 +166,7 @@ router.post("/getoffensename", (req, res) => {
   }
 });
 
-router.post('/getoffenseaction',(req, res) => {
+router.post("/getoffenseaction", (req, res) => {
   try {
     let actioncode = req.body.actioncode;
     let offenceid = req.body.offenceid;
@@ -179,7 +178,8 @@ router.post('/getoffenseaction',(req, res) => {
     where mda_actioncode like '${actioncode[0]}%'
     AND mo_offensename = '${offenceid}'`;
 
-    mysql.mysqlQueryPromise(sql)
+    mysql
+      .mysqlQueryPromise(sql)
       .then((result) => {
         console.log(result);
 
@@ -202,21 +202,20 @@ router.post('/getoffenseaction',(req, res) => {
   }
 });
 
-
-router.post('/save', async (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let offenseid = req.body.offenseid; 
+    let offenseid = req.body.offenseid;
     let actionid = req.body.actionid;
     let violation = req.body.violation;
     let date = req.body.date;
-    let createby = req.session.fullname; 
-    let createdate = currentDate.format('YYYY-MM-DD');
-    let status = 'Active';
+    let createby = req.session.fullname;
+    let createdate = currentDate.format("YYYY-MM-DD");
+    let status = "Active";
     let data = [];
-    console.log('Received department name:', offenseid);
-    console.log('Received department name:', actionid);
-    console.log('Received department name:', violation);
+    console.log("Received department name:", offenseid);
+    console.log("Received department name:", actionid);
+    console.log("Received department name:", violation);
 
     const offenseIDquery = `select mo_offenseid from master_offense where mo_offensename ='${offenseid}'`;
 
@@ -225,68 +224,77 @@ router.post('/save', async (req, res) => {
       if (offenseidresult && offenseidresult.length > 0) {
         const offenseID = offenseidresult[0].mo_offenseid;
 
-      const actionIDquery = `select mda_actionid from master_disciplinary_action where mda_actioncode = '${actionid}'`;
-
-      try {
-        const actionidresult = await mysql.mysqlQueryPromise(actionIDquery);
-        if (actionidresult && actionidresult.length > 0) {
-          const actionID = actionidresult[0].mda_actionid;
-        
-
-        const violationIDquery = `select mv_violationid from master_violation WHERE mv_description = '${violation}'`;
+        const actionIDquery = `select mda_actionid from master_disciplinary_action where mda_actioncode = '${actionid}'`;
 
         try {
-          const violationidresult = await mysql.mysqlQueryPromise(violationIDquery);
-          if (violationidresult && violationidresult.length > 0) {
-            const violationID = violationidresult[0].mv_violationid;
+          const actionidresult = await mysql.mysqlQueryPromise(actionIDquery);
+          if (actionidresult && actionidresult.length > 0) {
+            const actionID = actionidresult[0].mda_actionid;
 
-          data.push([
-            employeeid, offenseID, actionID, violationID, date, createby, createdate, status
-          ]);
+            const violationIDquery = `select mv_violationid from master_violation WHERE mv_description = '${violation}'`;
 
-          mysql.InsertTable('offense_disciplinary_actions', data, (inserterr, insertresult) => {
-            if (inserterr) {
-              console.error('error inserting record: ', inserterr);
-              res.json({ msg: 'insert failed'});
-            } else {
-              console.log(insertresult);
-              res.json({msg: 'success'});
+            try {
+              const violationidresult = await mysql.mysqlQueryPromise(
+                violationIDquery
+              );
+              if (violationidresult && violationidresult.length > 0) {
+                const violationID = violationidresult[0].mv_violationid;
+
+                data.push([
+                  employeeid,
+                  offenseID,
+                  actionID,
+                  violationID,
+                  date,
+                  createby,
+                  createdate,
+                  status,
+                ]);
+
+                mysql.InsertTable(
+                  "offense_disciplinary_actions",
+                  data,
+                  (inserterr, insertresult) => {
+                    if (inserterr) {
+                      console.error("error inserting record: ", inserterr);
+                      res.json({ msg: "insert failed" });
+                    } else {
+                      console.log(insertresult);
+                      res.json({ msg: "success" });
+                    }
+                  }
+                );
+              } else {
+                console.error("Action ID not found");
+                res.json({ msg: "violation_id_not_found" });
+              }
+            } catch (violationerror) {
+              console.error("error inserting: ", violationerror);
             }
-          });
-        } else {
-          console.error('Action ID not found');
-          res.json({ msg: 'violation_id_not_found' });
-        }
-        } catch (violationerror) {
-          console.error('error inserting: ',violationerror);
-          
+          } else {
+            console.error("Action ID not found");
+            res.json({ msg: "action_id_not_found" });
+          }
+        } catch (actionerror) {
+          console.error("error inserting: ", actionerror);
+          res.json({ msg: "error" });
         }
       } else {
-        console.error('Action ID not found');
-        res.json({ msg: 'action_id_not_found' });
+        console.error("Action ID not found");
+        res.json({ msg: "offense_id_not_found" });
       }
-        
-      } catch (actionerror) {
-        console.error('error inserting: ',actionerror);
-        res.json({ msg: 'error'});
-        
-      }
-    } else {
-      console.error('Action ID not found');
-      res.json({ msg: 'offense_id_not_found' });
-    }
     } catch (offenseerror) {
-      console.error('error inserting record: ',offenseerror);
-      res.json({ msg: 'error'});
+      console.error("error inserting record: ", offenseerror);
+      res.json({ msg: "error" });
     }
   } catch (error) {
     console.log(error);
-    console.error('Error: ', error);
-    res.json({ msg: 'error' });
+    console.error("Error: ", error);
+    res.json({ msg: "error" });
   }
 });
 
-router.post('/getdisciplinary', (req ,res) => {
+router.post("/getdisciplinary", (req, res) => {
   try {
     let disciplinaryid = req.body.disciplinaryid;
     let sql = `        
@@ -309,26 +317,24 @@ router.post('/getdisciplinary', (req ,res) => {
 
     console.log(sql);
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg: "success",
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "success",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg: 'success',
-        data : error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
-

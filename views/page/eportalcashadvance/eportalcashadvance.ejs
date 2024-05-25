@@ -1,0 +1,130 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Cash Advance History</h1> -->
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-cashad">
+    <h3>Cash Advance History</h3>
+    <button type="button" id="applybtn" class="btn btn-eportal-color col-sm-2 col-add" data-bs-toggle="modal" data-bs-target="#reqcamodal">
+        <b>Apply Cash Advance</b>
+      </button>
+  </div>
+  <div class="card-body cbody-cashad">
+  <table class="table table-light table-striped" id="dataTableapplycashadvance">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Request Date</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Purpose</th>
+        <!-- <th scope="col">Remaining Amount</th> -->
+        <th scope="col">Status</th>
+        <th scope="col">Approvel Date</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <!-- <tbody>
+      <tr>
+        <td data-label="ID">1</td>
+        <td data-label="Employee ID">123</td>
+        <td data-label="Salary">2023-01-01</td>
+        <td data-label="Allowances">5,000</td>
+        <td data-label="Deduction">Loan</td>
+        <td data-label="Payment Date">2023-01-01</td>
+        <td data-label="Remaining Amount">1000</td>
+        <td data-label="Status">Paid</td>
+        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-eye"></i></button></td>
+    </tr>
+    <tr>
+        <td data-label="ID">1</td>
+        <td data-label="Employee ID">123</td>
+        <td data-label="Salary">2023-01-01</td>
+        <td data-label="Allowances">5,000</td>
+        <td data-label="Deduction">Loan</td>
+        <td data-label="Payment Date">2023-01-01</td>
+        <td data-label="Remaining Amount">1000</td>
+        <td data-label="Status">Paid</td>
+        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-print"></i></button></td>
+    </tr>
+    <tr>
+        <td data-label="ID">1</td>
+        <td data-label="Employee ID">123</td>
+        <td data-label="Salary">2023-01-01</td>
+        <td data-label="Allowances">5,000</td>
+        <td data-label="Deduction">Loan</td>
+        <td data-label="Payment Date">2023-01-01</td>
+        <td data-label="Remaining Amount">1000</td>
+        <td data-label="Status">Paid</td>
+        <td data-label="Action"><button id="edit-btn" class="btn text-danger" name="edit-btn" data-bs-toggle="modal" data-bs-target="#viewmodal"><i class="fas fa-fw fa-print"></i></button></td>
+    </tr>
+    </tbody> -->
+  </table>
+        </div>
+      </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="reqcamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Cash Advance</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <form>
+                  <div class="row g-3">
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="reqcaamount" class="form-label">Amount</label>
+                        <input type="number" class="form-control border-form-modal" id="reqcaamount" name="reqcaamount">
+                      </div>
+                      <div class="col">
+                        <label for="reqcapurpose" class="form-label">Purpose</label>
+                        <input type="text" class="form-control border-form-modal" id="reqcapurpose" name="reqcapurpose">
+                      </div>
+                      </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="reqcasave">Save</button>
+            </div>
+          </div>
+        </div>
+        <!--cancel modal-->
+        <div class="modal fade" id="reqcacancelmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" id="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Cash Advance</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <form>
+                  <div class="row g-3">
+                    <div class="row g-3">
+                      <div class="col">
+                        <label for="editreqcaamount" class="form-label">Amount</label>
+                        <input type="number" class="form-control border-form-modal" id="editreqcaamount" name="editreqcaamount" min="0" max="5000">
+                      </div>                    
+                      <div class="col">
+                        <label for="editreqcapurpose" class="form-label">Purpose</label>
+                        <input type="text" class="form-control border-form-modal" id="editreqcapurpose" name="editreqcapurpose">
+                      </div>
+                      <div class="col">
+                        <label for="pendingcaaction" class="form-label">Action</label>
+                        <select class="form-select border-form-modal" id="pendingcaaction" name="pendingcaaction">
+                          <option value="Cancel">Cancel</option>
+                        </select>
+                      </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="editreqcasave">Save</button>
+            </div>
+          </div>
+        </div>

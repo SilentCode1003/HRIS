@@ -3,6 +3,21 @@ var roleacess = [
     role: "Admin",
     routes: [
       {
+        layout: "employeeprofilelayout",
+      },
+      {
+        layout: "otherdeductionsIDlayout",
+      },
+      {
+        layout: "otherdeductionslayout",
+      },
+      {
+        layout: "appsdetailslayout",
+      },
+      {
+        layout: "otapprovallayout",
+      },
+      {
         layout: "attendanceojtlayout",
       },
       {
@@ -120,9 +135,6 @@ var roleacess = [
         layout: "salaryhistorylayout",
       },
       {
-        layout: "timelogslayout",
-      },
-      {
         layout: "generatepayrolllayout",
       },
       {
@@ -130,6 +142,39 @@ var roleacess = [
       },
       {
         layout: "apprenticelayout",
+      },
+      {
+        layout: "attendancerequestlayout",
+      },
+      {
+        layout: "setpayrolldatelayout",
+      },
+      {
+        layout: "teamleaduserslayout",
+      },
+      {
+        layout: "shiftsettingslayout",
+      },
+      {
+        layout: "empbackgroundlayout",
+      },
+      {
+        layout: "leavesettingslayout",
+      },
+      {
+        layout: "approval_stage_settingslayout",
+      },
+      {
+        layout: "request_approval_settingslayout",
+      },
+      {
+        layout: "subgrouplayout",
+      },
+      {
+        layout: "attendance_request_activitylayout",
+      },
+      {
+        layout: "leave_request_activitylayout",
       },
     ],
   },
@@ -166,6 +211,12 @@ var roleacess = [
       {
         layout: "eportalsalarylayout",
       },
+      {
+        layout: "eportalrequestattendancelayout",
+      },
+      {
+        layout: "eportalrequestovertimelayout",
+      },
     ],
   },
   {
@@ -182,6 +233,91 @@ var roleacess = [
       },
       {
         layout: "ojtprofilelayout",
+      },
+    ],
+  },
+  {
+    role: "Super Visor",
+    routes: [
+      {
+        layout: "teamleadindexlayout",
+      },
+      {
+        layout: "teamleademployeelayout",
+      },
+      {
+        layout: "teamleadcoalayout",
+      },
+      {
+        layout: "teamleadovertimelayout",
+      },
+      {
+        layout: "teamleadleavelayout",
+      },
+      {
+        layout: "teamleadpendingcoalayout",
+      },
+      {
+        layout: "teamleadapprovedcoalayout",
+      },
+      {
+        layout: "teamleadappliedovertimelayout",
+      },
+      {
+        layout: "teamleadapprovedovertimelayout",
+      },
+      {
+        layout: "teamleadpendingleavelayout",
+      },
+      {
+        layout: "teamleadapprovedleavelayout",
+      },
+      {
+        layout: "teamleadgeofencelayout",
+      },
+    ],
+  },
+  {
+    role: "Team Leader",
+    routes: [
+      {
+        layout: "teamleadindexlayout",
+      },
+      {
+        layout: "teamleademployeelayout",
+      },
+      {
+        layout: "teamleadcoalayout",
+      },
+      {
+        layout: "teamleadovertimelayout",
+      },
+      {
+        layout: "teamleadleavelayout",
+      },
+      {
+        layout: "teamleadpendingcoalayout",
+      },
+      {
+        layout: "teamleadapprovedcoalayout",
+      },
+      {
+        layout: "teamleadappliedovertimelayout",
+      },
+      {
+        layout: "teamleadapprovedovertimelayout",
+      },
+      {
+        layout: "teamleadpendingleavelayout",
+      },
+      {
+        layout: "teamleadapprovedleavelayout",
+      },
+      {
+        layout: "teamleadgeofencelayout",
+      },
+      {
+        layout: "teamleadattendancelayout",
       },
     ],
   },
@@ -276,13 +412,68 @@ var roleacess = [
   },
 ];
 
-exports.Validator = function (req, res, layout) {
-  // console.log(layout);
+// exports.Validator = function (req, res, layout) {
+//   let ismatch = false;
+//   let counter = 0;
 
+//   console.log("Access Type:", req.session.accesstype);
+//   console.log("Layout:", layout);
+
+//   if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
+//     console.log(req.session.accesstype);
+//     console.log("hit");
+//     return res.render(`${layout}`, {
+//       image: req.session.image,
+//       employeeid: req.session.employeeid,
+//       fullname: req.session.fullname,
+//       accesstype: req.session.accesstype,
+//       geofenceid: req.session.geofenceid,
+//       departmentid: req.session.departmentid,
+//     });
+//   } else {
+//     roleacess.forEach((key, item) => {
+//       counter += 1;
+//       var routes = key.routes;
+
+//       routes.forEach((value, index) => {
+//         if (key.role == req.session.accesstype && value.layout == layout) {
+//           console.log("Role: ", req.session.accesstype, "Layout: ", layout);
+//           ismatch = true;
+
+//           return res.render(`${layout}`, {
+//             image: req.session.image,
+//             employeeid: req.session.employeeid,
+//             fullname: req.session.fullname,
+//             accesstype: req.session.accesstype,
+//             departmentid: req.session.departmentid,
+//             departmentname: req.session.departmentname,
+//             position: req.session.position,
+//             geofenceid: req.session.geofenceid,
+//           });
+//         }
+//       });
+
+//       if (counter == roleacess.length) {
+//         if (!ismatch) {
+//           res.redirect("/login");
+//         }
+//       }
+//     });
+//   }
+// };
+
+exports.ValidatorForTeamLead = function (req, res, layout) {
   let ismatch = false;
   let counter = 0;
-  // //console.log(roleacess.length)
-  if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
+
+  console.log("Access Type:", req.session.accesstype);
+  console.log("Layout:", layout);
+
+  if (
+    req.session.accesstype == "Team Leader" ||
+    ("Super Visor" && layout == "teamleadindexlayout")
+  ) {
+    console.log(req.session.accesstype);
     console.log("hit");
     return res.render(`${layout}`, {
       image: req.session.image,
@@ -291,6 +482,8 @@ exports.Validator = function (req, res, layout) {
       accesstype: req.session.accesstype,
       geofenceid: req.session.geofenceid,
       departmentid: req.session.departmentid,
+      subgroupid: req.session.subgroupid,
+      accesstypeid: req.session.accesstypeid,
     });
   } else {
     roleacess.forEach((key, item) => {
@@ -298,8 +491,6 @@ exports.Validator = function (req, res, layout) {
       var routes = key.routes;
 
       routes.forEach((value, index) => {
-        // console.log(`${key.role} - ${value.layout}`);
-
         if (key.role == req.session.accesstype && value.layout == layout) {
           console.log("Role: ", req.session.accesstype, "Layout: ", layout);
           ismatch = true;
@@ -309,10 +500,12 @@ exports.Validator = function (req, res, layout) {
             employeeid: req.session.employeeid,
             fullname: req.session.fullname,
             accesstype: req.session.accesstype,
-            department: req.session.department,
+            departmentid: req.session.departmentid,
             departmentname: req.session.departmentname,
             position: req.session.position,
             geofenceid: req.session.geofenceid,
+            subgroupid: req.session.subgroupid,
+            accesstypeid: req.session.accesstypeid,
           });
         }
       });
@@ -371,5 +564,52 @@ exports.ValidatorforOjt = function (req, res, layout) {
         }
       }
     });
+  }
+};
+
+const { SelectStatement } = require("../repository/customhelper");
+const { Select } = require("../repository/dbconnect");
+const { JsonErrorResponse } = require("../repository/response");
+
+exports.Validator = function (req, res, layout, route) {
+  let sql = SelectStatement(
+    "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
+    [req.session.accessid, layout, route]
+  );
+
+  console.log(sql);
+
+  Select(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.json(JsonErrorResponse(err));
+    }
+
+    console.log(result);
+
+    if (result != 0) {
+      return res.render(`${layout}`, {
+        // employeeid: req.session.employeeid,
+        // accessid: req.session.accessid,
+        // departmentid: req.session.departmentid,
+        // positionid: req.session.positionid,
+        image: req.session.image,
+        employeeid: req.session.employeeid,
+        fullname: req.session.fullname,
+        accesstype: req.session.accesstype,
+        geofenceid: req.session.geofenceid,
+        departmentid: req.session.departmentid,
+      });
+    } else {
+      res.redirect("/login");
+    }
+  });
+};
+
+exports.EnsureLogin = function (req, res, next) {
+  if (!req.session.accessid) {
+    res.redirect("/login");
+  } else {
+    next();
   }
 };

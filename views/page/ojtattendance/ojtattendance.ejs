@@ -1,0 +1,82 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title"></h1> -->
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header cheader-attendance">
+        <h3>Attendance</h3>
+        <div class="row g-2">
+            <div class="col">
+                <input id='myInput' type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+                    <b>Export Attendance</b>
+                 </button>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body cbody-attendance">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableattendance">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Device In</th>
+                        <th>Device Out</th>
+                        <th>Total Hours</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!--MODAL-->
+
+<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <div>
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
+                       Logs
+                    </h1>
+                </div>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-bordered table-light" id="dataTableattendancelogs">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Log Type</th>
+                                <th>Latitude</th>
+                                <th>Lonitude</th>
+                                <th>Device</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Training</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput'  type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#trainingmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTabletraining">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th class="col-25">Training Name</th>
+                        <th class="col-25">Employee Name</th>
+                        <th>Date Started</th>
+                        <th>Date Finished</th>
+                        <th>Location</th>
+                        <th class="col-sm-1">Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="trainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h1 class="modal-title" id="exampleModalLabel">Add Training</h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input class="form-select border-form-modal" id="trainingname" name="trainingname" aria-label="Floating label select example">
+                        <label for="floatingSelectGrid">Training Name</label>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="trainingemployeename" name="trainingemployeename" aria-label="Floating label select example">
+                              <option selected>Choose....</option>
+                            </select>
+                            <label for="floatingSelectGrid">Employee name</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                      <div class="form-floating">
+                      <input type="date" class="form-control border-form-modal" id="trainingdatestarted" name="trainingdatestarted">
+                      <label for="floatingInput">Date Started</label>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="col">
+                    <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="trainingdatefinished" name="trainingdatefinished">
+                    <label for="floatingInput">Date Finished</label>
+                    </div>
+                </div>
+                <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <input class="form-select border-form-modal" id="traininglocation" name="traininglocation" aria-label="Floating label select example">
+                            <label for="floatingSelectGrid">Location</label>
+                          </div>
+                    </div>
+                    <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="trainingsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="edittrainingmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal-body">
+          <form>
+            <!-- Training Name Select -->
+            <div class="col">
+              <div class="form-floating">
+                <input class="form-select border-form-modal" id="edittrainingname" name="edittrainingname" aria-label="Floating label select example">
+                <label for="edittrainingname">Training Name</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Employee Name Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="edittrainingemployeename" name="edittrainingemployeename" aria-label="Floating label select example">
+                  <option selected>Choose....</option>
+                  <!-- Employee name options should be dynamically loaded here -->
+                </select>
+                <label for="edittrainingemployeename">Employee name</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Date Started Input -->
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-control border-form-modal" id="edittrainingdatestarted" name="edittrainingdatestarted">
+                <label for="edittrainingdatestarted">Date Started</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Date Finished Input -->
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-control border-form-modal" id="edittrainingdatefinished" name="edittrainingdatefinished">
+                <label for="edittrainingdatefinished">Date Finished</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Location Select -->
+            <div class="col">
+              <div class="form-floating">
+                <input class="form-select border-form-modal" id="edittraininglocation" name="edittraininglocation" aria-label="Floating label select example">
+                <label for="edittraininglocation">Location</label>
+              </div>
+            </div>
+            <br>
+            
+            <!-- Status Select -->
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="edittrainingstatus" name="edittrainingstatus" aria-label="Floating label select example">
+                  <option selected>Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                <label for="edittrainingstatus">Status</label>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="edittrainingsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

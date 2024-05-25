@@ -1,0 +1,395 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Leave History</h1> -->
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-requestleave">
+    <h3>My Leaves</h3>
+    <div class="row g-2">
+      <div class="col-md-6">
+        <div class="input-group input-group-sm mb-3">
+          <label for="pendingleavename" class="form-label fw-bold text-white" style="margin-right: 5%;">Leave Type :</label>
+        <select class="form-select payslipemp" id="leavetypeheader">
+          <option selected disabled>Select Leave Type First</option> 
+           
+        </select>
+        </div>
+      </div>
+      <div class="col" style="margin-left: 5%;">
+        <div>
+          <label class="fw-bold text-white">Leave Total Per Year : </label>
+          <small class="payslipemp text-white" id="leaveperyearheader"></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-2">
+      <div class="col-md-6"></div>
+        <div class="col" style="margin-left: 5%;">
+          <div>
+            <span class="fw-bold text-white">Leave Credits Unused : </span>
+            <small class="ms-3 payslipemp text-white" id="Unusedleaveheader"></small>
+          </div>
+        </div>
+    </div>
+
+    <div class="row g-2">
+      <div class="col-md-6"></div>
+      <div class="col" style="margin-left: 5%;">
+        <div>
+          <span class="fw-bold text-white">Leave Credits Used : </span>
+          <small class="ms-3 payslipemp text-white" id="UsedleaveHeader"></small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row g-2">
+      <div class="col"></div>
+      <div class="col-sm-2">
+        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
+          <h6>Apply Leave</h6>
+        </button>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+<div class="col">
+  <div class="card">
+      <div class="card-header ch-generate">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="true"><b>Pending</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Approved</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Rejected</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Cancelled</b>
+                  </button>
+              </div>
+          </nav>
+      </div>
+      <!-- Leave  Request -->
+      <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="row">
+                      <div class="col-xl-12 col-lg-12">
+                          <div class="card shadow mb-4">
+                              <div class="card-header ch-coop">
+                                <table class="table table-light table-bordered" id="dataTableapplyleave">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Date Started</th>
+                                      <th scope="col">Date Finished</th>
+                                      <th scope="col">Leave Type</th>
+                                      <th scope="col">Reason</th>
+                                      <th scope="col">Applied Date</th>
+                                      <th scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                          <thead>
+                              <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date Started</th>
+                                <th scope="col">Date Finished</th>
+                                <th scope="col">Leave Type</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Applied Date</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+ <!-- Modal -->
+<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Apply Leave</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+            <div class="row g-3">
+              <div class="col">
+                <label for="leavetype" class="form-label">Leave Type</label>
+                <select class="form-select border-form-modal" id="leavetype" name="leavetype">
+                  <option selected disabled>SELECT LEAVE</option> 
+                </select>
+              </div>
+              <div class="col">
+                <label for="editemail" class="form-label">Start Leave Date</label>
+                <input type="date" class="form-control border-form-modal" id="startldate" name="startldate">
+              </div>
+              <div class="col">
+                <label for="editpassword" class="form-label">End Leave Date</label>
+                <input type="date" class="form-control border-form-modal" id="endldate" name="endldate">
+              </div>
+            </div>
+            <div class="row g-3">
+                <div class="col">
+                  <label for="message-text" class="col-form-label">Reason:</label>
+                  <textarea class="form-control border-form-modal" id="leavereason" name="leavereason"></textarea>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col">
+                  <label for="message-text" class="col-form-label">Total Duration Days</label>
+                  <input type="text" class="form-control border-form-modal" id="durationdays" name="durationdays" disabled>
+                </div>
+                <div class="col">
+                  <label for="message-text" class="col-form-label">Total Unused Leave</label>
+                  <input type="text" class="form-control border-form-modal" id="unusedleave" name="unpaiddays" disabled>
+                </div>
+            </div>
+            <div class="row g-3">
+              <div class="col">
+                <label for="message-text" class="col-form-label">Total Paid Days</label>
+                <input type="text" class="form-control border-form-modal" id="paiddays" name="paiddays" disabled>
+              </div>
+              <div class="col">
+                <label for="message-text" class="col-form-label">Total Unpaid Days</label>
+                <input type="text" class="form-control border-form-modal" id="unpaiddays" name="unpaiddays" disabled>
+              </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label class="form-label" for="EditFile"></label>
+                <input type="file" name="uploadimage" id="uploadimage" class="form-control border-form-modal"
+                accept="image/*">
+              </div>
+              <div class="col">
+                <div class="text-center">
+                  <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                    class="rounded border-form-modal" alt="placeholder">
+                </div>
+              </div>
+              <div class="col">
+                <label for="timeout" class="form-label">Sub Group</label>
+                <select type="text" class="form-control border-form-modal" id="leavesubgroup" name="leavesubgroup">
+                </select>
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="pendingleavesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--EDIT MODAL -->
+<div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Edit This Leave ?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <div class="col">
+                        <div class="col g-6">
+                          <input type="file" name="edituploadimage" id="edituploadimage"
+                            class="form-control border-form-modal" accept="image/*">
+                        </div>
+                      </div>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="editleavetype" name="editleavetype" disabled>
+                            <label for="floatingInput">Leave Type</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="editleavestartdate" name="editleavestartdate" 
+                            placeholder="Address">
+                            <label for="floatingInput">Leave Start Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="editleaveenddate" name="editleaveenddate" 
+                            placeholder="Address">
+                            <label for="floatingInput">Leave End Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="editleaveduration" name="editleaveduration" disabled>
+                            <label for="floatingInput">Leave Duration</label>
+                          </div>
+                        </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="date" class="form-control border-form-modal" id="editleaveapplieddate" name="editleaveapplieddate" 
+                          placeholder="Address">
+                          <label for="floatingInput">Leave Applied Date</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="editleavedays" name="editleavedays" disabled>
+                          <label for="floatingInput">Total Leave Days</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="editunusedleave" name="editunusedleave" disabled>
+                          <label for="otnormal">Total Unused Leave</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="editusedleave" name="editusedleave" disabled>
+                          <label for="otearly">Total Used Leave</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="editpaiddays" name="editpaiddays" disabled>
+                            <label for="otearly">Paid Days</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="editunpaiddays" name="editunpaiddays" disabled>
+                            <label for="otearly">Unpaid Days</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="number" class="form-control border-form-modal" id="editleaveyear" name="editleaveyear"
+                              placeholder="Phone Number" disabled>
+                              <label for="floatingInput">Leave Year</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editleavestatus" name="editleavestatus"
+                            aria-label="Floating label select example">
+                            <option value="Cancel">Cancel</option>
+                            <option value="Pending">Pending</option>
+                          </select>
+                            <label for="floatingInput">Status</label>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <textarea type="text" class="form-control border-form-modal" id="editleavereason" name="editleavereason"
+                            placeholder="Reason"></textarea>
+                          <label for="floatingInput">Reason</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="editleavesavebutton">Save</button>
+          </div>
+      </div>
+  </div>
+</div>

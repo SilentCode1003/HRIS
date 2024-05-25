@@ -3,7 +3,7 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Encrypter } = require("./repository/crytography");
-const { generateUsernameAndPasswordforOjt } = require("./helper");
+const { generateUsernameAndPasswordforOjt } = require("./repository/helper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -13,7 +13,7 @@ const currentMonth = moment().format("MM");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtlayout', { title: 'Express' });
-  Validator(req, res, "ojtlayout");
+  Validator(req, res, "ojtlayout", "ojt");
 });
 
 module.exports = router;
@@ -36,8 +36,41 @@ router.get("/load", (req, res) => {
     LEFT JOIN
         ojt_attendance oa ON mo.mo_id = oa.oa_ojtid
     GROUP BY
-        mo.mo_id, mo.mo_hours;
+        mo.mo_id, mo.mo_hours
+        ORDER BY mo_startdate DESC
         `;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.get("/selectdistinct", (req, res) => {
+  try {
+    let sql = `
+    SELECT DISTINCT 
+concat(mo_lastname,' ',mo_name) as ojtname,
+mo_id as ojtid
+FROM master_ojt
+LEFT JOIN ojt_user ON master_ojt.mo_id = ojt_user.ou_ojtid
+WHERE ojt_user.ou_ojtid IS NULL`;
 
     mysql
       .mysqlQueryPromise(sql)

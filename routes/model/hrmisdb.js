@@ -1,4 +1,4 @@
-const { OJTAttendanceModel } = require("./model");
+const { OJTAttendanceModel, DataModel, RawDataModel } = require("./model");
 
 exports.Master_Employee = (data) => {
   let dataResult = [];
@@ -152,7 +152,7 @@ exports.Master_Attendance = (data) => {
       geofencelatitude: key.ma_geofencelatitude,
       geofencelongitude: key.ma_geofencelongitude,
       geofenceradius: key.ma_geofenceradius,
-      ma_devicein: key.ma_devicein,
+      devicein: key.ma_devicein,
       deviceout: key.ma_deviceout,
     });
   });
@@ -326,12 +326,16 @@ exports.Master_Shift = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
-      shiftid: key.ms_shiftid,
-      shiftname: key.ms_shiftname,
-      status: key.ms_status,
+      shiftid: key.ms_id,
+      employeeid: key.ms_employeeid,
       department: key.ms_department,
-      createby: key.ms_createby,
-      createdate: key.ms_createdate,
+      monday: key.ms_monday,
+      tuesday: key.ms_tuesday,
+      wednesday: key.ms_wednesday,
+      thursday: key.ms_thursday,
+      friday: key.ms_friday,
+      saturday: key.ms_saturday,
+      sunday: key.ms_sunday,
     });
   });
 
@@ -614,6 +618,8 @@ exports.Master_Salary = (data) => {
       employeeid: key.ms_employeeid,
       monthly: key.ms_monthly,
       allowances: key.ms_allowances,
+      adjustments: key.ms_basic_adjustments,
+      payrolltype: key.ms_payrolltype,
     });
   });
 
@@ -650,6 +656,8 @@ exports.Salary_History = (data) => {
       employeeid: key.sh_employeeid,
       monthly: key.sh_monthly,
       allowances: key.sh_allowances,
+      adjustments: key.sh_basic_adjustments,
+      payrolltype: key.sh_payrolltype,
     });
   });
 
@@ -698,6 +706,342 @@ exports.Ojt_Attendance_Logs = (data) => {
   });
 
   return dataResult;
+};
+
+exports.Apps_Details = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      appid: key.ad_id,
+      appimage: key.ad_image,
+      appname: key.ad_name,
+      appsdetails: key.ad_details,
+      appversion: key.ad_version,
+      appdate: key.ad_date,
+      appcreateby: key.ad_createby,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Payroll_Approval_Ot = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approveot_id: key.pao_id,
+      image: key.pao_image,
+      fullname: key.pao_fullname,
+      employeeid: key.pao_employeeid,
+      attendancedate: key.pao_attendancedate,
+      clockin: key.pao_clockin,
+      clockout: key.pao_clockout,
+      totalhours: key.pao_total_hours,
+      night_ot: key.pao_night_differentials,
+      earlyot: key.pao_early_ot,
+      normal_ot: key.pao_normal_ot,
+      night_pay: key.pao_night_pay,
+      normal_pay: key.pao_normal_pay,
+      earlyot_pay: key.pao_early_ot_pay,
+      night_pay_perhour: key.pao_night_hours_pay,
+      normal_pay_perhour: key.pao_normal_ot_pay,
+      totalot_pay: key.pao_total_ot_net_pay,
+      payrolldate: key.pao_payroll_date,
+      reason: key.pao_reason,
+      overtimestatus: key.pao_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Payroll_Date = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      payrolldate_id: key.pd_payrollid,
+      payroll_name: key.pd_name,
+      payroll_cutoff: key.pd_cutoff,
+      payroll_startdate: key.pd_startdate,
+      payroll_enddate: key.pd_enddate,
+      payrolldate: key.pd_payrolldate,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Other_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      otherdeduct: key.od_id,
+      employeeid: key.od_employeeid,
+      idtype: key.od_idtype,
+      amount: key.od_amount,
+      period: key.od_period,
+      cutoff: key.od_cutoff,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Master_Deductions = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      otherdeductid: key.md_deductionid,
+      employeeid: key.md_employeeid,
+      idtype: key.md_idtype,
+      idnumber: key.md_idnumber,
+      issuedate: key.md_issuedate,
+      createby: key.md_createby,
+      createdate: key.md_createdate,
+      status: key.md_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Attendance_Request = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      emp_id: key.me_id,
+      image: key.me_profile_pic,
+      requestid: key.ar_requestid,
+      employeeid: key.ar_employeeid,
+      attendancedate: key.ar_attendace_date,
+      timein: key.ar_timein,
+      timeout: key.ar_timeout,
+      total: key.ar_total,
+      createdate: key.ar_createdate,
+      createby: key.ar_createby,
+      requeststatus: key.ar_status,
+      reason: key.ar_reason,
+      file: key.ar_file,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Master_Notification = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      notificationid: key.mn_notificationid,
+      employeeid: key.mn_employeeid,
+      date: key.mn_date,
+      tittle: key.mn_tittle,
+      description: key.mn_description,
+      subdescription: key.mn_subdescription,
+      image: key.mn_image,
+      isrecieved: key.mn_isReceived,
+      isread: key.mn_isRead,
+      isdelete: key.mn_isDeleate,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Admin_Notification = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      notificationid: key.an_notificationid,
+      employeeid: key.an_employeeid,
+      date: key.an_date,
+      tittle: key.an_tittle,
+      description: key.an_description,
+      subdescription: key.an_subdescription,
+      isrecieved: key.an_isReceived,
+      isread: key.an_isRead,
+      isdelete: key.an_isDeleate,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.TeamLeader_User = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      image: key.me_profile_pic,
+      tluserid: key.tu_userid,
+      employeeid: key.tu_employeeid,
+      username: key.tu_username,
+      password: key.tu_password,
+      accesstype: key.tu_accesstype,
+      subgroupid: key.tu_subgroupid,
+      createby: key.tu_createby,
+      createdate: key.tu_createdate,
+      status: key.tu_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Master_Shift_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      shiftsettingsid: key.mss_shiftid,
+      shiftname: key.mss_shiftname,
+      startshift: key.mss_startshift,
+      endshift: key.mss_endshift,
+      restday: key.mss_restday,
+      exemptedday: key.mss_exemptedday,
+      createdate: key.mss_createdate,
+      createby: key.mss_createby,
+      status: key.mss_shiftstatus,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Master_Employee_Background = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      backgroundid: key.meb_id,
+      employeeid: key.meb_employeeid,
+      type: key.meb_type,
+      coursestatus: key.meb_courseandstatus,
+      attainment: key.meb_attainment,
+      tittle: key.meb_tittle,
+      backstatus: key.meb_status,
+      start: key.meb_start,
+      end: key.meb_end,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Master_Leaves = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      leavesettingsid: key.ml_id,
+      employeeid: key.ml_employeeid,
+      tenure: key.ml_tenure,
+      leavetype: key.ml_leavetype,
+      yearleave: key.ml_year,
+      totalleave: key.ml_totalleavedays,
+      unusedleave: key.ml_unusedleavedays,
+      usedleave: key.ml_usedleavedays,
+      status: key.ml_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Subgroup = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      subgroupid: key.s_id,
+      departmentid: key.s_departmentid,
+      subgroupname: key.s_name,
+      createby: key.s_createby,
+      createdate: key.s_createdate,
+      status: key.s_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Approval_Stage_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approvalstage: key.ats_id,
+      accessid: key.ats_accessid,
+      approvalcount: key.ats_count,
+      createby: key.ats_createdby,
+      createdate: key.ats_createddate,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Request_Approval_Settings = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      approvalsettings: key.ras_is,
+      departmentid: key.ras_departmentid,
+      settingscount: key.ras_count,
+      createby: key.ras_createdby,
+      createdate: key.ras_createdate,
+      status: key.ras_status,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.Attendance_Request_Activity = (data) => {
+  let dataResult = [];
+
+  data.forEach((key, item) => {
+    dataResult.push({
+      attendanceactid: key.ara_id,
+      employeeid: key.ara_employeeid,
+      departmentid: key.ara_departmentid,
+      requestid: key.ara_requestid,
+      subgroupid: key.ara_subgroupid,
+      status: key.ara_status,
+      date: key.ara_date,
+    });
+  });
+
+  return dataResult;
+};
+
+exports.DataModeling = (data, prefix) => {
+  let result = [];
+
+  data.forEach((d) => {
+    result.push(new DataModel(d, prefix));
+  });
+
+  return result;
+};
+
+exports.RawData = (data) => {
+  let result = [];
+
+  data.forEach((d) => {
+    result.push(new RawDataModel(d));
+  });
+  return result;
 };
 
 //#region Remodeling

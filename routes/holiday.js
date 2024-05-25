@@ -10,7 +10,7 @@ const holidaysPH = new Holidays("PH");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('holidaylayout', { title: 'Express' });
-  Validator(req, res, "holidaylayout");
+  Validator(req, res, "holidaylayout", "holiday");
 });
 
 module.exports = router;
@@ -126,6 +126,66 @@ router.get("/load", (req, res) => {
         data: result,
       });
     });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+router.post("/getholiday", (req, res) => {
+  try {
+    let holidayid = req.body.holidayid;
+    let sql = `select *
+    from master_holiday
+    where mh_holidayid = '${holidayid}'`;
+
+    mysql.Select(sql, "Master_Holiday", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+router.post("/update", (req, res) => {
+  try {
+    let holidayid = req.body.holidayid;
+    let day = req.body.day;
+    let date = req.body.date;
+    let name = req.body.name;
+    let type = req.body.type;
+    let sql = `UPDATE master_holiday SET 
+    mh_day = '${day}',
+    mh_name = '${name}',
+    mh_date = '${date}',
+    mh_type = '${type}'
+    where mh_holidayid = '${holidayid}'`;
+
+    console.log(sql);
+
+    mysql
+      .Update(sql)
+      .then((result) => {
+        console.log(result);
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
   } catch (error) {
     res.json({
       msg: error,

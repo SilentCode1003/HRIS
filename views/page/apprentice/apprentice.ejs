@@ -1,0 +1,87 @@
+<br>
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">Candidate for Probationary</h3>
+      <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableapprentice">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Employee ID</th>
+                        <th class="col-25">Apprentice Name</th>
+                        <th>Department</th>
+                        <th>Hire Date</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="apprenticemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+                colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+            </lord-icon>
+            <h1 class="modal-title" id="exampleModalLabel">Are you sure you want to approved this apprentice?</h1>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="card">
+                    <div class="card-body candidate-prof">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="apprenticefullname" class="apprentice-label">Name</label>
+                                        <input type="text" class="form-control border-form-modal" id="apprenticefullname" placeholder="Apprentice Name" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apprenticedepartment" class="apprentice-label">Department</label>
+                                        <select class="form-control border-form-modal" id="apprenticedepartment" disabled>
+                                        </select>
+                                    </div>                                    
+                                    <div class="form-group">
+                                        <label for="apprenticestart" class="apprentice-label">Start Date</label>
+                                        <input type="text" class="form-control border-form-modal" id="apprenticestart" placeholder="Start Date" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputState" class="apprentice-label">Action</label>
+                                        <select id="inputState" class="form-control border-form-modal">
+                                            <option>Choose...</option>
+                                            <option value="probitionary">Approve to Probationary</option>
+                                            <option value="end_of_contract">End of Contract</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <img id="editpreview" style="width: 200px; height: 200px;" class="rounded rounded-circle img-prof" alt="placeholder" disabled>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="saveprobi">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
