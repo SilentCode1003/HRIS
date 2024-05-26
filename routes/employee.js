@@ -6,7 +6,11 @@ const moment = require("moment");
 const multer = require("multer");
 const XLSX = require("xlsx");
 const { Validator } = require("./controller/middleware");
-const { convertExcelDate } = require("./repository/customhelper");
+const {
+  convertExcelDate,
+  GetCurrentDatetime,
+  GetCurrentDate,
+} = require("./repository/customhelper");
 const { Encrypter } = require("./repository/crytography");
 const {
   generateUsernameAndPasswordForApprentice,
@@ -15,6 +19,9 @@ const {
   generateUsernameAndPasswordforemployee,
 } = require("./repository/helper");
 const { sq } = require("date-fns/locale");
+const { GenerateExcel } = require("./repository/excel");
+const { Select } = require("./repository/dbconnect");
+const { DataModeling, RawData } = require("./model/hrmisdb");
 
 const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
@@ -28,7 +35,6 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
 
 router.get("/filtertenure", (req, res) => {
   try {
@@ -1124,6 +1130,36 @@ router.get("/totalresigned", (req, res) => {
       msg: "error",
       error,
     });
+  }
+});
+
+router.get("/generatealphalist", (req, res) => {
+  try {
+    let date = GetCurrentDate();
+    let storeProceedure = "call hrmis.GenerateAlphaList()";
+
+    Select(storeProceedure, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ msg: "error", data: err });
+      }
+
+      let data = DataModeling(result[0], "al_");
+      let excelBuffer = GenerateExcel("Alpha List", data);
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="AlphaList_${date}.xlsx"`
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.send(excelBuffer);
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ msg: "error", data: error });
   }
 });
 
