@@ -47,10 +47,11 @@
 
               finalData.push({
                 // image: imgElement.outerHTML,
-                tluserid: item.tluserid,
+                tluserid: item.userid,
                 employeeid: item.employeeid,
                 username: item.username,
                 accesstype: item.accesstype,
+                subgroupname: item.subgroupid,
                 createby: item.createby,
                 createdate: item.createdate,
                 status: item.status,
@@ -73,6 +74,7 @@
           { data: "employeeid" },
           { data: "username" },
           { data: "accesstype" },
+          { data: "subgroupname" },
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },

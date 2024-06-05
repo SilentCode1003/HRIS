@@ -1,10 +1,14 @@
 <script>
+  let base64String = "";
   let approveot_id = "";
   $(document).ready(function () {
     console.log("Initialize");
     let employeeid = "<%= employeeid %>";
     LoadTable();
     LoadPayrollDate();
+    EditLoadPayrollDate();
+    LoadSubgroup();
+    EditLoadSubgroup();
 
     function LoadTable() {
       $("#dataTableapplyOvertime").DataTable({
@@ -33,16 +37,16 @@
                     `;
 
               finalData.push({
-                approveot_id: item.approveot_id,
+                approveot_id: item.id,
                 attendancedate: item.attendancedate,
                 clockin: item.clockin,
                 clockout: item.clockout,
-                totalhours: item.totalhours,
-                night_ot: item.night_ot,
-                earlyot: item.earlyot,
+                totalhours: item.total_hours,
+                night_ot: item.night_differentials,
+                earlyot: item.early_ot,
                 normal_ot: item.normal_ot,
-                payrolldate: item.payrolldate,
-                overtimestatus: item.overtimestatus,
+                payrolldate: item.payroll_date,
+                overtimestatus: item.status,
                 action: action,
               });
             });
@@ -108,56 +112,203 @@
       });
     }
 
-    $(document).on("click", "#pendingleavesavebtn", function () {
-      let startdate = $("#startldate").val();
-      let enddate = $("#endldate").val();
-      let leavetype = $("#leavetype").val();
-      let reason = $("#leavereason").val();
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#addappliedsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#appliedsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#addappliedday", function () {
+      $("#addappliedday").on("change", function () {
+        let selectedDate = $(this).val();
+        console.log("Selected Date:", selectedDate);
+        let formattedDate = new Date(selectedDate).toISOString().split("T")[0];
+
+        console.log("Formatted Date:", formattedDate);
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestovertime/getattendancedate",
+          data: {
+            attendancedate: formattedDate,
+            employeeid: employeeid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+              const currentDate = new Date();
+              const DateSubmmitted = currentDate.toISOString().split("T")[0];
+
+              $.each(existingData, (key, item) => {
+                let combinedTime;
+                if (item.starttime === item.endtime) {
+                  combinedTime = item.pao_starttime;
+                } else {
+                  combinedTime = `${item.starttime} - ${item.endtime}`;
+                }
+                $("#addotshiftscheduled").text(combinedTime);
+                $("#otpositionname").text(item.schedtimein);
+                $("#otdepartmentname").text(item.schedtimeout);
+                $("#addotpositionname").text(item.positioname);
+                $("#addotdepartmentname").text(item.departmentname);
+                $("#addotfullname").text(item.fullname);
+                $("#adddatesubmittedot").text(DateSubmmitted);
+              });
+            } else if (result.msg === "notexist") {
+              swal(
+                "Warning", "You have No Logs On that Date", "warning"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal("Error fetching employee data", "", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "An error occurred while fetching employee data",
+              err,
+              "error"
+            );
+          },
+        });
+      });
+    });
+
+    $(document).on("click", "#addovertime", function () {
+      let clockin = $("#addappliedotstart").val();
+      let clockout = $("#addappliedotend").val();
+      let attendancedate = $("#addappliedday").val();
+      let payrolldate = $("#addpayrolldateot").val();
+      let reason = $("#addappliedotreason").val();
+      let overtimestatus = $("#addappliedstatusot").val();
+      let subgroup = $("#addappliedsubgroup").val();
+      let overtimeimage = base64String;
 
       var message = "";
 
-      if (startdate == "") {
-        message += "shiftname is required ";
+      if (clockin === "") {
+        message += "status is required. ";
       }
 
-      if (enddate == "") {
-        message += "status is required ";
+      if (clockout === "") {
+        message += "status is required. ";
       }
 
-      if (leavetype == "") {
-        message += "department is required ";
+      if (attendancedate === "") {
+        message += "status is required. ";
       }
 
-      if (reason == "") {
-        message += "createby is required ";
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (reason === "") {
+        message += "status is required. ";
+      }
+
+      if (subgroup === "") {
+        message += "subgroup is required. ";
+      }
+
+      if (overtimestatus === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "Approved") {
+        message += "You Are Not Allowed to Approved You're Request";
+      }
+
+      if (overtimeimage === "") {
+        message += "status is required. ";
       }
 
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        function formatDateTime(dateTime) {
+          let date = new Date(dateTime);
+          let year = date.getFullYear();
+          let month = ("0" + (date.getMonth() + 1)).slice(-2);
+          let day = ("0" + date.getDate()).slice(-2);
+          let hours = ("0" + date.getHours()).slice(-2);
+          let minutes = ("0" + date.getMinutes()).slice(-2);
+          let seconds = ("0" + date.getSeconds()).slice(-2);
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // function extractDate(dateString) {
+        //   let dateParts = dateString.split(", ")[1];
+        //   return dateParts;
+        // }
+
+        let formattedClockin = formatDateTime(clockin);
+        let formattedClockout = formatDateTime(clockout);
+        // let attendancedateFormatted = extractDate(attendancedate);
+
+        //console.log(attendancedateFormatted, "formatday");
+        console.log(formattedClockin, "format");
+        console.log(formattedClockout, "format");
+
         $.ajax({
           type: "POST",
-          url: "/eportalrequestleave/submit",
+          url: "/eportalrequestovertime/addrequstot",
           data: {
             employeeid: employeeid,
-            startdate: startdate,
-            enddate: enddate,
-            leavetype: leavetype,
+            clockin: formattedClockin,
+            clockout: formattedClockout,
+            attendancedate: attendancedate,
+            payrolldate: payrolldate,
             reason: reason,
+            overtimestatus: overtimestatus,
+            subgroup: subgroup,
+            overtimeimage: overtimeimage,
           },
           success: function (result) {
             if (result.msg == "success") {
               swal(
-                "Update Successfully",
+                "Save Successfully",
                 "You clicked the button!",
                 "success"
               ).then((results) => {
                 window.location.reload();
               });
               LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning");
             }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");
@@ -219,6 +370,11 @@
               $("#totalotnetpay").val(item.totalotpay);
               $("#schedtimein").val(item.scheduledtimein);
               $("#schedtimeout").val(item.scheduledtimeout);
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.overtimeimage
+              );
+              base64String = item.overtimeimage;
 
               console.log(item.clockin);
               console.log(item.clockout);
@@ -233,73 +389,6 @@
       });
     });
 
-
-    // $("#appliedotstart, #appliedotend").change(function () {
-    //   let startshift = new Date($("#appliedotstart").val());
-    //   let endshift = new Date($("#appliedotend").val());
-    //   let scheduledTimeParts = $("#schedtimeout").val().split(":");
-
-    //   let scheduledTimeout = new Date(endshift);
-    //   scheduledTimeout.setHours(parseInt(scheduledTimeParts[0], 10));
-    //   scheduledTimeout.setMinutes(parseInt(scheduledTimeParts[1], 10));
-    //   scheduledTimeout.setSeconds(parseInt(scheduledTimeParts[2], 10));
-
-    //   console.log("Start Shift:", startshift);
-    //   console.log("End Shift:", endshift);
-    //   console.log("Scheduled Timeout:", scheduledTimeout);
-
-    //   if (
-    //     !startshift ||
-    //     !endshift ||
-    //     isNaN(startshift) ||
-    //     isNaN(endshift) ||
-    //     isNaN(scheduledTimeout)
-    //   ) {
-    //     console.error("Invalid date-time values provided.");
-    //     $("#appliedottotal").val("");
-    //     $("#appliednormal").val("");
-    //     $("#appliednightdiff").val("");
-    //     return;
-    //   }
-
-    //   let durationMs = endshift - startshift;
-    //   let totalMinutes = durationMs / (1000 * 60);
-
-    //   if (totalMinutes === 0) {
-    //     console.error("Total minutes is zero.");
-    //     $("#appliedottotal").val("");
-    //     $("#appliednormal").val("");
-    //     $("#appliednightdiff").val("");
-    //     return;
-    //   }
-
-    //   let hours = Math.floor(totalMinutes / 60);
-    //   let minutes = totalMinutes % 60;
-    //   let fractionalHours = (minutes / 60).toFixed(2);
-
-    //   let normalOTHours = 0;
-    //   let nightDiffHours = 0;
-
-    //   if (endshift.getHours() >= 22) {
-    //     console.log(endshift,'end');
-    //     let normalOTMs = endshift - scheduledTimeout;
-    //     normalOTHours = normalOTMs / (1000 * 60 * 60);
-    //     let nightDiffMs = endshift - scheduledTimeout;
-    //     nightDiffHours = nightDiffMs / (1000 * 60 * 60);
-    //   } else {
-    //     let normalOTMs = endshift - scheduledTimeout;
-    //     normalOTHours = normalOTMs / (1000 * 60 * 60);
-    //   }
-
-    //   console.log("Normal OT Hours:", normalOTHours);
-    //   console.log("Night Differentials Hours:", nightDiffHours);
-
-    //   let totalDuration = (hours + parseFloat(fractionalHours)).toFixed(2);
-    //   $("#appliedottotal").val(totalDuration);
-    //   $("#appliednormal").val(normalOTHours);
-    //   $("#appliednightdiff").val(nightDiffHours);
-    // }); 
-    
     function LoadPayrollDate() {
       $.ajax({
         type: "GET",
@@ -319,31 +408,52 @@
       });
     }
 
+    function EditLoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#addpayrolldateot").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#applyovertimesavebtn", function () {
       console.log("Save button clicked");
       let id = approveot_id;
-      let totalhours = $("#edittotalhours").val();
-      let night_ot = $("#editnightot").val();
-      let normal_ot = $("#editnormalot").val();
-      let earlyot = $("#editearlyot").val();
-      let reason = $("#editreason").val();
-      let overtimestatus = $("#editstatus").val();
+      let clockin = $("#appliedotstart").val();
+      let clockout = $("#appliedotend").val();
+      let attendancedate = $("#appliedday").val();
+      let payrolldate = $("#payrolldateot").val();
+      let reason = $("#appliedotreason").val();
+      let overtimestatus = $("#appliedstatusot").val();
+      let subgroup = $("#appliedsubgroup").val();
+      let overtimeimage = base64String;
 
       var message = "";
 
-      if (totalhours === "") {
+      if (clockin === "") {
         message += "status is required. ";
       }
 
-      if (night_ot === "") {
+      if (clockout === "") {
         message += "status is required. ";
       }
 
-      if (normal_ot === "") {
+      if (attendancedate === "") {
         message += "status is required. ";
       }
 
-      if (earlyot === "") {
+      if (payrolldate === "") {
         message += "status is required. ";
       }
 
@@ -355,6 +465,14 @@
         message += "status is required. ";
       }
 
+      if (overtimeimage === "") {
+        message += "status is required. ";
+      }
+
+      if (subgroup === "") {
+        message += "status is required. ";
+      }
+
       if (overtimestatus === "Approved") {
         message += "You Are Not Allowed to Approved You're Request";
       }
@@ -362,17 +480,44 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        function formatDateTime(dateTime) {
+          let date = new Date(dateTime);
+          let year = date.getFullYear();
+          let month = ("0" + (date.getMonth() + 1)).slice(-2);
+          let day = ("0" + date.getDate()).slice(-2);
+          let hours = ("0" + date.getHours()).slice(-2);
+          let minutes = ("0" + date.getMinutes()).slice(-2);
+          let seconds = ("0" + date.getSeconds()).slice(-2);
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        function extractDate(dateString) {
+          let dateParts = dateString.split(", ")[1];
+          return dateParts;
+        }
+
+        let formattedClockin = formatDateTime(clockin);
+        let formattedClockout = formatDateTime(clockout);
+        let attendancedateFormatted = extractDate(attendancedate);
+
+        console.log(attendancedateFormatted, "format");
+        console.log(formattedClockin, "format");
+        console.log(formattedClockout, "format");
+
         $.ajax({
           type: "POST",
           url: "/eportalrequestovertime/update",
           data: {
+            employeeid: employeeid,
             approveot_id: id,
-            totalhours: totalhours,
-            night_ot: night_ot,
-            normal_ot: normal_ot,
-            earlyot: earlyot,
+            clockin: formattedClockin,
+            clockout: formattedClockout,
+            attendancedate: attendancedateFormatted,
+            payrolldate: payrolldate,
             reason: reason,
+            subgroup: subgroup,
             overtimestatus: overtimestatus,
+            overtimeimage: overtimeimage,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -408,5 +553,59 @@
   function formatDateTime(dateTime) {
     const formattedDateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
     return formattedDateTime;
+  }
+
+  $(document).on("change", "#editotimage", function (e) {
+    const input = document.getElementById("editotimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("editpreview");
+      preview.src = reader.result;
+    };
+    imageUploadedleave();
+  });
+
+  function imageUploadedleave() {
+    const input = document.getElementById("editotimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#uploadimage", function (e) {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("preview");
+      preview.src = reader.result;
+    };
+    imageUploaded();
+  });
+
+  function imageUploaded() {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
   }
 </script>

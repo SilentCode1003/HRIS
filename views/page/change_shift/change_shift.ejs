@@ -1,0 +1,159 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Shift Adjustments</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#subgroupmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableChangeShiftSettings">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee Name</th>
+                        <th>Actual Rest Day</th>
+                        <th>Target Rest Day</th>
+                        <th>Create By</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="subgroupmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Adjustments</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <form>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select border-form-modal" id="csemployeename" name="csemployeename" aria-label="Floating label select example">
+                  </select>
+                  <label for="floatingSelectGrid">Employee Name</label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="date" class="form-select border-form-modal" id="targetdate" name="targetdate" aria-label="Floating label select example">
+                  <label for="targetdate">Target Date</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-select border-form-modal" id="targetdayName" name="targetdayName" aria-label="Day of the week" readonly>
+                  <label for="targetdayName">Day of the Week</label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <div class="form-floating">
+                  <input type="date" class="form-select border-form-modal" id="actualdate" name="actualdate" aria-label="Floating label select example">
+                  <label for="actualdate">Actual Rest Date</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-select border-form-modal" id="actualdayName" name="actualdayName" aria-label="Day of the week" readonly>
+                  <label for="actualdayName">Day of the Week</label>
+                </div>
+              </div>
+            </div>
+          </form>                             
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="changeshiftsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editchangeshift" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+      colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Add Adjustments</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="editcsemployeename" name="editcsemployeename" aria-label="Floating label select example">
+                </select>
+                <label for="floatingSelectGrid">Employee Name</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-select border-form-modal" id="edittargetdate" name="edittargetdate" aria-label="Floating label select example">
+                <label for="targetdate">Target Date</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-select border-form-modal" id="editactualdate" name="editactualdate" aria-label="Floating label select example">
+                <label for="actualdate">Actual Rest Date</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
+                  <option>Active</option>
+                  <option>Inactive</option>
+                </select>
+                <label for="actualdate">Shift Status</label>
+              </div>
+            </div>
+          </div>
+        </form>                             
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editchangeshiftsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -8,115 +8,129 @@
 
     <!-- First Card Row -->
     <div class="row g-3">
-
-        <!-- Total Employee Card -->
-        <div class="col-md-4">
-        <div data-toggle="modal" id="totalCOA" data-target="#totalEmployeeModal"
-            class="card-link">
-            <div id="totalCOACard" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
-                                <b>COA</b>
+        <!-- COA Employee Card -->
+        <div class="col-lg-3 col-md-6">
+            <div data-toggle="modal" id="totalCOA" data-target="#totalEmployeeModal" class="card-link">
+                <div id="totalCOACard" class="card h-100 py-2 db-card">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                    <b>COA</b>
+                                </div>
+                                <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
                             </div>
-                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
+                            <div class="col-auto">
+                                <!-- <i class="bi bi-people-fill card-icon"></i> -->
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <!-- <i class="bi bi-people-fill card-icon"></i> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- OVERTIME Employee Card -->
+        <div class="col-lg-3 col-md-6">
+            <div data-toggle="modal" id="totalovertime" data-target="#regularEmployeeModal" class="card-link">
+                <div id="totalovertimeCard" class="card h-100 py-2 db-card">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                    <b>Overtime</b>
+                                </div>
+                                <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="bi bi-person-check-fill card-icon"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- LEAVE Employee Card -->
+        <div class="col-lg-3 col-md-6">
+            <div data-toggle="modal" id="totalleave" data-target="#probationaryEmployeeModal" class="card-link">
+                <div id="totalleaveCard" class="card h-100 py-2 db-card">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                    <b>Leave</b>
+                                </div>
+                                <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- OT Meal Employee Card -->
+        <div class="col-lg-3 col-md-6">
+            <div data-toggle="modal" id="totalotmeal" data-target="#otmealEmployeeModal" class="card-link">
+                <div id="totalotmealCard" class="card h-100 py-2 db-card">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
+                                    <b>OT Meal</b>
+                                </div>
+                                <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-        <!-- Regular Employee Card -->
-        <div class="col-md-4">
-        <div data-toggle="modal" id="totalovertime" data-target="#regularEmployeeModal"
-            class="card-link">
-            <div id="totalovertimeCard" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
-                                <b>Overtime</b>
-                            </div>
-                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
-                        </div>
-                        <div class="col-auto">
-                            <!-- <i class="bi bi-person-check-fill card-icon"></i> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- Probationary Employee Card -->
-        <div class="col-md-4">
-        <div data-toggle="modal" id="totalleave" data-target="#probationaryEmployeeModal"
-            class="card-link">
-            <div id="totalleaveCard" class="card h-100 py-2 db-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead">
-                                <b>Leave</b>
-                            </div>
-                            <div class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"></div>
-                        </div>
-                        <div class="col-auto">
-                            <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </div>
+    
 
     <!---- MODAL-->
 
     <!-- Total Employee Modal -->
-    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
+    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header" id="modal-header">
-                        <div>
-                            <h3 class="modal-title" id="exampleModalToggleLabel">Pending COA</h3>
-                        </div>
-                        <br>
-                        <input id='myInputtotal' class="db-modal-search" type='text' placeholder="  Search....">
-                        <i class='bx bx-x' data-dismiss="modal"></i>
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div>
+                        <h3 class="modal-title" id="exampleModalToggleLabel">Pending COA</h3>
                     </div>
-                    <div class="modal-body" id="modal-body">
-                        <div class="modal-table">
-                            <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                                <table class="table custom-mobile-table table-light table-bordered" id="dataTableemployees">
-                                    <thead class="table-header">
-                                        <tr>
-                                            <td class="no-match-cell" style="display: none;"></td>
-                                            <th class="col-26">Name</th>
-                                            <th class="col-26">Attendance Date</th>
-                                            <th class="col-sm-1">Time In</th>
-                                            <th class="col-sm-1">Time Out</th>
-                                            <th class="col-sm-1">Total Hours</th>
-                                            <th>Reason</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <br>
+                    <input id='myInputtotal' class="db-modal-search" type='text' placeholder="  Search....">
+                    <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-light table-bordered" id="dataTableemployees">
+                                <thead class="table-header">
+                                    <tr>
+                                        <td class="no-match-cell" style="display: none;"></td>
+                                        <th class="col-26">Name</th>
+                                        <th class="col-26">Attendance Date</th>
+                                        <th class="col-sm-1">Time In</th>
+                                        <th class="col-sm-1">Time Out</th>
+                                        <th class="col-sm-1">Total Hours</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="modal-footer" id="modal-footer">
-                        <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -124,7 +138,7 @@
 
 
 
-    <!-- Regular Employee Modal -->
+    <!-- TOTAL OVERTIME Employee Modal -->
     <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog"
         aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -167,7 +181,7 @@
         </div>
     </div>
 
-    <!-- Probitionary Employee Modal -->
+    <!--  Total LEAVE Modal -->
     <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog"
         aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -212,7 +226,7 @@
     </div>
 
 
-    <!-- Resigned Employee Modal -->
+    <!-- Total OVERTIME Modal -->
     <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
         aria-labelledby="resignedEmployeeModal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -258,7 +272,7 @@
         </div>
     </div>
 
-    <!-- Total Admin Modal -->
+    <!-- Total LEAVE Modal -->
     <div class="modal fade" id="totaladminemployeeModal" tabindex="-1" role="dialog"
         aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -299,7 +313,50 @@
         </div>
     </div>
 
-    <!-- Total IT Department Modal -->
+
+    <!-- Total OT MEAL  Modal -->
+    <div class="modal fade" id="otmealEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div>
+                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">OT Meal Request</h3>
+                    </div>
+                    <br>
+                    <input id='myInputtotalotmeal' class="db-modal-search"  type='text'
+                        placeholder="  Search....">
+                    <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-light table-bordered" id="totalOtMealTable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th class="col-26">Name</th>
+                                        <th>Attendance Date</th>
+                                        <th>Time In</th>
+                                        <th>Time Out</th>
+                                        <th>Total Overtime</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content will be added dynamically using JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total  it Modal -->
     <div class="modal fade" id="totalitModal" tabindex="-1" role="dialog" aria-labelledby="totalitModal"
         aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">

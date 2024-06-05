@@ -6,6 +6,8 @@
     LoadList();
     searchTable();
     LoadListEdit();
+    LoadDepartment();
+    EditDepartment();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -36,11 +38,12 @@
                           <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editassmodal"><i class="fas fa-fw fa-pen"></i></button>
                       `;
               finalData.push({
-                approvalstage: item.approvalstage,
+                approvalstage: item.id,
+                departmentid: item.departmentid,
                 accessid: item.accessid,
-                approvalcount: item.approvalcount,
-                createby: item.createby,
-                createdate: item.createdate,
+                approvalcount: item.count,
+                createby: item.createdby,
+                createdate: item.createddate,
                 action: action,
               });
             });
@@ -50,6 +53,7 @@
         },
         columns: [
           { data: "approvalstage" },
+          { data: "departmentid" },
           { data: "accessid" },
           { data: "approvalcount" },
           { data: "createby" },
@@ -73,11 +77,16 @@
     $(document).on("click", "#approvalstagesavebtn", function () {
       let accessid = $("#accessid").val();
       let approvalcount = $("#approvecount").val();
+      let departmentid = $("#stagedepartmentname").val();
 
       var message = "";
 
       if (accessid == "") {
         message += "accessid is required ";
+      }
+
+      if (departmentid == "") {
+        message += "departmentid is required ";
       }
 
       if (approvalcount == "") {
@@ -93,6 +102,7 @@
           data: {
             accessid: accessid,
             approvalcount: approvalcount,
+            departmentid: departmentid,
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -144,6 +154,44 @@
       });
     }
 
+    function LoadDepartment() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#stagedepartmentname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditDepartment() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.departmentid, item.departmentid);
+            $(options).html(item.departmentname);
+            $("#editstagedepartmentname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     function LoadListEdit() {
       $.ajax({
         type: "GET",
@@ -187,7 +235,8 @@
 
             $.each(existingData, (key, item) => {
               $("#editaccessidname").val(item.accessid);
-              $("#editapprovecount").val(item.approvalcount);
+              $("#editapprovecount").val(item.count);
+              $("#editstagedepartmentname").val(item.departmentid);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -204,6 +253,7 @@
       let id = approvalstage;
       let accessid = $("#editaccessidname").val();
       let approvalcount = $("#editapprovecount").val();
+      let departmentid = $("#editstagedepartmentname").val();
 
       let message = "";
 
@@ -215,16 +265,21 @@
         message += "Approval count is required. ";
       }
 
+      if (departmentid === "") {
+        message += "departmentid  is required. ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/approval_stage_settings/update",
+          type: "PUT",
+          url: "/approval_stage_settings/edit",
           data: {
             approvalstage: approvalstage,
             accessid: accessid,
             approvalcount: approvalcount,
+            departmentid: departmentid,
           },
           success: function (result) {
             if (result.msg === "success") {

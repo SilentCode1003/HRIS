@@ -1,0 +1,168 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Overtime Request Activity</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableOvertimeActivity">
+                <thead>
+                  <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Employee Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Hours</th>
+                    <th>Applied Date</th>
+                    <th>Name Of Approver</th>
+                    <th>Approve/Reject Date</th>
+                    <th>Status</th>
+                    <th class="col-sm-1">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="overtimemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Overtime Request Activity</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="employeeotfullname" name="employeeotfullname" disabled>
+                          <label for="floatingInput">Employee Name</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="otdate" name="otdate" disabled>
+                            <label for="floatingInput">Attendance Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="otclockin" name="otclockin" disabled 
+                            placeholder="Address">
+                            <label for="floatingInput">Clock In</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="otclockout" name="otclockout" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Clock Out</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="otapprover" name="otapprover" disabled>
+                          <label for="floatingInput">Approver</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="actiondadteot" name="actiondadteot" disabled>
+                          <label for="otnormal">Action Date</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="totalapprovecount" name="totalapprovecount" disabled>
+                          <label for="otearly">Approve Count</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="totalothours" name="totalothours" disabled>
+                          <label for="floatingInput">Total Overtime Hours</label>
+                        </div>
+                    </div>
+                      <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="approvalstatus" name="approvalstatus"
+                            placeholder="Phone Number" disabled>
+                            <label for="floatingInput">Total Approved</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="overtimestatus" name="overtimestatus"
+                            placeholder="Phone Number" disabled>
+                            <label for="floatingInput">Status</label>
+                        </div>
+                      </div>
+                    </div>
+                   <br>
+                  <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <textarea type="text" class="form-control border-form-modal" id="overtimereason" name="overtimereason"
+                            placeholder="Reason" disabled></textarea>
+                          <label for="floatingInput">Reason</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <textarea type="text" class="form-control border-form-modal" id="overtimecomment" name="overtimecomment"
+                            placeholder="Reason" disabled></textarea>
+                          <label for="floatingInput">Comment</label>
+                        </div>
+                      </div>
+                  </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>

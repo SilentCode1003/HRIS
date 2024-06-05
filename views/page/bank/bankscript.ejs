@@ -99,7 +99,6 @@
       }
     });
 
-    // Function to get the value of an option by its display text
     function getValueByText(fieldName, displayText) {
       // Find the select element by its name attribute
       var selectElement = document.querySelector(`select[name="${fieldName}"]`);
@@ -115,7 +114,7 @@
       } else {
         console.log("Select element not found");
       }
-      return null; // Return null if no matching option is found
+      return null; 
     }
 
     $("#search").on("input", function () {
