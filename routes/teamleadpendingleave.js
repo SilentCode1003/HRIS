@@ -26,14 +26,15 @@ router.get("/load", (req, res) => {
     let sql = `SELECT 
     l_leaveid,
     concat(me_lastname,' ',me_firstname) as l_employeeid,
-    DATE_FORMAT(l_leavestartdate, '%Y-%m-%d %H:%i:%s') AS l_leavestartdate,
-    DATE_FORMAT(l_leaveenddate, '%Y-%m-%d %H:%i:%s') AS l_leaveenddate,
-    l_leavetype,
+    DATE_FORMAT(l_leavestartdate, '%Y-%m-%d') AS l_leavestartdate,
+    DATE_FORMAT(l_leaveenddate, '%Y-%m-%d') AS l_leaveenddate,
+    ml_leavetype as l_leavetype,
     l_leavereason,
     l_leaveapplieddate
     FROM leaves
     INNER JOIN
     master_employee ON leaves.l_employeeid = me_id
+    INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
     WHERE l_leavestatus = 'Pending' AND l_subgroupid = '${subgroupid}'
     AND me_department = '${departmentid}'
     AND l_employeeid NOT IN (
@@ -42,6 +43,7 @@ router.get("/load", (req, res) => {
         SELECT ats_count
         FROM aprroval_stage_settings
         WHERE ats_accessid = '${accesstypeid}'
+        AND ats_departmentid = '${departmentid}'
     )`;
 
     mysql.Select(sql, "Leaves", (err, result) => {

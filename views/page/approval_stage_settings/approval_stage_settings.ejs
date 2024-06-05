@@ -22,6 +22,7 @@
                     <tr>
                         <th class="col-sm-1">ID</th>
                         <th>Access Name</th>
+                        <th>Department Name</th>
                         <th>Approve Count Need</th>
                         <th>Created By</th>
                         <th>Create Date</th>
@@ -54,13 +55,25 @@
                             <label for="floatingSelectGrid">Access Name</label>
                         </div>
                     </div>
-                    <br>
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="number" class="form-select border-form-modal" id="approvecount" name="approvecount" aria-label="Floating label select example">
-                            <label for="floatingSelectGrid">Approve Count</label>
-                        </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="form-select border-form-modal" id="stagedepartmentname" name="stagedepartmentname">
+                      </select>
+                      <label for="floatingSelectGrid">Department Name</label>
                     </div>
+                  </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-select border-form-modal" id="approvecount" name="approvecount" aria-label="Floating label select example">
+                        <label for="floatingSelectGrid">Approve Count</label>
+                    </div>
+                  </div>
                 </div>
             </form>
         </div>
@@ -91,14 +104,26 @@
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
-                    </div>
-                    <br>
+                   </div>
+                </div>
+                <br>
+                <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
                             <input type="number" class="form-select border-form-modal" id="editapprovecount" name="editapprovecount" aria-label="Floating label select example">
                             <label for="floatingSelectGrid">Approve Count</label>
                         </div>
                     </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="form-select border-form-modal" id="editstagedepartmentname" name="editstagedepartmentname">
+                      </select>
+                      <label for="floatingSelectGrid">Department Name</label>
+                    </div>
+                  </div>
                 </div>
             </form>
         </div>

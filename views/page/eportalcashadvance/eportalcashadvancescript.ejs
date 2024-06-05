@@ -56,7 +56,18 @@
         columns: [
           { data: "cashadvanceid" },
           { data: "requestdate" },
-          { data: "amount" },
+          {
+            data: "amount",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
           { data: "purpose" },
           { data: "status" },
           { data: "approvaldate" },
@@ -68,9 +79,109 @@
       });
     }
 
+    $(document).on("click", "#approvedtable", function () {
+      $("#dataTableleaveApproved").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalcashadvance/approved",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById("dataTableleaveApproved");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var CASHADVANCE_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var REQUEST_DATE = row.insertCell(2);
+            var AMOUNT = row.insertCell(3);
+            var PURPOSE = row.insertCell(4);
+            var STATUS = row.insertCell(5);
+            var ACTION = row.insertCell(6);
+
+            var action = document.createElement("button");
+            action.id = "viewreciept";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#viewrecieptmodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+              cashadvanceid = dataRow[0];
+            };
+            CASHADVANCE_ID.innerHTML = item.cashadvanceid;
+            NAME.innerHTML = item.requestdate;
+            REQUEST_DATE.innerHTML = item.amount;
+            AMOUNT.innerHTML = item.purpose;
+            PURPOSE.innerHTML = item.status;
+            STATUS.innerHTML = item.approvaldate;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                CASHADVANCE_ID,
+                NAME,
+                REQUEST_DATE,
+                AMOUNT,
+                PURPOSE,
+                STATUS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#viewreciept", function () {
+      $.ajax({
+        type: "POST",
+        url: "/eportalcashadvance/getca",
+        data: {
+          cashadvanceid: cashadvanceid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#preview").attr
+              ("src", "data:image/jpg;base64," + item.image);
+                base64String = item.image;
+              $("#id").val(item.cashadvanceid);
+              $("#editreqcaamount").val(item.amount);
+              $("#editreqcapurpose").val(item.purpose);
+              $("#pendingcaaction").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
     $(document).on("click", "#reqcasave", function () {
+      console.log('hit');
       let amount = $("#reqcaamount").val();
       let purpose = $("#reqcapurpose").val();
+
+      console.log(amount);
 
       var message = "";
 
@@ -85,11 +196,12 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        amount = amount.replace(/,/g, "").replace("₱", "");
         $.ajax({
           type: "POST",
           url: "/eportalcashadvance/submit",
           data: {
-            amount: amount,
+            amount: parseFloat(amount),
             purpose: purpose,
           },
           success: function (result) {

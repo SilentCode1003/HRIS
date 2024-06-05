@@ -26,12 +26,12 @@
             var data = json.data;
 
             $.each(data, (key, item) => {
-              var action = "";
+              // var action = "";
               var status = item.status;
 
-              action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
-                     `;
+              // action = `
+              //         <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-eye"></i></button>
+              //        `;
 
               finalData.push({
                 leaveid: item.leaveid,
@@ -39,10 +39,10 @@
                 leavestartdate: item.leavestartdate,
                 leaveenddate: item.leaveenddate,
                 leavetype: item.leavetype,
-                reason: item.reason,
-                status: item.status,
-                applieddate: item.applieddate,
-                action: action,
+                reason: item.leavereason,
+                status: item.leavestatus,
+                applieddate: item.leaveapplieddate,
+                // action: action,
               });
             });
 
@@ -64,7 +64,7 @@
           { data: "reason" },
           { data: "status" },
           { data: "applieddate" },
-          { data: "action" },
+          // { data: "action" },
         ],
         initComplete: function () {},
       });

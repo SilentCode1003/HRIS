@@ -1,70 +1,29 @@
 <script>
-    $(document).ready(function () {
-      console.log('Initialize');
-      document.addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-          let username = $("#username").val();
-          let password = $("#password").val();
-  
-          var message = "";
-  
-          if (username === "") {
-            message += "Username ";
-          }
-          if (password === "") {
-            message += "Password ";
-          }
-  
-          if (message !== "") {
-            showSweetAlert("Required", `Please fill up ${message}`);
-          } else {
-            $.ajax({
-              type: "POST",
-              url: "/ojtlogin/login",
-              data: {
-                username: username,
-                password: password,
-              },
-              success: function (result) {
-                if (result.msg === "success") {
-                  swal("Login Successfully", "You clicked the button!", "success")
-                    .then(results => {
-                      if (result.data[0].accesstype === 'OJT') {
-                        location.replace("/ojtindex");
-                      } else {
-                        location.replace("/");
-                      }
-                    });
-                } else if (result.msg === "inactive") {
-                  swal("Inactive", "Your account is inactive. Please be guided accordingly.", "Ok")
-                    .then(() => {
-                      location.reload();
-                    });
-                } else if (result.msg === "incorrect") {
-                  swal("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
-                }
-              },
-              error: function (err) {
-                swal("Error", "An error occurred while saving data.", "error");
-              },
-  
-            });
-          }
-        }
-      });
-      $(document).on("click", "#loginBtn", function () {
+  $(document).ready(function () {
+    console.log("Initialize");
+
+    const loginUrlDropdown = document.getElementById("loginUrl");
+
+    loginUrlDropdown.addEventListener("change", (e) => {
+      const selectedUrl = e.target.value;
+      if (selectedUrl) {
+        window.location.href = selectedUrl;
+      }
+    });
+    document.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
         let username = $("#username").val();
         let password = $("#password").val();
-  
+
         var message = "";
-  
+
         if (username === "") {
           message += "Username ";
         }
         if (password === "") {
-          message += ". ";
+          message += "Password ";
         }
-  
+
         if (message !== "") {
           showSweetAlert("Required", `Please fill up ${message}`);
         } else {
@@ -77,21 +36,32 @@
             },
             success: function (result) {
               if (result.msg === "success") {
-                swal("Save Successfully", "You clicked the button!", "success")
-                  .then(results => {
-                    if (result.data[0].accesstype === 'OJT') {
-                      location.replace("/ojtindex");
-                    } else {
-                      location.replace("/");
-                    }
-                  });
+                swal(
+                  "Login Successfully",
+                  "You clicked the button!",
+                  "success"
+                ).then((results) => {
+                  if (result.data[0].accesstype === "OJT") {
+                    location.replace("/ojtindex");
+                  } else {
+                    location.replace("/");
+                  }
+                });
               } else if (result.msg === "inactive") {
-                showSweetAlert("Inactive", "Your account is inactive. Please be guided accordingly.", "error", "Ok");
+                swal(
+                  "Inactive",
+                  "Your account is inactive. Please be guided accordingly.",
+                  "Ok"
+                ).then(() => {
+                  location.reload();
+                });
               } else if (result.msg === "incorrect") {
-                showSweetAlert("Incorrect", "Incorrect Credentials. Please try again!", "error", "AWW NO!!");
-              } else if (result.msg === "resigned") {
-                // Display sweet alert for resigned employees
-                swal("Resigned Employee", "This employee has resigned.", "warning");
+                swal(
+                  "Incorrect",
+                  "Incorrect Credentials. Please try again!",
+                  "error",
+                  "AWW NO!!"
+                );
               }
             },
             error: function (err) {
@@ -99,20 +69,86 @@
             },
           });
         }
-      });
-
-      $(".toggle-password").on("click", function () {
-            const passwordInput = $("#password");
-            const passwordFieldType = passwordInput.attr("type");
-
-            // Toggle password visibility
-            if (passwordFieldType === "password") {
-                passwordInput.attr("type", "text");
-                $(this).find('i').removeClass("fa-eye").addClass("fa-eye-slash");
-            } else {
-                passwordInput.attr("type", "password");
-                $(this).find('i').removeClass("fa-eye-slash").addClass("fa-eye");
-            }
-      });
+      }
     });
-  </script>
+    $(document).on("click", "#loginBtn", function () {
+      let username = $("#username").val();
+      let password = $("#password").val();
+
+      var message = "";
+
+      if (username === "") {
+        message += "Username ";
+      }
+      if (password === "") {
+        message += ". ";
+      }
+
+      if (message !== "") {
+        showSweetAlert("Required", `Please fill up ${message}`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/ojtlogin/login",
+          data: {
+            username: username,
+            password: password,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                if (result.data[0].accesstype === "OJT") {
+                  location.replace("/ojtindex");
+                } else {
+                  location.replace("/");
+                }
+              });
+            } else if (result.msg === "inactive") {
+              showSweetAlert(
+                "Inactive",
+                "Your account is inactive. Please be guided accordingly.",
+                "error",
+                "Ok"
+              );
+            } else if (result.msg === "incorrect") {
+              showSweetAlert(
+                "Incorrect",
+                "Incorrect Credentials. Please try again!",
+                "error",
+                "AWW NO!!"
+              );
+            } else if (result.msg === "resigned") {
+              // Display sweet alert for resigned employees
+              swal(
+                "Resigned Employee",
+                "This employee has resigned.",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $(".toggle-password").on("click", function () {
+      const passwordInput = $("#password");
+      const passwordFieldType = passwordInput.attr("type");
+
+      // Toggle password visibility
+      if (passwordFieldType === "password") {
+        passwordInput.attr("type", "text");
+        $(this).find("i").removeClass("fa-eye").addClass("fa-eye-slash");
+      } else {
+        passwordInput.attr("type", "password");
+        $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
+      }
+    });
+  });
+</script>
