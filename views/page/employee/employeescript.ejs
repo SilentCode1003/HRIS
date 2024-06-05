@@ -538,13 +538,13 @@
 
               finalData.push({
                 // image: imgElement.outerHTML,
-                newEmployeeId: item.newEmployeeId,
-                firstname: item.firstname,
+                newEmployeeId: item.id,
+                firstname: item.fullname,
                 phone: item.phone,
                 email: item.email,
                 jobstatus: item.jobstatus,
-                me_department: item.me_department,
-                me_position: item.me_position,
+                me_department: item.departmentname,
+                me_position: item.positionname,
                 action: action,
               });
             });

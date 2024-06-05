@@ -30,7 +30,6 @@ router.get("/", function (req, res, next) {
   //   fullname: "DEV42",
   //   accesstype: "Admin",
   // });
-
   Validator(
     req,
     res,
@@ -61,12 +60,12 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
+      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "marl_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -204,7 +203,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            console.log(result);
+            //console.log(result);
 
             res.json(JsonSuccess());
           });

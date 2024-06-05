@@ -66,12 +66,13 @@
                 daterange: item.daterange,
                 payrolldate: item.payrolldate,
                 cutoff: item.cutoff,
-                salary: formatToCurrency(item.salary),
+                salary: formatToCurrency(item.totalsalary),
                 totalhours: item.totalhours,
                 nightdiff: item.nightdiff,
-                normal_ot: item.normal_ot,
-                early_ot: item.early_ot,
-                total_late_time: item.total_late_time,
+                normal_ot: item.normalot,
+                early_ot: item.earlyot,
+                total_late_time: item.totalminutes,
+                totalnetpay: formatToCurrency(item.totalnetpay),
                 action: action,
               });
             });
@@ -97,11 +98,26 @@
           { data: "normal_ot" },
           { data: "early_ot" },
           { data: "total_late_time" },
+          { data: "totalnetpay" },
           { data: "action" },
         ],
-        initComplete: function () {
-          console.log("Done");
+        createdRow: function (row, data, dataIndex) {
+          var totalnetpayCell = $(row).find("td:eq(9)");
+          // var leaveenddateCell = $(row).find("td:eq(4)");
+          // var applieddateCell = $(row).find("td:eq(6)");
+
+          // leavestartdateCell.wrapInner(
+          //   "<span class='leavestartdate-text'></span>"
+          // );
+          //leaveenddateCell.wrapInner("<span class='leaveenddate-text'></span>");
+          totalnetpayCell.wrapInner("<span class='approved-status'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
         },
+        initComplete: function () {},
       });
     }
 
@@ -131,10 +147,10 @@
 
             console.log(existingData);
             $.each(existingData[0], (key, item) => {
-              // $("#editpreview").attr(
-              //   "src",
-              //   "data:image/jpg;base64," + item.Image
-              // );
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.Image
+              );
               base64String = item.Image;
               $("#employeename").text(item.EmployeeFullName);
               $("#position").text(item.PositionName);

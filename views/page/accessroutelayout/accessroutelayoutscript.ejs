@@ -267,6 +267,7 @@
         searching: false,
         info: false,
         scrollCollapse: true,
+        scrollY: 600,
         serverMethod: "GET",
         ajax: {
           url: "/accessroutelayout/load",
@@ -352,5 +353,9 @@
         initComplete: function () {},
       });
     }
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 8, "#search");
+    })
   });
 </script>

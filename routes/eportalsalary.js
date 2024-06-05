@@ -5,6 +5,9 @@ var router = express.Router();
 const pdfmake = require("pdfmake/build/pdfmake");
 const pdfFonts = require("pdfmake/build/vfs_fonts");
 const e = require("express");
+const { Select } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -18,45 +21,46 @@ router.get("/getpayrolldate", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT 
-    CONCAT(gp_startdate, ' To ', gp_enddate) AS daterange,
-    DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') AS payrolldate,
-    gp_cutoff as cutoff,
-    gp_per_cutoff_with_allowances as salary,
-    SUM(gp_total_hours) as totalhours,
-    SUM(gp_night_differentials) as nightdiff,
-    SUM(gp_normal_ot) as normal_ot,
-    SUM(gp_early_ot) as early_ot,
-    SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(gp_late, '00:00:00')))) AS total_late_time
-FROM 
-    generate_payroll  
-WHERE 
-    gp_employeeid = '${employeeid}'
-GROUP BY 
-    gp_startdate, gp_enddate, gp_payrolldate, gp_cutoff, gp_per_cutoff_with_allowances
-ORDER BY 
-    gp_payrolldate DESC`;
+    CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
+    DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
+    p_cutoff as p_cutoff,
+    ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
+    SUM(p_totalhours) as p_totalhours,
+    SUM(p_nightothours) as p_nightdiff,
+    SUM(p_normalothours) as p_normalot,
+    SUM(p_earlyothours) as p_earlyot,
+    SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
+    round(p_total_netpay, 2) as p_totalnetpay
+    FROM 
+    payslip  
+    WHERE 
+    p_employeeid = '${employeeid}'
+    GROUP BY 
+    p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
+    ORDER BY 
+    p_payrolldate DESC`;
 
     console.log(employeeid);
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 

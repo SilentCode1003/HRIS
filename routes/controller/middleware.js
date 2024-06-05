@@ -275,6 +275,15 @@ var roleacess = [
       {
         layout: "teamleadgeofencelayout",
       },
+      {
+        layout: "teamleadappliedotmeallayout",
+      },
+      {
+        layout: "teamleadshiftlayout",
+      },
+      {
+        layout: "teamleadshiftadjustmentlayout",
+      },
     ],
   },
   {
@@ -318,6 +327,15 @@ var roleacess = [
       },
       {
         layout: "teamleadattendancelayout",
+      },
+      {
+        layout: "teamleadappliedotmeallayout",
+      },
+      {
+        layout: "teamleadshiftlayout",
+      },
+      {
+        layout: "teamleadshiftadjustmentlayout",
       },
     ],
   },
@@ -570,6 +588,44 @@ exports.ValidatorforOjt = function (req, res, layout) {
 const { SelectStatement } = require("../repository/customhelper");
 const { Select } = require("../repository/dbconnect");
 const { JsonErrorResponse } = require("../repository/response");
+
+
+
+// exports.ValidatorForTeamLead = function (req, res, layout, route) {
+//   let sql = SelectStatement(
+//     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
+//     [req.session.accessid, layout, route]
+//   );
+
+//   console.log(sql);
+
+//   Select(sql, (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       res.json(JsonErrorResponse(err));
+//     }
+
+//     console.log(result);
+
+//     if (result != 0) {
+//       return res.render(`${layout}`, {
+//         image: req.session.image,
+//         employeeid: req.session.employeeid,
+//         fullname: req.session.fullname,
+//         accesstype: req.session.accesstype,
+//         departmentid: req.session.departmentid,
+//         departmentname: req.session.departmentname,
+//         position: req.session.position,
+//         geofenceid: req.session.geofenceid,
+//         subgroupid: req.session.subgroupid,
+//         accesstypeid: req.session.accesstypeid,
+//       });
+//     } else {
+//       res.redirect("/login");
+//     }
+//   });
+// };
+
 
 exports.Validator = function (req, res, layout, route) {
   let sql = SelectStatement(

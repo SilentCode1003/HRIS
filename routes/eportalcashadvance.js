@@ -2,6 +2,9 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { Select } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 /* GET home page. */
@@ -102,6 +105,43 @@ router.get("/load", (req, res) => {
   }
 });
 
+
+router.get("/approved", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    ca_cashadvanceid,
+    ca_requestdate,
+    ca_amount,
+    ca_purpose,
+    ca_status,
+    ca_approvaldate
+    FROM cash_advance WHERE ca_employeeid = '${employeeid}'
+    AND ca_status = 'Approved'
+    ORDER BY ca_cashadvanceid DESC`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ca_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 router.post("/getload", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -159,37 +199,40 @@ router.post("/update", (req, res) => {
 router.post("/getca", (req, res) => {
   try {
     let cashadvanceid = req.body.cashadvanceid;
-    let sql = `select ca_amount as amount,
-    ca_purpose as purpose,
-    ca_status as status
-    from cash_advance
-    where ca_cashadvanceid = '${cashadvanceid}'`;
+    let sql = `SELECT 
+    ca_cashadvanceid,
+    me_profile_pic as ca_image,
+    CONCAT(me_lastname,' ',me_firstname) as ca_fullname,
+    ca_requestdate,
+    ca_amount,
+    ca_purpose,
+    ca_status,
+    ca_approvaldate
+    FROM cash_advance 
+    INNER JOIN master_employee ON cash_advance.ca_employeeid = me_id
+    WHERE ca_cashadvanceid = '${cashadvanceid}'
+    AND ca_status = 'Approved'
+    ORDER BY ca_cashadvanceid DESC`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      //console.log(sql)
-      .then((result) => {
-        if (result.length > 0) {
-          res.status(200).json({
-            msg: "success",
-            data: result,
-          });
-        } else {
-          res.status(404).json({
-            msg: "Department not found",
-          });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({
-          msg: "Error fetching department data",
-          error: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: error,
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ca_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 
