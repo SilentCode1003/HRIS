@@ -160,141 +160,6 @@
       });
     }
 
-    // $(document).on("click", "#generateButton", function () {
-    //   let startDate = $("#datepicker")
-    //     .data("daterangepicker")
-    //     .startDate.format("YYYY-MM-DD");
-    //   let endDate = $("#datepicker")
-    //     .data("daterangepicker")
-    //     .endDate.format("YYYY-MM-DD");
-
-    //   var message = "";
-
-    //   if (startDate === "") {
-    //     message += "Start date is required. ";
-    //   }
-
-    //   if (endDate === "") {
-    //     message += "End date is required. ";
-    //   }
-
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/generatepayroll/checkmissedlogs",
-    //       data: {
-    //         startdate: startDate,
-    //         enddate: endDate,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success" && result.data.length > 0) {
-    //           swal({
-    //             title: "Confirmation",
-    //             text: `There are missed logs between ${startDate} and ${endDate}. Do you still want to generate and load payroll?`,
-    //             icon: "warning",
-    //             buttons: "OK",
-    //             dangerMode: true,
-    //           });
-    //         } else {
-    //           swal("Success", "No missed logs found.", "success");
-    //         }
-    //       },
-    //       error: function (xhr, status, error) {
-    //         console.log("Error:", xhr.responseText);
-    //         swal(
-    //           "Error",
-    //           "An error occurred while checking missed logs.",
-    //           "error"
-    //         );
-    //       },
-    //     });
-    //     swal({
-    //       title: "Confirmation",
-    //       text: `Are you sure you want to generate and load payroll from ${startDate} To ${endDate}`,
-    //       icon: "warning",
-    //       buttons: ["Cancel", "Confirm"],
-    //       dangerMode: true,
-    //     }).then((willGenerate) => {
-    //       if (willGenerate) {
-    //         swal({
-    //           title: "Generating and Loading Payroll",
-    //           text: "Please wait... This will take a few minutes.",
-    //           buttons: false,
-    //           closeOnEsc: false,
-    //           closeOnClickOutside: false,
-    //           allowOutsideClick: false,
-    //           content: {
-    //             element: "div",
-    //             attributes: {
-    //               innerHTML:
-    //                 '<div class="progress"><div class="determinate" style="width: 0%"></div></div>',
-    //             },
-    //           },
-    //         });
-
-    //         let progress = 0;
-    //         const interval = setInterval(function () {
-    //           progress += 10;
-    //           if (progress <= 100) {
-    //             $(".progress .determinate").css("width", progress + "%");
-    //           } else {
-    //             clearInterval(interval);
-    //           }
-    //         }, 1000);
-
-    //         $.ajax({
-    //           type: "POST",
-    //           url: "/generatepayroll/generateandaoadaayroll",
-    //           data: {
-    //             startdate: startDate,
-    //             enddate: endDate,
-    //           },
-    //           success: function (result) {
-    //             console.log("Success:", result);
-    //             clearInterval(interval);
-    //             swal.close();
-
-    //             if (result.msg == "success") {
-    //               swal({
-    //                 title: "Generate and Load Successfully",
-    //                 text: "Thank you for waiting ;)",
-    //                 icon: "success",
-    //                 button: "OK!",
-    //               }).then((results) => {
-    //                 loadPayrollTable(startDate, endDate);
-    //               });
-    //             } else {
-    //               swal(
-    //                 "Error",
-    //                 "An error occurred while generating and loading payroll.",
-    //                 "error"
-    //               );
-    //             }
-    //           },
-    //           error: function (xhr, status, error) {
-    //             console.log("Error:", xhr.responseText);
-    //             clearInterval(interval);
-    //             swal.close();
-    //             swal(
-    //               "Error",
-    //               "An error occurred while generating and loading payroll.",
-    //               "error"
-    //             );
-    //           },
-    //         });
-    //       } else {
-    //         swal(
-    //           "Operation Cancelled",
-    //           "Payroll generation and loading process cancelled.",
-    //           "info"
-    //         );
-    //       }
-    //     });
-    //   }
-    // });
-
     $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
       $("#loadbutton").click(function () {
         let startDate = picker.startDate.format("YYYY-MM-DD");
@@ -564,6 +429,12 @@
               $("#basicadjustments").text(
                 formatToCurrency(item.Basic_Adjustments)
               );
+              $("#payrolladjustments").text(
+                formatToCurrency(item.Payroll_Adjustments)
+              );
+              $("#overtimemeal").text(
+                formatToCurrency(item.Overtime_Meal)
+              );
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Compensation));
@@ -626,6 +497,9 @@
               $("#payslipbasicadustments").text(
                 formatToCurrency(item.Basic_Adjustments)
               );
+              $("#payslippayrolladjustments").text(
+                formatToCurrency(item.Payroll_Adjustments)
+              );
               $("#payslipovertime").text(formatToCurrency(item.ApprovedOt));
               $("#payslipndpay").text(
                 formatToCurrency(item.ApprovedNightDiffOt)
@@ -633,6 +507,9 @@
               $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
               $("#payslipearlypay").text(
                 formatToCurrency(item.ApprovedEarlyOt)
+              );
+              $("#payslipotmeal").text(
+                formatToCurrency(item.Overtime_Meal)
               );
               $("#payslipregular").text(
                 formatToCurrency(item.Regular_Holiday_Compensation)

@@ -99,6 +99,17 @@ var leave_request_activityRouter = require("./routes/leave_request_activity");
 var accessroutelayoutRouter = require("./routes/accessroutelayout");
 var bankRouter = require("./routes/bank");
 var bankaccountRouter = require("./routes/bankaccount");
+var overtime_request_activityRouter = require("./routes/overtime_request_activity");
+var supervisoruserRouter = require("./routes/supervisoruser");
+var change_shiftRouter = require("./routes/change_shift");
+var eportalotmealRouter = require("./routes/eportalotmeal");
+var payroll_adjustmentsRouter = require("./routes/payroll_adjustments");
+var teamleadappliedotmealRouter = require("./routes/teamleadappliedotmeal");
+var meal_request_activityRouter = require("./routes/meal_request_activity");
+var teamleadshiftRouter = require("./routes/teamleadshift");
+var teamleadshiftadjustmentRouter = require("./routes/teamleadshiftadjustment");
+
+
 
 var app = express();
 
@@ -210,6 +221,16 @@ app.use("/leave_request_activity", leave_request_activityRouter);
 app.use("/accessroutelayout", accessroutelayoutRouter);
 app.use("/bank", bankRouter);
 app.use("/bankaccount", bankaccountRouter);
+app.use("/overtime_request_activity", overtime_request_activityRouter);
+app.use("/supervisoruser", supervisoruserRouter);
+app.use("/change_shift", change_shiftRouter);
+app.use("/eportalotmeal", eportalotmealRouter);
+app.use("/payroll_adjustments", payroll_adjustmentsRouter);
+app.use("/teamleadappliedotmeal" , teamleadappliedotmealRouter);
+app.use("/meal_request_activity", meal_request_activityRouter);
+app.use("/teamleadshift", teamleadshiftRouter);
+app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

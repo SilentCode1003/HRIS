@@ -1,0 +1,186 @@
+<script>
+  let payrolldate = "";
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+    //LoadEditEmp();
+
+    $(document).on("keyup", "#myInput2", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableUploadPayslip").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/payslip/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-pen"></i></button>
+                     `;
+
+              finalData.push({
+                payrolldate: item.payrolldate,
+                daterange: item.daterange,
+                totalhours: item.totalhours,
+                nightdiffhours: item.nightdiffhours,
+                normal_ot: item.normal_ot,
+                earlyot: item.earlyot,
+                late_minutes: item.late_minutes,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "payrolldate" },
+          { data: "daterange" },
+          { data: "totalhours" },
+          { data: "nightdiffhours" },
+          { data: "normal_ot" },
+          { data: "earlyot" },
+          { data: "late_minutes" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var payrolldateCell = $(row).find("td:eq(0)");
+          payrolldateCell.wrapInner("<span class='applieddate-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+
+    $("#dataTableUploadPayslip tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      payrolldate = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#payslipdate").val(payrolldate);
+    });
+
+    
+    $(document).on("click", "#uploadpayrolldate", function () {
+      let payrolldate = $("#payslipdate").val();
+
+      var message = "";
+
+      if (payrolldate === "") {
+        message += "Payroll Date is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to Upload this Payroll Date ${payrolldate}?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willApprove) => {
+          if (willApprove) {
+            swal({
+              title: "Uploading...",
+              text: "This will take a few minutes Please Wait !!",
+              icon: "info",
+              buttons: false,
+              closeOnClickOutside: false,
+              closeOnEsc: false,
+            });
+
+            $.ajax({
+              type: "POST",
+              url: "/payslip/approvepayslip",
+              data: {
+                payrolldate: payrolldate,
+              },
+              success: function (result) {
+                swal.close();
+                if (result.msg === "success") {
+                  swal(
+                    "Upload Successful",
+                    "Payroll date uploaded successfully!",
+                    "success"
+                  ).then(() => {
+                    window.location.reload();
+                  });
+                } else {
+                  swal(
+                    "Error",
+                    "An error occurred while saving data.",
+                    "error"
+                  );
+                }
+              },
+              error: function (err) {
+                swal.close();
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+            });
+          } else {
+            swal("Action Canceled", "", "info");
+          }
+        });
+      }
+    });
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput2");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableUploadPayslip");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

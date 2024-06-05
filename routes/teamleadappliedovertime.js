@@ -2,6 +2,10 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { ValidatorForTeamLead } = require("./controller/middleware");
+const { Select, InsertTable } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
+const { InsertStatement, SelectStatement } = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -17,37 +21,51 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
-    let sql = `SELECT
-    pao_image,
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `select 
     pao_id,
+    pao_image,
     pao_fullname,
-    DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
-    TIME_FORMAT(pao_clockin, '%H:%i:%s')  as pao_clockin,
-    TIME_FORMAT(pao_clockout, '%H:%i:%s')  as pao_clockout,
-	  (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
-    DATE_FORMAT(pao_payroll_date, '%W, %M %e, %Y') as pao_payroll_date,
+    DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
+    DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
+    DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
+    (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
+    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_status
-    FROM payroll_approval_ot
-	INNER JOIN
-	master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    WHERE me_department = '${departmentid}' AND pao_status = 'Appllied'
-    AND pao_employeeid NOT IN (
-      SELECT tu_employeeid FROM teamlead_user
-  );`;
+FROM payroll_approval_ot
+INNER JOIN
+master_employee ON payroll_approval_ot.pao_employeeid = me_id
+WHERE pao_status = 'Applied' AND pao_subgroupid = '${subgroupid}'
+AND me_department = '${departmentid}'
+AND pao_employeeid NOT IN (
+    SELECT tu_employeeid FROM teamlead_user)
+  AND pao_approvalcount = (
+    SELECT ats_count
+    FROM aprroval_stage_settings
+    WHERE ats_accessid = '${accesstypeid}'
+    AND ats_departmentid = '${departmentid}')`;
 
-    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-      if (err) console.error("Error", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
+    console.error(error);
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -55,6 +73,7 @@ router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
+	  pao_id,
     pao_image,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
@@ -64,25 +83,106 @@ router.post("/getotapproval", (req, res) => {
     pao_night_differentials,
     pao_early_ot,
     pao_normal_ot,
-    pao_night_pay,
-    pao_normal_pay,
-    pao_early_ot_pay,
-    pao_total_ot_net_pay,
     DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_reason,
-    pao_status
-    from payroll_approval_ot
+    pao_status,
+    pao_overtimeimage
+    FROM payroll_approval_ot
+    INNER JOIN
+    master_employee ON payroll_approval_ot.pao_employeeid = me_id
     where pao_id = '${approveot_id}'`;
 
-    mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
       console.log(result);
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+      if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+
+    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
+    //   if (err) console.error("Error: ", err);
+
+    //   console.log(result);
+
+    //   res.json({
+    //     msg: "success",
+    //     data: result,
+    //   });
+    // });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+
+router.post("/ovetimeaction", (req, res) => {
+  console.log("HIT");
+  try {
+    let employeeid = req.session.employeeid;
+    let departmentid = req.session.departmentid;
+    let subgroupid = req.session.subgroupid;
+    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    const { approveot_id, status, comment } = req.body;
+
+    // let data = [];
+
+    // data.push([
+    //   employeeid,
+    //   departmentid,
+    //   approveot_id,
+    //   subgroupid,
+    //   status,
+    //   createdate,
+    //   comment,
+    // ]);
+
+    let sql = InsertStatement("overtime_request_activity", "ora", [
+      "employeeid",
+      "departmentid",
+      "subgroupid",
+      "date",
+      "overtimeid",
+      "status",
+      "commnet",
+    ]);
+    let data = [[
+      employeeid,
+      departmentid,
+      subgroupid,
+      createdate,
+      approveot_id,
+      status,
+      comment
+    ]];
+    let checkStatement = SelectStatement(
+      "select * from overtime_request_activity where ora_employeeid=? and ora_overtimeid=?",
+      [employeeid, approveot_id]
+    );
+
+    console.log(checkStatement,'result');
+
+    InsertTable(sql, data, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      res.json(JsonSuccess());
     });
   } catch (error) {
     res.json({
@@ -91,3 +191,4 @@ router.post("/getotapproval", (req, res) => {
     });
   }
 });
+

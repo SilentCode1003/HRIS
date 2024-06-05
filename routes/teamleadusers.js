@@ -4,6 +4,9 @@ var express = require("express");
 const { Encrypter } = require("./repository/crytography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
+const { Select } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -110,23 +113,33 @@ router.get("/load", (req, res) => {
     ma_accessname as tu_accesstype,
     tu_createby,
     tu_createdate,
-    tu_status
+    tu_status,
+    s_name as tu_subgroupid
     from teamlead_user
     left join master_employee on teamlead_user.tu_employeeid = me_id
-    LEFT JOIN master_access ON teamlead_user.tu_accesstype = ma_accessid`;
+    LEFT JOIN master_access ON teamlead_user.tu_accesstype = ma_accessid
+    INNER JOIN subgroup ON teamlead_user.tu_subgroupid = s_id
+    WHERE tu_accesstype = '5'`;
 
-    mysql.Select(sql, "TeamLeader_User", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+      //console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "tu_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
-    res.json({
-      msg: error,
-    });
+    res.json(JsonErrorResponse(err));
   }
 });
 

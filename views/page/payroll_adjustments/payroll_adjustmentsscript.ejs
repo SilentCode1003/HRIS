@@ -1,0 +1,420 @@
+<script>
+  let adjustmentid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    searchTable();
+    LoadListEdit();
+    LoadPayrollDate();
+    EditPayrollDate();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTablePayrollAdjustments").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/payroll_adjustments/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadjustmentmodal"><i class="fas fa-fw fa-pen"></i></button>
+                  `;
+              finalData.push({
+                adjustmentid: item.adjustmentid,
+                fullname: item.fullname,
+                adjustmenttype: item.adjustmenttype,
+                adjust_amount: item.adjust_amount,
+                payrolldate: item.payrolldate,
+                adjustmentcreateby: item.createby,
+                adjustmentstatus: item.adjustmentstatus,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "adjustmentid" },
+          { data: "fullname" },
+          { data: "adjustmenttype" },
+          {
+            data: "adjust_amount",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "payrolldate" },
+          { data: "adjustmentcreateby" },
+          { data: "adjustmentstatus" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+
+          var statusText = data.adjustmentstatus;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $("#paemployeename").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjustmentsavebtn", function () {
+      let employeeid = $("#paemployeename").val();
+      let payrolldate = $("#papayrolldate").val();
+      let adjustmenttype = $("#patype").val();
+      let adjustmentamount = $("#paamount").val();
+      let adjustmentreason = $("#pareason").val();
+      let origindate = $("#paorigindate").val();
+
+      var message = "";
+
+      if (employeeid == "") {
+        message += "Employee Name is required ";
+      }
+
+      if (adjustmenttype == "") {
+        message += "Type is required ";
+      }
+
+      if (adjustmentamount == "") {
+        message += "Amount is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        adjustmentamount = adjustmentamount.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/payroll_adjustments/save",
+          data: {
+            employeeid: employeeid,
+            adjustmenttype: adjustmenttype,
+            payrolldate: payrolldate,
+            adjustmentamount: parseFloat(adjustmentamount),
+            adjustmentreason: adjustmentreason,
+            origindate: origindate,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#paemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#papayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editpaemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#editpapayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTablePayrollAdjustments tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      adjustmentid = dataRow[0];
+      console.log(dataRow);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getpayrolladjustment",
+        data: {
+          adjustmentid: adjustmentid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editpaemployeename").val(item.employeeid);
+              $("#editpaorigindate").val(item.origindate);
+              $("#editpatype").val(item.adjustmenttype);
+              $("#editpaamount").val(item.adjust_amount);
+              $("#editpapayrolldate").val(item.payrolldate);
+              $("#editstatuspa").val(item.adjustmentstatus);
+              $("#editpareason").val(item.reason);
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjustmenteditbtn", function () {
+      let id = adjustmentid;
+      let employeeid = $("#editpaemployeename").val();
+      let origindate = $("#editpaorigindate").val();
+      let adjustmenttype = $("#editpatype").val();
+      let adjust_amount = $("#editpaamount").val();
+      let payrolldate = $("#editpapayrolldate").val();
+      let adjustmentstatus = $("#editstatuspa").val();
+      let reason = $("#editpareason").val();
+
+
+
+      let message = "";
+
+      if (employeeid === "") {
+        message += "employeeid ID is required. ";
+      }
+
+      if (adjustmenttype === "") {
+        message += "adjustmenttype is required. ";
+      }
+
+      if (adjust_amount === "") {
+        message += "adjust_amount is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "payrolldate is required. ";
+      }
+
+      if (adjustmentstatus === "") {
+        message += "adjustmentstatus is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/payroll_adjustments/edit",
+          data: {
+            adjustmentid: id,
+            employeeid: employeeid,
+            origindate: origindate,
+            adjustmenttype: adjustmenttype,
+            adjust_amount: adjust_amount,
+            payrolldate: payrolldate,
+            adjustmentstatus: adjustmentstatus,
+            reason: reason,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Maybe The Department and Approver Count combination already exists.",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablePayrollAdjustments");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

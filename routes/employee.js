@@ -22,6 +22,7 @@ const { sq } = require("date-fns/locale");
 const { GenerateExcel } = require("./repository/excel");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling, RawData } = require("./model/hrmisdb");
+const { JsonDataResponse, JsonErrorResponse } = require("./repository/response");
 
 const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
@@ -505,13 +506,13 @@ router.get("/load", (req, res) => {
   try {
     let sql = ` 
     SELECT 
-    me_id as newEmployeeId,
-    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS firstname,
-    me_phone as phone,
-    me_email as email,
-    me_jobstatus as jobstatus,
-    md_departmentname AS me_department,
-    mp_positionname AS me_position
+    me_id,
+    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS me_fullname,
+    me_phone,
+    me_email,
+    me_jobstatus,
+    md_departmentname as me_departmentname,
+    mp_positionname as me_positionname
     FROM
     master_employee
     LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
@@ -519,20 +520,23 @@ router.get("/load", (req, res) => {
     WHERE
     me_jobstatus IN ('regular', 'probitionary','apprentice')`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "me_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res
       .status(500)

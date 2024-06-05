@@ -1,0 +1,339 @@
+<script>
+    let changeshift = "";
+  
+    $(document).ready(function () {
+      LoadTable();
+      LoadList();
+      searchTable();
+      LoadListEdit();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      $(function () {
+        var dtToday = new Date();
+  
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10) month = "0" + month.toString();
+        if (day < 10) day = "0" + day.toString();
+  
+        var minDate = year + "-" + month + "-" + day;
+  
+        $("#targetdate").attr("min", minDate);
+        $("#actualdate").attr("min", minDate);
+  
+        $('input[type="date"]').on("change", function () {
+          var dateInput = this.value;
+          var date = new Date(dateInput);
+          var options = { weekday: "long" };
+          var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+  
+          if (this.id === "targetdate") {
+            $("#targetdayName").val(dayName);
+          } else if (this.id === "actualdate") {
+            $("#actualdayName").val(dayName);
+          }
+        });
+      });
+  
+      function LoadTable() {
+        $("#dataTableChangeShiftSettings").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/teamleadshiftadjustment/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+      
+                action = `
+                  <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editchangeshift"><i class="fas fa-fw fa-pen"></i></button>
+                              `;
+                finalData.push({
+                  changeshift: item.id,
+                  fullname: item.fullname,
+                  actualrd: item.actualrd,
+                  changerd: item.changerd,
+                  createby: item.createby,
+                  shiftstatus: item.shiftstatus,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "changeshift" },
+            { data: "fullname" },
+            { data: "actualrd" },
+            { data: "changerd" },
+            { data: "createby" },
+            { data: "shiftstatus" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            //miyaka
+            var statusCell = $(row).find("td:eq(5)");
+  
+            var statusText = data.shiftstatus;
+  
+            var statusClass = "";
+  
+            switch (statusText.toLowerCase()) {
+              case "active":
+                statusClass = "active-status";
+                break;
+              case "inactive":
+                statusClass = "inactive-status";
+                break;
+              default:
+                statusClass = "";
+            }
+  
+            statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+  
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      $(document).on("click", "#changeshiftsavebtn", function () {
+        let employeeid = $("#csemployeename").val();
+        let targetrddate = $("#targetdate").val();
+        let actualrddate = $("#actualdate").val();
+  
+        var message = "";
+  
+        if (employeeid == "") {
+          message += "employeeid is required ";
+        }
+  
+        if (targetrddate == "") {
+          message += "targetrddate is required ";
+        }
+  
+        if (actualrddate == "") {
+          message += "actualrddate is required ";
+        }
+  
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/change_shift/save",
+            data: {
+              employeeid: employeeid,
+              targetrddate: targetrddate,
+              actualrddate: actualrddate,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Save Successfully",
+                  "You clicked the button!",
+                  "success"
+                ).then((result) => {
+                  window.location.reload();
+                });
+                LoadTable();
+              } else if (result.msg == "exist") {
+                swal("Error", "This combination already exists.", "error");
+              }
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+          });
+        }
+      });
+  
+      function LoadList() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadshift/selectshift",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.fullname);
+              $("#csemployeename").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      function LoadListEdit() {
+        $.ajax({
+          type: "GET",
+          url: "/teamleadshift/selectdistinct",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.id, item.id);
+              $(options).html(item.fullname);
+              $("#editcsemployeename").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $("#dataTableChangeShiftSettings tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+          changeshift = dataRow[0];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/change_shift/getchange_shift",
+          data: {
+            changeshift: changeshift,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#editcsemployeename").val(item.employeeid);
+                $("#editactualdate").val(item.actualrd);
+                $("#edittargetdate").val(item.changerd);
+                $("#editshiftstatus").val(item.shiftstatus);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            console.error("An error occurred while fetching employee data", err);
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      $(document).on("click", "#editchangeshiftsavebtn", function () {
+        let id = changeshift;
+        let employeeid = $("#editcsemployeename").val();
+        let actualrd = $("#editactualdate").val();
+        let changerd = $("#edittargetdate").val();
+        let shiftstatus = $("#editshiftstatus").val();
+  
+        let message = "";
+  
+        if (employeeid === "") {
+          message += "employeeid ID is required. ";
+        }
+  
+        if (actualrd === "") {
+          message += "actualrd is required. ";
+        }
+  
+        if (changerd === "") {
+          message += "changerd is required. ";
+        }
+  
+        if (shiftstatus === "") {
+          message += "shiftstatus is required. ";
+        }
+  
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "/change_shift/edit",
+            data: {
+              changeshift: id,
+              employeeid: employeeid,
+              actualrd: actualrd,
+              changerd: changerd,
+              shiftstatus: shiftstatus,
+            },
+            success: function (result) {
+              if (result.msg === "success") {
+                swal({
+                  title: "Update Successfully",
+                  text: "You clicked the button!",
+                  icon: "success",
+                  button: "OK!",
+                }).then(() => {
+                  window.location.reload();
+                });
+              } else if (result.msg === "exist") {
+                swal(
+                  "Exist",
+                  "Maybe The Department and Approver Count combination already exists.",
+                  "warning"
+                );
+              } else {
+                swal("Error", "An error occurred while updating.", "error");
+              }
+            },
+            error: function (err) {
+              swal(
+                "Error",
+                "An error occurred while making the request.",
+                "error"
+              );
+            },
+          });
+        }
+      });
+  
+      function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableChangeShiftSettings");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+            }
+          }
+          if (found) {
+            tr[i].style.display = "";
+            found = false;
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    });
+  </script>
+  

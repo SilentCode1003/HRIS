@@ -318,8 +318,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#educationname").append(options);
           });
         },
@@ -337,8 +337,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#workemployeename").append(options);
           });
         },
@@ -356,8 +356,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#editemployeename").append(options);
           });
         },

@@ -13,6 +13,7 @@
     loadCOAcard();
     loadOvertimeCard();
     loadLEAVECard();
+    loadOTmealCard();
     loadattendanceBadge();
 
     LoadBdayFolks();
@@ -76,6 +77,10 @@
       searchapprenticeTable();
     });
 
+    $(document).on("keyup", "#myInputtotalotmeal", function () {
+      searchOTMEAL();
+    });
+
     //#endregion
 
     //#region Load Modal Table
@@ -96,8 +101,10 @@
     function populatedatatable(data) {
       const tableBody = $("#dataTableemployees tbody");
       tableBody.empty();
+      console.log("Populating data table");
 
       if (data.length === 0) {
+        console.log("No data matched");
         const tr = $("<tr>").append(
           $("<td>", {
             colspan: 6,
@@ -107,21 +114,16 @@
         );
         tableBody.append(tr);
       } else {
+        console.log("Data length:", data.length);
         data.forEach((item) => {
           const tr = $("<tr>").append(
-            // $("<td>", {
-            //   html: item.profilePicturePath
-            //     ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
-            //     : "No Image",
-            //   "data-label": "Product Image",
-            // }),
             $("<td>", {
               text: item.employeeid,
               "data-label": "Name",
               class: "custom-mobile-align",
             }),
             $("<td>", {
-              text: item.attendancedate,
+              text: item.attendace_date,
               "data-label": "Attendance Date",
               class: "custom-mobile-align",
             }),
@@ -150,6 +152,7 @@
           tableBody.append(tr);
         });
       }
+      console.log("Table populated");
     }
 
     //#overtime Employee Modal
@@ -297,6 +300,79 @@
             }),
             $("<td>", {
               text: item.leavereason,
+              "data-label": "Reason",
+              class: "custom-mobile-align",
+            })
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+
+    //#OT MEAL Modal
+    $(document).on("click", "#totalotmeal", function () {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadindex/totalotmeal",
+        success: function (json) {
+          var data = json.data;
+
+          populateotmealtable(data);
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function populateotmealtable(data) {
+      const tableBody = $("#totalOtMealTable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          const tr = $("<tr>").append(
+            // $("<td>", {
+            //   html: item.profilePicturePath
+            //     ? `<img src="data:image/jpg;base64,${item.profilePicturePath}" alt="Product Image" class="" style="max-width: 90px; max-height: 90px;"/>`
+            //     : "No Image",
+            //   "data-label": "Product Image",
+            // }),
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "Name",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.attendancedate,
+              "data-label": "Attendance Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockin,
+              "data-label": "Time In",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockout,
+              "data-label": "Time Out",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.totalovertime,
+              "data-label": "Total Hours",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.otmeal_amount,
               "data-label": "Reason",
               class: "custom-mobile-align",
             })
@@ -894,6 +970,25 @@
         },
       });
     }
+
+    function loadOTmealCard() {
+      $.ajax({
+        type: "GET",
+        url: "teamleadindex/countotmealcard",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalOTMEAL = result.data.OTMEALCount;
+            $("#totalotmealCard .h5-teamlead").text(totalOTMEAL);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
     //#endregion
 
     //#region Load Badge Notif
@@ -1279,7 +1374,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "http://localhost:3005/getleave",
+        url: "/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -2278,6 +2373,32 @@
       input = document.getElementById("myInputtotaladmin");
       filter = input.value.toUpperCase();
       table = document.getElementById("totaladmintable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    function searchOTMEAL() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInputtotalotmeal");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("totalOtMealTable");
       tr = table.getElementsByTagName("tr");
 
       for (i = 1; i < tr.length; i++) {
