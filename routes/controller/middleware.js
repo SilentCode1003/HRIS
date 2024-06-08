@@ -236,109 +236,109 @@ var roleacess = [
       },
     ],
   },
-  {
-    role: "Super Visor",
-    routes: [
-      {
-        layout: "teamleadindexlayout",
-      },
-      {
-        layout: "teamleademployeelayout",
-      },
-      {
-        layout: "teamleadcoalayout",
-      },
-      {
-        layout: "teamleadovertimelayout",
-      },
-      {
-        layout: "teamleadleavelayout",
-      },
-      {
-        layout: "teamleadpendingcoalayout",
-      },
-      {
-        layout: "teamleadapprovedcoalayout",
-      },
-      {
-        layout: "teamleadappliedovertimelayout",
-      },
-      {
-        layout: "teamleadapprovedovertimelayout",
-      },
-      {
-        layout: "teamleadpendingleavelayout",
-      },
-      {
-        layout: "teamleadapprovedleavelayout",
-      },
-      {
-        layout: "teamleadgeofencelayout",
-      },
-      {
-        layout: "teamleadappliedotmeallayout",
-      },
-      {
-        layout: "teamleadshiftlayout",
-      },
-      {
-        layout: "teamleadshiftadjustmentlayout",
-      },
-    ],
-  },
-  {
-    role: "Team Leader",
-    routes: [
-      {
-        layout: "teamleadindexlayout",
-      },
-      {
-        layout: "teamleademployeelayout",
-      },
-      {
-        layout: "teamleadcoalayout",
-      },
-      {
-        layout: "teamleadovertimelayout",
-      },
-      {
-        layout: "teamleadleavelayout",
-      },
-      {
-        layout: "teamleadpendingcoalayout",
-      },
-      {
-        layout: "teamleadapprovedcoalayout",
-      },
-      {
-        layout: "teamleadappliedovertimelayout",
-      },
-      {
-        layout: "teamleadapprovedovertimelayout",
-      },
-      {
-        layout: "teamleadpendingleavelayout",
-      },
-      {
-        layout: "teamleadapprovedleavelayout",
-      },
-      {
-        layout: "teamleadgeofencelayout",
-      },
-      {
-        layout: "teamleadattendancelayout",
-      },
-      {
-        layout: "teamleadappliedotmeallayout",
-      },
-      {
-        layout: "teamleadshiftlayout",
-      },
-      {
-        layout: "teamleadshiftadjustmentlayout",
-      },
-    ],
-  },
+  // {
+  //   role: "Super Visor",
+  //   routes: [
+  //     {
+  //       layout: "teamleadindexlayout",
+  //     },
+  //     {
+  //       layout: "teamleademployeelayout",
+  //     },
+  //     {
+  //       layout: "teamleadcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadpendingcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadappliedovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadpendingleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadgeofencelayout",
+  //     },
+  //     {
+  //       layout: "teamleadappliedotmeallayout",
+  //     },
+  //     {
+  //       layout: "teamleadshiftlayout",
+  //     },
+  //     {
+  //       layout: "teamleadshiftadjustmentlayout",
+  //     },
+  //   ],
+  // },
+  // {
+  //   role: "Team Leader",
+  //   routes: [
+  //     {
+  //       layout: "teamleadindexlayout",
+  //     },
+  //     {
+  //       layout: "teamleademployeelayout",
+  //     },
+  //     {
+  //       layout: "teamleadcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadpendingcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedcoalayout",
+  //     },
+  //     {
+  //       layout: "teamleadappliedovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedovertimelayout",
+  //     },
+  //     {
+  //       layout: "teamleadpendingleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadapprovedleavelayout",
+  //     },
+  //     {
+  //       layout: "teamleadgeofencelayout",
+  //     },
+  //     {
+  //       layout: "teamleadattendancelayout",
+  //     },
+  //     {
+  //       layout: "teamleadappliedotmeallayout",
+  //     },
+  //     {
+  //       layout: "teamleadshiftlayout",
+  //     },
+  //     {
+  //       layout: "teamleadshiftadjustmentlayout",
+  //     },
+  //   ],
+  // },
   {
     role: "HR",
     routes: [
@@ -429,56 +429,6 @@ var roleacess = [
     ],
   },
 ];
-
-// exports.Validator = function (req, res, layout) {
-//   let ismatch = false;
-//   let counter = 0;
-
-//   console.log("Access Type:", req.session.accesstype);
-//   console.log("Layout:", layout);
-
-//   if (req.session.accesstype == "Employee" && layout == "eportalindexlayout") {
-//     console.log(req.session.accesstype);
-//     console.log("hit");
-//     return res.render(`${layout}`, {
-//       image: req.session.image,
-//       employeeid: req.session.employeeid,
-//       fullname: req.session.fullname,
-//       accesstype: req.session.accesstype,
-//       geofenceid: req.session.geofenceid,
-//       departmentid: req.session.departmentid,
-//     });
-//   } else {
-//     roleacess.forEach((key, item) => {
-//       counter += 1;
-//       var routes = key.routes;
-
-//       routes.forEach((value, index) => {
-//         if (key.role == req.session.accesstype && value.layout == layout) {
-//           console.log("Role: ", req.session.accesstype, "Layout: ", layout);
-//           ismatch = true;
-
-//           return res.render(`${layout}`, {
-//             image: req.session.image,
-//             employeeid: req.session.employeeid,
-//             fullname: req.session.fullname,
-//             accesstype: req.session.accesstype,
-//             departmentid: req.session.departmentid,
-//             departmentname: req.session.departmentname,
-//             position: req.session.position,
-//             geofenceid: req.session.geofenceid,
-//           });
-//         }
-//       });
-
-//       if (counter == roleacess.length) {
-//         if (!ismatch) {
-//           res.redirect("/login");
-//         }
-//       }
-//     });
-//   }
-// };
 
 exports.ValidatorForTeamLead = function (req, res, layout) {
   let ismatch = false;
@@ -590,44 +540,9 @@ const { Select } = require("../repository/dbconnect");
 const { JsonErrorResponse } = require("../repository/response");
 
 
-
-// exports.ValidatorForTeamLead = function (req, res, layout, route) {
-//   let sql = SelectStatement(
-//     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
-//     [req.session.accessid, layout, route]
-//   );
-
-//   console.log(sql);
-
-//   Select(sql, (err, result) => {
-//     if (err) {
-//       console.error(err);
-//       res.json(JsonErrorResponse(err));
-//     }
-
-//     console.log(result);
-
-//     if (result != 0) {
-//       return res.render(`${layout}`, {
-//         image: req.session.image,
-//         employeeid: req.session.employeeid,
-//         fullname: req.session.fullname,
-//         accesstype: req.session.accesstype,
-//         departmentid: req.session.departmentid,
-//         departmentname: req.session.departmentname,
-//         position: req.session.position,
-//         geofenceid: req.session.geofenceid,
-//         subgroupid: req.session.subgroupid,
-//         accesstypeid: req.session.accesstypeid,
-//       });
-//     } else {
-//       res.redirect("/login");
-//     }
-//   });
-// };
-
-
 exports.Validator = function (req, res, layout, route) {
+
+  
   let sql = SelectStatement(
     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
     [req.session.accessid, layout, route]

@@ -1503,7 +1503,7 @@
 
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
-              $("#leaveemployeename").val(item.employee);
+              $("#leaveemployeename").val(item.fullname);
               $("#reqleavetype").val(item.leavetype);
               $("#leavestartdate").val(item.leavestartdate);
               $("#leaveenddate").val(item.leaveenddate);
@@ -1919,8 +1919,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#leaveemployeename").append(options);
           });
         },
