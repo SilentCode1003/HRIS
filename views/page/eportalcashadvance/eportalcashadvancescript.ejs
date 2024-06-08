@@ -36,7 +36,6 @@
                 requestdate: item.requestdate,
                 amount: item.amount,
                 purpose: item.purpose,
-                status: item.status,
                 approvaldate: item.approvaldate,
                 action: action,
               });
@@ -69,7 +68,6 @@
             },
           },
           { data: "purpose" },
-          { data: "status" },
           { data: "approvaldate" },
           { data: "action" },
         ],
@@ -170,7 +168,7 @@
             swal("Error fetching employee data", "success");
           }
         },
-        error: function (err) {
+         n  : function (err) {
           swal("An error occurred while fetching employee data", err, "error");
         },
       });
@@ -239,7 +237,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/eportalcashadvance/getca",
+        url: "/eportalcashadvance/getpending",
         data: {
           cashadvanceid: cashadvanceid,
         },

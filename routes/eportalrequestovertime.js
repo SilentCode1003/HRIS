@@ -471,6 +471,8 @@ router.post("/update", (req, res) => {
     let reason = req.body.reason;
     let subgroup = req.body.subgroup;
     let overtimeimage = req.body.overtimeimage;
+
+    
     let sql = `UPDATE payroll_approval_ot
     SET 
         pao_image = (
@@ -669,6 +671,7 @@ router.post("/update", (req, res) => {
     console.log(reason);
     console.log(overtimestatus);
     console.log(approveot_id);
+    console.log(subgroup);
 
     mysql
       .Update(sql)
@@ -870,8 +873,6 @@ LIMIT 1;
     });
   }
 });
-
-
 
 
 function Check(sql) {
