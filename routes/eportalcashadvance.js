@@ -86,22 +86,39 @@ router.post("/submitforapp", async (req, res) => {
 router.get("/load", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
-    let sql = `SELECT * FROM cash_advance WHERE ca_employeeid = '${employeeid}'
+    let sql = `SELECT 
+    ca_cashadvanceid,
+    ca_requestdate,
+    ca_amount,
+    ca_purpose,
+    ca_approvaldate
+    FROM cash_advance 
+    WHERE ca_employeeid = '${employeeid}'
+    AND ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    mysql.Select(sql, "Cash_Advance", (err, result) => {
-      if (err) console.error("Error: ", err);
+    console.log(employeeid,'id');
+    console.log(sql);
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ca_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
-    res.json({
-      msg: "error",
-      error,
-    });
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -161,6 +178,47 @@ router.post("/getload", (req, res) => {
       msg: "error",
       error,
     });
+  }
+});
+
+
+router.post("/getpending", (req, res) => {
+  try {
+    let cashadvanceid = req.body.cashadvanceid;
+    let sql = `SELECT 
+    ca_cashadvanceid,
+    me_profile_pic as ca_image,
+    CONCAT(me_lastname,' ',me_firstname) as ca_fullname,
+    ca_requestdate,
+    ca_amount,
+    ca_purpose,
+    ca_status,
+    ca_approvaldate
+    FROM cash_advance 
+    INNER JOIN master_employee ON cash_advance.ca_employeeid = me_id
+    WHERE ca_cashadvanceid = '${cashadvanceid}'
+    AND ca_status = 'Pending'
+    ORDER BY ca_cashadvanceid DESC`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ca_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 

@@ -246,7 +246,8 @@ router.post("/emplogs", (req, res) => {
  TIME(oal_logdatetime) AS logtime
  FROM ojt_attendance_logs
  WHERE oal_ojtid = '${ojtid}'
- order by oal_logdatetime desc`;
+ order by oal_logdatetime desc
+ limit 4`;
 
     mysql
       .mysqlQueryPromise(sql)

@@ -210,8 +210,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#employee").append(options);
             //console.log(item.firstname);
           });
@@ -272,8 +272,8 @@
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.newEmployeeId, item.newEmployeeId);
-            $(options).html(item.firstname);
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
             $("#editemployee").append(options);
             //console.log(item.firstname);
           });
