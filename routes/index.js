@@ -156,7 +156,7 @@ router.get("/loadreqOT", (req, res) => {
     DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') as  pao_clockout,
     pao_total_hours
     FROM payroll_approval_ot
-    WHERE pao_status = 'Appllied'`;
+    WHERE pao_status = 'Applied'`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -467,7 +467,7 @@ router.get("/countovertimeot", (req, res) => {
     SELECT count(*) as pending
     from payroll_approval_ot 
     where 
-    pao_status = 'Appllied'`;
+    pao_status = 'Applied'`;
 
     mysql
       .mysqlQueryPromise(sql)
