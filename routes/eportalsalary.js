@@ -64,6 +64,197 @@ router.get("/getpayrolldate", (req, res) => {
   }
 });
 
+router.post("/loginsalary", (req, res) => {
+  try {
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+
+
+router.get("/getpayrolldate", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
+    DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
+    p_cutoff as p_cutoff,
+    ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
+    SUM(p_totalhours) as p_totalhours,
+    SUM(p_nightothours) as p_nightdiff,
+    SUM(p_normalothours) as p_normalot,
+    SUM(p_earlyothours) as p_earlyot,
+    SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
+    round(p_total_netpay, 2) as p_totalnetpay
+    FROM 
+    payslip  
+    WHERE 
+    p_employeeid = '${employeeid}'
+    GROUP BY 
+    p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
+    ORDER BY 
+    p_payrolldate DESC`;
+
+    console.log(employeeid);
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+
+
+
+router.post("/loadprofileslip", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT
+    p_image,
+    p_fullname,
+    p_position,
+    p_department,
+    p_startdate,
+    p_enddate,
+    p_payrolldate,
+    p_salary,
+    p_basic_perday,
+    p_basic_adjustments,
+    p_allowances,
+    p_compensation,
+    p_total_deductions,
+    p_total_netpay,
+    p_workdays,
+    p_restday,
+    p_present,
+    p_absent,
+    p_holidaydays,
+    p_leaveday,
+    p_overtime_meal,
+    p_payroll_adjustments,
+    p_leave_pay
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'`;
+
+    console.log(employeeid);
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+
+
+router.post("/loadpayslip", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT
+    p_sssid,
+    p_tinid,
+    p_philhealthid,
+    p_pagibigid,
+    p_payrolltype,
+    p_employeeid,
+    p_fullname,
+    p_position,
+    p_department,
+    p_remaining_leave,
+    p_startdate,
+    p_enddate,
+    p_payrolldate,
+    p_salary,
+    p_basic_perday,
+    p_allowances,
+    p_basic_adjustments,
+    p_payroll_adjustments,
+    p_approveOT,
+    p_approvedNightOT,
+    p_approveNormalOT,
+    p_approvedEarlyOT,
+    p_overtime_meal,
+    p_leave_pay,
+    p_regularholidayComp,
+    p_specialholidayComp,
+    p_regularholidayOT,
+    p_specialholidayOT,
+    p_overall_netpay,
+    p_sss_dedcutions,
+    p_pagibigdeductions,
+    p_philhealthdeductions,
+    p_tindeductions,
+    p_absent_deductions,
+    p_healthcard,
+    p_late_deductions,
+    p_total_deductions,
+    p_total_netpay
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'`;
+
+    console.log(employeeid);
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 router.post("/generatepdf", async (req, res) => {
@@ -71,36 +262,41 @@ router.post("/generatepdf", async (req, res) => {
     const {
       employeeid,
       payrolldate,
-      globalSSSID,
-      globalTINID,
-      globalPhilHealthID,
-      globalPagIbigID,
-      globalEmployeeFullName,
-      globalPositionName,
-      globalDepartment,
-      globalStartDate,
-      globalEnddate,
-      globalSalary,
-      globalPer_Day,
-      globalAllowances,
-      globalApprovedOt,
-      globalApprovedNightDiffOt,
-      globalApprovedNormalOt,
-      globalApprovedEarlyOt,
-      globalRegular_Holiday_Compensation,
-      globalSpecial_Holiday_Compensation,
-      globalRegularHolidayOT,
-      globalSpecialHolidayOT,
-      globalOverall_Net_Pay,
-      globalSSS,
-      globalPagIbig,
-      globalPhilHealth,
-      globalTIN,
-      globalAbsent_Deductions,
-      globalHealth_Card,
-      globalLate_Deductions,
-      globalTotal_AllDeductions,
-      globalTotal_Netpay,
+      globalsssid,
+      globaltinid,
+      globalphilhealthid,
+      globalpagibigid,
+      globalfullname,
+      globalposition,
+      globaldepartment,
+      globalremainingleave,
+      globalstartdate,
+      globalenddate,
+      globalsalary,
+      globalperday,
+      globalallowances,
+      globalapproveot,
+      globalbasicadjustments,
+      globalpayrolladjustments,
+      globalapprovednightot,
+      globalapprovenormalot,
+      globalapprovedearlyot,
+      globalovertimemeal,
+      globalleavepay,
+      globalregularholidaycomp,
+      globalspecialholidaycomp,
+      globalregularholidayot,
+      globalspecialholidayot,
+      globaloverallnetpay,
+      globalsssdeductions,
+      globalpagibigdeductions,
+      globalphilhealthdeductions,
+      globaltindeductions,
+      globalabsentdeductions,
+      globalhealthcard,
+      globallatedeductions,
+      globaltotaldeductions,
+      globaltotalnetpay,
     } = req.body;
 
     const docDefinition = {
@@ -123,7 +319,7 @@ router.post("/generatepdf", async (req, res) => {
         },
         { text: "Payslip", style: "header" },
         {
-          text: "From: " + globalStartDate + " To: " + globalEnddate,
+          text: "From: " + globalstartdate + " To: " + globalenddate,
           style: "header",
         },
         {
@@ -137,22 +333,21 @@ router.post("/generatepdf", async (req, res) => {
               width: "50%",
               stack: [
                 { text: "EMP Code: " + employeeid, bold: true },
-                { text: "SSS ID: " + globalSSSID, bold: true },
-                { text: "TIN ID: " + globalTINID, bold: true },
-                { text: "Philhealth ID: " + globalPhilHealthID, bold: true },
-                { text: "PAG IBIG ID: " + globalPagIbigID, bold: true },
-                { text: "Remaining SL: ", bold: true },
-                { text: "Remaining Leave: ", bold: true },
+                { text: "SSS ID: " + globalsssid, bold: true },
+                { text: "TIN ID: " + globaltinid, bold: true },
+                { text: "Philhealth ID: " + globalphilhealthid, bold: true },
+                { text: "PAG IBIG ID: " + globalpagibigid, bold: true },
+                { text: "Remaining Paid Leaves: " + globalremainingleave, bold: true },
               ],
             },
             {
               width: "50%",
               stack: [
-                { text: "EMP Name: " + globalEmployeeFullName, bold: true },
-                { text: "Position: " + globalPositionName, bold: true },
-                { text: "Department: " + globalDepartment, bold: true },
-                { text: "Health Card: " + globalHealth_Card, bold: true },
-                { text: "Total Net Pay:  ₱" + globalTotal_Netpay, bold: true },
+                { text: "EMP Name: " + globalfullname, bold: true },
+                { text: "Position: " + globalposition, bold: true },
+                { text: "Department: " + globaldepartment, bold: true },
+                { text: "Health Card: " + globalhealthcard, bold: true },
+                { text: "Total Net Pay:  ₱" + globaltotalnetpay, bold: true },
                 { text: "Authorised Signatory: ", bold: true },
               ],
             },
@@ -169,87 +364,111 @@ router.post("/generatepdf", async (req, res) => {
                 { text: "Deductions", style: "tableHeader", bold: true },
                 { text: "Amount", style: "tableHeader", bold: true },
               ],
-              ["Basic", "₱" + globalSalary, "SSS", "₱" + globalSSS],
+              ["Basic", "₱" + globalsalary, "SSS", "₱" + globalsssdeductions],
               [
                 "Daily Rate",
-                "₱" + globalPer_Day,
+                "₱" + globalperday,
                 "Philhealth",
-                "₱" + globalPhilHealth,
+                "₱" + globalphilhealthdeductions,
               ],
               [
                 "Allowances",
-                "₱" + globalAllowances,
+                "₱" + globalallowances,
                 "HDMF",
-                "₱" + globalPagIbig,
+                "₱" + globalpagibigdeductions,
+              ],
+              [
+                "Basic Adjustments",
+                "₱" + globalbasicadjustments,
+                "Cash Advanced",
+                "",
+              ],
+              [
+                "Payroll Adjustments",
+                "₱" + globalpayrolladjustments,
+                "Tax",
+                "₱" + globaltindeductions,
               ],
               [
                 "Total Approve Overtime",
-                "₱" + globalApprovedOt,
-                "Tax",
-                "₱" + globalTIN,
+                "₱" + globalapproveot,
+                "Absent",
+                "₱" + globalabsentdeductions,
               ],
               [
                 "Night Differrentials",
-                "₱" + globalApprovedNightDiffOt,
-                "Absent",
-                "₱" + globalAbsent_Deductions,
+                "₱" + globalapprovednightot,
+                "Health Card",
+                "₱" + globalhealthcard,
               ],
               [
                 "Normal Overtime",
-                "₱" + globalApprovedNormalOt,
-                "Health Card",
-                "₱" + globalHealth_Card,
+                "₱" + globalapprovenormalot,
+                "Late",
+                "₱" + globallatedeductions,
               ],
               [
                 "Early Overtime",
-                "₱" + globalApprovedEarlyOt,
-                "Late",
-                "₱" + globalLate_Deductions,
+                "₱" + globalapprovedearlyot,
+                "",
+                "",
+              ],
+              [
+                "Overtime Meal",
+                "₱" + globalovertimemeal,
+                "",
+                "",
+              ],
+              [
+                "Leave With Pay",
+                "₱" + globalleavepay,
+                "",
+                "",
               ],
               [
                 "Special Holiday Overtime",
-                "₱" + globalSpecialHolidayOT,
+                "₱" + globalspecialholidayot,
                 "",
                 "",
               ],
               [
                 "Regular Holiday Overtime",
-                "₱" + globalRegularHolidayOT,
+                "₱" + globalregularholidayot,
                 "",
                 "",
               ],
               [
                 "Special Holiday",
-                "₱" + globalSpecial_Holiday_Compensation,
+                "₱" + globalspecialholidaycomp,
                 "",
                 "",
               ],
               [
                 "Regular Holiday",
-                "₱" + globalRegular_Holiday_Compensation,
+                "₱" + globalregularholidaycomp,
                 "",
                 "",
               ],
               [
                 "Total Compensation",
-                "₱" + globalOverall_Net_Pay,
+                "₱" + globaloverallnetpay,
                 "Total Deductions",
-                "₱" + globalTotal_AllDeductions,
+                "₱" + globaltotaldeductions,
               ],
             ],
           },
         },
         {
-          text: "Total Net Pay: ₱" + globalTotal_Netpay,
+          text: "Total Net Pay: ₱" + globaltotalnetpay,
           margin: [0, 30, 0, 0],
           border: [false, true, true, true],
         },
         {
           text:
             "Employee Name: " +
-            globalEmployeeFullName +
+            globalfullname +
             "\n\n Signature ____________________________",
-          margin: [0, 50, 0, 0],
+          margin: [0, 40, 0, 0],
           border: [false, true, true, true],
         },
       ],
@@ -274,12 +493,8 @@ router.post("/generatepdf", async (req, res) => {
   }
 });
 
-router.post("/loginsalary", (req, res) => {
-  try {
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
+
+
+
+
+

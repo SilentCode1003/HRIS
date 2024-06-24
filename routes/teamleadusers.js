@@ -215,7 +215,35 @@ router.post("/getusers", (req, res) => {
 
 router.get("/subgroupload", (req, res) => {
   try {
-    let sql = `select * from subgroup`;
+    let departmentid = req.session.departmentid;
+    let sql = `select * 
+    from subgroup
+    where s_departmentid = '${departmentid}'`;
+
+    mysql.Select(sql, "Subgroup", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error,
+    });
+  }
+});
+
+
+
+router.post("/subgrouploadforapp", (req, res) => {
+  try {
+    let departmentid = req.body.departmentid;
+    let sql = `select * 
+    from subgroup
+    where s_departmentid = '${departmentid}'`;
 
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error: ", err);

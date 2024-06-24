@@ -6,6 +6,8 @@
     LoadListEmp();
     LoadAccess();
     LoadEditAccess();
+    LoadSubgroup();
+    LoadEditSubgroup();
     searchTable();
 
     $(document).on("keyup", "#myInput", function () {
@@ -109,6 +111,7 @@
     $(document).on("click", "#userssavebtn", function () {
       let employeeid = $("#usersname").val();
       let accesstype = $("#usersaccesstype").val();
+      let subgroupid = $("#subgroupid").val();
 
       var message = "";
 
@@ -120,6 +123,10 @@
         message += "DESCRIPTION ";
       }
 
+      if (subgroupid == "") {
+        message += "subgroupid ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -129,6 +136,7 @@
           data: {
             employeeid: employeeid,
             accesstype: accesstype,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -168,6 +176,45 @@
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#usersname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#editsubgroupid").append(options);
           });
         },
         error: function (result) {
@@ -241,6 +288,7 @@
               $("#editusername").val(item.username);
               //$("#editpassword").val(item.password);
               $("#editusersaccesstype").val(item.accesstype);
+              $("#editsubgroupid").val(item.subgroupid);
               $("#editusersstatus").val(item.status);
             });
           } else {
@@ -262,12 +310,17 @@
       let username = $("#editusername").val();
       //let password = $("#editpassword").val();
       let accesstype = $("#editusersaccesstype").val();
+      let subgroupid = $("#editsubgroupid").val();
       let status = $("#editusersstatus").val();
 
       var message = "";
 
       if (username === "") {
         message += "departmentname is required. ";
+      }
+
+      if (subgroupid === "") {
+        message += "subgroupid is required. ";
       }
 
       //if (password === "") {
@@ -293,6 +346,7 @@
             username: username,
             //password: password,
             accesstype: accesstype,
+            subgroupid: subgroupid,
             status: status,
           },
           success: function (result) {

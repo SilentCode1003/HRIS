@@ -178,15 +178,26 @@
                                                                             <p class="mb-0 number-rest" id="absent"></p>
                                                                         </li>
                                                                         <li
-                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
                                                                             <div class="col-sm-6">
-                                                                                <p class="mb-0 p-rest"><lord-icon
-                                                                                        src="https://cdn.lordicon.com/xjvrxoon.json"
-                                                                                        colors="primary:#000000,secondary:#ffffff,tertiary:#f24c00"
+                                                                                <p class="mb-0 p-work"><lord-icon
+                                                                                        src="https://cdn.lordicon.com/vnnimcas.json"
+                                                                                        colors="primary:#000000,secondary:#16c72e"
                                                                                         class="db-icon-payslip">
                                                                                     </lord-icon> Holiday</p>
                                                                             </div>
-                                                                            <p class="mb-0 number-rest" id="holidayday"></p>
+                                                                            <p class="mb-0 p-number" id="holidayday"></p>
+                                                                        </li>
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                                                            <div class="col-sm-6">
+                                                                                <p class="mb-0 p-rest"><lord-icon
+                                                                                        src="https://cdn.lordicon.com/eoacwhtz.json"
+                                                                                        colors="primary:#000000,secondary:#ffffff,tertiary:#f24c00"
+                                                                                        class="db-icon-payslip">
+                                                                                    </lord-icon> Leave</p>
+                                                                            </div>
+                                                                            <p class="mb-0 number-rest" id="leavepaydadys"></p>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -282,6 +293,17 @@
                                                                         </div>
                                                                     </div>
                                                                     <hr class="hr-color">
+                                                                    <!-- Leave Pay -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0 payroll-label">Leave
+                                                                                Pay</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="leavepayprofile">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="hr-color">
                                                                     <!-- Cash Advanced -->
                                                                     <div class="row">
                                                                         <div class="col-sm-3">
@@ -289,6 +311,16 @@
                                                                                 Deductions</p>
                                                                         </div>
                                                                         <div class="col-sm-9" id="cadeductions">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="hr-color">
+                                                                    <!-- Loan Deductions -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0 payroll-label">Loan Deductions</p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="loandeductions">
                                                                             <p class="text-muted mb-0"></p>
                                                                         </div>
                                                                     </div>
@@ -445,8 +477,8 @@
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div> <span class="fw-bold">Remaining
-                                                                                SL:</span> <small
-                                                                                class="ms-3 payslipemp">5</small>
+                                                                                Paid Leaves:</span> <small
+                                                                                class="ms-3 payslipemp" id="payslipremainingleave"></small>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -456,12 +488,6 @@
                                                                                 IBIG ID:</span> <small
                                                                                 class="ms-3 payslipemp"
                                                                                 id="payslipdeppagibigid"></small>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div> <span class="fw-bold">Remaining
-                                                                                Leave</span> <small
-                                                                                class="ms-3 payslipemp">5</small>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -550,13 +576,21 @@
                                                                             Overtime
                                                                         </th>
                                                                         <td id="payslipearlypay"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td>Loan Deductions</td>
+                                                                        <td id="paysliploandeductions"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Overtime
                                                                             Meal
                                                                         </th>
                                                                         <td id="payslipotmeal"></td>
+                                                                        <td colspan="2"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row" class="earning-table">Leave
+                                                                            With Pay
+                                                                        </th>
+                                                                        <td id="payslipleavepay"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
@@ -848,3 +882,4 @@
             </div>
         </div>
     </div>
+</div>

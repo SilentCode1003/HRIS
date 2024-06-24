@@ -8,6 +8,7 @@
     console.log("Initialize");
     searchTable();
 
+
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
@@ -435,6 +436,12 @@
               $("#overtimemeal").text(
                 formatToCurrency(item.Overtime_Meal)
               );
+              $("#leavepayprofile").text(
+                formatToCurrency(item.Leave_Pay)
+              );
+              $("#loandeductions").text(
+                formatToCurrency(item.Loans)
+              );
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Compensation));
@@ -445,6 +452,7 @@
               $("#present").text(item.Total_gp_status);
               $("#absent").text(item.Absent);
               $("#holidayday").text(item.Holiday);
+              $("#leavepaydadys").text(item.Leaveday);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -485,6 +493,7 @@
               $("#payslipempname").text(item.EmployeeFullName);
               $("#payslipposition").text(item.PositionName);
               $("#payslipdepartment").text(item.Department);
+              $("#payslipremainingleave").text(item.Remaining_Leave);
               $("#paysliprange").text(
                 formatDate(item.StartDate) +
                   "- TO - " +
@@ -511,6 +520,9 @@
               $("#payslipotmeal").text(
                 formatToCurrency(item.Overtime_Meal)
               );
+              $("#payslipleavepay").text(
+                formatToCurrency(item.Leave_Pay)
+              );
               $("#payslipregular").text(
                 formatToCurrency(item.Regular_Holiday_Compensation)
               );
@@ -533,6 +545,7 @@
               );
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
+              $("#paysliploandeductions").text(formatToCurrency(item.Loans));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
               );

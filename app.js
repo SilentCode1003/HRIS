@@ -108,6 +108,8 @@ var teamleadappliedotmealRouter = require("./routes/teamleadappliedotmeal");
 var meal_request_activityRouter = require("./routes/meal_request_activity");
 var teamleadshiftRouter = require("./routes/teamleadshift");
 var teamleadshiftadjustmentRouter = require("./routes/teamleadshiftadjustment");
+var mobileAPIRouter = require("./routes/mobile-api");
+var gov_loansRouter = require("./routes/gov_loans");
 
 
 
@@ -230,6 +232,8 @@ app.use("/teamleadappliedotmeal" , teamleadappliedotmealRouter);
 app.use("/meal_request_activity", meal_request_activityRouter);
 app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
+app.use("/mobile-api", mobileAPIRouter);
+app.use("/gov_loans", gov_loansRouter);
 
 
 // catch 404 and forward to error handler

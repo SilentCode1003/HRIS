@@ -526,12 +526,11 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
