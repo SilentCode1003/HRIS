@@ -1,7 +1,7 @@
 const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
 var express = require("express");
-const { ValidatorForTeamLead } = require("./controller/middleware");
+const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
 const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
@@ -9,9 +9,14 @@ var router = express.Router();
 //const currentDate = moment();
 
 /* GET home page. */
+
 router.get("/", function (req, res, next) {
-  ValidatorForTeamLead(req, res, "teamleadindexlayout", "teamleadindex");
+  // Validator(req, res, "indexlayout");
+  Validator(req, res, "teamleadindexlayout", "teamleadindex");
 });
+// router.get("/", function (req, res, next) {
+//   ValidatorForTeamLead(req, res, "teamleadindexlayout", "teamleadindex");
+// });
 
 module.exports = router;
 

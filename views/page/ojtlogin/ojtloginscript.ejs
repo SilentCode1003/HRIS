@@ -2,14 +2,15 @@
   $(document).ready(function () {
     console.log("Initialize");
 
-    const loginUrlDropdown = document.getElementById("loginUrl");
+    // const loginUrlDropdown = document.getElementById("loginUrl");
 
-    loginUrlDropdown.addEventListener("change", (e) => {
-      const selectedUrl = e.target.value;
-      if (selectedUrl) {
-        window.location.href = selectedUrl;
-      }
-    });
+    // loginUrlDropdown.addEventListener("change", (e) => {
+    //   const selectedUrl = e.target.value;
+    //   if (selectedUrl) {
+    //     window.location.href = selectedUrl;
+    //   }
+    // });
+    
     document.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         let username = $("#username").val();

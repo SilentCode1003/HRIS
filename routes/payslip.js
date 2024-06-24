@@ -67,14 +67,34 @@ router.get("/load", (req, res) => {
 router.post("/approvepayslip", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
-    let sql = `call hrmis.ApprovePayslip('${payrolldate}')`;
+    let sqlApprove = `call hrmis.ApprovePayslip('${payrolldate}')`;
+    let sqlUpdateLoanStatus = `call hrmis.UpdateLoanStatus('${payrolldate}')`;
 
-    mysql.StoredProcedure(sql, (err, result) => {
-      if (err) console.error("Error: ", err);
+    mysql.StoredProcedure(sqlApprove, (errApprove, resultApprove) => {
+      if (errApprove) {
+        console.error("Error in ApprovePayslip: ", errApprove);
+        return res.json({
+          msg: "error",
+          data: errApprove,
+        });
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
+      mysql.StoredProcedure(sqlUpdateLoanStatus, (errUpdate, resultUpdate) => {
+        if (errUpdate) {
+          console.error("Error in UpdateLoanStatus: ", errUpdate);
+          return res.json({
+            msg: "error",
+            data: errUpdate,
+          });
+        }
+
+        res.json({
+          msg: "success",
+          data: {
+            approveResult: resultApprove,
+            updateResult: resultUpdate,
+          },
+        });
       });
     });
   } catch (error) {
@@ -84,3 +104,4 @@ router.post("/approvepayslip", (req, res) => {
     });
   }
 });
+

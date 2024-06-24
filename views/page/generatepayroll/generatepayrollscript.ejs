@@ -8,6 +8,7 @@
     console.log("Initialize");
     searchTable();
 
+
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
@@ -438,6 +439,9 @@
               $("#leavepayprofile").text(
                 formatToCurrency(item.Leave_Pay)
               );
+              $("#loandeductions").text(
+                formatToCurrency(item.Loans)
+              );
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Compensation));
@@ -541,6 +545,7 @@
               );
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
+              $("#paysliploandeductions").text(formatToCurrency(item.Loans));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
               );

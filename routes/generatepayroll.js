@@ -61,7 +61,6 @@ router.post("/checkmissedlogs", (req, res) => {
 
     mysql.Select(sql, "Master_Attendance", (err, result) => {
       if (err) console.error("Error: ", err);
-
       res.json({
         msg: "success",
         data: result,

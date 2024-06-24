@@ -431,6 +431,7 @@ exports.Master_User = (data) => {
       username: key.mu_username,
       password: key.mu_password,
       accesstype: key.mu_accesstype,
+      subgroupid: key.mu_subgroupid,
       createby: key.mu_createby,
       createdate: key.mu_createdate,
       status: key.mu_status,
