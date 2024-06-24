@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('e0c6b351995386cc41246fe07c21b530', (err, encrypted) => {
+Decrypter('3875b7381ace2a3cd3a91afbab4d304d', (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -614,6 +614,7 @@ exports.InsertTable = (tablename, data, callback) => {
         mu_username,
         mu_password,
         mu_accesstype,
+        mu_subgroupid,
         mu_createby,
         mu_createdate,
         mu_status) VALUES ?`;

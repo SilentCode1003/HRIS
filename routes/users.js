@@ -27,7 +27,7 @@ module.exports = router;
 
 router.post("/save", async (req, res) => {
   try {
-    const { employeeid, accesstype } = req.body;
+    const { employeeid, accesstype, subgroupid } = req.body;
     let status = "Active";
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
@@ -64,6 +64,7 @@ router.post("/save", async (req, res) => {
                 username,
                 encrypted,
                 accesstype,
+                subgroupid,
                 createby,
                 createdate,
                 status,
@@ -132,6 +133,7 @@ router.post("/update", async (req, res) => {
   try {
     let userid = req.body.userid;
     let username = req.body.username;
+    let subgroupid = req.body.subgroupid;
     //let password = req.body.password;
     let accesstype = req.body.accesstype;
     let status = req.body.status;
@@ -151,6 +153,7 @@ router.post("/update", async (req, res) => {
     let sqlupdate = `UPDATE master_user SET 
       mu_username = '${username}',
       mu_accesstype = '${accesstype}',
+      mu_subgroupid = '${subgroupid}',
       mu_status ='${status}'
       WHERE mu_userid ='${userid}'`;
 
@@ -177,6 +180,7 @@ router.post("/getusers", (req, res) => {
         mu_username,
         mu_password,
         mu_accesstype,
+        mu_subgroupid,
         mu_status
         from master_user
         where mu_userid = '${userid}'`;

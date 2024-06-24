@@ -14,7 +14,7 @@ module.exports = router;
 
 router.post("/login", (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, accesstypeid } = req.body;
 
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
@@ -37,7 +37,8 @@ router.post("/login", (req, res) => {
         LEFT JOIN master_department ON md_departmentid = me_department
         LEFT JOIN master_position ON mp_positionid = me_position
         LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
-        WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
+        WHERE mu_username = '${username}' AND mu_password = '${encrypted}'
+        AND mu_accesstype = '${accesstypeid}'`;
 
       mysql.mysqlQueryPromise(sql)
         .then((result) => {
@@ -64,7 +65,6 @@ router.post("/login", (req, res) => {
                   req.session.geofenceid = user.geofenceid;
                   req.session.accessid = user.accessid;
                 });
-
                 console.log('accesstype',req.session.accesstype);
                 return res.json({
                   msg: "success",

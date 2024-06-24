@@ -109,16 +109,16 @@ router.get("/load", (req, res) => {
   try {
     let sql = `    
     SELECT 
-mg_governmentid,
-concat(me_firstname, ' ', me_lastname) AS mg_employeeid,
-mg_idtype,
-mg_idnumber,
-mg_issuedate,
-mg_createby,
-mg_createdate,
-mg_status
-FROM master_govid
-LEFT JOIN master_employee ON master_govid.mg_employeeid = me_id`;
+    mg_governmentid,
+    concat(me_firstname, ' ', me_lastname) AS mg_employeeid,
+    mg_idtype,
+    mg_idnumber,
+    mg_issuedate,
+    mg_createby,
+    mg_createdate,
+    mg_status
+    FROM master_govid
+    LEFT JOIN master_employee ON master_govid.mg_employeeid = me_id`;
 
     mysql.Select(sql, "Master_GovId", (err, result) => {
       if (err) console.error("Error: ", err);
