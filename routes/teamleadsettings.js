@@ -1,62 +1,63 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter, Decrypter } = require("./repository/crytography");
 const { Validator } = require("./controller/middleware");
+const { Encrypter, Decrypter } = require("./repository/crytography");
 var router = express.Router();
 const currentDate = moment();
+const bcrypt = require("bcrypt");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('settingslayout', { title: 'Express' });
 
-  Validator(req, res, "settingslayout", "settings");
+  Validator(req, res, "teamleadsettingslayout", "teamleadsettings");
 });
 
 module.exports = router;
 
-router.post("/update", async (req, res) => {
+router.post("/getsettingsaccount", (req, res) => {
   try {
-    let userid = req.body.userid;
-    let username = req.body.username;
-    let password = req.body.password;
-    let accesstype = req.body.accesstype;
-    let status = req.body.status;
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
+   me.me_profile_pic as profilePicturePath, 
+   me.me_id as employeeid,
+   mu.mu_username as username,
+   me.me_firstname as firstname,
+   me.me_lastname as lastname,
+   me.me_civilstatus as civilstatus,
+   me.me_jobstatus as jobstatus,
+   me.me_email as email,
+   me.me_address as address
+   FROM 
+   master_employee me
+   LEFT JOIN
+   master_user mu ON me.me_id = mu.mu_employeeid
+   where me_id = '${employeeid}'`;
 
-    const encrypted = await new Promise((resolve, reject) => {
-      Encrypter(password, (err, result) => {
-        if (err) {
-          console.error("Error in Encrypter: ", err);
-          reject(err);
-        } else {
-          resolve(result);
-        }
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        console.log(result);
+
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        return res.json({
+          msg: error,
+        });
       });
-    });
-
-    let sqlupdate = `UPDATE master_user SET 
-      mu_username = '${username}',
-      mu_password = '${encrypted}',
-      mu_accesstype = '${accesstype}',
-      mu_status ='${status}'
-      WHERE mu_userid ='${userid}'
-      AND mu_username`;
-
-    const updateResult = await mysql.Update(sqlupdate);
-
-    console.log(updateResult);
-
-    res.json({
-      msg: "success",
-    });
   } catch (error) {
     console.error("Error: ", error);
     res.json({
       msg: "error",
+      data: null,
     });
   }
 });
-
 
 router.post("/updatepassword", async (req, res) => {
   try {

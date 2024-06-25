@@ -5,6 +5,7 @@ const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
 const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
+const { de } = require("date-fns/locale");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -386,6 +387,11 @@ router.get("/totalcoa", (req, res) => {
         WHERE ats_accessid = '${accesstypeid}'
         AND ats_departmentid = '${departmentid}'
     )`;
+
+    console.log(departmentid);
+    console.log(subgroupid);
+    console.log(accesstypeid);
+    console.log(sql);
 
     Select(sql, (err, result) => {
       if (err) {

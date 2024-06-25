@@ -544,7 +544,7 @@ exports.Validator = function (req, res, layout, route) {
   
   let sql = SelectStatement(
     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
-    [req.session.accessid, layout, route]
+    [req.session.accesstypeid, layout, route]
   );
 
   console.log(sql);
@@ -559,16 +559,16 @@ exports.Validator = function (req, res, layout, route) {
 
     if (result != 0) {
       return res.render(`${layout}`, {
-        // employeeid: req.session.employeeid,
-        // accessid: req.session.accessid,
-        // departmentid: req.session.departmentid,
-        // positionid: req.session.positionid,
+        accessid: req.session.accessid,
+        accesstypeid: req.session.accesstypeid,
+        positionid: req.session.positionid,
         image: req.session.image,
         employeeid: req.session.employeeid,
         fullname: req.session.fullname,
         accesstype: req.session.accesstype,
         geofenceid: req.session.geofenceid,
         departmentid: req.session.departmentid,
+        subgroupid: req.session.subgroupid,
       });
     } else {
       res.redirect("/login");
