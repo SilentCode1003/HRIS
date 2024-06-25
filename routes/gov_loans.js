@@ -248,7 +248,7 @@ router.post("/getgovloansadvanced", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    const { govloanid, paid_date, payment_type, selected_dates, employeeid } =
+    const { govloanid, paid_date, payment_type, selected_dates, employeeid, loan_type } =
       req.body;
 
     let data = [];
@@ -295,8 +295,8 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatementWithArray(
-      "SELECT * FROM gov_loan_details WHERE gld_employeeid = ? AND gld_payrolldates IN (?) AND gld_loanstatus = ?",
-      [employeeid, selected_dates, "PAID"]
+      "SELECT * FROM gov_loan_details INNER JOIN gov_loans ON gov_loan_details.gld_loanid = gl_loanid WHERE gld_employeeid = ? AND gld_payrolldates IN (?) AND gld_loanstatus = ? AND gl_loan_type = ?",   
+      [employeeid, selected_dates, "PAID" , loan_type]
     );
 
     Check(checkStatement)
