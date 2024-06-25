@@ -12,8 +12,11 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(req, res, "teamleadappliedovertimelayout"),
-    "teamleadappliedovertime";
+  Validator(
+    req, 
+    res, 
+    "teamleadappliedovertimelayout",
+    "teamleadappliedovertime");
 });
 
 module.exports = router;

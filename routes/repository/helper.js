@@ -74,7 +74,8 @@ exports.UserLogin = (result, callback) => {
         position: row.position,
         jobstatus: row.jobstatus,
         geofenceid: row.geofenceid,
-        accessid: row.accessid,
+        accesstypeid: row.accesstypeid,
+        subgroupid: row.subgroupid,
       });
     });
 

@@ -76,52 +76,52 @@ router.post("/loginsalary", (req, res) => {
 
 
 
-router.get("/getpayrolldate", (req, res) => {
-  try {
-    let employeeid = req.session.employeeid;
-    let sql = `SELECT 
-    CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
-    DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
-    p_cutoff as p_cutoff,
-    ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
-    SUM(p_totalhours) as p_totalhours,
-    SUM(p_nightothours) as p_nightdiff,
-    SUM(p_normalothours) as p_normalot,
-    SUM(p_earlyothours) as p_earlyot,
-    SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
-    round(p_total_netpay, 2) as p_totalnetpay
-    FROM 
-    payslip  
-    WHERE 
-    p_employeeid = '${employeeid}'
-    GROUP BY 
-    p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
-    ORDER BY 
-    p_payrolldate DESC`;
+// router.get("/getpayrolldate", (req, res) => {
+//   try {
+//     let employeeid = req.session.employeeid;
+//     let sql = `SELECT 
+//     CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
+//     DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
+//     p_cutoff as p_cutoff,
+//     ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
+//     SUM(p_totalhours) as p_totalhours,
+//     SUM(p_nightothours) as p_nightdiff,
+//     SUM(p_normalothours) as p_normalot,
+//     SUM(p_earlyothours) as p_earlyot,
+//     SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
+//     round(p_total_netpay, 2) as p_totalnetpay
+//     FROM 
+//     payslip  
+//     WHERE 
+//     p_employeeid = '${employeeid}'
+//     GROUP BY 
+//     p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
+//     ORDER BY 
+//     p_payrolldate DESC`;
 
-    console.log(employeeid);
+//     console.log(employeeid);
 
-    Select(sql, (err, result) => {
-      if (err) {
-        console.error(err);
-        res.json(JsonErrorResponse(err));
-      }
+//     Select(sql, (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         res.json(JsonErrorResponse(err));
+//       }
 
-      console.log(result);
+//       console.log(result);
 
-      if (result != 0) {
-        let data = DataModeling(result, "p_");
+//       if (result != 0) {
+//         let data = DataModeling(result, "p_");
 
-        console.log(data);
-        res.json(JsonDataResponse(data));
-      } else {
-        res.json(JsonDataResponse(result));
-      }
-    });
-  } catch (error) {
-    res.json(JsonErrorResponse(error));
-  }
-});
+//         console.log(data);
+//         res.json(JsonDataResponse(data));
+//       } else {
+//         res.json(JsonDataResponse(result));
+//       }
+//     });
+//   } catch (error) {
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
 
 
 
@@ -130,6 +130,7 @@ router.get("/getpayrolldate", (req, res) => {
 router.post("/loadprofileslip", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let payrolldate = req.body.payrolldate;
     let sql = `SELECT
     p_image,
     p_fullname,
@@ -152,10 +153,12 @@ router.post("/loadprofileslip", (req, res) => {
     p_holidaydays,
     p_leaveday,
     p_overtime_meal,
+    p_loans,
     p_payroll_adjustments,
     p_leave_pay
     FROM payslip
-    WHERE p_employeeid = '${employeeid}'`;
+    WHERE p_employeeid = '${employeeid}'
+    And p_payrolldate = '${payrolldate}'`;
 
     console.log(employeeid);
 
@@ -187,6 +190,7 @@ router.post("/loadprofileslip", (req, res) => {
 router.post("/loadpayslip", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let payrolldate = req.body.payrolldate;
     let sql = `SELECT
     p_sssid,
     p_tinid,
@@ -223,11 +227,13 @@ router.post("/loadpayslip", (req, res) => {
     p_tindeductions,
     p_absent_deductions,
     p_healthcard,
+    p_loans,
     p_late_deductions,
     p_total_deductions,
     p_total_netpay
     FROM payslip
-    WHERE p_employeeid = '${employeeid}'`;
+    WHERE p_employeeid = '${employeeid}'
+    And p_payrolldate = '${payrolldate}'`;
 
     console.log(employeeid);
 
