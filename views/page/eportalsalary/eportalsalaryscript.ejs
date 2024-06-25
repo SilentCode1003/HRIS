@@ -149,6 +149,7 @@
         url: "/eportalsalary/loadprofileslip",
         data: {
           employeeid: employeeid,
+          payrolldate: payrolldate,
         },
         success: function (result) {
           if (result.msg === "success") {
@@ -171,6 +172,9 @@
               );
               $("#overtimemeal").text(
                 formatToCurrency(item.overtime_meal)
+              );
+              $("#loandeductions").text(
+                formatToCurrency(item.loans)
               );
               $("#leavepayprofile").text(
                 formatToCurrency(item.leave_pay)
@@ -205,6 +209,7 @@
         url: "/eportalsalary/loadpayslip",
         data: {
           employeeid: employeeid,
+          payrolldate: payrolldate,
         },
         success: function (result) {
           if (result.msg === "success") {
@@ -250,6 +255,9 @@
               globalallowances = item.allowances
               $("#payslipbasicadustments").text(
                 formatToCurrency(item.basic_adjustments)
+              );
+              $("#paysliploans").text(
+                formatToCurrency(item.loans)
               );
               globalbasicadjustments = item.basic_adjustments
               $("#payslippayrolladjustments").text(

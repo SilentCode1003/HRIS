@@ -29,8 +29,9 @@ router.post("/login", (req, res) => {
         md_departmentid AS departmentid,
         md_departmentname AS departmentname,
         mp_positionname AS position,
-        ma_accessid as accessid,
-        mgs_id AS geofenceid
+        ma_accessid as accesstypeid,
+        mgs_id AS geofenceid,
+        mu_subgroupid as subgroupid
         FROM master_user
         INNER JOIN master_access ON mu_accesstype = ma_accessid
         LEFT JOIN master_employee ON mu_employeeid = me_id
@@ -63,7 +64,8 @@ router.post("/login", (req, res) => {
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
                   req.session.geofenceid = user.geofenceid;
-                  req.session.accessid = user.accessid;
+                  req.session.accesstypeid = user.accesstypeid;
+                  req.session.subgroupid = user.subgroupid;
                 });
                 console.log('accesstype',req.session.accesstype);
                 return res.json({
