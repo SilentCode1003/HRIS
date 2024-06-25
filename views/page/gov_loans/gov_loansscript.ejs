@@ -511,6 +511,7 @@
       let payroll_date = $("#govloanadvancedpayrolldate").val();
       let employeeid = $("#govloanadvancedemployeeid").val();
       let payment_type = $("#govloanpaymenttypeadvanced").val();
+      let loan_type = $("#govloanadvancedtype").val();
 
       var message = "";
 
@@ -520,6 +521,10 @@
 
       if (payment_type === "") {
         message += "status is required. ";
+      }
+
+      if (loan_type === "") {
+        message += "loan_type is required. "; 
       }
 
       let selected_dates = [];
@@ -547,6 +552,7 @@
             paid_date: payroll_date,
             payment_type: payment_type,
             selected_dates: selected_dates,
+            loan_type: loan_type,
           },
           success: function (result) {
             if (result.msg == "success") {

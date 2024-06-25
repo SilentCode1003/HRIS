@@ -14,7 +14,7 @@ const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
 var router = express.Router();
 const currentDate = moment();
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/crytography");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
