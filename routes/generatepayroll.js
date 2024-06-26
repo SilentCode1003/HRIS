@@ -4,7 +4,11 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
-const XLSX = require("xlsx");
+const XLSX = require("xlsx","xlsx-style");
+const { Select } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
+
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -264,3 +268,140 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
+
+router.get("/payrolldateload", (req, res) => {
+  try {
+    let sql = `SELECT DISTINCT 
+    DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
+    concat(gp_startdate,' To ',gp_enddate) as gp_date_range,
+    gp_cutoff
+    FROM 
+    generate_payroll
+    order by gp_payrolldate desc`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "gp_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+
+// router.post("/exportbank", async (req, res) => {
+//   try {
+//     let payrolldate = req.body.payrolldate;
+//     let bankname = req.body.bankname;
+//     let sql = `call hrmis.ExportBankStatement('${payrolldate}', '${bankname}')`;
+
+//     const result = await mysql.mysqlQueryPromise(sql);
+
+//     const jsonData = JSON.parse(JSON.stringify(result[0]));
+
+//     if (jsonData.length === 0) {
+//       return res.status(404).json({ msg: "No data found" });
+//     }
+
+//     const headers = Object.keys(jsonData[0]);
+
+//     const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
+//     const workbook = XLSX.utils.book_new();
+//     const worksheetName = `${payrolldate}_${bankname}`;
+//     XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+
+//     const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
+//     worksheet["!cols"] = [];
+//     for (let i = 0; i < columnCount; i++) {
+//       if (i === 0) {
+//         worksheet["!cols"].push({ wch: 30 });
+//       } else {
+//         worksheet["!cols"].push({ wch: 20 });
+//       }
+//     }
+//     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
+
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename="bank_statement_${payrolldate}_${bankname}.xlsx"`
+//     );
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.send(excelBuffer); 
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       data: error,
+//     });
+//   }
+// });
+
+router.post("/exportbank", async (req, res) => {
+  try {
+    let payrolldate = req.body.payrolldate;
+    let bankname = req.body.bankname;
+    let sql = `call hrmis.ExportBankStatement('${payrolldate}', '${bankname}')`;
+
+    const result = await mysql.mysqlQueryPromise(sql);
+
+    const jsonData = JSON.parse(JSON.stringify(result[0]));
+
+    if (jsonData.length === 0) {
+      return res.status(404).json({ msg: "No data found" });
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(jsonData);
+    const workbook = XLSX.utils.book_new();
+    const worksheetName = `${payrolldate}_${bankname}`;
+    XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+
+    const headers = Object.keys(jsonData[0]);
+    headers.forEach((header, index) => {
+      const cellAddress = XLSX.utils.encode_cell({ c: index, r: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: { horizontal: "center" }
+      };
+    });
+
+    worksheet["!cols"] = headers.map((header, index) => ({
+      wch: index === 0 ? 30 : 20
+    }));
+
+    const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: 'xlsx', bookSST: false });
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="bank_statement_${payrolldate}_${bankname}.xlsx"`
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.send(excelBuffer);
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+

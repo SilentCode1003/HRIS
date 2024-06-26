@@ -7,10 +7,98 @@
   $(document).ready(function () {
     console.log("Initialize");
     searchTable();
-
+    LoadBank();
+    LoadPayrollDate();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
+    });
+
+    function LoadBank() {
+      $.ajax({
+        type: "GET",
+        url: "/bank/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.name);
+            $("#bnkstmntbank").append(options);
+          });
+        },
+        error: function (result) {
+          showSweetAlert("Error", result, "error");
+        },
+      });
+    }
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/generatepayroll/payrolldateload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#bnkstmntpayroll").append(options);
+          });
+        },
+        error: function (result) {
+          showSweetAlert("Error", result, "error");
+        },
+      });
+    }
+
+    $(document).on("click", "#exportbnkstmnt", function () {
+      let payrolldate = $("#bnkstmntpayroll").val();
+      let bankname = $("#bnkstmntbank").val();
+
+      var message = "";
+
+      if (payrolldate === "") {
+        message += "payrolldate is required. ";
+      }
+
+      if (bankname === "") {
+        message += "bankname is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/generatepayroll/exportbank",
+          data: {
+            payrolldate: payrolldate,
+            bankname: bankname,
+          },
+          xhrFields: {
+            responseType: "blob",
+          },
+          success: function (blob) {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = `bank_statement_${payrolldate}_${bankname}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a); 
+            window.URL.revokeObjectURL(url);
+          },
+          error: function (xhr, status, error) {
+            console.log("Error:", xhr.responseText);
+            swal(
+              "Error",
+              "An error occurred while exporting bank statement.",
+              "error"
+            );
+          },
+        });
+      }
     });
 
     $(document).on("click", "#generateButton", function () {
@@ -205,14 +293,7 @@
 
               action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#payslipmodal"><i class="fas fa-fw fa-pen"></i></button>`;
 
-              // var imgElement = document.createElement("img");
-              // imgElement.src = "data:image/jpg;base64," + item.Image;
-              // imgElement.alt = "Profile Image";
-              // imgElement.style.width = "90px";
-              // imgElement.style.height = "90px";
-
               finalData.push({
-                // Image: imgElement.outerHTML,
                 EmployeeFullName: item.EmployeeFullName,
                 EmployeeId: item.EmployeeId,
                 Salary: item.Salary,
@@ -233,9 +314,6 @@
           },
         ],
         columns: [
-          // {
-          //   data: "Image"
-          // },
           {
             data: "EmployeeFullName",
           },
@@ -433,15 +511,9 @@
               $("#payrolladjustments").text(
                 formatToCurrency(item.Payroll_Adjustments)
               );
-              $("#overtimemeal").text(
-                formatToCurrency(item.Overtime_Meal)
-              );
-              $("#leavepayprofile").text(
-                formatToCurrency(item.Leave_Pay)
-              );
-              $("#loandeductions").text(
-                formatToCurrency(item.Loans)
-              );
+              $("#overtimemeal").text(formatToCurrency(item.Overtime_Meal));
+              $("#leavepayprofile").text(formatToCurrency(item.Leave_Pay));
+              $("#loandeductions").text(formatToCurrency(item.Loans));
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Compensation));
@@ -517,12 +589,8 @@
               $("#payslipearlypay").text(
                 formatToCurrency(item.ApprovedEarlyOt)
               );
-              $("#payslipotmeal").text(
-                formatToCurrency(item.Overtime_Meal)
-              );
-              $("#payslipleavepay").text(
-                formatToCurrency(item.Leave_Pay)
-              );
+              $("#payslipotmeal").text(formatToCurrency(item.Overtime_Meal));
+              $("#payslipleavepay").text(formatToCurrency(item.Leave_Pay));
               $("#payslipregular").text(
                 formatToCurrency(item.Regular_Holiday_Compensation)
               );

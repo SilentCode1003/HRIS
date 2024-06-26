@@ -10,6 +10,9 @@
                 <div class="col-md-2">
                     <input id="datepicker" type="text" name="daterange">
                 </div>
+                <div class="col-sm-2 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalBank" class="btn btn-export-color"><b>Bank Statement</b></button>
+                </div>
                 <div class="col-sm-1 col-add">
                     <button id="loadbutton" class="btn btn-load-color"><b>Load</b></button>
                 </div>
@@ -21,11 +24,56 @@
                 </div>
             </div> 
         </div>
+
+        <!--modal for uploading bank statement-->
+        <div class="modal fade" id="openModalBank" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/hwpjjkev.json" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Export Bank Statement</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="bnkstmntpayroll" name="bnkstmntpayroll"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Payroll Date</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="bnkstmntbank" name="bnkstmntbank"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Bank</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                <br>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="exportbnkstmnt">Export</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
         <div class="card-body">
 
             <div class="progress" id="loadingBar" style="display: none;">
                 <div class="indeterminate"></div>
             </div>
+
 
 
             <div class="table-responsive" id="table-responsive-id">
@@ -516,7 +564,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Basic</th>
-                                                                        <td id="payslipbasic"></td>
+                                                                        <td id="payslipbasic" style="color: green; font-weight: bold;"></td>
                                                                         <td>SSS</td>
                                                                         <td id="payslipsss"></td>
                                                                     </tr>
@@ -537,14 +585,14 @@
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Basic 
                                                                             Adjustments</th>
-                                                                        <td id="payslipbasicadustments"></td>
+                                                                        <td id="payslipbasicadustments" style="color: green; font-weight: bold;"></td>
                                                                         <td>Tax</td>
                                                                         <td id="paysliptin"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Payroll 
                                                                             Adjustments</th>
-                                                                        <td id="payslippayrolladjustments"></td>
+                                                                        <td id="payslippayrolladjustments" style="color: green; font-weight: bold;"></td>
                                                                         <td>Cash Advanced</td>
                                                                         <td id="payslipcashadvanced"></td>
                                                                     </tr>
@@ -552,7 +600,7 @@
                                                                         <th scope="row" class="earning-table">Total
                                                                             Approve Overtime
                                                                         </th>
-                                                                        <td id="payslipovertime"></td>
+                                                                        <td id="payslipovertime" style="color: green; font-weight: bold;"></td>
                                                                         <td>Absent</td>
                                                                         <td id="payslipabsent"></td>
                                                                     </tr>
@@ -583,7 +631,7 @@
                                                                         <th scope="row" class="earning-table">Overtime
                                                                             Meal
                                                                         </th>
-                                                                        <td id="payslipotmeal"></td>
+                                                                        <td id="payslipotmeal" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
@@ -597,28 +645,28 @@
                                                                         <th scope="row" class="earning-table">Special
                                                                             Holiday Overtime
                                                                         </th>
-                                                                        <td id="payslipspecialovertime"></td>
+                                                                        <td id="payslipspecialovertime" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Regular
                                                                             Holiday Overtime
                                                                         </th>
-                                                                        <td id="payslipregularovertime"></td>
+                                                                        <td id="payslipregularovertime" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Special
                                                                             Holiday
                                                                         </th>
-                                                                        <td id="payslipspecial"></td>
+                                                                        <td id="payslipspecial" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Regular
                                                                             Holiday
                                                                         </th>
-                                                                        <td id="payslipregular"></td>
+                                                                        <td id="payslipregular" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
