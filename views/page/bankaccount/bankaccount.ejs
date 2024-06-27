@@ -1,4 +1,4 @@
-<div class="card bank-card">
+<!-- <div class="card bank-card">
   <div class="card-header" id="modal-header">
     <h3 class="bank-card-title">Bank</h3>
   </div>
@@ -87,7 +87,6 @@
 <br>
   <div class="card bank-card-table">
     <div class="card-header ch-coop">
-
           <h3 class="bank-card-title">Bank Table</h3>
           <div class="input-group mb-3 col-md-3 mt-3">
             <span class="input-group-text" id="basic-addon1"
@@ -131,7 +130,7 @@
     </div>
   </div>
 
-  <!-- Modal -->
+ Modal
   <div
     class="modal fade bd-example-modal-lg"
     id="editModal"
@@ -256,4 +255,297 @@
       </div>
     </div>
   </div>
+ -->
+
+ <div class="card bank-card">
+  <div class="card-header" id="modal-header">
+    <h3 class="bank-card-title">Bank</h3>
+  </div>
+  <div class="card-body bank-body">
+    <div class="row">
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <label class="input-group-text bank-btn" for="employee">Employee</label>
+          <select class="form-select border-form-modal" id="employee">
+            <option selected>--Select Employee--</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <label class="input-group-text bank-btn" for="bank">Bank</label>
+          <select class="form-select border-form-modal" id="bank">
+            <option selected>--Select Bank--</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <span class="input-group-text bank-btn" id="basic-addon1">Account Number</span>
+          <input
+            id="accountnumber"
+            name="accountnumber"
+            type="text"
+            class="form-control border-form-modal"
+            placeholder="Account Number"
+            aria-label="Account Number"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <span class="input-group-text bank-btn" id="basic-addon1">Card Number</span>
+          <input
+            id="cardnumber"
+            name="cardnumber"
+            type="text"
+            class="form-control border-form-modal"
+            placeholder="Card Number"
+            aria-label="Card Number"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-lg-6 col-xl-6">
+        <div class="input-group mb-3">
+          <span class="input-group-text bank-btn" id="basic-addon1">Expiration Date</span>
+          <input
+            id="expirationdate"
+            name="expirationdate"
+            type="date"
+            class="form-control border-form-modal"
+            aria-describedby="basic-addon1"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <div class="col-sm-1 col-add">
+        <button
+          id="addBtn"
+          name="addBtn"
+          class="btn btn-add-color"
+          type="button"><b>+ Add</b></button>
+      </div>
+    </div>
+    <div class="row justify-content-end mt-3">
+      <div class="col-sm-1 col-add">
+        <button
+          id="uploadBtn"
+          name="uploadBtn"
+          class="btn btn-export-color"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#uploadModal"><b>Upload</b></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+<div class="card bank-card-table">
+  <div class="card-header ch-coop">
+    <h3 class="bank-card-title">Bank Table</h3>
+    <div class="input-group mb-3 col-md-3 mt-3">
+      <span class="input-group-text" id="basic-addon1"><i class="fa fa-solid fa-search"> Search</i></span>
+      <input
+        id="search"
+        name="search"
+        type="text"
+        class="form-control bank-search"
+        placeholder="search"
+        aria-label="search"
+        aria-describedby="basic-addon1"
+      />
+    </div>
+  </div>
+  <div class="card-body bank-body">
+    <div class="table-responsive">
+      <table
+        id="data-table"
+        class="table align-middle table-sm table-bordered table-hover"
+      >
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Bank</th>
+            <th>Account No.</th>
+            <th>Card No.</th>
+            <th>Expiration Date</th>
+            <th>Created By</th>
+            <th>Created Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div
+  class="modal fade bd-example-modal-lg"
+  id="editModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-keyboard="false"
+  data-backdrop="static"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Bank</h5>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div class="row mb-2">
+          <div class="col-lg-12">
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="input-group mb-3">
+                  <span class="input-group-text bank-btn" id="basic-addon2">ID</span>
+                  <input
+                    id="idmodal"
+                    name="idmodal"
+                    type="text"
+                    class="form-control border-form-modal"
+                    placeholder="ID"
+                    aria-label="ID"
+                    aria-describedby="basic-addon2"
+                    disabled="true"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group mb-3">
+                  <label class="input-group-text bank-btn" for="employeemodal">Employee</label>
+                  <select class="form-select border-form-modal" id="employeemodal" name="employeemodal">
+                    <option selected>--Select Employee--</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group mb-3">
+                  <label class="input-group-text bank-btn" for="bankmodal">BANK</label>
+                  <select class="form-select border-form-modal" id="bankmodal" name="bankmodal">
+                    <option selected>--Select Bank--</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group mb-3">
+                  <span class="input-group-text bank-btn" id="basic-addon1">Account Number</span>
+                  <input
+                    id="accountnumbermodal"
+                    name="accountnumbermodal"
+                    type="text"
+                    class="form-control border-form-modal"
+                    placeholder="Account Number"
+                    aria-label="Account Number"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group mb-3">
+                  <span class="input-group-text bank-btn" id="basic-addon1">Card Number</span>
+                  <input
+                    id="cardnumbermodal"
+                    name="cardnumbermodal"
+                    type="text"
+                    class="form-control border-form-modal"
+                    placeholder="Card Number"
+                    aria-label="Card Number"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group mb-3">
+                  <span class="input-group-text bank-btn" id="basic-addon1">Expiration Date</span>
+                  <input
+                    id="expirationdatemodal"
+                    name="expirationdatemodal"
+                    type="date"
+                    class="form-control border-form-modal"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button
+          type="button"
+          class="btn btn-modal-close"
+          data-bs-dismiss="modal"
+        >
+          <i class="fa fa-times" aria-hidden="true"></i> Close
+        </button>
+        <button
+          type="button"
+          id="saveBtn"
+          class="btn btn-modal-save"
+        >
+          <i class="fa fa-check" aria-hidden="true"></i> Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/hwpjjkev.json" class="db-hrmis"></lord-icon>
+            <h1 class="modal-title" id="exampleModalLabel">BATCH UPLOAD</h1>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body modal-batch-body" id="modal-body">
+          <form>
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="bankname" name="bankname"
+                  aria-label="Floating label select example">
+                  <option selected disabled>Choose</option>
+                </select>
+                <label for="floatingSelectGrid">Select Bank</label>
+              </div>
+            </div>
+            <br>
+            <div class="col">
+              <div class="form-group">
+                <label for="excelFile">Choose Excel File</label>
+                <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+              </div>
+            </div>
+          </form>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-modal-save" id="uploadFileBtn">Upload</button>
+        </div>
+      </div>
+  </div>
+</div>
+
 

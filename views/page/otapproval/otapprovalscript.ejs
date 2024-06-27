@@ -34,14 +34,8 @@
 
               action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "90px";
-              imgElement.style.height = "90px";
 
               finalData.push({
-                image: imgElement.outerHTML,
                 approveot_id: item.approveot_id,
                 fullname: item.fullname,
                 attendancedate: item.attendancedate,
@@ -64,7 +58,6 @@
           },
         ],
         columns: [
-          { data: "image" },
           { data: "approveot_id" },
           { data: "fullname" },
           { data: "attendancedate" },
@@ -77,29 +70,29 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var overtimestatusCell = $(row).find("td:eq(8)");
+          // var overtimestatusCell = $(row).find("td:eq(8)");
 
-          var overtimestatusText = data.overtimestatus;
+          // var overtimestatusText = data.overtimestatus;
 
-          var overtimestatusClass = "";
+          // var overtimestatusClass = "";
 
-          switch (overtimestatusText.toLowerCase()) {
-            case "active":
-              overtimestatusClass = "active-status";
-              break;
-            case "inactive":
-              overtimestatusClass = "inactive-status";
-              break;
-            case "pending":
-              overtimestatusClass = "pending-status";
-              break;
-            default:
-              overtimestatusClass = "";
-          }
+          // switch (overtimestatusText.toLowerCase()) {
+          //   case "active":
+          //     overtimestatusClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     overtimestatusClass = "inactive-status";
+          //     break;
+          //   case "pending":
+          //     overtimestatusClass = "pending-status";
+          //     break;
+          //   default:
+          //     overtimestatusClass = "";
+          // }
 
-          overtimestatusCell.html(
-            `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
-          );
+          // overtimestatusCell.html(
+          //   `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
+          // );
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
@@ -137,7 +130,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      approveot_id = dataRow[1];
+      approveot_id = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
