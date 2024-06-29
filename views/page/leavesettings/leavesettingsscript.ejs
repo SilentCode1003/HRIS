@@ -384,11 +384,12 @@
       }
     }
 
-    function populateYears() {
-      var startYear = 2000;
-      var endYear = new Date().getFullYear() + 10;
+    function populateYears(selectId) {
+      var currentYear = new Date().getFullYear();
+      var endYear = currentYear + 10;
+      var startYear = currentYear;
 
-      var selectYear = document.getElementById("yearleave");
+      var selectYear = document.getElementById(selectId);
 
       for (var year = startYear; year <= endYear; year++) {
         var option = document.createElement("option");
@@ -397,39 +398,8 @@
         selectYear.appendChild(option);
       }
     }
-
-    populateYears();
-
-    function editpopulateYears() {
-      var startYear = 2000;
-      var endYear = new Date().getFullYear() + 10;
-
-      var editselectYear = document.getElementById("yearleaveperemployee");
-
-      for (var year = startYear; year <= endYear; year++) {
-        var option = document.createElement("option");
-        option.value = year;
-        option.text = year;
-        editselectYear.appendChild(option);
-      }
-    }
-
-    editpopulateYears();
-
-    function editpopulateYears2() {
-      var startYear = 2000;
-      var endYear = new Date().getFullYear() + 10;
-
-      var editselectYear = document.getElementById("edityearleaveperemployee");
-
-      for (var year = startYear; year <= endYear; year++) {
-        var option = document.createElement("option");
-        option.value = year;
-        option.text = year;
-        editselectYear.appendChild(option);
-      }
-    }
-
-    editpopulateYears2();
+    populateYears("yearleave");
+    populateYears("yearleaveperemployee");
+    populateYears("edityearleaveperemployee");
   });
 </script>
