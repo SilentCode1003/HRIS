@@ -1,0 +1,96 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    const sidebarContent = document.getElementById("dynamic-sidebar-content");
+
+    function fetchSidebarContent() {
+      $.ajax({
+        url: "/sidebar/fetchsidebar", 
+        type: "POST",
+        dataType: "json", 
+        success: function (data) {
+          const allowedRoutes = data.allowedRoutes;
+
+          const sidebarItems = [
+            {
+              href: "/",
+              iconSrc: "https://cdn.lordicon.com/kgvlhryh.json",
+              label: "Dashboard",
+            },
+            {
+              href: "#employee",
+              iconSrc: "https://cdn.lordicon.com/fmasbomy.json",
+              label: "Employee",
+              collapseId: "collapseemployee",
+            },
+            {
+              href: "#collapsemasteraccess",
+              iconSrc: "https://cdn.lordicon.com/veoexymv.json",
+              label: "Master",
+              collapseId: "collapsemasteraccess",
+            },
+            {
+              href: "#collapsepayroll",
+              iconSrc: "https://cdn.lordicon.com/jzvoyjzb.json",
+              label: "Payroll",
+              collapseId: "collapsepayroll",
+            },
+            {
+              href: "#collapserequstactivity",
+              iconSrc: "https://cdn.lordicon.com/kiynvdns.json",
+              label: "Request Activity",
+              collapseId: "collapserequstactivity",
+            },
+            {
+              href: "#collapseattendance",
+              iconSrc: "https://cdn.lordicon.com/svsiboke.json",
+              label: "Attendance",
+              collapseId: "collapseattendance",
+            },
+            {
+              href: "#collapsecoop",
+              iconSrc: "https://cdn.lordicon.com/jtiihjyw.json",
+              label: "Coop",
+              collapseId: "collapsecoop",
+            },
+            {
+              href: "#collapseojt",
+              iconSrc: "https://cdn.lordicon.com/txbgsuya.json",
+              label: "OJT",
+              collapseId: "collapseojt",
+            },
+          ];
+
+          sidebarItems.forEach((item) => {
+            if (allowedRoutes.includes(item.href)) {
+              const listItem = document.createElement("li");
+              listItem.classList.add("nav-item", "sidebar-item");
+
+              const link = document.createElement("a");
+              link.classList.add("nav-link", "collapsed");
+              link.href = item.href;
+
+              const icon = document.createElement("lord-icon");
+              icon.setAttribute("src", item.iconSrc);
+              icon.setAttribute("trigger", "loop");
+              icon.classList.add("db-icon-hrmis");
+
+              const span = document.createElement("span");
+              span.innerHTML = `<b>${item.label}</b>`;
+
+              link.appendChild(icon);
+              link.appendChild(span);
+
+              listItem.appendChild(link);
+              sidebarContent.appendChild(listItem);
+            }
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching sidebar content:", error);
+        },
+      });
+    }
+    fetchSidebarContent();
+  });
+</script>

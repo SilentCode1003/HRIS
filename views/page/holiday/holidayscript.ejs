@@ -95,50 +95,6 @@
       });
     }
 
-    function generateHolidays() {
-      const year = $("#yearInput").val();
-      var message = "";
-
-      if (year === "") {
-        message += "Year is required. ";
-      }
-
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          url: "/holiday/generateholiday?year=" + year,
-          type: "POST",
-        })
-          .done(function (result) {
-            if (result.msg === "success") {
-              swal({
-                title: "Generate Successfully",
-                text: "Year added",
-                icon: "success",
-                button: "OK!",
-              }).then(function () {
-                window.location.reload();
-                LoadTable();
-              });
-            } else if (result.msg === "exist") {
-              swal({
-                title: "Existing Year",
-                text: "That year is already generated",
-                icon: "warning",
-                button: "OK!",
-              });
-            }
-          })
-          .fail(function () {
-            swal(
-              "Error",
-              "Failed to generate holidays. Please try again.",
-              "error"
-            );
-          });
-      }
-    }
     $(document).on("click", "#generateHolidaysBtn", function (e) {
       const year = $("#yearInput").val();
       var message = "";
@@ -156,15 +112,7 @@
         })
           .done(function (result) {
             if (result.msg === "success") {
-              swal({
-                title: "Generate Successfully",
-                text: "Year added",
-                icon: "success",
-                button: "OK!",
-              }).then(function () {
-                window.location.reload();
-                LoadTable();
-              });
+              showHolidaysModal(result.data);
             } else if (result.msg === "exist") {
               swal({
                 title: "Existing Year",
@@ -178,6 +126,61 @@
             swal("Data already exists!", "You clicked the button!", "warning");
           });
       }
+    });
+
+    function showHolidaysModal(holidays) {
+      const holidaysList = $("#holidaysList");
+      holidaysList.empty();
+
+      holidays.forEach((holiday) => {
+        holidaysList.append(`
+      <div>
+        <input type="checkbox" class="holidayCheckbox" data-date="${holiday.date}" checked>
+        <b>${holiday.name}</b> -  <i><b>${holiday.date}</b></i> - ${holiday.day} - (${holiday.type})
+      </div>
+    `);
+      });
+
+      var holidaysModal = new bootstrap.Modal(
+        document.getElementById("holidaysModal")
+      );
+      holidaysModal.show();
+    }
+
+    $(document).on("click", "#confirmHolidaysBtn", function (e) {
+      const selectedHolidays = [];
+      $(".holidayCheckbox:checked").each(function () {
+        selectedHolidays.push($(this).data("date"));
+      });
+
+      $.ajax({
+        url: "/holiday/confirmholidays",
+        type: "POST",
+        data: JSON.stringify({ holidays: selectedHolidays }),
+        contentType: "application/json",
+      })
+        .done(function (result) {
+          if (result.msg === "success") {
+            swal({
+              title: "Generated Successfully",
+              text: "Holidays added",
+              icon: "success",
+              button: "OK!",
+            }).then(function () {
+              window.location.reload();
+              LoadTable();
+            });
+          }
+        })
+        .fail(function () {
+          swal("Insertion Error", "Error during holidays insertion", "error");
+        });
+
+      $("#holidaysModal").hide();
+    });
+
+    $(document).on("click", ".close", function (e) {
+      $("#holidaysModal").hide();
     });
 
     $("#dataTableholiday tbody").on("click", "tr", function () {

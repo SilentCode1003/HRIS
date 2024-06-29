@@ -32,6 +32,101 @@
       });
     }
 
+    // $(document).on("click", "#uploadFileBtn", function () {
+    //   var fileInput = $("#excelFile")[0].files[0];
+    //   var formData = new FormData();
+    //   let bankid = $("#bankname").val();
+
+    //   var message = "";
+
+    //   if (!bankid) {
+    //     message += "SELECT BANK !!! ";
+    //   }
+
+    //   if (!fileInput) {
+    //     message += "SELECT FILE !!! ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //     return;
+    //   }
+
+    //   var reader = new FileReader();
+    //   reader.onload = function (e) {
+    //     var data = new Uint8Array(e.target.result);
+    //     var workbook = XLSX.read(data, { type: "array" });
+    //     var sheetName = workbook.SheetNames[0];
+    //     var sheet = workbook.Sheets[sheetName];
+    //     var jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+    //     if (jsonData.length === 0) {
+    //       swal("Validation Error", "The Excel file is empty.", "error");
+    //       return;
+    //     }
+
+    //     var headers = jsonData[0];
+    //     if (
+    //       !headers.includes("EMPLOYEE ID") ||
+    //       !headers.includes("ACCOUNT NUMBER")
+    //     ) {
+    //       swal(
+    //         "Validation Error",
+    //         "The Excel file must contain 'EMPLOYEE ID' and 'ACCOUNT NUMBER' headers.",
+    //         "error"
+    //       );
+    //       return;
+    //     }
+
+    //     // Append file and bankid to formData after validation
+    //     formData.append("file", fileInput);
+    //     formData.append("bankid", bankid);
+
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/bankaccount/upload",
+    //       data: formData,
+    //       processData: false,
+    //       contentType: false,
+    //       success: function (result) {
+    //         if (result.msg === "success") {
+    //           swal({
+    //             title: "Upload Successfully",
+    //             text: "You clicked the button!",
+    //             icon: "success",
+    //             button: "OK!",
+    //           }).then((results) => {
+    //             window.location.reload();
+    //           });
+    //           LoadTable();
+    //         } else if (result.msg === "exist") {
+    //           let existingRecords = result.existingRecords;
+    //           let message = "The following records already exist:\n";
+    //           existingRecords.forEach((record) => {
+    //             message += `Employee ID: ${record[0]}, Account Number: ${record[2]}\n`;
+    //           });
+    //           swal({
+    //             title: "Exist",
+    //             text: message,
+    //             icon: "warning",
+    //             button: "OK!",
+    //           });
+    //         } else {
+    //           swal("Error", "An error occurred while uploading file", "error");
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //     });
+    //   };
+    //   reader.onerror = function (error) {
+    //     swal("Error", "An error occurred while reading the file.", "error");
+    //   };
+
+    //   reader.readAsArrayBuffer(fileInput);
+    // });
+
     $(document).on("click", "#uploadFileBtn", function () {
       var fileInput = $("#excelFile")[0].files[0];
       var formData = new FormData();
@@ -95,7 +190,7 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then((results) => {
+              }).then(() => {
                 window.location.reload();
               });
               LoadTable();
@@ -116,7 +211,26 @@
             }
           },
           error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
+            if (
+              err.responseJSON &&
+              err.responseJSON.error &&
+              err.responseJSON.invalidIds
+            ) {
+              let invalidIds = err.responseJSON.invalidIds;
+              let message =
+                "The following Employee IDs do not exist or are resigned:\n";
+              invalidIds.forEach((id) => {
+                message += `${id}\n`;
+              });
+              swal({
+                title: "Validation Error",
+                text: message,
+                icon: "error",
+                button: "OK!",
+              });
+            } else {
+              swal("Error", "An error occurred while saving data.", "error");
+            }
           },
         });
       };
