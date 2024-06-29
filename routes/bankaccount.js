@@ -32,6 +32,7 @@ module.exports = router;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+
 router.post('/upload', upload.single('file'), async (req, res) => {
   console.log('HIT');
   try {
@@ -55,6 +56,38 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     console.log(bankid, 'BANKID');
     console.log(file, 'file');
 
+    const invalidEmployeeIds = [];
+    const validInsertData = [];
+    for (let row of data) {
+      const employeeId = row['EMPLOYEE ID'];
+      const checkStatement = SelectStatement(
+        "SELECT me_id, me_jobstatus FROM master_employee WHERE me_id = ?",
+        [employeeId]
+      );
+      const checkResult = await Check(checkStatement);
+      if (checkResult.length === 0 || checkResult[0].me_jobstatus === 'resigned') {
+        invalidEmployeeIds.push(employeeId);
+      } else {
+        validInsertData.push([
+          employeeId,
+          bankid,
+          row['ACCOUNT NUMBER'],
+          cardnumber,
+          expiration,
+          status,
+          createdby,
+          createddate,
+        ]);
+      }
+    }
+
+    if (invalidEmployeeIds.length > 0) {
+      return res.status(400).json({ 
+        error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(', ')}`,
+        invalidIds: invalidEmployeeIds
+      });
+    }
+
     const sql = InsertStatement('bank_account', 'ba', [
       'employeeid',
       'bankid',
@@ -66,41 +99,17 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       'createddate',
     ]);
 
-    const insertData = data.map((row) => [
-      row['EMPLOYEE ID'],
-      bankid,
-      row['ACCOUNT NUMBER'],
-      cardnumber,
-      expiration,
-      status,
-      createdby,
-      createddate,
-    ]);
-
-    const checkPromises = insertData.map((row) => {
-      let checkStatement = SelectStatement(
-        "select * from bank_account where ba_employeeid=? and ba_bankid=? and ba_accountnumber=?",
-        [row[0], bankid, row[2]]
-      );
-      return Check(checkStatement);
-    });
-
-    const checkResults = await Promise.all(checkPromises);
-
-    const existingRecords = checkResults
-      .map((result, index) => result.length > 0 ? insertData[index] : null)
-      .filter(record => record !== null);
-
-    if (existingRecords.length > 0) {
-      return res.json({ msg: 'exist', existingRecords });
-    } else {
-      InsertTable(sql, insertData, (err, result) => {
+    if (validInsertData.length > 0) {
+      InsertTable(sql, validInsertData, (err, result) => {
         if (err) {
           console.log(err);
           return res.json(JsonErrorResponse(err));
         }
-        res.json({ msg: 'success' });
+        const insertedIds = validInsertData.map(row => row[0]);
+        res.json({ msg: 'success', insertedIds });
       });
+    } else {
+      res.json({ msg: 'success', insertedIds: [] }); // No valid data to insert
     }
   } catch (error) {
     console.error(error);
