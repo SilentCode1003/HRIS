@@ -706,6 +706,14 @@ tr:hover {
   text-shadow: 3px 3px 3px #4f0202 !important;
   letter-spacing: 1px;
 }
+
+
+.greet-text {
+  margin-left: 8px;
+  color: rgb(124, 58, 58) !important;
+  text-shadow: 3px 3px 3px #4f0202 !important;
+  letter-spacing: 1px;
+}
 .card-icon {
   margin-right: 8px;
   color: white !important;
@@ -907,6 +915,7 @@ tr:hover {
 .border-form-modal {
   border: 2.5px solid #7a1818 !important;
 }
+
 
 /* .modal-dialog .content-size-modal {
   height: 700px;

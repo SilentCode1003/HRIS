@@ -220,7 +220,7 @@ router.put("/edit", (req, res) => {
 
     let checkStatement = SelectStatement(
       "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
-      [employeeid, attendancedate]
+      [employeeid, attendancedate, status]
     );
 
     console.log(checkStatement,'check');

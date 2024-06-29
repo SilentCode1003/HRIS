@@ -153,6 +153,10 @@
 </script>
 
 <script>
+  function adjustTextareaHeight(textarea) {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  }
   function formatPrice(event, input) {
     event.preventDefault();
 
@@ -233,7 +237,6 @@
     }).format(amount);
     return formattedAmount;
   }
-  
 
   function formatDate(dateString) {
     const date = new Date(dateString);

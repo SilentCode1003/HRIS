@@ -1,0 +1,357 @@
+<script>
+    let medecineid = "";
+    let base64String = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableMedecines").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/medecines/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data, "data");
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                              <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editmedecinesmodal"><i class="fas fa-fw fa-pen"></i></button>
+                          `;
+              finalData.push({
+                medecineid: item.medecineid,
+                name: item.name,
+                category: item.category,
+                quantity: item.quantity,
+                expirydate: item.expirydate,
+                manufacturer: item.manufacturer,
+                createdate: item.createdate,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "medecineid" },
+          { data: "name" },
+          { data: "category" },
+          { data: "quantity" },
+          { data: "expirydate" },
+          { data: "manufacturer" },
+          { data: "createdate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          var appnameCell = $(row).find("td:eq(1)");
+
+          appnameCell.wrapInner("<span class='appname-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $(document).on("click", "#medsavebtn", function () {
+      let medecinename = $("#medname").val();
+      let medecinecategory = $("#medcategory").val();
+      let medecinequantity = $("#medquantity").val();
+      let medecineexpdate = $("#medexpdate").val();
+      let medecinedescription = $("#meddescription").val();
+      let medecinemanufacturer = $("#medmanufacture").val();
+      let medecineimage = base64String;
+
+
+      var message = "";
+
+      if (medecinename == "") {
+        message += "Medecine Name is required ";
+      }
+
+      if (medecinecategory == "") {
+        message += "Medecine Category is required ";
+      }
+
+      if (medecinequantity == "") {
+        message += "Medecine Quantity is required ";
+      }
+
+      if (medecineexpdate == "") {
+        message += "Medecine Expiry Date is required ";
+      }
+
+      if (medecinedescription == "") {
+        message += "Medecine Description is required ";
+      }
+
+      if (medecinemanufacturer == "") {
+        message += "Medecine Manufacturer is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/medecines/save",
+          data: {
+            medecinename: medecinename,
+            medecinecategory: medecinecategory,
+            medecinequantity: medecinequantity,
+            medecineexpdate: medecineexpdate,
+            medecinedescription: medecinedescription,
+            medecinemanufacturer: medecinemanufacturer,
+            medecineimage: medecineimage,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Some Error", "You clicked the button!", "error");
+          },
+        });
+      }
+    });
+
+    $("#dataTableMedecines tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+        medecineid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/medecines/getmedecine",
+        data: {
+            medecineid: medecineid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editmedname").val(item.name);
+              $("#editmedcategory").val(item.category);
+              $("#editmedquantity").val(item.quantity);
+              $("#editmedexpdate").val(item.expirydate);
+              $("#editmedmanufacture").val(item.manufacturer);
+              $("#editmeddescription").val(item.description);
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.medecineimage
+              );
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#mededitbtn", function () {
+      let id = medecineid;
+      let medecinename = $("#editmedname").val();
+      let medecinecategory = $("#editmedcategory").val();
+      let medecinequantity = $("#editmedquantity").val();
+      let medecineexpdate = $("#editmedexpdate").val();
+      let medecinedescription = $("#editmeddescription").val();
+      let medecinemanufacturer = $("#editmedmanufacture").val();
+      let medecineimage = base64String;
+
+
+      var message = "";
+
+      if (medecinename == "") {
+        message += "Medecine Name is required ";
+      }
+
+      if (medecinecategory == "") {
+        message += "Medecine Category is required ";
+      }
+
+      if (medecinequantity == "") {
+        message += "Medecine Quantity is required ";
+      }
+
+      if (medecineexpdate == "") {
+        message += "Medecine Expiry Date is required ";
+      }
+
+      if (medecinedescription == "") {
+        message += "Medecine Description is required ";
+      }
+
+      if (medecinemanufacturer == "") {
+        message += "Medecine Manufacturer is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/medecines/edit",
+          data: {
+            medecineid: id,
+            medecinename: medecinename,
+            medecinecategory: medecinecategory,
+            medecinequantity: medecinequantity,
+            medecineexpdate: medecineexpdate,
+            medecinedescription: medecinedescription,
+            medecinemanufacturer: medecinemanufacturer,
+            medecineimage: medecineimage,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+                LoadTable();
+              });
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Some Error", "You clicked the button!", "error");
+          },
+        });
+      }
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableMedecines");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+    $(document).on("change", "#addmedecineicon", function (e) {
+      const input = document.getElementById("addmedecineicon");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("previewleave");
+        preview.src = reader.result;
+      };
+      imageUploaded();
+    });
+
+    function imageUploaded() {
+      const input = document.getElementById("addmedecineicon");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    $(document).on("change", "#editmedecineicon", function (e) {
+      const input = document.getElementById("editmedecineicon");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("preview");
+        preview.src = reader.result;
+      };
+      EditImage();
+    });
+
+    function EditImage() {
+      const input = document.getElementById("editmedecineicon");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
