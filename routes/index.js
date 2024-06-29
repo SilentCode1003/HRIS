@@ -1509,111 +1509,18 @@ router.post("/deleatenotif", (req, res) => {
 
 //#region TOPBAR SEARCH EMPLOYEE
 
-// router.post('/searchemployee', (req, res) => {
-//   try {
-//     const { search } = req.body;
-
-//     // Split search term into first name and last name
-//     const [firstName, lastName] = search.split(' ');
-
-//     // Construct SQL query to search for employees by first name and last name
-//     let sql = `SELECT me_firstname, me_lastname FROM master_employee WHERE 1`;
-
-//     if (firstName) {
-//       sql += ` AND me_firstname LIKE '%${firstName}%'`;
-//     }
-
-//     if (lastName) {
-//       sql += ` AND me_lastname LIKE '%${lastName}%'`;
-//     }
-
-//     mysql.mysqlQueryPromise(sql)
-//       .then((result) => {
-//         const employeeNames = result.map((employee) => `${employee.me_firstname} ${employee.me_lastname}`);
-//         res.json({
-//           msg: 'success',
-//           data: employeeNames,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: 'error',
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: 'error',
-//       data: error,
-//     });
-//   }
-// });
-
-// router.post('/searchemployee', (req, res) => {
-//   try {
-//     const { search } = req.body;
-
-//     const [firstName, lastName] = search.split(' ');
-//     let sql = `SELECT me_id, me_firstname, me_lastname, me_profile_pic FROM master_employee WHERE 1`;
-
-//     if (firstName) {
-//       sql += ` AND me_firstname LIKE '%${firstName}%'`;
-//     }
-
-//     if (lastName) {
-//       sql += ` AND me_lastname LIKE '%${lastName}%'`;
-//     }
-
-//     mysql.mysqlQueryPromise(sql)
-//       .then((result) => {
-//         const employees = result.map((employee) => ({
-//           employeeid: employee.me_id,
-//           name: `${employee.me_firstname} ${employee.me_lastname}`,
-//           profilePic: employee.me_profile_pic,
-//         }));
-//         res.json({
-//           msg: 'success',
-//           data: employees,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: 'error',
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: 'error',
-//       data: error,
-//     });
-//   }
-// });
-
 router.post("/searchemployee", (req, res) => {
   try {
     const { search } = req.body;
-    let firstName = "";
-    let lastName = "";
 
-    const lastSpaceIndex = search.lastIndexOf(" ");
-    if (lastSpaceIndex !== -1) {
-      firstName = search.substring(0, lastSpaceIndex);
-      lastName = search.substring(lastSpaceIndex + 1);
-    } else {
-      firstName = search;
-    }
-
-    let sql = `SELECT me_id, me_firstname, me_lastname, me_profile_pic FROM master_employee WHERE 1`;
-
-    if (firstName) {
-      sql += ` AND me_firstname LIKE '%${firstName}%'`;
-    }
-
-    if (lastName) {
-      sql += ` AND me_lastname LIKE '%${lastName}%'`;
-    }
-
+    let sql = `
+    SELECT me_id, me_firstname, me_lastname, me_profile_pic 
+    FROM master_employee 
+    WHERE CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
+    OR me_id LIKE '%${search}%'
+    OR me_firstname LIKE '%${search}%'
+    OR me_lastname LIKE '%${search}%'`;
+    
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -1636,9 +1543,60 @@ router.post("/searchemployee", (req, res) => {
   } catch (error) {
     res.json({
       msg: "error",
-      data: error,
+      data: error.message,
     });
   }
 });
+
+// router.post("/searchemployee", (req, res) => {
+//   try {
+//     const { search } = req.body;
+
+//     let sql = `
+//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic 
+//     FROM master_employee 
+//     WHERE 1`;
+
+//     if (search) {
+//       sql += ` AND me_id = '${search}'`;
+//     } else if (search) {
+//       sql += ` AND (CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
+//                 OR me_firstname LIKE '%${search}%'
+//                 OR me_lastname LIKE '%${search}%')`;
+//     } else {
+//       res.json({
+//         msg: "error",
+//         data: "Invalid search criteria",
+//       });
+//       return;
+//     }
+
+//     mysql
+//       .mysqlQueryPromise(sql)
+//       .then((result) => {
+//         const employees = result.map((employee) => ({
+//           employeeid: employee.employeeid,
+//           name: `${employee.me_firstname} ${employee.me_lastname}`,
+//           profilePic: employee.me_profile_pic,
+//         }));
+//         res.json({
+//           msg: "success",
+//           data: employees,
+//         });
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       data: error.message,
+//     });
+//   }
+// });
+
 
 //#endregion
