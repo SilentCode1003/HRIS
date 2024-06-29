@@ -35,10 +35,10 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
-
               action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-fw fa-pen"></i></button>
-                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-fw fa-eye"></i></button>
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-pen"></i></button>
+                      <button id="advanceBtn" class="btn text-danger" name="advanceBtn" data-bs-toggle="modal" data-bs-target="#advancedgovloansmodal"><i class="fa fa-credit-card"></i></button>
+                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-eye"></i></button>
                      `;
 
               finalData.push({
@@ -288,7 +288,7 @@
           });
         },
         error: function (result) {
-          alert("error: " + result.data);
+          swal("error: " + result.data);
         },
       });
     }
@@ -465,7 +465,7 @@
       });
     });
 
-    $(document).on("click", "#editBtn", function () {
+    $(document).on("click", "#advanceBtn", function () {
       $.ajax({
         type: "POST",
         url: "/gov_loans/getgovloansadvanced",
@@ -499,7 +499,7 @@
                 formatCurrencyValue(existingData[0].per_month)
               );
             }
-            $("#editgovloansmodal").modal("show");
+            $("#advancedgovloansmodal").modal("show");
           }
         },
       });
@@ -523,7 +523,7 @@
       }
 
       if (loan_type === "") {
-        message += "loan_type is required. "; 
+        message += "loan_type is required. ";
       }
 
       let selected_dates = [];
@@ -538,10 +538,10 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        console.log(govloanid,'payrolldate');
-        console.log(payroll_date,'payrolldate');
-        console.log(payment_type,'payrolldate');
-        console.log(selected_dates,'payrolldate');
+        console.log(govloanid, "payrolldate");
+        console.log(payroll_date, "payrolldate");
+        console.log(payment_type, "payrolldate");
+        console.log(selected_dates, "payrolldate");
         $.ajax({
           type: "PUT",
           url: "gov_loans/edit",
