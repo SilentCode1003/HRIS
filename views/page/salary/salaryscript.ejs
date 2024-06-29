@@ -207,7 +207,7 @@
     function LoadListEmp() {
       $.ajax({
         type: "GET",
-        url: "/employee/selectdistinct",
+        url: "/employee/selectdistinctsalary",
         success: function (result) {
           console.log(result.data);
           var data = result.data;
@@ -216,7 +216,7 @@
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#salaryemp").append(options);
-            console.log(item.firstname);
+            console.log(item.fullname);
           });
         },
         error: function (result) {

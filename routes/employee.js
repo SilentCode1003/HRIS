@@ -184,23 +184,31 @@ router.post("/saveold", async (req, res) => {
   }
 });
 
-router.get("/selectdistinct", (req, res) => {
+router.get("/selectdistinctshift", (req, res) => {
   try {
     let sql = `SELECT DISTINCT
     me_id,
-    concat(me_lastname,' ',me_firstname) as me_firstname
+    concat(me_lastname,' ',me_firstname) as me_fullname
     FROM master_employee
     LEFT JOIN master_shift ON master_employee.me_id = master_shift.ms_employeeid
     WHERE master_shift.ms_employeeid IS NULL
     AND me_jobstatus IN ('regular', 'probitionary','apprentice')`;
 
-    mysql.Select(sql, "Master_Employee", (err, result) => {
-      if (err) console.error("Error :", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+
+      if (result != 0) {
+        let data = DataModeling(result, "me_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
     res.json({
@@ -214,19 +222,26 @@ router.get("/selectdistinctsalary", (req, res) => {
   try {
     let sql = `SELECT DISTINCT
     me_id,
-    concat(me_lastname,' ',me_firstname) as me_firstname
+    concat(me_lastname,' ',me_firstname) as me_fullname
     FROM master_employee
-    LEFT JOIN master_shift ON master_employee.me_id = master_shift.ms_employeeid
-    WHERE master_shift.ms_employeeid IS NULL
+    LEFT JOIN master_salary ON master_employee.me_id = master_salary.ms_employeeid
+    WHERE master_salary.ms_employeeid IS NULL
     AND me_jobstatus IN ('regular', 'probitionary','apprentice')`;
 
-    mysql.Select(sql, "Master_Employee", (err, result) => {
-      if (err) console.error("Error :", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+
+      if (result != 0) {
+        let data = DataModeling(result, "me_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
     res.json({

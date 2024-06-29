@@ -97,7 +97,6 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          //miyaka
           var statusCell = $(row).find("td:eq(7)");
           statusCell.wrapInner("<span class='pending-status'></span>");
 
@@ -278,7 +277,7 @@
     function LoadPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/setpayrolldate/loadreq",
+        url: "/gov_loans/loadreq",
         success: function (result) {
           var data = result.data;
 
@@ -308,7 +307,7 @@
           });
         },
         error: function (result) {
-          alert("error: " + result.data);
+          swal("error: " + result.data);
         },
       });
     }

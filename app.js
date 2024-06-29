@@ -112,6 +112,8 @@ var mobileAPIRouter = require("./routes/mobile-api");
 var gov_loansRouter = require("./routes/gov_loans");
 var teamleadsettingsRouter = require("./routes/teamleadsettings");
 var sidebarRouter = require("./routes/sidebar");
+var medecinesRouter = require("./routes/medecines");
+var medecinesrequestRouter = require("./routes/medecines_request");
 
 
 
@@ -238,6 +240,8 @@ app.use("/mobile-api", mobileAPIRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
 app.use("/sidebar", sidebarRouter);
+app.use("/medecines", medecinesRouter);
+app.use("/medecines_request", medecinesrequestRouter);  
 
 
 // catch 404 and forward to error handler
