@@ -174,12 +174,14 @@ router.post("/save", (req, res) => {
             let loanId = insertResult[0].id;
             let forecastDates = generateForecastDates(effective_date, adjusted_duration);
             let loanstatus = GetValue(NPD());
+            let payment_type = 'VIA PAYSLIP';
 
             let detailsData = forecastDates.map((date) => [
               employeeid,
               loanId,
               date.toISOString().split("T")[0],
               loanstatus,
+              payment_type,
             ]);
 
             console.log(detailsData, "Dates");
@@ -189,6 +191,7 @@ router.post("/save", (req, res) => {
               "loanid",
               "payrolldates",
               "loanstatus",
+              "payment_type",
             ]);
 
             InsertTable(detailsSql, detailsData, (err, result) => {
@@ -211,6 +214,7 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 
 router.post("/getgovloans", (req, res) => {
