@@ -1519,7 +1519,8 @@ router.post("/searchemployee", (req, res) => {
     WHERE CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
     OR me_id LIKE '%${search}%'
     OR me_firstname LIKE '%${search}%'
-    OR me_lastname LIKE '%${search}%'`;
+    OR me_lastname LIKE '%${search}%'
+    OR me_middlename LIKE '%${search}%'`;
     
     mysql
       .mysqlQueryPromise(sql)

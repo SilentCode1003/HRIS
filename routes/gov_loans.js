@@ -68,11 +68,47 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.get("/loadreq", (req, res) => {
+  try {
+    let sql = `SELECT 
+    pd_payrollid, 
+    pd_name, 
+    pd_cutoff, 
+    pd_startdate, 
+    pd_enddate, 
+    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+    FROM payroll_date
+    WHERE YEAR(pd_payrolldate) = YEAR(CURDATE())
+    AND (DAY(pd_payrolldate) = 15 OR pd_payrolldate = LAST_DAY(pd_payrolldate))
+    ORDER BY pd_payrolldate`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "pd_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 router.post("/save", (req, res) => {
   try {
     let status = GetValue(ACT());
-    let createdby =
-      req.session.personelid == null ? "DEV42" : req.session.personelid;
+    let createdby = req.session.fullname;
     let createddate = GetCurrentDatetime();
     const {
       employeeid,
@@ -83,6 +119,14 @@ router.post("/save", (req, res) => {
       effective_date,
       duration,
     } = req.body;
+
+    let adjusted_per_month = per_month;
+    let adjusted_duration = duration;
+
+    if (payment_type === "Monthly") {
+      adjusted_per_month /= 2;
+      adjusted_duration *= 2;
+    }
 
     let sql = InsertStatement("gov_loans", "gl", [
       "employeeid",
@@ -101,10 +145,10 @@ router.post("/save", (req, res) => {
         employeeid,
         loan_type,
         amount_recieved,
-        per_month,
+        adjusted_per_month,
         payment_type,
         effective_date,
-        duration,
+        adjusted_duration,
         createddate,
         status,
         createdby,
@@ -128,7 +172,7 @@ router.post("/save", (req, res) => {
             }
 
             let loanId = insertResult[0].id;
-            let forecastDates = generateForecastDates(effective_date, duration);
+            let forecastDates = generateForecastDates(effective_date, adjusted_duration);
             let loanstatus = GetValue(NPD());
 
             let detailsData = forecastDates.map((date) => [
@@ -167,6 +211,7 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 router.post("/getgovloans", (req, res) => {
   try {
@@ -248,8 +293,14 @@ router.post("/getgovloansadvanced", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    const { govloanid, paid_date, payment_type, selected_dates, employeeid, loan_type } =
-      req.body;
+    const {
+      govloanid,
+      paid_date,
+      payment_type,
+      selected_dates,
+      employeeid,
+      loan_type,
+    } = req.body;
 
     let data = [];
     let columns = [];
@@ -295,8 +346,8 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatementWithArray(
-      "SELECT * FROM gov_loan_details INNER JOIN gov_loans ON gov_loan_details.gld_loanid = gl_loanid WHERE gld_employeeid = ? AND gld_payrolldates IN (?) AND gld_loanstatus = ? AND gl_loan_type = ?",   
-      [employeeid, selected_dates, "PAID" , loan_type]
+      "SELECT * FROM gov_loan_details INNER JOIN gov_loans ON gov_loan_details.gld_loanid = gl_loanid WHERE gld_employeeid = ? AND gld_payrolldates IN (?) AND gld_loanstatus = ? AND gl_loan_type = ?",
+      [employeeid, selected_dates, "PAID", loan_type]
     );
 
     Check(checkStatement)

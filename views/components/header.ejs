@@ -7,7 +7,7 @@
 <meta name="description" content="" />
 <meta name="author" content="" />
 
-<title>HRMIS| ADMIN</title>
+<title id="dynamic-title"></title>
 
 <!-- Custom fonts for this template-->
 <link rel="icon" type="image/png" href="/images/img/5L.png" />
@@ -95,3 +95,10 @@
 
 <!--Leaflet-->
 <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    let accessType = "<%= accesstype %>";
+    document.getElementById('dynamic-title').innerText = `HRMIS | ${accessType}`;
+  });
+</script>
