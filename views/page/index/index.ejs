@@ -6,6 +6,17 @@
 
     </div>
 
+     <!-- Greeting Row -->
+     <div class="row">
+        <div class="col-12 p-8">
+            <h1 class="text-xxl font-weight-bold text-uppercase mb-1 greet-text">
+                Welcome back <span class="font-semibold"><%= fullname %> | <%= accesstype %></span>
+            </h1>
+        </div>
+    </div>
+
+    <br>
+
     <!-- First Card Row -->
     <div class="row">
 
@@ -1151,7 +1162,7 @@
     <!--Overtime Modal-->
     <div class="modal fade" id="otapprovalmodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content content-size-modal">
                 <div class="modal-header" id="modal-header">
                     <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
@@ -1303,7 +1314,7 @@
                                                 <option value="Approved">Approved</option>
                                                 <option value="Applied">Applied</option>
                                                 <option value="Pending">Pending</option>
-                                                <option value="Appllied">Appllied</option>
+                                                <option value="Rejected">Reject</option>
                                             </select>
                                             <label for="floatingInput">Status</label>
                                         </div>

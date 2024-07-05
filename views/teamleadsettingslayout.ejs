@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include("./components/header.ejs")%>
+    <%- include("./components/teamleadheader.ejs")%>
   </head>
 
   <body id="page-top">
@@ -9,17 +9,16 @@
 
     <div id="wrapper">
       <!-- Sidebar -->
-      <%- include("./components/sidebar.ejs")%>
+      <%- include("./components/teamleadsidebar.ejs")%>
       <!-- End of Sidebar -->
-
       <!-- Topbar -->
-      <%- include("./components/topbar.ejs")%>
+      <%- include("./components/teamleadtopbar.ejs")%>
       <!-- End of Topbar -->
 
       <!-- Content Wrapper -->
       <div id="content-wrapper">
         <div class="content">
-          <%- include("./page/otapproval/otapproval.ejs")%>
+          <%- include("./page/teamleadsettings/teamleadsettings.ejs")%>
         </div>
       </div>
       </div>
@@ -34,7 +33,7 @@
 
     <!-- Bootstrap core JavaScript-->
     <%- include("./components/scripts.ejs")%> <%-
-    include("./components/topbarscript.ejs")%> <%-
-    include("./page/otapproval/otapprovalscript.ejs")%>
+    include("./components/teamleadtopbarscript.ejs")%> <%-
+    include("./page/teamleadsettings/teamleadsettingsscript.ejs")%>
   </body>
 </html>

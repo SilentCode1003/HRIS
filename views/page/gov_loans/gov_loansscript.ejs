@@ -35,10 +35,10 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
-
               action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-fw fa-pen"></i></button>
-                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-fw fa-eye"></i></button>
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-pen"></i></button>
+                      <button id="advanceBtn" class="btn text-danger" name="advanceBtn" data-bs-toggle="modal" data-bs-target="#advancedgovloansmodal"><i class="fa fa-credit-card"></i></button>
+                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-eye"></i></button>
                      `;
 
               finalData.push({
@@ -97,7 +97,6 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          //miyaka
           var statusCell = $(row).find("td:eq(7)");
           statusCell.wrapInner("<span class='pending-status'></span>");
 
@@ -278,7 +277,7 @@
     function LoadPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/setpayrolldate/loadreq",
+        url: "/gov_loans/loadreq",
         success: function (result) {
           var data = result.data;
 
@@ -289,7 +288,7 @@
           });
         },
         error: function (result) {
-          alert("error: " + result.data);
+          swal("error: " + result.data);
         },
       });
     }
@@ -308,7 +307,7 @@
           });
         },
         error: function (result) {
-          alert("error: " + result.data);
+          swal("error: " + result.data);
         },
       });
     }
@@ -466,7 +465,7 @@
       });
     });
 
-    $(document).on("click", "#editBtn", function () {
+    $(document).on("click", "#advanceBtn", function () {
       $.ajax({
         type: "POST",
         url: "/gov_loans/getgovloansadvanced",
@@ -500,7 +499,7 @@
                 formatCurrencyValue(existingData[0].per_month)
               );
             }
-            $("#editgovloansmodal").modal("show");
+            $("#advancedgovloansmodal").modal("show");
           }
         },
       });
@@ -511,6 +510,7 @@
       let payroll_date = $("#govloanadvancedpayrolldate").val();
       let employeeid = $("#govloanadvancedemployeeid").val();
       let payment_type = $("#govloanpaymenttypeadvanced").val();
+      let loan_type = $("#govloanadvancedtype").val();
 
       var message = "";
 
@@ -520,6 +520,10 @@
 
       if (payment_type === "") {
         message += "status is required. ";
+      }
+
+      if (loan_type === "") {
+        message += "loan_type is required. ";
       }
 
       let selected_dates = [];
@@ -534,10 +538,10 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
-        console.log(govloanid,'payrolldate');
-        console.log(payroll_date,'payrolldate');
-        console.log(payment_type,'payrolldate');
-        console.log(selected_dates,'payrolldate');
+        console.log(govloanid, "payrolldate");
+        console.log(payroll_date, "payrolldate");
+        console.log(payment_type, "payrolldate");
+        console.log(selected_dates, "payrolldate");
         $.ajax({
           type: "PUT",
           url: "gov_loans/edit",
@@ -547,6 +551,7 @@
             paid_date: payroll_date,
             payment_type: payment_type,
             selected_dates: selected_dates,
+            loan_type: loan_type,
           },
           success: function (result) {
             if (result.msg == "success") {

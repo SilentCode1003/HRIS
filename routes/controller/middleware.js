@@ -537,14 +537,14 @@ exports.ValidatorforOjt = function (req, res, layout) {
 
 const { SelectStatement } = require("../repository/customhelper");
 const { Select } = require("../repository/dbconnect");
-const { JsonErrorResponse } = require("../repository/response");
+const { JsonErrorResponse, JsonDataResponse } = require("../repository/response");
 
 
 exports.Validator = function (req, res, layout, route) {
   
   let sql = SelectStatement(
     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
-    [req.session.accessid, layout, route]
+    [req.session.accesstypeid, layout, route]
   );
 
   console.log(sql);
@@ -559,16 +559,16 @@ exports.Validator = function (req, res, layout, route) {
 
     if (result != 0) {
       return res.render(`${layout}`, {
-        // employeeid: req.session.employeeid,
-        // accessid: req.session.accessid,
-        // departmentid: req.session.departmentid,
-        // positionid: req.session.positionid,
+        accessid: req.session.accessid,
+        accesstypeid: req.session.accesstypeid,
+        positionid: req.session.positionid,
         image: req.session.image,
         employeeid: req.session.employeeid,
         fullname: req.session.fullname,
         accesstype: req.session.accesstype,
         geofenceid: req.session.geofenceid,
         departmentid: req.session.departmentid,
+        subgroupid: req.session.subgroupid,
       });
     } else {
       res.redirect("/login");
@@ -583,3 +583,62 @@ exports.EnsureLogin = function (req, res, next) {
     next();
   }
 };
+
+
+// exports.SidebarRestrictions = function (req, res, route, callback) {
+//   let sql = SelectStatement(
+//     "select marl_route from master_access_route_layout where marl_accessid = ?",
+//     [req.session.accesstypeid]
+//   );
+
+//   console.log(sql);
+
+//   Select(sql, (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       return res.json(JsonErrorResponse(err));
+//     }
+
+//     console.log(result);
+
+//     if (result.length > 0) {
+//       return callback(null, result);
+//     } else {
+//       return res.render(`${route}`, {
+//         accessid: req.session.accessid,
+//         accesstypeid: req.session.accesstypeid,
+//       });
+//     }
+//   });
+// };
+
+exports.SidebarRestrictions = function (req, res) {
+  let sql = SelectStatement(
+    "select marl_route from master_access_route_layout where marl_accessid = ?",
+    [req.session.accesstypeid]
+  );
+
+  console.log(sql);
+
+  Select(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.json(JsonErrorResponse(err));
+    }
+
+    console.log(result);
+
+    if (result.length > 0) {
+      const allowedRoutes = result.map((row) => row.marl_route); // Extracting routes from result
+      return res.json(JsonDataResponse({ allowedRoutes }));
+    } else {
+      return res.render("your_error_template", {  // Adjust to your error handling
+        accessid: req.session.accessid,
+        accesstypeid: req.session.accesstypeid,
+      });
+    }
+  });
+};
+
+
+

@@ -16,6 +16,9 @@ const {
   UpdateStatement,
 } = require("./repository/customhelper");
 const { Validator } = require("./controller/middleware");
+const multer = require('multer');
+const xlsx = require('xlsx');
+const { ca } = require("date-fns/locale");
 var router = express.Router();
 
 /* GET home page. */
@@ -24,6 +27,96 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
+
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+
+router.post('/upload', upload.single('file'), async (req, res) => {
+  console.log('HIT');
+  try {
+    const file = req.file;
+    const bankid = req.body.bankid;
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const workbook = xlsx.read(file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = xlsx.utils.sheet_to_json(sheet);
+
+    const createdby = req.session.fullname;
+    const createddate = GetCurrentDatetime();
+    const status = GetValue(ACT());
+    const cardnumber = 'N/A';
+    const expiration = 'N/A';
+
+    console.log(data, 'DATA');
+    console.log(bankid, 'BANKID');
+    console.log(file, 'file');
+
+    const invalidEmployeeIds = [];
+    const validInsertData = [];
+    for (let row of data) {
+      const employeeId = row['EMPLOYEE ID'];
+      const checkStatement = SelectStatement(
+        "SELECT me_id, me_jobstatus FROM master_employee WHERE me_id = ?",
+        [employeeId]
+      );
+      const checkResult = await Check(checkStatement);
+      if (checkResult.length === 0 || checkResult[0].me_jobstatus === 'resigned') {
+        invalidEmployeeIds.push(employeeId);
+      } else {
+        validInsertData.push([
+          employeeId,
+          bankid,
+          row['ACCOUNT NUMBER'],
+          cardnumber,
+          expiration,
+          status,
+          createdby,
+          createddate,
+        ]);
+      }
+    }
+
+    if (invalidEmployeeIds.length > 0) {
+      return res.status(400).json({ 
+        error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(', ')}`,
+        invalidIds: invalidEmployeeIds
+      });
+    }
+
+    const sql = InsertStatement('bank_account', 'ba', [
+      'employeeid',
+      'bankid',
+      'accountnumber',
+      'cardnumber',
+      'expiration',
+      'status',
+      'createdby',
+      'createddate',
+    ]);
+
+    if (validInsertData.length > 0) {
+      InsertTable(sql, validInsertData, (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.json(JsonErrorResponse(err));
+        }
+        const insertedIds = validInsertData.map(row => row[0]);
+        res.json({ msg: 'success', insertedIds });
+      });
+    } else {
+      res.json({ msg: 'success', insertedIds: [] }); // No valid data to insert
+    }
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 
 router.get("/load", (req, res) => {
   try {
@@ -63,6 +156,7 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 router.post("/save", (req, res) => {
   try {
@@ -125,6 +219,7 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 router.put("/status", (req, res) => {
   try {

@@ -65,8 +65,9 @@ router.post("/updatepassword", async (req, res) => {
     let currentPass = req.body.currentPass;
     let newPass = req.body.newPass;
     let confirmPass = req.body.confirmPass;
+    let accesstypeid = req.session.accesstypeid;
 
-    console.log(employeeid, currentPass, newPass, confirmPass);
+    console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
 
     if (newPass !== confirmPass) {
       return res.json({
@@ -76,7 +77,8 @@ router.post("/updatepassword", async (req, res) => {
     }
 
     const userData = await mysql.mysqlQueryPromise(
-      `SELECT mu_password FROM master_user WHERE mu_employeeid = '${employeeid}'`
+      `SELECT mu_password FROM master_user WHERE 
+      mu_accesstype = '${accesstypeid}' and  mu_employeeid = '${employeeid}'`
     );
 
     if (userData.length !== 1) {
@@ -114,7 +116,7 @@ router.post("/updatepassword", async (req, res) => {
           }
 
           await mysql.Update(
-            `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}'`
+            `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}' and mu_accesstype = '${accesstypeid}'`
           );
 
           return res.json({

@@ -43,6 +43,30 @@
 </div>
 
 
+<!-- Modal for displaying holidays -->
+<div class="modal fade" id="holidaysModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Select Holidays to Exclude</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div id="holidaysList"></div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="confirmHolidaysBtn">Generate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <!--Modal Edit-->
 <div class="modal fade" id="editholidaymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">

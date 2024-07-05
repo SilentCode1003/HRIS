@@ -1,0 +1,222 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Medecines Invetory</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+            <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#medecinesmodal">
+                <b>+ Add</b>
+              </button>
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableMedecines">
+                <thead>
+                  <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Medecine Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Expiry Date</th>
+                    <th>Manufacturer</th>
+                    <th>Created Date</th>
+                    <th class="col-sm-1">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="medecinesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Medecine</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                      <input type="file" name="addmedecineicon" id="addmedecineicon" class="form-control border-form-modal"
+                      accept="image/*">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" class="form-control border-form-modal" id="medname" name="medname"
+                                placeholder="Address">
+                                <label for="floatingInput">Medecine Name</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="medcategory" name="medcategory"
+                              placeholder="Address">
+                              <label for="floatingInput">Medecine Category</label>
+                            </div>
+                        </div>
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="medexpdate" name="medexpdate" 
+                            placeholder="Address">
+                            <label for="floatingInput">Medecine Expiry Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="medmanufacture" name="medmanufacture"
+                            placeholder="Address">
+                            <label for="floatingInput">Medecine Manufacturer</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="medquantity" name="medquantity"
+                          placeholder="Address">
+                          <label for="floatingInput">Medecine Quantity</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                              <textarea type="text" class="form-control border-form-modal" id="meddescription" name="meddescription"
+                              placeholder="Address" oninput="adjustTextareaHeight(this)"></textarea>
+                              <label for="floatingInput">Medecine Description</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="medsavebtn">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!--Edit Modal -->
+<div class="modal fade" id="editmedecinesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Edit Medecine</h3>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                    <div class="col g-6">
+                      <div class="p-4" style="width: 300px; margin-top: -100px;">
+                        <div class="text-center">
+                          <img id="preview" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                        </div>
+                        <br>
+                        <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                        <input type="file" name="editmedecineicon" id="editmedecineicon" class="form-control border-form-modal"
+                        accept="image/*">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                    <form>
+                      <br>
+                      <div class="row g-3">
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input type="text" class="form-control border-form-modal" id="editmedname" name="editmedname"
+                                  placeholder="Address">
+                                  <label for="floatingInput">Medecine Name</label>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-floating">
+                                <input type="text" class="form-control border-form-modal" id="editmedcategory" name="editmedcategory"
+                                placeholder="Address">
+                                <label for="floatingInput">Medecine Category</label>
+                              </div>
+                          </div>
+                      </div>                             
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="date" class="form-control border-form-modal" id="editmedexpdate" name="editmedexpdate" 
+                              placeholder="Address">
+                              <label for="floatingInput">Medecine Expiry Date</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="editmedmanufacture" name="editmedmanufacture"
+                              placeholder="Address">
+                              <label for="floatingInput">Medecine Manufacturer</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="editmedquantity" name="editmedquantity"
+                            placeholder="Address">
+                            <label for="floatingInput">Medecine Quantity</label>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                          <div class="col">
+                              <div class="form-floating">
+                                <textarea type="text" class="form-control border-form-modal" id="editmeddescription" name="editmeddescription"
+                                placeholder="Address"style="height: 8rem;" oninput="adjustTextareaHeight(this)"></textarea>
+                                <label for="floatingInput">Medecine Description</label>
+                              </div>
+                          </div>
+                      </div>
+                      <br>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="mededitbtn">Save</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  

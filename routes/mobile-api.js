@@ -14,7 +14,7 @@ const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
 var router = express.Router();
 const currentDate = moment();
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/crytography");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,6 +23,46 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
+
+
+router.post("/loadotmeal", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status in ('Pending', 'Applied')`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 
 
@@ -43,7 +83,7 @@ router.post("/login", (req, res) => {
         md_departmentid AS departmentid,
         md_departmentname AS departmentname,
         mp_positionname AS position,
-        ma_accessid as accessid,
+        ma_accessid as accesstypeid,
         mgs_id AS geofenceid
         FROM master_user
         INNER JOIN master_access ON mu_accesstype = ma_accessid
@@ -77,7 +117,7 @@ router.post("/login", (req, res) => {
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
                   req.session.geofenceid = user.geofenceid;
-                  req.session.accessid = user.accessid;
+                  req.session.accesstypeid = user.accesstypeid;
                 });
                 console.log('accesstype',req.session.accesstype);
                 return res.json({
@@ -261,6 +301,133 @@ WHERE pao_id = '${approveot_id}'`;
       res.json({
         msg: "error",
         data: error,
+      });
+    }
+  });
+
+
+  router.post("/getpayrolldate", (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let sql = `SELECT 
+      CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
+      DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
+      p_cutoff as p_cutoff,
+      ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
+      SUM(p_totalhours) as p_totalhours,
+      SUM(p_nightothours) as p_nightdiff,
+      SUM(p_normalothours) as p_normalot,
+      SUM(p_earlyothours) as p_earlyot,
+      SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
+      round(p_total_netpay, 2) as p_totalnetpay
+      FROM 
+      payslip  
+      WHERE 
+      p_employeeid = '${employeeid}'
+      GROUP BY 
+      p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
+      ORDER BY 
+      p_payrolldate DESC
+      LIMIT 2`;
+  
+      console.log(employeeid);
+  
+      Select(sql, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.json(JsonErrorResponse(err));
+        }
+  
+        console.log(result);
+  
+        if (result != 0) {
+          let data = DataModeling(result, "p_");
+  
+          console.log(data);
+          res.json(JsonDataResponse(data));
+        } else {
+          res.json(JsonDataResponse(result));
+        }
+      });
+    } catch (error) {
+      res.json(JsonErrorResponse(error));
+    }
+  });
+
+
+
+  router.post("/updatepassword", async (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let currentPass = req.body.currentPass;
+      let newPass = req.body.newPass;
+      let confirmPass = req.body.confirmPass;
+      let accesstypeid = req.body.accesstypeid;
+  
+      console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
+  
+      if (newPass !== confirmPass) {
+        return res.json({
+          msg: "error",
+          description: "New password and confirm password do not match",
+        });
+      }
+  
+      const userData = await mysql.mysqlQueryPromise(
+        `SELECT mu_password FROM master_user WHERE 
+        mu_accesstype = '${accesstypeid}' and  mu_employeeid = '${employeeid}'`
+      );
+  
+      if (userData.length !== 1) {
+        return res.json({
+          msg: "error",
+          description: "Employee not found",
+        });
+      }
+  
+      const encryptedStoredPassword = userData[0].mu_password;
+  
+      Decrypter(
+        encryptedStoredPassword,
+        async (decryptError, decryptedStoredPassword) => {
+          if (decryptError) {
+            return res.json({
+              msg: "error",
+              description: "Error decrypting the stored password",
+            });
+          }
+  
+          if (currentPass !== decryptedStoredPassword) {
+            return res.json({
+              msg: "error",
+              description: "Current password is incorrect",
+            });
+          }
+  
+          Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
+            if (encryptError) {
+              return res.json({
+                msg: "error",
+                description: "Error encrypting the new password",
+              });
+            }
+  
+            await mysql.Update(
+              `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}' and mu_accesstype = '${accesstypeid}'`
+            );
+  
+            return res.json({
+              msg: "success",
+              description: "Password updated successfully",
+            });
+          });
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      return res.json({
+        msg: "error",
+        description: error.message || "Internal server error",
       });
     }
   });
