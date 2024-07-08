@@ -4,6 +4,11 @@ var express = require("express");
 const { Encrypter } = require("./repository/crytography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
+const { Select, Update } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse, MessageStatus, JsonSuccess, JsonWarningResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
+const { SelectStatement, UpdateStatement, GetCurrentDatetime } = require("./repository/customhelper");
+const { is } = require("date-fns/locale");
 var router = express.Router();
 const currentDate = moment();
 
@@ -31,6 +36,7 @@ router.post("/save", async (req, res) => {
     let status = "Active";
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
+    let geofenceValue = 1;
 
     const existingUserQuery = `SELECT * FROM master_user WHERE mu_employeeid = '${employeeid}' AND mu_accesstype = '${accesstype}'`;
     const existingUserResult = await mysql.mysqlQueryPromise(
@@ -68,6 +74,7 @@ router.post("/save", async (req, res) => {
                 createby,
                 createdate,
                 status,
+                geofenceValue,
               ],
             ];
 
@@ -109,7 +116,11 @@ router.get("/load", (req, res) => {
     ma_accessname as mu_accesstype,
     mu_createby,
     mu_createdate,
-    mu_status
+    mu_status,
+    CASE 
+            WHEN mu_isgeofence = 1 THEN 'Active'
+            ELSE 'Inactive'
+        END AS mu_isgeofence
     from master_user
     left join master_employee on master_user.mu_employeeid = me_id
     LEFT JOIN master_access ON master_user.mu_accesstype = ma_accessid`;
@@ -129,76 +140,229 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/update", async (req, res) => {
+// router.post("/update", async (req, res) => {
+//   try {
+//     let userid = req.body.userid;
+//     let username = req.body.username;
+//     let subgroupid = req.body.subgroupid;
+//     //let password = req.body.password;
+//     let accesstype = req.body.accesstype;
+//     let status = req.body.status;
+
+//     // Wrap the Encrypter function in a promise
+//     // const encrypted = await new Promise((resolve, reject) => {
+//     //   Encrypter(password, (err, result) => {
+//     //     if (err) {
+//     //       console.error("Error in Encrypter: ", err);
+//     //       reject(err);
+//     //     } else {
+//     //       resolve(result);
+//     //     }
+//     //   });
+//     // });
+
+//     let sqlupdate = `UPDATE master_user SET 
+//       mu_username = '${username}',
+//       mu_accesstype = '${accesstype}',
+//       mu_subgroupid = '${subgroupid}',
+//       mu_status ='${status}'
+//       WHERE mu_userid ='${userid}'`;
+
+//     const updateResult = await mysql.Update(sqlupdate);
+
+//     console.log(updateResult);
+
+//     res.json({
+//       msg: "success",
+//     });
+//   } catch (error) {
+//     console.error("Error: ", error);
+//     res.json({
+//       msg: "error",
+//     });
+//   }
+// });
+
+
+router.post("/getisgeofencetrue", (req, res) => {
   try {
-    let userid = req.body.userid;
-    let username = req.body.username;
-    let subgroupid = req.body.subgroupid;
-    //let password = req.body.password;
-    let accesstype = req.body.accesstype;
-    let status = req.body.status;
+    let employeeid = req.body.employeeid;
+    let sql = `
+      SELECT 
+        mu_username,
+        mu_password,
+        mu_accesstype,
+        mu_subgroupid,
+        mu_status,
+        mu_isgeofence
+    FROM master_user
+    WHERE mu_employeeid = '${employeeid}';
+    `;
 
-    // Wrap the Encrypter function in a promise
-    // const encrypted = await new Promise((resolve, reject) => {
-    //   Encrypter(password, (err, result) => {
-    //     if (err) {
-    //       console.error("Error in Encrypter: ", err);
-    //       reject(err);
-    //     } else {
-    //       resolve(result);
-    //     }
-    //   });
-    // });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    let sqlupdate = `UPDATE master_user SET 
-      mu_username = '${username}',
-      mu_accesstype = '${accesstype}',
-      mu_subgroupid = '${subgroupid}',
-      mu_status ='${status}'
-      WHERE mu_userid ='${userid}'`;
+      console.log(result);
 
-    const updateResult = await mysql.Update(sqlupdate);
+      if (result != 0) {
+        let data = DataModeling(result, "mu_");
 
-    console.log(updateResult);
-
-    res.json({
-      msg: "success",
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
-    console.error("Error: ", error);
-    res.json({
-      msg: "error",
-    });
+    res.json(JsonErrorResponse(err));
   }
 });
+
 
 router.post("/getusers", (req, res) => {
   try {
     let userid = req.body.userid;
     let sql = `
-    SELECT 
+      SELECT 
         mu_username,
         mu_password,
         mu_accesstype,
         mu_subgroupid,
-        mu_status
-        from master_user
-        where mu_userid = '${userid}'`;
+        mu_status,
+        CASE 
+            WHEN mu_isgeofence = 1 THEN 'True'
+            ELSE 'False'
+        END AS mu_isgeofence
+    FROM master_user
+    WHERE mu_userid = '${userid}';
+    `;
 
-    mysql.Select(sql, "Master_User", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
       console.log(result);
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+      if (result != 0) {
+        let data = DataModeling(result, "mu_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-      error: error,
-    });
+    res.json(JsonErrorResponse(err));
   }
 });
+
+
+
+router.put("/edit", (req, res) => {
+  try {
+    let createby = req.session.fullname;
+    let createdate = GetCurrentDatetime();
+    const { userid, username, accesstype, subgroupid, status, isgeofence } = req.body;
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+    let geofenceValue;
+
+    if (username) {
+      data.push(username);
+      columns.push("username");
+    }
+
+    if (accesstype) {
+      data.push(accesstype);
+      columns.push("accesstype");
+    }
+
+    if (subgroupid) {
+      data.push(subgroupid);
+      columns.push("subgroupid");
+    }
+
+    if (createby) {
+      data.push(createby);
+      columns.push("createby");
+    }
+
+    if (createdate) {
+      data.push(createdate);
+      columns.push("createdate");
+    }
+
+    if (status) {
+      data.push(status);
+      columns.push("status");
+    }
+
+    // Check and convert the value of isgeofence
+    if (isgeofence) {
+      geofenceValue = (isgeofence.toLowerCase() === 'true') ? 1 : 0;
+      data.push(geofenceValue);
+      columns.push("isgeofence");
+    }
+
+    if (userid) {
+      data.push(userid);
+      arguments.push("userid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "master_user",
+      "mu",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    let checkStatement = SelectStatement(
+      "select * from master_user where mu_username = ? and mu_accesstype = ? and mu_subgroupid = ? and mu_status = ? and mu_isgeofence = ?",
+      [username, accesstype, subgroupid, status, geofenceValue]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+//#endregion
+

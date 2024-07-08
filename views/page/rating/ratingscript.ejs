@@ -1,0 +1,227 @@
+<script>
+    let questiontypeid = "";
+    let base64String = "";
+  
+    $(document).ready(function () {
+      LoadTable();
+      searchTable();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableQuestionType").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/question_type/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                        <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editquestiontypemodal"><i class="fas fa-fw fa-pen"></i></button>
+                       `;
+  
+                finalData.push({
+                  typeid: item.typeid,
+                  typename: item.typename,
+                  type_points: item.type_points,
+                  createby: item.createby,
+                  createdate: item.createdate,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            { data: "typeid" },
+            { data: "typename" },
+            { data: "type_points" },
+            { data: "createby" },
+            { data: "createdate" },
+            { data: "action" },
+          ],
+  
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      $(document).on("click", "#questiontypesaveBtn", function () {
+        let questiontypename = $("#questiontypename").val();
+        let questiontypepoints = $("#questiontypoints").val();
+  
+  
+        var message = "";
+  
+        if (questiontypename == "") {
+          message += "questiontypename is required ";
+        }
+  
+        if (questiontypepoints == "") {
+          message += "questiontypepoints is required ";
+        }
+  
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "POST",
+            url: "/question_type/save",
+            data: {
+                questiontypename: questiontypename,
+                questiontypepoints: questiontypepoints,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Update Successfully",
+                  "You clicked the button!",
+                  "success"
+                ).then((results) => {
+                  window.location.reload();
+                });
+                LoadTable();
+              } else if (result.msg == "exist") {
+                swal("Exist", "Data already exists!", "warning");
+              }
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+          });
+        }
+      });
+
+      $("#dataTableQuestionType tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+          questiontypeid = dataRow[0];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/question_type/getquestiontype",
+          data: {
+            questiontypeid: questiontypeid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#editquestiontypename").val(item.typename);
+                $("#editquestiontypoints").val(item.type_points);
+              });
+            } else {
+              swal("Error fetching employee data", "success");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", err, "error");
+          },
+        });
+      });
+      $(document).on("click", "#editquestiontypesaveBtn", function () {
+        let id = questiontypeid;
+        let typename = $("#editquestiontypename").val();
+        let type_points = $("#editquestiontypoints").val();
+  
+        var message = "";
+  
+        if (typename === "") {
+          message += "Type Name is required. ";
+        }
+  
+        if (type_points === "") {
+          message += "Type Points is required. ";
+        }
+  
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "/question_type/edit",
+            data: {
+              questiontypeid: id,
+              typename: typename,
+              type_points: type_points,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Update Successfully",
+                  "You clicked the button!",
+                  "success"
+                ).then((results) => {
+                  window.location.reload();
+                });
+                LoadTable();
+              } else if (result.msg == "exist") {
+                swal("Exist", "Data already exists!", "warning");
+              }
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+          });
+        }
+      });
+    });
+  
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableQuestionType");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+  

@@ -4,6 +4,13 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "http://localhost:5173", // Replace with your frontend URL
+  credentials: true,
+};
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -114,6 +121,12 @@ var teamleadsettingsRouter = require("./routes/teamleadsettings");
 var sidebarRouter = require("./routes/sidebar");
 var medecinesRouter = require("./routes/medecines");
 var medecinesrequestRouter = require("./routes/medecines_request");
+var examRouter = require("./routes/exam");
+var question_typeRouter = require("./routes/question_type");
+var questionRouter = require("./routes/question");
+var ratingRouter = require("./routes/rating");
+var teamleadgeofenceempRouter = require("./routes/teamleadgeofenceemp");
+var applicant_registrationRouter = require("./routes/applicant_registration");
 
 
 
@@ -132,6 +145,8 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(cors(corsOptions));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -242,6 +257,12 @@ app.use("/teamleadsettings", teamleadsettingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
 app.use("/medecines_request", medecinesrequestRouter);  
+app.use("/exam", examRouter);
+app.use("/question_type", question_typeRouter);
+app.use("/question", questionRouter);
+app.use("/rating", ratingRouter);
+app.use("/teamleadgeofenceemp", teamleadgeofenceempRouter);
+app.use("/applicant_registration", applicant_registrationRouter);
 
 
 // catch 404 and forward to error handler

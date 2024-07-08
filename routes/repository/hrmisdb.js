@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
+Decrypter("9de2c5798b1774b9a5ce9f66a705b03d", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -20,11 +20,9 @@ Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
 //   console.log(encrypted);
 // });
 
-
-Encrypter('5lsolutions101520', (err, encrypted) => {
+Encrypter("5lsolutions101520", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
-
 });
 
 const connection = mysql.createConnection({
@@ -355,7 +353,8 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_latitudein,
         ma_longitudein,
         ma_devicein,
-        ma_gefenceidIn) VALUES ?`;
+        ma_gefenceidIn,
+        ma_locationIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -617,6 +616,7 @@ exports.InsertTable = (tablename, data, callback) => {
         mu_subgroupid,
         mu_createby,
         mu_createdate,
+        mu_isgeofence,
         mu_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {

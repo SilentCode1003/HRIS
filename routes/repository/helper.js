@@ -26,7 +26,6 @@ exports.generateUsernameAndPasswordforemployee = (employee) => {
       me_birthday: birthday,
     } = employee;
 
-    
     const username = firstname.toLowerCase() + lastname.charAt(0).toLowerCase();
 
     const password = newEmployeeId + birthday.replace(/-/g, "");
@@ -58,6 +57,18 @@ exports.generateUsernameAndPasswordForApprentice = (apprentice) => {
   }
 };
 
+exports.generateUsernamefoApplicant = (applicant) => {
+  try {
+    const { map_applicantid: newApplicantId, map_nickname: nickname } =
+      applicant;
+
+    const username = nickname.toLowerCase() + newApplicantId;
+
+    return { username };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 exports.UserLogin = (result, callback) => {
   try {
@@ -65,17 +76,18 @@ exports.UserLogin = (result, callback) => {
 
     result.forEach((row) => {
       userData.push({
-        image: row.image,
         employeeid: row.employeeid,
         fullname: row.fullname,
         accesstype: row.accesstype,
         departmentid: row.departmentid,
+        isgeofence: row.isgeofence,
         departmentname: row.departmentname,
         position: row.position,
         jobstatus: row.jobstatus,
         geofenceid: row.geofenceid,
         accesstypeid: row.accesstypeid,
         subgroupid: row.subgroupid,
+        image: row.image,
       });
     });
 
@@ -86,33 +98,32 @@ exports.UserLogin = (result, callback) => {
   }
 };
 
+// exports.TeamLeadLogin = (result, callback) => {
+//   try {
+//     const tlData = [];
 
-exports.TeamLeadLogin = (result, callback) => {
-  try {
-    const tlData = [];
+//     result.forEach((row) => {
+//       tlData.push({
+//         image: row.image,
+//         employeeid: row.employeeid,
+//         fullname: row.fullname,
+//         accesstype: row.accesstype,
+//         departmentid: row.departmentid,
+//         departmentname: row.departmentname,
+//         position: row.position,
+//         jobstatus: row.jobstatus,
+//         geofenceid: row.geofenceid,
+//         subgroupid: row.subgroupid,
+//         accesstypeid: row.accesstypeid,
+//       });
+//     });
 
-    result.forEach((row) => {
-      tlData.push({
-        image: row.image,
-        employeeid: row.employeeid,
-        fullname: row.fullname,
-        accesstype: row.accesstype,
-        departmentid: row.departmentid,
-        departmentname: row.departmentname,
-        position: row.position,
-        jobstatus: row.jobstatus,
-        geofenceid: row.geofenceid,
-        subgroupid: row.subgroupid,
-        accesstypeid: row.accesstypeid,
-      });
-    });
-
-    return tlData;
-  } catch (error) {
-    console.log(error);
-    callback(error);
-  }
-};
+//     return tlData;
+//   } catch (error) {
+//     console.log(error);
+//     callback(error);
+//   }
+// };
 
 exports.OjtLogin = (result, callback) => {
   try {

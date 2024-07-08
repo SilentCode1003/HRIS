@@ -713,7 +713,10 @@ tr:hover {
   color: rgb(124, 58, 58) !important;
   text-shadow: 3px 3px 3px #4f0202 !important;
   letter-spacing: 1px;
+  font-size: 28px !important;
 }
+
+
 .card-icon {
   margin-right: 8px;
   color: white !important;
@@ -1217,6 +1220,7 @@ tr:hover {
   .content {
     margin-left: 230px;
   }
+  
 
   /* .content-toggled {
     margin-left: 0px !important;
@@ -1254,6 +1258,10 @@ tr:hover {
   .content {
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .greet-text {
+    font-size: 20px !important;
   }
 
   .content-toggled {

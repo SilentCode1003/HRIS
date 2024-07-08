@@ -40,6 +40,8 @@
   let globaltotaldeductions = "";
   let globaltotalnetpay = "";
   let globaltotalnetpaywords = "";
+  let globalloans = "";
+  let globalRestDay_OTpay = "";
 
 
   $(document).ready(function () {
@@ -190,6 +192,7 @@
               $("#absent").text(item.absent);
               $("#holidayday").text(item.holidaydays);
               $("#leavepaydadys").text(item.leaveday);
+              $("#restdayot").text(item.restotday);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -256,10 +259,13 @@
               $("#payslipbasicadustments").text(
                 formatToCurrency(item.basic_adjustments)
               );
+              globalbasicadjustments = item.basic_adjustments
               $("#paysliploans").text(
                 formatToCurrency(item.loans)
               );
-              globalbasicadjustments = item.basic_adjustments
+              globalloans = item.loans
+              $("#paysliprestdayot").text(formatToCurrency(item.restday_ot));
+              globalRestDay_OTpay = item.restday_ot
               $("#payslippayrolladjustments").text(
                 formatToCurrency(item.payroll_adjustments)
               );
@@ -476,6 +482,8 @@
           globaltotaldeductions: globaltotaldeductions,
           globaltotalnetpay: globaltotalnetpay,
           globaltotalnetpaywords: globaltotalnetpaywords,
+          globalloans: globalloans,
+          globalRestDay_OTpay: globalRestDay_OTpay,
         },
         dataType: "text",
         success: function (data) {
