@@ -90,49 +90,6 @@
       }
     }
 
-    function exportTableToExcel(tableID, filename = "", callback) {
-      let table = document.getElementById(tableID);
-      let wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-      let ws = wb.Sheets["Sheet1"];
-      let range = XLSX.utils.decode_range(ws["!ref"]);
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-        let address = XLSX.utils.encode_cell({ c: C, r: 1 });
-        if (!ws[address]) continue;
-        ws[address].s = {
-          font: {
-            bold: true,
-          },
-        };
-      }
-
-      // Set column widths
-      ws["!cols"] = [
-        { wpx: 200 }, // A
-        { wpx: 220 }, // B
-        { wpx: 200 }, // C
-        { wpx: 200 }, // D
-        { wpx: 200 }, // E
-        { wpx: 220 }, // F
-      ];
-
-      let wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-
-      function s2ab(s) {
-        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
-        var view = new Uint8Array(buf); //create uint8array as viewer
-        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff; //convert to octet
-        return buf;
-      }
-
-      let blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-
-      saveAs(blob, filename);
-
-      if (callback && typeof callback === "function") {
-        callback();
-      }
-    }
-
     document
       .getElementById("exportExcelBtn")
       .addEventListener("click", function () {

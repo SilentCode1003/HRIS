@@ -273,16 +273,15 @@ router.post("/logs", (req, res) => {
     let sql = `select 
     me_profile_pic as image,
     concat(me_lastname,' ',me_firstname) as fullname,
-	  DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
-	  TIME(al_logdatetime) AS logtime,
+	DATE_FORMAT(al_logdatetime, '%W, %M %e, %Y') AS logdate,
+	TIME(al_logdatetime) AS logtime,
     al_logtype AS logtype,
-	  al_latitude AS latitude,
+	al_latitude AS latitude,
     al_longitude AS longitude,
-	  al_device AS device,
-    mgs_geofencename as location
+	al_device AS device,
+    al_location as location
     from attendance_logs
     inner join master_employee on attendance_logs.al_employeeid = me_id
-    inner join master_geofence_settings on attendance_logs.al_geofenceid = mgs_id
     where al_attendanceid = '${attendanceid}'`;
 
     mysql

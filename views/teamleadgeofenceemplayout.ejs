@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include("./components/header.ejs")%>
+    <%- include("./components/teamleadheader.ejs")%>
   </head>
 
   <body id="page-top">
@@ -9,18 +9,16 @@
 
     <div id="wrapper">
       <!-- Sidebar -->
-      <%- include("./components/sidebar.ejs")%>
+      <%- include("./components/teamleadsidebar.ejs")%>
       <!-- End of Sidebar -->
-
       <!-- Topbar -->
-      <%- include("./components/topbar.ejs")%>
+      <%- include("./components/teamleadtopbar.ejs")%>
       <!-- End of Topbar -->
 
       <!-- Content Wrapper -->
       <div id="content-wrapper">
         <div class="content">
-          <%-
-          include("./page/payslip/payslip.ejs")%>
+          <%- include("./page/teamleadgeofenceemp/teamleadgeofenceemp.ejs")%>
         </div>
       </div>
       </div>
@@ -34,8 +32,8 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <%- include("./components/scripts.ejs")%> 
-    <%- include("./components/topbarscript.ejs")%>
-    <%- include("./page/payslip/payslipscript.ejs")%>
+    <%- include("./components/scripts.ejs")%> <%-
+    include("./components/teamleadtopbarscript.ejs")%> <%-
+    include("./page/teamleadgeofenceemp/teamleadgeofenceempscript.ejs")%>
   </body>
 </html>

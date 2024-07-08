@@ -73,6 +73,9 @@ router.post("/latestlogforapp", (req, res) => {
 router.post("/clockin", (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
+  const locationin = req.body.locationin;
+
+  console.log(locationin,'locationin');
 
   if (!employee_id) {
     return res.status(401).json({
@@ -144,6 +147,7 @@ router.post("/clockin", (req, res) => {
             longitude,
             devicein,
             geofenceid,
+            locationin,
           ],
         ];
 
@@ -200,6 +204,7 @@ router.post("/clockout", (req, res) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
         const deviceout = getDeviceInformation(req.body.deviceout);
+        const locationout = req.body.locationout;
 
         const updateQuery = `
         UPDATE master_attendance
@@ -208,7 +213,8 @@ router.post("/clockout", (req, res) => {
           ma_latitudeout = '${latitude}',
           ma_longitudeout = '${longitude}',
           ma_deviceout = '${deviceout}',
-          ma_geofenceidOut = '${geofenceid}'
+          ma_geofenceidOut = '${geofenceid}',
+          ma_locationOut = '${locationout}'
         WHERE
           ma_employeeid = '${employee_id}'
           AND ma_attendancedate = '${ma_attendancedate}'`;

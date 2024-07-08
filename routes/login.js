@@ -27,6 +27,7 @@ router.post("/login", (req, res) => {
         me_profile_pic AS image,
         me_jobstatus AS jobstatus,
         md_departmentid AS departmentid,
+        mu_isgeofence as isgeofence,
         md_departmentname AS departmentname,
         mp_positionname AS position,
         ma_accessid as accesstypeid,
@@ -60,14 +61,18 @@ router.post("/login", (req, res) => {
                   req.session.accesstype = user.accesstype;
                   req.session.image = user.image;
                   req.session.departmentid = user.departmentid;
+                  req.session.isgeofence = user.isgeofence;
                   req.session.departmentname = user.departmentname;
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
                   req.session.geofenceid = user.geofenceid;
                   req.session.accesstypeid = user.accesstypeid;
                   req.session.subgroupid = user.subgroupid;
+                  
                 });
                 console.log('accesstype',req.session.accesstype);
+                
+                console.log(req.session.isgeofence,'data');
                 return res.json({
                   msg: "success",
                   data: data,

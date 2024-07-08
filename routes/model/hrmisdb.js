@@ -434,6 +434,7 @@ exports.Master_User = (data) => {
       subgroupid: key.mu_subgroupid,
       createby: key.mu_createby,
       createdate: key.mu_createdate,
+      isgeofence: key.mu_isgeofence,
       status: key.mu_status,
     });
   });

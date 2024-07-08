@@ -13,6 +13,21 @@
       searchTable();
     });
 
+    document
+      .getElementById("exportExcelBtn")
+      .addEventListener("click", function () {
+        exportTableToExcel("dataTablesalary", "EmployeeSalary.xlsx", function () {
+          swal(
+            "Update Successfully",
+            "You clicked the button!",
+            "success"
+          ).then((results) => {
+            window.location.reload();
+          });
+          LoadTable();
+        });
+      });
+
     function LoadTable() {
       $("#dataTablesalary").DataTable({
         destroy: true,
