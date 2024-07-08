@@ -148,6 +148,7 @@ router.post("/loadprofileslip", (req, res) => {
     p_total_netpay,
     p_workdays,
     p_restday,
+    p_restotday,
     p_present,
     p_absent,
     p_holidaydays,
@@ -224,6 +225,7 @@ router.post("/loadpayslip", (req, res) => {
     p_sss_dedcutions,
     p_pagibigdeductions,
     p_philhealthdeductions,
+    p_restday_ot,
     p_tindeductions,
     p_absent_deductions,
     p_healthcard,
@@ -303,6 +305,9 @@ router.post("/generatepdf", async (req, res) => {
       globallatedeductions,
       globaltotaldeductions,
       globaltotalnetpay,
+      //globaltotalnetpaywords,
+      globalloans,
+      globalRestDay_OTpay,
     } = req.body;
 
     const docDefinition = {
@@ -416,6 +421,12 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Early Overtime",
                 "₱" + globalapprovedearlyot,
+                "Loans",
+                "₱" + globalloans,
+              ],
+              [
+                "Rest Day OT",
+                "₱" + globalRestDay_OTpay,
                 "",
                 "",
               ],

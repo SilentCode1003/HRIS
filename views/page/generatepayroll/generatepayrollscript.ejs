@@ -86,7 +86,7 @@
             a.download = `bank_statement_${payrolldate}_${bankname}.xlsx`;
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a); 
+            document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
           },
           error: function (xhr, status, error) {
@@ -217,8 +217,21 @@
                   text: "Thank you for waiting ;)",
                   icon: "success",
                   button: "OK!",
-                }).then((results) => {
+                }).then(() => {
                   loadPayrollTable(startDate, endDate);
+                });
+              } else if (result.msg == "exist") {
+                let message =
+                  "Payroll data already exists for the following date ranges:\n";
+                result.data.forEach((entry) => {
+                  message += `Start Date: ${entry.startdate}, End Date: ${entry.enddate}\n`;
+                });
+
+                swal({
+                  title: "Existing Payroll Data",
+                  text: message,
+                  icon: "warning",
+                  button: "OK",
                 });
               } else {
                 swal(
@@ -229,9 +242,7 @@
               }
             },
             error: function (xhr, status, error) {
-              console.log("Error:", xhr.responseText);
-              clearInterval(interval);
-              swal.close();
+              console.error("Error:", error);
               swal(
                 "Error",
                 "An error occurred while generating and loading payroll.",
@@ -525,6 +536,7 @@
               $("#absent").text(item.Absent);
               $("#holidayday").text(item.Holiday);
               $("#leavepaydadys").text(item.Leaveday);
+              $("#restdayot").text(item.RestDay_OT);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -614,6 +626,7 @@
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
               $("#paysliploandeductions").text(formatToCurrency(item.Loans));
+              $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
               );

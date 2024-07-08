@@ -1,0 +1,834 @@
+<script>
+  let questionid = "";
+  let base64String = "";
+  let originalChoices = [];
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadExamname();
+    LoadQuestionType();
+    EditLoadExamname();
+    EditLoadQuestionType();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableQuestion").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/question/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                        <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editquestionmodal"><i class="fas fa-fw fa-pen"></i></button>
+                        <button id="addQuestionBtn" class="btn text-success" name="addQuestionBtn" data-bs-toggle="modal" data-bs-target="#addquestionmodal"><i class="fas fa-fw fa-plus"></i></button>
+                       `;
+
+              finalData.push({
+                questionid: item.questionid,
+                examname: item.examname,
+                question_type: item.question_type,
+                question_answer: item.question_answer,
+                points: item.points,
+                createdate: item.createdate,
+                createby: item.createby,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "questionid" },
+          { data: "examname" },
+          { data: "question_type" },
+          { data: "question_answer" },
+          { data: "points" },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "action" },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    let choiceCount = 0;
+
+    document.getElementById("addChoiceBtn").addEventListener("click", () => {
+      choiceCount++;
+      const choicesContainer = document.getElementById("choicesContainer");
+
+      const newChoiceDiv = document.createElement("div");
+      newChoiceDiv.classList.add("form-floating", "mb-2");
+      newChoiceDiv.id = `choiceDiv${choiceCount}`;
+
+      const newChoiceInput = document.createElement("input");
+      newChoiceInput.type = "text";
+      newChoiceInput.classList.add("form-control", "border-form-modal");
+      newChoiceInput.id = `choice${choiceCount}`;
+      newChoiceInput.name = "choices[]";
+      newChoiceInput.placeholder = `Choice ${choiceCount}`;
+      newChoiceInput.oninput = updateAnswerOptions;
+
+      const newChoiceLabel = document.createElement("label");
+      newChoiceLabel.htmlFor = `choice${choiceCount}`;
+      newChoiceLabel.innerText = `Choice ${choiceCount}`;
+
+      const newImageInput = document.createElement("input");
+      newImageInput.type = "file";
+      newImageInput.classList.add("form-control", "border-form-modal");
+      newImageInput.id = `choiceImage${choiceCount}`;
+      newImageInput.name = "choiceImages[]";
+      newImageInput.accept = "image/*";
+      newImageInput.onchange = previewImage; // Call previewImage function on change
+
+      const imagePreview = $("<img>")
+        .attr("id", `imagePreview${choiceCount}`)
+        .css({
+          width: "100px",
+          height: "auto",
+          display: "none", // Initially hide the image preview
+          marginTop: "10px",
+        });
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.classList.add(
+        "btn",
+        "btn-danger",
+        "btn-sm",
+        "removeChoiceBtn"
+      );
+      removeButton.innerText = "Remove";
+      removeButton.onclick = () => removeChoice(newChoiceDiv.id);
+
+      newChoiceDiv.appendChild(newChoiceInput);
+      newChoiceDiv.appendChild(newChoiceLabel);
+      newChoiceDiv.appendChild(newImageInput);
+      newChoiceDiv.appendChild(imagePreview[0]); // Append the jQuery object's DOM element
+      newChoiceDiv.appendChild(removeButton);
+
+      choicesContainer.appendChild(newChoiceDiv);
+
+      updateAnswerOptions();
+    });
+
+    function removeChoice(choiceDivId) {
+      const choiceDiv = document.getElementById(choiceDivId);
+      choiceDiv.remove();
+
+      const choicesContainer = document.getElementById("choicesContainer");
+      const choiceDivs = choicesContainer.querySelectorAll(".form-floating");
+      choiceCount = choiceDivs.length;
+
+      choiceDivs.forEach((div, index) => {
+        const choiceInput = div.querySelector('input[type="text"]');
+        const choiceLabel = div.querySelector("label");
+        const imageInput = div.querySelector('input[type="file"]');
+        const imagePreview = $(div).find("img");
+        const removeButton = div.querySelector("button");
+
+        const newId = `choiceDiv${index + 1}`;
+        div.id = newId;
+
+        const newInputId = `choice${index + 1}`;
+        choiceInput.id = newInputId;
+        choiceInput.placeholder = `Choice ${index + 1}`;
+
+        const newImageId = `choiceImage${index + 1}`;
+        imageInput.id = newImageId;
+        imageInput.onchange = previewImage; // Update onchange handler for image input
+
+        imagePreview.attr("id", `imagePreview${index + 1}`); // Update image preview ID
+        imagePreview.css({
+          width: "100px",
+          height: "auto",
+          display: "none", // Initially hide the image preview
+          marginTop: "10px",
+        });
+
+        choiceLabel.htmlFor = newInputId;
+        choiceLabel.innerText = `Choice ${index + 1}`;
+
+        removeButton.onclick = () => removeChoice(newId);
+      });
+
+      updateAnswerOptions();
+    }
+
+    function updateAnswerOptions() {
+      const answerSelect = document.getElementById("addexamanswer");
+      answerSelect.innerHTML =
+        "<option selected disabled>Select Answer</option>";
+
+      const choices = document.querySelectorAll(
+        '#choicesContainer input[name="choices[]"]'
+      );
+      choices.forEach((choice, index) => {
+        if (choice.value.trim() !== "") {
+          const option = document.createElement("option");
+          option.value = choice.value;
+          option.text = `Choice ${index + 1}: ${choice.value}`;
+          answerSelect.appendChild(option);
+        }
+      });
+    }
+
+    function previewImage() {
+      const input = this; // Get the input element
+      const preview = $(this).next("img"); // Get the next sibling img element (image preview)
+
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.attr("src", e.target.result); // Set image preview source
+          preview.css("display", "block"); // Display the image preview
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.attr("src", ""); // Clear image preview source
+        preview.css("display", "none"); // Hide the image preview
+      }
+    }
+
+    $(document).on("click", "#examsavebtn", function () {
+      let examname = $("#examname").val();
+      let questiontext = $("#addquestiondescription").val();
+      let questiontype = $("#questiontype").val();
+      let questionchoices = [];
+      let base64String = "";
+
+      const choiceElements = $("input[name='choices[]']");
+      const imageElements = $("input[name='choiceImages[]']");
+
+      choiceElements.each(function (index, element) {
+        const choiceText = $(element).val();
+        const imageElement = imageElements[index];
+        const file = imageElement.files[0];
+
+        if (file) {
+          getBase64(file, (base64String) => {
+            questionchoices.push({
+              text: choiceText,
+              image: base64String,
+            });
+            if (questionchoices.length === choiceElements.length) {
+              submitForm(examname, questiontext, questiontype, questionchoices);
+            }
+          });
+        } else {
+          questionchoices.push({
+            text: choiceText,
+            image: null,
+          });
+          if (questionchoices.length === choiceElements.length) {
+            submitForm(examname, questiontext, questiontype, questionchoices);
+          }
+        }
+      });
+    });
+
+    function getBase64(file, callback) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        callback(reader.result.split(",")[1]); // Split to get base64 part only
+      };
+      reader.onerror = function (error) {
+        console.error("Error: ", error);
+      };
+    }
+
+    function submitForm(examname, questiontext, questiontype, questionchoices) {
+      let questionanswer = $("#addexamanswer").val();
+      let questionimage = base64String;
+
+      console.log(
+        examname,
+        questiontext,
+        questiontype,
+        questionchoices,
+        questionanswer,
+        questionimage
+      );
+
+      var message = "";
+
+      if (examname == "") {
+        message += "Exam Name is required. ";
+      }
+
+      if (questiontext == "") {
+        message += "Question Description is required. ";
+      }
+
+      if (questiontype == "") {
+        message += "Question Type is required. ";
+      }
+
+      if (questionchoices.length === 0) {
+        message += "At least one Question Choice is required. ";
+      }
+
+      if (questionanswer == "") {
+        message += "Question Answer is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/question/save",
+          data: {
+            examname: examname,
+            questiontext: questiontext,
+            questiontype: questiontype,
+            questionchoices: questionchoices,
+            questionanswer: questionanswer,
+            questionimage: questionimage,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Saved Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    }
+
+    function LoadExamname() {
+      $.ajax({
+        type: "GET",
+        url: "/exam/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var option = new Option(item.examname, item.examid);
+            $(option).data("duration", item.duration);
+            $("#examname").append(option);
+          });
+        },
+        error: function (result) {
+          swal("Error: " + result.data);
+        },
+      });
+    }
+
+    function updateExamDuration() {
+      var selectedOption = $("#examname").find("option:selected");
+      var duration = selectedOption.data("duration");
+      $("#addquestionduration").val(duration);
+    }
+    $("#examname").on("change", updateExamDuration);
+
+    function LoadQuestionType() {
+      $.ajax({
+        type: "GET",
+        url: "/question_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.typeid, item.typeid);
+            $(options).html(item.typename);
+            $("#questiontype").append(options);
+          });
+        },
+        error: function (result) {
+          swal("Error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadExamname() {
+      $.ajax({
+        type: "GET",
+        url: "/exam/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var option = new Option(item.examname, item.examid);
+            $(option).data("duration", item.duration);
+            $("#editexamname").append(option);
+          });
+        },
+        error: function (result) {
+          swal("Error: " + result.data);
+        },
+      });
+    }
+
+    function EditupdateExamDuration() {
+      var selectedOption = $("#editexamname").find("option:selected");
+      var duration = selectedOption.data("duration");
+      $("#editquestionduration").val(duration);
+    }
+    $("#editexamname").on("change", EditupdateExamDuration);
+
+    function EditLoadQuestionType() {
+      $.ajax({
+        type: "GET",
+        url: "/question_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.typeid, item.typeid);
+            $(options).html(item.typename);
+            $("#editquestiontype").append(options);
+          });
+        },
+        error: function (result) {
+          swal("Error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableQuestion tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      questionid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/question/getquestion",
+        data: { questionid: questionid },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            // Populate form fields with existing data
+            $.each(existingData, (key, item) => {
+              $("#editexamname").val(item.examid);
+              $("#editquestionduration").val(item.duration);
+              $("#editquestiondescription").val(item.question_text);
+              $("#editquestiontype").val(item.question_typeid);
+              $("#editexamanswer").val(item.question_answer);
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.question_image
+              );
+
+              // Parse choices array and store it globally
+              originalChoices = JSON.parse(item.question_choices);
+
+              // Clear existing choices
+              $("#editchoicesContainer").empty();
+
+              // Re-create choice elements
+              let choiceCount = 0;
+              originalChoices.forEach((choice, index) => {
+                choiceCount++;
+                addChoiceElement(choice.text, index + 1, choice.image);
+              });
+
+              // Add functionality to add new choices
+              $("#editChoiceBtn")
+                .off()
+                .on("click", () => {
+                  choiceCount++;
+                  addChoiceElement("", choiceCount, "");
+                });
+            });
+
+            function addChoiceElement(choiceText, index, choiceImage) {
+              const choicesContainer = $("#editchoicesContainer");
+
+              const newChoiceDiv = $("<div>")
+                .addClass("form-floating mb-2")
+                .attr("id", `choiceDiv${index}`);
+
+              const newChoiceInput = $("<input>")
+                .attr({
+                  type: "text",
+                  id: `choice${index}`,
+                  name: "choices[]",
+                  value: choiceText,
+                  placeholder: `Choice ${index}`,
+                  class: "form-control border-form-modal",
+                })
+                .on("input", updateAnswerOptions);
+
+              const newChoiceLabel = $("<label>")
+                .attr("for", `choice${index}`)
+                .text(`Choice ${index}`);
+
+              const newImageInput = $("<input>")
+                .attr({
+                  type: "file",
+                  id: `choiceImage${index}`,
+                  name: "choiceImages[]",
+                  accept: "image/*",
+                  class: "form-control border-form-modal",
+                })
+                .on("change", function () {
+                  convertImageToBase64(this, `choiceImage${index}`);
+                });
+
+              const removeButton = $("<button>")
+                .attr({
+                  type: "button",
+                  class: "btn btn-danger btn-sm removeChoiceBtn",
+                })
+                .text("Remove")
+                .on("click", () => removeChoice(`choiceDiv${index}`));
+
+              newChoiceDiv.append(
+                newChoiceInput,
+                newChoiceLabel,
+                newImageInput,
+                removeButton
+              );
+              choicesContainer.append(newChoiceDiv);
+
+              // Set choice image if provided
+              if (choiceImage) {
+                const imageData = choiceImage.includes("data:image")
+                  ? choiceImage
+                  : "data:image/jpg;base64," + choiceImage;
+                newImageInput.data("base64", imageData);
+
+                // Set a preview for the image
+                const imagePreview = $("<img>")
+                  .attr("src", imageData)
+                  .attr("alt", `Choice ${index} Image Preview`)
+                  .css({
+                    width: "100px",
+                    height: "auto",
+                    display: "block",
+                    marginTop: "10px",
+                  });
+                newChoiceDiv.append(imagePreview);
+              }
+
+              updateAnswerOptions();
+            }
+
+            function removeChoice(choiceDivId) {
+              $(`#${choiceDivId}`).remove();
+              updateChoiceIds();
+              updateAnswerOptions();
+            }
+
+            function updateChoiceIds() {
+              const choicesContainer = $("#editchoicesContainer");
+              const choiceDivs = choicesContainer.children(".form-floating");
+
+              choiceDivs.each((index, div) => {
+                const newId = `choiceDiv${index + 1}`;
+                $(div).attr("id", newId);
+
+                const choiceInput = $(div).find('input[type="text"]');
+                const choiceLabel = $(div).find("label");
+                const imageInput = $(div).find('input[type="file"]');
+                const removeButton = $(div).find(".removeChoiceBtn");
+
+                choiceInput.attr("id", `choice${index + 1}`);
+                choiceInput.attr("placeholder", `Choice ${index + 1}`);
+                choiceLabel
+                  .attr("for", `choice${index + 1}`)
+                  .text(`Choice ${index + 1}`);
+                imageInput.attr("id", `choiceImage${index + 1}`);
+
+                removeButton.off().on("click", () => removeChoice(newId));
+              });
+
+              // Update choiceCount
+              choiceCount = choiceDivs.length;
+            }
+
+            function updateAnswerOptions() {
+              const answerSelect = $("#editexamanswer");
+              answerSelect.html(
+                "<option selected disabled>Select Answer</option>"
+              );
+
+              $("#editchoicesContainer input[name='choices[]']").each(
+                (index, choice) => {
+                  const choiceValue = $(choice).val().trim();
+                  if (choiceValue !== "") {
+                    const option = $("<option>")
+                      .attr("value", choiceValue)
+                      .text(`Choice ${index + 1}: ${choiceValue}`);
+                    answerSelect.append(option);
+                  }
+                }
+              );
+            }
+
+            function convertImageToBase64(inputElement, targetId) {
+              const file = inputElement.files[0];
+              const reader = new FileReader();
+
+              reader.onloadend = function () {
+                const base64String = reader.result.split(",")[1];
+                $(`#${targetId}`).data("base64", base64String);
+
+                // Add image preview
+                const imagePreview = $(`#${targetId}`).siblings("img");
+                if (imagePreview.length) {
+                  imagePreview.attr("src", reader.result);
+                } else {
+                  const newImagePreview = $("<img>")
+                    .attr("src", reader.result)
+                    .attr("alt", `Choice Image Preview`)
+                    .css({
+                      width: "100px",
+                      height: "auto",
+                      display: "block",
+                      marginTop: "10px",
+                    });
+                  $(`#${targetId}`).parent().append(newImagePreview);
+                }
+              };
+
+              if (file) {
+                reader.readAsDataURL(file);
+              }
+            }
+          } else {
+            swal("Error fetching question data", "success");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching question data",
+            err.responseText,
+            "error"
+          );
+        },
+      });
+    });
+
+    $(document).on("click", "#editquestionsavebtn", function () {
+      let id = questionid;
+      let examid = $("#editexamname").val();
+      let duration = $("#editquestionduration").val();
+      let question_text = $("#editquestiondescription").val();
+      let question_typeid = $("#editquestiontype").val();
+      let question_answer = $("#editexamanswer").val();
+      let questionimage = base64String;
+
+      let updatedChoices = [];
+      function convertImageToBase64(file, callback) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          callback(reader.result.split(",")[1]);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      let choicePromises = [];
+
+      $("#editchoicesContainer .form-floating").each(function (index) {
+        let choiceText = $(this).find("input[type='text']").val();
+        let fileInput = $(this).find("input[type='file']")[0];
+        let choiceImage = fileInput.files[0];
+        let originalChoice = originalChoices[index];
+
+        let promise = new Promise((resolve) => {
+          if (choiceImage) {
+            convertImageToBase64(choiceImage, (base64Image) => {
+              updatedChoices.push({ text: choiceText, image: base64Image });
+              resolve();
+            });
+          } else {
+            // Check if the choice text or image has changed
+            if (
+              originalChoice.text !== choiceText ||
+              $(fileInput).data("base64") !== originalChoice.image
+            ) {
+              updatedChoices.push({
+                text: choiceText,
+                image: $(fileInput).data("base64") || "",
+              });
+            } else {
+              // If no changes, keep the original choice
+              updatedChoices.push(originalChoice);
+            }
+            resolve();
+          }
+        });
+
+        choicePromises.push(promise);
+      });
+
+      Promise.all(choicePromises).then(() => {
+        var message = "";
+
+        if (examid === "") {
+          message += "Exam name is required. ";
+        }
+
+        if (question_answer === "") {
+          message += "Exam Answer is required. ";
+        }
+
+        if (message !== "") {
+          swal("Validation Error", message, "error");
+        } else {
+          $.ajax({
+            type: "PUT",
+            url: "/question/edit",
+            data: {
+              questionid: id,
+              examname: examid,
+              duration: duration,
+              questiontext: question_text,
+              questiontype: question_typeid,
+              questionanswer: question_answer,
+              questionchoices: JSON.stringify(updatedChoices),
+              questionimage: questionimage,
+            },
+            success: function (result) {
+              if (result.msg == "success") {
+                swal(
+                  "Update Successfully",
+                  "You clicked the button!",
+                  "success"
+                ).then((results) => {
+                  window.location.reload();
+                });
+                LoadTable();
+              } else if (result.msg == "exist") {
+                swal("Exist", "Data already exists!", "warning");
+              }
+            },
+            error: function (err) {
+              swal("Error", "An error occurred while saving data.", "error");
+            },
+          });
+        }
+      });
+    });
+
+    $(document).on("change", "#addquestionimage", function (e) {
+      const input = document.getElementById("addquestionimage");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("previewleave");
+        preview.src = reader.result;
+      };
+      imageUploaded();
+    });
+
+    function imageUploaded() {
+      const input = document.getElementById("addquestionimage");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    $(document).on("change", "#editquestionimage", function (e) {
+      const input = document.getElementById("editquestionimage");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      EditImage();
+    });
+
+    function EditImage() {
+      const input = document.getElementById("editquestionimage");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableQuestion");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

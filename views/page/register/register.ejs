@@ -1,291 +1,144 @@
-<!-- 
-<header class="bg-dark text-white text-center py-4">
-    <div class="container">
-        <div class="row">
-         
-            <div class="col-12 col-md-2 text-md-left mb-3 mb-md-0">
-                <img src="/images/img/5L.png" alt="Logo" class="img-fluid" style="max-width: 100%; max-height: 100%;">
-            </div>
 
-      
-            <div class="col-12 col-md-8">
-                <h1 class="text-center">5L Solutions Supply & Allied Services Corp</h1>
-            </div>
-        </div>
-    </div>
-</header> -->
+<div class="registration-form">
+    <!-- <h1>Registration Information</h1> -->
+    <div class="container reg-container">
+        <div class="main reg-main">
+
+            <div class="content reg-content">
+                <img src="/images/img/whitelogo.png" alt="Logo" class="img-fluid reg-logo">
 
 
-<!-- <div class="container">
-    <div class="row" id="cd-register">
-        
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="row g-0">
-                 
-                    <div class="col-12 col-md-6 position-relative">
-   
-                        <div class="overlay"></div>
+                <h2>Register Information</h2>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtfname" class="form-label">Firstname</label>
+                                <input type="text" class="form-control uppercase-input" id="ojtfname" name="ojtfname" required>
+                            </div>
+                        </div>
 
-                        <img src="/images/img/hero.jpg" alt="Image" class="img-fluid h-100">
+                        <div class="col-md-6 mb-4">
+                            <label for="ojtlname" class="form-label">Lastname</label>
+                            <input type="text" class="form-control uppercase-input" id="ojtlname" name="ojtlname" required>
+                        </div>
+                    </div>
 
-                      
-                        <div class="position-absolute top-50 start-50 translate-middle text-center text-light w-100">
-                            <div class="text-container p-4 bg-dark bg-opacity-75" style="z-index: 2;">
-                                
-                                <h2 class="mb-4 fs-4 text-light">Welcome OJT's</h2>
-                                <p class="fs-6 text-light">
-                                    "Welcome to the journey of growth and learning! As you embark on your On-the-Job
-                                    Training with us, remember that every task, challenge, and experience is an
-                                    opportunity for personal and professional development."
-                                </p>
+                    <div class="row">
+                        <div class="form-outline mb-4">
+                            <label for="ojtschool" class="form-label">School</label>
+                            <input type="text" class="form-control" id="ojtschool" name="ojtschool" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-outline mb-4">
+                            <label for="ojtaddress" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="ojtaddress" name="ojtaddress" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="form-outline">
+                                <label for="ojthours" class="form-label">Total Hours</label>
+                                <input type="number" class="form-control" id="ojthours" name="ojthours" max="999" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <label for="ojtphone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="ojtphone" name="ojtphone" required>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtgender" class="form-label">Gender</label>
+                                <select class="form-select" id="ojtgender" name="ojtgender" required>
+                                    <option selected>Choose...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtstartdate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtdepartment" class="form-label">Department</label>
+                                <select class="form-select" id="ojtdepartment" name="ojtdepartment" required></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtbirthday" class="form-label">Birthday</label>
+                                <input type="date" class="form-control" id="ojtbirthday" name="ojtbirthday" required>
                             </div>
                         </div>
                     </div>
 
 
-               
-                    <div class="col-md-6">
-                        <div class="card-body">
-                         
-                            <form>
-                                <div class="mb-3">
-                                    <label for="ojtfname" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="ojtfname" name="ojtfname" required>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline">
+                                <label for="ojtecname" class="form-label">Emergency Contact Name</label>
+                                <input type="text" class="form-control" id="ojtecname" name="ojtecname" required>
+                            </div>
+                        </div>
 
-                                <div class="mb-3">
-                                    <label for="ojtlname" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="ojtlname" name="ojtlname" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtschool" class="form-label">School</label>
-                                    <input type="text" class="form-control" id="ojtschool" name="ojtschool" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtgender" class="form-label">Gender</label>
-                                    <select class="form-select" id="ojtgender" name="ojtgender" required>
-                                        <option selected>Choose...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtaddress" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="ojtaddress" name="ojtaddress" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojthours" class="form-label">Total Hours</label>
-                                    <input type="number" class="form-control" id="ojthours" name="ojthours" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtphone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="ojtphone" name="ojtphone" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtstartdate" class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtdepartment" class="form-label">Department</label>
-                                    <select class="form-select" id="ojtdepartment" name="ojtdepartment" required>
-                                    </select>
-                                </div>
-                            
-                                <div class="mb-3">
-                                    <label for="ojtbirthday" class="form-label">Birthday</label>
-                                    <input type="date" class="form-control" id="ojtbirthday" name="ojtbirthday" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtecname" class="form-label">Emergency Contact Name</label>
-                                    <input type="text" class="form-control" id="ojtecname"
-                                        name="ojtecname" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="ojtecphone" class="form-label">Emergency Contact
-                                        Phone</label>
-                                    <input type="tel" class="form-control" id="ojtecphone"
-                                        name="ojtecphone" required>
-                                </div>
-
-                                <div class="text-center">
-                                    <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;;"
-                                      class="rounded rounded-circle" alt="placeholder">
-                                  </div>
-                                  <br>
-                                  <div class="col">
-                                    <div class="col g-6">
-                                      <input type="file" name="ojtprofileimage" id="ojtprofileimage" class="form-control"
-                                        accept="image/*">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="termsCheck" required>
-                                    <label class="form-check-label" for="termsCheck">I agree to the terms and
-                                        conditions</label>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary" id="ojtsavebtn">Register</button>
-                            </form>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-outline mb-4">
+                                <label for="ojtecphone" class="form-label">Emergency Contact Phone</label>
+                                <input type="tel" class="form-control" id="ojtecphone" name="ojtecphone" required>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="text-center">
+                        <img id="preview" src="https://via.placeholder.com/250"
+                            class="rounded rounded-circle register-img-upload" alt="placeholder">
+                    </div>
+
+                    <br>
+                    <div class="col">
+                        <div class="col g-6 mb-4">
+                            <input type="file" name="ojtprofileimage" id="ojtprofileimage" class="form-control"
+                                accept="image/*">
+                        </div>
+                    </div>
+
+                    <!-- <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
+                    </div> -->
+                    
+                    <br>
+                    <br>
+                    <button type="submit" class="btn btn-primary" id="ojtsavebtn">Register</button>
+                </form>
             </div>
+
+            <div class="overlay"></div>
+            <div class="form-img reg-form-img">
+                <p class="reg-p">"Welcome to the journey of growth and learning! As you embark on your On-the-Job
+                    Training with us, remember that every task, challenge, and experience is an
+                    opportunity for personal and professional development."</p>
+                <img src="/images/img/register2.png" alt="">
+            </div>
+            
         </div>
     </div>
+    
 </div>
- -->
 
-    <div class="registration-form">
-        <!-- <h1>Registration Information</h1> -->
-        <div class="container reg-container">
-            <div class="main reg-main">
-    
-                <div class="content reg-content">
-                    <img src="/images/img/whitelogo.png" alt="Logo" class="img-fluid reg-logo">
-    
-    
-                    <h2>Register Information</h2>
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtfname" class="form-label">Firstname</label>
-                                    <input type="text" class="form-control uppercase-input" id="ojtfname" name="ojtfname" required>
-                                </div>
-                            </div>
-    
-                            <div class="col-md-6 mb-4">
-                                <label for="ojtlname" class="form-label">Lastname</label>
-                                <input type="text" class="form-control uppercase-input" id="ojtlname" name="ojtlname" required>
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="form-outline mb-4">
-                                <label for="ojtschool" class="form-label">School</label>
-                                <input type="text" class="form-control" id="ojtschool" name="ojtschool" required>
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="form-outline mb-4">
-                                <label for="ojtaddress" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="ojtaddress" name="ojtaddress" required>
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="col-md-4 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojthours" class="form-label">Total Hours</label>
-                                    <input type="number" class="form-control" id="ojthours" name="ojthours" max="999" required>
-                                </div>
-                            </div>
-    
-                            <div class="col-md-4 mb-4">
-                                <label for="ojtphone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="ojtphone" name="ojtphone" required>
-                            </div>
-    
-                            <div class="col-md-4 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtgender" class="form-label">Gender</label>
-                                    <select class="form-select" id="ojtgender" name="ojtgender" required>
-                                        <option selected>Choose...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="col-md-4 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtstartdate" class="form-label">Start Date</label>
-                                    <input type="date" class="form-control" id="ojtstartdate" name="ojtstartdate" required>
-                                </div>
-                            </div>
-    
-                            <div class="col-md-4 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtdepartment" class="form-label">Department</label>
-                                    <select class="form-select" id="ojtdepartment" name="ojtdepartment" required></select>
-                                </div>
-                            </div>
-    
-                            <div class="col-md-4 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtbirthday" class="form-label">Birthday</label>
-                                    <input type="date" class="form-control" id="ojtbirthday" name="ojtbirthday" required>
-                                </div>
-                            </div>
-                        </div>
-    
-    
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="form-outline">
-                                    <label for="ojtecname" class="form-label">Emergency Contact Name</label>
-                                    <input type="text" class="form-control" id="ojtecname" name="ojtecname" required>
-                                </div>
-                            </div>
-    
-                            <div class="col-md-6 mb-4">
-                                <div class="form-outline mb-4">
-                                    <label for="ojtecphone" class="form-label">Emergency Contact Phone</label>
-                                    <input type="tel" class="form-control" id="ojtecphone" name="ojtecphone" required>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div class="text-center">
-                            <img id="preview" src="https://via.placeholder.com/250"
-                                class="rounded rounded-circle register-img-upload" alt="placeholder">
-                        </div>
-    
-                        <br>
-                        <div class="col">
-                            <div class="col g-6 mb-4">
-                                <input type="file" name="ojtprofileimage" id="ojtprofileimage" class="form-control"
-                                    accept="image/*">
-                            </div>
-                        </div>
-    
-                        <!-- <div class="mb-4 form-check">
-                            <input type="checkbox" class="form-check-input" id="termsCheck" required>
-                            <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
-                        </div> -->
-                        
-                        <br>
-                        <br>
-                        <button type="submit" class="btn btn-primary" id="ojtsavebtn">Register</button>
-                    </form>
-                </div>
-
-                <div class="overlay"></div>
-                <div class="form-img reg-form-img">
-                    <p class="reg-p">"Welcome to the journey of growth and learning! As you embark on your On-the-Job
-                        Training with us, remember that every task, challenge, and experience is an
-                        opportunity for personal and professional development."</p>
-                    <img src="/images/img/register2.png" alt="">
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-    
 
 

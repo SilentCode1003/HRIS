@@ -27,6 +27,7 @@
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th>Status</th>
+                        <th>Geo Fencing</th>
                         <th class="col-sm-1">Action</th>
                     </tr>
                 </thead>
@@ -120,6 +121,17 @@
                         </select>
                         <label for="floatingSelectGrid">Access Type</label>
                       </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="editgeofence" name="editgeofence" aria-label="Floating label select example">
+                      <option selected disabled>Choose....</option>
+                      <option value="True">Active</option>
+                      <option value="False">Inactive</option>
+                    </select>
+                    <label for="floatingSelectGrid">Geo Fencing</label>
+                  </div>
                 </div>
                 <br>
                 <div class="col">

@@ -81,6 +81,7 @@ router.post("/login", (req, res) => {
         me_profile_pic AS image,
         me_jobstatus AS jobstatus,
         md_departmentid AS departmentid,
+        mu_isgeofence as isgeofence,
         md_departmentname AS departmentname,
         mp_positionname AS position,
         ma_accessid as accesstypeid,
@@ -107,12 +108,15 @@ router.post("/login", (req, res) => {
               if (user.status === "Active") {
                 let data = UserLogin(result);
 
+                //console.log(data,'data');
+
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
                   req.session.image = user.image;
                   req.session.departmentid = user.departmentid;
+                  req.session.isgeofence = user.isgeofence;
                   req.session.departmentname = user.departmentname;
                   req.session.position = user.position;
                   req.session.jobstatus = user.jobstatus;
@@ -428,6 +432,73 @@ WHERE pao_id = '${approveot_id}'`;
       return res.json({
         msg: "error",
         description: error.message || "Internal server error",
+      });
+    }
+  });
+
+
+
+  router.post("/loadloansdetails", (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let sql = `SELECT * FROM gov_loan_details
+      WHERE gld_employeeid = '${employeeid}'`;  
+  
+      Select(sql, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.json(JsonErrorResponse(err));
+        }
+  
+        console.log(result);
+  
+        if (result != 0) {
+          let data = DataModeling(result, "gld_");
+  
+          console.log(data);
+          res.json(JsonDataResponse(data));
+        } else {
+          res.json(JsonDataResponse(result));
+        }
+      });
+    } catch (error) {
+      res.json({
+        msg: "error",
+        error,
+      });
+    }
+  });
+
+
+
+
+  router.post("/loadloans", (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let sql = `SELECT * FROM gov_loans
+      WHERE gl_employeeid = '${employeeid}'`;
+  
+      Select(sql, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.json(JsonErrorResponse(err));
+        }
+  
+        console.log(result);
+  
+        if (result != 0) {
+          let data = DataModeling(result, "gl_");
+  
+          console.log(data);
+          res.json(JsonDataResponse(data));
+        } else {
+          res.json(JsonDataResponse(result));
+        }
+      });
+    } catch (error) {
+      res.json({
+        msg: "error",
+        error,
       });
     }
   });

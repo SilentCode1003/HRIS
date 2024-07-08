@@ -1,0 +1,285 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">List Of Exams</h3>
+        <div class="row g-2">
+            <div class="col">
+                <input id='myInput' type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#exammodal">
+                    <b>+ Add</b>
+                  </button>
+            </div>
+        </div>    
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableExam">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Exam Name</th>
+                        <th>Exam Duration</th>
+                        <th>Exam Created Date</th>
+                        <th>Exam Created By</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exammodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Exam</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+           <form>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="examname" name="examname" placeholder="First Name">
+                    <label for="floatingInput">Exam Name</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row g-3">
+                <label for="hoursInput">Duration</label>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="hoursInput" name="hoursInput" placeholder="HH" min="0" max="23" value="0" oninput="formatExamTime()">
+                        <label for="hoursInput">Hours</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="minutesInput" name="minutesInput" placeholder="MM" min="0" max="59" value="0" oninput="formatExamTime()">
+                        <label for="minutesInput">Minutes</label>
+                    </div>
+                </div>    
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="number" class="form-control border-form-modal" id="secondsInput" name="secondsInput" placeholder="SS" min="0" max="59" value="0" oninput="formatExamTime()">
+                        <label for="secondsInput">Seconds</label>
+                    </div>
+                </div>
+            </div>
+        
+            <input type="hidden" id="formattedTime" name="formattedTime">
+            <br>
+            <label for="hoursInput">Icon </label>
+            <div class="form-floating">
+                <label class="form-label" for="EditFile"></label>
+                <input type="file" name="addicon" id="addicon" class="form-control border-form-modal"
+                  accept="image/*">
+              </div>
+              <div class="text-center">
+                <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                  class="rounded border-form-modal" alt="placeholder">
+              </div>
+
+           </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="examsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+    <!-- Add Question Modal -->
+<div class="modal fade" id="addquestionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+            <h3 class="modal-title" id="exampleModalLabel">Add Question to this Exam</h3>
+            <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="addquestionname" name="addquestionname" placeholder="First Name" readonly>
+                    <label for="floatingInput">Exam Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="addquestionduration" name="addquestionduration" placeholder="First Name" readonly>
+                    <label for="floatingInput">Exam Duration</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row g-3">
+                <label for="hoursInput">Question Description</label>
+                <div class="col">
+                    <div class="form-floating">
+                        <textarea type="text" class="form-control border-form-modal" id="addquestiondescription" name="addquestiondescription"
+                        placeholder="Address" oninput="adjustTextareaHeight(this)"></textarea>
+                        <label for="floatingInput">Question Description</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                        <label class="form-label" for="EditFile"></label>
+                        <input type="file" name="addquestionimage" id="addquestionimage" class="form-control border-form-modal"
+                        accept="image/*">
+                    </div>
+                    <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
+                        class="rounded border-form-modal" alt="placeholder">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="addexamduration" name="addexamchoices" placeholder="First Name">
+                        <label for="floatingInput">Choices</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control border-form-modal" id="addexamduration" name="addexamanswer" placeholder="First Name">
+                        <label for="floatingInput">Answer</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+            <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-modal-save" id="examsavebtn">Save</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="editexammodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="edithealthrecordemployeeid" name="edithealthrecordemployeeid" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Employee ID</label>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select" id="edithealthrecordbloodtype" name="edithealthrecordbloodtype" aria-label="Floating label select example">
+                              <option value="GRP A">Group A</option>
+                              <option value="GRP B">Group B</option>
+                              <option value="GRP AB">Group AB</option>
+                              <option value="GRP O">Group O</option>
+                            </select>
+                            <label for="floatingSelectGrid">Blood Type</label>
+                          </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordmedicalcondition" name="edithealthrecordmedicalcondition" placeholder="First Name">
+                        <label for="floatingInput">Medical Condition</label>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordprescribemedication" name="edithealthrecordprescribemedication" placeholder="First Name">
+                        <label for="floatingInput">Prescribe Medication</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control" id="edithealthrecordlastcheckup" name="edithealthrecordlastcheckup" placeholder="First Name">
+                        <label for="floatingInput">Last Check Up</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordinsurance" name="edithealthrecordinsurance" placeholder="First Name">
+                        <label for="floatingInput">Insurance</label>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="text" class="form-control" id="edithealthrecordinsurancenumber" name="edithealthrecordinsurancenumber" placeholder="First Name">
+                        <label for="floatingInput">Insurance Number</label>
+                        </div>
+                    </div>
+                </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="edithealthrecordemergencycontactname" name="edithealthrecordemergencycontactname" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Name</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="text" class="form-control" id="edithealthrecordemergencycontactnumber" name="edithealthrecordemergencycontactnumber" placeholder="First Name">
+                            <label for="floatingInput">Emergency Contact Number</label>
+                            </div>
+                        </div>
+                    </div>
+                        <br>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="edithealthrecordsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+</div>

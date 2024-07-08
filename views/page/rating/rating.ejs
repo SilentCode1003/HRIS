@@ -1,0 +1,112 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">Rating Type</h3>
+        <div class="row g-2">
+            <div class="col">
+                <input id='myInput' type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#questiontypemodal">
+                    <b>+ Add</b>
+                  </button>
+            </div>
+        </div>    
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableQuestionType">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Question Type Name</th>
+                        <th>Question Points Duration</th>
+                        <th>Created Date</th>
+                        <th>Created By</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="questiontypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Question Type</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+           <form>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="questiontypename" name="questiontypename" placeholder="First Name">
+                    <label for="floatingInput">Question Type Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="questiontypoints" name="questiontypoints" placeholder="First Name">
+                    <label for="floatingInput">Question Type Points</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+           </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="questiontypesaveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editquestiontypemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+            <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Edit Question Type</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+           <form>
+            <div class="row g-3">
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editquestiontypename" name="editquestiontypename" placeholder="First Name">
+                    <label for="floatingInput">Question Type Name</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="editquestiontypoints" name="editquestiontypoints" placeholder="First Name">
+                    <label for="floatingInput">Question Type Points</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+           </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="editquestiontypesaveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+</div>

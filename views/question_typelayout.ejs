@@ -18,10 +18,7 @@
 
       <!-- Content Wrapper -->
       <div id="content-wrapper">
-        <div class="content">
-          <%-
-          include("./page/payslip/payslip.ejs")%>
-        </div>
+        <div class="content"><%- include("./page/question_type/question_type.ejs")%></div>
       </div>
       </div>
       
@@ -34,8 +31,8 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <%- include("./components/scripts.ejs")%> 
-    <%- include("./components/topbarscript.ejs")%>
-    <%- include("./page/payslip/payslipscript.ejs")%>
+    <%- include("./components/scripts.ejs")%> <%-
+    include("./components/topbarscript.ejs")%> <%-
+    include("./page/question_type/question_typescript.ejs")%>
   </body>
 </html>

@@ -4,11 +4,13 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
-const XLSX = require("xlsx","xlsx-style");
+const XLSX = require("xlsx", "xlsx-style");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -18,10 +20,30 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.post("/generateandaoadaayroll", (req, res) => {
+router.post("/generateandaoadaayroll", async (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
+
+    let checkExistingSql = `SELECT gp_startdate, gp_enddate FROM generate_payroll 
+                            WHERE gp_startdate >= '${startdate}' 
+                            AND gp_enddate <= '${enddate}'`;
+
+    let existingEntries = await mysql.mysqlQueryPromise(checkExistingSql);
+
+    if (existingEntries.length > 0) {
+      let existingDates = existingEntries.map((entry) => ({
+        startdate: entry.gp_startdate,
+        enddate: entry.gp_enddate,
+      }));
+
+      return res.json({
+        msg: "exist",
+        data: existingDates,
+        message: "Payroll data already exists for the specified date range",
+      });
+    }
+
     let generateSql = `call hrmis.GeneratePayroll('${startdate}', '${enddate}')`;
     let loadSql = `call hrmis.LoadPayroll('${startdate}', '${enddate}')`;
 
@@ -269,7 +291,6 @@ router.post("/exportfile", async (req, res) => {
   }
 });
 
-
 router.get("/payrolldateload", (req, res) => {
   try {
     let sql = `SELECT DISTINCT 
@@ -302,8 +323,6 @@ router.get("/payrolldateload", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
 
 // router.post("/exportbank", async (req, res) => {
 //   try {
@@ -345,7 +364,7 @@ router.get("/payrolldateload", (req, res) => {
 //       "Content-Type",
 //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 //     );
-//     res.send(excelBuffer); 
+//     res.send(excelBuffer);
 //   } catch (error) {
 //     res.json({
 //       msg: "error",
@@ -378,15 +397,19 @@ router.post("/exportbank", async (req, res) => {
       const cellAddress = XLSX.utils.encode_cell({ c: index, r: 0 });
       worksheet[cellAddress].s = {
         font: { bold: true },
-        alignment: { horizontal: "center" }
+        alignment: { horizontal: "center" },
       };
     });
 
     worksheet["!cols"] = headers.map((header, index) => ({
-      wch: index === 0 ? 30 : 20
+      wch: index === 0 ? 30 : 20,
     }));
 
-    const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: 'xlsx', bookSST: false });
+    const excelBuffer = XLSX.write(workbook, {
+      type: "buffer",
+      bookType: "xlsx",
+      bookSST: false,
+    });
 
     res.setHeader(
       "Content-Disposition",
@@ -404,4 +427,3 @@ router.post("/exportbank", async (req, res) => {
     });
   }
 });
-
