@@ -567,6 +567,8 @@
                                                                         </th>
                                                                         <th scope="col" class="payslip-color">Amount
                                                                         </th>
+                                                                        <th scope="col" class="payslip-color">Details
+                                                                        </th>
                                                                         <th scope="col" class="payslip-color">Deductions
                                                                         </th>
                                                                         <th scope="col" class="payslip-color">Amount
@@ -577,6 +579,7 @@
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Basic</th>
                                                                         <td id="payslipbasic" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>SSS</td>
                                                                         <td id="payslipsss"></td>
                                                                     </tr>
@@ -584,6 +587,7 @@
                                                                         <th scope="row" class="earning-table">Daily Rate
                                                                         </th>
                                                                         <td id="payslipperday"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>Philhealth</td>
                                                                         <td id="paysliphdmf"></td>
                                                                     </tr>
@@ -591,6 +595,7 @@
                                                                         <th scope="row" class="earning-table">Allowances
                                                                         </th>
                                                                         <td id="payslipallowances"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>HDMF</td>
                                                                         <td id="payslippagibig"></td>
                                                                     </tr>
@@ -598,6 +603,7 @@
                                                                         <th scope="row" class="earning-table">Basic 
                                                                             Adjustments</th>
                                                                         <td id="payslipbasicadustments" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>Tax</td>
                                                                         <td id="paysliptin"></td>
                                                                     </tr>
@@ -605,6 +611,7 @@
                                                                         <th scope="row" class="earning-table">Payroll 
                                                                             Adjustments</th>
                                                                         <td id="payslippayrolladjustments" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>Cash Advanced</td>
                                                                         <td id="payslipcashadvanced"></td>
                                                                     </tr>
@@ -613,6 +620,7 @@
                                                                             Approve Overtime
                                                                         </th>
                                                                         <td id="payslipovertime" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td>Absent</td>
                                                                         <td id="payslipabsent"></td>
                                                                     </tr>
@@ -620,6 +628,7 @@
                                                                         <th scope="row" class="earning-table">Night
                                                                             Differrentials</th>
                                                                         <td id="payslipndpay"></td>
+                                                                        <td id="payslipndhoursmin"></td>
                                                                         <td>Health Card</td>
                                                                         <td id="paysliphealthcard"></td>
                                                                     </tr>
@@ -628,6 +637,7 @@
                                                                             Overtime
                                                                         </th>
                                                                         <td id="payslipotpay"></td>
+                                                                        <td id="payslipothoursmin"></td>
                                                                         <td>Late</td>
                                                                         <td id="paysliplate"></td>
                                                                     </tr>
@@ -636,49 +646,61 @@
                                                                             Overtime
                                                                         </th>
                                                                         <td id="payslipearlypay"></td>
-                                                                        <td>Loan Deductions</td>
-                                                                        <td id="paysliploandeductions"></td>
+                                                                        <td id="payslipearlyhoursmin"></td>
+                                                                        <td>WISP</td>
+                                                                        <td id="payslipwisp"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Rest Day
                                                                             OT
                                                                         </th>
                                                                         <td id="paysliprestdayot" style="color: green; font-weight: bold;"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td colspan="1"></td>
+                                                                        <td>Calamity Loan</td>
+                                                                        <td id="payslipcalamity"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Overtime
                                                                             Meal
                                                                         </th>
                                                                         <td id="payslipotmeal" style="color: green; font-weight: bold;"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td colspan="1"></td>
+                                                                        <td>Short Term Loan</td>
+                                                                        <td id="payslipshortterm"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Leave
                                                                             With Pay
                                                                         </th>
                                                                         <td id="payslipleavepay"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td colspan="1"></td>
+                                                                        <td>Housing Loan</td>
+                                                                        <td id="paysliphousing"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Special
                                                                             Holiday Overtime
                                                                         </th>
                                                                         <td id="payslipspecialovertime" style="color: green; font-weight: bold;"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td colspan="1"></td>
+                                                                        <td>Education Loan</td>
+                                                                        <td id="payslipeducationloan"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Regular
                                                                             Holiday Overtime
                                                                         </th>
                                                                         <td id="payslipregularovertime" style="color: green; font-weight: bold;"></td>
-                                                                        <td colspan="2"></td>
+                                                                        <td colspan="1"></td>
+                                                                        <td>Sterling Loan</td>
+                                                                        <td id="payslipsterlingloan"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="earning-table">Special
                                                                             Holiday
                                                                         </th>
                                                                         <td id="payslipspecial" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
@@ -686,12 +708,14 @@
                                                                             Holiday
                                                                         </th>
                                                                         <td id="payslipregular" style="color: green; font-weight: bold;"></td>
+                                                                        <td colspan="1"></td>
                                                                         <td colspan="2"></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th scope="row" class="total-table">Total
                                                                             Compensation</th>
                                                                         <td id="paysliptotal" class="total-table-td">
+                                                                        <td class="total-table-td"></td>
                                                                         </td>
                                                                         <td class="total-table-td">Total Deductions</td>
                                                                         <td id="paysliptotaldeductions"

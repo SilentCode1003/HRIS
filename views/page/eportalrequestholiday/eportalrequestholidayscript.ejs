@@ -1,6 +1,6 @@
 <script>
   let base64String = "";
-  let leavesettingsid = "";
+  let holidayid = "";
   let employeeid = "<%= employeeid %>";
   let totalLeaveGlobal = 0;
   let unusedLeaveGlobal = "";
@@ -8,13 +8,11 @@
   $(document).ready(function () {
     console.log("Initialize");
     LoadTable();
-    LoadList();
-    LoadListHeader();
-    LoadLeaveTypes();
-    LoadListEmp();
+    LoadPayrollDate();
+    LoadSubgroup();
 
     function LoadTable() {
-      $("#dataTableapplyleave").DataTable({
+      $("#dataTablePendingHoliday").DataTable({
         destroy: true,
         processing: true,
         serverSide: true,
@@ -25,7 +23,7 @@
         scrollCollapse: true,
         type: "GET",
         ajax: {
-          url: "/eportalrequestleave/loadpending",
+          url: "/eportalrequestholiday/load",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -35,16 +33,18 @@
               var status = item.status;
 
               action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#allleavemodal"><i class="fas fa-fw fa-pen"></i></button>
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#holidaymemodal"><i class="fas fa-fw fa-pen"></i></button>
                     `;
 
               finalData.push({
-                leaveid: item.leaveid,
-                leavestartdate: item.leavestartdate,
-                leaveenddate: item.leaveenddate,
-                leavetype: item.leavetype,
-                reason: item.reason,
-                applieddate: item.applieddate,
+                holidayid: item.holidayid,
+                attendancedate: item.attendancedate,
+                timein: item.timein,
+                timeout: item.timeout,
+                holidaytype: item.holidaytype,
+                total_hours: item.total_hours,
+                nightdiff_ot_total: item.nightdiff_ot_total,
+                normal_ot_total: item.normal_ot_total,
                 action: action,
               });
             });
@@ -61,12 +61,14 @@
           },
         ],
         columns: [
-          { data: "leaveid" },
-          { data: "leavestartdate" },
-          { data: "leaveenddate" },
-          { data: "leavetype" },
-          { data: "reason" },
-          { data: "applieddate" },
+          { data: "holidayid" },
+          { data: "attendancedate" },
+          { data: "timein" },
+          { data: "timeout" },
+          { data: "holidaytype" },
+          { data: "total_hours" },
+          { data: "nightdiff_ot_total" },
+          { data: "normal_ot_total" },
           { data: "action" },
         ],
         initComplete: function () {
@@ -96,42 +98,53 @@
 
     $(document).on("click", "#approvedtable", function () {
       console.log("Hit");
-      $("#dataTableleaveApproved").find("tr:gt(0)").remove();
+      $("#dataTableApprovedHoliday").find("tr:gt(0)").remove();
 
       $.ajax({
-        type: "GET",
-        url: "/eportalrequestleave/loadapproved",
+        type: "POST",
+        url: "/eportalrequestholiday/loadapproved",
+        data: {
+          employeeid: employeeid,
+        },
         success: function (json) {
           var finalData = [];
           var data = json.data;
           console.log(finalData);
 
-          material_list_tbl = document.getElementById("dataTableleaveApproved");
+          material_list_tbl = document.getElementById(
+            "dataTableApprovedHoliday"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var LEAVE_ID = row.insertCell(0);
-            var LEAVE_STARTDADTE = row.insertCell(1);
-            var LEAVE_ENDATE = row.insertCell(2);
-            var LEAVE_TYPE = row.insertCell(3);
-            var REASON = row.insertCell(4);
-            var APPLIEDDATE = row.insertCell(5);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
 
-            LEAVE_ID.innerHTML = item.leaveid;
-            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
-            LEAVE_ENDATE.innerHTML = item.leaveenddate;
-            LEAVE_TYPE.innerHTML = item.leavetype;
-            REASON.innerHTML = item.reason;
-            APPLIEDDATE.innerHTML = item.applieddate;
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
 
             $.each(
               [
-                LEAVE_ID,
-                LEAVE_STARTDADTE,
-                LEAVE_ENDATE,
-                LEAVE_TYPE,
-                REASON,
-                APPLIEDDATE,
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -146,42 +159,53 @@
 
     $(document).on("click", "#rejectedtable", function () {
       console.log("Hit");
-      $("#dataTableleaveRejected").find("tr:gt(0)").remove();
+      $("#dataTableRejectedHoliday").find("tr:gt(0)").remove();
 
       $.ajax({
-        type: "GET",
-        url: "/eportalrequestleave/loadrejected",
+        type: "POST",
+        url: "/eportalrequestholiday/loadrejected",
+        data: {
+          employeeid: employeeid,
+        },
         success: function (json) {
           var finalData = [];
           var data = json.data;
           console.log(finalData);
 
-          material_list_tbl = document.getElementById("dataTableleaveRejected");
+          material_list_tbl = document.getElementById(
+            "dataTableRejectedHoliday"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var LEAVE_ID = row.insertCell(0);
-            var LEAVE_STARTDADTE = row.insertCell(1);
-            var LEAVE_ENDATE = row.insertCell(2);
-            var LEAVE_TYPE = row.insertCell(3);
-            var REASON = row.insertCell(4);
-            var APPLIEDDATE = row.insertCell(5);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
 
-            LEAVE_ID.innerHTML = item.leaveid;
-            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
-            LEAVE_ENDATE.innerHTML = item.leaveenddate;
-            LEAVE_TYPE.innerHTML = item.leavetype;
-            REASON.innerHTML = item.reason;
-            APPLIEDDATE.innerHTML = item.applieddate;
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
 
             $.each(
               [
-                LEAVE_ID,
-                LEAVE_STARTDADTE,
-                LEAVE_ENDATE,
-                LEAVE_TYPE,
-                REASON,
-                APPLIEDDATE,
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -196,44 +220,53 @@
 
     $(document).on("click", "#cancelledtable", function () {
       console.log("Hit");
-      $("#dataTableleaveCancelled").find("tr:gt(0)").remove();
+      $("#dataTableHolidayCancelled").find("tr:gt(0)").remove();
 
       $.ajax({
-        type: "GET",
-        url: "/eportalrequestleave/loadcancelled",
+        type: "POST",
+        url: "/eportalrequestholiday/loadcancelled",
+        data: {
+          employeeid: employeeid,
+        },
         success: function (json) {
           var finalData = [];
           var data = json.data;
           console.log(finalData);
 
           material_list_tbl = document.getElementById(
-            "dataTableleaveCancelled"
+            "dataTableHolidayCancelled"
           );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var LEAVE_ID = row.insertCell(0);
-            var LEAVE_STARTDADTE = row.insertCell(1);
-            var LEAVE_ENDATE = row.insertCell(2);
-            var LEAVE_TYPE = row.insertCell(3);
-            var REASON = row.insertCell(4);
-            var APPLIEDDATE = row.insertCell(5);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
 
-            LEAVE_ID.innerHTML = item.leaveid;
-            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
-            LEAVE_ENDATE.innerHTML = item.leaveenddate;
-            LEAVE_TYPE.innerHTML = item.leavetype;
-            REASON.innerHTML = item.reason;
-            APPLIEDDATE.innerHTML = item.applieddate;
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
 
             $.each(
               [
-                LEAVE_ID,
-                LEAVE_STARTDADTE,
-                LEAVE_ENDATE,
-                LEAVE_TYPE,
-                REASON,
-                APPLIEDDATE,
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -246,128 +279,45 @@
       });
     });
 
-    function LoadListHeader(leavesettingsid) {
-      $.ajax({
-        type: "POST",
-        url: "eportalrequestleave/loadheader",
-        data: {
-          leavesettingsid: leavesettingsid,
-          employeeid: employeeid,
-        },
-        success: function (result) {
-          if (result.msg === "success") {
-            const existingData = result.data;
-            $.each(existingData, (key, item) => {
-              $("#leaveperyearheader").text(item.totalleave);
-              $("#Unusedleaveheader").text(item.unused);
-              $("#UsedleaveHeader").text(item.used);
-              totalLeaveGlobal = parseFloat(item.totalleave);
-              unusedLeaveGlobal = parseFloat(item.unused);
-              totalusedGlobal = parseFloat(item.used);
-            });
-          } else {
-            swal("Error fetching employee data", msg, "error");
-          }
-        },
-        error: function (err) {
-          swal("An Error Occurred", msg, "error");
-        },
-      });
-    }
-
-    function LoadLeaveTypes() {
+    function LoadPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/eportalrequestleave/loadleavetype",
+        url: "/setpayrolldate/loadreq",
         success: function (result) {
           var data = result.data;
 
           $.each(data, function (key, item) {
-            var options = new Option(item.leavetype, item.leavesettingsid);
-            $(options).html(item.leavetype);
-            $("#leavetypeheader").append(options);
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#holidaypayrolldate").append(options);
           });
         },
         error: function (result) {
-          alert("Error: " + result.data);
+          alert("error: " + result.data);
         },
       });
     }
 
-    $("#leavetypeheader").change(function () {
-      var selectedLeavesettingsid = $(this).val();
-      LoadListHeader(selectedLeavesettingsid);
-    });
 
-    function LoadList() {
+    function LoadSubgroup() {
       $.ajax({
         type: "GET",
-        url: "/eportalrequestleave/loadleavetype",
+        url: "/teamleadusers/subgroupload",
         success: function (result) {
           var data = result.data;
-
-          //$("#leavetype").empty();
 
           $.each(data, function (key, item) {
-            var options = new Option(
-              item.leavesettingsid,
-              item.leavesettingsid
-            );
-            $(options).html(item.leavetype);
-            $("#leavetype").append(options);
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#holidaysubgroup").append(options);
           });
-          if (data.length > 0) {
-            var initialUnusedLeave = data[0].unusedleave;
-            $("#unusedleave").val(initialUnusedLeave);
-          }
         },
         error: function (result) {
-          alert("Error: " + result.data);
-        },
-      });
-      $("#leavetype").change(function () {
-        var selectedLeaveType = $(this).val();
-        updateUnusedLeave(selectedLeaveType);
-      });
-
-      $("#loadListBtn").click(function () {
-        LoadList();
-      });
-    }
-
-    function updateUnusedLeave(selectedLeaveType) {
-      $.ajax({
-        type: "POST",
-        url: "/eportalrequestleave/getunusedleave",
-        data: { leavetype: selectedLeaveType },
-        success: function (result) {
-          var data = result.data;
-          if (Array.isArray(data) && data.length > 0) {
-            unusedLeaveGlobal = data[0].unusedleave;
-            $("#unusedleave").val(unusedLeaveGlobal);
-
-            if (unusedLeaveGlobal !== "") {
-              console.log("Unused leave value:", unusedLeaveGlobal);
-            } else {
-              console.log("Unused leave value is not set.");
-            }
-          } else {
-            console.error("Error: No data or incorrect data format.");
-            alert("Error fetching total unused leave. Please try again.");
-          }
-        },
-        error: function (xhr, status, error) {
-          console.error("Error fetching total unused leave:", error);
-          alert("Error fetching total unused leave. Please try again.");
+          alert("error: " + result.data);
         },
       });
     }
-
-    console.log("unused", unusedLeaveGlobal);
-
-    $("#loadListBtn").click(function () {
-      LoadList();
-    });
+    
 
     // $(document).on("click", "#pendingleavesavebtn", function () {
     //   let startdate = $("#startldate").val();
@@ -394,7 +344,7 @@
     //     message += "End Date is required ";
     //   }
 
-    //   if (leavetype == "") {
+    //   if (leavetype === "") {
     //     message += "Leave Type is required ";
     //   }
 
@@ -480,7 +430,7 @@
         message += "End Date is required ";
       }
 
-      if (leavetype === "" || leavetype === null) {
+      if (leavetype === "") {
         message += "Leave Type is required ";
       }
 
@@ -547,7 +497,7 @@
             } else if (result.msg === "exist") {
               swal("Exist", "Data already exists!", "warning");
             } else if (result.msg === "not allowed") {
-              swal("Warning", "Need 3 before the start date", "warning");
+              swal("Error", "Not allowed", "error");
             } else if (result.msg === "Invalid employee ID") {
               swal("Error", "Invalid employee ID", "error");
             } else {
@@ -562,31 +512,9 @@
       }
     });
 
-    function calculateUnpaidDays(durationDays) {
-      let unusedDays = parseFloat(unusedLeaveGlobal);
-      let unpaidDays = durationDays - unusedDays;
-      return unpaidDays < 0 ? 0 : unpaidDays;
-    }
-
-    $("#startldate, #endldate").change(function () {
-      let startLDate = new Date($("#startldate").val());
-      let endLDate = new Date($("#endldate").val());
-
-      let durationDays =
-        Math.floor((endLDate - startLDate) / (1000 * 60 * 60 * 24)) + 1;
-
-      let unpaidDays = calculateUnpaidDays(durationDays);
-      let paidDays =
-        durationDays < unusedLeaveGlobal ? durationDays : unusedLeaveGlobal;
-
-      $("#durationdays").val(durationDays);
-      $("#paiddays").val(paidDays);
-      $("#unpaiddays").val(unpaidDays);
-    });
-
     //Edit Section
 
-    $("#dataTableapplyleave tbody").on("click", "tr", function () {
+    $("#dataTablePendingHoliday tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
         .closest("tr")
@@ -595,40 +523,42 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      leaveid = dataRow[0];
+      holidayid = dataRow[0];
+      console.log(holidayid);
     });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "eportalrequestholiday/getreqholiday",
         data: {
-          leaveid: leaveid,
+          holidayid: holidayid,
+          employeeid: employeeid,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#editpendingleaveid").val(item.leaveid);
-              $("#editleaveemployeename").val(item.employee);
-              $("#editleavetype").val(item.leavetype);
-              $("#editleavestartdate").val(item.leavestartdate);
-              $("#editleaveenddate").val(item.leaveenddate);
-              $("#editleavereason").val(item.leavereason);
-              $("#editleaveapplieddate").val(item.leaveapplieddate);
-              $("#previewleave").attr(
-                "src",
-                "data:image/jpg;base64," + item.leaveimage
-              );
-              $("#editleavedays").val(item.totalleavedays);
-              $("#editunusedleave").val(item.unusedleave);
-              $("#editusedleave").val(item.usedleave);
-              $("#editleaveyear").val(item.leaveyear);
-              $("#editleavestatus").val(item.leavestatus);
-              $("#editleaveduration").val(item.leaveduration);
-              $("#editpaiddays").val(item.leavepaiddays);
-              $("#editunpaiddays").val(item.leaveunpaiddays);
+              $("#holidayattendancedate").val(item.attendancedate);
+              $("#holidaytimein").val(item.timein);
+              $("#holidaytimeout").val(item.timeout);
+              $("#holidaystatus").val(item.status);
+              $("#holidaytype").val(item.holidaytype);
+              $("#holidaydate").val(item.holidaydate);
+              $("#holidayname").val(item.holidayname);
+              // $("#previewleave").attr(
+              //   "src",
+              //   "data:image/jpg;base64," + item.leaveimage
+              // );
+              //  $("#holidaysubgroup").val(item.totalleavedays);
+              // $("#editunusedleave").val(item.unusedleave);
+              // $("#editusedleave").val(item.usedleave);
+              // $("#editleaveyear").val(item.leaveyear);
+              // $("#editleavestatus").val(item.leavestatus);
+              // $("#editleaveduration").val(item.leaveduration);
+              // $("#editpaiddays").val(item.leavepaiddays);
+              // $("#editunpaiddays").val(item.leaveunpaiddays);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -640,80 +570,53 @@
       });
     });
 
-    $(document).on(
-      "change",
-      "#editleavestartdate, #editleaveenddate, #editpaiddays",
-      function () {
-        let startDate = $("#editleavestartdate").val();
-        let endDate = $("#editleaveenddate").val();
-        let paidDays = parseFloat($("#editpaiddays").val());
-        let unusedLeave = parseFloat($("#editunusedleave").val());
-        let duration = calculateLeaveDuration(startDate, endDate);
+    $(document).on("click", "#holidaysavebtn", function () {
+      let id = holidayid;
+      let clockin = $("#holidaytimein").val();
+      let clockout = $("#holidaytimeout").val();
+      let payrolldate = $("#holidaypayrolldate").val();
+      let attendancedate = $("#holidayattendancedate").val();
+      let subgroup = $("#holidaysubgroup").val();
+      let status = $("#holidaystatus").val();
+      let holidayimage = base64String;
 
-        if (duration > unusedLeave) {
-          let unpaidDays = duration - unusedLeave;
-          $("#editpaiddays").val(unusedLeave);
-          $("#editunpaiddays").val(unpaidDays);
-        } else {
-          $("#editleaveduration").val(duration);
-          $("#editpaiddays").val(duration);
-          $("#editunpaiddays").val(0);
-        }
-      }
-    );
-
-    function calculateLeaveDuration(startDate, endDate) {
-      let start = new Date(startDate);
-      let end = new Date(endDate);
-      let difference = end - start;
-      let durationDays = difference / (1000 * 60 * 60 * 24) + 1;
-      return Math.round(durationDays);
-    }
-
-    $(document).on("click", "#editleavesavebutton", function () {
-      let id = leaveid;
-      let status = $("#editleavestatus").val();
-      let leavetype = $().val("#editleavetype");
-      let leavestartdate = $("#editleavestartdate").val();
-      let leaveenddate = $("#editleaveenddate").val();
-      let leaveduration = $("#editleaveduration").val();
-      let leavepaidays = $("#editpaiddays").val();
-      let leaveunpaiddays = $("#editunpaiddays").val();
-      let comment = $("#editleavecomment").val();
-      let leaveimage = base64String;
+      console.log(id);
+      console.log(clockin);
+      console.log(clockout);
+      console.log(payrolldate);
+      console.log(attendancedate);
+      console.log(subgroup);
+      console.log(status);
+      console.log(holidayimage);
 
       var message = "";
 
+      if (id === "") {
+        message += "ID is required. ";
+      }
+
+      if (clockin === "") {
+        message += "Clockin is required. ";
+      }
+
+      if (clockout === "") {
+        message += "Clockout is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "Payrolldate is required. ";
+      }
+
+      if (attendancedate === "") {
+        message += "Attendancedate is required. ";
+      }
+
+      if (subgroup === "") {
+        message += "Subgroup is required. ";
+      }
+      
       if (status === "") {
-        message += "status is required. ";
-      }
-
-      if (leavetype === "") {
-        message += "Leave Type is Required is required. ";
-      }
-
-      if (leavestartdate === "") {
-        message += "Startdate is required. ";
-      }
-
-      if (leaveenddate === "") {
-        message += "Enddate is required";
-      }
-
-      if (leaveduration === "") {
-        message += "leaveduration is required. ";
-      }
-
-      if (leavepaidays === "") {
-        message += "leavepaidays is required. ";
-      }
-
-      if (leaveunpaiddays === "") {
-        message += "leaveunpaiddays is required. ";
-      }
-
-      if (comment === "") {
-        message += "comment is required. ";
+        message += "Status is required. "; 
       }
 
       if (message !== "") {
@@ -728,18 +631,18 @@
         }).then((willApprove) => {
           if (willApprove) {
             $.ajax({
-              type: "POST",
-              url: "/allleave/update",
+              type: "PUT",
+              url: "/eportalrequestholiday/edit",
               data: {
-                leaveid: id,
-                status: status,
-                leavestartdate: leavestartdate,
-                leaveenddate: leaveenddate,
-                leaveduration: leaveduration,
-                leavepaidays: leavepaidays,
-                leaveunpaiddays: leaveunpaiddays,
-                comment: comment,
-                leaveimage: leaveimage,
+                holidayid: id,
+                status: status, 
+                clockin: clockin,
+                clockout: clockout,
+                attendancedate: attendancedate,
+                payrolldate: payrolldate,
+                subgroup: subgroup,
+                holidayimage: holidayimage,
+                employeeid: employeeid,
               },
               success: function (result) {
                 if (result.msg == "success") {

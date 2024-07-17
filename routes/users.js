@@ -73,8 +73,8 @@ router.post("/save", async (req, res) => {
                 subgroupid,
                 createby,
                 createdate,
-                status,
                 geofenceValue,
+                status,
               ],
             ];
 

@@ -6,10 +6,10 @@ var logger = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
 
-const corsOptions = {
-  origin: "http://localhost:5173", // Replace with your frontend URL
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
+//   credentials: true,
+// };
 
 
 var indexRouter = require("./routes/index");
@@ -127,6 +127,11 @@ var questionRouter = require("./routes/question");
 var ratingRouter = require("./routes/rating");
 var teamleadgeofenceempRouter = require("./routes/teamleadgeofenceemp");
 var applicant_registrationRouter = require("./routes/applicant_registration");
+var eportalrequestHolidayRouter = require("./routes/eportalrequestholiday");
+var teamleadholidayRouter = require("./routes/teamleadholiday");  
+var teamleadtotalholidayRouter = require("./routes/teamleadtotalholiday");
+var holiday_request_activityRouter = require("./routes/holiday_request_activity");
+var loan_typeRouter = require("./routes/loan_type");
 
 
 
@@ -146,7 +151,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -263,6 +268,11 @@ app.use("/question", questionRouter);
 app.use("/rating", ratingRouter);
 app.use("/teamleadgeofenceemp", teamleadgeofenceempRouter);
 app.use("/applicant_registration", applicant_registrationRouter);
+app.use("/eportalrequestholiday", eportalrequestHolidayRouter);
+app.use("/teamleadholiday", teamleadholidayRouter);
+app.use("/teamleadtotalholiday", teamleadtotalholidayRouter);
+app.use("/holiday_request_activity", holiday_request_activityRouter);
+app.use("/loan_type", loan_typeRouter);
 
 
 // catch 404 and forward to error handler

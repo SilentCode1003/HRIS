@@ -6,6 +6,7 @@
     LoadList();
     LoadEditEmp();
     LoadPayrollDate();
+    LoadLoanType();
     EditLoadPayrollDate();
     searchTable();
     LoadAdvancedList();
@@ -285,6 +286,25 @@
             var options = new Option(item.payrolldate, item.payrolldate);
             $(options).html(item.payrolldate);
             $("#govloaneffectivedate").append(options);
+          });
+        },
+        error: function (result) {
+          swal("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadLoanType() {
+      $.ajax({
+        type: "GET",
+        url: "/loan_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.name, item.name);
+            $(options).html(item.name);
+            $("#govloantype").append(options);
           });
         },
         error: function (result) {

@@ -41,7 +41,7 @@
                 approvalstage: item.id,
                 departmentid: item.departmentid,
                 accessid: item.accessid,
-                approvalcount: item.count,
+                approvalcount: item.count + 1,
                 createby: item.createdby,
                 createdate: item.createddate,
                 action: action,
@@ -101,7 +101,7 @@
           url: "/approval_stage_settings/save",
           data: {
             accessid: accessid,
-            approvalcount: approvalcount,
+            approvalcount: approvalcount - 1,
             departmentid: departmentid,
           },
           success: function (result) {
@@ -235,7 +235,7 @@
 
             $.each(existingData, (key, item) => {
               $("#editaccessidname").val(item.accessid);
-              $("#editapprovecount").val(item.count);
+              $("#editapprovecount").val(item.count + 1);
               $("#editstagedepartmentname").val(item.departmentid);
             });
           } else {
@@ -278,7 +278,7 @@
           data: {
             approvalstage: approvalstage,
             accessid: accessid,
-            approvalcount: approvalcount,
+            approvalcount: approvalcount - 1,
             departmentid: departmentid,
           },
           success: function (result) {
