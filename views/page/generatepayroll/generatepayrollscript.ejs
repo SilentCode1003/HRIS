@@ -597,6 +597,9 @@
               $("#payslipndpay").text(
                 formatToCurrency(item.ApprovedNightDiffOt)
               );
+              $("#payslipndhoursmin").text(item.Night_diff_approved_hours);
+              $("#payslipothoursmin").text(item.Normal_ot_approved_hours);
+              $("#payslipearlyhoursmin").text(item.Early_ot_approved_hours);
               $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
               $("#payslipearlypay").text(
                 formatToCurrency(item.ApprovedEarlyOt)
@@ -624,8 +627,19 @@
                 formatToCurrency(item.Absent_Deductions)
               );
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
+              $("#payslipcalamity").text(formatToCurrency(item.Calamity_Loan));
+              $("#payslipshortterm").text(
+                formatToCurrency(item.Short_Term_Loan)
+              );
+              $("#paysliphousing").text(formatToCurrency(item.Housing_Loan));
+              $("#payslipeducationloan").text(
+                formatToCurrency(item.Study_Now_Pay_Later)
+              );
+              $("#payslipsterlingloan").text(
+                formatToCurrency(item.Sterling_Loan)
+              );
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
-              $("#paysliploandeductions").text(formatToCurrency(item.Loans));
+              $("#payslipwisp").text(formatToCurrency(item.Wisp_Deductions));
               $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)

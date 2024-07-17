@@ -195,23 +195,86 @@ router.get('/loadcancelled' , (req, res) => {
   }
 });
 
+// router.post("/submit", async (req, res) => {
+//   try {
+//     const employeeid = req.body.employeeid;
+//     const { startdate, enddate, leavetype, reason, image, subgroup } = req.body;
+//     const createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+//     const status = "Pending";
+//     const durationDays = req.body.durationDays;
+//     const paidDays = req.body.paidDays;
+//     const unpaidDays = req.body.unpaidDays;
+//     const approvedcount = '0';
+
+//     console.log(startdate, enddate, leavetype, reason, employeeid, durationDays, paidDays, unpaidDays);
+
+//     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
+//     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
+
+//     if (employeeResult.length === 0) {
+//       return res.json({ msg: "Invalid employee ID" });
+//     }
+
+//     const data = [
+//       [
+//         employeeid,
+//         startdate,
+//         enddate,
+//         leavetype,
+//         reason,
+//         image,
+//         status,
+//         createdate,
+//         durationDays,
+//         paidDays,
+//         unpaidDays,
+//         subgroup,
+//         approvedcount
+//       ],
+//     ];
+
+//     mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
+//       if (insertErr) {
+//         console.error("Error inserting leave record: ", insertErr);
+//         res.json({ msg: "insert_failed" });
+//       } else {
+//         console.log(insertResult);
+//         res.json({ msg: "success" });
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error in /submit route: ", error);
+//     res.json({ msg: "error" });
+//   }
+// });
+
+
 router.post("/submit", async (req, res) => {
   try {
-    const employeeid = req.body.employeeid;
-    const { startdate, enddate, leavetype, reason, image, subgroup } = req.body;
-    const createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    const { employeeid, startdate, enddate, leavetype, reason, image, subgroup, durationDays, paidDays, unpaidDays } = req.body;
+    const createdate = moment().format("YYYY-MM-DD HH:mm:ss");
     const status = "Pending";
-    const durationDays = req.body.durationDays;
-    const paidDays = req.body.paidDays;
-    const unpaidDays = req.body.unpaidDays;
     const approvedcount = '0';
 
-    console.log(startdate, enddate, leavetype, reason, employeeid, durationDays, paidDays, unpaidDays);
+    console.log("Received request with data:", req.body);
+
+    // Calculate the date 3 days from now
+    const allowedStartDate = moment().add(3, 'days').startOf('day');
+
+    // Convert startdate to a moment object
+    const startDateMoment = moment(startdate);
+
+    // Check if the startdate is within the allowed 3-day rule
+    if (startDateMoment.isBefore(allowedStartDate)) {
+      console.log("Start date is within the 3-day rule");
+      return res.json({ msg: "not allowed" });
+    }
 
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
 
     if (employeeResult.length === 0) {
+      console.log("Invalid employee ID");
       return res.json({ msg: "Invalid employee ID" });
     }
 
@@ -235,18 +298,22 @@ router.post("/submit", async (req, res) => {
 
     mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
       if (insertErr) {
-        console.error("Error inserting leave record: ", insertErr);
+        console.error("Error inserting leave record:", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
+        console.log("Insert result:", insertResult);
         res.json({ msg: "success" });
       }
     });
   } catch (error) {
-    console.error("Error in /submit route: ", error);
+    console.error("Error in /submit route:", error);
     res.json({ msg: "error" });
   }
 });
+
+
+
+
 
 router.post("/getleave", (req, res) => {
   try {

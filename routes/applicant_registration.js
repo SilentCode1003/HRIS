@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 const multer = require("multer");
@@ -38,7 +37,7 @@ router.post("/register_personal", async (req, res) => {
   console.log("hit");
   try {
     const {
-      firstname,
+      firstName,
       lastname,
       middlename,
       nickname,
@@ -83,9 +82,12 @@ router.post("/register_personal", async (req, res) => {
     } = req.body;
 
     console.log(req.body);
+    console.log(firstName,'firstname');
+    console.log(lastname,'lastname');
+
 
     const applicantExists = await checkApplicantExists(
-      firstname,
+      firstName,
       lastname,
       middlename
     );
@@ -155,7 +157,7 @@ router.post("/register_personal", async (req, res) => {
     const data = [
       [
         applicantId,
-        firstname,
+        firstName,
         lastname,
         middlename,
         nickname,
@@ -202,7 +204,7 @@ router.post("/register_personal", async (req, res) => {
 
     const checkStatement = SelectStatement(
       "SELECT * FROM master_applicant_personal WHERE map_firstname=? AND map_lastname=? AND map_middlename=?",
-      [firstname, lastname, middlename]
+      [firstName, lastname, middlename]
     );
 
     const checkResult = await Check(checkStatement);

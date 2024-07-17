@@ -10,6 +10,8 @@ const {
   convertExcelDate,
   GetCurrentDatetime,
   GetCurrentDate,
+  SelectStatement,
+  InsertStatement,
 } = require("./repository/customhelper");
 const { Encrypter } = require("./repository/crytography");
 const {
@@ -20,9 +22,15 @@ const {
 } = require("./repository/helper");
 const { sq } = require("date-fns/locale");
 const { GenerateExcel } = require("./repository/excel");
-const { Select } = require("./repository/dbconnect");
+const { Select, InsertTable } = require("./repository/dbconnect");
 const { DataModeling, RawData } = require("./model/hrmisdb");
-const { JsonDataResponse, JsonErrorResponse } = require("./repository/response");
+const {
+  JsonDataResponse,
+  JsonErrorResponse,
+  JsonWarningResponse,
+  MessageStatus,
+  JsonSuccess,
+} = require("./repository/response");
 
 const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
@@ -200,7 +208,6 @@ router.get("/selectdistinctshift", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
@@ -233,7 +240,6 @@ router.get("/selectdistinctsalary", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
@@ -547,7 +553,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
@@ -654,6 +659,7 @@ router.post("/save", async (req, res) => {
           }
           const userSaveResult = await saveUserRecord(
             req,
+            res,
             employeeId,
             username,
             encryptedPassword
@@ -1246,7 +1252,7 @@ function GetPosition(name, callback) {
   });
 }
 
-async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
+async function saveUserRecord(req, res, oldemployeeid, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
     const createdate = moment().format("YYYY-MM-DD");
     const createby = req.session ? req.session.fullname : null;
@@ -1256,29 +1262,59 @@ async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
 
     mysql.Select(sql, "Master_Access", (err, result) => {
       if (err) reject(err);
-
+      let subgroupid = 1;
+      let geofenceValue = 1;
+      let status = "Active";
       let accessid = result[0].accessid;
-      const data = [
+      let sql = InsertStatement("master_user", "mu", [
+        "employeeid",
+        "username",
+        "password",
+        "accesstype",
+        "subgroupid",
+        "createby",
+        "createdate",
+        "status",
+        "isgeofence",
+      ]);
+      let data = [
         [
           oldemployeeid,
           username,
           encryptedPassword,
           accessid,
+          subgroupid,
           createby,
           createdate,
-          "Active",
+          status,
+          geofenceValue,
         ],
       ];
+      let checkStatement = SelectStatement(
+        "select * from master_user where mu_employeeid=? and mu_accesstype=?",
+        [oldemployeeid, accessid]
+      );
 
-      mysql.InsertTable("master_user", data, (inserterr, insertResult) => {
-        if (inserterr) {
-          console.error("Error inserting user record: ", inserterr);
-          reject({ msg: "insert_failed" });
-        } else {
-          console.log("User record inserted: ", insertResult);
-          resolve({ msg: "success" });
-        }
-      });
+      Check(checkStatement)
+        .then((result) => {
+          console.log(result);
+          if (result != 0) {
+            return res.json(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            InsertTable(sql, data, (err, result) => {
+              if (err) {
+                console.log(err);
+                res.json(JsonErrorResponse(err));
+              }
+
+              res.json(JsonSuccess());
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.json(JsonErrorResponse(error));
+        });
     });
   });
 }
@@ -1322,6 +1358,16 @@ function checkOldIdExists(oldemployeeid) {
       .catch((error) => {
         reject(error);
       });
+  });
+}
+
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
   });
 }
 //#endregion
