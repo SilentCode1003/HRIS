@@ -1,0 +1,265 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Leave History</h1> -->
+<br>
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-requestleave">
+    <h3>My Holidays</h3>
+    <div class="row g-2">
+      <div class="col"></div>
+      <div class="col-sm-2">
+        <!-- <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
+          <h6>Apply Holiday</h6>
+        </button> -->
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+<div class="col">
+  <div class="card">
+      <div class="card-header ch-generate">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="true"><b>Pending</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Approved</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Rejected</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Cancelled</b>
+                  </button>
+              </div>
+          </nav>
+      </div>
+      <!-- Leave  Request -->
+      <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="row">
+                      <div class="col-xl-12 col-lg-12">
+                          <div class="card shadow mb-4">
+                              <div class="card-header ch-coop">
+                                <table class="table table-light table-bordered" id="dataTablePendingHoliday">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Attendance Date</th>
+                                      <th scope="col">Clock In</th>
+                                      <th scope="col">Clock Out</th>
+                                      <th scope="col">Holiday Type</th>
+                                      <th scope="col">Total Hours</th>
+                                      <th scope="col">Night Differrentials</th>
+                                      <th scope="col">Normal Overtime</th>
+                                      <th scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableApprovedHoliday">
+                        <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Attendance Date</th>
+                              <th scope="col">Clock In</th>
+                              <th scope="col">Clock Out</th>
+                              <th scope="col">Holiday Type</th>
+                              <th scope="col">Total Hours</th>
+                              <th scope="col">Night Differrentials</th>
+                              <th scope="col">Normal Overtime</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableRejectedHoliday">
+                          <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Attendance Date</th>
+                                <th scope="col">Clock In</th>
+                                <th scope="col">Clock Out</th>
+                                <th scope="col">Holiday Type</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Night Differrentials</th>
+                                <th scope="col">Normal Overtime</th>
+                                <th scope="col">Action</th>
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableHolidayCancelled">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Attendance Date</th>
+                              <th scope="col">Clock In</th>
+                              <th scope="col">Clock Out</th>
+                              <th scope="col">Holiday Type</th>
+                              <th scope="col">Total Hours</th>
+                              <th scope="col">Night Differrentials</th>
+                              <th scope="col">Normal Overtime</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="holidaymemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Applied Holiday ?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                      <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                          <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <div class="col">
+                          <div class="col g-6">
+                          <input type="file" name="edituploadimage" id="edituploadimage"
+                              class="form-control border-form-modal" accept="image/*">
+                          </div>
+                      </div>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="holidaytimein" name="holidaytimein"
+                            placeholder="Address">
+                            <label for="floatingInput">Clock In</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="holidaytimeout" name="holidaytimeout"
+                            placeholder="Address">
+                            <label for="floatingInput">Clock Out</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="holidayattendancedate" name="holidayattendancedate">
+                            <label for="floatingInput">Attendance Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="holidayname" name="holidayname"
+                            placeholder="Holiday Name" readonly>
+                         <label for="floatingInput">Holiday Name</label>
+                       </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="holidaytype" name="holidaytype"
+                            placeholder="Holiday Type" readonly>
+                          <label for="floatingInput">Holiday Type</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="holidaypayrolldate" name="holidaypayrolldate"
+                                aria-label="Floating label select example">
+                             </select>
+                             <label for="floatingInput">Pyroll Date</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="holidaydate" name="holidaydate"
+                            placeholder="Holiday Date" readonly>
+                          <label for="floatingInput">Holiday Date</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="holidaysubgroup" name="holidaysubgroup"
+                              aria-label="Floating label select example">
+                           </select>
+                           <label for="floatingInput">Sub Group</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <select class="form-select border-form-modal" id="holidaystatus" name="holidaystatus"
+                          aria-label="Floating label select example">
+                          <option value="Applied">Applied</option>
+                          <option value="Pending">Pending</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
+                          <label for="floatingInput">Status</label>
+                      </div>                    
+                    </div>
+                    </div>
+                  <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="holidaysavebtn">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
