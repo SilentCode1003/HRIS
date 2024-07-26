@@ -156,7 +156,8 @@ router.get("/loadreqOT", (req, res) => {
     DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') as  pao_clockout,
     pao_total_hours
     FROM payroll_approval_ot
-    WHERE pao_status = 'Applied'`;
+    WHERE pao_status = 'Applied'
+    order by pao_id ASC`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -186,7 +187,8 @@ router.get("/loadreqattendance", (req, res) => {
     ar_total
     FROM attendance_request
     INNER JOIN master_employee on ar_employeeid = me_id
-    WHERE ar_status = 'Pending'`;
+    WHERE ar_status = 'Pending'
+    order by ar_requestid ASC`;
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);

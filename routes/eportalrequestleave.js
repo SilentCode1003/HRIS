@@ -2,6 +2,9 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { Select } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -48,6 +51,80 @@ router.post('/loadheader', (req,res) => {
 });
 
 
+// router.post('/getrestdays', (req,res) => {
+//   try {
+//     let employeeid = req.body.employeeid;
+//     let sql =  `SELECT 
+//         CONCAT(
+//             CASE WHEN JSON_UNQUOTE(ms_monday->'$.time_in') = '00:00:00' THEN 'Monday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_tuesday->'$.time_in') = '00:00:00' THEN 'Tuesday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_wednesday->'$.time_in') = '00:00:00' THEN 'Wednesday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_thursday->'$.time_in') = '00:00:00' THEN 'Thursday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_friday->'$.time_in') = '00:00:00' THEN 'Friday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_saturday->'$.time_in') = '00:00:00' THEN 'Saturday ' ELSE '' END,
+//             CASE WHEN JSON_UNQUOTE(ms_sunday->'$.time_in') = '00:00:00' THEN 'Sunday ' ELSE '' END
+//         ) AS restdays
+//     FROM master_shift
+//     WHERE ms_employeeid = '${employeeid}'`;
+
+//     Select(sql, (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         res.json(JsonErrorResponse(err));
+//       }
+
+//       console.log(result);
+
+//       if (result != 0) {
+//         let data = DataModeling(result, "ms_");
+
+//         console.log(data);
+//         res.json(JsonDataResponse(data));
+//       } else {
+//         res.json(JsonDataResponse(result));
+//       }
+//     });
+//   } catch (error) {
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
+
+router.post('/getrestdays', (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql =  `SELECT 
+        CONCAT(
+            CASE WHEN JSON_UNQUOTE(ms_monday->'$.time_in') = '00:00:00' THEN 'Monday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_tuesday->'$.time_in') = '00:00:00' THEN 'Tuesday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_wednesday->'$.time_in') = '00:00:00' THEN 'Wednesday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_thursday->'$.time_in') = '00:00:00' THEN 'Thursday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_friday->'$.time_in') = '00:00:00' THEN 'Friday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_saturday->'$.time_in') = '00:00:00' THEN 'Saturday ' ELSE '' END,
+            CASE WHEN JSON_UNQUOTE(ms_sunday->'$.time_in') = '00:00:00' THEN 'Sunday ' ELSE '' END
+        ) AS restdays
+    FROM master_shift
+    WHERE ms_employeeid = '${employeeid}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      if (result.length > 0) {
+        let data = DataModeling(result, "ms_");
+        res.json(JsonDataResponse(data[0])); // assuming DataModeling returns an array
+      } else {
+        res.json(JsonDataResponse({ restdays: "" }));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 router.post('/loadheaderforapp', (req,res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -83,6 +160,7 @@ router.post('/loadheaderforapp', (req,res) => {
     });
   }
 });
+
 
 router.get('/loadpending' , (req, res) => {
   try {
@@ -310,9 +388,6 @@ router.post("/submit", async (req, res) => {
     res.json({ msg: "error" });
   }
 });
-
-
-
 
 
 router.post("/getleave", (req, res) => {

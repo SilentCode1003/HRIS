@@ -67,8 +67,10 @@ router.get("/load", (req, res) => {
 router.post("/getmedecinequantity", (req, res) => {
   try {
     let medecineid = req.body.medecineid;
-    let sql = `SELECT 
-      mm_quantity
+    let sql = `   SELECT 
+      mm_quantity,
+      mm_grams_ml,
+      mm_unit
       FROM master_medecines
       WHERE mm_medecineid = '${medecineid}'`;
 
@@ -92,7 +94,6 @@ router.post("/getmedecinequantity", (req, res) => {
     res.json(JsonErrorResponse(err));
   }
 });
-
 
 router.post('/check_quantity', (req, res) => {
   try {
@@ -126,7 +127,8 @@ router.post("/save", (req, res) => {
   try {
     let approvedby = req.session.fullname;
     let requestdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { employeeid, medecinename, medecinerequestednumber, medreqreason } =
+    const { employeeid, medecinename, medecinerequestednumber, medreqreason, meddossage, medunit
+     } =
       req.body;
     let checkQuantityStatement = SelectStatement(
       "SELECT mm_quantity FROM master_medecines WHERE mm_medecineid = ?",
@@ -144,6 +146,8 @@ router.post("/save", (req, res) => {
         let sql = InsertStatement("medecines_request", "mr", [
           "medecineid",
           "quantity_request",
+          "dossage",
+          "unit",
           "employeeid",
           "requestdate",
           "approvedby",
@@ -154,6 +158,8 @@ router.post("/save", (req, res) => {
           [
             medecinename,
             medecinerequestednumber,
+            meddossage,
+            medunit,
             employeeid,
             requestdate,
             approvedby,
@@ -177,7 +183,42 @@ router.post("/save", (req, res) => {
                   res.json(JsonErrorResponse(err));
                 }
 
-                res.json(JsonSuccess());
+                console.log(result);
+
+                let newMedicineId = result[0].id;
+    
+                console.log(newMedicineId);
+    
+                let historySql = InsertStatement("medecine_history", "mh", [
+                  "history_type",
+                  "responsible",
+                  "quantity",
+                  "grams_ml",
+                  "unit",
+                  "medecine_name",
+                  "createdate",
+                  "createby",
+                ]);
+    
+                let historyData = [[
+                  "Stock Out",
+                  employeeid,
+                  medecinerequestednumber,
+                  meddossage,
+                  medunit,
+                  newMedicineId,
+                  requestdate,
+                  approvedby,
+                ]];
+    
+                InsertTable(historySql, historyData, (err, result) => {
+                  if (err) {
+                    console.log(err);
+                    return res.json(JsonErrorResponse(err));
+                  }
+    
+                  res.json(JsonSuccess());
+                });
               });
             }
           })
@@ -196,23 +237,22 @@ router.post("/save", (req, res) => {
   }
 });
 
-router.post("/getpayrolladjustment", (req, res) => {
+router.post("/viewmedreq", (req, res) => {
   try {
-    let adjustmentid = req.body.adjustmentid;
-    let sql = `SELECT
-      me_profile_pic as pa_image,
-      pa_adjustmentid,
-      pa_employeeid,
-      pa_origindate,
-      pa_adjustmenttype,
-      pa_adjust_amount,
-      pa_payrolldate,
-      pa_reason,
-      pa_adjustmentstatus
-      FROM payroll_adjustments
-      INNER JOIN master_employee ON payroll_adjustments.pa_employeeid = me_id
-      WHERE pa_adjustmentid = '${adjustmentid}'
-      AND pa_employeeid = me_id`;
+    let medecineid = req.body.medecineid;
+    let sql = `  SELECT 
+      CONCAT(me_lastname,' ',me_firstname) AS mr_fullname,
+      me_profile_pic as mr_image,
+      CONCAT(mm_grams_ml,' ',mm_unit) AS mr_dossage,
+      CONCAT(mm_name,' ',mm_category) AS mr_medecine_name,
+      mr_quantity_request,
+      MAX(DATE_FORMAT(mr_requestdate, '%Y-%m-%d %H:%i:%s')) as mr_requestdate,
+      mr_reason,
+      mr_approvedby
+      FROM medecines_request
+      INNER JOIN master_employee ON medecines_request.mr_employeeid = me_id
+      INNER JOIN master_medecines ON medecines_request.mr_medecineid = mm_medecineid
+      WHERE mr_requestid = '${medecineid}'`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -223,7 +263,7 @@ router.post("/getpayrolladjustment", (req, res) => {
       console.log(result, "result");
 
       if (result != 0) {
-        let data = DataModeling(result, "pa_");
+        let data = DataModeling(result, "mr_");
 
         res.json(JsonDataResponse(data));
       } else {
@@ -232,115 +272,6 @@ router.post("/getpayrolladjustment", (req, res) => {
     });
   } catch (error) {
     res.json(JsonErrorResponse(err));
-  }
-});
-
-router.put("/edit", (req, res) => {
-  try {
-    const {
-      adjustmentid,
-      employeeid,
-      origindate,
-      adjustmenttype,
-      adjust_amount,
-      payrolldate,
-      adjustmentstatus,
-      reason,
-    } = req.body;
-    let createby = req.session.fullname;
-    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-
-    let data = [];
-    let columns = [];
-    let arguments = [];
-
-    if (employeeid) {
-      data.push(employeeid);
-      columns.push("employeeid");
-    }
-
-    if (origindate) {
-      data.push(origindate);
-      columns.push("origindate");
-    }
-
-    if (adjustmenttype) {
-      data.push(adjustmenttype);
-      columns.push("adjustmenttype");
-    }
-
-    if (adjust_amount) {
-      data.push(adjust_amount);
-      columns.push("adjust_amount");
-    }
-
-    if (payrolldate) {
-      data.push(payrolldate);
-      columns.push("payrolldate");
-    }
-
-    if (adjustmentstatus) {
-      data.push(adjustmentstatus);
-      columns.push("adjustmentstatus");
-    }
-
-    if (reason) {
-      data.push(reason);
-      columns.push("reason");
-    }
-
-    if (createby) {
-      data.push(createby);
-      columns.push("createby");
-    }
-
-    if (createdate) {
-      data.push(createdate);
-      columns.push("createdate");
-    }
-
-    if (adjustmentid) {
-      data.push(adjustmentid);
-      arguments.push("adjustmentid");
-    }
-
-    let updateStatement = UpdateStatement(
-      "payroll_adjustments",
-      "pa",
-      columns,
-      arguments
-    );
-
-    console.log(data);
-
-    let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_adjustments WHERE pa_employeeid =? and pa_adjustmenttype= ? and pa_origindate= ? and pa_adjustmentstatus =?",
-      [employeeid, adjustmenttype, origindate, adjustmentstatus]
-    );
-
-    console.log(checkStatement, "check");
-
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
-
-            console.log(result);
-
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
-  } catch (error) {
-    console.log(error);
-    res.json(JsonErrorResponse(error));
   }
 });
 

@@ -5,6 +5,7 @@
   $(document).ready(function () {
     LoadTable();
     searchTable();
+    LoadMedecine();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -35,6 +36,7 @@
 
               action = `
                               <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editmedecinesmodal"><i class="fas fa-fw fa-pen"></i></button>
+                              <button id="addQuantityBtn" class="btn text-success" name="addQuantityBtn" data-bs-toggle="modal" data-bs-target="#addqunatitymodal"><i class="fas fa-fw fa-plus"></i></button>
                           `;
               finalData.push({
                 medecineid: item.medecineid,
@@ -75,6 +77,119 @@
       });
     }
 
+    $(document).on("click", "#stockintable", function () {
+      console.log("Hit");
+      $("#dataTableMedecinesStockIn").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/medecines/loadstockin",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById("dataTableMedecinesStockIn");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HISTORY_ID = row.insertCell(0);
+            var HISTORY_TYPE = row.insertCell(1);
+            var QUANTITY = row.insertCell(2);
+            var GRAMS_ML = row.insertCell(3);
+            var UNIT = row.insertCell(4);
+            var MEDECINE_NAME = row.insertCell(5);
+            var CREATE_DATE = row.insertCell(6);
+            var CREATE_BY = row.insertCell(7);
+
+            HISTORY_ID.innerHTML = item.historyid;
+            HISTORY_TYPE.innerHTML = item.history_type;
+            QUANTITY.innerHTML = item.quantity;
+            GRAMS_ML.innerHTML = item.grams_ml;
+            UNIT.innerHTML = item.unit;
+            MEDECINE_NAME.innerHTML = item.medecine_name;
+            CREATE_DATE.innerHTML = item.createdate;
+            CREATE_BY.innerHTML = item.createby;
+
+            $.each(
+              [
+                HISTORY_ID,
+                HISTORY_TYPE,
+                QUANTITY,
+                GRAMS_ML,
+                UNIT,
+                MEDECINE_NAME,
+                CREATE_DATE,
+                CREATE_BY,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+
+    $(document).on("click", "#stockouttable", function () {
+      console.log("Hit");
+      $("#dataTableMedecinesStockOut").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/medecines/loadstockout",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById("dataTableMedecinesStockOut");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HISTORY_ID = row.insertCell(0);
+            var HISTORY_TYPE = row.insertCell(1);
+            var QUANTITY = row.insertCell(2);
+            var GRAMS_ML = row.insertCell(3);
+            var UNIT = row.insertCell(4);
+            var MEDECINE_NAME = row.insertCell(5);
+            var CREATE_DATE = row.insertCell(6);
+            var CREATE_BY = row.insertCell(7);
+
+            HISTORY_ID.innerHTML = item.historyid;
+            HISTORY_TYPE.innerHTML = item.history_type;
+            QUANTITY.innerHTML = item.quantity;
+            GRAMS_ML.innerHTML = item.grams_ml;
+            UNIT.innerHTML = item.unit;
+            MEDECINE_NAME.innerHTML = item.medecine_name;
+            CREATE_DATE.innerHTML = item.createdate;
+            CREATE_BY.innerHTML = item.createby;
+
+            $.each(
+              [
+                HISTORY_ID,
+                HISTORY_TYPE,
+                QUANTITY,
+                GRAMS_ML,
+                UNIT,
+                MEDECINE_NAME,
+                CREATE_DATE,
+                CREATE_BY,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
     $(document).on("click", "#medsavebtn", function () {
       let medecinename = $("#medname").val();
       let medecinecategory = $("#medcategory").val();
@@ -82,6 +197,8 @@
       let medecineexpdate = $("#medexpdate").val();
       let medecinedescription = $("#meddescription").val();
       let medecinemanufacturer = $("#medmanufacture").val();
+      let medecinegramsorml = $("#medgrams").val();
+      let medecineunit = $("#medunit").val();
       let medecineimage = base64String;
 
 
@@ -111,6 +228,14 @@
         message += "Medecine Manufacturer is required ";
       }
 
+      if (medecinegramsorml == "") {
+        message += "Medecine Grams/ML is required ";
+      }
+
+      if (medecineunit == "") {
+        message += "Medecine Unit is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -120,6 +245,8 @@
           data: {
             medecinename: medecinename,
             medecinecategory: medecinecategory,
+            medecinegramsorml: medecinegramsorml,
+            medecineunit: medecineunit,
             medecinequantity: medecinequantity,
             medecineexpdate: medecineexpdate,
             medecinedescription: medecinedescription,
@@ -153,6 +280,26 @@
       }
     });
 
+
+    function LoadMedecine() {
+      $.ajax({
+        type: "GET",
+        url: "/medecines/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.medecineid, item.medecineid);
+            $(options).html(item.name + " - " + item.category);
+            $("#quantitymedname").append(options);
+          });
+        },
+        error: function (result) {
+          swal("Error fetching employee data", "", "error");
+        },
+      });
+    }
+
     $("#dataTableMedecines tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -182,6 +329,8 @@
               $("#editmedexpdate").val(item.expirydate);
               $("#editmedmanufacture").val(item.manufacturer);
               $("#editmeddescription").val(item.description);
+              $("#editmedgrams").val(item.grams_ml);
+              $("#editmedunit").val(item.unit);
               $("#preview").attr(
                 "src",
                 "data:image/jpg;base64," + item.medecineimage
@@ -206,6 +355,8 @@
       let medecineexpdate = $("#editmedexpdate").val();
       let medecinedescription = $("#editmeddescription").val();
       let medecinemanufacturer = $("#editmedmanufacture").val();
+      let meddossage = $("#editmedgrams").val();
+      let medunit = $("#editmedunit").val();
       let medecineimage = base64String;
 
 
@@ -235,6 +386,14 @@
         message += "Medecine Manufacturer is required ";
       }
 
+      if (meddossage == "") {
+        message += "Medecine Dossage is required ";
+      }
+
+      if (medunit == "") {
+        message += "Medecine Unit is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -249,7 +408,104 @@
             medecineexpdate: medecineexpdate,
             medecinedescription: medecinedescription,
             medecinemanufacturer: medecinemanufacturer,
+            meddossage: meddossage,
+            medunit: medunit,
             medecineimage: medecineimage,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+                LoadTable();
+              });
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Some Error", "You clicked the button!", "error");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#addQuantityBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/medecines/getmedecine",
+        data: {
+            medecineid: medecineid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#quantitymedname").val(item.medecineid);
+              $("#quantitycategory").val(item.category);
+              $("#quantitytotal").val(item.quantity);
+              $("#qunatitydossage").val((item.grams_ml) + " " + (item.unit));
+              $("#quantityexpiry").val(item.expirydate);
+              $("#quantitymanufacture").val(item.manufacturer);
+              $("#previewold").attr(
+                "src",
+                "data:image/jpg;base64," + item.medecineimage
+              );
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+
+    $(document).on("click", "#addQuantitySaveBtn", function () {
+      let id = medecineid;
+      let stockInpieces = $("#addquantitytotal").val();
+      let gramsMl = $("#quantitygrams").val();
+      let unit = $("#quantityUnit").val();
+
+
+      var message = "";
+
+      if (stockInpieces == "") {
+        message += "Medecine Name is required ";
+      }
+
+      if (gramsMl == "") {
+        message += "Medecine Category is required ";
+      }
+
+      if (unit == "") {
+        message += "Medecine Quantity is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/medecines/stockin",
+          data: {
+            medecineid: medecineid,
+            stockinpieces: stockInpieces,
+            gramsMl: gramsMl,
+            unit: unit,
           },
           success: function (result) {
             if (result.msg == "success") {

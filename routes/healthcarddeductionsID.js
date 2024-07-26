@@ -8,7 +8,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('paymentlayout', { title: 'Express' });
-  Validator(req, res, "otherdeductionsIDlayout", "otherdeductionsID");
+  Validator(req, res, "healthcarddeductionsIDlayout", "healthcarddeductionsID");
 });
 
 module.exports = router;

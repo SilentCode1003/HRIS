@@ -1,0 +1,162 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Sudden Deductions</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput' type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#subgroupmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableSuddenDeductions">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Deduction Name</th>
+                        <th>Payroll Date</th>
+                        <th>Deduction Amount</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="subgroupmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Add Sudden Deductions</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="suddedctionname" name="suddedctionname">
+                            <label for="floatingSelectGrid">Deduction Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="sudpayrolldate" name="sudpayrolldate" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Payroll Date</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" 
+                             oninput="formatPrice(event, this)" id="sudamount" name="sudamount" aria-label="Floating label select example">
+                            <label for="floatingSelectGrid">Amount</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="file" class="form-select border-form-modal" id="sudfile" name="sudfile" aria-label="Floating label select example">
+                            <label for="floatingSelectGrid">File (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                    <label for="hoursInput">Deduction Description</label>
+                    <div class="col">
+                        <div class="form-floating">
+                            <textarea type="text" class="form-control border-form-modal" id="suddescription" name="suddescription"
+                            placeholder="Address" oninput="adjustTextareaHeight(this)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="suddensaveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editsubgroupmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+          <h3 class="modal-title" id="exampleModalLabel">Edit Sudden Deductions</h3>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <form>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="editsuddedctionname" name="editsuddedctionname">
+                            <label for="floatingSelectGrid">Deduction Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editsudpayrolldate" name="editsudpayrolldate" aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelectGrid">Payroll Date</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" 
+                             oninput="formatPrice(event, this)" id="editsudamount" name="editsudamount" aria-label="Floating label select example">
+                            <label for="floatingSelectGrid">Amount</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="file" class="form-select border-form-modal" id="editsudfile" name="editsudfile" aria-label="Floating label select example">
+                            <label for="floatingSelectGrid">File (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                    <label for="hoursInput">Deduction Description</label>
+                    <div class="col">
+                        <div class="form-floating">
+                            <textarea type="text" class="form-control border-form-modal" id="editsuddescription" name="editsuddescription"
+                            placeholder="Address" oninput="adjustTextareaHeight(this)"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="suddeneditBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

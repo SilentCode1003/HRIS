@@ -25,7 +25,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/otherdeductions/load",
+          url: "/healthcarddeductions/load",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -140,7 +140,7 @@
         amount = amount.replace(/,/g, "").replace("₱", "");
         $.ajax({
           type: "POST",
-          url: "/otherdeductions/save",
+          url: "/healthcarddeductions/save",
           data: {
             employeeid: employeeid,
             idtype: idtype,
@@ -264,7 +264,7 @@
     function Loadedittype() {
       $.ajax({
         type: "GET",
-        url: "/otherdeductionsID/load",
+        url: "/healthcarddeductionsID/load",
         success: function (result) {
           console.log(result.data);
           var data = result.data;
@@ -370,7 +370,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/otherdeductions/getotherdeduction",
+        url: "/healthcarddeductions/getotherdeduction",
         data: {
           otherdeduct: otherdeduct,
         },
@@ -436,7 +436,7 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/otherdeductions/update",
+          url: "/healthcarddeductions/update",
           data: {
             otherdeduct: id,
             employeeid: employeeid,

@@ -132,6 +132,7 @@ router.post("/loadprofileslip", (req, res) => {
     let employeeid = req.body.employeeid;
     let payrolldate = req.body.payrolldate;
     let sql = `SELECT
+    p_employeeid,
     p_image,
     p_fullname,
     p_position,
@@ -154,7 +155,6 @@ router.post("/loadprofileslip", (req, res) => {
     p_holidaydays,
     p_leaveday,
     p_overtime_meal,
-    p_loans,
     p_payroll_adjustments,
     p_leave_pay
     FROM payslip
@@ -185,53 +185,88 @@ router.post("/loadprofileslip", (req, res) => {
   }
 });
 
-
-
-
 router.post("/loadpayslip", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let payrolldate = req.body.payrolldate;
     let sql = `SELECT
-    p_sssid,
-    p_tinid,
-    p_philhealthid,
-    p_pagibigid,
-    p_payrolltype,
     p_employeeid,
-    p_fullname,
-    p_position,
-    p_department,
-    p_remaining_leave,
-    p_startdate,
-    p_enddate,
-    p_payrolldate,
-    p_salary,
-    p_basic_perday,
-    p_allowances,
-    p_basic_adjustments,
-    p_payroll_adjustments,
-    p_approveOT,
-    p_approvedNightOT,
-    p_approveNormalOT,
-    p_approvedEarlyOT,
-    p_overtime_meal,
-    p_leave_pay,
-    p_regularholidayComp,
-    p_specialholidayComp,
-    p_regularholidayOT,
-    p_specialholidayOT,
-    p_overall_netpay,
-    p_sss_dedcutions,
-    p_pagibigdeductions,
-    p_philhealthdeductions,
-    p_restday_ot,
-    p_tindeductions,
-    p_absent_deductions,
-    p_healthcard,
-    p_loans,
-    p_late_deductions,
-    p_total_deductions,
+    p_sssid, 
+    p_tinid,
+    p_philhealthid, 
+    p_pagibigid, 
+    p_present, 
+    p_restday, 
+    p_leaveday, 
+    p_restotday, 
+    p_fullname, 
+    p_remaining_leave, 
+    p_image, 
+    p_position, 
+    p_department, 
+    p_payrolltype, 
+    p_salary, 
+    p_allowances, 
+    p_basic_adjustments, 
+    p_payrolldate, 
+    p_cutoff, 
+    p_startdate, 
+    p_enddate, 
+    p_totalhours, 
+    p_totalminutes, 
+    p_nightothours, 
+    p_normalothours, 
+    p_earlyothours, 
+    p_lateminutes, 
+    p_latehours, 
+    p_holidayot, 
+    p_regularhours, 
+    p_basic_perday, 
+    p_basic_perhour, 
+    p_nighdiff, 
+    p_normalot, 
+    p_exempteddays, 
+    p_workdays, 
+    p_restdays, 
+    p_presentdays_gp, 
+    p_holidaydays, 
+    p_absent, 
+    p_nightdiffpay, 
+    p_restday_ot, 
+    p_otpay, 
+    p_earlyotpay, 
+    p_compensation, 
+    p_night_diff_hours_approved, 
+    p_normal_ot_hours_approved, 
+    p_early_ot_hours_approved, 
+    p_approveOT, 
+    p_approveNormalOT, 
+    p_approvedNightOT, 
+    p_approvedEarlyOT, 
+    p_regularholidayComp, 
+    p_specialholidayComp, 
+    p_regularholidayOT, 
+    p_specialholidayOT, 
+    p_payroll_adjustments, 
+    p_overtime_meal, 
+    p_leave_pay, 
+    p_overall_netpay, 
+    p_absent_deductions, 
+    p_wisp_deductions, 
+    p_late_deductions, 
+    p_sss_dedcutions, 
+    p_pagibigdeductions, 
+    p_philhealthdeductions, 
+    p_tindeductions, 
+    p_healthcard, 
+    p_sudden_deductions,
+    p_calamity_loan, 
+    p_shortterm_loan, 
+    p_housing_loan, 
+    p_education_loan, 
+    p_sterling_loan,
+    p_salary_loan,
+    p_total_deductions, 
     p_total_netpay
     FROM payslip
     WHERE p_employeeid = '${employeeid}'
@@ -262,8 +297,250 @@ router.post("/loadpayslip", (req, res) => {
 });
 
 
-
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+// router.post("/generatepdf", async (req, res) => {
+//   try {
+//     const {
+//       employeeid,
+//       payrolldate,
+//       globalsssid,
+//       globaltinid,
+//       globalphilhealthid,
+//       globalpagibigid,
+//       globalfullname,
+//       globalposition,
+//       globaldepartment,
+//       globalremainingleave,
+//       globalstartdate,
+//       globalenddate,
+//       globalsalary,
+//       globalperday,
+//       globalallowances,
+//       globalapproveot,
+//       globalbasicadjustments,
+//       globalpayrolladjustments,
+//       globalapprovednightot,
+//       globalapprovenormalot,
+//       globalapprovedearlyot,
+//       globalovertimemeal,
+//       globalleavepay,
+//       globalregularholidaycomp,
+//       globalspecialholidaycomp,
+//       globalregularholidayot,
+//       globalspecialholidayot,
+//       globaloverallnetpay,
+//       globalsssdeductions,
+//       globalpagibigdeductions,
+//       globalphilhealthdeductions,
+//       globaltindeductions,
+//       globalabsentdeductions,
+//       globalhealthcard,
+//       globallatedeductions,
+//       globaltotaldeductions,
+//       globaltotalnetpay,
+//       //globaltotalnetpaywords,
+//       globalloans,
+//       globalsuddendeductionsName,
+//       globalsuddendeductionsAmount,
+//       globalRestDay_OTpay,
+//     } = req.body;
+
+//     const docDefinition = {
+//       content: [
+//         {
+//           columns: [
+//             {
+//               text: "5L Solutions and Allied Services & Corporation",
+//               fontSize: 20,
+//               bold: true,
+//               alignment: "center",
+//             },
+//           ],
+//         },
+//         { text: "Payslip", style: "header" },
+//         {
+//           text: "From: " + globalstartdate + " To: " + globalenddate,
+//           style: "header",
+//         },
+//         {
+//           text: "Payroll Date: " + payrolldate,
+//           style: "subheader",
+//           alignment: "right",
+//         },
+//         {
+//           columns: [
+//             {
+//               width: "50%",
+//               stack: [
+//                 { text: "EMP Code: " + employeeid, bold: true },
+//                 { text: "SSS ID: " + globalsssid, bold: true },
+//                 { text: "TIN ID: " + globaltinid, bold: true },
+//                 { text: "Philhealth ID: " + globalphilhealthid, bold: true },
+//                 { text: "PAG IBIG ID: " + globalpagibigid, bold: true },
+//                 { text: "Remaining Paid Leaves: " + globalremainingleave, bold: true },
+//               ],
+//             },
+//             {
+//               width: "50%",
+//               stack: [
+//                 { text: "EMP Name: " + globalfullname, bold: true },
+//                 { text: "Position: " + globalposition, bold: true },
+//                 { text: "Department: " + globaldepartment, bold: true },
+//                 { text: "Health Card: " + globalhealthcard, bold: true },
+//                 { text: "Total Net Pay:  ₱" + globaltotalnetpay, bold: true },
+//                 { text: "Authorised Signatory: ", bold: true },
+//               ],
+//             },
+//           ],
+//         },
+//         {
+//           table: {
+//             headerRows: 1,
+//             widths: ["*", "*", "*", "*"],
+//             body: [
+//               [
+//                 { text: "Earnings", style: "tableHeader", bold: true },
+//                 { text: "Amount", style: "tableHeader", bold: true },
+//                 { text: "Deductions", style: "tableHeader", bold: true },
+//                 { text: "Amount", style: "tableHeader", bold: true },
+//               ],
+//               ["Basic", "₱" + globalsalary, "SSS", "₱" + globalsssdeductions],
+//               [
+//                 "Daily Rate",
+//                 "₱" + globalperday,
+//                 "Philhealth",
+//                 "₱" + globalphilhealthdeductions,
+//               ],
+//               [
+//                 "Allowances",
+//                 "₱" + globalallowances,
+//                 "HDMF",
+//                 "₱" + globalpagibigdeductions,
+//               ],
+//               [
+//                 "Basic Adjustments",
+//                 "₱" + globalbasicadjustments,
+//                 "Cash Advanced",
+//                 "",
+//               ],
+//               [
+//                 "Payroll Adjustments",
+//                 "₱" + globalpayrolladjustments,
+//                 "Tax",
+//                 "₱" + globaltindeductions,
+//               ],
+//               [
+//                 "Total Approve Overtime",
+//                 "₱" + globalapproveot,
+//                 "Absent",
+//                 "₱" + globalabsentdeductions,
+//               ],
+//               [
+//                 "Night Differrentials",
+//                 "₱" + globalapprovednightot,
+//                 "Health Card",
+//                 "₱" + globalhealthcard,
+//               ],
+//               [
+//                 "Normal Overtime",
+//                 "₱" + globalapprovenormalot,
+//                 "Late",
+//                 "₱" + globallatedeductions,
+//               ],
+//               [
+//                 "Early Overtime",
+//                 "₱" + globalapprovedearlyot,
+//                 "Loans",
+//                 "₱" + globalloans,
+//               ],
+//               [
+//                 "Rest Day OT",
+//                 "₱" + globalRestDay_OTpay,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Overtime Meal",
+//                 "₱" + globalovertimemeal,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Leave With Pay",
+//                 "₱" + globalleavepay,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Special Holiday Overtime",
+//                 "₱" + globalspecialholidayot,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Regular Holiday Overtime",
+//                 "₱" + globalregularholidayot,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Special Holiday",
+//                 "₱" + globalspecialholidaycomp,
+//                 globalsuddendeductionsName,
+//                 globalsuddendeductionsAmount
+//               ],
+//               [
+//                 "Regular Holiday",
+//                 "₱" + globalregularholidaycomp,
+//                 "",
+//                 "",
+//               ],
+//               [
+//                 "Total Compensation",
+//                 "₱" + globaloverallnetpay,
+//                 "Total Deductions",
+//                 "₱" + globaltotaldeductions,
+//               ],
+//             ],
+//           },
+//         },
+//         {
+//           text: "Total Net Pay: ₱" + globaltotalnetpay,
+//           margin: [0, 30, 0, 0],
+//           border: [false, true, true, true],
+//         },
+//         {
+//           text:
+//             "Employee Name: " +
+//             globalfullname +
+//             "\n\n Signature ____________________________",
+//           margin: [0, 40, 0, 0],
+//           border: [false, true, true, true],
+//         },
+//       ],
+//       styles: {
+//         header: {
+//           fontSize: 18,
+//           bold: true,
+//           alignment: "center",
+//           margin: [0, 0, 0, 10],
+//         },
+//         subheader: { fontSize: 14, bold: true, margin: [0, 0, 0, 10] },
+//       },
+//     };
+
+//     const pdfDoc = pdfMake.createPdf(docDefinition);
+//     pdfDoc.getBase64((base64String) => {
+//       res.send(base64String);
+//     });
+//   } catch (error) {
+//     console.error("Error generating PDF:", error);
+//     res.status(500).send("Error generating PDF");
+//   }
+// });
+
+
 
 router.post("/generatepdf", async (req, res) => {
   try {
@@ -305,10 +582,46 @@ router.post("/generatepdf", async (req, res) => {
       globallatedeductions,
       globaltotaldeductions,
       globaltotalnetpay,
-      //globaltotalnetpaywords,
-      globalloans,
-      globalRestDay_OTpay,
+      globalsuddendeductionsName = [],
+      globalsuddendeductionsAmount = [],
+      globalrestday_ot,
+      globalsalary_loan,
+      globalwisp_deductions,
+      globalcalamity_loan,
+      globaleducation_loan,
+      globalshortterm_loan,
+      globalsterling_loan,
+      globalhousing_loan,
     } = req.body;
+
+    console.log("GlobalsuddendedductionsName on server:", globalsuddendeductionsName);
+    console.log("GlobalsuddendedductionsAmount on server:", globalsuddendeductionsAmount);
+
+    const deductions = (globalsuddendeductionsName || []).map((name, index) => ({
+      name,
+      amount: globalsuddendeductionsAmount[index] || "₱0.00",
+    }));
+
+    const deductionRows = deductions.map((deduction) => [
+      "",
+      "",
+      deduction.name,
+      "₱" + deduction.amount,
+    ]);
+
+    const specialHolidayRow = [
+      "Special Holiday",
+      "₱" + globalspecialholidaycomp,
+      "",
+      "" 
+    ];
+
+    const finalDeductionRows = [
+      specialHolidayRow,
+      ...deductionRows,
+    ];
+
+    console.log(deductionRows,'deductionRows');
 
     const docDefinition = {
       content: [
@@ -421,51 +734,46 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Early Overtime",
                 "₱" + globalapprovedearlyot,
-                "Loans",
-                "₱" + globalloans,
+                "WISP",
+                "₱" + globalwisp_deductions,
               ],
               [
                 "Rest Day OT",
-                "₱" + globalRestDay_OTpay,
-                "",
-                "",
+                "₱" + globalrestday_ot,
+                "Calamity Loan",
+                "₱" + globalcalamity_loan,
               ],
               [
                 "Overtime Meal",
                 "₱" + globalovertimemeal,
-                "",
-                "",
+                "Short Term Loan",
+                "₱" + globalshortterm_loan,
               ],
               [
                 "Leave With Pay",
                 "₱" + globalleavepay,
-                "",
-                "",
+                "Housing Loan",
+                "₱" + globalhousing_loan,
               ],
               [
                 "Special Holiday Overtime",
                 "₱" + globalspecialholidayot,
-                "",
-                "",
+                "Education Loan",
+                "₱" + globaleducation_loan,
               ],
               [
                 "Regular Holiday Overtime",
                 "₱" + globalregularholidayot,
-                "",
-                "",
-              ],
-              [
-                "Special Holiday",
-                "₱" + globalspecialholidaycomp,
-                "",
-                "",
+                "Sterling Loan",
+                "₱" + globalsterling_loan,
               ],
               [
                 "Regular Holiday",
                 "₱" + globalregularholidaycomp,
-                "",
-                "",
+                "Salary Loan",
+                "₱" + globalsalary_loan,
               ],
+              ...finalDeductionRows,
               [
                 "Total Compensation",
                 "₱" + globaloverallnetpay,
@@ -485,18 +793,18 @@ router.post("/generatepdf", async (req, res) => {
             "Employee Name: " +
             globalfullname +
             "\n\n Signature ____________________________",
-          margin: [0, 40, 0, 0],
+          margin: [0, 10, 0, 0],
           border: [false, true, true, true],
         },
       ],
       styles: {
         header: {
-          fontSize: 18,
+          fontSize: 15,
           bold: true,
           alignment: "center",
           margin: [0, 0, 0, 10],
         },
-        subheader: { fontSize: 14, bold: true, margin: [0, 0, 0, 10] },
+        subheader: { fontSize: 12, bold: true, margin: [0, 0, 0, 10] },
       },
     };
 
