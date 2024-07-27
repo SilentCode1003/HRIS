@@ -369,92 +369,6 @@
       LoadList();
     });
 
-    // $(document).on("click", "#pendingleavesavebtn", function () {
-    //   let startdate = $("#startldate").val();
-    //   let enddate = $("#endldate").val();
-    //   let leavetype = $("#leavetype").val();
-    //   let reason = $("#leavereason").val();
-    //   let durationDays = $("#durationdays").val();
-    //   let paidDays = $("#paiddays").val();
-    //   let unpaidDays = $("#unpaiddays").val();
-    //   let image = base64String;
-    //   let subgroup = $("#leavesubgroup").val();
-
-    //   var message = "";
-
-    //   if (startdate == "") {
-    //     message += "Start Date is required ";
-    //   }
-
-    //   if (subgroup == "") {
-    //     message += "subgroup is required ";
-    //   }
-
-    //   if (enddate == "") {
-    //     message += "End Date is required ";
-    //   }
-
-    //   if (leavetype == "") {
-    //     message += "Leave Type is required ";
-    //   }
-
-    //   if (durationDays == "") {
-    //     message += "Reason is required ";
-    //   }
-
-    //   if (reason == "") {
-    //     message += "Reason is required ";
-    //   }
-
-    //   if (paidDays == "") {
-    //     message += "Paid Days is required ";
-    //   } else if (paidDays <= 0) {
-    //     message += "Paid Days must be greater than 0 ";
-    //   }
-
-    //   if (image == "") {
-    //     message += "Image is required ";
-    //   }
-
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/eportalrequestleave/submit",
-    //       data: {
-    //         employeeid: employeeid,
-    //         startdate: startdate,
-    //         enddate: enddate,
-    //         leavetype: leavetype,
-    //         reason: reason,
-    //         durationDays: durationDays,
-    //         paidDays: paidDays,
-    //         unpaidDays: unpaidDays,
-    //         image: image,
-    //         subgroup: subgroup,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success") {
-    //           swal(
-    //             "Update Successfully",
-    //             "You clicked the button!",
-    //             "success"
-    //           ).then((result) => {
-    //             window.location.reload();
-    //           });
-    //           LoadTable();
-    //         } else if (result.msg == "exist") {
-    //           swal("Exist", "Data already exists!", "warning");
-    //         }
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //     });
-    //   }
-    // });
-
     $(document).on("click", "#pendingleavesavebtn", function () {
       let startdate = $("#startldate").val();
       let enddate = $("#endldate").val();
@@ -568,21 +482,74 @@
       return unpaidDays < 0 ? 0 : unpaidDays;
     }
 
+    function getRestDays(employeeid) {
+      return $.ajax({
+        type: "POST",
+        url: "eportalrequestleave/getrestdays",
+        data: { employeeid: employeeid },
+        dataType: "json",
+      });
+    }
+
+    function calculateDurationExcludingRestDays(startDate, endDate, restDays) {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      let duration = 0;
+      while (start <= end) {
+        let dayOfWeek = start.toLocaleString("en-US", { weekday: "long" });
+        if (!restDays.includes(dayOfWeek)) {
+          duration++;
+        }
+        start.setDate(start.getDate() + 1);
+      }
+
+      return duration;
+    }
     $("#startldate, #endldate").change(function () {
-      let startLDate = new Date($("#startldate").val());
-      let endLDate = new Date($("#endldate").val());
+      let startDate = $("#startldate").val();
+      let endDate = $("#endldate").val();
 
-      let durationDays =
-        Math.floor((endLDate - startLDate) / (1000 * 60 * 60 * 24)) + 1;
+      getRestDays(employeeid)
+        .done(function (response) {
+          if (response.data && response.data.restdays) {
+            let restDays = response.data.restdays.trim().split(" ");
+            let durationDays = calculateDurationExcludingRestDays(
+              startDate,
+              endDate,
+              restDays
+            );
+            let unpaidDays = calculateUnpaidDays(durationDays);
+            let paidDays = Math.min(durationDays, unusedLeaveGlobal);
 
-      let unpaidDays = calculateUnpaidDays(durationDays);
-      let paidDays =
-        durationDays < unusedLeaveGlobal ? durationDays : unusedLeaveGlobal;
-
-      $("#durationdays").val(durationDays);
-      $("#paiddays").val(paidDays);
-      $("#unpaiddays").val(unpaidDays);
+            $("#durationdays").val(durationDays);
+            $("#paiddays").val(paidDays);
+            $("#unpaiddays").val(unpaidDays);
+          } else {
+            console.error("Failed to retrieve rest days.");
+            alert("Error fetching rest days. Please try again.");
+          }
+        })
+        .fail(function (xhr, status, error) {
+          console.error("Error fetching rest days:", error);
+          alert("Error fetching rest days. Please try again.");
+        });
     });
+
+    // $("#startldate, #endldate").change(function () {
+    //   let startLDate = new Date($("#startldate").val());
+    //   let endLDate = new Date($("#endldate").val());
+
+    //   let durationDays =
+    //     Math.floor((endLDate - startLDate) / (1000 * 60 * 60 * 24)) + 1;
+
+    //   let unpaidDays = calculateUnpaidDays(durationDays);
+    //   let paidDays =
+    //     durationDays < unusedLeaveGlobal ? durationDays : unusedLeaveGlobal;
+
+    //   $("#durationdays").val(durationDays);
+    //   $("#paiddays").val(paidDays);
+    //   $("#unpaiddays").val(unpaidDays);
+    // });
 
     //Edit Section
 

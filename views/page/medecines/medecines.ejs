@@ -1,49 +1,126 @@
+<!-- <h1 class="font-weight-bold text-danger" id="head-title">Leave History</h1> -->
 <br>
-
+<br>
 <!-- Table -->
-<div class="card" id="tablecard">
-    <div class="card-header ch-coop">
-      <h3 class="title-card-table">Medecines Invetory</h3>
-      <div class="row g-2">
-        <div class="col">
-          <input id='myInput' type='text' placeholder="  Search....">
-        </div>
-        <div class="col-sm-1 col-add">
-            <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#medecinesmodal">
-                <b>+ Add</b>
-              </button>
-        </div>
-      </div> 
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-generate">
+    <h3 class="title-card-table">Medicines Invetory</h3>
+    <div class="row g-2">
+      <div class="col">
+        <input id='myInput' type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#medecinesmodal">
+              <b>+ Add</b>
+            </button>
+      </div>
+    </div> 
+  </div>
+  <br>
+  <div class="card">
+    <div class="card-header ch-generate">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-stackbalance" type="button" role="tab" aria-controls="nav-profile"
+                    aria-selected="true"><b>Stock Balance</b>
+                </button>
+                <button class="nav-link eportal-leave" id="stockintable" data-bs-toggle="tab"
+                    data-bs-target="#nav-stockIn" type="button" role="tab" aria-controls="nav-profile"
+                    aria-selected="false"><b>Stock IN</b>
+                </button>
+                <button class="nav-link eportal-leave" id="stockouttable" data-bs-toggle="tab"
+                    data-bs-target="#nav-stockOut" type="button" role="tab" aria-controls="nav-profile"
+                    aria-selected="false"><b>Stock OUT</b>
+                </button>
+            </div>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTableMedecines">
-                <thead>
-                  <tr>
-                    <th class="col-sm-1">ID</th>
-                    <th>Medecine Name</th>
-                    <th>Category</th>
-                    <th>Quantity</th>
-                    <th>Expiry Date</th>
-                    <th>Manufacturer</th>
-                    <th>Created Date</th>
-                    <th class="col-sm-1">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <!-- Leave  Request -->
+    <div class="card-body db-custom-cards">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-stackbalance" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header ch-coop">
+                              <table class="table table-light table-bordered" id="dataTableMedecines">
+                                <thead>
+                                  <tr>
+                                    <th class="col-sm-1">ID</th>
+                                    <th>Medicine Name</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Expiry Date</th>
+                                    <th>Manufacturer</th>
+                                    <th>Created Date</th>
+                                    <th class="col-sm-1">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                             </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-stockIn" role="tabpanel"
+            aria-labelledby="nav-profile-tab">
+            <div class="card shadow mb-4">
+              <div class="card-header ch-coop">
+                <table class="table table-light table-bordered" id="dataTableMedecinesStockIn">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1">ID</th>
+                      <th>History Type</th>
+                      <th>Quantity</th>
+                      <th>Grams/ML</th>
+                      <th>Unit</th>
+                      <th>Medicine Name</th>
+                      <th>Created Date</th>
+                      <th>Created By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-stockOut" role="tabpanel"
+            aria-labelledby="nav-profile-tab">
+            <div class="card shadow mb-4">
+              <div class="card-header ch-coop">
+                <table class="table table-light table-bordered" id="dataTableMedecinesStockOut">
+                  <thead>
+                    <tr>
+                      <th class="col-sm-1">ID</th>
+                      <th>History Type</th>
+                      <th>Quantity</th>
+                      <th>Grams/ML</th>
+                      <th>Unit</th>
+                      <th>Medicine Name</th>
+                      <th>Created Date</th>
+                      <th>Created By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="medecinesmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
       <div class="modal-content">
           <div class="modal-header" id="modal-header">
-              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Medecine</h3>
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Medicine</h3>
               <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
             <div class="modal-body" id="modal-body">
@@ -71,14 +148,14 @@
                             <div class="form-floating">
                                 <input type="text" class="form-control border-form-modal" id="medname" name="medname"
                                 placeholder="Address">
-                                <label for="floatingInput">Medecine Name</label>
+                                <label for="floatingInput">Medicine Name</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-floating">
                               <input type="text" class="form-control border-form-modal" id="medcategory" name="medcategory"
                               placeholder="Address">
-                              <label for="floatingInput">Medecine Category</label>
+                              <label for="floatingInput">Medicine Category</label>
                             </div>
                         </div>
                     </div>                             
@@ -88,21 +165,42 @@
                           <div class="form-floating">
                             <input type="date" class="form-control border-form-modal" id="medexpdate" name="medexpdate" 
                             placeholder="Address">
-                            <label for="floatingInput">Medecine Expiry Date</label>
+                            <label for="floatingInput">Medicine Expiry Date</label>
                           </div>
                       </div>
                       <div class="col">
                           <div class="form-floating">
                             <input type="text" class="form-control border-form-modal" id="medmanufacture" name="medmanufacture"
                             placeholder="Address">
-                            <label for="floatingInput">Medecine Manufacturer</label>
+                            <label for="floatingInput">Medicine Manufacturer</label>
                           </div>
                       </div>
                       <div class="col">
                         <div class="form-floating">
                           <input type="text" class="form-control border-form-modal" id="medquantity" name="medquantity"
                           placeholder="Address">
-                          <label for="floatingInput">Medecine Quantity</label>
+                          <label for="floatingInput">Medicine Quantity (pcs)</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="number" class="form-control border-form-modal" id="medgrams" name="medgrams"
+                          placeholder="Address">
+                          <label for="floatingInput">Grams/ML</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <select class="form-control border-form-modal" id="medunit" name="medunit">
+                            <option selected disabled>Choose...</option>
+                            <option value="mg">mg</option>
+                            <option value="ml">ml</option>
+                            <option value="g">g</option>
+                          </select>
+                          <label for="quantityUnit">Unit</label>
                         </div>
                       </div>
                     </div>
@@ -112,7 +210,7 @@
                             <div class="form-floating">
                               <textarea type="text" class="form-control border-form-modal" id="meddescription" name="meddescription"
                               placeholder="Address" oninput="adjustTextareaHeight(this)"></textarea>
-                              <label for="floatingInput">Medecine Description</label>
+                              <label for="floatingInput">Medicine Description</label>
                             </div>
                         </div>
                     </div>
@@ -134,7 +232,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
-                <h3 class="modal-title fs-5" id="exampleModalLabel">Edit Medecine</h3>
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Edit Medicine</h3>
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
               </div>
               <div class="modal-body" id="modal-body">
@@ -162,14 +260,14 @@
                               <div class="form-floating">
                                   <input type="text" class="form-control border-form-modal" id="editmedname" name="editmedname"
                                   placeholder="Address">
-                                  <label for="floatingInput">Medecine Name</label>
+                                  <label for="floatingInput">Medicine Name</label>
                               </div>
                           </div>
                           <div class="col">
                               <div class="form-floating">
                                 <input type="text" class="form-control border-form-modal" id="editmedcategory" name="editmedcategory"
                                 placeholder="Address">
-                                <label for="floatingInput">Medecine Category</label>
+                                <label for="floatingInput">Medicine Category</label>
                               </div>
                           </div>
                       </div>                             
@@ -179,21 +277,42 @@
                             <div class="form-floating">
                               <input type="date" class="form-control border-form-modal" id="editmedexpdate" name="editmedexpdate" 
                               placeholder="Address">
-                              <label for="floatingInput">Medecine Expiry Date</label>
+                              <label for="floatingInput">Medicine Expiry Date</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-floating">
                               <input type="text" class="form-control border-form-modal" id="editmedmanufacture" name="editmedmanufacture"
                               placeholder="Address">
-                              <label for="floatingInput">Medecine Manufacturer</label>
+                              <label for="floatingInput">Medicine Manufacturer</label>
                             </div>
                         </div>
                         <div class="col">
                           <div class="form-floating">
                             <input type="text" class="form-control border-form-modal" id="editmedquantity" name="editmedquantity"
+                            placeholder="Address" readonly>
+                            <label for="floatingInput">Medicine Quantity</label>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="editmedgrams" name="editmedgrams"
                             placeholder="Address">
-                            <label for="floatingInput">Medecine Quantity</label>
+                            <label for="floatingInput">Grams/ML</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <select class="form-control border-form-modal" id="editmedunit" name="editmedunit">
+                              <option selected disabled>Choose...</option>
+                              <option value="mg">mg</option>
+                              <option value="ml">ml</option>
+                              <option value="g">g</option>
+                            </select>
+                            <label for="quantityUnit">Unit</label>
                           </div>
                         </div>
                       </div>
@@ -203,7 +322,7 @@
                               <div class="form-floating">
                                 <textarea type="text" class="form-control border-form-modal" id="editmeddescription" name="editmeddescription"
                                 placeholder="Address"style="height: 8rem;" oninput="adjustTextareaHeight(this)"></textarea>
-                                <label for="floatingInput">Medecine Description</label>
+                                <label for="floatingInput">Medicine Description</label>
                               </div>
                           </div>
                       </div>
@@ -218,5 +337,125 @@
             </div>
         </div>
     </div>
+</div>
+
+<!--Add Quantity Modal -->
+<div class="modal fade" id="addqunatitymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Quantity Medecine</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewold" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-control border-form-modal" id="quantitymedname" name="quantitymedname"
+                                placeholder="Address" disabled>
+                                <option></option>
+                              </select>
+                                <label for="floatingInput">Medicine Name</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="qunatitydossage" name="qunatitydossage"
+                              placeholder="Address" disabled>
+                              <label for="floatingInput">Medecine Dossage</label>
+                          </div>
+                      </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="quantitycategory" name="quantitycategory"
+                              placeholder="Address" disabled>
+                              <label for="floatingInput">Medicine Category</label>
+                            </div>
+                        </div>
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="quantityexpiry" name="quantityexpiry" 
+                            placeholder="Address" disabled>
+                            <label for="floatingInput">Medicine Expiry Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="quantitymanufacture" name="quantitymanufacture"
+                            placeholder="Address" disabled>
+                            <label for="floatingInput">Medicine Manufacturer</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="quantitytotal" name="quantitytotal"
+                          placeholder="Address" readonly>
+                          <label for="floatingInput">Total Quantity (pcs)</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                        <div class="col">
+                          <h4>Stock In Here</h4>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="addquantitytotal" name="addquantitytotal"
+                            placeholder="Address">
+                            <label for="floatingInput">Per Pieces Quantity</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="quantitygrams" name="quantitygrams"
+                            placeholder="Address">
+                            <label for="floatingInput">Grams/ML</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <select class="form-control border-form-modal" id="quantityUnit" name="quantityUnit">
+                              <option selected disabled>Choose...</option>
+                              <option value="mg">mg</option>
+                              <option value="ml">ml</option>
+                              <option value="g">g</option>
+                            </select>
+                            <label for="quantityUnit">Unit</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="addQuantitySaveBtn">Save</button>
+          </div>
+      </div>
   </div>
+</div>
   

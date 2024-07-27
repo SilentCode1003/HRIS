@@ -102,6 +102,21 @@
   height: auto;
 }
 
+
+.eportal-leave {
+  color: white !important;
+  background-color: transparent !important;
+  font-size: 13px !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+}
+
+.eportal-leave:hover {
+  background-color: white !important;
+  color: #7a1818 !important;
+}
+
+
 @keyframes waveAnimation {
   0% {
       background-position: 0% 50%;
