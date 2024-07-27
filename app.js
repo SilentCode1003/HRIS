@@ -11,7 +11,6 @@ const cors = require("cors");
 //   credentials: true,
 // };
 
-
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var employeeRouter = require("./routes/employee");
@@ -74,8 +73,8 @@ var ojtreqabsentRouter = require("./routes/ojtreqabsent");
 var attendanceojtRouter = require("./routes/attendanceojt");
 var appsdetailsRouter = require("./routes/appsdetails");
 var otapprovalRouter = require("./routes/otapproval");
-var otherdeductionsRouter = require("./routes/otherdeductions");
-var otherdeductionsIDRouter = require("./routes/otherdeductionsID");
+var healthcarddeductionsRouter = require("./routes/healthcarddeductions");
+var healthcarddeductionsIDRouter = require("./routes/healthcarddeductionsID");
 var attendancerequestRouter = require("./routes/attendancerequest");
 var eportalrequestattendanceRouter = require("./routes/eportalrequestattendance");
 var setsetpayrolldateRouter = require("./routes/setpayrolldate");
@@ -128,12 +127,12 @@ var ratingRouter = require("./routes/rating");
 var teamleadgeofenceempRouter = require("./routes/teamleadgeofenceemp");
 var applicant_registrationRouter = require("./routes/applicant_registration");
 var eportalrequestHolidayRouter = require("./routes/eportalrequestholiday");
-var teamleadholidayRouter = require("./routes/teamleadholiday");  
+var teamleadholidayRouter = require("./routes/teamleadholiday");
 var teamleadtotalholidayRouter = require("./routes/teamleadtotalholiday");
 var holiday_request_activityRouter = require("./routes/holiday_request_activity");
 var loan_typeRouter = require("./routes/loan_type");
-
-
+var employer_contributionRouter = require("./routes/employer_contribution");
+var sudden_deductionsRouter = require("./routes/sudden_deductions");
 
 var app = express();
 
@@ -215,8 +214,8 @@ app.use("/ojtreqabsent", ojtreqabsentRouter);
 app.use("/attendanceojt", attendanceojtRouter);
 app.use("/appsdetails", appsdetailsRouter);
 app.use("/otapproval", otapprovalRouter);
-app.use("/otherdeductions", otherdeductionsRouter);
-app.use("/otherdeductionsID", otherdeductionsIDRouter);
+app.use("/healthcarddeductions", healthcarddeductionsRouter);
+app.use("/healthcarddeductionsID", healthcarddeductionsIDRouter);
 app.use("/attendancerequest", attendancerequestRouter);
 app.use("/eportalrequestattendance", eportalrequestattendanceRouter);
 app.use("/setpayrolldate", setsetpayrolldateRouter);
@@ -252,7 +251,7 @@ app.use("/supervisoruser", supervisoruserRouter);
 app.use("/change_shift", change_shiftRouter);
 app.use("/eportalotmeal", eportalotmealRouter);
 app.use("/payroll_adjustments", payroll_adjustmentsRouter);
-app.use("/teamleadappliedotmeal" , teamleadappliedotmealRouter);
+app.use("/teamleadappliedotmeal", teamleadappliedotmealRouter);
 app.use("/meal_request_activity", meal_request_activityRouter);
 app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
@@ -261,7 +260,7 @@ app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
-app.use("/medecines_request", medecinesrequestRouter);  
+app.use("/medecines_request", medecinesrequestRouter);
 app.use("/exam", examRouter);
 app.use("/question_type", question_typeRouter);
 app.use("/question", questionRouter);
@@ -273,7 +272,8 @@ app.use("/teamleadholiday", teamleadholidayRouter);
 app.use("/teamleadtotalholiday", teamleadtotalholidayRouter);
 app.use("/holiday_request_activity", holiday_request_activityRouter);
 app.use("/loan_type", loan_typeRouter);
-
+app.use("/employer_contribution", employer_contributionRouter);
+app.use("/sudden_deductions", sudden_deductionsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

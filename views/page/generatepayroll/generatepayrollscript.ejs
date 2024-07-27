@@ -647,14 +647,52 @@
               $("#paysliptotalnetpay").text(
                 formatToCurrency(item.Total_Netpay)
               );
-              $("#totalNetPayWords").text(
-                convertCurrencyToWords(item.Total_Netpay)
-              );
+              // $("#totalNetPayWords").text(
+              //   convertCurrencyToWords(item.Total_Netpay)
+              // );
 
-              const currencyAmount = Total_Netpay;
-              console.log(convertCurrencyToWords(currencyAmount));
+              // const currencyAmount = Total_Netpay;
+              // console.log(convertCurrencyToWords(currencyAmount));
 
               console.log("Setting salary:", item.Salary);
+            });
+
+            $.ajax({
+              type: "POST",
+              url: "/generatepayroll/sudden_deduc_load",
+              data: {
+                payrolldate: payrolldate,
+              },
+              success: function (deductionResult) {
+                if (deductionResult.msg === "success") {
+                  const suddenDeductions = deductionResult.data;
+                  let deductionNameHtml = "";
+                  let deductionAmountHtml = "";
+                  $.each(suddenDeductions, (index, deduction) => {
+                    deductionNameHtml += `<p>${deduction.deduction_name}</p>`;
+                    deductionAmountHtml += `<p>${formatToCurrency(
+                      deduction.amount
+                    )}</p>`;
+                  });
+                  $("#suddenDeductionsContainerName").html(deductionNameHtml);
+                  $("#suddenDeductionsContainerAmount").html(
+                    deductionAmountHtml
+                  );
+                } else {
+                  swal(
+                    "Error fetching sudden deductions data",
+                    deductionResult.msg,
+                    "error"
+                  );
+                }
+              },
+              error: function (err) {
+                swal(
+                  "An error occurred while fetching sudden deductions data",
+                  err.message,
+                  "error"
+                );
+              },
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -863,20 +901,20 @@
       return words.trim();
     }
 
-    function convertCurrencyToWords(currency) {
-      const parts = currency.split(".");
-      const integerPart = parseInt(parts[0].replace(",", ""));
-      const decimalPart = parseInt(parts[1] || 0);
+    // function convertCurrencyToWords(currency) {
+    //   const parts = currency.split(".");
+    //   const integerPart = parseInt(parts[0].replace(",", ""));
+    //   const decimalPart = parseInt(parts[1] || 0);
 
-      let words = convertToWords(integerPart);
-      words += " pesos";
+    //   let words = convertToWords(integerPart);
+    //   words += " pesos";
 
-      if (decimalPart > 0) {
-        words += " and " + convertToWords(decimalPart) + " centavos";
-      }
+    //   if (decimalPart > 0) {
+    //     words += " and " + convertToWords(decimalPart) + " centavos";
+    //   }
 
-      return words;
-    }
+    //   return words;
+    // }
 
     function searchTable() {
       var input, filter, found, table, tr, td, i, j;

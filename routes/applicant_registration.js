@@ -38,58 +38,60 @@ router.post("/register_personal", async (req, res) => {
   try {
     const {
       firstName,
-      lastname,
-      middlename,
-      nickname,
-      phone_no,
-      address,
-      provincial_address,
-      provincial_phone_address,
+      lastName,
+      middleName,
+      nickName,
+      presentAddress,
+      provincialAddress,
+      presentPhoneNumber,
+      provincialPhoneNumber,
       gender,
-      civil_status,
+      civilStatus,
       age,
-      birthday,
-      birthplace,
+      dateOfBirth,
+      placeOfBirth,
       citizenship,
       height,
       weight,
-      physical_limit,
-      sss_no,
-      tin_no,
-      pagibig_no,
-      related_emp,
-      related_date,
-      contact_person,
-      relationship,
-      realation_address,
-      realation_phone,
+      physicalLimitations,
+      sss,
+      tin,
       language,
-      otherskills,
-      isdriver,
-      vehicle_type,
-      islicense,
-      salary_desired,
-      position_preferred,
-      isallowedassigned,
-      reasonnotallowed,
-      isdischargedposition,
-      date_avail,
+      isRelated,
+      isRelatedYes,
+      isApplied,
+      isAppliedYes,
+      isCharged,
+      isChargedYes,
+      isIllness,
+      isDrive,
+      isDriveYes,
+      isLicense,
+      specialSkills,
+      positionPreferred,
+      salary,
+      dateAvailable,
+      isAccept,
+      isAcceptNo,
+      isDischarged,
       relative,
-      relative_dept,
-      recomended_by,
-      referred_to,
-      image,
+      deptReferences,
+      recommendedBy,
+      referredTo,
+      personEmergency,
+      relationship,
+      emergencyAddress,
+      emergencyPhoneNumber,
     } = req.body;
 
     console.log(req.body);
-    console.log(firstName,'firstname');
-    console.log(lastname,'lastname');
-
+    console.log(firstName, 'firstname');
+    console.log(lastName, 'lastname');
 
     const applicantExists = await checkApplicantExists(
       firstName,
-      lastname,
-      middlename
+      lastName,
+      middleName
     );
 
     if (applicantExists) {
@@ -104,7 +106,7 @@ router.post("/register_personal", async (req, res) => {
     );
 
     const { username } = generateUsernamefoApplicant({
-      map_nickname: nickname,
+      map_nickname: nickName,
       map_applicantid: applicantId,
     });
 
@@ -114,9 +116,9 @@ router.post("/register_personal", async (req, res) => {
       "lastname",
       "middlename",
       "nickname",
-      "phone_no",
       "address",
       "provincial_address",
+      "phone_no",
       "provincial_phone_address",
       "gender",
       "civil_status",
@@ -129,82 +131,90 @@ router.post("/register_personal", async (req, res) => {
       "physical_limit",
       "sss_no",
       "tin_no",
-      "pagibig_no",
-      "related_emp",
-      "related_date",
-      "contact_person",
-      "relationship",
-      "realation_address",
-      "realation_phone",
       "language",
-      "otherskills",
-      "isdriver",
-      "vehicle_type",
-      "islicense",
-      "salary_desired",
-      "position_preferred",
-      "isallowedassigned",
-      "reasonnotallowed",
-      "isdischargedposition",
-      "date_avail",
+      "isrelated",
+      "related_emp",
+      "isApplied",
+      "isAppliedYes",
+      "isCharged",
+      "isChargedYes",
+      "isIllness",
+      "isDrive",
+      "isDriveYes",
+      "isLicense",
+      "specialSkills",
+      "positionPreferred",
+      "salary",
+      "dateAvailable",
+      "isAccept",
+      "isAcceptNo",
+      "isDischarged",
       "relative",
-      "relative_dept",
-      "recomended_by",
-      "referred_to",
-      "image",
+      "deptReferences",
+      "recommendedBy",
+      "referredTo",
+      "personEmergency",
+      "relationship",
+      "emergencyAddress",
+      "emergencyPhoneNumber",
     ]);
 
     const data = [
       [
         applicantId,
         firstName,
-        lastname,
-        middlename,
-        nickname,
-        phone_no,
-        address,
-        provincial_address,
-        provincial_phone_address,
+        lastName,
+        middleName,
+        nickName,
+        presentAddress,
+        provincialAddress,
+        presentPhoneNumber,
+        provincialPhoneNumber,
         gender,
-        civil_status,
+        civilStatus,
         age,
-        birthday,
-        birthplace,
+        dateOfBirth,
+        placeOfBirth,
         citizenship,
         height,
         weight,
-        physical_limit,
-        sss_no,
-        tin_no,
-        pagibig_no,
-        related_emp,
-        related_date,
-        contact_person,
-        relationship,
-        realation_address,
-        realation_phone,
+        physicalLimitations,
+        sss,
+        tin,
         language,
-        otherskills,
-        isdriver,
-        vehicle_type,
-        islicense,
-        salary_desired,
-        position_preferred,
-        isallowedassigned,
-        reasonnotallowed,
-        isdischargedposition,
-        date_avail,
+        isRelated,
+        isRelatedYes,
+        isApplied,
+        isAppliedYes,
+        isCharged,
+        isChargedYes,
+        isIllness,
+        isDrive,
+        isDriveYes,
+        isLicense,
+        specialSkills,
+        positionPreferred,
+        salary,
+        dateAvailable,
+        isAccept,
+        isAcceptNo,
+        isDischarged,
         relative,
-        relative_dept,
-        recomended_by,
-        referred_to,
-        image,
+        deptReferences,
+        recommendedBy,
+        referredTo,
+        personEmergency,
+        relationship,
+        emergencyAddress,
+        emergencyPhoneNumber,
       ],
     ];
 
+    console.log(data, 'data');
+
     const checkStatement = SelectStatement(
       "SELECT * FROM master_applicant_personal WHERE map_firstname=? AND map_lastname=? AND map_middlename=?",
-      [firstName, lastname, middlename]
+      [firstName, lastName, middleName]
     );
 
     const checkResult = await Check(checkStatement);
@@ -237,8 +247,8 @@ router.post("/register_personal", async (req, res) => {
         }
       });
     });
-
-    res.json(JsonSuccess());
+    res.json({ success: true, applicantId });
+    //res.json(JsonSuccess(applicantId));
   } catch (error) {
     console.error(error);
     res.json(JsonErrorResponse(error));
@@ -248,14 +258,24 @@ router.post("/register_personal", async (req, res) => {
 
 router.post("/register_education", (req, res) => {
   try {
-    const {
-      applicantId,
-      attainment,
-      school_name,
-      school_start_date,
-      school_end_date,
-      isgraduated,
-    } = req.body;
+    // const {
+    //   applicantId,
+    //   attainment,
+    //   school_name,
+    //   school_start_date,
+    //   school_end_date,
+    //   isgraduated,
+    //   highest_level,
+    // } = req.body;
+
+    let attainmentArray = attainment.split(",");
+    let school_nameArray = school_name.split(",");
+    let school_start_dateArray = school_start_date.split(",");
+    let school_end_dateArray = school_end_date.split(",");
+    let isgraduatedArray = isgraduated.split(",");
+    let highest_levelArray = highest_level.split(",");
+
+    console.log(req.body);
 
     let sql = InsertStatement("applicant_education", "ae", [
       "applicantid",
@@ -264,17 +284,22 @@ router.post("/register_education", (req, res) => {
       "start",
       "end",
       "isgraduate",
+      "highest_level",
     ]);
     let data = [
       [
         applicantId,
-        attainment,
-        school_name,
-        school_start_date,
-        school_end_date,
-        isgraduated,
+        attainmentArray,
+        school_nameArray, 
+        school_start_dateArray, 
+        school_end_dateArray, 
+        isgraduatedArray, 
+        highest_levelArray,
       ],
     ];
+    console.log(data, 'data');
+
+
     let checkStatement = SelectStatement(
       "select * from applicant_education where ae_applicantid=? and ae_attainment=? and ae_schoolname=?",
       [applicantId, attainment, school_name]

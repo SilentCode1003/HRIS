@@ -6,9 +6,7 @@
     LoadTable();
     LoadList();
     searchTable();
-    LoadListEdit();
     LoadMedecine();
-    EditPayrollDate();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -38,7 +36,7 @@
               var status = item.status;
 
               action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadjustmentmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#viewmedreqmodal"><i class="fas fa-fw fa-pen"></i></button>
                     `;
               finalData.push({
                 requestid: item.requestid,
@@ -137,18 +135,31 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
+            console.log("Received Data:", existingData);
+
             let totalQuantity = 0;
+            let dosage = 0;
+            let unit = 0;
+
             $.each(existingData, (key, item) => {
               totalQuantity += parseInt(item.quantity, 10);
+              dosage += parseInt(item.grams_ml, 10);
+              unit = item.unit; 
             });
 
+            console.log("Total Quantity:", totalQuantity);
+            console.log("Dosage:", dosage);
+            console.log("Unit:", unit);
+
             $("#medreqtotalquantity").val(totalQuantity);
+            $("#medreqdossage").val(dosage);
+            $("#medrequnit").val(unit);
           } else {
-            swal("Error fetching medecine data", "", "error");
+            swal("Error fetching medicine data", "", "error");
           }
         },
         error: function (err) {
-          swal("An error occurred while fetching medecine data", err, "error");
+          swal("An error occurred while fetching medicine data", err, "error");
         },
       });
     });
@@ -158,6 +169,8 @@
       let medecinename = $("#medreqname").val();
       let medecinerequestednumber = $("#medrequsetednumber").val();
       let medreqreason = $("#medreqreason").val();
+      let meddossage = $("#medreqdossage").val();
+      let medunit = $("#medrequnit").val();
 
       var message = "";
 
@@ -166,16 +179,24 @@
       }
 
       if (medecinename == "") {
-        message += "Type is required ";
+        message += "Medecine Name is required ";
+      }
+
+      if (meddossage == "") {
+        message += "Dossage is required ";
+      }
+
+      if (medunit == "") {
+        message += "Unit is required ";
       }
 
       if (medecinerequestednumber == "") {
-        message += "Amount is required ";
+        message += "Medecine Requested is required ";
       } else if (
         isNaN(medecinerequestednumber) ||
         medecinerequestednumber <= 0
       ) {
-        message += "Amount must be a valid number greater than zero ";
+        message += "Medecine Requested must be a valid number greater than zero ";
       }
 
       if (message !== "") {
@@ -183,7 +204,7 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/medecines_request/check_quantity", 
+          url: "/medecines_request/check_quantity",
           data: {
             medecinename: medecinename,
             medecinerequestednumber: medecinerequestednumber,
@@ -198,6 +219,8 @@
                   medecinename: medecinename,
                   medecinerequestednumber: medecinerequestednumber,
                   medreqreason: medreqreason,
+                  meddossage: meddossage,
+                  medunit: medunit,
                 },
                 success: function (result) {
                   if (result.msg == "success") {
@@ -208,7 +231,7 @@
                     ).then((result) => {
                       window.location.reload();
                     });
-                    LoadTable(); 
+                    LoadTable();
                   } else if (result.msg == "exist") {
                     swal("Error", "This combination already exists.", "error");
                   }
@@ -274,44 +297,6 @@
       });
     }
 
-    function LoadListEdit() {
-      $.ajax({
-        type: "GET",
-        url: "/employee/load",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.id, item.id);
-            $(options).html(item.fullname);
-            $("#editpaemployeename").append(options);
-          });
-        },
-        error: function (result) {
-          swal("error: " + result.data);
-        },
-      });
-    }
-
-    function EditPayrollDate() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreq",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#editpapayrolldate").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
-
     $("#dataTableMedecineRequest tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -320,29 +305,29 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      adjustmentid = dataRow[0];
+        medecineid = dataRow[0];
       console.log(dataRow);
     });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/payroll_adjustments/getpayrolladjustment",
+        url: "/medecines_request/viewmedreq",
         data: {
-          adjustmentid: adjustmentid,
+          medecineid: medecineid,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#editpaemployeename").val(item.employeeid);
-              $("#editpaorigindate").val(item.origindate);
-              $("#editpatype").val(item.adjustmenttype);
-              $("#editpaamount").val(item.adjust_amount);
-              $("#editpapayrolldate").val(item.payrolldate);
-              $("#editstatuspa").val(item.adjustmentstatus);
-              $("#editpareason").val(item.reason);
+              $("#reqmedempname").val(item.fullname);
+              $("#reqmeddossage").val(item.dossage);
+              $("#reqmedmedname").val(item.medecine_name);
+              $("#reqmedreqtotal").val(item.quantity_request);
+              $("#reqmedreqdate").val(item.requestdate);
+              $("#reqmedreason").val(item.reason);
+              $("#reqmedverifier").val(item.approvedby);
               $("#preview").attr("src", "data:image/jpg;base64," + item.image);
             });
           } else {
@@ -354,85 +339,6 @@
           swal("An error occurred while fetching employee data", msg, "error");
         },
       });
-    });
-
-    $(document).on("click", "#adjustmenteditbtn", function () {
-      let id = adjustmentid;
-      let employeeid = $("#editpaemployeename").val();
-      let origindate = $("#editpaorigindate").val();
-      let adjustmenttype = $("#editpatype").val();
-      let adjust_amount = $("#editpaamount").val();
-      let payrolldate = $("#editpapayrolldate").val();
-      let adjustmentstatus = $("#editstatuspa").val();
-      let reason = $("#editpareason").val();
-
-      let message = "";
-
-      if (employeeid === "") {
-        message += "employeeid ID is required. ";
-      }
-
-      if (adjustmenttype === "") {
-        message += "adjustmenttype is required. ";
-      }
-
-      if (adjust_amount === "") {
-        message += "adjust_amount is required. ";
-      }
-
-      if (payrolldate === "") {
-        message += "payrolldate is required. ";
-      }
-
-      if (adjustmentstatus === "") {
-        message += "adjustmentstatus is required. ";
-      }
-
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "PUT",
-          url: "/payroll_adjustments/edit",
-          data: {
-            adjustmentid: id,
-            employeeid: employeeid,
-            origindate: origindate,
-            adjustmenttype: adjustmenttype,
-            adjust_amount: adjust_amount,
-            payrolldate: payrolldate,
-            adjustmentstatus: adjustmentstatus,
-            reason: reason,
-          },
-          success: function (result) {
-            if (result.msg === "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then(() => {
-                window.location.reload();
-              });
-            } else if (result.msg === "exist") {
-              swal(
-                "Exist",
-                "Maybe The Department and Approver Count combination already exists.",
-                "warning"
-              );
-            } else {
-              swal("Error", "An error occurred while updating.", "error");
-            }
-          },
-          error: function (err) {
-            swal(
-              "Error",
-              "An error occurred while making the request.",
-              "error"
-            );
-          },
-        });
-      }
     });
 
     function searchTable() {

@@ -6,7 +6,7 @@ const mysql = require("./repository/hrmisdb");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('paymentlayout', { title: 'Express' });
-  Validator(req, res, "otherdeductionslayout", "otherdeductions");
+  Validator(req, res, "healthcarddeductionslayout", "healthcarddeductions");
 });
 
 module.exports = router;
