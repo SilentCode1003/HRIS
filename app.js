@@ -133,6 +133,7 @@ var holiday_request_activityRouter = require("./routes/holiday_request_activity"
 var loan_typeRouter = require("./routes/loan_type");
 var employer_contributionRouter = require("./routes/employer_contribution");
 var sudden_deductionsRouter = require("./routes/sudden_deductions");
+var generate13thmonthRouter = require("./routes/generate13thmonth");
 
 var app = express();
 
@@ -274,6 +275,7 @@ app.use("/holiday_request_activity", holiday_request_activityRouter);
 app.use("/loan_type", loan_typeRouter);
 app.use("/employer_contribution", employer_contributionRouter);
 app.use("/sudden_deductions", sudden_deductionsRouter);
+app.use("/generate13thmonth", generate13thmonthRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

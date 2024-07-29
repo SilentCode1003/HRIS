@@ -545,7 +545,8 @@ router.get("/load", (req, res) => {
     LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     WHERE
-    me_jobstatus IN ('regular', 'probitionary','apprentice')`;
+    me_jobstatus IN ('regular', 'probitionary','apprentice')
+    ORDER BY me_id DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
