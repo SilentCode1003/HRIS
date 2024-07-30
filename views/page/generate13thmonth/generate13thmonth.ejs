@@ -1,0 +1,294 @@
+<body>
+    <!-- Table -->
+    <div class="card" id="tablecard">
+        <div class="card-header ch-coop">
+            <h3 class="title-card-table">Generate 13th Month</h3>
+            <div class="row g-4">
+                <div class="col">
+                    <input id="myInput" type="text" placeholder="Search....">
+                </div>
+                <div class="col-sm-2 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalTotalContribution" class="btn btn-export-color"><b>Reports</b></button>
+                </div>
+                <div class="col-sm-1 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalLoadContribution" class="btn btn-load-color"><b>Load</b></button>
+                </div>
+                <div class="col-sm-1 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalGenerateContribution" class="btn btn-add-color"><b>Generate</b></button>
+                </div>
+            </div> 
+        </div>
+
+        <!--modal for uploading bank statement-->
+        <div class="modal fade" id="openModalTotalContribution" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/hwpjjkev.json" trigger="loop" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Export Total Contribution</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="emplyrcontribution" name="emplyrcontribution"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Payroll Date</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="emplyrcontributionsaveBtn">Export</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!--modal for export reports total contribution-->
+        <div class="modal fade" id="openModalLoadContribution" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/cjbuodml.json" trigger="loop" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Load Total 13th Month</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="loademplyrcontribution" name="loademplyrcontribution"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Year</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="loademplyrcontributionsaveBtn">Load</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <!--modal for generate total contribution-->
+        <div class="modal fade" id="openModalGenerateContribution" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" trigger="loop" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Generate Total Contribution</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="genemplyrcontribution" name="genemplyrcontribution"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Payroll Date</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="genemplyrcontributionsaveBtn">Export</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="progress" id="loadingBar" style="display: none;">
+                <div class="indeterminate"></div>
+            </div>
+
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-light table-bordered" id="dataTableEmployee13thMonth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Year</th>
+                            <th>Total Basic Year</th>
+                            <th>Thirteenth Month</th>
+                            <th>Create Date</th>
+                            <th>Create By</th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<!--- Action Modal -->
+<div class="modal fade" id="actionmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Total Contribution</h3>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                    <div class="col g-6">
+                      <div class="p-4" style="width: 300px; margin-top: -100px;">
+                        <div class="text-center">
+                          <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                        </div>
+                        <br>
+                        <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                    <form>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="employeefullname" name="employeefullname" disabled>
+                              <label for="floatingInput">Full Name</label>
+                            </div>
+                        </div>  
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="msccontribution" name="msccontribution" disabled>
+                              <label for="floatingInput">Monthly Salary Credit</label>
+                            </div>
+                        </div>  
+                      </div>                             
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="date" class="form-control border-form-modal" id="contributionpayrolldate" name="contributionpayrolldate" 
+                              placeholder="Address" disabled>
+                              <label for="floatingInput">Payroll Date</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="contributioncutoff" name="contributioncutoff" 
+                              placeholder="Address" disabled>
+                              <label for="floatingInput">Cut Off</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="datetime-local" class="form-control border-form-modal" id="contributioncreatedate" name="contributioncreatedate" disabled>
+                              <label for="floatingInput">Created Date</label>
+                            </div>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row g-3" id="row">
+                        <div class="col">
+                            <h5>Employee Share</h5>
+                        </div>
+                      </div>
+                      <div class="row g-3">
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="emppagibig" name="emppagibig" disabled>
+                            <label for="floatingInput">PagIbig</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="empphilhealth" name="empphilhealth" disabled>
+                            <label for="otnormal">PhilHealth</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="empsss" name="empsss" disabled>
+                            <label for="otearly">SSS</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="empwisp" name="empwisp" disabled>
+                              <label for="otearly">WISP</label>
+                            </div>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row g-3" id="row">
+                        <div class="col">
+                            <h5>Employer Share</h5>
+                        </div>
+                      </div>
+                      <div class="row g-3">
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="employerpagibig" name="employerpagibig" disabled>
+                            <label for="floatingInput">PagIbig</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="employerphilhealth" name="employerphilhealth" disabled>
+                            <label for="otnormal">PhilHealth</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="employersss" name="employersss" disabled>
+                            <label for="otearly">SSS</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="employerwisp" name="employerwisp" disabled>
+                              <label for="otearly">WISP</label>
+                            </div>
+                          </div>
+                      </div>
+                    <br>
+                    <div class="row g-3" id="row">
+                        <div class="col">
+                            <h5>Total Contribution</h5>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="conttotal" name="conttotal" disabled>
+                              <label for="otearly">Total Contribution</label>
+                            </div>
+                          </div>
+                      </div>
+                      <br>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
