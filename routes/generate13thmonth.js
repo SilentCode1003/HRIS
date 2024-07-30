@@ -105,27 +105,38 @@ router.post("/load", (req, res) => {
   }
 });
 
-router.post("/generete13thmonth", (req, res) => {
+router.post("/gen13thmonth", (req, res) => {
+  console.log('Hit');
   try {
     let year = req.body.year;
     let createdby = req.session.fullname;
     let sql = `CALL GenerateThirteenthMonth('${createdby}', ${year})`;
 
-    mysql.StoredProcedure(sql, (err, result) => {
-      if (err) console.error("Error: ", err);
+    let checkStatement = SelectStatement(
+      "SELECT * FROM thirteenth_month WHERE tm_year = ?",
+      [year]
+    );
 
-      console.log(result);
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          mysql.StoredProcedure(sql, (err, result) => {
+            if (err) console.error("Error: ", err);
 
-      res.json({
-        msg: "success",
-        data: result,
+            console.log(result);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
       });
-    });
   } catch (error) {
-    res.json({
-      msg: "Internal server error",
-      error: error,
-    });
+   res.json(JsonErrorResponse(error));
   }
 });
 
