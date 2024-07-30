@@ -8,16 +8,55 @@
     let deviceout = "web";
     let bdaydiv = "";
     let anouncementdiv = "";
-    let geofenceid = "";
+    let geofenceid = 0;
     let userLocationName = "";
+    let geofenceData = {};
+    let isgeofence = false; // Declare global variable for geofence status
+
     LoadTable();
     LoadBdayFolks();
     GenerateAnouncement();
+    LoadGeofence();
 
     console.log("department", departmentid);
     console.log("userLocationName", userLocationName);
 
     //#region GEOFENCE MAP
+
+    function LoadGeofence() {
+      $.ajax({
+        type: "GET",
+        url: "/eportalindex/getisgefence",
+        success: function (result) {
+          if (result.msg === "success") {
+            const data = result.data;
+            console.log(data);
+            geofenceData = data;
+
+            if (data[0].isgeofence === 1) {
+              isgeofence = true;
+            } else {
+              isgeofence = false;
+            }
+          } else {
+            console.error("Error: ", result.message);
+            swal(
+              "An error occurred while fetching geofence data",
+              "Please try again later.",
+              "error"
+            );
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error: ", error);
+          swal(
+            "An error occurred while fetching geofence data",
+            "Please try again later.",
+            "error"
+          );
+        },
+      });
+    }
 
     const map = L.map("map").setView([0, 0], 15);
 
@@ -77,6 +116,7 @@
         }
       }
       console.log("false");
+      geofenceid = 0; // No geofence detected, set to 0
       return false;
     }
 
@@ -88,11 +128,10 @@
 
       const geocodeURL = `https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lng}&format=json&addressdetails=1`;
       $.getJSON(geocodeURL, function (data) {
-        userLocationName =  data.display_name;
+        userLocationName = data.display_name;
         console.log("Fetched detailed address:", userLocationName);
       })
-        .done(function () {
-        })
+        .done(function () { })
         .fail(function (jqxhr, textStatus, error) {
           const err = textStatus + ", " + error;
           console.error("Error fetching location:", err);
@@ -104,34 +143,39 @@
         }
       });
 
-      const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(
-        map
-      );
+      const userMarker = L.marker([userLocation.lat, userLocation.lng]).addTo(map);
       userMarker.bindPopup(`My Location`).openPopup();
 
       const geofenceButtonClockIn = document.getElementById("clockinbtn");
       const geofenceButtonClockOut = document.getElementById("clockoutbtn");
 
-      if (checkGeofence(userLocation)) {
-        swal(
-          "You are inside the geofence!",
-          "You clicked the clockin button!",
-          "success"
-        );
-        console.log("User is inside the geofence.");
+      if (isgeofence) {
+        if (checkGeofence(userLocation)) {
+          swal(
+            "You are inside the geofence!",
+            "You clicked the clockin button!",
+            "success"
+          );
+          console.log("User is inside the geofence.");
+          geofenceButtonClockIn.style.display = "block";
+          geofenceButtonClockOut.style.display = "block";
+        } else {
+          swal(
+            "You are outside the geofence!",
+            "You clicked the clockin button!",
+            "warning"
+          );
+          console.log("User is outside the geofence.");
+          geofenceButtonClockIn.style.display = "none";
+          geofenceButtonClockOut.style.display = "none";
+        }
+      } else {
         geofenceButtonClockIn.style.display = "block";
         geofenceButtonClockOut.style.display = "block";
-      } else {
-        swal(
-          "You are outside the geofence!",
-          "You clicked the clockin button!",
-          "warning"
-        );
-        console.log("User is outside the geofence.");
-        geofenceButtonClockIn.style.display = "none";
-        geofenceButtonClockOut.style.display = "none";
       }
     }
+
+
 
     function handleError(error) {
       console.error(`Error getting user location: ${error.message}`);
@@ -187,7 +231,7 @@
                 swal({
                   title: "Clock-in successful!",
                   icon: "success",
-                }).then(() => {});
+                }).then(() => { });
               } else {
                 swal({
                   title: "Clock-in failed",
@@ -251,7 +295,7 @@
                 swal({
                   title: "Clock-out successful!",
                   icon: "success",
-                }).then(() => {});
+                }).then(() => { });
               } else {
                 swal({
                   title: "Clock-in failed",
@@ -346,7 +390,7 @@
             }
           });
         },
-        initComplete: function () {},
+        initComplete: function () { },
       });
     }
 
