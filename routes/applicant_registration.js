@@ -68,6 +68,7 @@ router.post("/register_personal", async (req, res) => {
       isDriveYes,
       isLicense,
       specialSkills,
+      hobbies,
       positionPreferred,
       salary,
       dateAvailable,
@@ -143,6 +144,7 @@ router.post("/register_personal", async (req, res) => {
       "isDriveYes",
       "isLicense",
       "specialSkills",
+      "hobbies",
       "positionPreferred",
       "salary",
       "dateAvailable",
@@ -156,7 +158,7 @@ router.post("/register_personal", async (req, res) => {
       "personEmergency",
       "relationship",
       "emergencyAddress",
-      "emergencyPhoneNumber",
+      "emergencyPhoneNumber"
     ]);
 
     const data = [
@@ -193,6 +195,7 @@ router.post("/register_personal", async (req, res) => {
         isDriveYes,
         isLicense,
         specialSkills,
+        hobbies,
         positionPreferred,
         salary,
         dateAvailable,
@@ -255,141 +258,288 @@ router.post("/register_personal", async (req, res) => {
   }
 });
 
-
 router.post("/register_education", (req, res) => {
   try {
-    // const {
-    //   applicantId,
-    //   attainment,
-    //   school_name,
-    //   school_start_date,
-    //   school_end_date,
-    //   isgraduated,
-    //   highest_level,
-    // } = req.body;
+    const { applicantId, exam, list, secondList, thirdList, fourthList, fifthList, ...educationLevels } = req.body;
 
-    let attainmentArray = attainment.split(",");
-    let school_nameArray = school_name.split(",");
-    let school_start_dateArray = school_start_date.split(",");
-    let school_end_dateArray = school_end_date.split(",");
-    let isgraduatedArray = isgraduated.split(",");
-    let highest_levelArray = highest_level.split(",");
+    console.log(req.body, 'req.body');
 
-    console.log(req.body);
+    const educationPromises = [];
+    const seminarPromises = [];
+    const examPromises = [];
 
-    let sql = InsertStatement("applicant_education", "ae", [
-      "applicantid",
-      "attainment",
-      "schoolname",
-      "start",
-      "end",
-      "isgraduate",
-      "highest_level",
-    ]);
-    let data = [
-      [
-        applicantId,
-        attainmentArray,
-        school_nameArray, 
-        school_start_dateArray, 
-        school_end_dateArray, 
-        isgraduatedArray, 
-        highest_levelArray,
-      ],
-    ];
-    console.log(data, 'data');
+    for (const [attainment, details] of Object.entries(educationLevels)) {
+      if (!details) continue;
 
+      const {
+        name: school_name,
+        dateFrom: school_start_date,
+        dateTo: school_end_date,
+        graduated: isgraduated,
+        highestLevel: highest_level,
+      } = details;
 
-    let checkStatement = SelectStatement(
-      "select * from applicant_education where ae_applicantid=? and ae_attainment=? and ae_schoolname=?",
-      [applicantId, attainment, school_name]
-    );
+      let sql = InsertStatement("applicant_education", "ae", [
+        "applicantid",
+        "attainment",
+        "schoolname",
+        "start",
+        "end",
+        "isgraduate",
+        "highest_level",
+      ]);
 
-    Check(checkStatement)
-      .then((result) => {
-        console.log(result);
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
+      let data = [
+        [
+          applicantId,
+          attainment,
+          school_name,
+          school_start_date,
+          school_end_date,
+          isgraduated,
+          highest_level,
+        ],
+      ];
+
+      let checkStatement = SelectStatement(
+        "select * from applicant_education where ae_applicantid=? and ae_attainment=? and ae_schoolname=?",
+        [applicantId, attainment, school_name]
+      );
+
+      const promise = Check(checkStatement)
+        .then((result) => {
+          if (result.length != 0) {
+            return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            return new Promise((resolve, reject) => {
+              InsertTable(sql, data, (err, result) => {
+                if (err) {
+                  return reject(JsonErrorResponse(err));
+                }
+                resolve(JsonSuccess());
+              });
+            });
+          }
+        })
+        .catch((error) => JsonErrorResponse(error));
+
+      educationPromises.push(promise);
+    }
+    const seminarList = [list, secondList, thirdList, fourthList, fifthList];
+    seminarList.forEach((seminar, index) => {
+      if (!seminar) return;
+
+      const { listName: as_seminar_name, listDate: as_seminar_date } = seminar;
+
+      let sql = InsertStatement("applicant_seminar", "as", [
+        "applicantid",
+        "seminar_name",
+        "seminar_date",
+      ]);
+
+      let data = [
+        [
+          applicantId,
+          as_seminar_name,
+          as_seminar_date,
+        ],
+      ];
+
+      seminarPromises.push(
+        new Promise((resolve, reject) => {
           InsertTable(sql, data, (err, result) => {
             if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
+              return reject(JsonErrorResponse(err));
             }
-
-            res.json(JsonSuccess());
+            resolve(JsonSuccess());
           });
-        }
+        })
+      );
+    });
+
+    if (exam) {
+      const { typeOfExamination: aoe_examname, dateExam: aoe_exam_date, placeTaken: aoe_placetaken } = exam;
+
+      let sql = InsertStatement("applicant_other_exam", "aoe", [
+        "applicantid",
+        "examname",
+        "exam_date",
+        "placetaken",
+      ]);
+
+      let data = [
+        [
+          applicantId,
+          aoe_examname,
+          aoe_exam_date,
+          aoe_placetaken,
+        ],
+      ];
+
+      examPromises.push(
+        new Promise((resolve, reject) => {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              return reject(JsonErrorResponse(err));
+            }
+            resolve(JsonSuccess());
+          });
+        })
+      );
+    }
+
+    Promise.all([...educationPromises, ...seminarPromises, ...examPromises])
+      .then((results) => {
+        res.json(results);
       })
       .catch((error) => {
-        console.log(error);
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
 
 router.post("/register_career", (req, res) => {
   try {
-    const {
-      applicantId,
-      carrer_employer,
-      carrer_start_date,
-      career_end_date,
-      carrer_position,
-      career_supervisor,
-      carrer_reason,
-    } = req.body;
+    const { applicantId, seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars, ...careerData } = req.body;
 
-    let sql = InsertStatement("aplicant_career", "ac", [
-      "applicantid",
-      "employer",
-      "start",
-      "end",
-      "position",
-      "supervisor",
-      "reason",
-    ]);
-    let data = [
-      [
-        applicantId,
-        carrer_employer,
-        carrer_start_date,
-        career_end_date,
-        carrer_position,
-        career_supervisor,
-        carrer_reason,
-      ],
+    console.log("Request Body:", req.body);
+
+    const careerPromises = [];
+    const seminarPromises = [];
+
+    const employerLevels = [
+      'present',
+      'second',
+      'third',
+      'fourth',
+      'fifth',
+      'sixth',
     ];
-    let checkStatement = SelectStatement(
-      "select * from aplicant_career where ac_applicantid=? and ac_employer=? and ac_position=?",
-      [applicantId, carrer_employer, carrer_position]
-    );
 
-    Check(checkStatement)
-      .then((result) => {
-        console.log(result);
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
+    for (const level of employerLevels) {
+      if (!careerData[level]) continue;
+
+      const {
+        name: carrer_employer,
+        dateFrom: career_start_date,
+        dateTo: career_end_date,
+        position: carrer_position,
+        reason: carrer_reason,
+        natureEmployer: career_supervisor,
+      } = careerData[level];
+
+      console.log(`Processing ${level} - Employer: ${carrer_employer}`);
+
+      let sql = InsertStatement("applicant_career", "ac", [
+        "applicantid",
+        "employer",
+        "start",
+        "end",
+        "position",
+        "supervisor",
+        "reason",
+      ]);
+
+      console.log(`SQL Statement for ${level}:`, sql);
+
+      let data = [
+        [
+          applicantId,
+          carrer_employer,
+          career_start_date,
+          career_end_date,
+          carrer_position,
+          career_supervisor,
+          carrer_reason,
+        ],
+      ];
+
+      console.log(`Data for ${level}:`, data);
+
+      let checkStatement = SelectStatement(
+        "select * from applicant_career where ac_applicantid=? and ac_employer=? and ac_position=?",
+        [applicantId, carrer_employer, carrer_position]
+      );
+
+      console.log(`Check Statement for ${level}:`, checkStatement);
+
+      const promise = Check(checkStatement)
+        .then((result) => {
+          console.log(`Check Result for ${level}:`, result);
+
+          if (result.length != 0) {
+            console.log(`Entry already exists for ${level}`);
+            return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            return new Promise((resolve, reject) => {
+              InsertTable(sql, data, (err, result) => {
+                if (err) {
+                  console.log(`Error inserting ${level}:`, err);
+                  return reject(JsonErrorResponse(err));
+                }
+                console.log(`Successfully inserted ${level}`);
+                resolve(JsonSuccess());
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(`Error checking ${level}:`, error);
+          return JsonErrorResponse(error);
+        });
+
+      careerPromises.push(promise);
+    }
+
+    const seminarList = [seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars];
+    seminarList.forEach((seminar, index) => {
+      if (!seminar) return;
+
+      const { seminarName: as_seminar_name, dateSeminar: as_seminar_date } = seminar;
+
+      let sql = InsertStatement("applicant_seminar", "as", [
+        "applicantid",
+        "seminar_name",
+        "seminar_date",
+      ]);
+
+      console.log(`SQL Statement for seminar ${index + 1}:`, sql);
+
+      let data = [
+        [
+          applicantId,
+          as_seminar_name,
+          as_seminar_date,
+        ],
+      ];
+
+      seminarPromises.push(
+        new Promise((resolve, reject) => {
           InsertTable(sql, data, (err, result) => {
             if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
+              console.log(`Error inserting seminar ${index + 1}:`, err);
+              return reject(JsonErrorResponse(err));
             }
-
-            res.json(JsonSuccess());
+            console.log(`Successfully inserted seminar ${index + 1}`);
+            resolve(JsonSuccess());
           });
-        }
+        })
+      );
+    });
+
+    Promise.all([...careerPromises, ...seminarPromises])
+      .then((results) => {
+        res.json(results);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(`Error in Promise.all:`, error);
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    console.log(err);
+    console.log(`Catch block error:`, error);
     res.json(JsonErrorResponse(error));
   }
 });
@@ -553,6 +703,11 @@ router.post("/register_reference", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
+
+
+
+
 
 //#region FUNCTION
 function Check(sql) {
