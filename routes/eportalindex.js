@@ -5,6 +5,23 @@ var router = express.Router();
 const bodyParser = require("body-parser");
 const moment = require("moment");
 const { Attendance_Logs } = require("./model/hrmisdb");
+var express = require("express");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonWarningResponse,
+  JsonSuccess,
+  MessageStatus,
+} = require("./repository/response");
+const { Select, Update, InsertTable } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
+const { GetValue, ACT, INACT } = require("./repository/dictionary");
+const {
+  GetCurrentDatetime,
+  SelectStatement,
+  InsertStatement,
+  UpdateStatement,
+} = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -38,6 +55,38 @@ function getDeviceInformation(device) {
     return "web";
   }
 }
+
+router.get("/getisgefence", (req, res) =>{
+  console.log('hit');
+  try {
+    let employeeId = req.session.employeeid;
+    let accesstype = req.session.accesstypeid;
+  
+    console.log(employeeId);
+    let sql = `SELECT 
+    mu_isgeofence
+    FROM master_user
+    WHERE mu_accesstype = '${accesstype}' AND mu_employeeid = '${employeeId}'`;
+  
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+  
+      if (result != 0) {
+        let data = DataModeling(result, "mu_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 router.post("/latestlog", (req, res) => {
   const employeeid = req.body.employeeid;
