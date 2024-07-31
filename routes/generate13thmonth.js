@@ -188,6 +188,48 @@ router.post("/save", (req, res) => {
   }
 });
 
+
+router.post("/getinfo13thmonth", (req, res) => {
+  try {
+    let tmonthid = req.body.tmonthid;
+    let sql = `SELECT
+    tm_id,
+    CONCAT(me_lastname,' ',me_firstname) AS tm_fullname,
+    tm_year,
+    tm_total_basic,
+    tm_13th_month as tm_thirteenth_month,
+    DATE_FORMAT(tm_generated_at, '%Y,%m,%d %H:%i:%s') AS tm_generated_at,
+    tm_createby
+    FROM thirteenth_month
+    INNER JOIN master_employee ON thirteenth_month.tm_employeeid = me_id
+    WHERE tm_year = ${year}`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "tm_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+
+
 router.put("/status", (req, res) => {
   try {
     let id = req.body.id;
