@@ -30,10 +30,12 @@ router.get("/load", (req, res) => {
     md_departmentname as ats_departmentid,
     ats_count,
     ats_createdby,
-    ats_createddate
+    ats_createddate,
+    s_name as ats_subgroupid
     FROM aprroval_stage_settings
     INNER JOIN master_access on aprroval_stage_settings.ats_accessid = ma_accessid
-    INNER JOIN master_department on aprroval_stage_settings.ats_departmentid = md_departmentid`;
+    INNER JOIN master_department on aprroval_stage_settings.ats_departmentid = md_departmentid
+    INNER JOIN subgroup on aprroval_stage_settings.ats_subgroupid = s_id`;
 
       Select(sql, (err, result) => {
         if (err) {
@@ -63,12 +65,14 @@ router.post("/save", (req, res) => {
     let departmentid = req.body.departmentid;
     let count = req.body.approvalcount;
     let createdby = req.session.fullname;
+    let subgroupid = req.body.subgroupid;
     let createddate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 
 
     let sql = InsertStatement("aprroval_stage_settings", "ats", [
       "accessid",
       "departmentid",
+      "subgroupid",
       "count",
       "createdby",
       "createddate",
@@ -76,6 +80,7 @@ router.post("/save", (req, res) => {
     let data = [[
       accessid,
       departmentid, 
+      subgroupid,
       count, 
       createdby, 
       createddate]];
@@ -121,7 +126,8 @@ router.post("/getstagesettings", (req, res) => {
     ats_departmentid,
     ats_count,
     ats_createdby,
-    ats_createddate
+    ats_createddate,
+    ats_subgroupid
     FROM aprroval_stage_settings
     INNER JOIN master_access ON aprroval_stage_settings.ats_accessid = ma_accessid
     INNER JOIN master_department on aprroval_stage_settings.ats_departmentid = md_departmentid
@@ -157,7 +163,7 @@ router.post("/getstagesettings", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    const { approvalstage, accessid, approvalcount, departmentid } = req.body;
+    const { approvalstage, accessid, approvalcount, departmentid, subgroupid } = req.body;
 
     console.log(accessid);
     console.log(approvalstage);
@@ -171,6 +177,11 @@ router.put("/edit", (req, res) => {
     if (departmentid) {
       data.push(departmentid);
       columns.push("departmentid");
+    }
+
+    if (subgroupid) {
+      data.push(subgroupid);
+      columns.push("subgroupid");
     }
 
     if (accessid) {
@@ -198,8 +209,8 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatement(
-      "select * from aprroval_stage_settings where ats_accessid = ? and ats_departmentid = ? and ats_count = ?",
-      [accessid, departmentid, approvalcount]
+      "select * from aprroval_stage_settings where ats_accessid = ? and ats_departmentid = ? and ats_count = ? and ats_subgroupid = ?",
+      [accessid, departmentid, approvalcount, subgroupid]
     );
 
     Check(checkStatement)
@@ -225,64 +236,6 @@ router.put("/edit", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-// router.post("/update", (req, res) => {
-//   try {
-//     let approvalstage = req.body.approvalstage;
-//     let accessid = req.body.accessid;
-//     let approvalcount = req.body.approvalcount;
-//     let createby = req.session.fullname;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-
-//     console.log(approvalstage, approvalcount);
-
-//     let checkexist = `SELECT * FROM aprroval_stage_settings 
-//     WHERE ats_accessid = '${accessid}' AND ats_count = '${approvalcount}'`;
-
-//     console.log(checkexist, "sql");
-
-//     mysql.Select(checkexist, "Approval_Stage_Settings", (err, result) => {
-//       if (err) console.error("Error: ", err);
-
-//       if (result.length != 0) {
-//         res.json({
-//           msg: "exist",
-//         });
-//       } else {
-//         let sql = `UPDATE aprroval_stage_settings SET 
-//     ats_accessid = '${accessid}',
-//     ats_count = '${approvalcount}',
-//     ats_createdby = '${createby}',
-//     ats_createddate = '${createdate}'
-//     WHERE ats_id = '${approvalstage}'`;
-
-//         console.log(sql, "sql");
-
-//         mysql
-//           .Update(sql)
-//           .then((result) => {
-//             res.json({
-//               msg: "success",
-//               data: result,
-//             });
-//           })
-//           .catch((error) => {
-//             res.json({
-//               msg: "error",
-//               data: error,
-//             });
-//           });
-//       }
-//     });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error,
-//     });
-//     console.log(error);
-//   }
-// });
-
 
 
 

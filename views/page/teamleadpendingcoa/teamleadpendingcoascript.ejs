@@ -4,6 +4,7 @@
   $(document).ready(function () {
     searchTable();
     LoadTable();
+    LoadSubgroup();
     //Loadactionname();
 
     $(document).on("keyup", "#myInput", function () {
@@ -122,6 +123,25 @@
       requestid = dataRow[1];
     });
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#editcoasubgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
@@ -147,6 +167,7 @@
               $("#coacreatedate").val(item.createdate);
               $("#coarequeststatus").val(item.requeststatus);
               $("#editcoareason").val(item.reason);
+              $("#editcoasubgroupid").val(item.subgroupid);
               $("#editpreviewfile").attr(
                 "src",
                 "data:image/jpg;base64," + item.file
@@ -166,6 +187,7 @@
       console.log("hit");
       let id = requestid;
       let requeststatus = $("#editcoastatus").val();
+      let subgroupid = $("#editcoasubgroupid").val();
 
       var message = "";
 
@@ -182,6 +204,7 @@
           data: {
             requestid: requestid,
             status: requeststatus,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {

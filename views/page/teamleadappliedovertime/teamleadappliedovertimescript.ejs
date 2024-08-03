@@ -5,6 +5,7 @@
     LoadTable();
     searchTable();
     LoadList();
+    LoadSubgroup();
     //LoadEditEmp();
 
     $(document).on("keyup", "#myInput", function () {
@@ -124,6 +125,25 @@
     //   });
     // }
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $("#dataTableOtapproval tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -161,6 +181,7 @@
               $("#appliedpayrolldate").val(item.payroll_date);
               $("#appliedreason").val(item.reason);
               $("#appliedstatus").val(item.status);
+              $("#subgroupid").val(item.subgroupid);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -182,6 +203,7 @@
       let id = approveot_id;
       let requeststatus = $("#appliedstatus").val();
       let comment = $("#otcomment").val();
+      let subgroupid = $("#subgroupid").val();
 
       console.log(approveot_id, "LEAVE");
       console.log(requeststatus, "LEAVE");
@@ -207,6 +229,7 @@
             approveot_id: approveot_id,
             status: requeststatus,
             comment: comment,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {

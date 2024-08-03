@@ -6,6 +6,7 @@
       searchTable();
       LoadPayrollDate();
       LoadEditEmp();
+      LoadSubgroup();
   
       $(document).on("keyup", "#myInput", function () {
         searchTable();
@@ -123,6 +124,25 @@
           },
         });
       }
+
+      function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#mealsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
   
       $("#dataTableOtMeal tbody").on("click", "tr", function () {
         var dataRow = [];
@@ -160,6 +180,7 @@
                 $("#mealamount").val(item.otmeal_amount);
                 $("#mealstatus").val(item.status);
                 $("#mealapplieddate").val(item.applieddate);
+                $("#mealsubgroup").val(item.subgroupid);
               });
             } else {
               swal("Error fetching employee data", message, "error");
@@ -181,6 +202,7 @@
         let id = otmealid;
         let status = $("#mealstatus").val();
         let comment = $("#mealcomment").val();
+        let subgroupid = $("#mealsubgroup").val();
   
         console.log(id, "LEAVE");
         console.log(status, "LEAVE");
@@ -206,6 +228,7 @@
               otmealid: otmealid,
               status: status,
               comment: comment,
+              subgroupid: subgroupid,
             },
             success: function (result) {
             if (result.msg === "success") {

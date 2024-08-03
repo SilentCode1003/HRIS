@@ -4,6 +4,7 @@
     LoadTable();
     searchTable();
     LoadEditEmp();
+    LoadSubgroup();
 
     $(document).on("keyup", "#myInput2", function () {
       searchTable();
@@ -130,6 +131,7 @@
               $("#leaveduration").val(item.leaveduration);
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
+              $("#subgroupid").val(item.leavesubgroupid);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -141,11 +143,31 @@
       });
     });
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#leavesavebutton", function () {
       console.log("hit");
       let id = leaveid;
       let requeststatus = $("#reqleavestatus").val();
       let comment = $("#leavecomment").val();
+      let subgroupid = $("#subgroupid").val();
 
       console.log(leaveid, "LEAVE");
       console.log(requeststatus, "LEAVE");
@@ -171,6 +193,7 @@
             leaveid: leaveid,
             status: requeststatus,
             comment: comment,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {

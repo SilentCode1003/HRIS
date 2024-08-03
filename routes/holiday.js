@@ -5,6 +5,9 @@ const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 const Holidays = require("date-holidays");
+const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
+const { JsonWarningResponse, MessageStatus, JsonSuccess, JsonErrorResponse } = require("./repository/response");
+const { Update, Select } = require("./repository/dbconnect");
 const holidaysPH = new Holidays("PH");
 
 /* GET home page. */
@@ -259,40 +262,128 @@ router.post("/getholiday", (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {
+// router.post("/update", (req, res) => {
+//   try {
+//     let holidayid = req.body.holidayid;
+//     let day = req.body.day;
+//     let date = req.body.date;
+//     let name = req.body.name;
+//     let type = req.body.type;
+//     let sql = `UPDATE master_holiday SET 
+//     mh_day = '${day}',
+//     mh_name = '${name}',
+//     mh_date = '${date}',
+//     mh_type = '${type}'
+//     where mh_holidayid = '${holidayid}'`;
+
+//     console.log(sql);
+
+//     mysql
+//       .Update(sql)
+//       .then((result) => {
+//         console.log(result);
+//         res.json({
+//           msg: "success",
+//           data: result,
+//         });
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: error,
+//     });
+//   }
+// });
+
+
+
+router.put("/edit", (req, res) => {
   try {
-    let holidayid = req.body.holidayid;
-    let day = req.body.day;
-    let date = req.body.date;
-    let name = req.body.name;
-    let type = req.body.type;
-    let sql = `UPDATE master_holiday SET 
-    mh_day = '${day}',
-    mh_name = '${name}',
-    mh_date = '${date}',
-    mh_type = '${type}'
-    where mh_holidayid = '${holidayid}'`;
+    const { day, date, name, type, holidayid } = req.body;
 
-    console.log(sql);
+    let data = [];
+    let columns = [];
+    let arguments = [];
 
-    mysql
-      .Update(sql)
+    if (date) {
+      data.push(date);
+      columns.push("date");
+    }
+
+    if (name) {
+      data.push(name);
+      columns.push("name");
+    }
+
+    if (day) {
+      data.push(day);
+      columns.push("day");
+    }
+
+    if (type) {
+      data.push(type);
+      columns.push("type");
+    }
+
+    if (holidayid) {
+      data.push(holidayid);
+      arguments.push("holidayid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "master_holiday",
+      "mh",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    let checkStatement = SelectStatement(
+      "select * from master_holiday where mh_date = ? and mh_name = ? and mh_day = ? and mh_type = ?",
+      [date, name, day, type]
+    );
+
+    Check(checkStatement)
       .then((result) => {
-        console.log(result);
-        res.json({
-          msg: "success",
-          data: result,
-        });
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            //console.log(result);
+
+            res.json(JsonSuccess(result));
+          });
+        }
       })
       .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
+        console.log(error);
+        res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    res.json({
-      msg: error,
-    });
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
 });
+
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+//#endregion
+
+

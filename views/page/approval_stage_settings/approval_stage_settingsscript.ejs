@@ -8,6 +8,8 @@
     LoadListEdit();
     LoadDepartment();
     EditDepartment();
+    LoadSubgroup();
+    EditLoadSubgroup();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -40,6 +42,7 @@
               finalData.push({
                 approvalstage: item.id,
                 departmentid: item.departmentid,
+                subgroupid: item.subgroupid,
                 accessid: item.accessid,
                 approvalcount: item.count + 1,
                 createby: item.createdby,
@@ -54,6 +57,7 @@
         columns: [
           { data: "approvalstage" },
           { data: "departmentid" },
+          { data: "subgroupid" },
           { data: "accessid" },
           { data: "approvalcount" },
           { data: "createby" },
@@ -74,10 +78,49 @@
       });
     }
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#stagesubgroupname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#editstagesubgroupname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#approvalstagesavebtn", function () {
       let accessid = $("#accessid").val();
       let approvalcount = $("#approvecount").val();
       let departmentid = $("#stagedepartmentname").val();
+      let subgroupid = $("#stagesubgroupname").val();
 
       var message = "";
 
@@ -93,6 +136,10 @@
         message += "approvalcount is required ";
       }
 
+      if (subgroupid == "") {
+        message += "subgroupid is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -103,6 +150,7 @@
             accessid: accessid,
             approvalcount: approvalcount - 1,
             departmentid: departmentid,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -237,6 +285,7 @@
               $("#editaccessidname").val(item.accessid);
               $("#editapprovecount").val(item.count + 1);
               $("#editstagedepartmentname").val(item.departmentid);
+              $("#editstagesubgroupname").val(item.subgroupid);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -254,6 +303,7 @@
       let accessid = $("#editaccessidname").val();
       let approvalcount = $("#editapprovecount").val();
       let departmentid = $("#editstagedepartmentname").val();
+      let subgroupid = $("#editstagesubgroupname").val();
 
       let message = "";
 
@@ -269,6 +319,10 @@
         message += "departmentid  is required. ";
       }
 
+      if (subgroupid === "") {
+        message += "subgroupid  is required. ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -280,6 +334,7 @@
             accessid: accessid,
             approvalcount: approvalcount - 1,
             departmentid: departmentid,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg === "success") {

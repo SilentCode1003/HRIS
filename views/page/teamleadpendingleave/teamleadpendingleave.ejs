@@ -143,19 +143,18 @@
                               <label for="floatingInput">Leave Year</label>
                           </div>
                       </div>
-                      <div class="col">
-                          <div class="form-floating">
-                            <select class="form-select border-form-modal" id="reqleavestatus" name="reqleavestatus"
-                            aria-label="Floating label select example">
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                          </select>
-                            <label for="floatingInput">Status</label>
-                      </div>
                     </div>
-                  </div>
-                  <br>
-                  <div class="row g-3">
+                    <br>
+                    <div class="row g-3">
+                      <div class = "col">
+                        <div class="form-floating">
+                          <select type="text" class="form-control border-form-modal" id="subgroupid" name="subgroupid"
+                            placeholder="First Name" disabled>
+                            <option></option>
+                          </select>
+                          <label for="floatingInput">Sub Group Name</label>
+                        </div>
+                      </div>
                       <div class="col">
                         <div class="form-floating">
                           <textarea type="text" class="form-control border-form-modal" id="leavereason" name="leavereason"
@@ -163,15 +162,27 @@
                           <label for="floatingInput">Reason</label>
                         </div>
                       </div>
-                      <div class="col">
-                          <div class="form-floating">
-                            <textarea type="text" class="form-control border-form-modal" id="leavecomment" name="leavecomment"
-                              placeholder="Comment"></textarea>
-                            <label for="floatingInput">Comment</label>
-                          </div>
-                        </div>
                     </div>
                     <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <textarea type="text" class="form-control border-form-modal" id="leavecomment" name="leavecomment"
+                            placeholder="Comment"></textarea>
+                          <label for="floatingInput">Comment</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <select class="form-select border-form-modal" id="reqleavestatus" name="reqleavestatus"
+                          aria-label="Floating label select example">
+                          <option value="Approved">Approved</option>
+                          <option value="Rejected">Rejected</option>
+                          </select>
+                          <label for="floatingInput">Status</label>
+                        </div>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>

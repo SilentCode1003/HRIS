@@ -21,34 +21,95 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+// router.get("/load", (req, res) => {
+//   try {
+//     let departmentid = req.session.departmentid;
+//     let subgroupid = req.session.subgroupid;
+//     let accesstypeid = req.session.accesstypeid;
+//     let sql = `select 
+//         pao_id,
+//         pao_image,
+//         pao_fullname,
+//         DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
+//         DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
+//         DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
+//         (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
+//         DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
+//         pao_status
+//     FROM payroll_approval_ot
+//     INNER JOIN
+//     master_employee ON payroll_approval_ot.pao_employeeid = me_id
+//     INNER JOIN 
+//             aprroval_stage_settings ON 
+//                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+//                 aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
+//                 aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
+//                 aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
+//         WHERE 
+//         pao_status = 'Applied' 
+//             AND pao_subgroupid IN (${subgroupid})
+//             AND me_department = '${departmentid}'
+//             AND pao_employeeid NOT IN (
+//                 SELECT tu_employeeid 
+//                 FROM teamlead_user
+//             )`;
+
+//     Select(sql, (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         res.json(JsonErrorResponse(err));
+//       }
+
+//       console.log(result);
+
+//       if (result != 0) {
+//         let data = DataModeling(result, "pao_");
+
+//         console.log(data);
+//         res.json(JsonDataResponse(data));
+//       } else {
+//         res.json(JsonDataResponse(result));
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
 router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
-    let sql = `select 
-    pao_id,
-    pao_image,
-    pao_fullname,
-    DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
-    DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
-    DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
-    (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
-    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
-    pao_status
-FROM payroll_approval_ot
-INNER JOIN
-master_employee ON payroll_approval_ot.pao_employeeid = me_id
-WHERE pao_status = 'Applied' AND pao_subgroupid = '${subgroupid}'
-AND me_department = '${departmentid}'
-AND pao_employeeid NOT IN (
-    SELECT tu_employeeid FROM teamlead_user)
-  AND pao_approvalcount = (
-    SELECT ats_count
-    FROM aprroval_stage_settings
-    WHERE ats_accessid = '${accesstypeid}'
-    AND ats_departmentid = '${departmentid}')`;
-
+    let sql = `SELECT 
+        pao_id,
+        pao_image,
+        pao_fullname,
+        DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
+        DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
+        DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
+        (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
+        DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
+        pao_status
+    FROM payroll_approval_ot
+    INNER JOIN
+    master_employee ON payroll_approval_ot.pao_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
+        WHERE 
+        pao_status = 'Applied' 
+            AND pao_subgroupid IN (${subgroupid})
+            AND me_department = '${departmentid}'
+            AND pao_employeeid NOT IN (
+                SELECT tu_employeeid 
+                FROM teamlead_user
+            )`;
+            
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -72,6 +133,7 @@ AND pao_employeeid NOT IN (
   }
 });
 
+
 router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
@@ -89,7 +151,8 @@ router.post("/getotapproval", (req, res) => {
     DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_reason,
     pao_status,
-    pao_overtimeimage
+    pao_overtimeimage,
+    pao_subgroupid
     FROM payroll_approval_ot
     INNER JOIN
     master_employee ON payroll_approval_ot.pao_employeeid = me_id
@@ -138,7 +201,7 @@ router.post("/ovetimeaction", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
-    let subgroupid = req.session.subgroupid;
+    let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     const { approveot_id, status, comment } = req.body;
 

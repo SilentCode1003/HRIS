@@ -1,11 +1,14 @@
 <script>
   let approvalsettings = "";
+  let globaldepartmentid = "";
 
   $(document).ready(function () {
     LoadTable();
     LoadList();
     searchTable();
+    LoadSubgroup();
     LoadListEdit();
+    EditLoadSubgroup();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -39,6 +42,7 @@
                 approvalsettings: item.approvalsettings,
                 departmentid: item.departmentid,
                 settingscount: item.settingscount,
+                subgroupid: item.subgroupid,
                 createby: item.createby,
                 createdate: item.createdate,
                 status: item.status,
@@ -53,6 +57,7 @@
           { data: "approvalsettings" },
           { data: "departmentid" },
           { data: "settingscount" },
+          { data: "subgroupid" },
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },
@@ -72,9 +77,75 @@
       });
     }
 
+    $('#departmentid').change(function() {
+        var departmentid = $(this).val();
+        if(departmentid) {
+            LoadSubgroup(departmentid, "#subgroupname");
+        }
+    });
+
+    $("#editdepartmentid").change(function () {
+      var departmentid = $(this).val();
+      if (departmentid) {
+        LoadSubgroup(departmentid, "#editsubgroupname");
+      }
+    });
+
+    function LoadSubgroup(departmentid, targetDropdown) {
+      $.ajax({
+        type: "POST",
+        url: "/request_approval_settings/loadsubgroup",
+        data: JSON.stringify({ departmentid: departmentid }),
+        contentType: "application/json",
+        success: function (result) {
+          var data = result.data;
+          var $targetDropdown = $(targetDropdown);
+
+          // Clear previous options
+          $targetDropdown.empty();
+          $targetDropdown.append(
+            "<option selected disabled>Choose...</option>"
+          );
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.name);
+            $targetDropdown.append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadSubgroup() {
+      $.ajax({
+        type: "POST",
+        url: "/request_approval_settings/loadsubgroup",
+        data: {
+          departmentid: globaldepartmentid,
+        },
+        success: function (result) {
+          var data = result.data;
+          console.log(globaldepartmentid);
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.name);
+            $("#editsubgroupname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#approversavebtn", function () {
       let departmentid = $("#departmentid").val();
       let settingscount = $("#approver").val();
+      let subgroupid = $("#subgroupname").val();
 
       var message = "";
 
@@ -86,6 +157,10 @@
         message += "settingscount is required ";
       }
 
+      if (subgroupid == "") {
+        message += "subgroupid is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -95,6 +170,7 @@
           data: {
             departmentid: departmentid,
             settingscount: settingscount,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -189,16 +265,24 @@
 
             $.each(existingData, (key, item) => {
               $("#editdepartmentid").val(item.departmentid);
+              globaldepartmentid = item.departmentid;
               $("#editapprover").val(item.settingscount);
               $("#editstatus").val(item.status);
+              LoadSubgroup(
+                globaldepartmentid,
+                "#editsubgroupname",
+                function () {
+                  $("#editsubgroupname").val(item.subgroupid);
+                }
+              );
             });
           } else {
-            swal("Error fetching employee data", msg, "error");
+            swal("Error fetching employee data", result.msg, "error");
           }
         },
         error: function (err) {
           console.error("An error occurred while fetching employee data", err);
-          swal("An error occurred while fetching employee data", msg, "error");
+          swal("An error occurred while fetching employee data", "error");
         },
       });
     });
@@ -208,6 +292,7 @@
       let departmentid = $("#editdepartmentid").val();
       let settingscount = $("#editapprover").val();
       let status = $("#editstatus").val();
+      let subgroupid = $("#editsubgroupname").val();
 
       let message = "";
 
@@ -223,6 +308,10 @@
         message += "status count is required. ";
       }
 
+      if (subgroupid == "") {
+        message += "subgroupid is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -234,6 +323,7 @@
             departmentid: departmentid,
             settingscount: settingscount,
             status: status,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg === "success") {
