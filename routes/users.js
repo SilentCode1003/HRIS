@@ -32,7 +32,7 @@ module.exports = router;
 
 router.post("/save", async (req, res) => {
   try {
-    const { employeeid, accesstype, subgroupid } = req.body;
+    const { employeeid, accesstype } = req.body;
     let status = "Active";
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
@@ -70,7 +70,6 @@ router.post("/save", async (req, res) => {
                 username,
                 encrypted,
                 accesstype,
-                subgroupid,
                 createby,
                 createdate,
                 geofenceValue,
@@ -192,7 +191,6 @@ router.post("/getisgeofencetrue", (req, res) => {
         mu_username,
         mu_password,
         mu_accesstype,
-        mu_subgroupid,
         mu_status,
         mu_isgeofence
     FROM master_user
@@ -230,7 +228,6 @@ router.post("/getusers", (req, res) => {
         mu_username,
         mu_password,
         mu_accesstype,
-        mu_subgroupid,
         mu_status,
         CASE 
             WHEN mu_isgeofence = 1 THEN 'True'
@@ -268,7 +265,7 @@ router.put("/edit", (req, res) => {
   try {
     let createby = req.session.fullname;
     let createdate = GetCurrentDatetime();
-    const { userid, username, accesstype, subgroupid, status, isgeofence } = req.body;
+    const { userid, username, accesstype, status, isgeofence } = req.body;
 
     let data = [];
     let columns = [];
@@ -285,10 +282,10 @@ router.put("/edit", (req, res) => {
       columns.push("accesstype");
     }
 
-    if (subgroupid) {
-      data.push(subgroupid);
-      columns.push("subgroupid");
-    }
+    // if (subgroupid) {
+    //   data.push(subgroupid);
+    //   columns.push("subgroupid");
+    // }
 
     if (createby) {
       data.push(createby);
@@ -327,8 +324,8 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatement(
-      "select * from master_user where mu_username = ? and mu_accesstype = ? and mu_subgroupid = ? and mu_status = ? and mu_isgeofence = ?",
-      [username, accesstype, subgroupid, status, geofenceValue]
+      "select * from master_user where mu_username = ? and mu_accesstype = ? and mu_status = ? and mu_isgeofence = ?",
+      [username, accesstype, status, geofenceValue]
     );
 
     Check(checkStatement)

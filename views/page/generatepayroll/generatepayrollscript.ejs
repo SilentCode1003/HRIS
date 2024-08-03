@@ -562,6 +562,9 @@
 
             console.log(existingData);
             $.each(existingData[0], (key, item) => {
+
+              console.log(existingData[0],'data');
+              
               $("#editpreview").attr(
                 "src",
                 "data:image/jpg;base64," + item.Image
@@ -641,6 +644,7 @@
               $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
               $("#payslipwisp").text(formatToCurrency(item.Wisp_Deductions));
               $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
+              $("#payslipsalaryloan").text(formatToCurrency(item.Salary_Loan));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
               );
@@ -653,8 +657,6 @@
 
               // const currencyAmount = Total_Netpay;
               // console.log(convertCurrencyToWords(currencyAmount));
-
-              console.log("Setting salary:", item.Salary);
             });
 
             $.ajax({

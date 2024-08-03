@@ -30,7 +30,8 @@ router.get("/load", (req, res) => {
   FROM attendance_request
   INNER JOIN
   master_employee ON attendance_request.ar_employeeid = me_id
-  WHERE me_department = '${departmentid}' and ar_subgroupid = '${subgroupid}'
+  WHERE me_department = '${departmentid}' 
+  AND ar_subgroupid IN (${subgroupid})
   AND ar_employeeid NOT IN (
     SELECT tu_employeeid FROM teamlead_user)`;
 

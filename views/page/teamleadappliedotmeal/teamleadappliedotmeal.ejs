@@ -126,12 +126,18 @@
                       </div>
                       <div class="col">
                         <div class="form-floating">
-                          <select class="form-select border-form-modal" id="mealstatus" name="mealstatus"
-                          aria-label="Floating label select example">
-                          <option value="Approved">Approved</option>
-                          <option value="Rejected">Rejected</option>
+                          <input type="datetime-local" class="form-control border-form-modal" id="mealapplieddate" name="mealapplieddate" disabled
+                          placeholder="Address">
+                         <label for="floatingInput">Applied Date</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <select class="form-select border-form-modal" id="mealsubgroup" name="mealsubgroup"
+                          aria-label="Floating label select example"disabled>
+                          <option></option>
                           </select>
-                          <label for="floatingInput">Status</label>
+                          <label for="floatingInput">Subgroup</label>
                         </div>                    
                       </div>
                     </div>
@@ -146,10 +152,13 @@
                       </div>
                       <div class="col">
                         <div class="form-floating">
-                          <input type="datetime-local" class="form-control border-form-modal" id="mealapplieddate" name="mealapplieddate" disabled
-                          placeholder="Address">
-                         <label for="floatingInput">Applied Date</label>
-                        </div>
+                          <select class="form-select border-form-modal" id="mealstatus" name="mealstatus"
+                          aria-label="Floating label select example">
+                          <option value="Approved">Approved</option>
+                          <option value="Rejected">Rejected</option>
+                          </select>
+                          <label for="floatingInput">Status</label>
+                        </div>                    
                       </div>
                   </div>
                     <br>

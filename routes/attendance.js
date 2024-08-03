@@ -67,6 +67,8 @@ router.get("/load", (req, res) => {
         ) AS totalhours
         FROM master_attendance
         LEFT JOIN master_employee ON ma_employeeid = me_id
+        WHERE
+        ma_attendancedate = CURDATE()
         ORDER BY ma_attendanceid DESC`;
 
     mysql

@@ -10,7 +10,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("1b4fe92d87f76ed5158001af53a94e56", (err, encrypted) => {
+Decrypter("542cd7af7e9c771697005ed48d97b1ac", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -613,7 +613,6 @@ exports.InsertTable = (tablename, data, callback) => {
         mu_username,
         mu_password,
         mu_accesstype,
-        mu_subgroupid,
         mu_createby,
         mu_createdate,
         mu_isgeofence,
@@ -1116,7 +1115,8 @@ exports.InsertTable = (tablename, data, callback) => {
       ras_count,
       ras_createdby,
       ras_createdate,
-      ras_status) VALUES ?`;
+      ras_status,
+      ras_subgroupid) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

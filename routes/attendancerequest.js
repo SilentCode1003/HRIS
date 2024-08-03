@@ -61,7 +61,8 @@ router.post("/getattendancerequest", (req, res) => {
         ar_createdate,
         ar_status,
         ar_reason,
-        ar_file
+        ar_file,
+        ar_subgroupid
       FROM attendance_request
       INNER JOIN
       master_employee ON attendance_request.ar_employeeid = me_id
