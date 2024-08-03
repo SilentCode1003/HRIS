@@ -43,7 +43,6 @@
   let globalloans = "";
   let globalRestDay_OTpay = "";
   let globalsterling_loan = "";
-  let globallate_deductions = "";
   let globalwisp_deductions = "";
   let globalhousing_loan = "";
   let globaleducation_loan = "";
@@ -337,15 +336,13 @@
                 formatToCurrency(item.sterling_loan)
               );
               globalsterling_loan = item.sterling_loan;
-              $("#paysliplate").text(formatToCurrency(item.late_deductions));
-              globallate_deductions = item.late_deductions;
               $("#payslipwisp").text(formatToCurrency(item.wisp_deductions));
               globalwisp_deductions = item.wisp_deductions;
               $("#paysliprestdayot").text(formatToCurrency(item.restday_ot));
               globalrestday_ot = item.restday_ot;
               $("#paysliplate").text(formatToCurrency(item.late_deductions));
               globallatedeductions = item.late_deductions;
-              $("#paysliplate").text(formatToCurrency(item.salary_loan));
+              $("#payslipsalaryloan").text(formatToCurrency(item.salary_loan));
               globalsalary_loan = item.salary_loan;
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.total_deductions)

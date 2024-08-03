@@ -274,9 +274,13 @@
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
+        day = day.replace(/[^a-zA-Z0-9\s]/g, '');
+        date = date.replace(/[^0-9\-]/g, '');
+        name = name.replace(/[^a-zA-Z0-9\s]/g, '');
+        type = type.replace(/[^a-zA-Z0-9\s]/g, '');
         $.ajax({
-          type: "POST",
-          url: "/holiday/update",
+          type: "PUT",
+          url: "/holiday/edit",
           data: {
             holidayid: id,
             day: day,

@@ -6,6 +6,7 @@
     LoadTable();
     searchTable();
     LoadList();
+    LoadSubgroup();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -127,6 +128,25 @@
       });
     }
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#holidaysubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $("#dataTableAppliedHoliday tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -163,6 +183,7 @@
               $("#holidaydate").val(item.holidaydate);
               $("#holidayname").val(item.holidayname);
               $("#holidaystatus").val(item.status);
+              $("#holidaysubgroup").val(item.subgroupid);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -183,6 +204,7 @@
       let status = $("#holidaystatus").val();
       let comment = $("#holidaycomment").val(); // Fix the typo "holidaycommemt" to "holidaycomment"
       let payrolldate = $("#holidaypayrolldate").val();
+      let subgroupid = $("#holidaysubgroup").val();
 
       console.log(status);
       console.log(comment);
@@ -216,6 +238,7 @@
             holiday_id: id,
             status: status,
             comment: comment,
+            subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {

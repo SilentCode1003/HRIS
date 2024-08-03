@@ -831,6 +831,7 @@ exports.Attendance_Request = (data) => {
       requeststatus: key.ar_status,
       reason: key.ar_reason,
       file: key.ar_file,
+      subgroupid: key.ar_subgroupid,
     });
   });
 
@@ -1003,6 +1004,7 @@ exports.Request_Approval_Settings = (data) => {
       createby: key.ras_createdby,
       createdate: key.ras_createdate,
       status: key.ras_status,
+      subgroupid: key.ras_subgroupid,
     });
   });
 

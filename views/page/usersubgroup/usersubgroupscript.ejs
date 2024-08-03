@@ -1,0 +1,307 @@
+<script>
+  let userid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadSubgroup();
+    searchTable();
+    LoadUserId();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    $("#usersname").change(function () {
+      LoadAccessType();
+    });
+
+    function LoadTable() {
+      $("#dataTableusersubgroup").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/usersubgroup/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                    <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-fw fa-trash"></i></button>
+                   `;
+
+              //    var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "100px";
+              // imgElement.style.height = "100px";
+
+              finalData.push({
+                // image: imgElement.outerHTML,
+                id: item.id,
+                employeeid: item.employeeid,
+                accessname: item.accessname,
+                subgroup: item.subgroup,
+                count: item.count + 1,
+                createdate: item.createdate,
+                createby: item.createby,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          // { data: "image" },
+          { data: "id" },
+          { data: "employeeid" },
+          { data: "accessname" },
+          { data: "subgroup" },
+          { data: "count" },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          // var statusCell = $(row).find("td:eq(6)");
+          // var geofenceCell = $(row).find("td:eq(7)");
+
+          // var statusText = data.status;
+          // var geofenceText = data.isgeofence;
+
+          // var statusClass = "";
+          // var geofenceClass = "";
+
+          // switch (statusText.toLowerCase()) {
+          //   case "active":
+          //     statusClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     statusClass = "inactive-status";
+          //     break;
+          //   default:
+          //     statusClass = "";
+          // }
+
+          // switch (geofenceText.toLowerCase()) {
+          //   case "active":
+          //     geofenceClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     geofenceClass = "inactive-status";
+          //     break;
+          //   default:
+          //     geofenceClass = "";
+          // }
+
+          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          // geofenceCell.html(`<span class="${geofenceClass}">${geofenceText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    function LoadUserId() {
+      $.ajax({
+        type: "GET",
+        url: "/usersubgroup/loaduserid",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.userid, item.userid);
+            $(options).html(item.fullname + " - " + item.accessname);
+            $("#usersname").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#userssavebtn", function () {
+      let userid = $("#usersname").val();
+      let subgroupid = $("#subgroupid").val();
+      let approvecount = $("#approvecount").val();
+
+      var message = "";
+
+      if (userid == "") {
+        message += "Employee Users is required. ";
+      }
+
+      if (subgroupid == "") {
+        message += "Sub Group is required. ";
+      }
+
+      if (approvecount == "") {
+        message += "Approval Count is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/usersubgroup/save",
+          data: {
+            userid: userid,
+            subgroupid: subgroupid,
+            approvecount: approvecount - 1,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableusersubgroup tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      userid = dataRow[0];
+      console.log(userid);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      swal({
+        title: "Are you sure?",
+        text: `Do you really want to delete user ${userid}? This action cannot be undone.`,
+        icon: "warning",
+        buttons: {
+          cancel: {
+            text: "No, cancel!",
+            value: null,
+            visible: true,
+            className: "btn-danger",
+            closeModal: true,
+          },
+          confirm: {
+            text: "Yes, delete it!",
+            value: true,
+            visible: true,
+            className: "btn-success",
+            closeModal: true,
+          },
+        },
+      }).then((result) => {
+        if (result) {
+          // Proceed with the deletion
+          $.ajax({
+            type: "POST",
+            url: "/usersubgroup/delete",
+            contentType: "application/json",
+            data: JSON.stringify({ userid: userid }),
+            success: function (result) {
+              if (result.msg === "success") {
+                LoadTable();
+                swal("Deleted!", "The user has been deleted.", "success");
+              } else if (result.msg === "notexist") {
+                swal("Warning!", `${userid} does not exist!`, "warning");
+              }
+            },
+            error: function (err) {
+              swal(
+                "Error!",
+                "An error occurred while deleting the user.",
+                "error"
+              );
+            },
+          });
+        } else {
+          swal("Cancelled", "The user was not deleted.", "info");
+        }
+      });
+    });
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableusersubgroup");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

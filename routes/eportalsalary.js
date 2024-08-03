@@ -272,6 +272,7 @@ router.post("/loadpayslip", (req, res) => {
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
 
+    
     console.log(employeeid);
 
     Select(sql, (err, result) => {

@@ -597,6 +597,8 @@ router.post("/register_family", (req, res) => {
       family_birthday,
     } = req.body;
 
+    console.log(req.body);
+
     let sql = InsertStatement("applicant_family", "af", [
       "applicantid",
       "name",
@@ -656,6 +658,8 @@ router.post("/register_reference", (req, res) => {
       reference_complete_address,
       reference_contact_no,
     } = req.body;
+
+    
 
     let sql = InsertStatement("applicant_references", "ar", [
       "applicantid",

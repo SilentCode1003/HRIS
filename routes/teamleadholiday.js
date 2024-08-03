@@ -3,7 +3,7 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess, JsonWarningResponse } = require("./repository/response");
+const { JsonErrorResponse, JsonDataResponse, JsonSuccess, JsonWarningResponse, MessageStatus } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
 const { SelectStatement, InsertStatement, GetCurrentDatetime } = require("./repository/customhelper");
@@ -19,7 +19,59 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 
-router.get("/load", (req, res) => {
+// router.get("/load", (req, res) => {
+//     try {
+//       let departmentid = req.session.departmentid;
+//       let subgroupid = req.session.subgroupid;
+//       let accesstypeid = req.session.accesstypeid;
+//       let sql = `SELECT 
+//       ph_holidayid,
+//       concat(me_lastname,' ',me_firstname) as ph_fullname,
+//       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+//       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+//       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
+//       (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
+//       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate
+//   FROM payroll_holiday
+//   INNER JOIN
+//   master_employee ON payroll_holiday.ph_employeeid = me_id
+//   WHERE ph_status = 'Applied'
+//   AND ph_subgroupid IN (${subgroupid})
+//   AND me_department = '${departmentid}'
+//   AND ph_employeeid NOT IN (
+//       SELECT mu_employeeid FROM master_user where mu_accesstype = '${accesstypeid}')
+//     AND ph_approvalcount = (
+//       SELECT ats_count
+//       FROM aprroval_stage_settings
+//       WHERE ats_accessid = '${accesstypeid}'
+//       AND ats_departmentid = '${departmentid}')`;
+  
+//       Select(sql, (err, result) => {
+//         if (err) {
+//           console.error(err);
+//           res.json(JsonErrorResponse(err));
+//         }
+  
+//         console.log(result);
+  
+//         if (result != 0) {
+//           let data = DataModeling(result, "ph_");
+  
+//           console.log(data);
+//           res.json(JsonDataResponse(data));
+//         } else {
+//           res.json(JsonDataResponse(result));
+//         }
+//       });
+//     } catch (error) {
+//       console.error(error);
+//       res.json(JsonErrorResponse(error));
+//     }
+//   });
+
+
+
+  router.get("/load", (req, res) => {
     try {
       let departmentid = req.session.departmentid;
       let subgroupid = req.session.subgroupid;
@@ -35,16 +87,20 @@ router.get("/load", (req, res) => {
   FROM payroll_holiday
   INNER JOIN
   master_employee ON payroll_holiday.ph_employeeid = me_id
-  WHERE ph_status = 'Applied' AND ph_subgroupid = '${subgroupid}'
-  AND me_department = '${departmentid}'
-  AND ph_employeeid NOT IN (
-      SELECT mu_employeeid FROM master_user where mu_accesstype = '${accesstypeid}')
-    AND ph_approvalcount = (
-      SELECT ats_count
-      FROM aprroval_stage_settings
-      WHERE ats_accessid = '${accesstypeid}'
-      AND ats_departmentid = '${departmentid}')`;
-  
+  INNER JOIN 
+  aprroval_stage_settings ON 
+      aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+      aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
+      aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
+      aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
+      WHERE 
+        ph_status = 'Applied' 
+        AND ph_subgroupid IN (${subgroupid})
+        AND me_department = '${departmentid}'
+        AND ph_approvalcount NOT IN (
+            SELECT tu_employeeid 
+            FROM teamlead_user
+        )`;
       Select(sql, (err, result) => {
         if (err) {
           console.error(err);
@@ -70,6 +126,7 @@ router.get("/load", (req, res) => {
 
 
 
+
   router.post("/getholidayapproval", (req, res) => {
     try {
       let holiday_id = req.body.holiday_id;
@@ -85,6 +142,7 @@ router.get("/load", (req, res) => {
 	    ph_holidaytype,
       DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,
       mh_name as ph_holidayname,
+      ph_subgroupid,
       ph_status
       FROM payroll_holiday
       INNER JOIN master_holiday ON payroll_holiday.ph_holidaydate = mh_date
@@ -133,7 +191,7 @@ router.get("/load", (req, res) => {
     try {
       let employeeid = req.session.employeeid;
       let departmentid = req.session.departmentid;
-      let subgroupid = req.session.subgroupid;
+      let subgroupid = req.body.subgroupid;
       let createdate = GetCurrentDatetime();
       const { holiday_id, status, comment } = req.body;
   
@@ -156,8 +214,8 @@ router.get("/load", (req, res) => {
         comment
       ]];
       let checkStatement = SelectStatement(
-        "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=?",
-        [employeeid, holiday_id]
+        "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=? and hra_status=? ",
+        [employeeid, holiday_id, status]
       );
   
       console.log(checkStatement,'result');
