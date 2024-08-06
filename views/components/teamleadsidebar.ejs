@@ -25,6 +25,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
+<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Super Visor') {%>
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseemployee"
             aria-expanded="true" aria-controls="collapseemployee">
@@ -32,7 +33,7 @@
             </lord-icon>
             <span><b>Employee</b></span>
         </a>
-  
+
         <div id="collapseemployee" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/teamleademployee">List of Employee</a>
@@ -42,8 +43,10 @@
             </div>
         </div>
     </li>
+<% }%>
 
 
+<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Super Visor' || accesstype == 'Team Leader') {%>
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsecoa"
             aria-expanded="true" aria-controls="collapsecoa">
@@ -150,202 +153,7 @@
             </div>
         </div>
     </li>
-
-    <!--- hahahha-->
-    <!-- <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsemasteraccess"
-            aria-expanded="true" aria-controls="collapsemasteraccess">
-            <lord-icon src="https://cdn.lordicon.com/veoexymv.json" trigger="loop" class="db-icon-hrmis">
-            </lord-icon>
-           <span><b>Master Access</b></span>
-        </a>
-
-        <div id="collapsemasteraccess" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/access">Access</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseojt"
-            aria-expanded="true" aria-controls="collapseojt">
-            <lord-icon src="https://cdn.lordicon.com/txbgsuya.json" trigger="loop" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>OJT</b></span></a>
-
-        <div id="collapseojt" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/ojt">List Of Ojt</a>
-                <a class="collapse-item" href="/ojtuser">Users For Ojt</a>
-                <a class="collapse-item" href="/attendanceojt">Attendance For Ojt</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseapps"
-            aria-expanded="true" aria-controls="collapseapps">
-            <lord-icon src="https://cdn.lordicon.com/ciqqqyun.json" trigger="loop" stroke="bold"
-                colors="primary:#ffffff,secondary:#9ce5f4,tertiary:#3a3347" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Apps</b></span></a>
-
-        <div id="collapseapps" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/appsdetails">Apps</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseusercontrol"
-            aria-expanded="true" aria-controls="collapseusercontrol">
-            <lord-icon src="https://cdn.lordicon.com/szoiozyr.json" trigger="loop"
-                colors="primary:#121331,secondary:#a5e830,tertiary:#f9c9c0,quaternary:#ad6836,quinary:#4faef9"
-                class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>User Control</b></span>
-        </a>
-
-        <div id="collapseusercontrol" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/users">Users</a>
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedepartment"
-            aria-expanded="true" aria-controls="collapsedepartment">
-            <lord-icon src="https://cdn.lordicon.com/wtyzzeli.json" trigger="loop" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Department</b></span>
-        </a>
-
-        <div id="collapsedepartment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/department">Department</a>
-                <a class="collapse-item" href="/position">Position</a>
-            </div>
-        </div>
-    </li>    -->
-
-    <!-- Nav Item - Tables -->
-    <!-- <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseattendance "
-            aria-expanded="true" aria-controls="collapseattendance">
-            <lord-icon src="https://cdn.lordicon.com/svsiboke.json" trigger="loop"
-                colors="primary:#121331,secondary:#ebe6ef,tertiary:#16c72e,quaternary:#66d7ee,quinary:#e8e230,senary:#3a3347" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Attendance</b></span>
-        </a>
-
-        <div id="collapseattendance" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/attendance">All Attendance</a>
-                <a class="collapse-item" href="/geofencesettings">Geo Fences</a>
-                <a class="collapse-item" href="/otapproval">OT Approval</a>
-                <a class="collapse-item" href="/attendancerequest">COA</a>
-            </div>
-        </div>
-    </li>
-    
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsepayroll"
-            aria-expanded="true" aria-controls="collapsepayroll">
-            <lord-icon src="https://cdn.lordicon.com/jzvoyjzb.json" trigger="loop"
-                colors="primary:#000000,secondary:#16c72e,tertiary:#e8e230"  class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Payroll</b></span></a>
-
-        <div id="collapsepayroll" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/salary">Salary Settings</a>
-                <a class="collapse-item" href="/salaryhistory">Salary History</a>
-                <a class="collapse-item" href="/payslip">Payslip</a>
-                <a class="collapse-item" href="/generatepayroll">Generate Payroll Date</a>
-                <a class="collapse-item" href="/requestcashadvance">Request Cash Advance</a>
-                <a class="collapse-item" href="/deduction">Goverment Deduction</a>
-                <a class="collapse-item" href="/otherdeductions">Other Deductions</a>
-                <a class="collapse-item" href="/setpayrolldate">Set Payroll Date</a>
-            </div>
-        </div>
-    </li> -->
-
-    <!----Coop ---->
-    <!-- <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsecoop"
-            aria-expanded="true" aria-controls="collapsecoop">
-            <lord-icon src="https://cdn.lordicon.com/jtiihjyw.json" trigger="loop" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Coop</b></span></a>
-
-        <div id="collapsecoop" class="collapse" aria-labelledby="headingcoop"
-            data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/loan">Loan</a>
-                <a class="collapse-item" href="/payment">Payments</a>
-                <a class="collapse-item" href="/interest">Interests</a>
-                <a class="collapse-item" href="/deposit">Deposit</a>
-                <a class="collapse-item" href="/member">Member Records</a>
-            </div>
-        </div>
-    </li> 
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseleave"
-            aria-expanded="true" aria-controls="collapseleave">
-            <lord-icon src="https://cdn.lordicon.com/eoacwhtz.json" trigger="loop"
-                colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Leave</b></span></a>
-
-        <div id="collapseleave" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/allleave">All Leave</a>
-                <a class="collapse-item" href="/pendingleave">Pending Leave</a>
-                <a class="collapse-item" href="/approvedleave">Approved Leave</a>
-                <a class="collapse-item" href="/rejectedleave">Reject Leave</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsedeviation"
-            aria-expanded="true" aria-controls="collapsedeviation">
-            <lord-icon src="https://cdn.lordicon.com/jxzkkoed.json" trigger="loop"
-                colors="primary:#121331,secondary:#ffc738,tertiary:#e83a30" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Deviation Notices</b></span></a>
-
-        <div id="collapsedeviation" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/offenses">Offenses</a>
-                <a class="collapse-item" href="/violation">Violation</a>
-                <a class="collapse-item" href="/disciplinaryaction">Disciplinary Action</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item sidebar-item">
-        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseholiday"
-            aria-expanded="true" aria-controls="collapseholiday">
-            <lord-icon src="https://cdn.lordicon.com/vnnimcas.json" trigger="loop"
-                colors="primary:#0a5c15,secondary:#16c72e,tertiary:#f2e2d9,quaternary:#e83a30" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Holiday</b></span></a>
-
-        <div id="collapseholiday" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
-                <a class="collapse-item" href="/holiday">Holiday</a>
-                <a class="collapse-item" href="/holidayrate">Holiday Rate</a>
-            </div>
-        </div>
-    </li> -->
-     
-    <!-- <li class="nav-item sidebar-item">
-        <a class="nav-link" href="/announcement">
-            <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" trigger="loop"
-                colors="primary:#121331,secondary:#eee966,tertiary:#c71f16,quaternary:#ffffff" class="db-icon-hrmis">
-            </lord-icon>
-            <span><b>Announcement</b></span></a>
-    </li> -->
-   
+<% }%>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-md-block">

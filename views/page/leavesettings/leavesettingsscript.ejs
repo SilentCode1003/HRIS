@@ -33,6 +33,7 @@
 
               action = `
                     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editleave"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewleave"><i class="fas fa-fw fa-eye"></i></button>
                    `;
 
               finalData.push({
@@ -356,6 +357,65 @@
           },
         });
       }
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $("#dataTableLeaves").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "leavesettings/getleavedates",
+        data: {
+          leavesettingsid: leavesettingsid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(data, "data");
+          material_list_tbl = document.getElementById("dataTableLeaves");
+
+          const TittleContainer = $("#TittleContainer");
+            TittleContainer.empty();
+          
+          const firstItem = data[0]; 
+          const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.leavetype}</h3>`;
+          TittleContainer.append(cardHtml);
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var FULLNAME = row.insertCell(0);
+            var LEAVEDATES = row.insertCell(1);
+            var LEAVE_DAY = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var LEAVE_YEAR = row.insertCell(4);
+            var LEAVE_PAYROLLDATE = row.insertCell(5);
+
+            FULLNAME.innerHTML = item.fullname;
+            LEAVEDATES.innerHTML = item.leavedates;
+            LEAVE_DAY.innerHTML = item.day_name;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            LEAVE_YEAR.innerHTML = item.year;
+            LEAVE_PAYROLLDATE.innerHTML = item.payrolldate;
+
+            $.each(
+              [
+                FULLNAME,
+                LEAVEDATES,
+                LEAVE_DAY,
+                LEAVE_TYPE,
+                LEAVE_YEAR,
+                LEAVE_PAYROLLDATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+          // Handle errors here
+        },
+      });
     });
 
     function searchTable() {
