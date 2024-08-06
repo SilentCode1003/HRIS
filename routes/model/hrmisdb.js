@@ -68,6 +68,7 @@ exports.Leaves = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
+      leavetypeid: key.ml_id,
       leaveid: key.l_leaveid,
       employeeid: key.l_employeeid,
       leavestartdate: key.l_leavestartdate,

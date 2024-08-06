@@ -587,79 +587,91 @@ router.post("/register_seminar", (req, res) => {
 
 router.post("/register_family", (req, res) => {
   try {
-    const {
-      applicantId,
-      family_name,
-      family_relation,
-      family_age,
-      family_ocupation,
-      family_company_position,
-      family_birthday,
-    } = req.body;
+    const { applicantId, mother, siblings, spouse, children } = req.body;
 
-    console.log(req.body);
+    const familyMembers = [
+      { ...mother, relation: "mother" },
+      { ...siblings, relation: "siblings" },
+      { ...spouse, relation: "spouse" },
+      { ...children, relation: "children" },
+    ];
 
     let sql = InsertStatement("applicant_family", "af", [
       "applicantid",
       "name",
       "relation",
       "age",
+      "occupation",
       "company_position",
       "birthday",
     ]);
-    let data = [
-      [
-        applicantId,
-        family_name,
-        family_relation,
-        family_age,
-        family_ocupation,
-        family_company_position,
-        family_birthday,
-      ],
-    ];
-    let checkStatement = SelectStatement(
-      "select * from applicant_family where af_applicantid=? and af_name=? and af_relation=?",
-      [applicantId, family_name, family_relation]
-    );
 
-    Check(checkStatement)
-      .then((result) => {
-        console.log(result);
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, result) => {
-            if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
-            }
+    const promises = familyMembers.map((member) => {
+      const {
+        name,
+        age,
+        birthdate: birthday,
+        occupation,
+        company: company_position,
+        relation,
+      } = member;
 
-            res.json(JsonSuccess());
-          });
-        }
+      let data = [
+        [
+          applicantId,
+          name,
+          relation,
+          age,
+          occupation,
+          company_position,
+          birthday,
+        ],
+      ];
+
+      let checkStatement = SelectStatement(
+        "select * from applicant_family where af_applicantid=? and af_name=? and af_relation=?",
+        [applicantId, name, relation]
+      );
+
+      return Check(checkStatement)
+        .then((result) => {
+          if (result.length != 0) {
+            return JsonWarningResponse(MessageStatus.EXIST);
+          } else {
+            return new Promise((resolve, reject) => {
+              InsertTable(sql, data, (err, result) => {
+                if (err) {
+                  return reject(JsonErrorResponse(err));
+                }
+                resolve(JsonSuccess());
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          return JsonErrorResponse(error);
+        });
+    });
+
+    Promise.all(promises)
+      .then((results) => {
+        res.json(results);
       })
       .catch((error) => {
-        console.log(error);
         res.json(JsonErrorResponse(error));
       });
+
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
 
 router.post("/register_reference", (req, res) => {
   try {
-    const {
-      applicantId,
-      reference_name,
-      reference_occupation,
-      reference_complete_address,
-      reference_contact_no,
-    } = req.body;
+    const { applicantId, references } = req.body;
 
-    
+    const { name: reference_name, occupation: reference_occupation, address: reference_complete_address, telephone: reference_contact_no } = references;
 
     let sql = InsertStatement("applicant_references", "ar", [
       "applicantid",
@@ -668,6 +680,7 @@ router.post("/register_reference", (req, res) => {
       "complete_address",
       "contact_no",
     ]);
+
     let data = [
       [
         applicantId,
@@ -677,6 +690,7 @@ router.post("/register_reference", (req, res) => {
         reference_contact_no,
       ],
     ];
+
     let checkStatement = SelectStatement(
       "select * from applicant_references where ar_applicantid=? and ar_references_name=? and ar_occupation=?",
       [applicantId, reference_name, reference_occupation]
@@ -685,15 +699,14 @@ router.post("/register_reference", (req, res) => {
     Check(checkStatement)
       .then((result) => {
         console.log(result);
-        if (result != 0) {
+        if (result.length != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
           InsertTable(sql, data, (err, result) => {
             if (err) {
               console.log(err);
-              res.json(JsonErrorResponse(err));
+              return res.json(JsonErrorResponse(err));
             }
-
             res.json(JsonSuccess());
           });
         }
@@ -703,11 +716,10 @@ router.post("/register_reference", (req, res) => {
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 
 

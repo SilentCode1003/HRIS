@@ -5,6 +5,7 @@
   let totalLeaveGlobal = 0;
   let unusedLeaveGlobal = "";
   let totalusedGlobal = 0;
+  let masterleaveid = "";
   $(document).ready(function () {
     console.log("Initialize");
     LoadTable();
@@ -94,6 +95,73 @@
       });
     }
 
+    // $(document).on("click", "#approvedtable", function () {
+    //   console.log("Hit");
+    //   $("#dataTableleaveApproved").find("tr:gt(0)").remove();
+
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/eportalrequestleave/loadapproved",
+    //     success: function (json) {
+    //       var finalData = [];
+    //       var data = json.data;
+    //       console.log(finalData);
+
+    //       material_list_tbl = document.getElementById("dataTableleaveApproved");
+
+    //       $.each(data, function (key, item) {
+    //         var row = material_list_tbl.insertRow(1);
+    //         var LEAVE_ID = row.insertCell(0);
+    //         var LEAVE_TYPEID = row.insertCell(1);
+    //         var LEAVE_STARTDADTE = row.insertCell(2);
+    //         var LEAVE_ENDATE = row.insertCell(3);
+    //         var LEAVE_TYPE = row.insertCell(4);
+    //         var REASON = row.insertCell(5);
+    //         var APPLIEDDATE = row.insertCell(6);
+    //         var ACTION = row.insertCell(7);
+
+    //         var action = document.createElement("button");
+    //         LEAVE_ID.innerHTML = item.leaveid;
+    //         LEAVE_TYPEID.innerHTML = item.leavetypeid;
+    //         LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
+    //         LEAVE_ENDATE.innerHTML = item.leaveenddate;
+    //         LEAVE_TYPE.innerHTML = item.leavetype;
+    //         REASON.innerHTML = item.leavereason;
+    //         APPLIEDDATE.innerHTML = item.leaveapplieddate;
+    //         ACTION.innerHTML = '<button id="viewBtn" class="btn text-primary view-btn" data-bs-toggle="modal" data-bs-target="#viewleave"><i class="fas fa-fw fa-eye"></i></button>';
+    //         $("#dataTableleaveApproved tbody").on("click", "tr", function () {
+    //           var dataRow = [];
+    //           $(this)
+    //             .closest("tr")
+    //             .find("td")
+    //             .each(function () {
+    //               dataRow.push($(this).text());
+    //             });
+    //            masterleaveid = dataRow[1];
+    //           console.log(dataRow);
+    //         });
+    //         $.each(
+    //           [
+    //             LEAVE_ID,
+    //             LEAVE_TYPEID,
+    //             LEAVE_STARTDADTE,
+    //             LEAVE_ENDATE,
+    //             LEAVE_TYPE,
+    //             REASON,
+    //             APPLIEDDATE,
+    //             ACTION,
+    //           ],
+    //           function (_, cell) {
+    //             cell.style.textAlign = "center";
+    //             cell.style.verticalAlign = "middle";
+    //           }
+    //         );
+    //       });
+    //     },
+    //     error: function (xhr, status, error) {},
+    //   });
+    // });
+
     $(document).on("click", "#approvedtable", function () {
       console.log("Hit");
       $("#dataTableleaveApproved").find("tr:gt(0)").remove();
@@ -106,32 +174,53 @@
           var data = json.data;
           console.log(finalData);
 
-          material_list_tbl = document.getElementById("dataTableleaveApproved");
+          var material_list_tbl = document.getElementById(
+            "dataTableleaveApproved"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
             var LEAVE_ID = row.insertCell(0);
-            var LEAVE_STARTDADTE = row.insertCell(1);
-            var LEAVE_ENDATE = row.insertCell(2);
-            var LEAVE_TYPE = row.insertCell(3);
-            var REASON = row.insertCell(4);
-            var APPLIEDDATE = row.insertCell(5);
+            var LEAVE_TYPEID = row.insertCell(1);
+            var LEAVE_STARTDADTE = row.insertCell(2);
+            var LEAVE_ENDATE = row.insertCell(3);
+            var LEAVE_TYPE = row.insertCell(4);
+            var REASON = row.insertCell(5);
+            var APPLIEDDATE = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             LEAVE_ID.innerHTML = item.leaveid;
+            LEAVE_TYPEID.innerHTML = item.leavetypeid;
             LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
             LEAVE_ENDATE.innerHTML = item.leaveenddate;
             LEAVE_TYPE.innerHTML = item.leavetype;
-            REASON.innerHTML = item.reason;
-            APPLIEDDATE.innerHTML = item.applieddate;
+            REASON.innerHTML = item.leavereason;
+            APPLIEDDATE.innerHTML = item.leaveapplieddate;
+            ACTION.innerHTML =
+              '<button id="viewBtn" class="btn text-primary view-btn" data-bs-toggle="modal" data-bs-target="#viewleave"><i class="fas fa-fw fa-eye"></i></button>';
+
+            $("#dataTableleaveApproved tbody").on("click", "tr", function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+              masterleaveid = dataRow[1];
+              console.log(dataRow);
+            });
 
             $.each(
               [
                 LEAVE_ID,
+                LEAVE_TYPEID,
                 LEAVE_STARTDADTE,
                 LEAVE_ENDATE,
                 LEAVE_TYPE,
                 REASON,
                 APPLIEDDATE,
+                ACTION,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -141,6 +230,65 @@
           });
         },
         error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $("#dataTableLeaves").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "eportalrequestleave/getleavedates",
+        data: {
+          masterleaveid: masterleaveid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(data, "data");
+          material_list_tbl = document.getElementById("dataTableLeaves");
+
+          const TittleContainer = $("#TittleContainer");
+          TittleContainer.empty();
+
+          const firstItem = data;
+          const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.leavetype}</h3>`;
+          TittleContainer.append(cardHtml);
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var FULLNAME = row.insertCell(0);
+            var LEAVEDATES = row.insertCell(1);
+            var LEAVE_DAY = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var LEAVE_YEAR = row.insertCell(4);
+            var LEAVE_PAYROLLDATE = row.insertCell(5);
+
+            FULLNAME.innerHTML = item.fullname;
+            LEAVEDATES.innerHTML = item.leavedates;
+            LEAVE_DAY.innerHTML = item.day_name;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            LEAVE_YEAR.innerHTML = item.year;
+            LEAVE_PAYROLLDATE.innerHTML = item.payrolldate;
+
+            $.each(
+              [
+                FULLNAME,
+                LEAVEDATES,
+                LEAVE_DAY,
+                LEAVE_TYPE,
+                LEAVE_YEAR,
+                LEAVE_PAYROLLDATE,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+          // Handle errors here
+        },
       });
     });
 
