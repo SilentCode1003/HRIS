@@ -198,6 +198,7 @@ router.get('/loadapproved' , (req, res) => {
     l_leavestartdate,
     l_leaveenddate,
     ml_leavetype as l_leavetype,
+    ml_id as l_leavetypeid,
     l_leavereason,
     l_leaveapplieddate
     from leaves
@@ -205,15 +206,66 @@ router.get('/loadapproved' , (req, res) => {
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_leavestatus = 'Approved' AND l_employeeid = '${employeeid}'`;
     
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: 'success', data: result
-      });
+      //console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "l_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+
+router.post("/getleavedates", (req, res) => {
+  try {
+    let masterleaveid = req.body.masterleaveid;
+    let sql = `
+    SELECT
+    ld_dateid,
+    CONCAT(me_lastname,' ',me_firstname) AS ld_fullname,
+    DATE_FORMAT(ld_leavedates, '%Y-%m-%d') AS ld_leavedates,
+    DATE_FORMAT(ld_leavedates, '%W') AS ld_day_name,
+    ml_leavetype AS ld_leavetype,
+    ml_year AS ld_year,
+    DATE_FORMAT(ld_payrolldate, '%Y-%m-%d') AS ld_payrolldate
+    FROM leave_dates
+    INNER JOIN master_leaves ON leave_dates.ld_leavetype = ml_id
+    INNER JOIN master_employee ON leave_dates.ld_employeeid = me_id
+    WHERE ml_id = '${masterleaveid}'
+    `;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ld_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 

@@ -96,7 +96,7 @@ router.post("/save", (req, res) => {
     data.push([departmentid, settingscount, createby, createdate, status, subgroupid]);
 
     let sql = `SELECT * FROM request_approval_settings WHERE 
-    ras_departmentid = '${departmentid}' AND ras_count = '${settingscount}'`;
+    ras_departmentid = '${departmentid}' AND ras_count = '${settingscount}' AND ras_subgroupid = '${subgroupid}'`;
 
     mysql.Select(sql, "Request_Approval_Settings", (err, result) => {
       if (err) console.error("Error :", err);

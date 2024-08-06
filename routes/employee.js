@@ -20,7 +20,6 @@ const {
 const {
   generateUsernameAndPasswordforemployee,
 } = require("./repository/helper");
-const { sq } = require("date-fns/locale");
 const { GenerateExcel } = require("./repository/excel");
 const { Select, InsertTable } = require("./repository/dbconnect");
 const { DataModeling, RawData } = require("./model/hrmisdb");
@@ -172,6 +171,7 @@ router.post("/saveold", async (req, res) => {
           }
           const userSaveResult = await saveUserRecord(
             req,
+            res,
             oldemployeeid,
             username,
             encryptedPassword
@@ -1263,7 +1263,6 @@ async function saveUserRecord(req, res, oldemployeeid, username, encryptedPasswo
 
     mysql.Select(sql, "Master_Access", (err, result) => {
       if (err) reject(err);
-      let subgroupid = 1;
       let geofenceValue = 1;
       let status = "Active";
       let accessid = result[0].accessid;
@@ -1272,7 +1271,6 @@ async function saveUserRecord(req, res, oldemployeeid, username, encryptedPasswo
         "username",
         "password",
         "accesstype",
-        "subgroupid",
         "createby",
         "createdate",
         "status",
@@ -1284,7 +1282,6 @@ async function saveUserRecord(req, res, oldemployeeid, username, encryptedPasswo
           username,
           encryptedPassword,
           accessid,
-          subgroupid,
           createby,
           createdate,
           status,
