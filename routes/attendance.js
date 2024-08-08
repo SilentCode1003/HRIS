@@ -6,6 +6,7 @@ const e = require("express");
 var router = express.Router();
 const currentDate = moment();
 const XLSX = require("xlsx");
+//const XLSX = require('xlsx-style'); // Note the use of 'xlsx-style'
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -188,6 +189,8 @@ router.post("/getloadforapp", (req, res) => {
   DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
   ma_devicein as devicein,
   ma_deviceout as deviceout,
+  ma_locationIn as locationin,
+  ma_locationOut as locationout,
   CONCAT(
   FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
   FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
@@ -485,6 +488,149 @@ router.post("/exportfile", async (req, res) => {
     res.status(500).json({ msg: "error", data: error });
   }
 });
+
+
+router.post('/exportreports', async (req, res) => {
+  try {
+    const { startdate, enddate } = req.body;
+
+    // Define the SQL command to call the stored procedure
+    const sqlExportAttendance = `CALL hrmis.AttendanceExport('${startdate}', '${enddate}')`;
+
+    // Execute the stored procedure and get the results
+    const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
+
+    // Ensure that resultExportAttendance is an array and has at least two elements
+    if (!Array.isArray(resultExportAttendance) || resultExportAttendance.length < 2) {
+      throw new Error('Invalid result structure from stored procedure');
+    }
+
+    // Fetch TempAttendanceSummary (first result set)
+    const summaryResults = resultExportAttendance[0];
+    if (!summaryResults) {
+      throw new Error('No summary results found');
+    }
+    const summaryData = JSON.parse(JSON.stringify(summaryResults));
+
+    // Fetch TempAttendance (second result set)
+    const attendanceResults = resultExportAttendance[1];
+    if (!attendanceResults) {
+      throw new Error('No attendance results found');
+    }
+    const attendanceData = JSON.parse(JSON.stringify(attendanceResults));
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Create and append a sheet for TempAttendanceSummary
+    if (summaryData.length > 0) {
+      const worksheetSummary = XLSX.utils.json_to_sheet(summaryData, { header: Object.keys(summaryData[0]) });
+      adjustColumnWidths(worksheetSummary, summaryData);
+      formatHeaders(worksheetSummary);
+      XLSX.utils.book_append_sheet(workbook, worksheetSummary, 'Attendance Summary');
+    }
+
+    // Group TempAttendance by employeeid
+    const groupedData = {};
+    attendanceData.forEach((record) => {
+      const { employeeid, fullname } = record; // Ensure these fields exist in your data
+      if (!employeeid || !fullname) {
+        console.warn('Missing employeeid or fullname in record:', record);
+        return;
+      }
+      if (!groupedData[employeeid]) {
+        groupedData[employeeid] = { data: [], name: fullname };
+      }
+      groupedData[employeeid].data.push(record);
+    });
+
+    // Convert groupedData to an array and sort by fullname
+    const sortedEmployeeData = Object.keys(groupedData)
+      .map(employeeId => ({ id: employeeId, ...groupedData[employeeId] }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    // Create and append sheets for each employee with their full name
+    sortedEmployeeData.forEach(({ id, data, name }) => {
+      if (data.length > 0) {
+        const worksheetEmployee = XLSX.utils.json_to_sheet(data, { header: Object.keys(data[0]) });
+        adjustColumnWidths(worksheetEmployee, data);
+        formatHeaders(worksheetEmployee);
+        XLSX.utils.book_append_sheet(workbook, worksheetEmployee, `${name}`);
+      }
+    });
+
+    // Write to buffer
+    const excelBuffer = XLSX.write(workbook, { type: 'buffer' });
+
+    // Send the file to client
+    res.setHeader('Content-Disposition', `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(excelBuffer);
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ msg: 'error', data: error.message });
+  }
+});
+
+// Helper function to adjust column widths
+function adjustColumnWidths(worksheet, data) {
+  const cols = [];
+  
+  // Determine the maximum length of each column
+  data.forEach(row => {
+    Object.keys(row).forEach((key, index) => {
+      const length = (row[key] ? row[key].toString().length : 10) + 2; // Adding some padding
+      if (!cols[index] || cols[index] < length) {
+        cols[index] = length;
+      }
+    });
+  });
+
+  // Adjust column width considering headers
+  const headerKeys = Object.keys(data[0]);
+  headerKeys.forEach((key, index) => {
+    const headerLength = key.length + 2; // Adding some padding for headers
+    if (!cols[index] || cols[index] < headerLength) {
+      cols[index] = headerLength;
+    }
+  });
+
+  // Apply the width to each column
+  worksheet['!cols'] = cols.map(width => ({ wpx: width * 10 })); // Adjust wpx for better readability
+}
+
+// Helper function to format headers
+function formatHeaders(worksheet) {
+  const headerRow = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+  if (!headerRow) return;
+
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  const headerCellIndices = headerRow.map((_, index) => index);
+
+  headerCellIndices.forEach(index => {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+    if (!worksheet[cellAddress]) return;
+
+    const cell = worksheet[cellAddress];
+    cell.s = {
+      font: {
+        bold: true,
+        color: { rgb: "FFFFFF" }
+      },
+      fill: {
+        fgColor: { rgb: "000000" }
+      },
+      alignment: {
+        horizontal: "center"
+      }
+    };
+
+    // Convert text to uppercase
+    cell.v = cell.v.toString().toUpperCase();
+  });
+}
+
 
 router.post("/exportfileperemployee", async (req, res) => {
   try {
