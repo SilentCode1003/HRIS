@@ -85,8 +85,8 @@ router.post("/save", (req, res) => {
       createdby, 
       createddate]];
     let checkStatement = SelectStatement(
-      "select * from aprroval_stage_settings where ats_accessid=? and ats_departmentid=?",
-      [accessid, departmentid]
+      "select * from aprroval_stage_settings where ats_accessid=? and ats_departmentid=? and ats_subgroupid=?",
+      [accessid, departmentid, subgroupid]
     );
 
     Check(checkStatement)
