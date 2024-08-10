@@ -392,7 +392,7 @@
     function LoadPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/setpayrolldate/loadreq",
+        url: "/setpayrolldate/loadreqbeforepayout",
         success: function (result) {
           var data = result.data;
 
@@ -411,7 +411,7 @@
     function EditLoadPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/setpayrolldate/loadreq",
+        url: "/setpayrolldate/loadreqbeforepayout",
         success: function (result) {
           var data = result.data;
 

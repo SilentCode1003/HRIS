@@ -65,7 +65,6 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -83,17 +82,11 @@ router.get("/load", (req, res) => {
     INNER JOIN 
         aprroval_stage_settings ON 
             aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-            aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
             aprroval_stage_settings.ats_subgroupid = leaves.l_subgroupid AND
             aprroval_stage_settings.ats_count = leaves.l_approvalcount
             WHERE 
             l_leavestatus = 'Pending' 
-        AND l_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND l_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND l_subgroupid IN (${subgroupid})`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
       if (err) console.error("Error: ", err);
