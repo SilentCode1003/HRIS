@@ -73,7 +73,6 @@ module.exports = router;
 
   router.get("/load", (req, res) => {
     try {
-      let departmentid = req.session.departmentid;
       let subgroupid = req.session.subgroupid;
       let accesstypeid = req.session.accesstypeid;
       let sql = `SELECT 
@@ -90,17 +89,11 @@ module.exports = router;
   INNER JOIN 
   aprroval_stage_settings ON 
       aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-      aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
       aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
       aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
       WHERE 
         ph_status = 'Applied' 
-        AND ph_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND ph_approvalcount NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND ph_subgroupid IN (${subgroupid})`;
       Select(sql, (err, result) => {
         if (err) {
           console.error(err);
