@@ -105,6 +105,192 @@
       });
     }
 
+    
+    $(document).on("click", "#approvedtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveApproved").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestattendance/loadapproved",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById(
+            "dataTableleaveApproved"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var REQUEST_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var TOTAL = row.insertCell(4);
+            var CREATE_DATE = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var REASON = row.insertCell(7);
+
+            REQUEST_ID.innerHTML = item.requestid;
+            ATTENDANCE_DATE.innerHTML = item.attendace_date;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            TOTAL.innerHTML = item.total;
+            CREATE_DATE.innerHTML = item.createdate;
+            STATUS.innerHTML = item.status;
+            REASON.innerHTML = item.reason;
+
+            $("#dataTableleaveApproved tbody").on("click", "tr", function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+              masterleaveid = dataRow[1];
+              console.log(dataRow);
+            });
+
+            $.each(
+              [
+                REQUEST_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL,
+                CREATE_DATE,
+                STATUS,
+                REASON,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+
+    $(document).on("click", "#rejectedtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveRejected").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestattendance/loadrejected",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById("dataTableleaveRejected");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var REQUEST_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var TOTAL = row.insertCell(4);
+            var CREATE_DATE = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var REASON = row.insertCell(7);
+
+            REQUEST_ID.innerHTML = item.requestid;
+            ATTENDANCE_DATE.innerHTML = item.attendace_date;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            TOTAL.innerHTML = item.total;
+            CREATE_DATE.innerHTML = item.createdate;
+            STATUS.innerHTML = item.status;
+            REASON.innerHTML = item.reason;
+
+            $.each(
+              [
+                REQUEST_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL,
+                CREATE_DATE,
+                STATUS,
+                REASON,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#cancelledtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveCancelled").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalrequestattendance/loadcancelled",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableleaveCancelled"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var REQUEST_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var TOTAL = row.insertCell(4);
+            var CREATE_DATE = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var REASON = row.insertCell(7);
+
+            REQUEST_ID.innerHTML = item.requestid;
+            ATTENDANCE_DATE.innerHTML = item.attendace_date;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            TOTAL.innerHTML = item.total;
+            CREATE_DATE.innerHTML = item.createdate;
+            STATUS.innerHTML = item.status;
+            REASON.innerHTML = item.reason;
+
+            $.each(
+              [
+                REQUEST_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL,
+                CREATE_DATE,
+                STATUS,
+                REASON,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
     $(document).on("click", "#coasavebtn", function () {
       let attendancedate = $("#attendancedate").val();
       let timein = $("#timein").val();

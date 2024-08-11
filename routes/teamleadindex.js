@@ -108,7 +108,6 @@ ORDER BY
 
 router.get("/countcoacard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -120,17 +119,11 @@ router.get("/countcoacard", (req, res) => {
     INNER JOIN 
         aprroval_stage_settings ON 
             aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-            aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
             aprroval_stage_settings.ats_subgroupid = attendance_request.ar_subgroupid AND
             aprroval_stage_settings.ats_count = attendance_request.ar_approvalcount
      WHERE 
         ar_status = 'Pending' 
-        AND ar_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND ar_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND ar_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -161,7 +154,6 @@ router.get("/countcoacard", (req, res) => {
 
 router.get("/countovertimecard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -173,17 +165,11 @@ router.get("/countovertimecard", (req, res) => {
      INNER JOIN 
             aprroval_stage_settings ON 
                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-                aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
                 aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
                 aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
         WHERE 
         pao_status = 'Applied' 
-            AND pao_subgroupid IN (${subgroupid})
-            AND me_department = '${departmentid}'
-            AND pao_employeeid NOT IN (
-                SELECT tu_employeeid 
-                FROM teamlead_user
-            )`;
+            AND pao_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -214,7 +200,6 @@ router.get("/countovertimecard", (req, res) => {
 
 router.get("/countleavecard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -226,17 +211,11 @@ router.get("/countleavecard", (req, res) => {
      INNER JOIN 
         aprroval_stage_settings ON 
             aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-            aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
             aprroval_stage_settings.ats_subgroupid = leaves.l_subgroupid AND
             aprroval_stage_settings.ats_count = leaves.l_approvalcount
             WHERE 
             l_leavestatus = 'Pending' 
-        AND l_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND l_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND l_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -267,7 +246,6 @@ router.get("/countleavecard", (req, res) => {
 
 router.get("/countotmealcard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -279,17 +257,11 @@ router.get("/countotmealcard", (req, res) => {
     INNER JOIN 
             aprroval_stage_settings ON 
                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-                aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
                 aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
                 aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
     WHERE 
         oma_status = 'Applied' 
-        AND oma_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND oma_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND oma_subgroupid IN (${subgroupid})`;
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -382,7 +354,6 @@ WHERE
 
 router.get("/totalcoa", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -397,17 +368,11 @@ router.get("/totalcoa", (req, res) => {
     INNER JOIN 
         aprroval_stage_settings ON 
             aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-            aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
             aprroval_stage_settings.ats_subgroupid = attendance_request.ar_subgroupid AND
             aprroval_stage_settings.ats_count = attendance_request.ar_approvalcount
      WHERE 
         ar_status = 'Pending' 
-        AND ar_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND ar_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND ar_subgroupid IN (${subgroupid})`;
 
     console.log(departmentid);
     console.log(subgroupid);
@@ -438,7 +403,6 @@ router.get("/totalcoa", (req, res) => {
 
 router.get("/totalotmeal", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -453,17 +417,11 @@ router.get("/totalotmeal", (req, res) => {
     INNER JOIN 
             aprroval_stage_settings ON 
                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-                aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
                 aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
                 aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
     WHERE 
         oma_status = 'Applied' 
-        AND oma_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND oma_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND oma_subgroupid IN (${subgroupid})`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -489,7 +447,6 @@ router.get("/totalotmeal", (req, res) => {
 
 router.get("/totalot", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -504,17 +461,11 @@ router.get("/totalot", (req, res) => {
     INNER JOIN 
     aprroval_stage_settings ON 
         aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-        aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
         aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
         aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
     WHERE 
     pao_status = 'Applied' 
-        AND pao_subgroupid IN (${subgroupid})
-        AND me_department = '${departmentid}'
-        AND pao_employeeid NOT IN (
-            SELECT tu_employeeid 
-            FROM teamlead_user
-        )`;
+        AND pao_subgroupid IN (${subgroupid})`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error :!!", err);
@@ -536,7 +487,6 @@ router.get("/totalot", (req, res) => {
 
 router.get("/totalleave", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -557,17 +507,11 @@ INNER JOIN
     INNER JOIN 
     aprroval_stage_settings ON 
         aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-        aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
         aprroval_stage_settings.ats_subgroupid = leaves.l_subgroupid AND
         aprroval_stage_settings.ats_count = leaves.l_approvalcount
         WHERE 
         l_leavestatus = 'Pending' 
-    AND l_subgroupid IN (${subgroupid})
-    AND me_department = '${departmentid}'
-    AND l_employeeid NOT IN (
-        SELECT tu_employeeid 
-        FROM teamlead_user
-    )`;
+    AND l_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
