@@ -200,6 +200,39 @@
               $("#leavepaydadys").text(item.leaveday);
               $("#restdayot").text(item.restotday);
             });
+
+            $.ajax({
+              url: "eportalsalary/loaddinamicamount",
+              type: "POST",
+              contentType: "application/json", 
+              data: JSON.stringify({
+                payrolldate: payrolldate, 
+                employeeid: employeeid,
+              }),
+              dataType: "json",
+              success: function (response) {
+               
+                if (response && response.data) {
+
+                  $("#dinamicloanname").empty();
+                  $("#dinamicloandeductions").empty();
+
+                  response.data.forEach((item) => {
+                    $("#dinamicloanname").append(
+                      `<p class="mb-0 payroll-label">${item.loan_type}</p>`
+                    );
+                    $("#dinamicloandeductions").append(
+                      `<p class="text-muted mb-0">${(formatToCurrency(item.loan_amount))}</p>`
+                    );
+                  });
+                } else {
+                  console.error("Unexpected response format:", response);
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error("AJAX error:", status, error);
+              },
+            });
           } else {
             swal("Error fetching employee data", msg, "error");
           }
@@ -419,7 +452,7 @@
                 }
               },
               error: function (err) {
-                console.error("AJAX Error:", err); // Debugging statement
+                console.error("AJAX Error:", err);
                 swal(
                   "An error occurred while fetching sudden deductions data",
                   err.message,

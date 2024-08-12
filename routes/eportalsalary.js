@@ -298,6 +298,87 @@ router.post("/loadpayslip", (req, res) => {
 });
 
 
+router.post("/loaddinamicamount", (req, res) => {
+  try {
+    let payrolldate = req.body.payrolldate;
+    let employeeid = req.body.employeeid;
+    let sql = `
+    SELECT 'Calamity Loan' AS p_loan_type, p_calamity_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_calamity_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+    
+    UNION ALL
+    
+    SELECT 'Shirt Term Loan' AS p_loan_type, p_shortterm_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_shortterm_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+    
+    UNION ALL
+    
+    SELECT 'Housing Loan' AS p_loan_type, p_housing_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_housing_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+    
+    UNION ALL
+    
+    SELECT 'Educational Loan' AS p_loan_type, p_education_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_education_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+    
+    UNION ALL
+    
+    SELECT 'Sterling Loan' AS p_loan_type, p_sterling_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_sterling_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+    
+    UNION ALL
+    
+    SELECT 'Salary Loan' AS p_loan_type, p_salary_loan AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_salary_loan != 0
+      AND p_payrolldate = '${payrolldate}'
+
+    UNION ALL
+      
+   SELECT 'WISP' AS p_loan_type, p_wisp_deductions AS p_loan_amount
+    FROM payslip
+    WHERE p_employeeid = '${employeeid}'
+      AND p_wisp_deductions != 0
+      AND p_payrolldate = '${payrolldate}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result,'result');
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(err));
+  }
+});
+
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 // router.post("/generatepdf", async (req, res) => {
