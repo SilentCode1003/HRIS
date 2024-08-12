@@ -65,6 +65,180 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.get("/loadapproved", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
+      pao_id,
+      DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
+      DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
+      DATE_FORMAT(pao_clockout, '%d %M %Y, %h:%i %p') AS pao_clockout,
+      pao_total_hours,
+      pao_early_ot,
+      pao_normal_ot,
+      pao_night_differentials,
+      DATE_FORMAT(pao_payroll_date, '%W, %Y-%m-%d') AS pao_payroll_date,
+      pao_status
+      FROM payroll_approval_ot
+      WHERE pao_employeeid = '${employeeid}'
+      AND pao_status = 'Approved'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.get("/loadapplied", (req, res) => {
+    try {
+      let employeeid = req.session.employeeid;
+      let sql = `SELECT
+        pao_id,
+        DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
+        DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
+        DATE_FORMAT(pao_clockout, '%d %M %Y, %h:%i %p') AS pao_clockout,
+        pao_total_hours,
+        pao_early_ot,
+        pao_normal_ot,
+        pao_night_differentials,
+        DATE_FORMAT(pao_payroll_date, '%W, %Y-%m-%d') AS pao_payroll_date,
+        pao_status
+        FROM payroll_approval_ot
+        WHERE pao_employeeid = '${employeeid}'
+        AND pao_status = 'Applied'`;
+  
+      Select(sql, (err, result) => {
+        if (err) {
+          console.error(err);
+          res.json(JsonErrorResponse(err));
+        }
+  
+        console.log(result);
+  
+        if (result != 0) {
+          let data = DataModeling(result, "pao_");
+  
+          console.log(data);
+          res.json(JsonDataResponse(data));
+        } else {
+          res.json(JsonDataResponse(result));
+        }
+      });
+    } catch (error) {
+      res.json({
+        msg: "error",
+        error,
+      });
+    }
+  });
+
+
+router.get("/loadrejected", (req, res) => {
+    try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
+        pao_id,
+        DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
+        DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
+        DATE_FORMAT(pao_clockout, '%d %M %Y, %h:%i %p') AS pao_clockout,
+        pao_total_hours,
+        pao_early_ot,
+        pao_normal_ot,
+        pao_night_differentials,
+        DATE_FORMAT(pao_payroll_date, '%W, %Y-%m-%d') AS pao_payroll_date,
+        pao_status
+        FROM payroll_approval_ot
+        WHERE pao_employeeid = '${employeeid}'
+        AND pao_status = 'Rejected'`;
+
+    Select(sql, (err, result) => {
+        if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+        }
+
+        console.log(result);
+
+        if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+        } else {
+        res.json(JsonDataResponse(result));
+        }
+    });
+    } catch (error) {
+    res.json({
+        msg: "error",
+        error,
+    });
+    }
+});
+
+
+router.get("/loadcancelled", (req, res) => {
+    try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
+        pao_id,
+        DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
+        DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
+        DATE_FORMAT(pao_clockout, '%d %M %Y, %h:%i %p') AS pao_clockout,
+        pao_total_hours,
+        pao_early_ot,
+        pao_normal_ot,
+        pao_night_differentials,
+        DATE_FORMAT(pao_payroll_date, '%W, %Y-%m-%d') AS pao_payroll_date,
+        pao_status
+        FROM payroll_approval_ot
+        WHERE pao_employeeid = '${employeeid}'
+        AND pao_status = 'Cancel'`;
+
+    Select(sql, (err, result) => {
+        if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+        }
+
+        console.log(result);
+
+        if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+        } else {
+        res.json(JsonDataResponse(result));
+        }
+    });
+    } catch (error) {
+    res.json({
+        msg: "error",
+        error,
+    });
+    }
+});
+
 router.post("/getovertime", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
@@ -200,7 +374,7 @@ router.post("/getovertime", (req, res) => {
     pao_early_ot AS earlyot,
     pao_normal_ot AS normalot,
     pao_night_differentials AS nightdiff,
-    pao_payroll_date AS payrolldate,
+    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS payrolldate,
     pao_status AS status,
     pao_night_hours_pay as nightotpay,
     pao_normal_ot_pay as normalotpay,
@@ -219,6 +393,8 @@ WHERE pao_id = '${approveot_id}'`;
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
+        console.log(result);
+        
         res.json({
           msg: "success",
           data: result,
@@ -289,7 +465,8 @@ router.post("/addrequstot", (req, res) => {
     pao_reason,
     pao_status,
     pao_subgroupid,
-    pao_approvalcount
+    pao_approvalcount,
+    pao_overtimeimage
   )
 SELECT
 me.me_profile_pic AS pao_image,
@@ -680,37 +857,15 @@ INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
     WHERE me_id = '${employeeid}'
     LIMIT 1`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-    // Select(sql, (err, result) => {
-    //     if (err) {
-    //       console.error(err);
-    //       res.json(JsonErrorResponse(err));
-    //     }
-
-    //     console.log(result);
-
-    //     if (result != 0) {
-    //       //let data = DataModeling(result, "pao_");
-
-    //       console.log(data);
-    //       res.json(JsonDataResponse(data));
-    //     } else {
-    //       res.json(JsonDataResponse(result));
-    //     }
-    //   });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      } else {
+        console.log(result);
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json({
       msg: "error",
@@ -721,6 +876,8 @@ INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
 
 router.post("/update", (req, res) => {
   try {
+    console.log('hit');
+    
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
     let clockout = req.body.clockout;
@@ -732,7 +889,6 @@ router.post("/update", (req, res) => {
     let subgroup = req.body.subgroup;
     let overtimeimage = req.body.overtimeimage;
 
-    
     let sql = `UPDATE payroll_approval_ot
     SET 
         pao_image = (
@@ -1420,13 +1576,12 @@ LIMIT 1;
   }
 });
 
-
 function Check(sql) {
-    return new Promise((resolve, reject) => {
-      Select(sql, (err, result) => {
-        if (err) reject(err);
-  
-        resolve(result);
-      });
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
     });
-  }
+  });
+}

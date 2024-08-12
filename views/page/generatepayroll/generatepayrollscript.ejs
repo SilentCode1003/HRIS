@@ -524,7 +524,16 @@
               );
               $("#overtimemeal").text(formatToCurrency(item.Overtime_Meal));
               $("#leavepayprofile").text(formatToCurrency(item.Leave_Pay));
-              $("#loandeductions").text(formatToCurrency(item.Loans));
+              let totalLoans = (parseFloat(item.Calamity_Loan) || 0) +
+              (parseFloat(item.Short_Term_Loan) || 0) +
+              (parseFloat(item.Housing_Loan) || 0) +
+              (parseFloat(item.Education_Loan) || 0) +
+              (parseFloat(item.Sterling_Loan) || 0) +
+              (parseFloat(item.Salary_Loan) || 0) +
+              (parseFloat(item.Wisp_Deductions) || 0);
+              let formattedTotal = formatToCurrency(totalLoans);
+              // Update the HTML element with the formatted total
+              $("#loandeductions").text(formattedTotal);
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Overall_Net_Pay));
