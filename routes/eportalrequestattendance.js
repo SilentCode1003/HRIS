@@ -3,8 +3,13 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
+const { REQUEST } = require("./repository/dictionary");
+const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -120,6 +125,18 @@ router.post("/submit", async (req, res) => {
         res.json({ msg: "insert_failed" });
       } else {
         console.log(insertResult);
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            timein: timein,
+            timeout: timeout,
+            reason: reason,
+            requesttype: REQUEST.COA,
+          },
+        ];
+        SendEmailNotification(subgroupid, REQUEST.COA, emailbody);
+
         res.json({ msg: "success" });
       }
     });
@@ -225,23 +242,23 @@ router.get("/loadapproved", (req, res) => {
   WHERE ar_employeeid ='${employeeid}'
   AND ar_status = 'Approved'`;
 
-  Select(sql, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.json(JsonErrorResponse(err));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    //console.log(result);
+      //console.log(result);
 
-    if (result != 0) {
-      let data = DataModeling(result, "ar_");
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
 
-      //console.log(data);
-      res.json(JsonDataResponse(data));
-    } else {
-      res.json(JsonDataResponse(result));
-    }
-  });
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json(JsonErrorResponse(err));
   }
@@ -265,23 +282,23 @@ router.get("/loadrejected", (req, res) => {
   WHERE ar_employeeid ='${employeeid}'
   AND ar_status = 'Rejected'`;
 
-  Select(sql, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.json(JsonErrorResponse(err));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    //console.log(result);
+      //console.log(result);
 
-    if (result != 0) {
-      let data = DataModeling(result, "ar_");
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
 
-      //console.log(data);
-      res.json(JsonDataResponse(data));
-    } else {
-      res.json(JsonDataResponse(result));
-    }
-  });
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json(JsonErrorResponse(err));
   }
@@ -305,31 +322,27 @@ router.get("/loadcancelled", (req, res) => {
   WHERE ar_employeeid ='${employeeid}'
   AND ar_status = 'Cancelled'`;
 
-  Select(sql, (err, result) => {
-    if (err) {
-      console.error(err);
-      res.json(JsonErrorResponse(err));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    //console.log(result);
+      //console.log(result);
 
-    if (result != 0) {
-      let data = DataModeling(result, "ar_");
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
 
-      //console.log(data);
-      res.json(JsonDataResponse(data));
-    } else {
-      res.json(JsonDataResponse(result));
-    }
-  });
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json(JsonErrorResponse(err));
   }
 });
-
-
-
-
 
 function calculateTotalHours(timein, timeout) {
   const datetimeIn = new Date(timein);

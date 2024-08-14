@@ -1,7 +1,6 @@
 <script>
-  let requestid = "";
-
   $(document).ready(function () {
+    let requestid = "";
     searchTable();
     LoadTable();
     LoadSubgroup();
@@ -10,106 +9,6 @@
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
-
-    function LoadTable() {
-      $("#dataTableattendancerequest").DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        paging: false,
-        searching: false,
-        info: false,
-        scrollY: 600,
-        scrollCollapse: true,
-        serverMethod: "GET",
-        ajax: {
-          url: "/teamleadpendingcoa/load",
-          dataSrc: (json) => {
-            var finalData = [];
-            var data = json.data;
-
-            $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
-
-              action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
-                   `;
-
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "90px";
-              imgElement.style.height = "90px";
-
-              finalData.push({
-                image: imgElement.outerHTML,
-                requestid: item.requestid,
-                employeeid: item.employeeid,
-                attendancedate: item.attendancedate,
-                timein: item.timein,
-                timeout: item.timeout,
-                total: item.total,
-                createdate: item.createdate,
-                requeststatus: item.requeststatus,
-                action: action,
-              });
-            });
-
-            return finalData;
-          },
-        },
-        columnDefs: [
-          {
-            targets: 1,
-            className: "td-indent",
-          },
-        ],
-        columns: [
-          { data: "image" },
-          { data: "requestid" },
-          { data: "employeeid" },
-          { data: "attendancedate" },
-          { data: "timein" },
-          { data: "timeout" },
-          { data: "total" },
-          { data: "createdate" },
-          { data: "requeststatus" },
-          { data: "action" },
-        ],
-        createdRow: function (row, data, dataIndex) {
-          //miyaka
-          var requeststatusCell = $(row).find("td:eq(8)");
-
-          var requeststatusText = data.requeststatus;
-
-          var requeststatusClass = "";
-
-          switch (requeststatusText.toLowerCase()) {
-            case "approved":
-              requeststatusClass = "approved-status";
-              break;
-            case "cancel":
-              requeststatusClass = "cancel-status";
-              break;
-            case "pending":
-              requeststatusClass = "pending-status";
-              break;
-            default:
-              requeststatusClass = "";
-          }
-
-          requeststatusCell.html(
-            `<span class="${requeststatusClass}">${requeststatusText}</span>`
-          );
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
-        initComplete: function () {},
-      });
-    }
 
     $("#dataTableattendancerequest tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -120,7 +19,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      requestid = dataRow[1];
+      requestid = dataRow[0];
     });
 
     function LoadSubgroup() {
@@ -143,6 +42,7 @@
     }
 
     $(document).on("click", "#editBtn", function () {
+      $("#editrequestmodal").modal("show");
       $.ajax({
         type: "POST",
         url: "/attendancerequest/getattendancerequest",
@@ -213,9 +113,9 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
+              }).then((results) => {});
+              $("#editcoastatus").val("Pending");
+              $("#editrequestmodal").modal("hide");
               LoadTable();
             } else {
               swal({
@@ -233,6 +133,106 @@
       }
     });
 
+    function LoadTable() {
+      console.log("load table");
+      $("#dataTableattendancerequest").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/teamleadpendingcoa/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              //data-bs-toggle="modal" data-bs-target="#editrequestmodal"
+              action = `
+                    <button id="editBtn" class="btn text-primary" name="editBtn" ><i class="fas fa-fw fa-pen"></i></button>`;
+
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
+
+              finalData.push({
+                requestid: item.requestid,
+                employeeid: item.employeeid,
+                attendancedate: item.attendancedate,
+                timein: item.timein,
+                timeout: item.timeout,
+                total: item.total,
+                createdate: item.createdate,
+                requeststatus: item.requeststatus,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "requestid" },
+          { data: "employeeid" },
+          { data: "attendancedate" },
+          { data: "timein" },
+          { data: "timeout" },
+          { data: "total" },
+          { data: "createdate" },
+          { data: "requeststatus" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var requeststatusCell = $(row).find("td:eq(7)");
+
+          var requeststatusText = data.requeststatus;
+
+          var requeststatusClass = "";
+
+          switch (requeststatusText.toLowerCase()) {
+            case "approved":
+              requeststatusClass = "approved-status";
+              break;
+            case "cancel":
+              requeststatusClass = "cancel-status";
+              break;
+            case "pending":
+              requeststatusClass = "pending-status";
+              break;
+            default:
+              requeststatusClass = "";
+          }
+
+          requeststatusCell.html(
+            `<span class="${requeststatusClass}">${requeststatusText}</span>`
+          );
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
     function Loadactionname() {
       $.ajax({
         type: "GET",

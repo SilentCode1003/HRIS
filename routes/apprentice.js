@@ -4,9 +4,11 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const { error } = require("jquery");
-const { generateUsernameAndPasswordforemployee } = require("./repository/helper");
+const {
+  generateUsernameAndPasswordforemployee,
+} = require("./repository/helper");
 
 const currentYear = moment().format("YY");
 const currentMonth = moment().format("MM");
@@ -15,7 +17,7 @@ const currentMonth = moment().format("MM");
 router.get("/", function (req, res, next) {
   //res.render('announcementlayout', { title: 'Express' });
 
-  Validator(req, res, "apprenticelayout",'apprentice');
+  Validator(req, res, "apprenticelayout", "apprentice");
 });
 
 module.exports = router;
@@ -154,9 +156,9 @@ router.post("/update", async (req, res) => {
             return res.json({ msg: "encrypt_error" });
           }
 
-          const createBy = req.session.fullname; 
+          const createBy = req.session.fullname;
           const createdate = currentDate.format("YYYY-MM-DD");
-          const accessType = 2; 
+          const accessType = 2;
 
           let insertUserQuery = `INSERT INTO master_user (
                       mu_employeeid, 
@@ -184,19 +186,20 @@ router.post("/update", async (req, res) => {
 
         console.log("Update Old Employee Query:", updateOldEmployeeQuery);
 
-        mysql.mysqlQueryPromise(updateOldEmployeeQuery)
-        .then((result) => {
-          res.json({
-            msg: 'success',
-            data: result,
+        mysql
+          .mysqlQueryPromise(updateOldEmployeeQuery)
+          .then((result) => {
+            res.json({
+              msg: "success",
+              data: result,
+            });
+          })
+          .catch((error) => {
+            res.json({
+              msg: "error",
+              data: error,
+            });
           });
-        })
-        .catch((error) => {
-          res.json({
-            msg: 'error',
-            data: error,
-          });
-        });
       })
       .catch((error) => {
         console.error("Insert Employee Error:", error);
@@ -214,8 +217,6 @@ router.post("/update", async (req, res) => {
   }
 });
 
-
-
 router.post("/updateuser", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -224,19 +225,20 @@ router.post("/updateuser", (req, res) => {
     mu_status = 'Inactive'
     where mu_employeeid = '${employeeid}'`;
 
-    mysql.Update(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .Update(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
       msg: "error",
@@ -244,10 +246,6 @@ router.post("/updateuser", (req, res) => {
     });
   }
 });
-
-
-
-
 
 function fetchEmployeeData(employeeid) {
   return new Promise((resolve, reject) => {
@@ -284,4 +282,3 @@ function fetchEmployeeData(employeeid) {
       });
   });
 }
-

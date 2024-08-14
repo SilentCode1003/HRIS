@@ -1,7 +1,10 @@
 <script>
-  let approveot_id = "";
-
   $(document).ready(function () {
+    let approveot_id = "";
+    let attendancedate = "";
+    let clockin = "";
+    let clockout = "";
+
     LoadTable();
     searchTable();
     LoadList();
@@ -154,6 +157,9 @@
         });
       console.log(dataRow);
       approveot_id = dataRow[0];
+      attendancedate = dataRow[2];
+      clockin = dataRow[3];
+      clockout = dataRow[4];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -168,7 +174,10 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#previewleave").attr("src", "data:image/jpg;base64," + item.overtimeimage);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.overtimeimage
+              );
               base64String = item.overtimeimage;
               $("#appliedotfullname").val(item.fullname);
               $("#appliedattendancedate").val(item.attendancedate);
@@ -196,7 +205,6 @@
         },
       });
     });
-
 
     $(document).on("click", "#otsavebutton", function () {
       console.log("hit");
@@ -230,6 +238,9 @@
             status: requeststatus,
             comment: comment,
             subgroupid: subgroupid,
+            attendancedate: attendancedate,
+            clockin: clockin,
+            clockout: clockout,
           },
           success: function (result) {
             if (result.msg == "success") {
