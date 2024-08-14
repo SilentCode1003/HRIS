@@ -137,6 +137,12 @@ var generate13thmonthRouter = require("./routes/generate13thmonth");
 var usersubgrouplayoutRouter = require("./routes/usersubgroup");
 var eportalgovloansRouter = require("./routes/eportalgovloans");
 var forgotpasswordRouter = require("./routes/forgotpassword");
+var enrolled_bank_accRouter = require("./routes/enrolled_bank_acc");
+var eportalrestdayotRouter = require("./routes/eportalrestdayot");
+var restdayot_request_activityRouter = require("./routes/restdayot_request_activity");
+var teamleadappliedrdotRouter = require("./routes/teamleadappliedrdot");
+var teamleadapprovedrdotRouter = require("./routes/teamleadapprovedrdot");
+
 
 var app = express();
 
@@ -282,6 +288,12 @@ app.use("/generate13thmonth", generate13thmonthRouter);
 app.use("/usersubgroup", usersubgrouplayoutRouter);
 app.use("/eportalgovloans", eportalgovloansRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
+app.use("/enrolled_bank_acc", enrolled_bank_accRouter);
+app.use("/eportalrestdayot", eportalrestdayotRouter);
+app.use("/restdayot_request_activity", restdayot_request_activityRouter);
+app.use("/teamleadappliedrdot", teamleadappliedrdotRouter);
+app.use("/teamleadapprovedrdot", teamleadapprovedrdotRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

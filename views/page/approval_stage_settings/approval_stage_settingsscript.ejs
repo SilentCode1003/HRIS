@@ -78,12 +78,16 @@
       });
     }
 
-    function LoadSubgroup() {
+    function LoadSubgroup(department) {
       $.ajax({
-        type: "GET",
-        url: "/subgroup/load",
+        type: "POST",
+        url: "/subgroup/getsubgroupbydepartment",
+        data: {
+          departmentid: department,
+        },
         success: function (result) {
           var data = result.data;
+          $("#stagesubgroupname").empty();
 
           $.each(data, function (key, item) {
             var options = new Option(item.subgroupid, item.subgroupid);
@@ -97,12 +101,17 @@
       });
     }
 
-    function EditLoadSubgroup() {
+    function EditLoadSubgroup(department) {
       $.ajax({
-        type: "GET",
-        url: "/subgroup/load",
+        type: "POST",
+        url: "/subgroup/getsubgroupbydepartment",
+        data: {
+          departmentid: department,
+        },
         success: function (result) {
           var data = result.data;
+          // Clear existing options
+          $("#editstagesubgroupname").empty();
 
           $.each(data, function (key, item) {
             var options = new Option(item.subgroupid, item.subgroupid);
@@ -214,6 +223,11 @@
             $(options).html(item.departmentname);
             $("#stagedepartmentname").append(options);
           });
+
+          $("#stagedepartmentname").change(function () {
+            var selectedDepartmentId = $(this).val();
+            LoadSubgroup(selectedDepartmentId);
+          });
         },
         error: function (result) {
           alert("error: " + result.data);
@@ -232,6 +246,11 @@
             var options = new Option(item.departmentid, item.departmentid);
             $(options).html(item.departmentname);
             $("#editstagedepartmentname").append(options);
+          });
+
+          $("#editstagedepartmentname").change(function () {
+            var selectedDepartmentId = $(this).val();
+            EditLoadSubgroup(selectedDepartmentId);
           });
         },
         error: function (result) {
@@ -286,14 +305,19 @@
               $("#editapprovecount").val(item.count + 1);
               $("#editstagedepartmentname").val(item.departmentid);
               $("#editstagesubgroupname").val(item.subgroupid);
+              EditLoadSubgroup(item.departmentid);
             });
           } else {
-            swal("Error fetching employee data", msg, "error");
+            swal("Error fetching employee data", result.msg, "error");
           }
         },
         error: function (err) {
           console.error("An error occurred while fetching employee data", err);
-          swal("An error occurred while fetching employee data", msg, "error");
+          swal(
+            "An error occurred while fetching employee data",
+            err.msg,
+            "error"
+          );
         },
       });
     });

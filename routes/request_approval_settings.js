@@ -63,7 +63,8 @@ router.post("/loadsubgroup", (req, res) => {
     s_id,
     s_name
     FROM subgroup
-    WHERE s_departmentid = '${departmentid}'`;
+    WHERE s_departmentid = '${departmentid}'
+    AND s_status = 'Active'`;
 
     Select(sql, (err, result) => {
       if (err) {

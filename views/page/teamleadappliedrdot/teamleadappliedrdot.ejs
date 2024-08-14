@@ -1,0 +1,148 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Applied Rest Day OT</h3>
+      <!-- <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button> -->
+      <input id='myInput' type='text' placeholder="  Search....">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-bordered table-light" id="dataTableOtapproval">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee Name</th>
+                        <th>Attendance Date</th>
+                        <th>Clock In</th>
+                        <th>Clock Out</th>
+                        <th>Total Hours</th>
+                        <th>Payroll Date</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="otapprovalmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Approve This RDOT Request</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="text" class="form-control border-form-modal" id="appliedotfullname" name="appliedotfullname" disabled>
+                          <label for="floatingInput">Full Name</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="appliedattendancedate" name="appliedattendancedate" disabled>
+                            <label for="floatingInput">Attendace Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="appliedclockin" name="appliedclockin" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Clock In</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="datetime-local" class="form-control border-form-modal" id="appliedclockout" name="appliedclockout" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Clock Out</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="number" class="form-control border-form-modal" id="totalothours" name="totalothours" disabled>
+                            <label for="floatingInput">Total Hours</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <select class="form-select border-form-modal" id="appliedpayrolldate" name="appliedpayrolldate"
+                              aria-label="Floating label select example">
+                           </select>
+                           <label for="floatingInput">Pyroll Date</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                           <select class="form-select border-form-modal" id="subgroupid" name="subgroupid"
+                              aria-label="Floating label select example" disabled>
+                              <option></option>
+                           </select>
+                           <label for="floatingInput">Sub Group Name</label>
+                        </div> 
+                      </div>        
+                      <div class="col">
+                        <div class="form-floating">
+                          <select class="form-select border-form-modal" id="appliedstatus" name="appliedstatus"
+                          aria-label="Floating label select example">
+                          <option value="Approved">Approved</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                          <label for="floatingInput">Status</label>
+                      </div>                    
+                    </div>
+                    </div>
+                  <br>
+                  <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <textarea type="text" class="form-control border-form-modal" id="otcomment" name="otcomment"
+                              placeholder="Comment"></textarea>
+                            <label for="floatingInput">Comment</label>
+                          </div>
+                        </div>
+                      </div>
+                    <br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="otsavebutton">Save</button>
+          </div>
+      </div>
+  </div>
+</div>

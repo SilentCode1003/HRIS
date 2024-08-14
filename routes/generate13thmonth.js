@@ -140,53 +140,53 @@ router.post("/gen13thmonth", (req, res) => {
   }
 });
 
-router.post("/save", (req, res) => {
-  try {
-    let status = GetValue(ACT());
-    let createdby =
-      req.session.personelid == null ? "DEV42" : req.session.personelid;
-    let createddate = GetCurrentDatetime();
-    const { route, layout, access } = req.body;
+// router.post("/save", (req, res) => {
+//   try {
+//     let status = GetValue(ACT());
+//     let createdby =
+//       req.session.personelid == null ? "DEV42" : req.session.personelid;
+//     let createddate = GetCurrentDatetime();
+//     const { route, layout, access } = req.body;
 
-    let sql = InsertStatement("master_access_route_layout", "marl", [
-      "route",
-      "layout",
-      "accessid",
-      "status",
-      "createdby",
-      "createddate",
-    ]);
-    let data = [[route, layout, access, status, createdby, createddate]];
-    let checkStatement = SelectStatement(
-      "select * from master_access_route_layout where marl_route=? and marl_layout=? and marl_accessid=?",
-      [route, layout, access]
-    );
+//     let sql = InsertStatement("master_access_route_layout", "marl", [
+//       "route",
+//       "layout",
+//       "accessid",
+//       "status",
+//       "createdby",
+//       "createddate",
+//     ]);
+//     let data = [[route, layout, access, status, createdby, createddate]];
+//     let checkStatement = SelectStatement(
+//       "select * from master_access_route_layout where marl_route=? and marl_layout=? and marl_accessid=?",
+//       [route, layout, access]
+//     );
 
-    Check(checkStatement)
-      .then((result) => {
-        console.log(result);
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, result) => {
-            if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
-            }
+//     Check(checkStatement)
+//       .then((result) => {
+//         console.log(result);
+//         if (result != 0) {
+//           return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//         } else {
+//           InsertTable(sql, data, (err, result) => {
+//             if (err) {
+//               console.log(err);
+//               res.json(JsonErrorResponse(err));
+//             }
 
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
-  } catch (error) {
-    console.log(err);
-    res.json(JsonErrorResponse(error));
-  }
-});
+//             res.json(JsonSuccess());
+//           });
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//         res.json(JsonErrorResponse(error));
+//       });
+//   } catch (error) {
+//     console.log(err);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
 
 
 router.post("/getinfo13thmonth", (req, res) => {
