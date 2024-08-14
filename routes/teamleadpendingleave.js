@@ -166,71 +166,62 @@ router.post("/leaveaction", (req, res) => {
   }
 });
 
-router.post("/leaveaction", (req, res) => {
-  try {
-    let employeeid = req.session.employeeid;
-    let departmentid = req.session.departmentid;
-    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { subgroupid, leaveid, status, comment, startdate, enddate } =
-      req.body;
+// router.post("/leaveaction", (req, res) => {
+//   try {
+//     let employeeid = req.session.employeeid;
+//     let departmentid = req.session.departmentid;
+//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+//     const { subgroupid, leaveid, status, comment } = req.body;
 
-    let sql = InsertStatement("leave_request_activity", "lra", [
-      "employeeid",
-      "departmentid",
-      "leaveid",
-      "subgroupid",
-      "status",
-      "date",
-      "comment",
-    ]);
+//     let sql = InsertStatement("leave_request_activity", "lra", [
+//       "employeeid",
+//       "departmentid",
+//       "leaveid",
+//       "subgroupid",
+//       "status",
+//       "date",
+//       "comment",
+//     ]);
 
-    console.log(InsertStatement);
+//     console.log(InsertStatement);
 
-    console.log(sql);
+//     console.log(sql);
 
-    let data = [
-      [
-        employeeid,
-        departmentid,
-        subgroupid,
-        leaveid,
-        status,
-        createdate,
-        comment,
-      ],
-    ];
-    let checkStatement = SelectStatement(
-      "select * from leave_request_activity where lra_employeeid=? and lra_leaveid=? and lra_subgroupid=? and lra_status=?",
-      [employeeid, leaveid, subgroupid, status]
-    );
+//     let data = [[employeeid, departmentid, subgroupid, leaveid, status, createdate, comment]];
+//     let checkStatement = SelectStatement(
+//       "select * from leave_request_activity where lra_employeeid=? and lra_leaveid=? and lra_subgroupid=? and lra_status=?",
+//       [employeeid, leaveid, subgroupid, status]
+//     );
 
-    console.log(checkStatement);
+//     console.log(checkStatement);
 
-    Check(checkStatement)
-      .then((result) => {
-        console.log(result);
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, result) => {
-            if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
-            }
+//     Check(checkStatement)
+//       .then((result) => {
+//         console.log(result);
+//         if (result != 0) {
+//           return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//         } else {
+//           InsertTable(sql, data, (err, result) => {
+//             if (err) {
+//               console.log(err);
+//               res.json(JsonErrorResponse(err));
+//             }
 
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
-  } catch (error) {
-    console.log(err);
-    res.json(JsonErrorResponse(error));
-  }
-});
+//             res.json(JsonSuccess());
+
+//             console.log(result);
+//           });
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//         res.json(JsonErrorResponse(error));
+//       });
+//   } catch (error) {
+//     console.log(err);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
 
 //#region FUNCTION
 function Check(sql) {

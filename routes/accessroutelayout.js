@@ -78,12 +78,15 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
+  console.log("HIT");
   try {
-    let status = GetValue(ACT());
+    let status = 'ACTIVE';
     let createdby =
       req.session.personelid == null ? "DEV42" : req.session.personelid;
     let createddate = GetCurrentDatetime();
     const { route, layout, access } = req.body;
+
+    console.log(req.body);
 
     let sql = InsertStatement("master_access_route_layout", "marl", [
       "route",
@@ -93,6 +96,9 @@ router.post("/save", (req, res) => {
       "createdby",
       "createddate",
     ]);
+
+    console.log(sql);
+    
     let data = [[route, layout, access, status, createdby, createddate]];
     let checkStatement = SelectStatement(
       "select * from master_access_route_layout where marl_route=? and marl_layout=? and marl_accessid=?",
@@ -120,7 +126,7 @@ router.post("/save", (req, res) => {
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });

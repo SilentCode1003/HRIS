@@ -81,7 +81,7 @@ router.post("/getattendanceactivity", (req, res) => {
     INNER JOIN master_employee me_request ON ar.ar_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id
     INNER JOIN subgroup on ara.ara_subgroupid = s_id
-	JOIN request_approval_settings  ON ara_departmentid = ras_departmentid
+	  JOIN request_approval_settings  ON ara_departmentid = ras_departmentid
     WHERE ara_id = '${requsetid}'`;
 
     mysql

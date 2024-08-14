@@ -6,8 +6,6 @@ const { Select, InsertTable } = require("./repository/dbconnect");
 const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { InsertStatement, SelectStatement } = require("./repository/customhelper");
-const { REQUEST } = require("./repository/dictionary");
-const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -17,8 +15,8 @@ router.get("/", function (req, res, next) {
   Validator(
     req, 
     res, 
-    "teamleadappliedovertimelayout",
-    "teamleadappliedovertime");
+    "teamleadappliedrdotlayout",
+    "teamleadappliedrdot");
 });
 
 module.exports = router;
@@ -80,29 +78,34 @@ module.exports = router;
 // });
 
 router.get("/load", (req, res) => {
+    console.log("HIT");
+    
   try {
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
-        pao_id,
-        pao_fullname,
-        DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
-        DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
-        DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
-        (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
-        DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
-        pao_status
-    FROM payroll_approval_ot
+        roa_rdotid,
+        roa_fullname,
+        DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') as roa_attendancedate,
+        DATE_FORMAT(roa_timein, '%Y-%m-%d %H:%i:%s') AS roa_timein,
+        DATE_FORMAT(roa_timeout, '%Y-%m-%d %H:%i:%s') AS roa_timeout,
+        roa_total_hours,
+        DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
+        roa_status
+    FROM restday_ot_approval
     INNER JOIN
-    master_employee ON payroll_approval_ot.pao_employeeid = me_id
+    master_employee ON restday_ot_approval.roa_employeeid = me_id
     INNER JOIN 
             aprroval_stage_settings ON 
                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-                aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
-                aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
+                aprroval_stage_settings.ats_subgroupid = restday_ot_approval.roa_subgroupid AND
+                aprroval_stage_settings.ats_count = restday_ot_approval.roa_approvalcount
         WHERE 
-        pao_status = 'Applied' 
-            AND pao_subgroupid IN (${subgroupid})`;
+        roa_status = 'Applied' 
+            AND roa_subgroupid IN (${subgroupid})`;
+
+            console.log(sql);
+            
             
     Select(sql, (err, result) => {
       if (err) {
@@ -113,7 +116,7 @@ router.get("/load", (req, res) => {
       console.log(result);
 
       if (result != 0) {
-        let data = DataModeling(result, "pao_");
+        let data = DataModeling(result, "roa_");
 
         console.log(data);
         res.json(JsonDataResponse(data));
@@ -128,29 +131,24 @@ router.get("/load", (req, res) => {
 });
 
 
-router.post("/getotapproval", (req, res) => {
+router.post("/getrdotapproval", (req, res) => {
   try {
-    let approveot_id = req.body.approveot_id;
-    let sql = `select 
-	  pao_id,
-    pao_image,
-    pao_fullname,
-    DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
-    DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
-    DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
-    (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
-    pao_night_differentials,
-    pao_early_ot,
-    pao_normal_ot,
-    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
-    pao_reason,
-    pao_status,
-    pao_overtimeimage,
-    pao_subgroupid
-    FROM payroll_approval_ot
-    INNER JOIN
-    master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    where pao_id = '${approveot_id}'`;
+    let rdotid = req.body.rdotid;
+    let sql = `SELECT 
+      roa_rdotid,
+      roa_fullname,
+      DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') as roa_attendancedate,
+      DATE_FORMAT(roa_timein, '%Y-%m-%d %H:%i:%s') AS roa_timein,
+      DATE_FORMAT(roa_timeout, '%Y-%m-%d %H:%i:%s') AS roa_timeout,
+      roa_total_hours,
+      DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
+      roa_status,
+      roa_file,
+      roa_subgroupid
+      FROM restday_ot_approval
+      INNER JOIN
+      master_employee ON restday_ot_approval.roa_employeeid = me_id
+      WHERE roa_rdotid = '${rdotid}'`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -161,7 +159,7 @@ router.post("/getotapproval", (req, res) => {
       console.log(result);
 
       if (result != 0) {
-        let data = DataModeling(result, "pao_");
+        let data = DataModeling(result, "roa_");
 
         console.log(data);
         res.json(JsonDataResponse(data));
@@ -169,17 +167,6 @@ router.post("/getotapproval", (req, res) => {
         res.json(JsonDataResponse(result));
       }
     });
-
-    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-    //   if (err) console.error("Error: ", err);
-
-    //   console.log(result);
-
-    //   res.json({
-    //     msg: "success",
-    //     data: result,
-    //   });
-    // });
   } catch (error) {
     res.json({
       msg: "error",
@@ -190,48 +177,36 @@ router.post("/getotapproval", (req, res) => {
 
 
 
-router.post("/ovetimeaction", (req, res) => {
+router.post("/rdotaction", (req, res) => {
   console.log("HIT");
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
     let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { approveot_id, status, comment, attendancedate, timein, timeout } = req.body;
+    const { rdotid, status, comment } = req.body;
 
-    // let data = [];
-
-    // data.push([
-    //   employeeid,
-    //   departmentid,
-    //   approveot_id,
-    //   subgroupid,
-    //   status,
-    //   createdate,
-    //   comment,
-    // ]);
-
-    let sql = InsertStatement("overtime_request_activity", "ora", [
+    let sql = InsertStatement("restdayot_request_activity", "rra", [
       "employeeid",
       "departmentid",
       "subgroupid",
       "date",
-      "overtimeid",
+      "restdayotid",
       "status",
-      "commnet",
+      "comment",
     ]);
     let data = [[
       employeeid,
       departmentid,
       subgroupid,
       createdate,
-      approveot_id,
+      rdotid,
       status,
       comment
     ]];
     let checkStatement = SelectStatement(
-      "select * from overtime_request_activity where ora_employeeid=? and ora_overtimeid=?",
-      [employeeid, approveot_id]
+      "select * from restdayot_request_activity where rra_employeeid=? and rra_id=?",
+      [employeeid, rdotid]
     );
 
     console.log(checkStatement,'result');
@@ -241,18 +216,6 @@ router.post("/ovetimeaction", (req, res) => {
         console.log(err);
         res.json(JsonErrorResponse(err));
       }
-
-      let emailbody = [
-        {
-          employeename: employeeid,
-          date: attendancedate,
-          timein: timein,
-          timeout: timeout,
-          reason: comment,
-          requesttype: REQUEST.OVERTIME,
-        },
-      ];
-      SendEmailNotificationEmployee(employeeid,subgroupid, emailbody);
 
       res.json(JsonSuccess());
     });

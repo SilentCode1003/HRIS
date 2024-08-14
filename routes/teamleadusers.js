@@ -245,7 +245,8 @@ router.post("/subgrouploadforapp", (req, res) => {
     let departmentid = req.body.departmentid;
     let sql = `select * 
     from subgroup
-    where s_departmentid = '${departmentid}'`;
+    where s_departmentid = '${departmentid}'
+    AND s_status = 'Active'`;
 
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error: ", err);

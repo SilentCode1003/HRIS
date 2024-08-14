@@ -1425,15 +1425,15 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var LEAVE_ID = row.insertCell(1);
-            var FIRSTNAME = row.insertCell(2);
-            var LEAVE_STARTDADTE = row.insertCell(3);
-            var LEAVE_ENDATE = row.insertCell(4);
-            var LEAVE_TYPE = row.insertCell(5);
-            var REASON = row.insertCell(6);
-            var APPLIEDDATE = row.insertCell(7);
-            var ACTION = row.insertCell(8);
+            // var IMAGE = row.insertCell(0);
+            var LEAVE_ID = row.insertCell(0);
+            var FIRSTNAME = row.insertCell(1);
+            var LEAVE_STARTDADTE = row.insertCell(2);
+            var LEAVE_ENDATE = row.insertCell(3);
+            var LEAVE_TYPE = row.insertCell(4);
+            var REASON = row.insertCell(5);
+            var APPLIEDDATE = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
             action.id = "editBtn";
@@ -1452,13 +1452,13 @@
               leaveid = dataRow[1];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             LEAVE_ID.innerHTML = item.leaveid;
             FIRSTNAME.innerHTML = item.firstname;
             LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
@@ -1667,14 +1667,14 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var CASHADVANCE_ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var REQUEST_DATE = row.insertCell(3);
-            var AMOUNT = row.insertCell(4);
-            var PURPOSE = row.insertCell(5);
-            var STATUS = row.insertCell(6);
-            var ACTION = row.insertCell(7);
+            // var IMAGE = row.insertCell(0);
+            var CASHADVANCE_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var REQUEST_DATE = row.insertCell(2);
+            var AMOUNT = row.insertCell(3);
+            var PURPOSE = row.insertCell(4);
+            var STATUS = row.insertCell(5);
+            var ACTION = row.insertCell(6);
 
             var action = document.createElement("button");
             action.id = "editCABtn";
@@ -1693,13 +1693,13 @@
               cashadvanceid = dataRow[1];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             CASHADVANCE_ID.innerHTML = item.employeeid;
             NAME.innerHTML = item.firstname;
             REQUEST_DATE.innerHTML = item.requestdate;
@@ -1847,15 +1847,15 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var APPROVEDOT_ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var ATTENDANCE_DATE = row.insertCell(3);
-            var PAYROLL_DATE = row.insertCell(4);
-            var CLOCKIN = row.insertCell(5);
-            var CLOCKOUT = row.insertCell(6);
-            var TOTAL_HOURS = row.insertCell(7);
-            var ACTION = row.insertCell(8);
+            // var IMAGE = row.insertCell(0);
+            var APPROVEDOT_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var PAYROLL_DATE = row.insertCell(3);
+            var CLOCKIN = row.insertCell(4);
+            var CLOCKOUT = row.insertCell(5);
+            var TOTAL_HOURS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
             action.id = "editOTBTN";
@@ -1874,13 +1874,13 @@
               approveot_id = dataRow[1];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             APPROVEDOT_ID.innerHTML = item.approveot_id;
             NAME.innerHTML = item.fullname;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -2069,14 +2069,14 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var REQUEST_ID = row.insertCell(1);
-            var FULLNAME = row.insertCell(2);
-            var ATTENDANCE_DATE = row.insertCell(3);
-            var TIME_IN = row.insertCell(4);
-            var TIME_OUT = row.insertCell(5);
-            var TOTAL_HOURS = row.insertCell(6);
-            var ACTION = row.insertCell(7);
+            // var IMAGE = row.insertCell(0);
+            var REQUEST_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var TIME_IN = row.insertCell(3);
+            var TIME_OUT = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var ACTION = row.insertCell(6);
 
             var action = document.createElement("button");
             action.id = "editCOABTN";
@@ -2095,13 +2095,13 @@
               requestid = dataRow[1];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             REQUEST_ID.innerHTML = item.requestid;
             FULLNAME.innerHTML = item.employeeid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;

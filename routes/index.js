@@ -19,7 +19,6 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `select
-    me_profile_pic as image,
     l_leaveid as leaveid ,
     me_id as newEmployeeId,
     concat(me_lastname,' ',me_firstname) as firstname,
@@ -111,7 +110,6 @@ router.get("/loadCA", (req, res) => {
   try {
     let sql = `   
     select
-	  me_profile_pic as image,
     ca_cashadvanceid as employeeid,
     concat(me_lastname,' ',me_firstname) as firstname,
     ca_requestdate as requestdate,
@@ -148,7 +146,6 @@ router.get("/loadreqOT", (req, res) => {
   try {
     let sql = `   
     SELECT 
-    pao_image,
     pao_id,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%W, %M %d, %Y') as pao_attendancedate,
@@ -179,7 +176,6 @@ router.get("/loadreqattendance", (req, res) => {
   try {
     let sql = `   
     SELECT 
-    me_profile_pic,
     ar_requestid,
     concat(me_lastname,' ' ,me_firstname) as  ar_employeeid,
     DATE_FORMAT(ar_attendace_date, '%W, %M %d, %Y') as ar_attendace_date,
@@ -250,7 +246,6 @@ router.get("/attendancestatus", (req, res) => {
   try {
     let sql = `
     SELECT
-    me.me_profile_pic as image,
     concat(me.me_lastname,' ',me.me_firstname) as FullName,
     TIME_FORMAT(ma.ma_clockin, '%h:%i %p') AS actual_clockin,
     CASE
@@ -262,7 +257,17 @@ router.get("/attendancestatus", (req, res) => {
         WHEN WEEKDAY(ma.ma_attendancedate) = 5 THEN JSON_UNQUOTE(ms.ms_saturday->'$.time_in')
         WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
     END AS scheduled_time_in,
-    TIMESTAMPDIFF(MINUTE, 
+		
+	CASE WHEN (CASE
+            WHEN WEEKDAY(ma.ma_attendancedate) = 0 THEN JSON_UNQUOTE(ms.ms_monday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 1 THEN JSON_UNQUOTE(ms.ms_tuesday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 2 THEN JSON_UNQUOTE(ms.ms_wednesday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 3 THEN JSON_UNQUOTE(ms.ms_thursday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 4 THEN JSON_UNQUOTE(ms.ms_friday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 5 THEN JSON_UNQUOTE(ms.ms_saturday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
+        END) = '00:00:00' THEN 'RESTDAY OT'
+        ELSE TIMESTAMPDIFF(MINUTE, 
         CONCAT(CAST(ma.ma_attendancedate AS DATE), ' ', 
         CASE
             WHEN WEEKDAY(ma.ma_attendancedate) = 0 THEN JSON_UNQUOTE(ms.ms_monday->'$.time_in')
@@ -274,7 +279,7 @@ router.get("/attendancestatus", (req, res) => {
             WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
         END), 
         ma.ma_clockin
-    ) AS minutes_late
+    )END AS minutes_late
 FROM
     master_attendance ma
 JOIN

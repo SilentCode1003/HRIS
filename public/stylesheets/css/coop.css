@@ -611,6 +611,8 @@ tr:hover {
 #totalCOACard,
 #totalovertimeCard,
 #totalotmealCard,
+#totalrestdayotCard,
+#totalholidayCard,
 #totalleaveCard {
   background-image: url(/images/img/coa.png);
   background-position: center;
@@ -1010,7 +1012,7 @@ tr:hover {
 }
 
 
-#totalCOA, #totalovertime, #totalleave, #totalotmeal{
+#totalCOA, #totalovertime, #totalleave, #totalotmeal, #totalrestdayot, #totalholiday{
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
   height: 200px;
@@ -1032,6 +1034,8 @@ tr:hover {
 #totalovertime:hover,
 #totalleave:hover,
 #totalotmeal:hover,
+#totalrestdayot:hover,
+#totalholiday:hover,
 #total1year:hover,
 .department-card:hover {
   transform: scale(1.1);

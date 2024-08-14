@@ -18,7 +18,6 @@ router.get("/load", (req, res) => {
     let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let sql = `SELECT 
-    me_profile_pic,
     ar_requestid,
     concat(me_lastname,' ',me_firstname) as ar_employeeid,
     DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,

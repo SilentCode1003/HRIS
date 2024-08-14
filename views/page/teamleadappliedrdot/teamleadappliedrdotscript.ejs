@@ -1,13 +1,10 @@
 <script>
-  $(document).ready(function () {
-    let approveot_id = "";
-    let attendancedate = "";
-    let clockin = "";
-    let clockout = "";
+  let rdotid = "";
 
+  $(document).ready(function () {
     LoadTable();
     searchTable();
-    LoadList();
+    LoadPayrollDate();
     LoadSubgroup();
     //LoadEditEmp();
 
@@ -27,7 +24,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/teamleadappliedovertime/load",
+          url: "/teamleadappliedrdot/load",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -47,14 +44,14 @@
 
               finalData.push({
                 // image: imgElement.outerHTML,
-                approveot_id: item.id,
+                rdotid: item.rdotid,
                 fullname: item.fullname,
                 attendancedate: item.attendancedate,
-                clockin: item.clockin,
-                clockout: item.clockout,
+                timein: item.timein,
+                timeout: item.timeout,
                 totalhours: item.total_hours,
-                payrolldate: item.payroll_date,
-                overtimestatus: item.status,
+                payrolldate: item.payrolldate,
+                status: item.status,
                 action: action,
               });
             });
@@ -70,14 +67,14 @@
         ],
         columns: [
           // { data: "image" },
-          { data: "approveot_id" },
+          { data: "rdotid" },
           { data: "fullname" },
           { data: "attendancedate" },
-          { data: "clockin" },
-          { data: "clockout" },
+          { data: "timein" },
+          { data: "timeout" },
           { data: "totalhours" },
           { data: "payrolldate" },
-          { data: "overtimestatus" },
+          { data: "status" },
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
@@ -90,7 +87,7 @@
       });
     }
 
-    function LoadList() {
+    function LoadPayrollDate() {
       $.ajax({
         type: "GET",
         url: "/setpayrolldate/loadreqbeforepayout",
@@ -109,29 +106,10 @@
       });
     }
 
-    // function LoadEditEmp() {
-    //   $.ajax({
-    //     type: "GET",
-    //     url: "/employee/load",
-    //     success: function (result) {
-    //       var data = result.data;
-
-    //       $.each(data, function (key, item) {
-    //         var options = new Option(item.id, item.id);
-    //         $(options).html(item.fullname);
-    //         $("#appliedotfullname").append(options);
-    //       });
-    //     },
-    //     error: function (result) {
-    //       alert("error: " + result.data);
-    //     },
-    //   });
-    // }
-
     function LoadSubgroup() {
       $.ajax({
         type: "GET",
-        url: "/subgroup/load",
+        url: "/subgroup/getsubgroupallactive",
         success: function (result) {
           var data = result.data;
 
@@ -156,42 +134,39 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      approveot_id = dataRow[0];
-      attendancedate = dataRow[2];
-      clockin = dataRow[3];
-      clockout = dataRow[4];
+      rdotid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/teamleadappliedovertime/getotapproval",
+        url: "/teamleadappliedrdot/getrdotapproval",
         data: {
-          approveot_id: approveot_id,
+          rdotid: rdotid,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
+            console.log(existingData);
+            
+
             $.each(existingData, (key, item) => {
               $("#previewleave").attr(
                 "src",
-                "data:image/jpg;base64," + item.overtimeimage
+                "data:image/jpg;base64," + item.file
               );
-              base64String = item.overtimeimage;
+              base64String = item.file;
               $("#appliedotfullname").val(item.fullname);
               $("#appliedattendancedate").val(item.attendancedate);
-              $("#appliedclockin").val(item.clockin);
-              $("#appliedclockout").val(item.clockout);
+              $("#appliedclockin").val(item.timein);
+              $("#appliedclockout").val(item.timeout);
               $("#totalothours").val(item.total_hours);
-              $("#totalnightdiff").val(item.night_differentials);
-              $("#totalearlytot").val(item.early_ot);
-              $("#totalnormalot").val(item.normal_ot);
-              $("#appliedpayrolldate").val(item.payroll_date);
-              $("#appliedreason").val(item.reason);
-              $("#appliedstatus").val(item.status);
+              $("#appliedpayrolldate").val(item.payrolldate);
               $("#subgroupid").val(item.subgroupid);
+              $("#appliedstatus").val(item.status);
             });
+            
           } else {
             swal("Error fetching employee data", message, "error");
           }
@@ -208,14 +183,11 @@
 
     $(document).on("click", "#otsavebutton", function () {
       console.log("hit");
-      let id = approveot_id;
+      let id = rdotid;
       let requeststatus = $("#appliedstatus").val();
       let comment = $("#otcomment").val();
       let subgroupid = $("#subgroupid").val();
 
-      console.log(approveot_id, "LEAVE");
-      console.log(requeststatus, "LEAVE");
-      console.log(comment, "LEAVE");
 
       var message = "";
 
@@ -232,15 +204,12 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/teamleadappliedovertime/ovetimeaction",
+          url: "/teamleadappliedrdot/rdotaction",
           data: {
-            approveot_id: approveot_id,
+            rdotid: rdotid,
             status: requeststatus,
             comment: comment,
             subgroupid: subgroupid,
-            attendancedate: attendancedate,
-            clockin: clockin,
-            clockout: clockout,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -268,103 +237,6 @@
         });
       }
     });
-
-    $(document).on("click", "#otsavebutton", function () {
-      console.log("HIT");
-      let id = approveot_id;
-      let night_ot = $("#otnight").val();
-      let earlyot = $("#otearly").val();
-      let normal_ot = $("#otnormal").val();
-      let payrolldate = $("#otpayrolldate").val();
-      let overtimestatus = $("#otstatus").val();
-
-      var message = "";
-
-      if (night_ot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (earlyot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (normal_ot === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (payrolldate === "") {
-        message += "status is required. ";
-      }
-
-      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
-        message += "You Need to Approve or Disregard. ";
-      }
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "otapproval/update",
-          data: {
-            approveot_id: id,
-            night_ot: night_ot,
-            earlyot: earlyot,
-            normal_ot: normal_ot,
-            payrolldate: payrolldate,
-            overtimestatus: overtimestatus,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Update Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning");
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
-      }
-    });
-
-    // Event listener for clockin and clockout input fields
-    // $("#otclockin, #otclockout").on("change", function () {
-    //   // Get the values of clockin and clockout
-    //   let clockinValue = $("#otclockin").val();
-    //   let clockoutValue = $("#otclockout").val();
-
-    //   // Calculate duration in minutes
-    //   let duration = moment
-    //     .duration(
-    //       moment(clockoutValue, "HH:mm").diff(moment(clockinValue, "HH:mm"))
-    //     )
-    //     .asMinutes();
-
-    //   // Adjust night_ot, earlyot, and normal_ot based on duration
-    //   if (duration >= 480) {
-    //     // 8 hours or more
-    //     $("#otnight").val(duration);
-    //     $("#otearly").val(0);
-    //     $("#otnormal").val(0);
-    //   } else if (duration >= 240) {
-    //     // 4 to 8 hours
-    //     $("#otnight").val(0);
-    //     $("#otearly").val(duration);
-    //     $("#otnormal").val(0);
-    //   } else {
-    //     // Less than 4 hours
-    //     $("#otnight").val(0);
-    //     $("#otearly").val(0);
-    //     $("#otnormal").val(duration);
-    //   }
-    // });
 
     $(document).on("change", "#otimage", function (e) {
       const input = document.getElementById("otimage");
