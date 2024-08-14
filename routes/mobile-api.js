@@ -14,7 +14,7 @@ const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
 var router = express.Router();
 const currentDate = moment();
-const { Encrypter, Decrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/cryptography");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -23,7 +23,6 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
 
 router.post("/loadotmeal", (req, res) => {
   try {
@@ -64,11 +63,9 @@ router.post("/loadotmeal", (req, res) => {
   }
 });
 
-
-
 router.post("/login", (req, res) => {
   try {
-    const { username, password,} = req.body;
+    const { username, password } = req.body;
 
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
@@ -95,7 +92,8 @@ router.post("/login", (req, res) => {
         WHERE mu_username = '${username}' AND mu_password = '${encrypted}'
         AND mu_accesstype = '2'`;
 
-      mysql.mysqlQueryPromise(sql)
+      mysql
+        .mysqlQueryPromise(sql)
         .then((result) => {
           if (result.length !== 0) {
             const user = result[0];
@@ -123,7 +121,7 @@ router.post("/login", (req, res) => {
                   req.session.geofenceid = user.geofenceid;
                   req.session.accesstypeid = user.accesstypeid;
                 });
-                console.log('accesstype',req.session.accesstype);
+                console.log("accesstype", req.session.accesstype);
                 return res.json({
                   msg: "success",
                   data: data,
@@ -158,11 +156,10 @@ router.post("/login", (req, res) => {
   }
 });
 
-
 router.post("/loadovertime", (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let sql = `SELECT
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT
       pao_id,
       DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
       DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
@@ -176,37 +173,36 @@ router.post("/loadovertime", (req, res) => {
       FROM payroll_approval_ot
       WHERE pao_employeeid = '${employeeid}'
       AND pao_status = 'Pending'`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "pao_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        error,
-      });
-    }
-  });
 
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-  router.post("/loadcoa", (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let sql = `SELECT 
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.post("/loadcoa", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
       ar_requestid,
       DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
       DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
@@ -219,37 +215,36 @@ router.post("/loadovertime", (req, res) => {
     INNER JOIN
     master_employee ON attendance_request.ar_employeeid = me_id
     where ar_employeeid ='${employeeid}'`;
-  
+
     Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ar_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        error,
-      });
-    }
-  });
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
+      console.log(result);
 
-  router.post("/getovertime", (req, res) => {
-    try {
-      let approveot_id = req.body.approveot_id;
-      let sql = `SELECT
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.post("/getovertime", (req, res) => {
+  try {
+    let approveot_id = req.body.approveot_id;
+    let sql = `SELECT
     pao_id AS approvalid,
     JSON_UNQUOTE(JSON_EXTRACT(
         CASE DAYNAME(pao_attendancedate)
@@ -286,34 +281,33 @@ LEFT JOIN master_holiday ON pao_attendancedate = mh_date
 INNER JOIN master_department ON master_employee.me_department = md_departmentid
 INNER JOIN master_position ON master_employee.me_position = mp_positionid
 WHERE pao_id = '${approveot_id}'`;
-  
-      mysql
-        .mysqlQueryPromise(sql)
-        .then((result) => {
-          res.json({
-            msg: "success",
-            data: result,
-          });
-        })
-        .catch((error) => {
-          res.json({
-            msg: "error",
-            data: error,
-          });
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
         });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        data: error,
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    }
-  });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
 
-
-  router.post("/getpayrolldate", (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let sql = `SELECT 
+router.post("/getpayrolldate", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
       CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
       DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
       p_cutoff as p_cutoff,
@@ -333,172 +327,165 @@ WHERE pao_id = '${approveot_id}'`;
       ORDER BY 
       p_payrolldate DESC
       LIMIT 2`;
-  
-      console.log(employeeid);
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "p_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json(JsonErrorResponse(error));
-    }
-  });
 
+    console.log(employeeid);
 
-
-  router.post("/updatepassword", async (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let currentPass = req.body.currentPass;
-      let newPass = req.body.newPass;
-      let confirmPass = req.body.confirmPass;
-      let accesstypeid = req.body.accesstypeid;
-  
-      console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
-  
-      if (newPass !== confirmPass) {
-        return res.json({
-          msg: "error",
-          description: "New password and confirm password do not match",
-        });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
       }
-  
-      const userData = await mysql.mysqlQueryPromise(
-        `SELECT mu_password FROM master_user WHERE 
-        mu_accesstype = '${accesstypeid}' and  mu_employeeid = '${employeeid}'`
-      );
-  
-      if (userData.length !== 1) {
-        return res.json({
-          msg: "error",
-          description: "Employee not found",
-        });
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
       }
-  
-      const encryptedStoredPassword = userData[0].mu_password;
-  
-      Decrypter(
-        encryptedStoredPassword,
-        async (decryptError, decryptedStoredPassword) => {
-          if (decryptError) {
-            return res.json({
-              msg: "error",
-              description: "Error decrypting the stored password",
-            });
-          }
-  
-          if (currentPass !== decryptedStoredPassword) {
-            return res.json({
-              msg: "error",
-              description: "Current password is incorrect",
-            });
-          }
-  
-          Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
-            if (encryptError) {
-              return res.json({
-                msg: "error",
-                description: "Error encrypting the new password",
-              });
-            }
-  
-            await mysql.Update(
-              `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}' and mu_accesstype = '${accesstypeid}'`
-            );
-  
-            return res.json({
-              msg: "success",
-              description: "Password updated successfully",
-            });
-          });
-        }
-      );
-    } catch (error) {
-      console.error(error);
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/updatepassword", async (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let currentPass = req.body.currentPass;
+    let newPass = req.body.newPass;
+    let confirmPass = req.body.confirmPass;
+    let accesstypeid = req.body.accesstypeid;
+
+    console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
+
+    if (newPass !== confirmPass) {
       return res.json({
         msg: "error",
-        description: error.message || "Internal server error",
+        description: "New password and confirm password do not match",
       });
     }
-  });
 
+    const userData = await mysql.mysqlQueryPromise(
+      `SELECT mu_password FROM master_user WHERE 
+        mu_accesstype = '${accesstypeid}' and  mu_employeeid = '${employeeid}'`
+    );
 
-
-  router.post("/loadloansdetails", (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let sql = `SELECT * FROM gov_loan_details
-      WHERE gld_employeeid = '${employeeid}'`;  
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "gld_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json({
+    if (userData.length !== 1) {
+      return res.json({
         msg: "error",
-        error,
+        description: "Employee not found",
       });
     }
-  });
 
+    const encryptedStoredPassword = userData[0].mu_password;
 
+    Decrypter(
+      encryptedStoredPassword,
+      async (decryptError, decryptedStoredPassword) => {
+        if (decryptError) {
+          return res.json({
+            msg: "error",
+            description: "Error decrypting the stored password",
+          });
+        }
 
+        if (currentPass !== decryptedStoredPassword) {
+          return res.json({
+            msg: "error",
+            description: "Current password is incorrect",
+          });
+        }
 
-  router.post("/loadloans", (req, res) => {
-    try {
-      let employeeid = req.body.employeeid;
-      let sql = `SELECT * FROM gov_loans
+        Encrypter(newPass, async (encryptError, encryptedNewPassword) => {
+          if (encryptError) {
+            return res.json({
+              msg: "error",
+              description: "Error encrypting the new password",
+            });
+          }
+
+          await mysql.Update(
+            `UPDATE master_user SET mu_password = '${encryptedNewPassword}' WHERE mu_employeeid = '${employeeid}' and mu_accesstype = '${accesstypeid}'`
+          );
+
+          return res.json({
+            msg: "success",
+            description: "Password updated successfully",
+          });
+        });
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    return res.json({
+      msg: "error",
+      description: error.message || "Internal server error",
+    });
+  }
+});
+
+router.post("/loadloansdetails", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT * FROM gov_loan_details
+      WHERE gld_employeeid = '${employeeid}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "gld_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
+router.post("/loadloans", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT * FROM gov_loans
       WHERE gl_employeeid = '${employeeid}'`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "gl_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        error,
-      });
-    }
-  });
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "gl_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});

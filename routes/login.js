@@ -1,8 +1,8 @@
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 var router = express.Router();
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const { UserLogin } = require("./repository/helper");
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -10,7 +10,6 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
 
 router.post("/login", (req, res) => {
   try {
@@ -75,7 +74,8 @@ router.post("/login", (req, res) => {
           mgs_id
       LIMIT 1`;
 
-      mysql.mysqlQueryPromise(sql)
+      mysql
+        .mysqlQueryPromise(sql)
         .then((result) => {
           if (result.length !== 0) {
             const user = result[0];
@@ -87,6 +87,8 @@ router.post("/login", (req, res) => {
             ) {
               if (user.status === "Active") {
                 let data = UserLogin(result);
+
+                console.log(result);
 
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
@@ -102,9 +104,9 @@ router.post("/login", (req, res) => {
                   req.session.accesstypeid = user.accesstypeid;
                   req.session.subgroupid = user.subgroupid;
                 });
-                console.log('accesstype',req.session.accesstype);
-                
-                console.log(req.session.isgeofence,'data');
+                console.log("accesstype", req.session.accesstype);
+
+                console.log(req.session.isgeofence, "data");
                 return res.json({
                   msg: "success",
                   data: data,
@@ -139,8 +141,6 @@ router.post("/login", (req, res) => {
   }
 });
 
-
-
 router.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err)
@@ -153,31 +153,27 @@ router.post("/logout", (req, res) => {
   });
 });
 
-
 let transporter = nodemailer.createTransport({
-  host: 'smtp.example.com', // Your SMTP server
+  host: "smtp.example.com", // Your SMTP server
   port: 587,
   secure: false, // false for TLS; true for SSL
   auth: {
-      user: 'your_email@example.com', // Your email
-      pass: 'your_email_password' // Your email password
-  }
+    user: "your_email@example.com", // Your email
+    pass: "your_email_password", // Your email password
+  },
 });
 
-
-router.post('/forgotpass' , (req, res) => {
+router.post("/forgotpass", (req, res) => {
   try {
-    
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-//#region Reserved Login 
+//#region Reserved Login
 
 // router.post("/login", (req, res) => {
 //   try {
@@ -186,7 +182,7 @@ router.post('/forgotpass' , (req, res) => {
 //     Encrypter(password, (err, encrypted) => {
 //       if (err) console.error("Error: ", err);
 
-//       let sql = `SELECT 
+//       let sql = `SELECT
 //       mu_employeeid AS employeeid,
 //       CONCAT(me_firstname, ' ', me_lastname) AS fullname,
 //       ma_accessname AS accesstype,
@@ -202,7 +198,7 @@ router.post('/forgotpass' , (req, res) => {
 //       LEFT JOIN master_employee ON mu_employeeid = me_id
 //       LEFT JOIN master_department ON md_departmentid = me_department
 //       LEFT JOIN master_position ON mp_positionid = me_position
-//       LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
+//       LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department
 //       WHERE mu_username = '${username}' AND mu_password = '${encrypted}'`;
 
 //       mysql.mysqlQueryPromise(sql)
@@ -229,7 +225,7 @@ router.post('/forgotpass' , (req, res) => {
 //                   req.session.jobstatus = user.jobstatus;
 //                   req.session.geofenceid = user.geofenceid;
 //                 });
-                
+
 //                 let genNotifSql = `call hrmis.GetNotification('${req.session.employeeid}')`;
 
 //                 mysql.StoredProcedure(genNotifSql, (err, result) => {
@@ -276,6 +272,5 @@ router.post('/forgotpass' , (req, res) => {
 //     });
 //   }
 // });
-
 
 //#endregion

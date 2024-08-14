@@ -1,11 +1,14 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -236,8 +239,6 @@ router.get("/subgroupload", (req, res) => {
     });
   }
 });
-
-
 
 router.post("/subgrouploadforapp", (req, res) => {
   try {

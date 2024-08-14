@@ -2,21 +2,25 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { JsonWarningResponse, JsonErrorResponse, JsonSuccess } = require("./repository/response");
+const {
+  JsonWarningResponse,
+  JsonErrorResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { InsertTable, Select } = require("./repository/dbconnect");
-const { SelectStatement, InsertStatement } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  InsertStatement,
+} = require("./repository/customhelper");
+const { REQUEST } = require("./repository/dictionary");
+const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('pendingleavelayout', { title: 'Express' });
-  Validator(
-    req,
-    res,
-    "teamleadpendingleavelayout",
-    "teamleadpendingleave"
-  );
+  Validator(req, res, "teamleadpendingleavelayout", "teamleadpendingleave");
 });
 
 module.exports = router;
@@ -26,7 +30,7 @@ module.exports = router;
 //     let departmentid = req.session.departmentid;
 //     let subgroupid = req.session.subgroupid;
 //     let accesstypeid = req.session.accesstypeid;
-//     let sql = `SELECT 
+//     let sql = `SELECT
 //     l_leaveid,
 //     concat(me_lastname,' ',me_firstname) as l_employeeid,
 //     DATE_FORMAT(l_leavestartdate, '%Y-%m-%d') AS l_leavestartdate,
@@ -38,7 +42,7 @@ module.exports = router;
 //     INNER JOIN
 //     master_employee ON leaves.l_employeeid = me_id
 //     INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
-//     WHERE l_leavestatus = 'Pending' 
+//     WHERE l_leavestatus = 'Pending'
 //     AND l_subgroupid IN (${subgroupid})
 //     AND me_department = '${departmentid}'
 //     AND l_employeeid NOT IN (
@@ -110,6 +114,7 @@ router.post("/leaveaction", (req, res) => {
     let leaveid = req.body.leaveid;
     let status = req.body.status;
     let comment = req.body.comment;
+    const { startdate, enddate } = req.body;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 
     let data = [];
@@ -131,6 +136,23 @@ router.post("/leaveaction", (req, res) => {
 
       console.log(result);
 
+      let emailbody = [
+        {
+          employeename: employeeid,
+          date: createdate,
+          startdate: startdate,
+          enddate: enddate,
+          reason: comment,
+          requesttype: REQUEST.LEAVE,
+        },
+      ];
+      SendEmailNotificationEmployee(
+        employeeid,
+        subgroupid,
+        REQUEST.LEAVE,
+        emailbody
+      );
+
       res.json({
         msg: "success",
         data: result,
@@ -144,13 +166,13 @@ router.post("/leaveaction", (req, res) => {
   }
 });
 
-
 router.post("/leaveaction", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { subgroupid, leaveid, status, comment } = req.body;
+    const { subgroupid, leaveid, status, comment, startdate, enddate } =
+      req.body;
 
     let sql = InsertStatement("leave_request_activity", "lra", [
       "employeeid",
@@ -166,7 +188,17 @@ router.post("/leaveaction", (req, res) => {
 
     console.log(sql);
 
-    let data = [[employeeid, departmentid, subgroupid, leaveid, status, createdate, comment]];
+    let data = [
+      [
+        employeeid,
+        departmentid,
+        subgroupid,
+        leaveid,
+        status,
+        createdate,
+        comment,
+      ],
+    ];
     let checkStatement = SelectStatement(
       "select * from leave_request_activity where lra_employeeid=? and lra_leaveid=? and lra_subgroupid=? and lra_status=?",
       [employeeid, leaveid, subgroupid, status]
@@ -187,8 +219,6 @@ router.post("/leaveaction", (req, res) => {
             }
 
             res.json(JsonSuccess());
-
-            console.log(result);
           });
         }
       })
@@ -201,8 +231,6 @@ router.post("/leaveaction", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
 
 //#region FUNCTION
 function Check(sql) {
