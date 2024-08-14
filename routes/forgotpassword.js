@@ -48,7 +48,7 @@ router.post("/request", (req, res) => {
 
         res.status(200).json(JsonSuccess());
       } else {
-        res.status(404).json(JsonSuccess("Employee not found"));
+        res.status(404).json(JsonErrorResponse("Employee not found"));
       }
     });
   } catch (error) {
