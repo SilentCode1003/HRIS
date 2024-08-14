@@ -34,14 +34,14 @@
               //     <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
               //    `;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "90px";
-              imgElement.style.height = "90px";
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
 
               finalData.push({
-                image: imgElement.outerHTML,
+                // image: imgElement.outerHTML,
                 requestid: item.requestid,
                 employeeid: item.employeeid,
                 attendancedate: item.attendancedate,
@@ -64,7 +64,7 @@
           },
         ],
         columns: [
-          { data: "image" },
+          // { data: "image" },
           { data: "requestid" },
           { data: "employeeid" },
           { data: "attendancedate" },

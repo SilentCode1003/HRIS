@@ -1,0 +1,155 @@
+<script>
+    let restdayotid = "";
+  
+    $(document).ready(function () {
+      LoadTable();
+      searchTable();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableOvertimeActivity").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 400,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/restdayot_request_activity/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `
+                              <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#overtimemodal"><i class="fas fa-fw fa-pen"></i></button>
+                          `;
+                finalData.push({
+                  id: item.id,
+                  fullname: item.fullname,
+                  clockin: item.clockin,
+                  clockout: item.clockout,
+                  totalhours: item.totalhours,
+                  attendancedate: item.attendancedate,
+                  approver: item.approver,
+                  actiondate: item.actiondate,
+                  status: item.status,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columns: [
+            { data: "id" },
+            { data: "fullname" },
+            { data: "clockin" },
+            { data: "clockout" },
+            { data: "totalhours" },
+            { data: "attendancedate" },
+            { data: "approver" },
+            { data: "actiondate" },
+            { data: "status" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            var appnameCell = $(row).find("td:eq(2)");
+  
+            appnameCell.wrapInner("<span class='appname-text'></span>");
+  
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      $("#dataTableOvertimeActivity tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+          restdayotid = dataRow[0];
+      }); 
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/restdayot_request_activity/getrestdayotactivity",
+          data: {
+            restdayotid: restdayotid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              $.each(existingData, (key, item) => {
+                $("#employeeotfullname").val(item.fullname);
+                $("#otclockin").val(item.clockin);
+                $("#otclockout").val(item.clockout);
+                $("#totalothours").val(item.totalhours);
+                $("#otdate").val(item.attendancedate);
+                $("#otapprover").val(item.approver);
+                $("#actiondadteot").val(item.actiondate);
+                $("#overtimestatus").val(item.status);
+                $("#previewleave").attr(
+                  "src",
+                  "data:image/jpg;base64," + item.image
+                );
+                $("#activitypaiddays").val(item.subgroupname);
+                $("#totalapprovecount").val(item.approvecount);
+                $("#overtimecomment").val(item.actioncomment);
+                $("#actiondate").val(item.actiondate);
+                $("#approvalstatus").val(item.approval_status);
+                $("#overtimereason").val(item.reason);
+              });
+            } else {
+              swal("Error fetching employee data", msg, "error");
+            }
+          },
+          error: function (err) {
+            console.error("An error occurred while fetching employee data", err);
+            swal("An error occurred while fetching employee data", msg, "error");
+          },
+        });
+      });
+  
+      function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableOvertimeActivity");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+            }
+          }
+          if (found) {
+            tr[i].style.display = "";
+            found = false;
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    });
+  </script>
+  

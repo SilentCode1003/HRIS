@@ -3,7 +3,10 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
 var router = express.Router();
@@ -289,6 +292,96 @@ router.get("/countotmealcard", (req, res) => {
   }
 });
 
+router.get("/countrestdayotcard", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `    
+    SELECT 
+    count(*) AS RDOT
+    FROM 
+    restday_ot_approval
+    INNER JOIN master_employee ON restday_ot_approval.roa_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = restday_ot_approval.roa_subgroupid AND
+                aprroval_stage_settings.ats_count = restday_ot_approval.roa_approvalcount
+    WHERE 
+        roa_status = 'Applied' 
+        AND roa_subgroupid IN (${subgroupid})`;
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              RDOTCount: result[0].RDOT,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countholidaycard", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `    
+    SELECT 
+    count(*) AS HOLIDAY
+    FROM 
+    payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
+    WHERE 
+        ph_status = 'Applied' 
+        AND ph_subgroupid IN (${subgroupid})`;
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              HOLIDAYCount: result[0].HOLIDAY,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.get("/countattendancebadge", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
@@ -532,6 +625,93 @@ INNER JOIN
       msg: "error",
       data: error,
     });
+  }
+});
+
+router.get("/totalrestdayot", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
+    concat(me_lastname,' ',me_firstname) as roa_employeeid,
+    DATE_FORMAT(roa_attendancedate, '%W, %M %e, %Y') AS roa_attendancedate,
+    TIME_FORMAT(roa_timein, '%h:%i %p') roa_timein, 
+    TIME_FORMAT(roa_timeout, '%h:%i %p') roa_timeout,
+    roa_total_hours
+    FROM restday_ot_approval
+    INNER JOIN master_employee ON restday_ot_approval.roa_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = restday_ot_approval.roa_subgroupid AND
+                aprroval_stage_settings.ats_count = restday_ot_approval.roa_approvalcount
+    WHERE 
+        roa_status = 'Applied' 
+        AND roa_subgroupid IN (${subgroupid})`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.get("/totalholiday", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
+    concat(me_lastname,' ',me_firstname) as ph_employeeid,
+    DATE_FORMAT(ph_attendancedate, '%W, %M %e, %Y') AS ph_attendancedate,
+    TIME_FORMAT(ph_timein, '%h:%i %p') ph_timein, 
+    TIME_FORMAT(ph_timeout, '%h:%i %p') ph_timeout,
+    ph_total_hours
+    FROM payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
+    WHERE 
+        ph_status = 'Applied' 
+        AND ph_subgroupid IN (${subgroupid})`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      console.log(result);
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 

@@ -50,23 +50,51 @@
             access: access,
           },
           success: function (result) {
-            console.log(result);
             if (result.msg == "success") {
-              LoadTable();
-              showSweetAlert("Success", "Added Successfully!", "success", "OK");
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                LoadTable();
+              });
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
             } else {
-              LoadTable();
-              showSweetAlert(
-                "Warning",
-                `${route} ${layout} ${access} ${result.msg}`,
-                "warning",
-                "OK"
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
               );
             }
           },
-          error: function (error) {
-            showSweetAlert("Error", error, "error", "OK");
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
           },
+          // success: function (result) {
+          //   console.log(result);
+          //   if (result.msg == "success") {
+          //     LoadTable();
+          //     swal("Success", "Added Successfully!", "success", "OK");
+          //   } else {
+          //     LoadTable();
+          //     swal(
+          //       "Warning",
+          //       `${route} ${layout} ${access} ${result.msg}`,
+          //       "warning",
+          //       "OK"
+          //     );
+          //   }
+          // },
+          // error: function (error) {
+          //   swal("Error", error, "error", "OK");
+          // },
         });
       }
     });
@@ -364,25 +392,25 @@
     // })
 
     function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput2");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("data-table");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("data-table");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
         }
       }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
     }
-  }
   });
 </script>

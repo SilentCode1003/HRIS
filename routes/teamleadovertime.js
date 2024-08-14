@@ -17,7 +17,6 @@ router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `SELECT
-    pao_image,
     pao_id,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,

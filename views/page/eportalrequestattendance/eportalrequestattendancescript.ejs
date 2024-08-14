@@ -5,7 +5,7 @@
     console.log("Initialize");
     let employeeid = "<%= employeeid %>";
     LoadTable();
-    LoadListEmp();
+    LoadSubgroup();
 
     function LoadTable() {
       $("#dataTablereqCOA").DataTable({
@@ -378,7 +378,7 @@
       }
     });
 
-    function LoadListEmp() {
+    function LoadSubgroup() {
       $.ajax({
         type: "GET",
         url: "/teamleadusers/subgroupload",
