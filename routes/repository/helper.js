@@ -1,4 +1,5 @@
 const { DataModeling } = require("../model/hrmisdb");
+const { DecrypterString } = require("./cryptography");
 const { Select } = require("./dbconnect");
 const { SendEmail } = require("./mailer");
 
@@ -443,6 +444,63 @@ exports.EmailNotification = (details) => {
 
                     <div style="margin-top: 1rem;">
                     <a href="https://hrmis.5lsolutions.com/" class="bmss-link">CHECK</a>
+                      </div>
+                </div>
+                <hr class="divider">
+                <div class="card-footer">
+                    <span>Chronus MTK Powered by </span> 
+                    <a href="https://www.5lsolutions.com/" class="bmss-link">5L Solutions</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+  //juice.inlineContent(template, style)
+  const inlinedHtml = juice.inlineContent(template, style);
+  return inlinedHtml;
+};
+
+exports.ForgotPasswordTemplate = (details) => {
+  // Read and combine CSS files
+
+  const { id, fullname, password } = details[0];
+
+
+  const template = /*html*/ `
+    <html>
+    <head>
+    </head>
+    <body>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Request Password
+                </div>
+                <hr class="divider">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-half">
+                            <span class="label-title">Employee ID:</span>
+                            <span class="text-md">${id}</span>
+                        </div>
+                        <div class="col-half">
+                            <span class="label-title">Fullname:</span>
+                            <span class="text-md">${fullname}</span>
+                        </div>
+                    </div>
+                  
+                    <div class="row mt-1">
+                        <div class="col-full">
+                            <span class="label-title">Password:</span>
+                            <span class="text-md">${DecrypterString(password)}</span>
+                        </div>
+                    </div>
+
+                    
+
+                    <div style="margin-top: 1rem;">
+                    <a href="https://hrmis.5lsolutions.com/" class="bmss-link">Login</a>
                       </div>
                 </div>
                 <hr class="divider">
