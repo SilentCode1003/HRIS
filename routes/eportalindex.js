@@ -49,6 +49,8 @@ function getLatestLog(employeeId) {
 }
 
 function getDeviceInformation(device) {
+  console.log(device);
+  
   if (typeof device === "undefined" || " ") {
     return "app";
   } else {

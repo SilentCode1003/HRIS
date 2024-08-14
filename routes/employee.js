@@ -13,7 +13,7 @@ const {
   SelectStatement,
   InsertStatement,
 } = require("./repository/customhelper");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const {
   generateUsernameAndPasswordForApprentice,
 } = require("./repository/helper");
@@ -1253,7 +1253,13 @@ function GetPosition(name, callback) {
   });
 }
 
-async function saveUserRecord(req, res, oldemployeeid, username, encryptedPassword) {
+async function saveUserRecord(
+  req,
+  res,
+  oldemployeeid,
+  username,
+  encryptedPassword
+) {
   return new Promise((resolve, reject) => {
     const createdate = moment().format("YYYY-MM-DD");
     const createby = req.session ? req.session.fullname : null;

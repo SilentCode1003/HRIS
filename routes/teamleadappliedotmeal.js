@@ -6,6 +6,8 @@ const { Select, InsertTable } = require("./repository/dbconnect");
 const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { InsertStatement, SelectStatement } = require("./repository/customhelper");
+const { REQUEST } = require("./repository/dictionary");
+const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -176,7 +178,7 @@ router.post("/otmealaction", (req, res) => {
     let departmentid = req.session.departmentid;
     let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { otmealid, status, comment } = req.body;
+    const { otmealid, status, comment,attendancedate, timein, timeout } = req.body;
 
     let sql = InsertStatement("meal_request_activity", "mra", [
       "employeeid",
@@ -208,6 +210,18 @@ router.post("/otmealaction", (req, res) => {
         console.log(err);
         res.json(JsonErrorResponse(err));
       }
+
+      let emailbody = [
+        {
+          employeename: employeeid,
+          date: attendancedate,
+          timein: timein,
+          timeout: timeout,
+          reason: comment,
+          requesttype: REQUEST.OTMEAL,
+        },
+      ];
+      SendEmailNotificationEmployee(employeeid,subgroupid, emailbody);
 
       res.json(JsonSuccess());
     });

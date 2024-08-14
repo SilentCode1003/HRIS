@@ -2,25 +2,30 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
+const { REQUEST } = require("./repository/dictionary");
+const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalrequestleavelayout', { title: 'Express' });
-  Validator(req, res, "eportalrequestleavelayout",'eportalrequestleave');
+  Validator(req, res, "eportalrequestleavelayout", "eportalrequestleave");
 });
 
 module.exports = router;
 
-router.post('/loadheader', (req,res) => {
+router.post("/loadheader", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
     let employeeid = req.body.employeeid;
-    let sql =  `select 
+    let sql = `select 
     ml_leavetype as leavetype,
     ml_unusedleavedays as unused,
     ml_totalleavedays as totalleave,
@@ -29,32 +34,32 @@ router.post('/loadheader', (req,res) => {
     where ml_employeeid = '${employeeid}' 
     and ml_id = '${leavesettingsid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
 // router.post('/getrestdays', (req,res) => {
 //   try {
 //     let employeeid = req.body.employeeid;
-//     let sql =  `SELECT 
+//     let sql =  `SELECT
 //         CONCAT(
 //             CASE WHEN JSON_UNQUOTE(ms_monday->'$.time_in') = '00:00:00' THEN 'Monday ' ELSE '' END,
 //             CASE WHEN JSON_UNQUOTE(ms_tuesday->'$.time_in') = '00:00:00' THEN 'Tuesday ' ELSE '' END,
@@ -89,11 +94,10 @@ router.post('/loadheader', (req,res) => {
 //   }
 // });
 
-
-router.post('/getrestdays', (req, res) => {
+router.post("/getrestdays", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql =  `SELECT 
+    let sql = `SELECT 
         CONCAT(
             CASE WHEN JSON_UNQUOTE(ms_monday->'$.time_in') = '00:00:00' THEN 'Monday ' ELSE '' END,
             CASE WHEN JSON_UNQUOTE(ms_tuesday->'$.time_in') = '00:00:00' THEN 'Tuesday ' ELSE '' END,
@@ -124,11 +128,10 @@ router.post('/getrestdays', (req, res) => {
   }
 });
 
-
-router.post('/loadheaderforapp', (req,res) => {
+router.post("/loadheaderforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql =  `select 
+    let sql = `select 
     ml_leavetype as leavetype,
     ml_totalleavedays as totalleave,
     ml_unusedleavedays as unused,
@@ -140,29 +143,29 @@ router.post('/loadheaderforapp', (req,res) => {
     from master_leaves
     where ml_employeeid = '${employeeid}'`;
 
-    mysql.mysqlQueryPromise(sql)
-    .then((result) => {
-      res.json({
-        msg:'success',
-        data: result,
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
       });
-    })
-    .catch((error) => {
-      res.json({
-        msg:'error',
-        data: error,
-      });
-    })
   } catch (error) {
     res.json({
-      msg:'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.get('/loadpending' , (req, res) => {
+router.get("/loadpending", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `select 
@@ -176,12 +179,13 @@ router.get('/loadpending' , (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_leavestatus = 'Pending' AND l_employeeid = '${employeeid}'`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -189,8 +193,7 @@ router.get('/loadpending' , (req, res) => {
   }
 });
 
-
-router.get('/loadapproved' , (req, res) => {
+router.get("/loadapproved", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `select 
@@ -205,7 +208,7 @@ router.get('/loadapproved' , (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_leavestatus = 'Approved' AND l_employeeid = '${employeeid}'`;
-    
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -227,7 +230,6 @@ router.get('/loadapproved' , (req, res) => {
     console.log(error);
   }
 });
-
 
 router.post("/getleavedates", (req, res) => {
   try {
@@ -269,8 +271,7 @@ router.post("/getleavedates", (req, res) => {
   }
 });
 
-
-router.get('/loadrejected' , (req, res) => {
+router.get("/loadrejected", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `select 
@@ -284,12 +285,13 @@ router.get('/loadrejected' , (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_leavestatus = 'Rejected' AND l_employeeid = '${employeeid}'`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -297,8 +299,7 @@ router.get('/loadrejected' , (req, res) => {
   }
 });
 
-
-router.get('/loadcancelled' , (req, res) => {
+router.get("/loadcancelled", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `select 
@@ -312,12 +313,13 @@ router.get('/loadcancelled' , (req, res) => {
     left join master_employee on leaves.l_employeeid = me_id
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_leavestatus = 'Cancel' AND l_employeeid = '${employeeid}'`;
-    
-    mysql.Select(sql, 'Leaves', (err, result) => {
-      if (err) console.error('Error: ', err);
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
 
       res.json({
-        msg: 'success', data: result
+        msg: "success",
+        data: result,
       });
     });
   } catch (error) {
@@ -378,18 +380,28 @@ router.get('/loadcancelled' , (req, res) => {
 //   }
 // });
 
-
 router.post("/submit", async (req, res) => {
   try {
-    const { employeeid, startdate, enddate, leavetype, reason, image, subgroup, durationDays, paidDays, unpaidDays } = req.body;
+    const {
+      employeeid,
+      startdate,
+      enddate,
+      leavetype,
+      reason,
+      image,
+      subgroup,
+      durationDays,
+      paidDays,
+      unpaidDays,
+    } = req.body;
     const createdate = moment().format("YYYY-MM-DD HH:mm:ss");
     const status = "Pending";
-    const approvedcount = '0';
+    const approvedcount = "0";
 
     console.log("Received request with data:", req.body);
 
     // Calculate the date 3 days from now
-    const allowedStartDate = moment().add(3, 'days').startOf('day');
+    const allowedStartDate = moment().add(3, "days").startOf("day");
 
     // Convert startdate to a moment object
     const startDateMoment = moment(startdate);
@@ -422,7 +434,7 @@ router.post("/submit", async (req, res) => {
         paidDays,
         unpaidDays,
         subgroup,
-        approvedcount
+        approvedcount,
       ],
     ];
 
@@ -432,6 +444,19 @@ router.post("/submit", async (req, res) => {
         res.json({ msg: "insert_failed" });
       } else {
         console.log("Insert result:", insertResult);
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: createdate,
+            startdate: startdate,
+            enddate: enddate,
+            reason: reason,
+            requesttype: REQUEST.LEAVE,
+          },
+        ];
+        SendEmailNotification(subgroup, emailbody);
+
         res.json({ msg: "success" });
       }
     });
@@ -440,7 +465,6 @@ router.post("/submit", async (req, res) => {
     res.json({ msg: "error" });
   }
 });
-
 
 router.post("/getleave", (req, res) => {
   try {
@@ -578,8 +602,6 @@ router.post("/getunusedleave", (req, res) => {
     });
   }
 });
-
-
 
 router.post("/loadleavetypeforapp", (req, res) => {
   try {

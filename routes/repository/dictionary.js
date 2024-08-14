@@ -51,7 +51,6 @@ exports.DFCT = () => {
   return "DFCT";
 };
 
-
 exports.DLV = () => {
   return "DLV";
 };
@@ -171,3 +170,16 @@ exports.TRFR = () => {
   return "TRFR";
 };
 //#endregion
+//ENUM
+const REQUEST = {
+  COA: "Correction of Attendance",
+  OVERTIME: "Overtime",
+  LEAVE: "Leave",
+  CA: "Cash Advance",
+  LOAN: "Loan",
+  OTMEAL: "Overtime Meal"
+};
+
+module.exports = {
+  REQUEST,
+};

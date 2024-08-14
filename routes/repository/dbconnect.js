@@ -1,6 +1,6 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
-const { Encrypter, Decrypter } = require("./crytography");
+const { Encrypter, Decrypter } = require("./cryptography");
 require("dotenv").config();
 
 let password = "";
@@ -8,6 +8,11 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
   // console.log(encrypted);
   password = encrypted;
+});
+
+Encrypter("m@iLcOwpaybLsol!2023", (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
 });
 
 const connection = mysql.createConnection({

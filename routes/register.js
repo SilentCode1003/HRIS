@@ -1,18 +1,18 @@
-const mysql = require('./repository/hrmisdb');
-const moment = require('moment');
-var express = require('express');
+const mysql = require("./repository/hrmisdb");
+const moment = require("moment");
+var express = require("express");
 var router = express.Router();
 const currentDate = moment();
-const { Encrypter } = require('./repository/crytography');
-const { generateUsernameAndPasswordforOjt } = require('./repository/helper');
+const { Encrypter } = require("./repository/cryptography");
+const { generateUsernameAndPasswordforOjt } = require("./repository/helper");
 
 const currentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('registerlayout', { title: 'Express' });
-//   Validator(req, res, 'registerlayout');
+router.get("/", function (req, res, next) {
+  res.render("registerlayout", { title: "Express" });
+  //   Validator(req, res, 'registerlayout');
 });
 
 module.exports = router;
@@ -51,7 +51,7 @@ router.post("/save", async (req, res) => {
         firstname,
         lastname,
         address,
-        'Active', 
+        "Active",
         birthday,
         gender,
         phone,
@@ -65,61 +65,62 @@ router.post("/save", async (req, res) => {
       ],
     ];
 
-    mysql.InsertTable("master_ojt", ojtData, async (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error("Error inserting ojt: ", insertErr);
-        return res.json({
-          msg: "insert failed",
+    mysql.InsertTable(
+      "master_ojt",
+      ojtData,
+      async (insertErr, insertResult) => {
+        if (insertErr) {
+          console.error("Error inserting ojt: ", insertErr);
+          return res.json({
+            msg: "insert failed",
+          });
+        }
+
+        console.log("Ojt record inserted: ", insertResult);
+
+        const { username, password } = generateUsernameAndPasswordforOjt({
+          mo_name: firstname,
+          mo_lastname: lastname,
+          mo_id: ojtID,
+          mo_birthday: birthday,
+        });
+
+        Encrypter(password, async (encryptErr, encryptedPassword) => {
+          if (encryptErr) {
+            console.error("Error encrypting password: ", encryptErr);
+            return res.json({
+              msg: "encrypt error",
+            });
+          }
+
+          const userSaveResult = await saveOjtRecord(
+            req,
+            ojtID,
+            username,
+            encryptedPassword
+          );
+
+          if (userSaveResult.msg === "success") {
+            return res.json({
+              msg: "success",
+            });
+          } else {
+            console.error("error saving ojt user", userSaveResult.msg);
+            return res.json({
+              msg: "user save",
+            });
+          }
         });
       }
-
-      console.log("Ojt record inserted: ", insertResult);
-
-      const { username, password } = generateUsernameAndPasswordforOjt({
-        mo_name: firstname,
-        mo_lastname: lastname,
-        mo_id: ojtID,
-        mo_birthday: birthday,
-      });
-
-      Encrypter(password, async (encryptErr, encryptedPassword) => {
-        if (encryptErr) {
-          console.error("Error encrypting password: ", encryptErr);
-          return res.json({
-            msg: 'encrypt error',
-          });
-        }
-
-        const userSaveResult = await saveOjtRecord(
-          req,
-          ojtID,
-          username,
-          encryptedPassword
-        );
-
-        if (userSaveResult.msg === "success") {
-          return res.json({
-            msg: "success",
-          });
-        } else {
-          console.error("error saving ojt user", userSaveResult.msg);
-          return res.json({
-            msg: "user save",
-          });
-        }
-      });
-    });
-
+    );
   } catch (error) {
     console.error("Error in try-catch block:", error);
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
-
-
 
 function checkojtExist(firstname, lastname) {
   return new Promise((resolve, reject) => {
@@ -142,7 +143,6 @@ function checkojtExist(firstname, lastname) {
   });
 }
 
-
 function generateOJTId(year, month) {
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_ojt WHERE mo_id LIKE '${year}${month}%'`;
@@ -164,21 +164,16 @@ function generateOJTId(year, month) {
 
 async function saveOjtRecord(req, ojtID, username, encryptedPassword) {
   return new Promise((resolve, reject) => {
-    const createdate = moment().format('YYYY-MM-DD');
-    const createby = req.session && req.session.fullname ? req.session.fullname : 'DefaultUser'; 
+    const createdate = moment().format("YYYY-MM-DD");
+    const createby =
+      req.session && req.session.fullname
+        ? req.session.fullname
+        : "DefaultUser";
 
     console.log("Session:", req.session);
 
     const data = [
-      [
-        ojtID,
-        username,
-        encryptedPassword,
-        4,
-        createby,
-        createdate,
-        "Active",
-      ],
+      [ojtID, username, encryptedPassword, 4, createby, createdate, "Active"],
     ];
 
     mysql.InsertTable("ojt_user", data, (inserterr, insertResult) => {
@@ -192,4 +187,3 @@ async function saveOjtRecord(req, ojtID, username, encryptedPassword) {
     });
   });
 }
-

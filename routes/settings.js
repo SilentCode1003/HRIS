@@ -1,7 +1,7 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter, Decrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/cryptography");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
@@ -56,7 +56,6 @@ router.post("/update", async (req, res) => {
     });
   }
 });
-
 
 router.post("/updatepassword", async (req, res) => {
   try {

@@ -1,13 +1,23 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
 const { Select, Update } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, MessageStatus, JsonSuccess, JsonWarningResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  MessageStatus,
+  JsonSuccess,
+  JsonWarningResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { SelectStatement, UpdateStatement, GetCurrentDatetime } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  UpdateStatement,
+  GetCurrentDatetime,
+} = require("./repository/customhelper");
 const { is } = require("date-fns/locale");
 var router = express.Router();
 const currentDate = moment();
@@ -160,7 +170,7 @@ router.get("/load", (req, res) => {
 //     //   });
 //     // });
 
-//     let sqlupdate = `UPDATE master_user SET 
+//     let sqlupdate = `UPDATE master_user SET
 //       mu_username = '${username}',
 //       mu_accesstype = '${accesstype}',
 //       mu_subgroupid = '${subgroupid}',
@@ -181,7 +191,6 @@ router.get("/load", (req, res) => {
 //     });
 //   }
 // });
-
 
 router.post("/getisgeofencetrue", (req, res) => {
   try {
@@ -218,7 +227,6 @@ router.post("/getisgeofencetrue", (req, res) => {
     res.json(JsonErrorResponse(err));
   }
 });
-
 
 router.post("/getusers", (req, res) => {
   try {
@@ -258,8 +266,6 @@ router.post("/getusers", (req, res) => {
     res.json(JsonErrorResponse(err));
   }
 });
-
-
 
 router.put("/edit", (req, res) => {
   try {
@@ -304,7 +310,7 @@ router.put("/edit", (req, res) => {
 
     // Check and convert the value of isgeofence
     if (isgeofence) {
-      geofenceValue = (isgeofence.toLowerCase() === 'true') ? 1 : 0;
+      geofenceValue = isgeofence.toLowerCase() === "true" ? 1 : 0;
       data.push(geofenceValue);
       columns.push("isgeofence");
     }
@@ -350,7 +356,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -362,4 +367,3 @@ function Check(sql) {
   });
 }
 //#endregion
-
