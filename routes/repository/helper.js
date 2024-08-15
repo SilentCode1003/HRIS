@@ -347,32 +347,60 @@ exports.SendEmployeeNotification = (employeeid, requesttype, body) => {
   }
 };
 
-const style = /*css*/ `@import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
-  body, table, td, a {-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;}
-  table, td {mso-table-rspace: 0pt;mso-table-lspace: 0pt;}
-  img {-ms-interpolation-mode: bicubic;}
-  body {margin: 0; padding: 0; width: 100% !important;-webkit-font-smoothing: antialiased;}
-  .container {max-width: 650px; margin: 2rem auto;}
-  .container-lg {max-width: 900px; margin: 2rem auto;}
-  .card {background-color: #fff; box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, 0.15); border: 1px solid #dadada; border-radius: .3125rem; padding: 10px;}
-  .card-header {text-align: center; font-size: 2.5rem; color: #B13434; padding: 10px;}
-  .card-body {padding: 10px;}
-  .card-footer {text-align: center; padding: 10px;}
-  .divider {border: solid 1px #e4e4e4;}
-  .label-title {color: #B13434; font-size: 1.25rem; margin-right: 0.35rem;}
-  .text-left {text-align: left;}
-  .table-container {border: 1px solid #e4e4e4; border-radius: .3125rem; width: 100%; margin: 1rem 0;}
-  .table {width: 100%; border-collapse: collapse;}
-  .table th, .table td {padding: .75rem; text-align: left; border-bottom: 1px solid #e4e4e4;}
-  .table-header {background-color: #eaecf4;}
-  .bmss-link {color: #d82a27;}
-  .text-md {font-size: 1.25rem;}
-  .row {display: flex; flex-wrap: wrap;}
-  .col-full {flex: 0 0 100%; width: 100%;}
-  .mt-1 {margin-top: 0.25rem;}
-  .col-half {flex:0 0 50%;width:50%}
-  .text-right {text-align: right !important;}`;
+const style = /*css*/ `@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
+* {font-family: "Merriweather", serif;font-weight: 400;}
+
+
+/* desktop style */
+
+.card-style {width: 15rem;top: 100px;}
+.header-style {background-color: #fffafa !important;text-align: center;border-bottom: 5px solid red !important;}
+.card-logo {margin-top: 15px;width: 55px;height: 55px;}
+.header-title {font-size: 16px;color: black !important;text-shadow: rgb(58, 1, 1) 1px 1px;font-weight: 700;font-style: italic !important;letter-spacing: .05rem;padding: 15px;}
+.line-title {color: black !important;padding-top: 35px;font-weight: 700;font-size: 30px;}
+.icon-style {width: 30px;height: 30px;padding: 2px;color: rgb(66, 65, 65) !important;}
+.shift-title {color: rgb(97, 96, 96) !important;font-size: 15px;margin-right: 0.35rem;font-weight: 600;}
+hr {border-bottom-width: 3px; --tw-border-opacity: 1;border-bottom-color: rgb(97 96 96 / var(--tw-border-opacity)); margin-bottom: 1rem;}
+body,table,td,a {-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;}
+table,td {mso-table-rspace: 0pt;mso-table-lspace: 0pt;}
+img {-ms-interpolation-mode: bicubic;}
+body {margin: 0;padding: 0;width: 100% !important;-webkit-font-smoothing: antialiased;}
+.container { max-width: 650px;margin: 2rem auto;}
+.container-lg { max-width: 900px;margin: 2rem auto;}
+.card {background-color: white !important;box-shadow: 0 .15rem 1.75rem 0 rgba(35, 36, 41, 0.15);border: 2px solid #757474 !important;border-radius: .3125rem;padding: 10px;}
+.time-card {background-color: rgb(252, 251, 251) !important;border: 1px solid #757474 !important;padding: 35px;margin-top: 20px !important;}
+.check {margin-top: 1rem;float: right;}
+.bmss-link {color: rgb(15, 172, 15) !important;font-weight: 900;font-size: 14px;}
+.bmss-link:hover {color: rgb(8, 124, 😎 !important;font-weight: 900);}
+.company-link {color: black !important;font-size: 12px;font-weight: 600;}
+.company-link:hover { color: red !important;font-weight: 900;}
+.company-logo {width: 25px;height: 25px;}
+.card-header {text-align: center;font-size: 2.5rem;padding: 10px;}
+.card-body { padding: 10px;}
+.card-footer { text-align: center;padding-top: 25px !important;background-color: white !important;}
+.title-footer {color: black !important;font-weight: 900;font-family: 'Franklin Gothic Medium';}
+.label-title {color: black !important;font-size: 18px;margin-right: 0.35rem;font-weight: 400;font-family: 'Franklin Gothic Medium';}
+.start-date {color: black !important;font-size: 18px;margin-right: 0.35rem;font-weight: 400;font-family: 'Franklin Gothic Medium';padding: 2px;}
+.start-time {color: rgb(23, 165, 23) !important;font-size: 18px;margin-right: 0.35rem;font-weight: 400;font-family: 'Franklin Gothic Medium';text-transform: uppercase;padding: 2px;}
+.text-left {text-align: left;}
+.table-container {border: 1px solid #e4e4e4;border-radius: .3125rem;width: 100%;margin: 1rem 0;}
+.table {width: 100%;border-collapse: collapse;}
+.table th,
+.table td {padding: .75rem;text-align: left;border-bottom: 1px solid #e4e4e4;}
+.table-header { background-color: #eaecf4;}
+.text-md {font-size: 18px;font-weight: 400;font-family: 'Franklin Gothic Medium';}
+.label-value {font-size: 18px;font-weight: 600;font-family: 'Franklin Gothic Medium';color: rgb(23, 165, 23) !important;}
+.label-end {font-size: 18px;font-weight: 600;font-family: 'Franklin Gothic Medium';color: rgb(221, 14, 14) !important;}
+.row {display: flex;flex-wrap: wrap;gap: 50%;padding-left: 4%;padding-right: 3%;padding-top: 1%;}
+.date {margin-left: auto;float: right;}
+.employeename {margin-top: 5%;padding: 2px;}
+.status-context {color: black !important;font-size: 18px;font-weight: 400;font-family: 'Franklin Gothic Medium';text-transform: uppercase;}
+.reason-context {color: rgb(73, 72, 72) !important;font-size: 15px;font-weight: 600;font-style: italic;}
+.col-full { flex: 0 0 100%; width: 100%;}
+.mt-1 {margin-top: 0.25rem;}
+.col-half { margin-bottom: 1rem;flex: 1 1 0%;}
+.text-right {text-align: right !important;}`;
 exports.EmailNotification = (details) => {
   // Read and combine CSS files
 
@@ -389,72 +417,107 @@ exports.EmailNotification = (details) => {
   } = details[0];
 
   const template = /*html*/ `
-    <html>
-    <head>
-    </head>
-    <body>
-        <div class="container">
-            <div class="card">
-                <div class="card-header">
-                    ${requesttype} Request
+    <html lang="en">
+
+<head>
+    <link rel="stylesheet" href="css/template.css">
+
+    <!--boostrap css-->
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!--bootstrap icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!--boxicons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header header-style">
+                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <b class="header-title">Solutions Supply and Allied Services Corp.</b>
+                <h2 class="line-title">${requesttype} Request</h2>
+            </div>
+
+            <div class="card-body">
+                <div class="date"> 
+                    <span class="label-title">Date:</span>
+                    <span class="text-md">${date}</span>
                 </div>
-                <hr class="divider">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-half">
-                            <span class="label-title">Employee:</span>
-                            <span class="text-md">${employeename}</span>
-                        </div>
-                        <div class="col-half">
-                            <span class="label-title">Date:</span>
-                            <span class="text-md">${date}</span>
-                        </div>
+        
+                    <div class="employeename">
+                        <i class='bx bx-user icon-style'></i>
+                        <span class="label-title">Employee:</span>
+                        <span class="text-md">${employeename}</span>
                     </div>
-                    <div class="row mt 1">
-                        <div class="col-half">
-                            <span class="label-title">${
-                              timein == undefined ? "Start Date" : "Time In"
-                            } :</span>
-                            <span class="text-md">${
-                              timein == undefined ? startdate : timein
-                            }</span>
-                        </div>
-                        <div class="col-half">
-                            <span class="label-title">${
-                              timeout == undefined ? "End Date" : "Time Out"
-                            } :</span>
-                            <span class="text-md">${
-                              timeout == undefined ? enddate : timeout
-                            }</span>
-                        </div>
+          
+
+                <div class="status">
+                    <i class='bx bx-stats icon-style'></i>
+                    <span class="label-title">Status:</span>
+                    <span class="status-context">${status}</span>
+                  </div>
+
+
+                  <div class="reason">
+                    <i class='bx bx-message-alt-detail icon-style'></i>
+                    <span class="label-title">Reason:</span>
+                    <span class="reason-context">${reason == undefined ? "N/A" : reason}</span>
+                  </div>
+
+                <div class="card time-card">
+                    <h6 class="shift-title">These are your shift records:</h6>
+                <div class="row mt-4">
+                    <div class="col-half">
+                        <h6 class="label-title">${
+                          timein == undefined ? "Start Date" : "Time In"
+                        }:</h6>
+                        <h6 class="label-value">${
+                          timein == undefined ? startdate : timein
+                        }</h6>
                     </div>
-
-                    <div class="row mt-1">
-                        <div class="col-full">
-                            <span class="label-title">${
-                              reason == undefined ? "Status" : "Reason"
-                            }:</span>
-                            <span class="text-md">${
-                              reason == undefined ? status : reason
-                            }</span>
-                        </div>
-                    </div>
-
-                    
-
-                    <div style="margin-top: 1rem;">
-                    <a href="https://hrmis.5lsolutions.com/" class="bmss-link">CHECK</a>
-                      </div>
                 </div>
-                <hr class="divider">
-                <div class="card-footer">
-                    <span>Chronus MTK Powered by </span> 
-                    <a href="https://www.5lsolutions.com/" class="bmss-link">5L Solutions</a>
+
+                <hr className="border-b-[3px] border-b-red-800 mb-4" />
+
+                <div class="row mt-4">
+                <div class="col-half">
+                        <h6 class="label-title">${
+                          timeout == undefined ? "Start Date" : "Time In"
+                        }:</h6>
+                        <h6 class="label-value">${
+                          timeout == undefined ? enddate : timeout
+                        }</h6>
+                    </div>
                 </div>
             </div>
+
+          
+                <div class="check">
+                    <a href="https://hrmis.5lsolutions.com/" class="bmss-link">Check here</a>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <span class="title-footer">Chronus MTK Powered by </span>
+                <a href="https://www.5lsolutions.com/" class="company-link"><img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo">Solutions Supply and Allied Services Corp.</a>
+            </div>
         </div>
-    </body>
-    </html>`;
+    </div>
+
+
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--script for lordicon-->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</body>
+
+</html>`;
 
   //juice.inlineContent(template, style)
   const inlinedHtml = juice.inlineContent(template, style);
@@ -466,52 +529,76 @@ exports.ForgotPasswordTemplate = (details) => {
 
   const { id, fullname, password } = details[0];
 
-
   const template = /*html*/ `
-    <html>
-    <head>
-    </head>
-    <body>
-        <div class="container">
-            <div class="card">
-                <div class="card-header">
-                    Request Password
-                </div>
-                <hr class="divider">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-half">
-                            <span class="label-title">Employee ID:</span>
-                            <span class="text-md">${id}</span>
-                        </div>
-                        <div class="col-half">
-                            <span class="label-title">Fullname:</span>
-                            <span class="text-md">${fullname}</span>
-                        </div>
-                    </div>
-                  
-                    <div class="row mt-1">
-                        <div class="col-full">
-                            <span class="label-title">Password:</span>
-                            <span class="text-md">${DecrypterString(password)}</span>
-                        </div>
-                    </div>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/template.css">
+    <!--boostrap css-->
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!--bootstrap icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!--boxicons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-                    
+</head>
 
-                    <div style="margin-top: 1rem;">
-                    <a href="https://hrmis.5lsolutions.com/" class="bmss-link">Login</a>
-                      </div>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header header-style">
+                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <b class="header-title">Solutions Supply and Allied Services Corp.</b>
+                <h2 class="line-title">Forgot Password</h2>
+            </div>
+
+            <div class="card-body">
+                <div class="date"> 
+                    <span class="label-title">ID:</span>
+                    <span class="text-md">${id}</span>
                 </div>
-                <hr class="divider">
-                <div class="card-footer">
-                    <span>Chronus MTK Powered by </span> 
-                    <a href="https://www.5lsolutions.com/" class="bmss-link">5L Solutions</a>
+        
+                    <div class="employeename">
+                        <i class='bx bx-user icon-style'></i>
+                        <span class="label-title">Employee:</span>
+                        <span class="text-md">${fullname}</span>
+                    </div>
+          
+                <div class="reason">
+                    <i class='bx bx-stats icon-style'></i>
+                    <span class="label-title">Password:</span>
+                    <span class="reason-context">${DecrypterString(
+                      password
+                    )}</span>
+                  </div>
+            </div>
+
+           
+
+
+
+                <div class="check">
+                    <a href="https://hrmis.5lsolutions.com/" class="bmss-link">Login here</a>
                 </div>
             </div>
+
+            <div class="card-footer">
+                <span class="title-footer">Chronus MTK Powered by </span>
+                <a href="https://www.5lsolutions.com/" class="company-link"> <img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo"> Solutions Supply and Allied Services Corp.</a>
+            </div>
         </div>
-    </body>
-    </html>`;
+    </div>
+
+
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--script for lordicon-->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</body>
+
+</html>`;
 
   //juice.inlineContent(template, style)
   const inlinedHtml = juice.inlineContent(template, style);
