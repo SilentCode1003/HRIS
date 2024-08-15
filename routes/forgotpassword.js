@@ -23,7 +23,7 @@ router.post("/request", (req, res) => {
 
     let sql = `select  
               me_id,
-              concat(me_firstname, '', me_lastname) as me_fullname,
+              concat(me_firstname, ' ', me_lastname) as me_fullname,
               me_email,
               mu_password as me_password
               from master_employee
