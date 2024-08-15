@@ -373,7 +373,7 @@
               globalwisp_deductions = item.wisp_deductions;
               $("#paysliprestdayot").text(formatToCurrency(item.restday_ot));
               globalrestday_ot = item.restday_ot;
-              $("#paysliplate").text(formatToCurrency(item.late_deductions));
+              $("#paysliplate").text(formatToCurrency(item.late_deductions) +  " (" + item.lateminutes + ")");
               globallatedeductions = item.late_deductions;
               $("#payslipsalaryloan").text(formatToCurrency(item.salary_loan));
               globalsalary_loan = item.salary_loan;
