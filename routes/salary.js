@@ -2,13 +2,20 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const {
+  SelectStatement,
+  UpdateStatement,
+  InsertStatement,
+} = require("./repository/customhelper");
+const { Select, Update, Insert } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('salarylayout', { title: 'Express' });
-  Validator(req, res, "salarylayout",'salary');
+  Validator(req, res, "salarylayout", "salary");
 });
 
 module.exports = router;
@@ -83,7 +90,7 @@ router.post("/save", (req, res) => {
   }
 });
 
-router.post('/getsalary', (req, res) => {
+router.post("/getsalary", (req, res) => {
   try {
     let salaryid = req.body.salaryid;
     let sql = `select 
@@ -94,27 +101,26 @@ router.post('/getsalary', (req, res) => {
     ms_payrolltype
     from master_salary
     where ms_id = '${salaryid}'`;
-    
+
     mysql.Select(sql, "Master_Salary", (err, result) => {
       if (err) console.error("Error: ", err);
 
       console.log(result);
 
       res.json({
-        msg: 'success',
+        msg: "success",
         data: result,
       });
     });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
     });
   }
 });
 
-
-router.post('/update', (req ,res) => {
+router.post("/update", (req, res) => {
   try {
     let salaryid = req.body.salaryid;
     let employeeid = req.body.employeeid;
@@ -132,27 +138,95 @@ router.post('/update', (req ,res) => {
 
     console.log(sqlupdate);
 
-
-    mysql.Update(sqlupdate)
-      .then((result) =>{
+    mysql
+      .Update(sqlupdate)
+      .then((result) => {
         console.log(result);
-    
+
         res.json({
-          msg: 'success',
+          msg: "success",
           data: result,
-        })
+        });
       })
-      .catch((error) =>{
+      .catch((error) => {
         res.json({
-          msg:'error',
+          msg: "error",
           data: error,
-        })
-        
+        });
       });
   } catch (error) {
     res.json({
-      msg: 'error',
+      msg: "error",
       data: error,
-    })
+    });
+  }
+});
+
+router.post("/upload", (req, res) => {
+  try {
+    const data = req.body.data;
+    let dataJson = JSON.parse(data);
+    for (const row of dataJson) {
+      const { employeeid, monthly, allowance, adjustment, payrolltype } = row;
+      let sql = `SELECT * FROM master_salary WHERE ms_employeeid = ?`;
+      let cmd = SelectStatement(sql, [employeeid]);
+      Select(cmd, (err, result) => {
+        if (err) console.error("Error: ", err);
+        if (result.length != 0) {
+          let data = DataModeling(result, "ms_");
+          for (const content of data) {
+            const { id, employeeid } = content;
+
+            console.log(employeeid);
+
+            let sqlupdate = UpdateStatement(
+              "master_salary",
+              "ms",
+              ["monthly", "allowances", "basic_adjustments", "payrolltype"],
+              ["employeeid"]
+            );
+
+            let data = [
+              monthly,
+              allowance,
+              adjustment,
+              payrolltype,
+              employeeid,
+            ];
+
+            Update(sqlupdate, data, (err, result) => {
+              if (err) console.error("Error: ", err);
+
+              console.log(result);
+            });
+          }
+        } else {
+          let cmd = InsertStatement("master_salary", "ms", [
+            "employeeid",
+            "monthly",
+            "allowances",
+            "basic_adjustments",
+            "payrolltype",
+          ]);
+
+          let data = [employeeid, monthly, allowance, adjustment, payrolltype];
+
+          Insert(cmd, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+            console.log(result);
+          });
+        }
+      });
+    }
+
+    res.status(200).json({
+      msg: "success",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.json({
+      msg: error,
+    });
   }
 });

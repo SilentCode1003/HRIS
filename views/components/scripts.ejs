@@ -74,6 +74,8 @@
 
 <!-- swal-->
 <script src="/javascripts/js/sweetalert.min.js"></script>
+<!-- Toastr-->
+<script src="javascripts/js/toastr.min.js"></script>
 
 <script src="/javascripts/js/scripts.js"></script>
 
@@ -106,53 +108,51 @@
 <!--PDF DOWNLOADER-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
 
-<script>
-  $(document).ready(function () {
-    $(document).on("click", "#logoutBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/login/logout",
-        success: function (result) {
-          swal({
-            title: "Ba Bye!!!",
-            text: "Log out Successfully",
-            icon: "success",
-            button: "Ba bye!!",
-          }).then((results) => {
-            window.location.reload();
-            location.replace("/");
-          });
-        },
-        error: function (err) {
-          errormsg(err);
-        },
-      });
-    });
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    $(document).on("click", "#logoutBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/ojtlogin/logout",
-        success: function (result) {
-          swal({
-            title: "Ba Bye!!!",
-            text: "Log out Successfully",
-            icon: "success",
-            button: "Ba bye!!",
-          }).then((results) => {
-            window.location.reload();
-            location.replace("/");
-          });
-        },
-        error: function (err) {
-          errormsg(err);
-        },
-      });
+<script>
+  $(document).on("click", "#logoutBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/login/logout",
+      success: function (result) {
+        swal({
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
+          icon: "success",
+          button: "Ba bye!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
     });
   });
-</script>
 
-<script>
+  $(document).on("click", "#logoutOjtBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/ojtlogin/logout",
+      success: function (result) {
+        swal({
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
+          icon: "success",
+          button: "Ba bye!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
+    });
+  });
   function adjustTextareaHeight(textarea) {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
@@ -384,4 +384,97 @@
       noMatchRow.attr("id", "no-match-row");
     }
   }
+
+  //#region  Alerts
+
+  function success(title, text) {
+    toastr.success(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+  function info(title, message) {
+    swal({
+      title: title,
+      text: message,
+      icon: "info",
+      button: "OK!",
+    });
+  }
+  function warning(title, text) {
+    console.log(text);
+    
+    toastr.warning(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "hide",
+    });
+  }
+  function errormsg(message) {
+    swal({
+      title: "Error",
+      text: message,
+      icon: "error",
+      button: "OK!",
+    });
+  }
+  function Loading(title) {
+    toastr.info(
+      `<strong>${title}</strong> <br>
+        <div style="text-align: center; margin-top: 5px;">
+          <div class="spinner-border" role="status" style="display: inline-block;">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>`,
+      null, // No title for the notification itself
+      {
+        closeButton: false,
+        debug: false,
+        newestOnTop: true,
+        progressBar: false,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "0", // Set to 0 to make it indefinite until manually cleared
+        timeOut: "0", // Set to 0 to make it indefinite until manually cleared
+        extendedTimeOut: "0", // Set to 0 to make it indefinite until manually cleared
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "hide",
+      }
+    );
+  }
+
+  function hideLoading() {
+    toastr.clear();
+    console.log("Toastr Cleared!");
+  }
+  //#endregion
 </script>
