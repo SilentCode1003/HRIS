@@ -8,10 +8,18 @@ const {
   JsonDataResponse,
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
+
+const REQUEST = {
+  COA: "Correction of Attendance",
+  OVERTIME: "Overtime",
+  LEAVE: "Leave",
+  CA: "Cash Advance",
+  LOAN: "Loan",
+  OTMEAL: "Overtime Meal",
+};
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
