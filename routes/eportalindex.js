@@ -157,7 +157,6 @@ router.post("/clockin", (req, res) => {
       AND ma_clockout IS NULL
   `;
 
-  console.log(checkMissingClockOutQuery);
 
   const executeSequentialQueries = (queries) =>
     queries.reduce(

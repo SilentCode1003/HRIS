@@ -84,16 +84,6 @@ router.post("/submit", async (req, res) => {
 
     let total = calculateTotalHours(timein, timeout);
 
-    console.log(
-      attendancedate,
-      timein,
-      timeout,
-      reason,
-      employeeid,
-      file,
-      approvedcount
-    );
-
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
     if (inputDate > Datenow) {
