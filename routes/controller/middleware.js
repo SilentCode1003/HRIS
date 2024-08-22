@@ -547,15 +547,12 @@ exports.Validator = function (req, res, layout, route) {
     [req.session.accesstypeid, layout, route]
   );
 
-  console.log(sql);
 
   Select(sql, (err, result) => {
     if (err) {
       console.error(err);
       res.json(JsonErrorResponse(err));
     }
-
-    console.log(result);
 
     if (result != 0) {
       return res.render(`${layout}`, {
@@ -618,7 +615,6 @@ exports.SidebarRestrictions = function (req, res) {
     [req.session.accesstypeid]
   );
 
-  console.log(sql);
 
   Select(sql, (err, result) => {
     if (err) {
@@ -626,7 +622,6 @@ exports.SidebarRestrictions = function (req, res) {
       return res.json(JsonErrorResponse(err));
     }
 
-    console.log(result);
 
     if (result.length > 0) {
       const allowedRoutes = result.map((row) => row.marl_route); // Extracting routes from result

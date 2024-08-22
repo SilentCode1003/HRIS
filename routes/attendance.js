@@ -331,7 +331,6 @@ router.post("/gethomestatus2", (req, res) => {
         where ma_employeeid = '${employeeid}' and ma_attendancedate = '${attendancedate}'
         order by ma_attendancedate desc 
         limit 1`;
-    console.log(sql);
 
     mysql
       .mysqlQueryPromise(sql)
