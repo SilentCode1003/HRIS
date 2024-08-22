@@ -2,6 +2,7 @@ const fs = require("fs");
 const moment = require("moment");
 const LINQ = require("node-linq").LINQ;
 const { format } = require("date-fns");
+const { type } = require("os");
 
 //#region READ & WRITE JSON FILES
 exports.ReadJSONFile = function (filepath) {
@@ -189,6 +190,24 @@ exports.SubtractDayTime = (idate, fdate) => {
 
   return diffInDays;
 };
+
+exports.AddDay = (idate, index) => {
+  const date = moment(`${idate}`);
+  const newDate = date.add(index, "days");
+  return newDate.format("YYYY-MM-DD");
+};
+
+exports.ConvertToDate = (datestring) => {
+  if (typeof datestring === "string") {
+    return moment(datestring).format("YYYY-MM-DD");
+  } else {
+    return this.convertExcelDate(datestring);
+  }
+};
+
+exports.ConvertTo24Formart = (timestring) =>{
+  return moment(timestring, "h:mm a").format("HH:mm:ss");
+}
 //#endregion
 
 //#region  SUMMARY REPORTS
@@ -506,11 +525,15 @@ exports.UpdateStatement = (tablename, prefix, columns, arguments) => {
   return statement;
 };
 
-
-
-exports.UpdateStatementWithArrayDates = (tablename, prefix, columns, datesColumn, loanIdColumn) => {
-  let cols = columns.map(col => `${prefix}_${col} = ?`).join(', ');
-  let datesPlaceholder = datesColumn.map(() => '?').join(', ');
+exports.UpdateStatementWithArrayDates = (
+  tablename,
+  prefix,
+  columns,
+  datesColumn,
+  loanIdColumn
+) => {
+  let cols = columns.map((col) => `${prefix}_${col} = ?`).join(", ");
+  let datesPlaceholder = datesColumn.map(() => "?").join(", ");
 
   let statement = `UPDATE ${tablename} 
   SET ${cols} 
@@ -518,7 +541,6 @@ exports.UpdateStatementWithArrayDates = (tablename, prefix, columns, datesColumn
 
   return statement;
 };
-
 
 exports.SelectStatement = (str, data) => {
   let statement = "";
@@ -534,14 +556,13 @@ exports.SelectStatement = (str, data) => {
   return statement;
 };
 
-
 exports.SelectStatementWithArray = (str, data) => {
   let statement = "";
   let found = 0;
   for (let i = 0; i < str.length; i++) {
     if (str[i] === "?") {
       if (Array.isArray(data[found])) {
-        statement += data[found].map(val => `'${val}'`).join(',');
+        statement += data[found].map((val) => `'${val}'`).join(",");
       } else {
         statement += `'${data[found]}'`;
       }
@@ -552,5 +573,3 @@ exports.SelectStatementWithArray = (str, data) => {
   }
   return statement;
 };
-
-
