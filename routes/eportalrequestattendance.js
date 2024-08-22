@@ -164,7 +164,6 @@ router.post("/getreqCOA", (req, res) => {
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -246,7 +245,7 @@ router.get("/loadapproved", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -286,7 +285,7 @@ router.get("/loadrejected", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -326,7 +325,7 @@ router.get("/loadcancelled", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");

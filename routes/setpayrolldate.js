@@ -27,7 +27,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -61,7 +60,7 @@ router.get("/loadreq", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      //console.log(result);
+      //
       res.json({
         msg: "success",
         data: result,
@@ -74,8 +73,6 @@ router.get("/loadreq", (req, res) => {
     });
   }
 });
-
-
 
 router.get("/loadreqbeforepayout", (req, res) => {
   try {
@@ -97,7 +94,7 @@ router.get("/loadreqbeforepayout", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      //console.log(result);
+      //
       res.json({
         msg: "success",
         data: result,

@@ -3,25 +3,28 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, Update } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonWarningResponse, MessageStatus, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonWarningResponse,
+  MessageStatus,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
+const {
+  UpdateStatement,
+  SelectStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('eportalrequestleavelayout', { title: 'Express' });
-  Validator(
-    req,
-    res,
-    "eportalotmeallayout",
-    "eportalotmeal"
-  );
+  Validator(req, res, "eportalotmeallayout", "eportalotmeal");
 });
 
 module.exports = router;
-
 
 router.get("/load", (req, res) => {
   try {
@@ -46,8 +49,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
@@ -61,11 +62,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-
-
-
 
 router.post("/getotmeal", (req, res) => {
   try {
@@ -91,8 +87,6 @@ router.post("/getotmeal", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
@@ -107,20 +101,17 @@ router.post("/getotmeal", (req, res) => {
   }
 });
 
-
-
-
 router.put("/edit", (req, res) => {
   try {
-    const { 
+    const {
       mealotid,
-      employeeid,  
-      clockin, 
-      clockout, 
+      employeeid,
+      clockin,
+      clockout,
       totalovertime,
       attendancedate,
       payroll_date,
-      otmeal_amount, 
+      otmeal_amount,
       approvalcount,
       status,
       subgroupid,
@@ -137,18 +128,15 @@ router.put("/edit", (req, res) => {
       columns.push("employeeid");
     }
 
-
     if (attendancedate) {
       data.push(attendancedate);
       columns.push("attendancedate");
     }
 
-
     if (clockin) {
       data.push(clockin);
       columns.push("clockin");
     }
-
 
     if (clockout) {
       data.push(clockout);
@@ -165,36 +153,30 @@ router.put("/edit", (req, res) => {
       columns.push("otmeal_amount");
     }
 
-
     if (payroll_date) {
       data.push(payroll_date);
       columns.push("payroll_date");
     }
-
 
     if (status) {
       data.push(status);
       columns.push("status");
     }
 
-
     if (subgroupid) {
       data.push(subgroupid);
       columns.push("subgroupid");
     }
-
 
     if (image) {
       data.push(image);
       columns.push("image");
     }
 
-
     if (approvalcount) {
       data.push(approvalcount);
       columns.push("approvalcount");
     }
-
 
     if (applieddate) {
       data.push(applieddate);
@@ -206,7 +188,6 @@ router.put("/edit", (req, res) => {
       arguments.push("mealid");
     }
 
-
     let updateStatement = UpdateStatement(
       "ot_meal_allowances",
       "oma",
@@ -214,26 +195,22 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-
-
-    console.log(updateStatement,'Update');
+    console.log(updateStatement, "Update");
 
     let checkStatement = SelectStatement(
       "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
       [employeeid, attendancedate, status]
     );
 
-    console.log(checkStatement,'check');
+    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
-        Update(updateStatement, data, (err, result) => {
+          Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            console.log(result);
 
             res.json(JsonSuccess());
           });
@@ -249,7 +226,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -261,7 +237,3 @@ function Check(sql) {
   });
 }
 //#endregion
-
-
-
-

@@ -133,7 +133,6 @@ router.post("/upload", (req, res) => {
 
     Insert_OJTAttendance(ojt_attendance)
       .then((result) => {
-        console.log(result);
         Update_OJTAttendance(ojt_attendance_update)
           .then((result) => {
             res.json({
@@ -171,7 +170,6 @@ function Insert_OJTAttendance(data) {
           console.error(err);
           reject(err);
         }
-        console.log(result);
 
         resolve(result);
       });
@@ -205,7 +203,6 @@ function Update_OJTAttendance(data) {
           reject(err);
         }
 
-        console.log(result);
         counter += 1;
 
         if (counter == model.length) {

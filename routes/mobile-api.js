@@ -47,8 +47,6 @@ router.post("/loadotmeal", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
@@ -180,8 +178,6 @@ router.post("/loadovertime", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
@@ -221,8 +217,6 @@ router.post("/loadcoa", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -336,8 +330,6 @@ router.post("/getpayrolldate", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
@@ -440,8 +432,6 @@ router.post("/loadloansdetails", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "gld_");
 
@@ -470,8 +460,6 @@ router.post("/loadloans", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "gl_");

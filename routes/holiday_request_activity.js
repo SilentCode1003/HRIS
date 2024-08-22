@@ -3,10 +3,19 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess, JsonWarningResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+  JsonWarningResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
-const { SelectStatement, InsertStatement, GetCurrentDatetime } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  InsertStatement,
+  GetCurrentDatetime,
+} = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -43,22 +52,20 @@ router.get("/load", (req, res) => {
     INNER JOIN master_employee me_activity ON hra.hra_employeeid = me_activity.me_id`;
 
     Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "hra_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "hra_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json(JsonErrorResponse(err));
   }
@@ -98,22 +105,20 @@ router.post("/getholidayactivity", (req, res) => {
     WHERE hra_id = '${holidayrequest_id}';`;
 
     Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "hra_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "hra_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json({
       msg: "error",

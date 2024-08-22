@@ -101,8 +101,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("master_performance_emp", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
-
           res.json({
             msg: "success",
           });
@@ -136,8 +134,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
         });
@@ -151,7 +147,7 @@ router.post("/update", (req, res) => {
     // mysql.Update(sqlupdate, (err,result) =>{
     //   if(err) console.error('Error: ', err);
 
-    //   console.log(result);
+    //
 
     //   res.json({
     //     msg: 'success'

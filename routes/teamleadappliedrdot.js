@@ -3,20 +3,23 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { InsertStatement, SelectStatement } = require("./repository/customhelper");
+const {
+  InsertStatement,
+  SelectStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(
-    req, 
-    res, 
-    "teamleadappliedrdotlayout",
-    "teamleadappliedrdot");
+  Validator(req, res, "teamleadappliedrdotlayout", "teamleadappliedrdot");
 });
 
 module.exports = router;
@@ -26,7 +29,7 @@ module.exports = router;
 //     let departmentid = req.session.departmentid;
 //     let subgroupid = req.session.subgroupid;
 //     let accesstypeid = req.session.accesstypeid;
-//     let sql = `select 
+//     let sql = `select
 //         pao_id,
 //         pao_image,
 //         pao_fullname,
@@ -39,18 +42,18 @@ module.exports = router;
 //     FROM payroll_approval_ot
 //     INNER JOIN
 //     master_employee ON payroll_approval_ot.pao_employeeid = me_id
-//     INNER JOIN 
-//             aprroval_stage_settings ON 
+//     INNER JOIN
+//             aprroval_stage_settings ON
 //                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
 //                 aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
 //                 aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
 //                 aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
-//         WHERE 
-//         pao_status = 'Applied' 
+//         WHERE
+//         pao_status = 'Applied'
 //             AND pao_subgroupid IN (${subgroupid})
 //             AND me_department = '${departmentid}'
 //             AND pao_employeeid NOT IN (
-//                 SELECT tu_employeeid 
+//                 SELECT tu_employeeid
 //                 FROM teamlead_user
 //             )`;
 
@@ -60,7 +63,7 @@ module.exports = router;
 //         res.json(JsonErrorResponse(err));
 //       }
 
-//       console.log(result);
+//
 
 //       if (result != 0) {
 //         let data = DataModeling(result, "pao_");
@@ -78,8 +81,8 @@ module.exports = router;
 // });
 
 router.get("/load", (req, res) => {
-    console.log("HIT");
-    
+  console.log("HIT");
+
   try {
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
@@ -104,16 +107,13 @@ router.get("/load", (req, res) => {
         roa_status = 'Applied' 
             AND roa_subgroupid IN (${subgroupid})`;
 
-            console.log(sql);
-            
-            
+    console.log(sql);
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
@@ -129,7 +129,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getrdotapproval", (req, res) => {
   try {
@@ -156,8 +155,6 @@ router.post("/getrdotapproval", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
@@ -174,8 +171,6 @@ router.post("/getrdotapproval", (req, res) => {
     });
   }
 });
-
-
 
 router.post("/rdotaction", (req, res) => {
   console.log("HIT");
@@ -195,21 +190,23 @@ router.post("/rdotaction", (req, res) => {
       "status",
       "comment",
     ]);
-    let data = [[
-      employeeid,
-      departmentid,
-      subgroupid,
-      createdate,
-      rdotid,
-      status,
-      comment
-    ]];
+    let data = [
+      [
+        employeeid,
+        departmentid,
+        subgroupid,
+        createdate,
+        rdotid,
+        status,
+        comment,
+      ],
+    ];
     let checkStatement = SelectStatement(
       "select * from restdayot_request_activity where rra_employeeid=? and rra_id=?",
       [employeeid, rdotid]
     );
 
-    console.log(checkStatement,'result');
+    console.log(checkStatement, "result");
 
     InsertTable(sql, data, (err, result) => {
       if (err) {
@@ -226,4 +223,3 @@ router.post("/rdotaction", (req, res) => {
     });
   }
 });
-

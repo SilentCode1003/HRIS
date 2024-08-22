@@ -46,7 +46,7 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "mm_");
@@ -65,19 +65,19 @@ router.get("/load", (req, res) => {
 
 router.post("/save", (req, res) => {
   try {
-    let createby = req.session.fullname; 
+    let createby = req.session.fullname;
     let responsible = req.session.employeeid;
     let createddate = GetCurrentDatetime();
     const {
-      medecinename, 
+      medecinename,
       medecinecategory,
       medecinegramsorml,
-      medecineunit, 
+      medecineunit,
       medecinequantity,
-      medecineexpdate, 
-      medecinedescription, 
+      medecineexpdate,
+      medecinedescription,
       medecinemanufacturer,
-      medecineimage
+      medecineimage,
     } = req.body;
 
     let sql = InsertStatement("master_medecines", "mm", [
@@ -94,22 +94,24 @@ router.post("/save", (req, res) => {
       "createby",
     ]);
 
-    let data = [[
-      medecinename, 
-      medecineimage, 
-      medecinecategory, 
-      medecinegramsorml, 
-      medecineunit,
-      medecinedescription, 
-      medecinequantity, 
-      medecineexpdate,
-      medecinemanufacturer,
-      createddate,
-      createby,
-    ]];
+    let data = [
+      [
+        medecinename,
+        medecineimage,
+        medecinecategory,
+        medecinegramsorml,
+        medecineunit,
+        medecinedescription,
+        medecinequantity,
+        medecineexpdate,
+        medecinemanufacturer,
+        createddate,
+        createby,
+      ],
+    ];
 
     let checkStatement = SelectStatement(
-      "select * from master_medecines where mm_name=? and mm_category=?",      
+      "select * from master_medecines where mm_name=? and mm_category=?",
       [medecinename, medecinecategory]
     );
 
@@ -123,8 +125,6 @@ router.post("/save", (req, res) => {
               console.log(err);
               return res.json(JsonErrorResponse(err));
             }
-
-            console.log(result);
 
             let newMedicineId = result[0].id;
 
@@ -141,16 +141,18 @@ router.post("/save", (req, res) => {
               "createby",
             ]);
 
-            let historyData = [[
-              "New Stock",
-              responsible,
-              medecinequantity, 
-              medecinegramsorml,
-              medecineunit,
-              newMedicineId,
-              createddate,
-              createby,
-            ]];
+            let historyData = [
+              [
+                "New Stock",
+                responsible,
+                medecinequantity,
+                medecinegramsorml,
+                medecineunit,
+                newMedicineId,
+                createddate,
+                createby,
+              ],
+            ];
 
             InsertTable(historySql, historyData, (err, result) => {
               if (err) {
@@ -211,14 +213,20 @@ router.post("/getmedecine", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    let createby = req.session.fullname; 
+    let createby = req.session.fullname;
     let createddate = GetCurrentDatetime();
-    const { medecinename, medecinecategory, medecinequantity, medecineexpdate
-      , medecinedescription, medecinemanufacturer, medecineimage, medecineid ,
-      meddossage, medunit
-     } = req.body;
-
-    
+    const {
+      medecinename,
+      medecinecategory,
+      medecinequantity,
+      medecineexpdate,
+      medecinedescription,
+      medecinemanufacturer,
+      medecineimage,
+      medecineid,
+      meddossage,
+      medunit,
+    } = req.body;
 
     let data = [];
     let columns = [];
@@ -294,8 +302,14 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatement(
-      "select * from master_medecines where mm_name=? and mm_category=? and mm_manufacturer= ? and mm_createdate=? and mm_expirydate=? ",      
-      [medecinename, medecinecategory, medecinemanufacturer, createddate, medecineexpdate]
+      "select * from master_medecines where mm_name=? and mm_category=? and mm_manufacturer= ? and mm_createdate=? and mm_expirydate=? ",
+      [
+        medecinename,
+        medecinecategory,
+        medecinemanufacturer,
+        createddate,
+        medecineexpdate,
+      ]
     );
 
     Check(checkStatement)
@@ -306,7 +320,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });
@@ -341,20 +355,30 @@ router.post("/stockin", (req, res) => {
       "createby",
     ]);
 
-    let data = [[
-      history_type,
-      responsible,
-      stockinpieces,
-      gramsMl,
-      unit,
-      medecineid,
-      createddate,
-      createby,
-    ]];
+    let data = [
+      [
+        history_type,
+        responsible,
+        stockinpieces,
+        gramsMl,
+        unit,
+        medecineid,
+        createddate,
+        createby,
+      ],
+    ];
 
     let checkStatement = SelectStatement(
       "select * from medecine_history where mh_history_type=? and mh_quantity=? and mh_grams_ml=? and mh_unit=? and mh_medecine_name=? and mh_createdate=? and mh_createby=?",
-      [history_type, stockinpieces, gramsMl, unit, medecineid, createddate, createby]
+      [
+        history_type,
+        stockinpieces,
+        gramsMl,
+        unit,
+        medecineid,
+        createddate,
+        createby,
+      ]
     );
 
     Check(checkStatement)
@@ -370,20 +394,20 @@ router.post("/stockin", (req, res) => {
 
             let updateSql = `UPDATE master_medecines SET mm_quantity = mm_quantity + '${stockinpieces}' WHERE mm_medecineid = '${medecineid}'`;
 
-            mysql.Update(updateSql)
-            .then((result) => {
-              console.log(result);
-              res.json({
-                msg: "success",
-                data: result,
+            mysql
+              .Update(updateSql)
+              .then((result) => {
+                res.json({
+                  msg: "success",
+                  data: result,
+                });
+              })
+              .catch((error) => {
+                res.json({
+                  msg: "error",
+                  data: error,
+                });
               });
-            })
-            .catch((error) => {
-              res.json({
-                msg: "error",
-                data: error,
-              });
-            });
           });
         }
       })
@@ -418,7 +442,7 @@ router.get("/loadstockin", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "mh_");
@@ -434,7 +458,6 @@ router.get("/loadstockin", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.get("/loadstockout", (req, res) => {
   try {
@@ -458,7 +481,7 @@ router.get("/loadstockout", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "mh_");
@@ -474,12 +497,6 @@ router.get("/loadstockout", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-
-
-
-
 
 //#region FUNCTION
 function Check(sql) {

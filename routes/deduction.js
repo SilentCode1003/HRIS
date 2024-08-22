@@ -84,8 +84,6 @@ router.post("/save", (req, res) => {
             return;
           }
 
-          console.log(result);
-
           res.json({
             msg: "success",
             data: result,
@@ -115,8 +113,6 @@ router.post("/getdeduction", (req, res) => {
 
     mysql.Select(sql, "Government_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",

@@ -3,9 +3,16 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { InsertStatement, SelectStatement } = require("./repository/customhelper");
+const {
+  InsertStatement,
+  SelectStatement,
+} = require("./repository/customhelper");
 const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
@@ -15,10 +22,11 @@ const currentDate = moment();
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
   Validator(
-    req, 
-    res, 
+    req,
+    res,
     "teamleadappliedovertimelayout",
-    "teamleadappliedovertime");
+    "teamleadappliedovertime"
+  );
 });
 
 module.exports = router;
@@ -28,7 +36,7 @@ module.exports = router;
 //     let departmentid = req.session.departmentid;
 //     let subgroupid = req.session.subgroupid;
 //     let accesstypeid = req.session.accesstypeid;
-//     let sql = `select 
+//     let sql = `select
 //         pao_id,
 //         pao_image,
 //         pao_fullname,
@@ -41,18 +49,18 @@ module.exports = router;
 //     FROM payroll_approval_ot
 //     INNER JOIN
 //     master_employee ON payroll_approval_ot.pao_employeeid = me_id
-//     INNER JOIN 
-//             aprroval_stage_settings ON 
+//     INNER JOIN
+//             aprroval_stage_settings ON
 //                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
 //                 aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
 //                 aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
 //                 aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
-//         WHERE 
-//         pao_status = 'Applied' 
+//         WHERE
+//         pao_status = 'Applied'
 //             AND pao_subgroupid IN (${subgroupid})
 //             AND me_department = '${departmentid}'
 //             AND pao_employeeid NOT IN (
-//                 SELECT tu_employeeid 
+//                 SELECT tu_employeeid
 //                 FROM teamlead_user
 //             )`;
 
@@ -62,7 +70,7 @@ module.exports = router;
 //         res.json(JsonErrorResponse(err));
 //       }
 
-//       console.log(result);
+//
 
 //       if (result != 0) {
 //         let data = DataModeling(result, "pao_");
@@ -103,14 +111,12 @@ router.get("/load", (req, res) => {
         WHERE 
         pao_status = 'Applied' 
             AND pao_subgroupid IN (${subgroupid})`;
-            
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
@@ -126,7 +132,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getotapproval", (req, res) => {
   try {
@@ -158,8 +163,6 @@ router.post("/getotapproval", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
@@ -173,7 +176,7 @@ router.post("/getotapproval", (req, res) => {
     // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
     //   if (err) console.error("Error: ", err);
 
-    //   console.log(result);
+    //
 
     //   res.json({
     //     msg: "success",
@@ -188,8 +191,6 @@ router.post("/getotapproval", (req, res) => {
   }
 });
 
-
-
 router.post("/ovetimeaction", (req, res) => {
   console.log("HIT");
   try {
@@ -197,7 +198,8 @@ router.post("/ovetimeaction", (req, res) => {
     let departmentid = req.session.departmentid;
     let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { approveot_id, status, comment, attendancedate, timein, timeout } = req.body;
+    const { approveot_id, status, comment, attendancedate, timein, timeout } =
+      req.body;
 
     // let data = [];
 
@@ -220,21 +222,23 @@ router.post("/ovetimeaction", (req, res) => {
       "status",
       "commnet",
     ]);
-    let data = [[
-      employeeid,
-      departmentid,
-      subgroupid,
-      createdate,
-      approveot_id,
-      status,
-      comment
-    ]];
+    let data = [
+      [
+        employeeid,
+        departmentid,
+        subgroupid,
+        createdate,
+        approveot_id,
+        status,
+        comment,
+      ],
+    ];
     let checkStatement = SelectStatement(
       "select * from overtime_request_activity where ora_employeeid=? and ora_overtimeid=?",
       [employeeid, approveot_id]
     );
 
-    console.log(checkStatement,'result');
+    console.log(checkStatement, "result");
 
     InsertTable(sql, data, (err, result) => {
       if (err) {
@@ -252,7 +256,7 @@ router.post("/ovetimeaction", (req, res) => {
           requesttype: REQUEST.OVERTIME,
         },
       ];
-      SendEmailNotificationEmployee(employeeid,subgroupid, emailbody);
+      SendEmailNotificationEmployee(employeeid, subgroupid, emailbody);
 
       res.json(JsonSuccess());
     });
@@ -263,4 +267,3 @@ router.post("/ovetimeaction", (req, res) => {
     });
   }
 });
-

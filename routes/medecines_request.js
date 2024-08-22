@@ -95,31 +95,35 @@ router.post("/getmedecinequantity", (req, res) => {
   }
 });
 
-router.post('/check_quantity', (req, res) => {
+router.post("/check_quantity", (req, res) => {
   try {
-      const { medecinename, medecinerequestednumber } = req.body;
-      let checkQuantityStatement = SelectStatement(
-          "SELECT mm_quantity FROM master_medecines WHERE mm_medecineid = ?",
-          [medecinename]
-      );
+    const { medecinename, medecinerequestednumber } = req.body;
+    let checkQuantityStatement = SelectStatement(
+      "SELECT mm_quantity FROM master_medecines WHERE mm_medecineid = ?",
+      [medecinename]
+    );
 
-      Check(checkQuantityStatement)
-          .then((quantityResult) => {
-              let availableQuantity = quantityResult[0].mm_quantity;
+    Check(checkQuantityStatement)
+      .then((quantityResult) => {
+        let availableQuantity = quantityResult[0].mm_quantity;
 
-              if (medecinerequestednumber > availableQuantity) {
-                  res.json({ status: "error", message: "Insufficient supply" });
-              } else {
-                  res.json({ status: "success" });
-              }
-          })
-          .catch((error) => {
-              console.log(error);
-              res.status(500).json({ status: "error", message: "Error checking quantity" });
-          });
+        if (medecinerequestednumber > availableQuantity) {
+          res.json({ status: "error", message: "Insufficient supply" });
+        } else {
+          res.json({ status: "success" });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res
+          .status(500)
+          .json({ status: "error", message: "Error checking quantity" });
+      });
   } catch (error) {
-      console.log(error);
-      res.status(500).json({ status: "error", message: "An unexpected error occurred" });
+    console.log(error);
+    res
+      .status(500)
+      .json({ status: "error", message: "An unexpected error occurred" });
   }
 });
 
@@ -127,9 +131,14 @@ router.post("/save", (req, res) => {
   try {
     let approvedby = req.session.fullname;
     let requestdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { employeeid, medecinename, medecinerequestednumber, medreqreason, meddossage, medunit
-     } =
-      req.body;
+    const {
+      employeeid,
+      medecinename,
+      medecinerequestednumber,
+      medreqreason,
+      meddossage,
+      medunit,
+    } = req.body;
     let checkQuantityStatement = SelectStatement(
       "SELECT mm_quantity FROM master_medecines WHERE mm_medecineid = ?",
       [medecinename]
@@ -183,12 +192,10 @@ router.post("/save", (req, res) => {
                   res.json(JsonErrorResponse(err));
                 }
 
-                console.log(result);
-
                 let newMedicineId = result[0].id;
-    
+
                 console.log(newMedicineId);
-    
+
                 let historySql = InsertStatement("medecine_history", "mh", [
                   "history_type",
                   "responsible",
@@ -199,24 +206,26 @@ router.post("/save", (req, res) => {
                   "createdate",
                   "createby",
                 ]);
-    
-                let historyData = [[
-                  "Stock Out",
-                  employeeid,
-                  medecinerequestednumber,
-                  meddossage,
-                  medunit,
-                  newMedicineId,
-                  requestdate,
-                  approvedby,
-                ]];
-    
+
+                let historyData = [
+                  [
+                    "Stock Out",
+                    employeeid,
+                    medecinerequestednumber,
+                    meddossage,
+                    medunit,
+                    newMedicineId,
+                    requestdate,
+                    approvedby,
+                  ],
+                ];
+
                 InsertTable(historySql, historyData, (err, result) => {
                   if (err) {
                     console.log(err);
                     return res.json(JsonErrorResponse(err));
                   }
-    
+
                   res.json(JsonSuccess());
                 });
               });

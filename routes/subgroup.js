@@ -67,7 +67,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("subgroup", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
           res.json({
             msg: "success",
             data: result,
@@ -99,7 +98,6 @@ router.post("/getsubgroup", (req, res) => {
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -112,7 +110,6 @@ router.post("/getsubgroup", (req, res) => {
     });
   }
 });
-
 
 router.post("/getsubgroupbydepartment", (req, res) => {
   try {
@@ -131,7 +128,6 @@ router.post("/getsubgroupbydepartment", (req, res) => {
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -184,8 +180,6 @@ router.post("/update", (req, res) => {
   }
 });
 
-
-
 router.get("/getsubgroupallactive", (req, res) => {
   try {
     let sql = ` SELECT
@@ -201,7 +195,6 @@ router.get("/getsubgroupallactive", (req, res) => {
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

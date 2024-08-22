@@ -537,16 +537,16 @@ exports.ValidatorforOjt = function (req, res, layout) {
 
 const { SelectStatement } = require("../repository/customhelper");
 const { Select } = require("../repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("../repository/response");
-
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("../repository/response");
 
 exports.Validator = function (req, res, layout, route) {
-  
   let sql = SelectStatement(
     "select * from master_access_route_layout where marl_accessid=? and marl_layout=? and marl_route=?",
     [req.session.accesstypeid, layout, route]
   );
-
 
   Select(sql, (err, result) => {
     if (err) {
@@ -581,7 +581,6 @@ exports.EnsureLogin = function (req, res, next) {
   }
 };
 
-
 // exports.SidebarRestrictions = function (req, res, route, callback) {
 //   let sql = SelectStatement(
 //     "select marl_route from master_access_route_layout where marl_accessid = ?",
@@ -596,7 +595,7 @@ exports.EnsureLogin = function (req, res, next) {
 //       return res.json(JsonErrorResponse(err));
 //     }
 
-//     console.log(result);
+//
 
 //     if (result.length > 0) {
 //       return callback(null, result);
@@ -615,25 +614,21 @@ exports.SidebarRestrictions = function (req, res) {
     [req.session.accesstypeid]
   );
 
-
   Select(sql, (err, result) => {
     if (err) {
       console.error(err);
       return res.json(JsonErrorResponse(err));
     }
 
-
     if (result.length > 0) {
       const allowedRoutes = result.map((row) => row.marl_route); // Extracting routes from result
       return res.json(JsonDataResponse({ allowedRoutes }));
     } else {
-      return res.render("your_error_template", {  // Adjust to your error handling
+      return res.render("your_error_template", {
+        // Adjust to your error handling
         accessid: req.session.accessid,
         accesstypeid: req.session.accesstypeid,
       });
     }
   });
 };
-
-
-

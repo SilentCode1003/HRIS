@@ -73,8 +73,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("master_salary", data, (err, result) => {
           if (err) console.log("Error: ", err);
 
-          console.log(result);
-
           res.json({
             msg: "success",
             data: result,
@@ -104,8 +102,6 @@ router.post("/getsalary", (req, res) => {
 
     mysql.Select(sql, "Master_Salary", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
@@ -141,8 +137,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -196,8 +190,6 @@ router.post("/upload", (req, res) => {
 
             Update(sqlupdate, data, (err, result) => {
               if (err) console.error("Error: ", err);
-
-              console.log(result);
             });
           }
         } else {
@@ -213,7 +205,6 @@ router.post("/upload", (req, res) => {
 
           Insert(cmd, data, (err, result) => {
             if (err) console.error("Error: ", err);
-            console.log(result);
           });
         }
       });

@@ -50,7 +50,7 @@ function getLatestLog(employeeId) {
 
 function getDeviceInformation(device) {
   console.log(device);
-  
+
   if (typeof device === "undefined" || " ") {
     return "app";
   } else {
@@ -58,26 +58,24 @@ function getDeviceInformation(device) {
   }
 }
 
-router.get("/getisgefence", (req, res) =>{
-  console.log('hit');
+router.get("/getisgefence", (req, res) => {
+  console.log("hit");
   try {
     let employeeId = req.session.employeeid;
     let accesstype = req.session.accesstypeid;
-  
+
     console.log(employeeId);
     let sql = `SELECT 
     mu_isgeofence
     FROM master_user
     WHERE mu_accesstype = '${accesstype}' AND mu_employeeid = '${employeeId}'`;
-  
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-  
       if (result != 0) {
         let data = DataModeling(result, "mu_");
         res.json(JsonDataResponse(data));
@@ -126,7 +124,7 @@ router.post("/clockin", (req, res) => {
   const geofenceid = req.body.geofenceid;
   const locationin = req.body.locationin;
 
-  console.log(locationin,'locationin');
+  console.log(locationin, "locationin");
 
   if (!employee_id) {
     return res.status(401).json({
@@ -156,7 +154,6 @@ router.post("/clockin", (req, res) => {
       AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
       AND ma_clockout IS NULL
   `;
-
 
   const executeSequentialQueries = (queries) =>
     queries.reduce(
@@ -350,8 +347,6 @@ router.post("/viewnotif", (req, res) => {
 
     mysql.Select(sql, "Master_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",

@@ -20,8 +20,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Apps_Details", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -41,8 +39,6 @@ router.post("/loadforapp", (req, res) => {
 
     mysql.Select(sql, "Apps_Details", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
@@ -89,8 +85,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("apps_details", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
-
           res.json({
             msg: "success",
           });
@@ -118,8 +112,6 @@ router.post("/getappsdetails", (req, res) => {
 
     mysql.Select(sql, "Apps_Details", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
