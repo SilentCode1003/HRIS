@@ -6,7 +6,6 @@ const {
   SendEmployeeRequestPassword,
   ForgotPasswordTemplate,
 } = require("./helper");
-
 function SendEmailNotificationEmployee(employeeid, subgroupid, title, data) {
   return new Promise((resolve, reject) => {
     try {
@@ -28,7 +27,7 @@ function SendEmailNotification(employeeid,subgroupid, title, data) {
       let html = EmailNotification(data);
       SendNotification(
         subgroupid,
-        `${REQUEST.COA} - ${GetCurrentDate()}`,
+        `${title} - ${GetCurrentDate()}`,
         html
       );
       SendEmployeeNotification(employeeid, title, html);
