@@ -189,8 +189,7 @@ router.post("/daterange", (req, res) => {
 router.post("/getloadforapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `       
-  SELECT
+    let sql = `SELECT
   CONCAT(me_lastname, " ", me_firstname) as employeeid,
   TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
   TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
@@ -204,15 +203,16 @@ router.post("/getloadforapp", (req, res) => {
   FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
   FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
   ) AS totalhours,
-  mgsIn.mgs_geofencename AS geofencenameIn,
-  mgsOut.mgs_geofencename AS geofencenameOut
+  CASE WHEN ma_gefenceidIn = 0 THEN al_location ELSE mgsIn.mgs_geofencename END AS geofencenameIn,
+  CASE WHEN ma_geofenceidOut = 0 THEN al_location ELSE mgsOut.mgs_geofencename END AS geofencenameOut
   FROM master_attendance
   INNER JOIN master_employee ON ma_employeeid = me_id
   LEFT JOIN
   master_geofence_settings mgsIn ON ma_gefenceidIn = mgsIn.mgs_id
   LEFT JOIN
   master_geofence_settings mgsOut ON ma_geofenceidOut = mgsOut.mgs_id
-  where ma_employeeid='${employeeid}'
+  INNER JOIN attendance_logs ON al_attendanceid = ma_attendanceid
+  where ma_employeeid='210206'
   ORDER BY ma_attendancedate DESC
   limit 2`;
 
@@ -247,8 +247,8 @@ router.post("/filterforapp", (req, res) => {
     DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
     ma_devicein as devicein,
     ma_deviceout as deviceout,
-    mgsIn.mgs_geofencename AS geofencenameIn,
-    mgsOut.mgs_geofencename AS geofencenameOut,
+    CASE WHEN ma_gefenceidIn = 0 THEN al_location ELSE mgsIn.mgs_geofencename END AS geofencenameIn,
+    CASE WHEN ma_geofenceidOut = 0 THEN al_location ELSE mgsOut.mgs_geofencename END AS geofencenameOut
     CONCAT(
     FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
     FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
