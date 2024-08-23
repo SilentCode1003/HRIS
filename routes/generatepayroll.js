@@ -148,6 +148,7 @@ router.post("/generateandaoadaayroll", async (req, res) => {
   }
 });
 
+
 router.post("/checkmissedlogs", (req, res) => {
   try {
     let startdate = req.body.startdate;
@@ -171,6 +172,7 @@ router.post("/checkmissedlogs", (req, res) => {
     });
   }
 });
+
 
 router.post("/loadpayroll", (req, res) => {
   try {
@@ -200,6 +202,7 @@ router.post("/loadpayroll", (req, res) => {
   }
 });
 
+
 router.post("/loadpayslipsummary", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
@@ -227,6 +230,7 @@ router.post("/loadpayslipsummary", (req, res) => {
     });
   }
 });
+
 
 router.post("/loadpayslipdetailed", (req, res) => {
   try {
@@ -258,6 +262,7 @@ router.post("/loadpayslipdetailed", (req, res) => {
     });
   }
 });
+
 
 router.post("/getpayrolldate", (req, res) => {
   try {
@@ -293,6 +298,7 @@ router.post("/getpayrolldate", (req, res) => {
   }
 });
 
+
 router.post("/loadpayslipsummaryforapp", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
@@ -314,6 +320,7 @@ router.post("/loadpayslipsummaryforapp", (req, res) => {
     });
   }
 });
+
 
 router.post("/exportfile", async (req, res) => {
   try {
@@ -362,6 +369,7 @@ router.post("/exportfile", async (req, res) => {
   }
 });
 
+
 router.get("/payrolldateload", (req, res) => {
   try {
     let sql = `SELECT DISTINCT 
@@ -392,6 +400,7 @@ router.get("/payrolldateload", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 // router.post("/exportbank", async (req, res) => {
 //   try {
@@ -441,6 +450,7 @@ router.get("/payrolldateload", (req, res) => {
 //     });
 //   }
 // });
+
 
 router.post("/exportbank", async (req, res) => {
   try {
@@ -496,6 +506,7 @@ router.post("/exportbank", async (req, res) => {
     });
   }
 });
+
 
 router.post("/sudden_deduc_load", (req, res) => {
   console.log("hit");

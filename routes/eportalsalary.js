@@ -151,7 +151,8 @@ router.post("/loadprofileslip", (req, res) => {
     p_leaveday,
     p_overtime_meal,
     p_payroll_adjustments,
-    p_leave_pay
+    p_leave_pay,
+    p_accrued13thmonth
     FROM payslip
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
@@ -260,7 +261,8 @@ router.post("/loadpayslip", (req, res) => {
     p_sterling_loan,
     p_salary_loan,
     p_total_deductions, 
-    p_total_netpay
+    p_total_netpay,
+    p_accrued13thmonth
     FROM payslip
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
@@ -660,6 +662,9 @@ router.post("/generatepdf", async (req, res) => {
       globalshortterm_loan,
       globalsterling_loan,
       globalhousing_loan,
+      globalnumlate,
+      globalnumabsent,
+      globalaccrued13thmonth,
     } = req.body;
 
     console.log(
@@ -722,7 +727,7 @@ router.post("/generatepdf", async (req, res) => {
         {
           text: "Payroll Date: " + payrolldate,
           style: "subheader",
-          alignment: "right",
+          alignment: "center",
         },
         {
           columns: [
@@ -748,7 +753,7 @@ router.post("/generatepdf", async (req, res) => {
                 { text: "Department: " + globaldepartment, bold: true },
                 { text: "Health Card: " + globalhealthcard, bold: true },
                 { text: "Total Net Pay:  ₱" + globaltotalnetpay, bold: true },
-                { text: "Authorised Signatory: ", bold: true },
+                { text: "Assumed Accrued 13th Month Pay:  ₱" + globalaccrued13thmonth, bold: true },
               ],
             },
           ],
@@ -792,7 +797,7 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Total Approve Overtime",
                 "₱" + globalapproveot,
-                "Absent",
+                "Absent" + "(" + globalnumabsent +  ")",
                 "₱" + globalabsentdeductions,
               ],
               [
@@ -804,7 +809,7 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Normal Overtime",
                 "₱" + globalapprovenormalot,
-                "Late",
+                "Late" + "(" + globalnumlate +  ")",
                 "₱" + globallatedeductions,
               ],
               [

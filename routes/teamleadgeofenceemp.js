@@ -29,12 +29,10 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
-    let subgroupid = req.session.subgroupid;
 
     let sql = `SELECT
       mu_userid,
       CONCAT(me_lastname,' ',me_firstname) as mu_fullname,
-      s_name as mu_subgroupname,
       CASE WHEN mu_isgeofence = 1 
       THEN 'Active' ELSE 'Inactive' END AS mu_isgeofence,
       ma_accessname as mu_accesstype,
@@ -42,16 +40,17 @@ router.get("/load", (req, res) => {
       mu_createdate
       FROM master_user
       INNER JOIN master_employee ON master_user.mu_employeeid = me_id
-      INNER JOIN subgroup ON master_user.mu_subgroupid = s_id
       INNER JOIN master_access ON master_user.mu_accesstype = ma_accessid
-      WHERE me_department = '${departmentid}'
-      AND mu_subgroupid = '${subgroupid}'`;
+      WHERE me_department = '${departmentid}'`;
 
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
+
+      console.log(result);
+      
       if (result != 0) {
         let data = DataModeling(result, "mu_");
         res.json(JsonDataResponse(data));

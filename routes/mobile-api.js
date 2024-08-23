@@ -168,8 +168,7 @@ router.post("/loadovertime", (req, res) => {
       pao_payroll_date,
       pao_status
       FROM payroll_approval_ot
-      WHERE pao_employeeid = '${employeeid}'
-      AND pao_status = 'Pending'`;
+      WHERE pao_employeeid = '${employeeid}'`;
 
     Select(sql, (err, result) => {
       if (err) {

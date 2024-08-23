@@ -246,6 +246,7 @@ router.get("/attendancestatus", (req, res) => {
   try {
     let sql = `
     SELECT
+    me.me_profile_pic as image,
     concat(me.me_lastname,' ',me.me_firstname) as FullName,
     TIME_FORMAT(ma.ma_clockin, '%h:%i %p') AS actual_clockin,
     CASE
