@@ -7,6 +7,4 @@ const REQUEST = {
   OTMEAL: "Overtime Meal",
 };
 
-exports.module = {
-  REQUEST,
-};
+exports.REQUEST = REQUEST;
