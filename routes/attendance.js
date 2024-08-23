@@ -259,6 +259,7 @@ router.post("/filterforapp", (req, res) => {
     master_geofence_settings mgsIn ON ma_gefenceidIn = mgsIn.mgs_id
     LEFT JOIN
     master_geofence_settings mgsOut ON ma_geofenceidOut = mgsOut.mgs_id
+    INNER JOIN attendance_logs ON al_attendanceid = ma_attendanceid
     where ma_employeeid='${employeeid}'
     ORDER BY ma_attendancedate DESC`;
 
