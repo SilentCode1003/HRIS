@@ -12,7 +12,7 @@ const {
   SelectStatement,
   InsertStatement,
 } = require("./repository/customhelper");
-const { REQUEST } = require("./repository/dictionary");
+const { REQUEST } = require("./repository/enums");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
