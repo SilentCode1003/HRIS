@@ -212,7 +212,7 @@ router.post("/getloadforapp", (req, res) => {
   LEFT JOIN
   master_geofence_settings mgsOut ON ma_geofenceidOut = mgsOut.mgs_id
   INNER JOIN attendance_logs ON al_attendanceid = ma_attendanceid
-  where ma_employeeid='210206'
+  where ma_employeeid=${employeeid}
   ORDER BY ma_attendancedate DESC
   limit 2`;
 
@@ -248,7 +248,7 @@ router.post("/filterforapp", (req, res) => {
     ma_devicein as devicein,
     ma_deviceout as deviceout,
     CASE WHEN ma_gefenceidIn = 0 THEN al_location ELSE mgsIn.mgs_geofencename END AS geofencenameIn,
-    CASE WHEN ma_geofenceidOut = 0 THEN al_location ELSE mgsOut.mgs_geofencename END AS geofencenameOut
+    CASE WHEN ma_geofenceidOut = 0 THEN al_location ELSE mgsOut.mgs_geofencename END AS geofencenameOut,
     CONCAT(
     FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
     FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
