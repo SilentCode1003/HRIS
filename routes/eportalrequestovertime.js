@@ -13,7 +13,6 @@ const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
 var router = express.Router();
 const currentDate = moment();
-z;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
