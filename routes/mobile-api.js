@@ -50,7 +50,6 @@ router.post("/loadotmeal", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -181,7 +180,6 @@ router.post("/loadovertime", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -221,7 +219,6 @@ router.post("/loadcoa", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ar_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -333,7 +330,6 @@ router.post("/getpayrolldate", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -435,7 +431,6 @@ router.post("/loadloansdetails", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "gld_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -464,7 +459,6 @@ router.post("/loadloans", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "gl_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
