@@ -6,7 +6,10 @@ const pdfmake = require("pdfmake/build/pdfmake");
 const pdfFonts = require("pdfmake/build/vfs_fonts");
 const e = require("express");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 
 /* GET home page. */
@@ -48,8 +51,6 @@ router.get("/getpayrolldate", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
@@ -74,12 +75,10 @@ router.post("/loginsalary", (req, res) => {
   }
 });
 
-
-
 // router.get("/getpayrolldate", (req, res) => {
 //   try {
 //     let employeeid = req.session.employeeid;
-//     let sql = `SELECT 
+//     let sql = `SELECT
 //     CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
 //     DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
 //     p_cutoff as p_cutoff,
@@ -90,13 +89,13 @@ router.post("/loginsalary", (req, res) => {
 //     SUM(p_earlyothours) as p_earlyot,
 //     SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
 //     round(p_total_netpay, 2) as p_totalnetpay
-//     FROM 
-//     payslip  
-//     WHERE 
+//     FROM
+//     payslip
+//     WHERE
 //     p_employeeid = '${employeeid}'
-//     GROUP BY 
+//     GROUP BY
 //     p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
-//     ORDER BY 
+//     ORDER BY
 //     p_payrolldate DESC`;
 
 //     console.log(employeeid);
@@ -107,7 +106,7 @@ router.post("/loginsalary", (req, res) => {
 //         res.json(JsonErrorResponse(err));
 //       }
 
-//       console.log(result);
+//
 
 //       if (result != 0) {
 //         let data = DataModeling(result, "p_");
@@ -122,10 +121,6 @@ router.post("/loginsalary", (req, res) => {
 //     res.json(JsonErrorResponse(error));
 //   }
 // });
-
-
-
-
 
 router.post("/loadprofileslip", (req, res) => {
   try {
@@ -168,8 +163,6 @@ router.post("/loadprofileslip", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
@@ -272,7 +265,6 @@ router.post("/loadpayslip", (req, res) => {
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
 
-    
     console.log(employeeid);
 
     Select(sql, (err, result) => {
@@ -280,8 +272,6 @@ router.post("/loadpayslip", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
@@ -296,7 +286,6 @@ router.post("/loadpayslip", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/loaddinamicamount", (req, res) => {
   try {
@@ -363,7 +352,7 @@ router.post("/loaddinamicamount", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result,'result');
+      console.log(result, "result");
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
@@ -377,7 +366,6 @@ router.post("/loaddinamicamount", (req, res) => {
     res.json(JsonErrorResponse(err));
   }
 });
-
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -622,8 +610,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 //   }
 // });
 
-
-
 router.post("/generatepdf", async (req, res) => {
   try {
     const {
@@ -676,13 +662,21 @@ router.post("/generatepdf", async (req, res) => {
       globalhousing_loan,
     } = req.body;
 
-    console.log("GlobalsuddendedductionsName on server:", globalsuddendeductionsName);
-    console.log("GlobalsuddendedductionsAmount on server:", globalsuddendeductionsAmount);
+    console.log(
+      "GlobalsuddendedductionsName on server:",
+      globalsuddendeductionsName
+    );
+    console.log(
+      "GlobalsuddendedductionsAmount on server:",
+      globalsuddendeductionsAmount
+    );
 
-    const deductions = (globalsuddendeductionsName || []).map((name, index) => ({
-      name,
-      amount: globalsuddendeductionsAmount[index] || "₱0.00",
-    }));
+    const deductions = (globalsuddendeductionsName || []).map(
+      (name, index) => ({
+        name,
+        amount: globalsuddendeductionsAmount[index] || "₱0.00",
+      })
+    );
 
     const deductionRows = deductions.map((deduction) => [
       "",
@@ -695,15 +689,12 @@ router.post("/generatepdf", async (req, res) => {
       "Special Holiday",
       "₱" + globalspecialholidaycomp,
       "",
-      "" 
+      "",
     ];
 
-    const finalDeductionRows = [
-      specialHolidayRow,
-      ...deductionRows,
-    ];
+    const finalDeductionRows = [specialHolidayRow, ...deductionRows];
 
-    console.log(deductionRows,'deductionRows');
+    console.log(deductionRows, "deductionRows");
 
     const docDefinition = {
       content: [
@@ -743,7 +734,10 @@ router.post("/generatepdf", async (req, res) => {
                 { text: "TIN ID: " + globaltinid, bold: true },
                 { text: "Philhealth ID: " + globalphilhealthid, bold: true },
                 { text: "PAG IBIG ID: " + globalpagibigid, bold: true },
-                { text: "Remaining Paid Leaves: " + globalremainingleave, bold: true },
+                {
+                  text: "Remaining Paid Leaves: " + globalremainingleave,
+                  bold: true,
+                },
               ],
             },
             {
@@ -899,9 +893,3 @@ router.post("/generatepdf", async (req, res) => {
     res.status(500).send("Error generating PDF");
   }
 });
-
-
-
-
-
-

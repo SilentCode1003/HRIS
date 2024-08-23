@@ -38,8 +38,6 @@ router.post("/getsettingsaccount", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,

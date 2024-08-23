@@ -36,36 +36,35 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-
 router.get("/selectyear", (req, res) => {
-    try {
-      let sql = `
+  try {
+    let sql = `
         SELECT DISTINCT YEAR(p_payrolldate) AS p_year
         FROM payslip
         ORDER BY p_year`;
-        
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        //console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "p_");
-  
-          //console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.json(JsonErrorResponse(error));
-    }
-  });
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 router.post("/load", (req, res) => {
   try {
@@ -88,7 +87,7 @@ router.post("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "tm_");
@@ -106,7 +105,7 @@ router.post("/load", (req, res) => {
 });
 
 router.post("/gen13thmonth", (req, res) => {
-  console.log('Hit');
+  console.log("Hit");
   try {
     let year = req.body.year;
     let createdby = req.session.fullname;
@@ -125,8 +124,6 @@ router.post("/gen13thmonth", (req, res) => {
           mysql.StoredProcedure(sql, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            console.log(result);
-
             res.json(JsonSuccess());
           });
         }
@@ -136,7 +133,7 @@ router.post("/gen13thmonth", (req, res) => {
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-   res.json(JsonErrorResponse(error));
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -164,7 +161,7 @@ router.post("/gen13thmonth", (req, res) => {
 
 //     Check(checkStatement)
 //       .then((result) => {
-//         console.log(result);
+//
 //         if (result != 0) {
 //           return res.json(JsonWarningResponse(MessageStatus.EXIST));
 //         } else {
@@ -188,7 +185,6 @@ router.post("/gen13thmonth", (req, res) => {
 //   }
 // });
 
-
 router.post("/getinfo13thmonth", (req, res) => {
   try {
     let tmonthid = req.body.tmonthid;
@@ -210,7 +206,7 @@ router.post("/getinfo13thmonth", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "tm_");
@@ -226,9 +222,6 @@ router.post("/getinfo13thmonth", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-
 
 router.put("/status", (req, res) => {
   try {
@@ -308,7 +301,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });

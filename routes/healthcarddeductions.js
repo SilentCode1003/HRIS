@@ -82,8 +82,6 @@ router.post("/save", (req, res) => {
             return;
           }
 
-          console.log(result);
-
           res.json({
             msg: "success",
             data: result,
@@ -113,8 +111,6 @@ router.post("/getotherdeduction", (req, res) => {
 
     mysql.Select(sql, "Other_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",

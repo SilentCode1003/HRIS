@@ -3,9 +3,16 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { InsertStatement, SelectStatement } = require("./repository/customhelper");
+const {
+  InsertStatement,
+  SelectStatement,
+} = require("./repository/customhelper");
 const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
@@ -14,12 +21,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(
-    req,
-    res,
-    "teamleadappliedotmeallayout",
-    "teamleadappliedotmeal"
-  );
+  Validator(req, res, "teamleadappliedotmeallayout", "teamleadappliedotmeal");
 });
 
 module.exports = router;
@@ -29,7 +31,7 @@ module.exports = router;
 //     const departmentid = req.session.departmentid;
 //     const subgroupid = req.session.subgroupid;
 //     const accesstypeid = req.session.accesstypeid;
-//     const sql = `SELECT 
+//     const sql = `SELECT
 //     oma_mealid,
 //     concat(me_lastname,' ',me_firstname) oma_fullname,
 //     DATE_FORMAT(oma_attendancedate, '%Y-%m-%d') as oma_attendancedate,
@@ -41,7 +43,7 @@ module.exports = router;
 // FROM ot_meal_allowances
 // INNER JOIN
 // master_employee ON ot_meal_allowances.oma_employeeid = me_id
-// WHERE oma_status = 'Applied' 
+// WHERE oma_status = 'Applied'
 // AND oma_subgroupid IN (${subgroupid})
 // AND me_department = '${departmentid}'
 // AND oma_employeeid NOT IN (
@@ -58,7 +60,7 @@ module.exports = router;
 //         res.json(JsonErrorResponse(err));
 //       }
 
-//       console.log(result);
+//
 
 //       if (result != 0) {
 //         let data = DataModeling(result, "oma_");
@@ -74,7 +76,6 @@ module.exports = router;
 //     res.json(JsonErrorResponse(error));
 //   }
 // });
-
 
 router.get("/load", (req, res) => {
   try {
@@ -105,8 +106,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
@@ -151,8 +150,6 @@ router.post("/getotmeal", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
@@ -170,15 +167,14 @@ router.post("/getotmeal", (req, res) => {
   }
 });
 
-
-
 router.post("/otmealaction", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
     let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const { otmealid, status, comment,attendancedate, timein, timeout } = req.body;
+    const { otmealid, status, comment, attendancedate, timein, timeout } =
+      req.body;
 
     let sql = InsertStatement("meal_request_activity", "mra", [
       "employeeid",
@@ -189,21 +185,23 @@ router.post("/otmealaction", (req, res) => {
       "date",
       "commnet",
     ]);
-    let data = [[
-      employeeid,
-      departmentid,
-      otmealid,
-      subgroupid,
-      status,
-      createdate,
-      comment
-    ]];
+    let data = [
+      [
+        employeeid,
+        departmentid,
+        otmealid,
+        subgroupid,
+        status,
+        createdate,
+        comment,
+      ],
+    ];
     let checkStatement = SelectStatement(
       "select * from meal_request_activity where mra_employeeid=? and mra_mealid=?",
       [employeeid, otmealid]
     );
 
-    console.log(checkStatement,'result');
+    console.log(checkStatement, "result");
 
     InsertTable(sql, data, (err, result) => {
       if (err) {
@@ -221,7 +219,7 @@ router.post("/otmealaction", (req, res) => {
           requesttype: REQUEST.OTMEAL,
         },
       ];
-      SendEmailNotificationEmployee(employeeid,subgroupid, emailbody);
+      SendEmailNotificationEmployee(employeeid, subgroupid, emailbody);
 
       res.json(JsonSuccess());
     });
@@ -232,6 +230,3 @@ router.post("/otmealaction", (req, res) => {
     });
   }
 });
-
-
-

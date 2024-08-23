@@ -331,7 +331,6 @@ router.post("/gethomestatus2", (req, res) => {
         where ma_employeeid = '${employeeid}' and ma_attendancedate = '${attendancedate}'
         order by ma_attendancedate desc 
         limit 1`;
-    console.log(sql);
 
     mysql
       .mysqlQueryPromise(sql)
@@ -823,7 +822,7 @@ router.post("/migrateattendance", (req, res) => {
     // }
 
     for (const row of json) {
-      if(row.logs.includes("NO LOGS")) continue;
+      if (row.logs.includes("NO LOGS")) continue;
       const { id, attendancedate, logs } = row;
       let date = ConvertToDate(attendancedate);
       let log = logs.split(" TO ");
@@ -834,19 +833,8 @@ router.post("/migrateattendance", (req, res) => {
           ? `${AddDay(date, 1)} ${ConvertTo24Formart(log[1])}`
           : `${date} ${ConvertTo24Formart(log[1])}`;
 
-      let logindata = [
-        [id, date, timein, 0.0, 0.0, 0, "SPROUT", "MIGRATED"],
-      ];
-      let logoutdata = [
-        timeout,
-        0.0,
-        0.0,
-        0,
-        "SPROUT",
-        "MIGRATED",
-        id,
-        date,
-      ];
+      let logindata = [[id, date, timein, 0.0, 0.0, 0, "SPROUT", "MIGRATED"]];
+      let logoutdata = [timeout, 0.0, 0.0, 0, "SPROUT", "MIGRATED", id, date];
 
       let insertQuery = InsertStatement("master_attendance", "ma", [
         "employeeid",
@@ -863,7 +851,6 @@ router.post("/migrateattendance", (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log(result);
       });
 
       let updateQuery = UpdateStatement(
@@ -884,7 +871,6 @@ router.post("/migrateattendance", (req, res) => {
         if (err) {
           console.log(err);
         }
-        console.log(result);
       });
     }
 

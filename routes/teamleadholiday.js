@@ -3,10 +3,20 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess, JsonWarningResponse, MessageStatus } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+  JsonWarningResponse,
+  MessageStatus,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
-const { SelectStatement, InsertStatement, GetCurrentDatetime } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  InsertStatement,
+  GetCurrentDatetime,
+} = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -18,13 +28,12 @@ router.get("/", function (req, res, next) {
 });
 module.exports = router;
 
-
 // router.get("/load", (req, res) => {
 //     try {
 //       let departmentid = req.session.departmentid;
 //       let subgroupid = req.session.subgroupid;
 //       let accesstypeid = req.session.accesstypeid;
-//       let sql = `SELECT 
+//       let sql = `SELECT
 //       ph_holidayid,
 //       concat(me_lastname,' ',me_firstname) as ph_fullname,
 //       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
@@ -45,18 +54,18 @@ module.exports = router;
 //       FROM aprroval_stage_settings
 //       WHERE ats_accessid = '${accesstypeid}'
 //       AND ats_departmentid = '${departmentid}')`;
-  
+
 //       Select(sql, (err, result) => {
 //         if (err) {
 //           console.error(err);
 //           res.json(JsonErrorResponse(err));
 //         }
-  
-//         console.log(result);
-  
+
+//
+
 //         if (result != 0) {
 //           let data = DataModeling(result, "ph_");
-  
+
 //           console.log(data);
 //           res.json(JsonDataResponse(data));
 //         } else {
@@ -69,13 +78,11 @@ module.exports = router;
 //     }
 //   });
 
-
-
-  router.get("/load", (req, res) => {
-    try {
-      let subgroupid = req.session.subgroupid;
-      let accesstypeid = req.session.accesstypeid;
-      let sql = `SELECT 
+router.get("/load", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
       ph_holidayid,
       concat(me_lastname,' ',me_firstname) as ph_fullname,
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
@@ -94,36 +101,31 @@ module.exports = router;
       WHERE 
         ph_status = 'Applied' 
         AND ph_subgroupid IN (${subgroupid})`;
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ph_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.json(JsonErrorResponse(error));
-    }
-  });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
 
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
 
-
-  router.post("/getholidayapproval", (req, res) => {
-    try {
-      let holiday_id = req.body.holiday_id;
-      let sql = ` SELECT 
+router.post("/getholidayapproval", (req, res) => {
+  try {
+    let holiday_id = req.body.holiday_id;
+    let sql = ` SELECT 
       ph_holidayid,
       ph_file,
       CONCAT(me_lastname,' ',me_firstname) as ph_fullname,
@@ -142,80 +144,78 @@ module.exports = router;
       INNER JOIN
       master_employee ON payroll_holiday.ph_employeeid = me_id
       where ph_holidayid = '${holiday_id}'`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ph_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-  
-      // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-      //   if (err) console.error("Error: ", err);
-  
-      //   console.log(result);
-  
-      //   res.json({
-      //     msg: "success",
-      //     data: result,
-      //   });
-      // });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        data: error,
-      });
-    }
-  });
-  
 
-  router.post("/holidayaction", (req, res) => {
-    try {
-      let employeeid = req.session.employeeid;
-      let departmentid = req.session.departmentid;
-      let subgroupid = req.body.subgroupid;
-      let createdate = GetCurrentDatetime();
-      const { holiday_id, status, comment } = req.body;
-  
-      let sql = InsertStatement("holiday_request_activity", "hra", [
-        "employeeid",
-        "departmentid",
-        "holidayreqid",
-        "subgroupid",
-        "status",
-        "date",
-        "commnet",
-      ]);
-      let data = [[
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+
+    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
+    //   if (err) console.error("Error: ", err);
+
+    //
+
+    //   res.json({
+    //     msg: "success",
+    //     data: result,
+    //   });
+    // });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/holidayaction", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let departmentid = req.session.departmentid;
+    let subgroupid = req.body.subgroupid;
+    let createdate = GetCurrentDatetime();
+    const { holiday_id, status, comment } = req.body;
+
+    let sql = InsertStatement("holiday_request_activity", "hra", [
+      "employeeid",
+      "departmentid",
+      "holidayreqid",
+      "subgroupid",
+      "status",
+      "date",
+      "commnet",
+    ]);
+    let data = [
+      [
         employeeid,
         departmentid,
         holiday_id,
         subgroupid,
         status,
         createdate,
-        comment
-      ]];
-      let checkStatement = SelectStatement(
-        "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=? and hra_status=? ",
-        [employeeid, holiday_id, status]
-      );
-  
-      console.log(checkStatement,'result');
-  
-      Check(checkStatement)
+        comment,
+      ],
+    ];
+    let checkStatement = SelectStatement(
+      "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=? and hra_status=? ",
+      [employeeid, holiday_id, status]
+    );
+
+    console.log(checkStatement, "result");
+
+    Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -233,13 +233,10 @@ module.exports = router;
         console.log(error);
         res.json(JsonErrorResponse(error));
       });
-    } catch (error) {
-      res.json(JsonErrorResponse(err));
-    }
-  });
-
-
-
+  } catch (error) {
+    res.json(JsonErrorResponse(err));
+  }
+});
 
 //#region FUNCTION
 function Check(sql) {
@@ -252,4 +249,3 @@ function Check(sql) {
   });
 }
 //#endregion
-  

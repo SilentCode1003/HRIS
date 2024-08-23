@@ -30,21 +30,14 @@ router.get("/", function (req, res, next) {
   //   fullname: "DEV42",
   //   accesstype: "Admin",
   // });
-  Validator(
-    req,
-    res,
-    "usersubgrouplayout",
-    "usersubgroup"
-  );
+  Validator(req, res, "usersubgrouplayout", "usersubgroup");
 });
 
 module.exports = router;
 
-
-
 router.get("/load", (req, res) => {
-    try {
-        let sql = `SELECT 
+  try {
+    let sql = `SELECT 
             us_id,
             CONCAT(me_lastname, ' ', me_firstname) AS us_employeeid,
             ma_accessname AS us_accessname,
@@ -63,32 +56,31 @@ router.get("/load", (req, res) => {
         INNER JOIN 
             subgroup ON user_subgroup.us_subgroupid = subgroup.s_id`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            //console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "us_");
-      
-              //console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "us_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.get("/loaduserid", (req, res) => {
-    try {
-        let sql = `SELECT
+  try {
+    let sql = `SELECT
         mu_userid,
         CONCAT(me_lastname,' ',me_firstname) AS mu_fullname,
         ma_accessname as mu_accessname
@@ -97,103 +89,96 @@ router.get("/loaduserid", (req, res) => {
         INNER JOIN master_access ON master_user.mu_accesstype = ma_accessid
         WHERE ma_accessname IN ('Super Visor', 'Team Leader', 'Department Head', 'Manager')`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "mu_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "mu_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.post("/delete", (req, res) => {
-    try {
-        let userid = req.body.userid;
-        let sql = `DELETE FROM user_subgroup WHERE us_id = '${userid}'`;
+  try {
+    let userid = req.body.userid;
+    let sql = `DELETE FROM user_subgroup WHERE us_id = '${userid}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-  
-            res.json(JsonSuccess());
-        });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
 router.post("/save", (req, res) => {
-    try {
-      let createby = req.session.fullname;
-      let createddate = GetCurrentDatetime();
-      const {userid, subgroupid, approvecount } = req.body;
-  
-      let sql = InsertStatement("user_subgroup", "us", [
-        "userid",
-        "subgroupid",
-        "createdate",
-        "createby",
-        "count"
-      ]);
-      let data = [[userid, subgroupid, createddate, createby, approvecount]];
-      let checkStatement = SelectStatement(
-        "select * from user_subgroup where us_userid=? and us_subgroupid=?",
-        [userid, subgroupid]
-      );
-  
-      Check(checkStatement)
-        .then((result) => {
-          console.log(result);
-          if (result != 0) {
-            return res.json(JsonWarningResponse(MessageStatus.EXIST));
-          } else {
-            InsertTable(sql, data, (err, result) => {
-              if (err) {
-                console.log(err);
-                res.json(JsonErrorResponse(err));
-              }
-  
-              res.json(JsonSuccess());
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json(JsonErrorResponse(error));
-        });
-    } catch (error) {
-      console.log(err);
-      res.json(JsonErrorResponse(error));
-    }
-  });
+  try {
+    let createby = req.session.fullname;
+    let createddate = GetCurrentDatetime();
+    const { userid, subgroupid, approvecount } = req.body;
 
+    let sql = InsertStatement("user_subgroup", "us", [
+      "userid",
+      "subgroupid",
+      "createdate",
+      "createby",
+      "count",
+    ]);
+    let data = [[userid, subgroupid, createddate, createby, approvecount]];
+    let checkStatement = SelectStatement(
+      "select * from user_subgroup where us_userid=? and us_subgroupid=?",
+      [userid, subgroupid]
+    );
 
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(err);
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 //#region FUNCTION
 function Check(sql) {
-    return new Promise((resolve, reject) => {
-      Select(sql, (err, result) => {
-        if (err) reject(err);
-  
-        resolve(result);
-      });
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
     });
-  }
-  //#endregion
-  
+  });
+}
+//#endregion

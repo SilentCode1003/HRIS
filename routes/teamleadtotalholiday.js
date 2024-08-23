@@ -3,10 +3,19 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess, JsonWarningResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+  JsonWarningResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
-const { SelectStatement, InsertStatement, GetCurrentDatetime } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  InsertStatement,
+  GetCurrentDatetime,
+} = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -19,11 +28,11 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 router.get("/load", (req, res) => {
-    try {
-      let departmentid = req.session.departmentid;
-      let subgroupid = req.session.subgroupid;
-      let accesstypeid = req.session.accesstypeid;
-      let sql = `SELECT 
+  try {
+    let departmentid = req.session.departmentid;
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
       ph_holidayid,
       concat(me_lastname,' ',me_firstname) as ph_fullname,
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
@@ -39,36 +48,32 @@ router.get("/load", (req, res) => {
     AND me_department = '${departmentid}'
     AND ph_employeeid NOT IN (
         SELECT mu_employeeid FROM master_user where mu_accesstype = '${accesstypeid}')`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ph_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.json(JsonErrorResponse(error));
-    }
-  });
 
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
 
-  router.post("/getholidayapproval", (req, res) => {
-    try {
-      let holiday_id = req.body.holiday_id;
-      let sql = `SELECT 
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getholidayapproval", (req, res) => {
+  try {
+    let holiday_id = req.body.holiday_id;
+    let sql = `SELECT 
         ph.ph_holidayid,
         CONCAT(me.me_lastname, ' ', me.me_firstname) AS ph_fullname,
         DATE_FORMAT(ph.ph_attendancedate, '%Y-%m-%d') AS ph_attendancedate,
@@ -97,40 +102,37 @@ router.get("/load", (req, res) => {
         ORDER BY 
         hra.hra_date DESC
         LIMIT 1`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ph_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-  
-      // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-      //   if (err) console.error("Error: ", err);
-  
-      //   console.log(result);
-  
-      //   res.json({
-      //     msg: "success",
-      //     data: result,
-      //   });
-      // });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        data: error,
-      });
-    }
-  });
-  
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+
+    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
+    //   if (err) console.error("Error: ", err);
+
+    //
+
+    //   res.json({
+    //     msg: "success",
+    //     data: result,
+    //   });
+    // });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});

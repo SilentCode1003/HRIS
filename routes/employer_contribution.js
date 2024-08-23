@@ -21,11 +21,10 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-
 router.post("/load", (req, res) => {
-    try {
-        let payrolldate = req.body.payrolldate;
-        let sql = `SELECT
+  try {
+    let payrolldate = req.body.payrolldate;
+    let sql = `SELECT
             ec_contributionid,
             CONCAT(me_lastname, ' ', me_firstname) AS ec_fullname,
             ec_monthly,
@@ -43,35 +42,35 @@ router.post("/load", (req, res) => {
             ec_payrolldate = '${payrolldate}'
         `;
 
-        console.log(sql);
+    console.log(sql);
 
-        Select(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.json(JsonErrorResponse(err));
-            }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-            //console.log(result);
+      //
 
-            if (result != 0) {
-                let data = DataModeling(result, "ec_");
+      if (result != 0) {
+        let data = DataModeling(result, "ec_");
 
-               // console.log(data);
-                res.json(JsonDataResponse(data));
-            } else {
-                res.json(JsonDataResponse(result));
-            }
-        });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+        // console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-router.post('/exportreports', (req, res) => {
-    try {
-        const payrolldate = req.body.payrolldate;
+router.post("/exportreports", (req, res) => {
+  try {
+    const payrolldate = req.body.payrolldate;
 
-        const sql = `
+    const sql = `
             SELECT
                 CONCAT(me_lastname, ' ', me_firstname) as Full_Name,
                 ec_monthly as Monthly,
@@ -92,71 +91,71 @@ router.post('/exportreports', (req, res) => {
             JOIN payroll_date ON employers_contribution.ec_payrolldate = pd_payrolldate
             WHERE ec_payrolldate = '${payrolldate}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json(JsonErrorResponse(err));
-            }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json(JsonErrorResponse(err));
+      }
 
-            if (result.length === 0) {
-                return res.status(404).json({ error: "No data found" });
-            }
+      if (result.length === 0) {
+        return res.status(404).json({ error: "No data found" });
+      }
 
-            result = result.map(row => {
-                return {
-                    ...row,
-                    Monthly: formatNumber(row.Monthly),
-                    Cut_Off: row.Cut_Off,
-                    PagIbig_Employer: formatNumber(row.PagIbig_Employer),
-                    SSS_Employer: formatNumber(row.SSS_Employer),
-                    PhilHealth_Employer: formatNumber(row.PhilHealth_Employer),
-                    WSIP_Employer: formatNumber(row.WSIP_Employer),
-                    PagIbig_Employee: formatNumber(row.PagIbig_Employee),
-                    PhilHealth_Employee: formatNumber(row.PhilHealth_Employee),
-                    SSS_Employee: formatNumber(row.SSS_Employee),
-                    WISP_Employee: formatNumber(row.WISP_Employee),
-                    Total_Contribution: formatNumber(row.Total_Contribution),
-                    Payroll_Date: formatDate(row.Payroll_Date),
-                    Create_Date: formatDateTime(row.Create_Date),
-                };
-            });
+      result = result.map((row) => {
+        return {
+          ...row,
+          Monthly: formatNumber(row.Monthly),
+          Cut_Off: row.Cut_Off,
+          PagIbig_Employer: formatNumber(row.PagIbig_Employer),
+          SSS_Employer: formatNumber(row.SSS_Employer),
+          PhilHealth_Employer: formatNumber(row.PhilHealth_Employer),
+          WSIP_Employer: formatNumber(row.WSIP_Employer),
+          PagIbig_Employee: formatNumber(row.PagIbig_Employee),
+          PhilHealth_Employee: formatNumber(row.PhilHealth_Employee),
+          SSS_Employee: formatNumber(row.SSS_Employee),
+          WISP_Employee: formatNumber(row.WISP_Employee),
+          Total_Contribution: formatNumber(row.Total_Contribution),
+          Payroll_Date: formatDate(row.Payroll_Date),
+          Create_Date: formatDateTime(row.Create_Date),
+        };
+      });
 
-            const worksheet = XLSX.utils.json_to_sheet(result);
-            const workbook = XLSX.utils.book_new();
-            const worksheetName = `Contribution_${payrolldate}`;
-            XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
+      const worksheet = XLSX.utils.json_to_sheet(result);
+      const workbook = XLSX.utils.book_new();
+      const worksheetName = `Contribution_${payrolldate}`;
+      XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
 
-            const headers = Object.keys(result[0]);
-            worksheet["!cols"] = headers.map((header, index) => ({
-                wch: index === 0 ? 30 : 20,
-            }));
+      const headers = Object.keys(result[0]);
+      worksheet["!cols"] = headers.map((header, index) => ({
+        wch: index === 0 ? 30 : 20,
+      }));
 
-            const excelBuffer = XLSX.write(workbook, {
-                type: 'buffer',
-                bookType: 'xlsx',
-                bookSST: false,
-            });
+      const excelBuffer = XLSX.write(workbook, {
+        type: "buffer",
+        bookType: "xlsx",
+        bookSST: false,
+      });
 
-            res.setHeader(
-                'Content-Disposition',
-                `attachment; filename="Employer_Contribution_${payrolldate}.xlsx"`
-            );
-            res.setHeader(
-                'Content-Type',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            );
-            res.send(excelBuffer);
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json(JsonErrorResponse(error));
-    }
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="Employer_Contribution_${payrolldate}.xlsx"`
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.send(excelBuffer);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(JsonErrorResponse(error));
+  }
 });
 
-router.post('/getcontribution', (req, res) => {
-    try {
-        let contributionid = req.body.contributionid;
-        let sql = `SELECT
+router.post("/getcontribution", (req, res) => {
+  try {
+    let contributionid = req.body.contributionid;
+    let sql = `SELECT
             CONCAT(me_lastname, ' ', me_firstname) as ec_fullname,
             me_profile_pic as ec_image,
             ec_monthly,
@@ -177,58 +176,54 @@ router.post('/getcontribution', (req, res) => {
         JOIN payroll_date ON employers_contribution.ec_payrolldate = pd_payrolldate
         WHERE ec_contributionid = '${contributionid}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-                console.error(err);
-                res.json(JsonErrorResponse(err));
-            }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-            //console.log(result);
+      //
 
-            if (result != 0) {
-                let data = DataModeling(result, "ec_");
+      if (result != 0) {
+        let data = DataModeling(result, "ec_");
 
-               // console.log(data);
-                res.json(JsonDataResponse(data));
-            } else {
-                res.json(JsonDataResponse(result));
-            }
-        });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+        // console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
-
-
-
-
 
 //#region function
 
 function formatNumber(value) {
-    return (typeof value === 'number' && !isNaN(value)) ? `₱${value.toFixed(2)}` : '₱0.00';
+  return typeof value === "number" && !isNaN(value)
+    ? `₱${value.toFixed(2)}`
+    : "₱0.00";
 }
 
 function formatDate(value) {
-    if (value) {
-        const date = new Date(value);
-        if (!isNaN(date.getTime())) {
-            return date.toISOString().split('T')[0]; 
-        }
+  if (value) {
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().split("T")[0];
     }
-    return '';
+  }
+  return "";
 }
 
-
 function formatDateTime(value) {
-    if (value) {
-        const date = new Date(value);
-        if (!isNaN(date.getTime())) {
-            return date.toISOString().replace('T', ' ').substring(0, 19);
-        }
+  if (value) {
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().replace("T", " ").substring(0, 19);
     }
-    return '';
+  }
+  return "";
 }
 
 //#endregion
-  

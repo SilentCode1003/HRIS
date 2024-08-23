@@ -171,17 +171,9 @@ function TRFR() {
 }
 //#endregion
 //ENUM
-const REQUEST = {
-  COA: "Correction of Attendance",
-  OVERTIME: "Overtime",
-  LEAVE: "Leave",
-  CA: "Cash Advance",
-  LOAN: "Loan",
-  OTMEAL: "Overtime Meal",
-};
+
 
 module.exports = {
-  REQUEST,
   GetValue,
   ACT,
   INACT,

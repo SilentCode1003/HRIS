@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -11,12 +14,7 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(
-    req,
-    res,
-    "teamleadapprovedrdotlayout",
-    "teamleadapprovedrdot"
-  );
+  Validator(req, res, "teamleadapprovedrdotlayout", "teamleadapprovedrdot");
 });
 
 module.exports = router;
@@ -39,15 +37,12 @@ router.get("/load", (req, res) => {
     WHERE roa_subgroupid IN ('${subgroupid}')  AND roa_status = 'Approved'`;
 
     console.log(sql);
-    
 
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");

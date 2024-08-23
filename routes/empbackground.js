@@ -33,8 +33,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Master_Employee_Background", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -114,7 +112,6 @@ router.post("/save", (req, res) => {
           console.error("Error inserting records: ", err);
           res.json({ msg: "Insert failed" });
         } else {
-          console.log(result);
           res.json({ msg: "success" });
         }
       }
@@ -147,8 +144,6 @@ router.post("/getbackground", (req, res) => {
 
     mysql.Select(sql, "Master_Employee_Background", (err, result) => {
       if (err) console.error("Error :", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
@@ -183,8 +178,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
         });

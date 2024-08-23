@@ -22,7 +22,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Master_Shift_Settings", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -65,8 +64,6 @@ router.post("/save", (req, res) => {
     mysql.InsertTable("master_shift_settings", data, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -88,8 +85,6 @@ router.post("/getshiftsettings", (req, res) => {
 
     mysql.Select(sql, "Master_Shift_Settings", (err, result) => {
       if (err) console.error("Error :", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",

@@ -12,7 +12,13 @@ const {
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
-const { UpdateStatement, GetCurrentDate, GetCurrentDatetime, SelectStatementWithArray, SelectStatement } = require("./repository/customhelper");
+const {
+  UpdateStatement,
+  GetCurrentDate,
+  GetCurrentDatetime,
+  SelectStatementWithArray,
+  SelectStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -47,7 +53,7 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -63,7 +69,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getreqholiday", (req, res) => {
   try {
@@ -90,8 +95,6 @@ router.post("/getreqholiday", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
@@ -109,21 +112,27 @@ router.post("/getreqholiday", (req, res) => {
   }
 });
 
-
 router.put("/edit", (req, res) => {
   try {
     let createdby = req.session.fullname;
     let createddate = GetCurrentDatetime();
-    const { holidayid, status, clockin, clockout, 
-      attendancedate, payrolldate, 
-      subgroup, holidayimage, employeeid } = req.body;
+    const {
+      holidayid,
+      status,
+      clockin,
+      clockout,
+      attendancedate,
+      payrolldate,
+      subgroup,
+      holidayimage,
+      employeeid,
+    } = req.body;
 
     console.log(req.body);
 
     let data = [];
     let columns = [];
     let arguments = [];
-
 
     if (createdby) {
       data.push(createdby);
@@ -197,7 +206,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });
@@ -213,7 +222,7 @@ router.put("/edit", (req, res) => {
   }
 });
 
-router.post('/loadapproved' , (req, res) => {
+router.post("/loadapproved", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -229,14 +238,14 @@ router.post('/loadapproved' , (req, res) => {
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Approved'
     order by ph_attendancedate asc`;
-    
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -252,9 +261,7 @@ router.post('/loadapproved' , (req, res) => {
   }
 });
 
-
-
-router.post('/loadrejected' , (req, res) => {
+router.post("/loadrejected", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -270,14 +277,14 @@ router.post('/loadrejected' , (req, res) => {
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Rejected'
     order by ph_attendancedate asc`;
-    
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -293,9 +300,7 @@ router.post('/loadrejected' , (req, res) => {
   }
 });
 
-
-
-router.post('/loadcancelled' , (req, res) => {
+router.post("/loadcancelled", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -311,14 +316,14 @@ router.post('/loadcancelled' , (req, res) => {
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Cancel'
     order by ph_attendancedate asc`;
-    
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -334,8 +339,6 @@ router.post('/loadcancelled' , (req, res) => {
   }
 });
 
-
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -347,7 +350,3 @@ function Check(sql) {
   });
 }
 //#endregion
-
-
-
-

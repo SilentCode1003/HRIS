@@ -71,7 +71,7 @@ router.post("/loadsubgroup", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-      
+
       if (result != 0) {
         let data = DataModeling(result, "s_");
         res.json(JsonDataResponse(data));
@@ -94,7 +94,14 @@ router.post("/save", (req, res) => {
     let status = "Active";
     let data = [];
 
-    data.push([departmentid, settingscount, createby, createdate, status, subgroupid]);
+    data.push([
+      departmentid,
+      settingscount,
+      createby,
+      createdate,
+      status,
+      subgroupid,
+    ]);
 
     let sql = `SELECT * FROM request_approval_settings WHERE 
     ras_departmentid = '${departmentid}' AND ras_count = '${settingscount}' AND ras_subgroupid = '${subgroupid}'`;
@@ -110,7 +117,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("request_approval_settings", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
           res.json({
             msg: "success",
             data: result,
@@ -143,7 +149,6 @@ router.post("/getapprovesettings", (req, res) => {
     mysql.Select(sql, "Request_Approval_Settings", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

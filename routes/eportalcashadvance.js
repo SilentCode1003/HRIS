@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -97,7 +100,7 @@ router.get("/load", (req, res) => {
     AND ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    console.log(employeeid,'id');
+    console.log(employeeid, "id");
     console.log(sql);
 
     Select(sql, (err, result) => {
@@ -105,8 +108,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -121,7 +122,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.get("/approved", (req, res) => {
   try {
@@ -142,8 +142,6 @@ router.get("/approved", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -181,7 +179,6 @@ router.post("/getload", (req, res) => {
   }
 });
 
-
 router.post("/getpending", (req, res) => {
   try {
     let cashadvanceid = req.body.cashadvanceid;
@@ -205,8 +202,6 @@ router.post("/getpending", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -277,8 +272,6 @@ router.post("/getca", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");

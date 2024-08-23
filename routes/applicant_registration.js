@@ -86,8 +86,8 @@ router.post("/register_personal", async (req, res) => {
     } = req.body;
 
     console.log(req.body);
-    console.log(firstName, 'firstname');
-    console.log(lastName, 'lastname');
+    console.log(firstName, "firstname");
+    console.log(lastName, "lastname");
 
     const applicantExists = await checkApplicantExists(
       firstName,
@@ -158,7 +158,7 @@ router.post("/register_personal", async (req, res) => {
       "personEmergency",
       "relationship",
       "emergencyAddress",
-      "emergencyPhoneNumber"
+      "emergencyPhoneNumber",
     ]);
 
     const data = [
@@ -213,7 +213,7 @@ router.post("/register_personal", async (req, res) => {
       ],
     ];
 
-    console.log(data, 'data');
+    console.log(data, "data");
 
     const checkStatement = SelectStatement(
       "SELECT * FROM master_applicant_personal WHERE map_firstname=? AND map_lastname=? AND map_middlename=?",
@@ -260,9 +260,18 @@ router.post("/register_personal", async (req, res) => {
 
 router.post("/register_education", (req, res) => {
   try {
-    const { applicantId, exam, list, secondList, thirdList, fourthList, fifthList, ...educationLevels } = req.body;
+    const {
+      applicantId,
+      exam,
+      list,
+      secondList,
+      thirdList,
+      fourthList,
+      fifthList,
+      ...educationLevels
+    } = req.body;
 
-    console.log(req.body, 'req.body');
+    console.log(req.body, "req.body");
 
     const educationPromises = [];
     const seminarPromises = [];
@@ -337,13 +346,7 @@ router.post("/register_education", (req, res) => {
         "seminar_date",
       ]);
 
-      let data = [
-        [
-          applicantId,
-          as_seminar_name,
-          as_seminar_date,
-        ],
-      ];
+      let data = [[applicantId, as_seminar_name, as_seminar_date]];
 
       seminarPromises.push(
         new Promise((resolve, reject) => {
@@ -358,7 +361,11 @@ router.post("/register_education", (req, res) => {
     });
 
     if (exam) {
-      const { typeOfExamination: aoe_examname, dateExam: aoe_exam_date, placeTaken: aoe_placetaken } = exam;
+      const {
+        typeOfExamination: aoe_examname,
+        dateExam: aoe_exam_date,
+        placeTaken: aoe_placetaken,
+      } = exam;
 
       let sql = InsertStatement("applicant_other_exam", "aoe", [
         "applicantid",
@@ -367,14 +374,7 @@ router.post("/register_education", (req, res) => {
         "placetaken",
       ]);
 
-      let data = [
-        [
-          applicantId,
-          aoe_examname,
-          aoe_exam_date,
-          aoe_placetaken,
-        ],
-      ];
+      let data = [[applicantId, aoe_examname, aoe_exam_date, aoe_placetaken]];
 
       examPromises.push(
         new Promise((resolve, reject) => {
@@ -403,7 +403,15 @@ router.post("/register_education", (req, res) => {
 
 router.post("/register_career", (req, res) => {
   try {
-    const { applicantId, seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars, ...careerData } = req.body;
+    const {
+      applicantId,
+      seminars,
+      secondSeminars,
+      thirdSeminars,
+      fourthSeminars,
+      fifthSeminars,
+      ...careerData
+    } = req.body;
 
     console.log("Request Body:", req.body);
 
@@ -411,12 +419,12 @@ router.post("/register_career", (req, res) => {
     const seminarPromises = [];
 
     const employerLevels = [
-      'present',
-      'second',
-      'third',
-      'fourth',
-      'fifth',
-      'sixth',
+      "present",
+      "second",
+      "third",
+      "fourth",
+      "fifth",
+      "sixth",
     ];
 
     for (const level of employerLevels) {
@@ -494,11 +502,18 @@ router.post("/register_career", (req, res) => {
       careerPromises.push(promise);
     }
 
-    const seminarList = [seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars];
+    const seminarList = [
+      seminars,
+      secondSeminars,
+      thirdSeminars,
+      fourthSeminars,
+      fifthSeminars,
+    ];
     seminarList.forEach((seminar, index) => {
       if (!seminar) return;
 
-      const { seminarName: as_seminar_name, dateSeminar: as_seminar_date } = seminar;
+      const { seminarName: as_seminar_name, dateSeminar: as_seminar_date } =
+        seminar;
 
       let sql = InsertStatement("applicant_seminar", "as", [
         "applicantid",
@@ -508,13 +523,7 @@ router.post("/register_career", (req, res) => {
 
       console.log(`SQL Statement for seminar ${index + 1}:`, sql);
 
-      let data = [
-        [
-          applicantId,
-          as_seminar_name,
-          as_seminar_date,
-        ],
-      ];
+      let data = [[applicantId, as_seminar_name, as_seminar_date]];
 
       seminarPromises.push(
         new Promise((resolve, reject) => {
@@ -561,7 +570,6 @@ router.post("/register_seminar", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -660,7 +668,6 @@ router.post("/register_family", (req, res) => {
       .catch((error) => {
         res.json(JsonErrorResponse(error));
       });
-
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
@@ -671,7 +678,12 @@ router.post("/register_reference", (req, res) => {
   try {
     const { applicantId, references } = req.body;
 
-    const { name: reference_name, occupation: reference_occupation, address: reference_complete_address, telephone: reference_contact_no } = references;
+    const {
+      name: reference_name,
+      occupation: reference_occupation,
+      address: reference_complete_address,
+      telephone: reference_contact_no,
+    } = references;
 
     let sql = InsertStatement("applicant_references", "ar", [
       "applicantid",
@@ -698,7 +710,6 @@ router.post("/register_reference", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result.length != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -720,10 +731,6 @@ router.post("/register_reference", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-
-
 
 //#region FUNCTION
 function Check(sql) {
@@ -752,8 +759,6 @@ function generateApplicantId(year, month) {
         console.log(newApprenticeID);
 
         resolve(newApprenticeID);
-
-        console.log(result);
       })
       .catch((error) => {
         reject(error);

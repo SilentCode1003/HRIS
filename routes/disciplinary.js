@@ -68,8 +68,6 @@ router.post("/getactionoffense", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -108,8 +106,6 @@ router.post("/getactioncode", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -145,8 +141,6 @@ router.post("/getoffensename", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -181,8 +175,6 @@ router.post("/getoffenseaction", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,

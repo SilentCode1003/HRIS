@@ -21,8 +21,6 @@ router.post("/getshift", (req, res) => {
     mysql.StoredProcedure(sql, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -121,7 +119,7 @@ router.post("/loadshiftforapp", (req, res) => {
 //         mysql.InsertTable("master_shift", data, (err, result) => {
 //           if (err) console.error("Error: ", err);
 
-//           console.log(result);
+//
 
 //           res.json({
 //             msg: "success",
@@ -149,7 +147,7 @@ router.post("/loadshiftforapp", (req, res) => {
 //     mysql.StoredProcedure(sql , (err, result) => {
 //       if (err) console.error("Error :", err)
 
-//       console.log(result);
+//
 //       res.json({
 //         msg:'success',
 //         data: result,
@@ -200,7 +198,6 @@ router.post("/save", async (req, res) => {
           });
         }
 
-        console.log(result);
         res.json({
           msg: "success",
           data: result,
@@ -245,8 +242,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,

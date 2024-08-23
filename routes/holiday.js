@@ -5,8 +5,16 @@ const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
 const Holidays = require("date-holidays");
-const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
-const { JsonWarningResponse, MessageStatus, JsonSuccess, JsonErrorResponse } = require("./repository/response");
+const {
+  UpdateStatement,
+  SelectStatement,
+} = require("./repository/customhelper");
+const {
+  JsonWarningResponse,
+  MessageStatus,
+  JsonSuccess,
+  JsonErrorResponse,
+} = require("./repository/response");
 const { Update, Select } = require("./repository/dbconnect");
 const holidaysPH = new Holidays("PH");
 
@@ -117,7 +125,6 @@ const getDOLEType = (holiday) => {
 //   }
 // });
 
-
 router.post("/generateholiday", async (req, res) => {
   try {
     const year = req.query.year
@@ -170,7 +177,6 @@ router.post("/generateholiday", async (req, res) => {
   }
 });
 
-
 router.post("/confirmholidays", async (req, res) => {
   try {
     const selectedHolidays = req.body.holidays;
@@ -218,8 +224,6 @@ router.post("/confirmholidays", async (req, res) => {
     });
   }
 });
-
-
 
 router.get("/load", (req, res) => {
   try {
@@ -269,7 +273,7 @@ router.post("/getholiday", (req, res) => {
 //     let date = req.body.date;
 //     let name = req.body.name;
 //     let type = req.body.type;
-//     let sql = `UPDATE master_holiday SET 
+//     let sql = `UPDATE master_holiday SET
 //     mh_day = '${day}',
 //     mh_name = '${name}',
 //     mh_date = '${date}',
@@ -281,7 +285,7 @@ router.post("/getholiday", (req, res) => {
 //     mysql
 //       .Update(sql)
 //       .then((result) => {
-//         console.log(result);
+//
 //         res.json({
 //           msg: "success",
 //           data: result,
@@ -299,8 +303,6 @@ router.post("/getholiday", (req, res) => {
 //     });
 //   }
 // });
-
-
 
 router.put("/edit", (req, res) => {
   try {
@@ -357,7 +359,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess(result));
           });
@@ -373,7 +375,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -385,5 +386,3 @@ function Check(sql) {
   });
 }
 //#endregion
-
-

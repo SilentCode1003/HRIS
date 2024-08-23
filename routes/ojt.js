@@ -208,8 +208,6 @@ router.post("/getojt", (req, res) => {
     mysql.Select(sql, "Master_Ojt", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -263,7 +261,6 @@ router.post("/update", async (req, res) => {
     mysql
       .Update(sql)
       .then((result) => {
-        console.log(result);
         res.json({
           msg: "success",
           data: result,

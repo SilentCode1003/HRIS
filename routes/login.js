@@ -88,8 +88,6 @@ router.post("/login", (req, res) => {
               if (user.status === "Active") {
                 let data = UserLogin(result);
 
-                console.log(result);
-
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;

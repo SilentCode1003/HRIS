@@ -16,8 +16,8 @@ const {
   UpdateStatement,
 } = require("./repository/customhelper");
 const { Validator } = require("./controller/middleware");
-const multer = require('multer');
-const xlsx = require('xlsx');
+const multer = require("multer");
+const xlsx = require("xlsx");
 const { ca } = require("date-fns/locale");
 var router = express.Router();
 
@@ -28,10 +28,8 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
 
 // router.post('/upload', upload.single('file'), async (req, res) => {
 //   console.log('HIT');
@@ -82,7 +80,7 @@ const upload = multer({ storage: storage });
 //     }
 
 //     if (invalidEmployeeIds.length > 0) {
-//       return res.status(400).json({ 
+//       return res.status(400).json({
 //         error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(', ')}`,
 //         invalidIds: invalidEmployeeIds
 //       });
@@ -117,15 +115,14 @@ const upload = multer({ storage: storage });
 //   }
 // });
 
-
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
     const bankid = req.body.bankid;
     if (!file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+      return res.status(400).json({ error: "No file uploaded" });
     }
-    const workbook = xlsx.read(file.buffer, { type: 'buffer' });
+    const workbook = xlsx.read(file.buffer, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet);
@@ -133,16 +130,16 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     const createdby = req.session.fullname;
     const createddate = GetCurrentDatetime();
     const status = GetValue(ACT());
-    const cardnumber = 'N/A';
-    const expiration = 'N/A';
+    const cardnumber = "N/A";
+    const expiration = "N/A";
 
     const invalidEmployeeIds = [];
     const validInsertData = [];
     const existingRecords = [];
-    
+
     for (let row of data) {
-      const employeeId = row['EMPLOYEE ID'];
-      const accountNumber = row['ACCOUNT NUMBER'];
+      const employeeId = row["EMPLOYEE ID"];
+      const accountNumber = row["ACCOUNT NUMBER"];
 
       // Check if employee exists and is not resigned
       const checkStatement = SelectStatement(
@@ -150,7 +147,10 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         [employeeId]
       );
       const checkResult = await Check(checkStatement);
-      if (checkResult.length === 0 || checkResult[0].me_jobstatus === 'resigned') {
+      if (
+        checkResult.length === 0 ||
+        checkResult[0].me_jobstatus === "resigned"
+      ) {
         invalidEmployeeIds.push(employeeId);
         continue;
       }
@@ -180,27 +180,29 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     if (invalidEmployeeIds.length > 0) {
       return res.status(400).json({
-        error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(', ')}`,
-        invalidIds: invalidEmployeeIds
+        error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(
+          ", "
+        )}`,
+        invalidIds: invalidEmployeeIds,
       });
     }
 
     if (existingRecords.length > 0) {
       return res.json({
-        msg: 'exist',
-        existingRecords: existingRecords
+        msg: "exist",
+        existingRecords: existingRecords,
       });
     }
 
-    const sql = InsertStatement('bank_account', 'ba', [
-      'employeeid',
-      'bankid',
-      'accountnumber',
-      'cardnumber',
-      'expiration',
-      'status',
-      'createdby',
-      'createddate',
+    const sql = InsertStatement("bank_account", "ba", [
+      "employeeid",
+      "bankid",
+      "accountnumber",
+      "cardnumber",
+      "expiration",
+      "status",
+      "createdby",
+      "createddate",
     ]);
 
     if (validInsertData.length > 0) {
@@ -209,11 +211,11 @@ router.post('/upload', upload.single('file'), async (req, res) => {
           console.log(err);
           return res.json(JsonErrorResponse(err));
         }
-        const insertedIds = validInsertData.map(row => row[0]);
-        res.json({ msg: 'success', insertedIds });
+        const insertedIds = validInsertData.map((row) => row[0]);
+        res.json({ msg: "success", insertedIds });
       });
     } else {
-      res.json({ msg: 'success', insertedIds: [] }); // No valid data to insert
+      res.json({ msg: "success", insertedIds: [] }); // No valid data to insert
     }
   } catch (error) {
     console.error(error);
@@ -243,8 +245,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "ba_");
 
@@ -259,7 +259,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/save", (req, res) => {
   try {
@@ -299,7 +298,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -322,7 +320,6 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.put("/status", (req, res) => {
   try {
@@ -411,8 +408,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            console.log(result);
 
             res.json(JsonSuccess());
           });

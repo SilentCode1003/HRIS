@@ -13,6 +13,7 @@ const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
 var router = express.Router();
 const currentDate = moment();
+z;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -45,8 +46,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
@@ -89,8 +88,6 @@ router.get("/loadapproved", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
@@ -109,9 +106,9 @@ router.get("/loadapproved", (req, res) => {
 });
 
 router.get("/loadapplied", (req, res) => {
-    try {
-      let employeeid = req.session.employeeid;
-      let sql = `SELECT
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT
         pao_id,
         DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS pao_attendancedate,
         DATE_FORMAT(pao_clockin, '%d %M %Y, %h:%i %p') AS pao_clockin,
@@ -125,35 +122,32 @@ router.get("/loadapplied", (req, res) => {
         FROM payroll_approval_ot
         WHERE pao_employeeid = '${employeeid}'
         AND pao_status = 'Applied'`;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "pao_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json({
-        msg: "error",
-        error,
-      });
-    }
-  });
 
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "pao_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
 
 router.get("/loadrejected", (req, res) => {
-    try {
+  try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT
         pao_id,
@@ -171,33 +165,30 @@ router.get("/loadrejected", (req, res) => {
         AND pao_status = 'Rejected'`;
 
     Select(sql, (err, result) => {
-        if (err) {
+      if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
-        }
+      }
 
-        console.log(result);
-
-        if (result != 0) {
+      if (result != 0) {
         let data = DataModeling(result, "pao_");
 
         console.log(data);
         res.json(JsonDataResponse(data));
-        } else {
+      } else {
         res.json(JsonDataResponse(result));
-        }
+      }
     });
-    } catch (error) {
+  } catch (error) {
     res.json({
-        msg: "error",
-        error,
+      msg: "error",
+      error,
     });
-    }
+  }
 });
 
-
 router.get("/loadcancelled", (req, res) => {
-    try {
+  try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT
         pao_id,
@@ -215,28 +206,26 @@ router.get("/loadcancelled", (req, res) => {
         AND pao_status = 'Cancel'`;
 
     Select(sql, (err, result) => {
-        if (err) {
+      if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
-        }
+      }
 
-        console.log(result);
-
-        if (result != 0) {
+      if (result != 0) {
         let data = DataModeling(result, "pao_");
 
         console.log(data);
         res.json(JsonDataResponse(data));
-        } else {
+      } else {
         res.json(JsonDataResponse(result));
-        }
+      }
     });
-    } catch (error) {
+  } catch (error) {
     res.json({
-        msg: "error",
-        error,
+      msg: "error",
+      error,
     });
-    }
+  }
 });
 
 router.post("/getovertime", (req, res) => {
@@ -393,8 +382,6 @@ WHERE pao_id = '${approveot_id}'`;
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-        
         res.json({
           msg: "success",
           data: result,
@@ -862,7 +849,6 @@ INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
         console.error(err);
         res.json(JsonErrorResponse(err));
       } else {
-        console.log(result);
         res.json(JsonDataResponse(result));
       }
     });
@@ -876,8 +862,8 @@ INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
 
 router.post("/update", (req, res) => {
   try {
-    console.log('hit');
-    
+    console.log("hit");
+
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
     let clockout = req.body.clockout;
@@ -1550,8 +1536,6 @@ LIMIT 1;
               console.error(err);
               res.json(JsonErrorResponse(err));
             }
-
-            console.log(result);
 
             if (result != 0) {
               let data = DataModeling(result, "pao_");

@@ -5,7 +5,7 @@
     let name = "";
 
     LoadTable();
-    
+
     $(document).on("click", "#addBtn", function () {
       let bank = $("#bank").val();
 
@@ -32,7 +32,6 @@
             bank: bank,
           },
           success: function (result) {
-            console.log(result);
             if (result.msg == "success") {
               LoadTable();
               showSweetAlert("Success", "Added Successfully!", "success", "OK");
@@ -114,7 +113,7 @@
       } else {
         console.log("Select element not found");
       }
-      return null; 
+      return null;
     }
 
     $("#search").on("input", function () {

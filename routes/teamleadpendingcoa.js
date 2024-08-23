@@ -167,7 +167,7 @@ router.get("/loadactionname", (req, res) => {
 //         return;
 //       }
 
-//       console.log(result);
+//
 
 //       let selectQuery = `
 //       SELECT
