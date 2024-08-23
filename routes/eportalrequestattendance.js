@@ -11,15 +11,7 @@ const { DataModeling } = require("./model/hrmisdb");
 const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
-
-const REQUEST = {
-  COA: "Correction of Attendance",
-  OVERTIME: "Overtime",
-  LEAVE: "Leave",
-  CA: "Cash Advance",
-  LOAN: "Loan",
-  OTMEAL: "Overtime Meal",
-};
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
