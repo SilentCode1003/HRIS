@@ -454,7 +454,7 @@ router.post("/submit", async (req, res) => {
             requesttype: REQUEST.LEAVE,
           },
         ];
-        SendEmailNotification(subgroup, emailbody);
+        SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
 
         res.json({ msg: "success" });
       }

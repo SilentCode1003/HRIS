@@ -125,7 +125,7 @@ router.post("/submit", async (req, res) => {
             requesttype: REQUEST.COA,
           },
         ];
-        SendEmailNotification(subgroupid, REQUEST.COA, emailbody);
+        SendEmailNotification(employeeid,subgroupid, REQUEST.COA, emailbody);
 
         res.json({ msg: "success" });
       }

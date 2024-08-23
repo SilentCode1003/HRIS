@@ -6,14 +6,13 @@ const {
   SendEmployeeRequestPassword,
   ForgotPasswordTemplate,
 } = require("./helper");
-const { REQUEST } = require("./enums");
 
 function SendEmailNotificationEmployee(employeeid, subgroupid, title, data) {
   return new Promise((resolve, reject) => {
     try {
       let html = EmailNotification(data);
       SendNotification(subgroupid, title, html);
-      SendEmployeeNotification(employeeid,subgroupid, title, html);
+      SendEmployeeNotification(employeeid, title, html);
       resolve("success");
     } catch (error) {
       console.log(error);
