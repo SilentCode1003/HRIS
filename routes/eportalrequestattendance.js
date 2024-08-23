@@ -122,6 +122,7 @@ router.post("/submit", async (req, res) => {
             timein: timein,
             timeout: timeout,
             reason: reason,
+            status: status,
             requesttype: REQUEST.COA,
           },
         ];
