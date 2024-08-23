@@ -13,7 +13,7 @@ function SendEmailNotificationEmployee(employeeid, subgroupid, title, data) {
     try {
       let html = EmailNotification(data);
       SendNotification(subgroupid, title, html);
-      SendEmployeeNotification(employeeid, title, html);
+      SendEmployeeNotification(employeeid,subgroupid, title, html);
       resolve("success");
     } catch (error) {
       console.log(error);
@@ -23,7 +23,7 @@ function SendEmailNotificationEmployee(employeeid, subgroupid, title, data) {
   });
 }
 
-function SendEmailNotification(subgroupid, title, data) {
+function SendEmailNotification(employeeid,subgroupid, title, data) {
   return new Promise((resolve, reject) => {
     try {
       let html = EmailNotification(data);
