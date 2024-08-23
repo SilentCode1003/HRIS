@@ -6,7 +6,7 @@ const {
   SendEmployeeRequestPassword,
   ForgotPasswordTemplate,
 } = require("./helper");
-const { REQUEST } = require("./repository/enums");
+const { REQUEST } = require("./enums");
 
 function SendEmailNotificationEmployee(employeeid, subgroupid, title, data) {
   return new Promise((resolve, reject) => {
