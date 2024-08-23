@@ -1972,14 +1972,15 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .payslipname {
-  font-family: 'Times New Roman';
-  color: black !important;
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(0, 0, 0) !important;
   margin-top: 5% !important;
 }
 
 .empnamepayslip {
-  border-bottom: 1px solid black !important;
-  font-weight: bold;
+  border-bottom: 1px solid rgb(0, 0, 0) !important;
+  font-weight: bolder;
+  font-size: xx-large;
 }
 
 /* .payslip-thead {

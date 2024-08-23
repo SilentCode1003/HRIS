@@ -417,6 +417,18 @@
                                                                             <p class="text-muted mb-0"></p>
                                                                         </div>
                                                                     </div>
+                                                                    <hr class="hr-color">
+                                                                    <!-- Accured 13th Month Pay -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3">
+                                                                            <p class="mb-0 payroll-label">Assumed Accrued 13th
+                                                                                Month Pay
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-sm-9" id="13thmonthpay">
+                                                                            <p class="text-muted mb-0"></p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -550,6 +562,12 @@
                                                                                 id="payslipdeppagibigid"></small>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-6">
+                                                                        <div> <span class="fw-bold"> Assumed Accrued 13th
+                                                                            Month Pay:</span> <small
+                                                                                class="ms-3 payslipemp" id="payslipheader13thmonthpay"></small>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-md-6">
@@ -621,7 +639,7 @@
                                                                         </th>
                                                                         <td id="payslipovertime" style="color: green; font-weight: bold;"></td>
                                                                         <td colspan="1"></td>
-                                                                        <td>Absent</td>
+                                                                        <td>Absent<span id="payslipnumabsent"></span></td>
                                                                         <td id="payslipabsent"></td>
                                                                     </tr>
                                                                     <tr>
@@ -638,7 +656,7 @@
                                                                         </th>
                                                                         <td id="payslipotpay"></td>
                                                                         <td id="payslipothoursmin"></td>
-                                                                        <td>Late</td>
+                                                                        <td>Late<span id="payslipnumlate"></span></td>
                                                                         <td id="paysliplate"></td>
                                                                     </tr>
                                                                     <tr>

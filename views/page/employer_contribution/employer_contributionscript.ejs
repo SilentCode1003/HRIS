@@ -279,7 +279,10 @@
               $("#empphilhealth").val(formatCurrencyValue(item.emp_philhealth));
               $("#empsss").val(formatCurrencyValue(item.emp_sss));
               $("#empwisp").val(formatCurrencyValue(item.emp_wisp));
-              $("#conttotal").val(formatCurrencyValue(item.contribution_total));
+              $("#totalpagibig").val(formatCurrencyValue(item.pagibig + item.emp_pagibig));
+              $("#totalsss").val(formatCurrencyValue(item.sss + item.emp_sss));
+              $("#totalphilhealth").val(formatCurrencyValue(item.philhealth + item.emp_philhealth));
+              $("#totalwisp").val(formatCurrencyValue(item.wisp + item.emp_wisp));
               $("#contributioncreatedate").val(item.createdate);
             });
           } else {

@@ -1,0 +1,270 @@
+<br>
+
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">Retro Active Pay</h3>
+      <div class="row g-2">
+        <div class="col">
+          <input id='myInput'  type='text' placeholder="  Search....">
+        </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addretromodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+        <div class="col-sm-1 col-add">
+          <button id="exportExcelBtn" class="btn btn-export-color"><b>Export</b></button>
+      </div>
+      </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableRetroPay">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">Employee ID</th>
+                        <th class="col-26">Employee</th>
+                        <th>New Monthly/Daily Salary</th>
+                        <th>Old Monthly/Daily Salary</th>
+                        <th>Payroll Type</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addretromodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Retro Active Pay?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="paemployeename" name="paemployeename" aria-label="Floating label select example">
+                              </select>
+                              <label for="floatingSelectGrid">Employee Name</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="newmonthly" name="newmonthly"
+                                placeholder="Adjustment Amount" oninput="formatPrice(event, this)">
+                            <label for="paamount">New Monthly</label>
+                        </div>
+                     </div>
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="newbasicadjustment" name="newbasicadjustment"
+                                placeholder="Adjustment Amount" oninput="formatPrice(event, this)">
+                            <label for="paamount">New Basic Adjustments</label>
+                        </div>
+                     </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="newallowance" name="newallowance"
+                                  placeholder="Adjustment Amount" oninput="formatPrice(event, this)">
+                              <label for="paamount">New Allowances</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="startpd" name="startpd" aria-label="Floating label select example">
+                              </select>
+                              <label for="floatingSelectGrid">Start Payroll Date</label>
+                          </div>
+                      </div>  
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="endpd" name="endpd" aria-label="Floating label select example">
+                              </select>
+                              <label for="floatingSelectGrid">End Payroll Date</label>
+                          </div>
+                      </div>  
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="generateretro">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="viewretrodetails" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">View Retro Pay Details?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="preview" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                    </div>
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="card-body p-0">
+                          <ul class="list-group list-group-flush rounded-3">
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-work">Emplyee ID</p>
+                                  </div>
+                                  <p class="mb-0 p-number" id="retroempid"></p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-rest">Full Name</p>
+                                  </div>
+                                  <p class="mb-0 number-rest" id="retrofname">
+                                  </p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-work">New Salary</p>
+                                  </div>
+                                  <p class="mb-0 p-number" id="newsalary"></p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-rest">Old Salary</p>
+                                  </div>
+                                  <p class="mb-0 number-rest" id="oldsalary"></p>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <table class="table table-bordered" id="dataTableRetroPayDetails">
+                        <thead>
+                          <tr>
+                            <th class="date-range-table">Payroll Dates</th>
+                            <th class="date-range-table">Old Total Netpay</th>
+                            <th class="date-range-table">New Total Netpay</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="row text-center mb-3">
+                      <div class="col-md-6">
+                        <strong>Total Old Salary:
+                        <span id="totaloldsalary">15000</span></strong>
+                      </div>
+                      <div class="col-md-6">
+                        <strong>Total New Salary:
+                        <span id="totalretropay">15000</span></strong>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <div class="d-flex flex-column payslipname">
+                        <span class="empnamepayslip" id="totalretropaydiff"></span>
+                        <span class="text-center">Total Retro Pay</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" data-bs-toggle="modal" data-bs-target="#proceedtopayrolladjustments">Proceed to Payroll Adjustments</button>
+            </div>            
+      </div>
+  </div>
+</div>
+
+
+<!-- Payroll Adjustments Modal -->
+<div class="modal fade" id="proceedtopayrolladjustments" data-bs-backdrop="static" tabindex="-1" aria-labelledby="payrollAdjustmentsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="payrollAdjustmentsLabel">Proceed to Payroll Adjustments</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="mb-3">
+            <div class="d-flex flex-column payslipname">
+              <center><span class="empnamepayslip" id="adjustmentfname"></span></center>
+              <span class="text-center">Employee</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="d-flex flex-column payslipname">
+              <center><span class="empnamepayslip" id="adjustmenttotal"></span></center>
+              <span class="text-center">Total Retro Pay</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="payrollDateSelect" class="form-label">Select Payroll Date</label>
+            <select class="form-select" id="payrollDateSelect">
+              <option selected disabled>Select a date</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="addjustmentsaveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

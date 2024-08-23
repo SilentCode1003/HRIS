@@ -532,7 +532,6 @@
               (parseFloat(item.Salary_Loan) || 0) +
               (parseFloat(item.Wisp_Deductions) || 0);
               let formattedTotal = formatToCurrency(totalLoans);
-              // Update the HTML element with the formatted total
               $("#loandeductions").text(formattedTotal);
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
@@ -546,6 +545,7 @@
               $("#holidayday").text(item.Holiday);
               $("#leavepaydadys").text(item.Leaveday);
               $("#restdayot").text(item.RestDay_OT);
+              $("#13thmonthpay").text(formatToCurrency(item.Accrued13thMonth));
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -583,6 +583,7 @@
               $("#payslipTINid").text(item.TINID);
               $("#payslipphilhealthid").text(item.PhilHealthID);
               $("#payslipdeppagibigid").text(item.PagIbigID);
+              $("#payslipheader13thmonthpay").text(formatToCurrency(item.Accrued13thMonth));
               $("#payslippayrolltype").text(item.PayrollType);
               $("#payslipid").text(item.EmployeeId);
               $("#payslipname").text(item.EmployeeFullName);
@@ -638,6 +639,7 @@
               $("#payslipabsent").text(
                 formatToCurrency(item.Absent_Deductions)
               );
+              $("#payslipnumabsent").html("<strong> ( " + item.Absent + " )</strong>");
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#payslipcalamity").text(formatToCurrency(item.Calamity_Loan));
               $("#payslipshortterm").text(
@@ -650,7 +652,8 @@
               $("#payslipsterlingloan").text(
                 formatToCurrency(item.Sterling_Loan)
               );
-              $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
+              $("#paysliplate").html(formatToCurrency(item.Late_Deductions)); 
+              $("#payslipnumlate").html("<strong> ( " + item.Late_Hours + " : " + item.Late_Minutes + " )</strong>");
               $("#payslipwisp").text(formatToCurrency(item.Wisp_Deductions));
               $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#payslipsalaryloan").text(formatToCurrency(item.Salary_Loan));

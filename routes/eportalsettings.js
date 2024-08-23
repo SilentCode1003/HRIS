@@ -20,20 +20,20 @@ router.post("/getsettingsaccount", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT
-   me.me_profile_pic as profilePicturePath, 
-   me.me_id as employeeid,
-   mu.mu_username as username,
-   me.me_firstname as firstname,
-   me.me_lastname as lastname,
-   me.me_civilstatus as civilstatus,
-   me.me_jobstatus as jobstatus,
-   me.me_email as email,
-   me.me_address as address
-   FROM 
-   master_employee me
-   LEFT JOIN
-   master_user mu ON me.me_id = mu.mu_employeeid
-   where me_id = '${employeeid}'`;
+    me.me_profile_pic as profilePicturePath, 
+    me.me_id as employeeid,
+    mu.mu_username as username,
+    me.me_firstname as firstname,
+    me.me_lastname as lastname,
+    me.me_civilstatus as civilstatus,
+    me.me_jobstatus as jobstatus,
+    me.me_email as email,
+    me.me_address as address
+    FROM 
+    master_employee me
+    LEFT JOIN
+    master_user mu ON me.me_id = mu.mu_employeeid
+    where me_id = '${employeeid}'`;
 
     mysql
       .mysqlQueryPromise(sql)
