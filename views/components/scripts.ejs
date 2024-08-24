@@ -416,7 +416,7 @@
   }
   function warning(title, text) {
     console.log(text);
-    
+
     toastr.warning(text, title, {
       closeButton: false,
       debug: false,
@@ -475,6 +475,73 @@
   function hideLoading() {
     toastr.clear();
     console.log("Toastr Cleared!");
+  }
+  //#endregion
+
+  //#region Dropdown
+  function AddDropdownData(dropdownID, activeData, inputID, hiddenID) {
+    for (const data of activeData) {
+      AddOption(dropdownID, data.display, data.value, inputID, hiddenID);
+    }
+  }
+
+  function AddOption(dropdownID, displayText, actualValue, inputID, hiddenID) {
+    const dropdownElement = document.getElementById(dropdownID);
+    const hiddenInput = document.getElementById(hiddenID);
+
+    const newOption = document.createElement("div");
+    newOption.className = "dropdown-option";
+    newOption.textContent = displayText;
+    newOption.setAttribute("data-value", actualValue);
+
+    newOption.addEventListener("click", function () {
+      const inputElement = document.getElementById(inputID);
+      inputElement.value = displayText;
+      hiddenInput.value = actualValue;
+      dropdownElement.style.display = "none";
+    });
+
+    dropdownElement.appendChild(newOption);
+
+    SetupDropdown(inputID, dropdownID, "dropdown-option");
+  }
+
+  function SetupDropdown(inputId, dropdownId, optionClass) {
+    const inputElement = document.getElementById(inputId);
+    const dropdownElement = document.getElementById(dropdownId);
+    const options = dropdownElement.getElementsByClassName(optionClass);
+
+    inputElement.addEventListener("click", function () {
+      dropdownElement.style.display = "block";
+    });
+
+    for (const option of options) {
+      option.addEventListener("click", function () {
+        inputElement.value = option.textContent;
+        const actualValue = option.getAttribute("data-value");
+        inputElement.setAttribute("data-actual-value", actualValue);
+        dropdownElement.style.display = "none";
+      });
+    }
+
+    inputElement.addEventListener("input", function () {
+      const value = inputElement.value.toUpperCase();
+      for (const option of options) {
+        if (option.textContent.toUpperCase().includes(value)) {
+          option.style.display = "block";
+        } else {
+          option.style.display = "none";
+        }
+      }
+      dropdownElement.style.display = "block";
+    });
+
+    document.addEventListener("click", function (event) {
+      const target = event.target;
+      if (!dropdownElement.contains(target) && target !== inputElement) {
+        dropdownElement.style.display = "none";
+      }
+    });
   }
   //#endregion
 </script>

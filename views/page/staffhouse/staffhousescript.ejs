@@ -196,8 +196,6 @@
             let data = json.data;
 
             $.each(data, (key, item) => {
-              console.log(item.name, item.address, item.telno, item.status);
-
               let action = "";
 
               if (item.status == "Active") {
@@ -213,7 +211,7 @@
                 name: item.name,
                 address: item.address,
                 tel: item.telno,
-                status: item.status,
+                status: item.status == "Active" ? `<div class="status-active"><span>${item.status}</span></div>` : `<div class="status-inactive"><span>${item.status}</span></div>`,
                 action: action,
               });
             });
