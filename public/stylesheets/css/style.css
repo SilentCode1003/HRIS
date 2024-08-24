@@ -1127,3 +1127,11 @@ body .fc-widget-header a {
 .status-inactive {
   background-color: #e47a7a;
 }
+
+.status-warning {
+  background-color: #e4bf7a;
+}
+
+.status-primary {
+  background-color: #7abde4;
+}

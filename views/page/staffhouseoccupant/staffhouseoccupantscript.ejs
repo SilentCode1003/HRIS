@@ -314,6 +314,10 @@
                 id: item.id,
                 staffhouseid: item.staffhouseid,
                 employeeid: item.employeeid,
+                durationstatus:
+                  item.durationstatus == "OVER STAYING"
+                    ? `<div class="status-warning"><span>${item.durationstatus}</span></div>`
+                    : `<div class="status-primary"><span>${item.durationstatus}</span></div>`,
                 startdate: item.startdate,
                 enddate: item.enddate,
                 status:
@@ -331,6 +335,7 @@
           { data: "id" },
           { data: "staffhouseid" },
           { data: "employeeid" },
+          { data: "durationstatus" },
           { data: "startdate" },
           { data: "enddate" },
           { data: "status" },
