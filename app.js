@@ -146,7 +146,7 @@ var retropayRouter = require("./routes/retropay");
 var staffhouseRouter = require("./routes/staffhouse");
 var staffhouseoccupantRouter = require("./routes/staffhouseoccupant");
 var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
-
+var staffhousehistoryRouter = require("./routes/staffhousehistory");
 
 var app = express();
 
@@ -301,7 +301,7 @@ app.use("/retropay", retropayRouter);
 app.use("/staffhouse", staffhouseRouter);
 app.use("/staffhouseoccupant", staffhouseoccupantRouter);
 app.use("/occupantdurationsetting", occupantdurationsettingRouter);
-
+app.use("/staffhousehistory", staffhousehistoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
