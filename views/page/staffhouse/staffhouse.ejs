@@ -1,0 +1,144 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title mb-0 font-weight-bold">Staff House</h3>
+    <div class="card">
+      <div class="card-body">
+        <div class="form">
+          <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Alias or Name e.g. Polo Drive"
+              />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+              <input
+                type="text"
+                class="form-control strong"
+                id="tel"
+                placeholder="Contact Number e.g. 0926-262-8210"
+              />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+              <textarea
+                name="address"
+                id="address"
+                class="form-control"
+                placeholder="Address e.g. 39 Macaria Ave, Pacita 1, Brgy. San Francisco, Biñan, Laguna, 4024"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="row mt-4 justify-content-start">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <button id="addBtn" class="btn btn-add-color w-75">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="card-title">
+      <h6 class="m-0 font-weight-bold">Staff House Table</h6>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <input
+          id="search"
+          type="text"
+          class="form-control"
+          placeholder="Search"
+        />
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="table">
+        <table id="data-table" class="table table-bordered table-hover">
+          <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Tel No.</th>
+            <th>Status</th>
+            <th>Action</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Staff House</h5>
+        <button
+          type="button"
+          class="close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form">
+          <div class="row">
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control"
+                id="namemodal"
+                placeholder="Alias or Name e.g. Polo Drive"
+              />
+            </div>
+            <input type="hidden" class="form-control" id="id" />
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-12">
+              <input
+                type="text"
+                class="form-control strong"
+                id="telmodal"
+                placeholder="Contact Number e.g. 0926-262-8210"
+              />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm-12">
+              <textarea
+                name="address"
+                id="addressmodal"
+                class="form-control"
+                placeholder="Address e.g. 39 Macaria Ave, Pacita 1, Brgy. San Francisco, Biñan, Laguna, 4024"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row justify-content-end">
+          <button id="updateBtn" class="btn btn-add-color w-100">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

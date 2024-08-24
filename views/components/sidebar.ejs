@@ -438,6 +438,47 @@
       <span><b>Announcement</b></span></a
     >
   </li>
+
+  <!--  Employee Rotation-->
+  <li class="nav-item sidebar-item">
+    <a
+      class="nav-link collapsed"
+      data-toggle="collapse"
+      data-target="#collapseemployeerotation"
+      aria-expanded="true"
+      aria-controls="collapseemployeerotation"
+    >
+      <lord-icon
+          src="https://cdn.lordicon.com/egmlnyku.json"
+          trigger="hover"
+          colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff"
+          class="db-icon-hrmis">
+      </lord-icon>
+      <span><b>Employee Rotation</b></span></a
+    >
+
+    <div
+      id="collapseemployeerotation"
+      class="collapse"
+      aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar"
+    >
+      <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+        <div class="sidebar-heading">OCCUPANT SETTINGS:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/staffhouse">Staffhouse</a>
+        <a class="collapse-item" href="/occupantdurationsetting">Duration Setting</a>
+        <br />
+        <div class="sidebar-heading">OCCUPANT:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/staffhouseoccupant">Register Occupants</a>
+        <br />
+        <div class="sidebar-heading">History:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/occupanthistory">Occupant History</a>
+      </div>
+    </div>
+  </li>
   <% }%> <%if (accesstype == 'Payroll' || accesstype == 'Admin') {%>
   <!-- Divider -->
   <hr class="sidebar-divider my-0" />

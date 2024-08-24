@@ -1,0 +1,236 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let name = "";
+    let tel = "";
+    let address = "";
+    let status = "";
+    LoadTable();
+
+    $("#data-table tbody").on("click", "tr", function () {
+      let dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      id = dataRow[0];
+      name = dataRow[1];
+      tel = dataRow[2];
+      address = dataRow[3];
+      status = dataRow[4];
+    });
+
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#table tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    });
+
+    $(document).on("click", "#addBtn", function () {
+      let name = $("#name").val();
+      let tel = $("#tel").val();
+      let address = $("#address").val();
+      let message = "";
+
+      if (name == "") {
+        message += "Staffhouse Name or Alias ";
+      }
+
+      if (tel == "") {
+        message += "Tel or Mobile Number ";
+      }
+
+      if (address == "") {
+        message += "Address ";
+      }
+
+      if (message != "") {
+        console.warn(message);
+
+        warning("Warning", `${message} is required!`);
+      } else {
+        let data = [
+          {
+            name: name,
+            tel: tel,
+            address: address,
+          },
+        ];
+
+        $.ajax({
+          type: "POST",
+          url: "/staffhouse/save",
+          data: { data },
+          success: function (res) {
+            if (res.status == "Success") {
+              success("Success", res.message);
+              LoadTable();
+            } else {
+              warning("Warning", res.message);
+            }
+          },
+          error: function (err) {
+            warning("Warning", "Server Error!");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/staffhouse/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $(document).on("click", "#activeBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/staffhouse/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#editModal").modal("show");
+      $("#namemodal").val(name);
+      $("#telmodal").val(tel);
+      $("#addressmodal").val(address);
+    });
+
+    $(document).on("click", "#updateBtn", function () {
+      let name = $("#namemodal").val();
+      let tel = $("#telmodal").val();
+      let address = $("#addressmodal").val();
+      let message = "";
+
+      if (name == "") {
+        message += "Staffhouse Name or Alias ";
+      }
+
+      if (tel == "") {
+        message += "Tel or Mobile Number ";
+      }
+
+      if (address == "") {
+        message += "Address ";
+      }
+
+      if (message != "") {
+        console.warn(message);
+        warning("Warning", `${message} is required!`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/staffhouse/update",
+          data: { id: id, name: name, tel: tel, address: address },
+          success: function (res) {
+            if (res.status == "Success") {
+              success("Success", res.message);
+              $("#editModal").modal("hide");
+              LoadTable();
+            } else {
+              warning("Warning", res.message);
+            }
+          },
+          error: function (err) {
+            warning("Warning", "Server Error!");
+          },
+        });
+      }
+    });
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/staffhouse/load",
+          dataSrc: (json) => {
+            let finalData = [];
+            let data = json.data;
+
+            $.each(data, (key, item) => {
+              console.log(item.name, item.address, item.telno, item.status);
+
+              let action = "";
+
+              if (item.status == "Active") {
+                action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>
+                <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+              } else {
+                action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>
+                <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+              }
+
+              finalData.push({
+                id: item.id,
+                name: item.name,
+                address: item.address,
+                tel: item.telno,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "name" },
+          { data: "address" },
+          { data: "tel" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

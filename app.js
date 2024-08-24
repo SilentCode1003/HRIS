@@ -143,6 +143,7 @@ var restdayot_request_activityRouter = require("./routes/restdayot_request_activ
 var teamleadappliedrdotRouter = require("./routes/teamleadappliedrdot");
 var teamleadapprovedrdotRouter = require("./routes/teamleadapprovedrdot");
 var retropayRouter = require("./routes/retropay");
+var staffhouseRouter = require("./routes/staffhouse");
 
 
 var app = express();
@@ -295,6 +296,7 @@ app.use("/restdayot_request_activity", restdayot_request_activityRouter);
 app.use("/teamleadappliedrdot", teamleadappliedrdotRouter);
 app.use("/teamleadapprovedrdot", teamleadapprovedrdotRouter);
 app.use("/retropay", retropayRouter);
+app.use("/staffhouse", staffhouseRouter);
 
 
 // catch 404 and forward to error handler
