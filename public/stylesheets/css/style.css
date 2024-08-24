@@ -1119,3 +1119,19 @@ body .fc-widget-header a {
   padding: 0.375rem 0.75rem;
   border-radius: 0.2rem;
 }
+
+.status-active {
+  background-color: #7ae4af;
+}
+
+.status-inactive {
+  background-color: #e47a7a;
+}
+
+.status-warning {
+  background-color: #e4bf7a;
+}
+
+.status-primary {
+  background-color: #7abde4;
+}

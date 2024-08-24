@@ -13,13 +13,11 @@ const STAFF_HOUSE_STATUS = {};
 exports.STAFF_HOUSE_STATUS = STAFF_HOUSE_STATUS;
 
 const STATUS_LOG = {
-  ACTIVE:5000,
-  INACTIVE: 5001,
-  NEW: 5002,
-  UPDATE: 5003,
-  DELETE: 5004,
-  REQUEST: 5005,
-  
-
+  ACTIVE:'Active',
+  INACTIVE: 'Inactive',
+  NEW: 'New',
+  UPDATE: 'Update',
+  DELETE: 'Delete',
+  REQUEST: 'Request',
 };
 exports.STATUS_LOG = STATUS_LOG;
