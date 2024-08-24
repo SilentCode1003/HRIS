@@ -278,6 +278,10 @@
       });
     }
 
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 7, "#search");
+    });
+
     function LoadTable() {
       $("#data-table").DataTable({
         destroy: true,

@@ -544,4 +544,37 @@
     });
   }
   //#endregion
+
+  //#region Search Table
+  function filterTableRows(tablename, colcount, searchid) {
+    console.log("triggered search");
+
+    const searchQuery = $(searchid).val().trim().toLowerCase();
+    let foundMatches = false;
+
+    $("#no-match-row").remove();
+
+    $(tablename + " tbody tr").each(function () {
+      const rowData = $(this).text().toLowerCase();
+      if (rowData.includes(searchQuery)) {
+        $(this).show();
+        foundMatches = true;
+      } else {
+        $(this).hide();
+      }
+    });
+
+    if (!foundMatches) {
+      const noMatchRow = $("<tr>").append(
+        $("<td>", {
+          colspan: colcount,
+          class: "text-center",
+          text: "No Data Matched",
+        })
+      );
+      $(tablename + " tbody").append(noMatchRow);
+      noMatchRow.attr("id", "no-match-row");
+    }
+  }
+  //#endregion
 </script>
