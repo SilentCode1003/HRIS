@@ -145,6 +145,7 @@ var teamleadapprovedrdotRouter = require("./routes/teamleadapprovedrdot");
 var retropayRouter = require("./routes/retropay");
 var staffhouseRouter = require("./routes/staffhouse");
 var staffhouseoccupantRouter = require("./routes/staffhouseoccupant");
+var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
 
 
 var app = express();
@@ -299,6 +300,7 @@ app.use("/teamleadapprovedrdot", teamleadapprovedrdotRouter);
 app.use("/retropay", retropayRouter);
 app.use("/staffhouse", staffhouseRouter);
 app.use("/staffhouseoccupant", staffhouseoccupantRouter);
+app.use("/occupantdurationsetting", occupantdurationsettingRouter);
 
 
 // catch 404 and forward to error handler

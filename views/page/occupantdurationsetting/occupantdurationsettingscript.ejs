@@ -3,7 +3,7 @@
     let id = "";
     let name = "";
     let tel = "";
-    let address = "";
+    let duration = "";
     let status = "";
     LoadTable();
 
@@ -17,9 +17,8 @@
         });
       id = dataRow[0];
       name = dataRow[1];
-      address = dataRow[2];
-      tel = dataRow[3];
-      status = dataRow[4];
+      duration = dataRow[2];
+      status = dataRow[3];
     });
 
     $("#search").on("keyup", function () {
@@ -31,20 +30,16 @@
 
     $(document).on("click", "#addBtn", function () {
       let name = $("#name").val();
-      let tel = $("#tel").val();
+      let duration = $("#duration").val();
       let address = $("#address").val();
       let message = "";
 
       if (name == "") {
-        message += "Staffhouse Name or Alias ";
+        message += "occupantdurationsetting Name or Alias ";
       }
 
-      if (tel == "") {
-        message += "Tel or Mobile Number ";
-      }
-
-      if (address == "") {
-        message += "Address ";
+      if (duration == "") {
+        message += "duration or Mobile Number ";
       }
 
       if (message != "") {
@@ -55,14 +50,14 @@
         let data = [
           {
             name: name,
-            tel: tel,
+            duration: duration,
             address: address,
           },
         ];
 
         $.ajax({
           type: "POST",
-          url: "/staffhouse/save",
+          url: "/occupantdurationsetting/save",
           data: { data },
           success: function (res) {
             if (res.status == "Success") {
@@ -84,7 +79,7 @@
 
       $.ajax({
         type: "POST",
-        url: "/staffhouse/status",
+        url: "/occupantdurationsetting/status",
         data: {
           id: id,
           status: status,
@@ -109,7 +104,7 @@
 
       $.ajax({
         type: "POST",
-        url: "/staffhouse/status",
+        url: "/occupantdurationsetting/status",
         data: {
           id: id,
           status: status,
@@ -132,26 +127,21 @@
     $(document).on("click", "#editBtn", function () {
       $("#editModal").modal("show");
       $("#namemodal").val(name);
-      $("#telmodal").val(tel);
-      $("#addressmodal").val(address);
+      $("#durationmodal").val(duration);
     });
 
     $(document).on("click", "#updateBtn", function () {
       let name = $("#namemodal").val();
-      let tel = $("#telmodal").val();
-      let address = $("#addressmodal").val();
+      let duration = $("#durationmodal").val();
+
       let message = "";
 
       if (name == "") {
-        message += "Staffhouse Name or Alias ";
+        message += "Name or Alias ";
       }
 
-      if (tel == "") {
-        message += "Tel or Mobile Number ";
-      }
-
-      if (address == "") {
-        message += "Address ";
+      if (duration == "") {
+        message += "Duration in days ";
       }
 
       if (message != "") {
@@ -160,8 +150,8 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/staffhouse/update",
-          data: { id: id, name: name, tel: tel, address: address },
+          url: "/occupantdurationsetting/update",
+          data: { id: id, name: name, duration: duration },
           success: function (res) {
             if (res.status == "Success") {
               success("Success", res.message);
@@ -190,7 +180,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/staffhouse/load",
+          url: "/occupantdurationsetting/load",
           dataSrc: (json) => {
             let finalData = [];
             let data = json.data;
@@ -200,17 +190,16 @@
 
               if (item.status == "Active") {
                 action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>
-                <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+                  <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
               } else {
                 action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>
-                <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+                  <button id="editBtn" class="btn text-danger" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
               }
 
               finalData.push({
                 id: item.id,
                 name: item.name,
-                address: item.address,
-                tel: item.telno,
+                duration: item.duration,
                 status:
                   item.status == "Active"
                     ? `<div class="status-active"><span>${item.status}</span></div>`
@@ -225,8 +214,7 @@
         columns: [
           { data: "id" },
           { data: "name" },
-          { data: "address" },
-          { data: "tel" },
+          { data: "duration" },
           { data: "status" },
           { data: "action" },
         ],

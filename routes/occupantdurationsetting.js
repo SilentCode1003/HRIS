@@ -15,14 +15,19 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  Validator(req, res, "staffhouselayout", "staffhouse");
+  Validator(
+    req,
+    res,
+    "occupantdurationsettinglayout",
+    "occupantdurationsetting"
+  );
 });
 
 module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let sql = "SELECT * FROM `staffhouse`";
+    let sql = "SELECT * FROM `occupant_duration_settings`";
 
     Select(sql, (err, result) => {
       if (err) {
@@ -30,7 +35,7 @@ router.get("/load", (req, res) => {
       }
 
       if (result.length != 0) {
-        let data = DataModeling(result, "s_");
+        let data = DataModeling(result, "ods_");
         res.status(200).json({
           status: "Success",
           data: data,
@@ -63,17 +68,16 @@ router.post("/save", function (req, res, next) {
         });
       } else {
         for (const d of data) {
-          const { name, tel, address } = d;
+          const { name, duration } = d;
 
-          console.log(name, tel, address, status);
+          console.log(name, duration, status);
 
-          let sql = InsertStatement("staffhouse", "s", [
+          let sql = InsertStatement("occupant_duration_settings", "ods", [
             "name",
-            "telno",
-            "address",
+            "duration",
             "status",
           ]);
-          let values = [[name, tel, address, status]];
+          let values = [[name, duration, status]];
 
           InsertTable(sql, values, (err, result) => {
             if (err) {
@@ -104,7 +108,12 @@ router.post("/status", function (req, res, next) {
   try {
     const { id, status } = req.body;
 
-    let cmd = UpdateStatement("staffhouse", "s", ["status"], ["id"]);
+    let cmd = UpdateStatement(
+      "occupant_duration_settings",
+      "ods",
+      ["status"],
+      ["id"]
+    );
     let data = [
       status == "Active" ? STATUS_LOG.INACTIVE : STATUS_LOG.ACTIVE,
       id,
@@ -132,18 +141,17 @@ router.post("/status", function (req, res, next) {
 
 router.post("/update", function (req, res, next) {
   try {
-    const { id, name, tel, address } = req.body;
+    const { id, name, duration } = req.body;
 
-    console.log(id, name, tel, address);
-    
+    console.log(id, name, duration);
 
     let cmd = UpdateStatement(
-      "staffhouse",
-      "s",
-      ["name", "telno", "address"],
+      "occupant_duration_settings",
+      "ods",
+      ["name", "duration"],
       ["id"]
     );
-    let data = [name, tel, address, id];
+    let data = [name, duration, id];
 
     Update(cmd, data, (err, result) => {
       if (err) {
@@ -169,7 +177,7 @@ router.post("/update", function (req, res, next) {
 
 function Check(name) {
   return new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM staffhouse WHERE s_name = ?";
+    let sql = "SELECT * FROM occupant_duration_settings WHERE ods_name = ?";
     let cmd = SelectStatement(sql, [name]);
 
     Select(cmd, (err, result) => {
