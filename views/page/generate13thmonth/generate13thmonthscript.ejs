@@ -4,12 +4,15 @@
   let PayrollDate = "";
   let employeeid = "";
   let contributionid = "";
+  let startpayrolldate = "";
+  let endpayrolldate = "";
 
   $(document).ready(function () {
     console.log("Initialize");
     searchTable();
     //LoadPayrollDate();
-    LoadYear();
+    //LoadYear();
+    LoadAllPayrollDate();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -42,32 +45,52 @@
     //     });
     //   }
 
-    function LoadYear() {
+    function LoadAllPayrollDate() {
       $.ajax({
         type: "GET",
-        url: "/generate13thmonth/selectyear",
+        url: "/retropay/viewpayrolldates",
         success: function (result) {
           var data = result.data;
-          function populateSelectOptions(selectElementId) {
-            var $select = $("#" + selectElementId);
-            $select.empty();
-
-            $select.append("<option selected disabled>Choose</option>");
-            $.each(data, function (key, item) {
-              var option = new Option(item.year, item.year);
-              $(option).html(item.year);
-              $select.append(option);
-            });
-          }
-          populateSelectOptions("loademplyrcontribution");
-          populateSelectOptions("genyear");
-          populateSelectOptions("emplyrcontribution");
+          $("#startpd").empty();
+          $("#endpd").empty();
+          $.each(data, function (key, item) {
+            var option = new Option(item.payrolldate, item.payrolldate);
+            $("#startpd").append($(option).clone());
+            $("#endpd").append($(option).clone());
+          });
         },
         error: function (result) {
-          showSweetAlert("Error", result.responseText, "error");
+          alert("error: " + result.data);
         },
       });
     }
+
+    // function LoadYear() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/generate13thmonth/selectyear",
+    //     success: function (result) {
+    //       var data = result.data;
+    //       function populateSelectOptions(selectElementId) {
+    //         var $select = $("#" + selectElementId);
+    //         $select.empty();
+
+    //         $select.append("<option selected disabled>Choose</option>");
+    //         $.each(data, function (key, item) {
+    //           var option = new Option(item.year, item.year);
+    //           $(option).html(item.year);
+    //           $select.append(option);
+    //         });
+    //       }
+    //       populateSelectOptions("loademplyrcontribution");
+    //       populateSelectOptions("genyear");
+    //       populateSelectOptions("emplyrcontribution");
+    //     },
+    //     error: function (result) {
+    //       showSweetAlert("Error", result.responseText, "error");
+    //     },
+    //   });
+    // }
 
     $(document).on("click", "#emplyrcontributionsaveBtn", function () {
       let payrolldate = $("#emplyrcontribution").val();
@@ -126,11 +149,12 @@
     });
 
     $("#loademplyrcontributionsaveBtn").click(function () {
-      let YearDate = $("#loademplyrcontribution").val();
-      loadEmployerContributionTable(YearDate);
+      let start = $("#startpd").val();
+      let end = $("#endpd").val();
+      loadEmployerContributionTable(start, end);
     });
 
-    function loadEmployerContributionTable(YearDate) {
+    function loadEmployerContributionTable(start, end) {
       swal({
         title: "Loading 13th Month",
         allowOutsideClick: false,
@@ -151,7 +175,8 @@
         ajax: {
           url: "/generate13thmonth/load",
           data: {
-            year: YearDate,
+            startpayrolldate: start,
+            endpayrolldate: end,
           },
           dataSrc: (json) => {
             var finalData = [];
@@ -162,16 +187,14 @@
               var action = "";
               var status = item.status;
 
-              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#actionmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+              action = `<button id="viewBtn" class="btn text-primary" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewdetails"><i class="fas fa-fw fa-pen"></i></button>`;
 
               finalData.push({
-                id: item.id,
+                employeeid: item.employeeid,
                 fullname: item.fullname,
-                year: item.year,
-                total_basic: item.total_basic,
-                thirteenth_month: item.thirteenth_month,
-                generated_at: item.generated_at,
-                createby: item.createby,
+                start_date: item.start_date,
+                end_date: item.end_date,
+                accrued13thmonth: item.accrued13thmonth,
                 action: action,
               });
               console.log(finalData);
@@ -186,11 +209,12 @@
           },
         ],
         columns: [
-          { data: "id" },
+          { data: "employeeid" },
           { data: "fullname" },
-          { data: "year" },
+          { data: "start_date" },
+          { data: "end_date" },
           {
-            data: "total_basic",
+            data: "accrued13thmonth",
             render: function (data, type, row) {
               return (
                 "₱" +
@@ -201,20 +225,6 @@
               );
             },
           },
-          {
-            data: "thirteenth_month",
-            render: function (data, type, row) {
-              return (
-                "₱" +
-                parseFloat(data).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              );
-            },
-          },
-          { data: "generated_at" },
-          { data: "createby" },
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
@@ -230,56 +240,56 @@
       });
     }
 
-    $(document).on("click", "#generate13thmonthsaveBtn", function () {
-      let YearDate = $("#genyear").val();
+    // $(document).on("click", "#generate13thmonthsaveBtn", function () {
+    //   let YearDate = $("#genyear").val();
 
-      var message = "";
+    //   var message = "";
 
-      if (YearDate === "") {
-        message += "Year Date is required. ";
-      }
+    //   if (YearDate === "") {
+    //     message += "Year Date is required. ";
+    //   }
 
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "/generate13thmonth/gen13thmonth",
-          data: {
-           year: YearDate,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
-              loadEmployerContributionTable(YearDate);
-            } else if (result.msg == "exist") {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
-            } else {
-              swal(
-                "Data already exists!",
-                "You clicked the button!",
-                "warning"
-              );
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
-      }
-    });
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/generate13thmonth/gen13thmonth",
+    //       data: {
+    //        year: YearDate,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success") {
+    //           swal({
+    //             title: "Update Successfully",
+    //             text: "You clicked the button!",
+    //             icon: "success",
+    //             button: "OK!",
+    //           }).then((results) => {
+    //             window.location.reload();
+    //           });
+    //           loadEmployerContributionTable(YearDate);
+    //         } else if (result.msg == "exist") {
+    //           swal({
+    //             title: "Exist",
+    //             text: "Data already exists!",
+    //             icon: "warning",
+    //             button: "OK!",
+    //           });
+    //         } else {
+    //           swal(
+    //             "Data already exists!",
+    //             "You clicked the button!",
+    //             "warning"
+    //           );
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //     });
+    //   }
+    // });
 
     $("#dataTableEmployee13thMonth tbody").on("click", "tr", function () {
       var dataRow = [];
@@ -290,41 +300,35 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      contributionid = dataRow[0];
+      employeeid = dataRow[0];
+      startpayrolldate = dataRow[2];
+      endpayrolldate = dataRow[3];
     });
 
-    $(document).on("click", "#editBtn", function () {
+    $(document).on("click", "#viewBtn", function () {
+      $("#dataTable13thMonthDetails").find("tr:gt(0)").remove();
+
       $.ajax({
         type: "POST",
-        url: "/employer_contribution/getcontribution",
+        url: "/generate13thmonth/viewdetailsprfile",
         data: {
-          contributionid: contributionid,
+          employeeid: employeeid,
+          startpayrolldate: startpayrolldate,
+          endpayrolldate: endpayrolldate,
         },
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#employeefullname").val(item.fullname);
-              $("#msccontribution").val(formatCurrencyValue(item.monthly));
-              $("#previewleave").attr(
-                "src",
-                "data:image/jpg;base64," + item.image
-              );
-              $("#contributionpayrolldate").val(item.payrolldate);
-              $("#contributioncutoff").val(item.cutoff);
-              $("#employerpagibig").val(formatCurrencyValue(item.pagibig));
-              $("#employersss").val(formatCurrencyValue(item.sss));
-              $("#employerphilhealth").val(
-                formatCurrencyValue(item.philhealth)
-              );
-              $("#employerwisp").val(formatCurrencyValue(item.wisp));
-              $("#emppagibig").val(formatCurrencyValue(item.emp_pagibig));
-              $("#empphilhealth").val(formatCurrencyValue(item.emp_philhealth));
-              $("#empsss").val(formatCurrencyValue(item.emp_sss));
-              $("#empwisp").val(formatCurrencyValue(item.emp_wisp));
-              $("#conttotal").val(formatCurrencyValue(item.contribution_total));
-              $("#contributioncreatedate").val(item.createdate);
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
+              $("#13thmonthemployeeid").text(item.employeeid);
+              $("#13thmonthfullname").text(item.fullname);
+              $("#13thmonthpresent").text(item.present);
+              $("#13thmonthabsent").text(item.absent);
+              $("#13thmonthlateminutes").text(item.late_minutes);
+              $("#13thmonthlatehours").text(item.late_hours);
+              $("#totalretropaydiff").text(formatCurrencyValue(item.totalaccrued));
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -336,6 +340,46 @@
             message,
             "error"
           );
+        },
+      });
+      $.ajax({
+        type: "POST",
+        url: "/generate13thmonth/viewdetails",
+        data: {
+          employeeid: employeeid,
+          startpayrolldate: startpayrolldate,
+          endpayrolldate: endpayrolldate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            var material_list_tbl = $("#dataTable13thMonthDetails").DataTable();
+            material_list_tbl.clear().draw();
+
+            $.each(existingData, function (key, item) {
+
+              var rowNode = material_list_tbl.row
+                .add([
+                  formatDate(item.payrolldate),
+                  formatCurrencyValue(item.overall_netpay),
+                  formatCurrencyValue(item.total_deductions),
+                  formatCurrencyValue(item.total_netpay),
+                  formatCurrencyValue(item.accrued13thmonth),
+                ])
+                .draw()
+                .node();
+
+              $(rowNode).find("td").css({
+                "text-align": "center",
+                "vertical-align": "middle",
+              });
+            });
+          } else {
+            swal("Error fetching");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr, status, error);
         },
       });
     });
