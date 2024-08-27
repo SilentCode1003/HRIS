@@ -28,56 +28,6 @@ router.get("/", function (req, res, next) {
 });
 module.exports = router;
 
-// router.get("/load", (req, res) => {
-//     try {
-//       let departmentid = req.session.departmentid;
-//       let subgroupid = req.session.subgroupid;
-//       let accesstypeid = req.session.accesstypeid;
-//       let sql = `SELECT
-//       ph_holidayid,
-//       concat(me_lastname,' ',me_firstname) as ph_fullname,
-//       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
-//       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
-//       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
-//       (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
-//       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate
-//   FROM payroll_holiday
-//   INNER JOIN
-//   master_employee ON payroll_holiday.ph_employeeid = me_id
-//   WHERE ph_status = 'Applied'
-//   AND ph_subgroupid IN (${subgroupid})
-//   AND me_department = '${departmentid}'
-//   AND ph_employeeid NOT IN (
-//       SELECT mu_employeeid FROM master_user where mu_accesstype = '${accesstypeid}')
-//     AND ph_approvalcount = (
-//       SELECT ats_count
-//       FROM aprroval_stage_settings
-//       WHERE ats_accessid = '${accesstypeid}'
-//       AND ats_departmentid = '${departmentid}')`;
-
-//       Select(sql, (err, result) => {
-//         if (err) {
-//           console.error(err);
-//           res.json(JsonErrorResponse(err));
-//         }
-
-//
-
-//         if (result != 0) {
-//           let data = DataModeling(result, "ph_");
-
-//           console.log(data);
-//           res.json(JsonDataResponse(data));
-//         } else {
-//           res.json(JsonDataResponse(result));
-//         }
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       res.json(JsonErrorResponse(error));
-//     }
-//   });
-
 router.get("/load", (req, res) => {
   try {
     let subgroupid = req.session.subgroupid;
