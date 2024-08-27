@@ -24,16 +24,16 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
-so_id,
-s_name as so_staffhouseid,
-CONCAT(me_firstname, ' ', me_lastname) as so_employeeid,
-CASE WHEN DATEDIFF(CURRENT_DATE, so_enddate) < 0 THEN 'OVER STAYING' ELSE CONCAT(DATEDIFF(CURRENT_DATE, so_enddate), ' DAYS REMAING') END AS so_durationstatus,
-so_startdate,
-so_enddate,
-so_status
-FROM staffhouse_occupant
-INNER JOIN staffhouse ON s_id = so_staffhouseid
-INNER JOIN master_employee ON me_id = so_employeeid`;
+    so_id,
+    s_name as so_staffhouseid,
+    CONCAT(me_firstname, ' ', me_lastname) as so_employeeid,
+    CASE WHEN DATEDIFF(so_enddate, CURRENT_DATE) < 0 THEN 'OVER STAYING' ELSE CONCAT(DATEDIFF(so_enddate,CURRENT_DATE), ' DAYS REMAING') END AS so_durationstatus,
+    so_startdate,
+    so_enddate,
+    so_status
+    FROM staffhouse_occupant
+    INNER JOIN staffhouse ON s_id = so_staffhouseid
+    INNER JOIN master_employee ON me_id = so_employeeid`;
 
     Select(sql, (err, result) => {
       if (err) {

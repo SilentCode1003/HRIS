@@ -250,13 +250,19 @@ router.post("/ovetimeaction", (req, res) => {
         {
           employeename: employeeid,
           date: attendancedate,
-          timein: timein,
-          timeout: timeout,
           reason: comment,
           requesttype: REQUEST.OVERTIME,
         },
       ];
-      SendEmailNotificationEmployee(employeeid, subgroupid, emailbody);
+
+      console.log(emailbody);
+
+      SendEmailNotificationEmployee(
+        employeeid,
+        subgroupid,
+        REQUEST.OVERTIME,
+        emailbody
+      );
 
       res.json(JsonSuccess());
     });
