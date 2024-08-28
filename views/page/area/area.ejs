@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-footer">
+    <div class="row card-header">
+      <h3 class="card-title mb-0 font-weight-bold">Area</h3>
+    </div>
+    <div class="row mb-2 mt-2">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            autocomplete="off"
+            id="area"
+            class="form-control"
+            placeholder="Input Area Name"
+            type="text"
+            name="area"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">Area</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-mt-2">
+      <div class="col-md-6 justify-content-center">
+        <button id="addBtn" name="addBtn" class="btn btn-add-color w-25">
+          Add
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">
+        <h6 class="m-0 font-weight-bold">Area Table</h6>
+      </div>
+      <div class="row">
+        <div class="table-responsive">
+            <table id="data-table" class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

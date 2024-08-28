@@ -147,6 +147,7 @@ var staffhouseRouter = require("./routes/staffhouse");
 var staffhouseoccupantRouter = require("./routes/staffhouseoccupant");
 var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
 var staffhousehistoryRouter = require("./routes/staffhousehistory");
+var areaRouter = require("./routes/area");
 
 var app = express();
 
@@ -302,6 +303,7 @@ app.use("/staffhouse", staffhouseRouter);
 app.use("/staffhouseoccupant", staffhouseoccupantRouter);
 app.use("/occupantdurationsetting", occupantdurationsettingRouter);
 app.use("/staffhousehistory", staffhousehistoryRouter);
+app.use("/area", areaRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

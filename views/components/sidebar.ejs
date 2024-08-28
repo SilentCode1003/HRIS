@@ -479,6 +479,42 @@
       </div>
     </div>
   </li>
+
+  <!-- Deployed Employee -->
+  <li class="nav-item sidebar-item">
+    <a
+      class="nav-link collapsed"
+      data-toggle="collapse"
+      data-target="#collapsedeployemployee"
+      aria-expanded="true"
+      aria-controls="collapsedeployemployee"
+    >
+      <lord-icon
+          src="https://cdn.lordicon.com/egmlnyku.json"
+          trigger="hover"
+          colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff"
+          class="db-icon-hrmis">
+      </lord-icon>
+      <span><b>Deployed Employee</b></span></a
+    >
+
+    <div
+      id="collapsedeployemployee"
+      class="collapse"
+      aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar"
+    >
+      <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+        <div class="sidebar-heading">AREA SETTINGS:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/area">Area</a>
+        <br />
+        <div class="sidebar-heading">ASSIGNED TO AREA:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/deployemployee">Deploy Employee</a>
+      </div>
+    </div>
+  </li>
   <% }%> <%if (accesstype == 'Payroll' || accesstype == 'Admin') {%>
   <!-- Divider -->
   <hr class="sidebar-divider my-0" />
