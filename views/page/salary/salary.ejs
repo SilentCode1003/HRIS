@@ -129,44 +129,52 @@
                       <label for="floatingSelectGrid">Employee</label>
                   </div>
               </div>
-                <br>
-                <div class="col">
+              <br>
+              <div class="col">
                 <div class="form-floating">
                   <input type="text" class="form-control border-form-modal" id="editmsemp" 
                   name="editmsemp" placeholder="Monthly Salary" oninput="formatPrice(event, this)">
                   <label for="editmsemp">Edit Monthly Or Daily Salary</label>
+                </div>
+              </div>                                       
+              <br>
+              
+              <div class="col">
+                  <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal" id="editallowances" name="editallowances"
+                          placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
+                      <label for="editallowances">Edit Monthly Allowances</label>
+                     
+                  </div>
               </div>
-            </div>                                       
-            <br>
-            <div class="col">
+              <br>
+              <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control border-form-modal" id="editallowances" name="editallowances"
-                        placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
-                    <label for="editallowances">Edit Monthly Allowances</label>
+                  <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
+                  placeholder="Adjustments" oninput="formatPrice(event, this)">
+              <label for="editadjustments">Edit Adjustments</label>
+                </div>
+              </div>
+
+              <br> 
+              <div class="col">
+                <div class="form-floating">
                     <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
-                        placeholder="Adjustments" oninput="formatPrice(event, this)">
-                    <label for="editadjustments">Edit Adjustments</label>
+                        placeholder="Adjustments">
+                    <label for="editallowances" oninput="formatPrice(event, this)">Edit Adjustments</label>
                 </div>
             </div>                 
             <br> 
             <div class="col">
               <div class="form-floating">
-                  <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
-                      placeholder="Adjustments">
-                  <label for="editallowances" oninput="formatPrice(event, this)">Edit Adjustments</label>
+                  <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
+                    <option value="Daily">Daily</option>
+                    <option value="Monthly">Monthly</option>
+                  </select>
+                  <label for="floatingSelectGrid">Edit Payroll Type</label>
               </div>
-          </div>                 
-          <br> 
-          <div class="col">
-            <div class="form-floating">
-                <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
-                  <option value="Daily">Daily</option>
-                  <option value="Monthly">Monthly</option>
-                </select>
-                <label for="floatingSelectGrid">Edit Payroll Type</label>
-            </div>
-        </div>
-          <br>    
+          </div>
+            <br>    
           </form>
       </div>
       <div class="modal-footer" id="modal-footer">

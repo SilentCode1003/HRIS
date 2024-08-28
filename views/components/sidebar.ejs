@@ -449,10 +449,11 @@
       aria-controls="collapseemployeerotation"
     >
       <lord-icon
-          src="https://cdn.lordicon.com/egmlnyku.json"
-          trigger="hover"
-          colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff"
-          class="db-icon-hrmis">
+        src="https://cdn.lordicon.com/egmlnyku.json"
+        trigger="hover"
+        colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff"
+        class="db-icon-hrmis"
+      >
       </lord-icon>
       <span><b>Employee Rotation</b></span></a
     >
@@ -467,15 +468,57 @@
         <div class="sidebar-heading">OCCUPANT SETTINGS:</div>
         <hr class="sidebar-divider my-0" />
         <a class="collapse-item" href="/staffhouse">Staffhouse</a>
-        <a class="collapse-item" href="/occupantdurationsetting">Duration Setting</a>
+        <a class="collapse-item" href="/occupantdurationsetting"
+          >Duration Setting</a
+        >
         <br />
         <div class="sidebar-heading">OCCUPANT:</div>
         <hr class="sidebar-divider my-0" />
-        <a class="collapse-item" href="/staffhouseoccupant">Register Occupants</a>
+        <a class="collapse-item" href="/staffhouseoccupant"
+          >Register Occupants</a
+        >
         <br />
         <div class="sidebar-heading">History:</div>
         <hr class="sidebar-divider my-0" />
         <a class="collapse-item" href="/staffhousehistory">Occupant History</a>
+      </div>
+    </div>
+  </li>
+
+  <!-- Deployed Employee -->
+  <li class="nav-item sidebar-item">
+    <a
+      class="nav-link collapsed"
+      data-toggle="collapse"
+      data-target="#collapsedeployemployee"
+      aria-expanded="true"
+      aria-controls="collapsedeployemployee"
+    >
+      <lord-icon
+        src="https://cdn.lordicon.com/iikoxwld.json"
+        trigger="hover"
+        colors="primary:#121331,secondary:#f4dc9c,tertiary:#e83a30,quaternary:#c76f16,quinary:#1663c7,senary:#4d2c19,septenary:#ffffff"
+        class="db-icon-hrmis"
+      >
+      </lord-icon>
+
+      <span><b>Deployed Employee</b></span></a
+    >
+
+    <div
+      id="collapsedeployemployee"
+      class="collapse"
+      aria-labelledby="headingTwo"
+      data-parent="#accordionSidebar"
+    >
+      <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+        <div class="sidebar-heading">AREA SETTINGS:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/area">Area</a>
+        <br />
+        <div class="sidebar-heading">ASSIGNED TO AREA:</div>
+        <hr class="sidebar-divider my-0" />
+        <a class="collapse-item" href="/areadeployemployee">Deploy Employee</a>
       </div>
     </div>
   </li>
