@@ -1,9 +1,9 @@
 <script>
   $(document).ready(function () {
     let id = "";
-    let name = "";
     let status = "";
 
+    LoadList();
     LoadTable();
 
     $("#data-table tbody").on("click", "tr", function () {
@@ -15,16 +15,20 @@
           dataRow.push($(this).text());
         });
       id = dataRow[0];
-      name = dataRow[1];
-      status = dataRow[2];
+      status = dataRow[4];
     });
 
     $(document).on("click", "#addBtn", function () {
-      let area = $("#area").val();
+      let area = $("#areaID").val();
+      let employee = $("#employeeID").val();
       let message = "";
 
       if (area == "") {
         message += "Area ";
+      }
+
+      if (employee == "") {
+        message += "Employee ";
       }
 
       if (message != "") {
@@ -32,9 +36,10 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/area/save",
+          url: "/areadeployemployee/save",
           data: {
             area: area,
+            employee: employee,
           },
           success: function (result) {
             if (result.status == "Success") {
@@ -51,13 +56,12 @@
       }
     });
 
-    
     $(document).on("click", "#inactiveBtn", function () {
       console.log(id, status);
 
       $.ajax({
         type: "POST",
-        url: "/area/status",
+        url: "/areadeployemployee/status",
         data: {
           id: id,
           status: status,
@@ -82,7 +86,7 @@
 
       $.ajax({
         type: "POST",
-        url: "/area/status",
+        url: "/areadeployemployee/status",
         data: {
           id: id,
           status: status,
@@ -106,38 +110,63 @@
       filterTableRows("#data-table", 7, "#search");
     });
 
-    $(document).on("click", "#editBtn", function () {
-      $("#namemodal").val(name);
-      $("#editModal").modal("show");
-    });
-
-    $(document).on("click", "#updateBtn", function () {
-      let name = $("#namemodal").val();
-
+    function LoadList() {
       $.ajax({
-        type: "POST",
-        url: "/area/edit",
-        data: {
-          id: id,
-          name: name,
-        },
+        type: "GET",
+        url: "/area/load",
         success: function (result) {
-          if (result.status == "Success") {
-            success("Success", result.message);
-            LoadTable();
-            $("#editDateModal").modal("hide");
-          } else {
-            warning("Warning", result.message);
-          }
+          let activeData = [];
+          let dropdownID = "areaDropdown";
+          let inputID = "area";
+          let hiddenID = "areaID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status === "Active") {
+              let name = item.name;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
         },
         error: function (err) {
           warning("Warning", err);
         },
       });
-    });
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "employeeDropdown";
+          let inputID = "employee";
+          let hiddenID = "employeeID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status != "resigned") {
+              let name = item.fullname;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    }
 
     function LoadTable() {
-
       $("#data-table").DataTable({
         destroy: true,
         processing: true,
@@ -149,7 +178,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/area/load",
+          url: "/areadeployemployee/load",
           dataSrc: (json) => {
             let finalData = [];
             let data = json.data;
@@ -158,16 +187,16 @@
               let action = "";
 
               if (item.status == "Active") {
-                action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>
-                <button id="editBtn" class="btn text-primary" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+                action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>`;
               } else {
-                action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>
-                <button id="editBtn" class="btn text-primary" name="editBtn"><i class="fas fa-pen" style="color: rgb(99, 115, 129);"></i></button>`;
+                action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>`;
               }
 
               finalData.push({
                 id: item.id,
-                name: item.name,
+                area: item.area,
+                employee: item.employee,
+                date: item.date,
                 status:
                   item.status == "Active"
                     ? `<div class="status-active"><span>${item.status}</span></div>`
@@ -181,7 +210,9 @@
         },
         columns: [
           { data: "id" },
-          { data: "name" },
+          { data: "area" },
+          { data: "employee" },
+          { data: "date" },
           { data: "status" },
           { data: "action" },
         ],

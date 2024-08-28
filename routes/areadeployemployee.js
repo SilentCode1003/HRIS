@@ -6,6 +6,7 @@ const {
   InsertStatement,
   SelectStatement,
   UpdateStatement,
+  GetCurrentDate,
 } = require("./repository/customhelper");
 const { InsertTable, Select, Update } = require("./repository/dbconnect");
 const { STATUS_LOG } = require("./repository/enums");
@@ -15,22 +16,29 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  Validator(req, res, "arealayout", "area");
+  Validator(req, res, "areadeployemployeelayout", "areadeployemployee");
 });
 
 module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
-    let sql = `SELECT * FROM area`;
-
+    let sql = `SELECT 
+            ade_id,
+            CONCAT(me_firstname, " ", me_lastname) as ade_employee,
+            a_name as ade_area,
+            ade_date,
+            ade_status 
+            FROM area_deploy_employee
+            INNER JOIN master_employee ON ade_employeeid = me_id
+            INNER JOIN area ON ade_areaid = a_id`;
     Select(sql, (err, results) => {
       if (err) {
         console.error("Error: ", err);
       }
 
       if (results.length != 0) {
-        let data = DataModeling(results, "a_");
+        let data = DataModeling(results, "ade_");
 
         res.status(200).json({
           status: "Success",
@@ -47,15 +55,38 @@ router.get("/load", (req, res) => {
 
 router.post("/save", (req, res) => {
   try {
-    const { area } = req.body;
+    const { area, employee } = req.body;
     let status = STATUS_LOG.ACTIVE;
-    let sql = InsertStatement("area", "a", ["name", "status"]);
-    let data = [[area,status]];
+    let date = GetCurrentDate();
+    let sql = InsertStatement("area_deploy_employee", "ade", [
+      "areaid",
+      "employeeid",
+      "date",
+      "status",
+    ]);
+    let data = [[area, employee, date, status]];
 
     InsertTable(sql, data, (err, results) => {
       if (err) {
         console.error("Error: ", err);
       }
+      console.log(results);
+
+      let history = InsertStatement("deploy_history_employee", "dhe", [
+        "areadeployid",
+        "date",
+        "status",
+      ]);
+      let history_data = [[results[0].id, date, status]];
+
+      InsertTable(history, history_data, (err, results) => {
+        if (err) {
+          console.error("Error: ", err);
+        }
+      });
+
+      console.log(results);
+
       res.status(200).json({ status: "Success", message: "Data Saved" });
     });
   } catch (error) {
@@ -69,7 +100,12 @@ router.post("/status", function (req, res, next) {
     let status_new =
       status == "Active" ? STATUS_LOG.INACTIVE : STATUS_LOG.ACTIVE;
 
-    let cmd = UpdateStatement("area", "a", ["status"], ["id"]);
+    let cmd = UpdateStatement(
+      "area_deploy_employee",
+      "ade",
+      ["status"],
+      ["id"]
+    );
     let data = [status_new, id];
 
     Update(cmd, data, (err, result) => {
@@ -89,28 +125,5 @@ router.post("/status", function (req, res, next) {
       status: "Error",
       message: error,
     });
-  }
-});
-
-
-router.post("/edit", (req, res) => {
-  try {
-    const { id, name } = req.body;
-    let update_sql = UpdateStatement(
-      "area",
-      "a",
-      ["name"],
-      ["id"]
-    );
-    let update_data = [name, id];
-    Update(update_sql, update_data, (err, results) => {
-      if (err) {
-        console.error("Error: ", err);
-      }
-
-      res.status(200).json({ status: "Success", message: "Data Updated" });
-    });
-  } catch (error) {
-    res.status(500).json({ status: 500, message: "Internal Server Error" });
   }
 });
