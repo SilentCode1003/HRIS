@@ -478,8 +478,6 @@ router.get("/totalcoa", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "ar_");
 
@@ -522,8 +520,6 @@ router.get("/totalotmeal", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
@@ -562,8 +558,6 @@ router.get("/totalot", (req, res) => {
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error :!!", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
@@ -655,8 +649,6 @@ router.get("/totalrestdayot", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
@@ -670,7 +662,6 @@ router.get("/totalrestdayot", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.get("/totalholiday", (req, res) => {
   try {
@@ -698,8 +689,6 @@ router.get("/totalholiday", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");

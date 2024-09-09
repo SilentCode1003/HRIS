@@ -8,10 +8,11 @@ const {
 } = require("./repository/response");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
-const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
+
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -78,7 +79,7 @@ router.post("/loadheader", (req, res) => {
 //         res.json(JsonErrorResponse(err));
 //       }
 
-//       console.log(result);
+//
 
 //       if (result != 0) {
 //         let data = DataModeling(result, "ms_");
@@ -215,7 +216,7 @@ router.get("/loadapproved", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "l_");
@@ -254,8 +255,6 @@ router.post("/getleavedates", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ld_");
@@ -455,7 +454,7 @@ router.post("/submit", async (req, res) => {
             requesttype: REQUEST.LEAVE,
           },
         ];
-        SendEmailNotification(subgroup, emailbody);
+        SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
 
         res.json({ msg: "success" });
       }
@@ -564,7 +563,6 @@ router.get("/loadleavetype", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -589,7 +587,6 @@ router.post("/getunusedleave", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -624,7 +621,6 @@ router.post("/loadleavetypeforapp", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

@@ -85,7 +85,6 @@ router.post("/loadleavestatus", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -116,7 +115,6 @@ router.post("/loadwork", (req, res) => {
     mysql.Select(sql, "Master_Employee_Background", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -147,7 +145,6 @@ router.post("/loadeduc", (req, res) => {
     mysql.Select(sql, "Master_Employee_Background", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

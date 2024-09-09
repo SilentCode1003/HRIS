@@ -12,7 +12,7 @@ const {
   SelectStatement,
   InsertStatement,
 } = require("./repository/customhelper");
-const { REQUEST } = require("./repository/dictionary");
+const { REQUEST } = require("./repository/enums");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
@@ -134,8 +134,6 @@ router.post("/leaveaction", (req, res) => {
     mysql.InsertTable("leave_request_activity", data, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       let emailbody = [
         {
           employeename: employeeid,
@@ -197,7 +195,7 @@ router.post("/leaveaction", (req, res) => {
 
 //     Check(checkStatement)
 //       .then((result) => {
-//         console.log(result);
+//
 //         if (result != 0) {
 //           return res.json(JsonWarningResponse(MessageStatus.EXIST));
 //         } else {
@@ -209,7 +207,7 @@ router.post("/leaveaction", (req, res) => {
 
 //             res.json(JsonSuccess());
 
-//             console.log(result);
+//
 //           });
 //         }
 //       })

@@ -8,10 +8,10 @@ const {
   JsonDataResponse,
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -76,16 +76,6 @@ router.post("/submit", async (req, res) => {
 
     let total = calculateTotalHours(timein, timeout);
 
-    console.log(
-      attendancedate,
-      timein,
-      timeout,
-      reason,
-      employeeid,
-      file,
-      approvedcount
-    );
-
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
     if (inputDate > Datenow) {
@@ -132,10 +122,11 @@ router.post("/submit", async (req, res) => {
             timein: timein,
             timeout: timeout,
             reason: reason,
+            status: status,
             requesttype: REQUEST.COA,
           },
         ];
-        SendEmailNotification(subgroupid, REQUEST.COA, emailbody);
+        SendEmailNotification(employeeid,subgroupid, REQUEST.COA, emailbody);
 
         res.json({ msg: "success" });
       }
@@ -166,7 +157,6 @@ router.post("/getreqCOA", (req, res) => {
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -248,7 +238,7 @@ router.get("/loadapproved", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -288,7 +278,7 @@ router.get("/loadrejected", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -328,7 +318,7 @@ router.get("/loadcancelled", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");

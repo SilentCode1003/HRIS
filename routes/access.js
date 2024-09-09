@@ -91,8 +91,6 @@ router.post("/save", (req, res) => {
           return;
         }
 
-        console.log(result);
-
         res.json({ msg: "success" });
       });
     });
@@ -118,8 +116,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
         });

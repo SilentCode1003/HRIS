@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -42,8 +45,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "l_");

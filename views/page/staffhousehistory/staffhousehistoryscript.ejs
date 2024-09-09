@@ -1,0 +1,48 @@
+<script>
+  $(document).ready(function () {
+    LoadTable();
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 6, "#search");
+    });
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/staffhousehistory/load",
+          dataSrc: (json) => {
+            let finalData = [];
+            let data = json.data;
+
+            $.each(data, (key, item) => {
+              finalData.push({
+                id: item.id,
+                employee: item.employee,
+                staffhouse: item.staffhouse,
+                activity: item.activity,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "employee" },
+          { data: "staffhouse" },
+          { data: "activity" },
+        ],
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

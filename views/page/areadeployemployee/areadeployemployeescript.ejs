@@ -1,0 +1,223 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let status = "";
+
+    LoadList();
+    LoadTable();
+
+    $("#data-table tbody").on("click", "tr", function () {
+      let dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      id = dataRow[0];
+      status = dataRow[4];
+    });
+
+    $(document).on("click", "#addBtn", function () {
+      let area = $("#areaID").val();
+      let employee = $("#employeeID").val();
+      let message = "";
+
+      if (area == "") {
+        message += "Area ";
+      }
+
+      if (employee == "") {
+        message += "Employee ";
+      }
+
+      if (message != "") {
+        warning("Warning", `${message} is required!`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/areadeployemployee/save",
+          data: {
+            area: area,
+            employee: employee,
+          },
+          success: function (result) {
+            if (result.status == "Success") {
+              success("Success", result.message);
+              LoadTable();
+            } else {
+              warning("Warning", result.message);
+            }
+          },
+          error: function (err) {
+            warning("Warning", err);
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/areadeployemployee/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $(document).on("click", "#activeBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/areadeployemployee/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 7, "#search");
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/area/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "areaDropdown";
+          let inputID = "area";
+          let hiddenID = "areaID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status === "Active") {
+              let name = item.name;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "employeeDropdown";
+          let inputID = "employee";
+          let hiddenID = "employeeID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status != "resigned") {
+              let name = item.fullname;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    }
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/areadeployemployee/load",
+          dataSrc: (json) => {
+            let finalData = [];
+            let data = json.data;
+
+            $.each(data, (key, item) => {
+              let action = "";
+
+              if (item.status == "Active") {
+                action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>`;
+              } else {
+                action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>`;
+              }
+
+              finalData.push({
+                id: item.id,
+                area: item.area,
+                employee: item.employee,
+                date: item.date,
+                status:
+                  item.status == "Active"
+                    ? `<div class="status-active"><span>${item.status}</span></div>`
+                    : `<div class="status-inactive"><span>${item.status}</span></div>`,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "area" },
+          { data: "employee" },
+          { data: "date" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

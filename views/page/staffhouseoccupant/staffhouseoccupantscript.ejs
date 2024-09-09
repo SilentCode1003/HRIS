@@ -1,0 +1,348 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let startdate = "";
+    let enddate = "";
+    let staffhouse = "";
+
+    LoadTable();
+    LoadList();
+
+    $("#data-table tbody").on("click", "tr", function () {
+      let dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      id = dataRow[0];
+      staffhouse = dataRow[1];
+      startdate = dataRow[4];
+      enddate = dataRow[5];
+      status = dataRow[6];
+    });
+
+    $("#addBtn").on("click", function () {
+      let staffhouse = $("#staffhouseID").val();
+      let employee = $("#employeeID").val();
+      let startdate = $("#startdate").val();
+      let enddate = $("#enddate").val();
+      let message = "";
+
+      if (staffhouse == "") {
+        message += "Staffhouse ";
+      }
+
+      if (employee == "") {
+        message += "Employee ";
+      }
+
+      if (startdate == "") {
+        message += "Start Date ";
+      }
+
+      if (enddate == "") {
+        message += "End Date ";
+      }
+
+      if (message != "") {
+        warning("Warning", `${message} is required!`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/staffhouseoccupant/save",
+          data: {
+            staffhouse: staffhouse,
+            employee: employee,
+            startdate: startdate,
+            enddate: enddate,
+          },
+          success: function (result) {
+            if (result.status == "Success") {
+              success("Success", result.message);
+              LoadTable();
+            } else {
+              warning("Warning", result.message);
+            }
+          },
+          error: function (err) {
+            warning("Warning", err);
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/staffhouseoccupant/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $(document).on("click", "#activeBtn", function () {
+      console.log(id, status);
+
+      $.ajax({
+        type: "POST",
+        url: "/staffhouseoccupant/status",
+        data: {
+          id: id,
+          status: status,
+        },
+
+        success: function (res) {
+          if (res.status == "Success") {
+            success("Success", res.message);
+            LoadTable();
+          } else {
+            warning("Warning", res.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", "Server Error!");
+        },
+      });
+    });
+
+    $(document).on("click", "#editDateBtn", function () {
+      $("#startdatemodal").val(startdate);
+      $("#enddatemodal").val(enddate);
+      $("#editDateModal").modal("show");
+    });
+
+    $(document).on("click", "#transferBtn", function () {
+      $("#staffhousemodal").val(staffhouse);
+      $("#editStaffhouseModal").modal("show");
+    });
+
+    $(document).on("click", "#updateStaffhouseBtn", function () {
+      let staffhouseid = $("#staffhousemodalID").val();
+      let message = "";
+
+      if (staffhouse == "") {
+        message += "Staffhouse ";
+      }
+
+      if (message != "") {
+        warning("Warning", `${message} is required!`);
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/staffhouseoccupant/transfer",
+          data: {
+            id: id,
+            staffhousename: staffhouse,
+            staffhouse: staffhouseid,
+          },
+          success: function (result) {
+            if (result.status == "Success") {
+              success("Success", result.message);
+              LoadTable();
+              $("#editStaffhouseModal").modal("hide");
+            } else {
+              warning("Warning", result.message);
+            }
+          },
+          error: function (err) {
+            warning("Warning", err);
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#updateDateBtn", function () {
+      let startdate = $("#startdatemodal").val();
+      let enddate = $("#enddatemodal").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/staffhouseoccupant/datechange",
+        data: {
+          id: id,
+          startdate: startdate,
+          enddate: enddate,
+        },
+        success: function (result) {
+          if (result.status == "Success") {
+            success("Success", result.message);
+            LoadTable();
+            $("#editDateModal").modal("hide");
+          } else {
+            warning("Warning", result.message);
+          }
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    });
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/staffhouse/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "staffhouseDropdown";
+          let inputID = "staffhouse";
+          let hiddenID = "staffhouseID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status === "Active") {
+              let name = item.name;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "/staffhouse/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "staffhousemodalDropdown";
+          let inputID = "staffhousemodal";
+          let hiddenID = "staffhousemodalID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status === "Active") {
+              let name = item.name;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "employeeDropdown";
+          let inputID = "employee";
+          let hiddenID = "employeeID";
+          let container = result.data;
+          //console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status != "resigned") {
+              let name = item.fullname;
+              let id = item.id;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    }
+
+    $("#search").on("input", function () {
+      filterTableRows("#data-table", 7, "#search");
+    });
+
+    function LoadTable() {
+      $("#data-table").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/staffhouseoccupant/load",
+          dataSrc: (json) => {
+            let finalData = [];
+            let data = json.data;
+
+            $.each(data, (key, item) => {
+              let action = "";
+
+              if (item.status == "Active") {
+                action = `<button id="inactiveBtn" class="btn text-primary" name="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></button>
+                <button id="editDateBtn" class="btn text-primary" name="editDateBtn"><i class="fas fa-calendar-check" style="color: rgb(99, 115, 129);"></i></button>
+                 <button id="transferBtn" class="btn text-primary" name="transferBtn"><i class="fas fa-map-marked" style="color: rgb(99, 115, 129);"></i></button>`;
+              } else {
+                action = `<button id="activeBtn" class="btn text-primary" name="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>`;
+              }
+
+              finalData.push({
+                id: item.id,
+                staffhouseid: item.staffhouseid,
+                employeeid: item.employeeid,
+                durationstatus:
+                  item.durationstatus == "OVER STAYING"
+                    ? `<div class="status-warning"><span>${item.durationstatus}</span></div>`
+                    : `<div class="status-primary"><span>${item.durationstatus}</span></div>`,
+                startdate: item.startdate,
+                enddate: item.enddate,
+                status:
+                  item.status == "Active"
+                    ? `<div class="status-active"><span>${item.status}</span></div>`
+                    : `<div class="status-inactive"><span>${item.status}</span></div>`,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "staffhouseid" },
+          { data: "employeeid" },
+          { data: "durationstatus" },
+          { data: "startdate" },
+          { data: "enddate" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        initComplete: function () {},
+      });
+    }
+  });
+</script>

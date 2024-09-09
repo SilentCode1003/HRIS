@@ -246,6 +246,7 @@ router.get("/attendancestatus", (req, res) => {
   try {
     let sql = `
     SELECT
+    me.me_profile_pic as image,
     concat(me.me_lastname,' ',me.me_firstname) as FullName,
     TIME_FORMAT(ma.ma_clockin, '%h:%i %p') AS actual_clockin,
     CASE
@@ -1337,8 +1338,6 @@ router.post("/viewnotif", (req, res) => {
     mysql.Select(sql, "Admin_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -1529,7 +1528,7 @@ router.post("/searchemployee", (req, res) => {
     OR me_firstname LIKE '${search}%'
     OR me_lastname LIKE '${search}%'
     OR me_middlename LIKE '${search}%'`;
-    
+
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -1562,8 +1561,8 @@ router.post("/searchemployee", (req, res) => {
 //     const { search } = req.body;
 
 //     let sql = `
-//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic 
-//     FROM master_employee 
+//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic
+//     FROM master_employee
 //     WHERE 1`;
 
 //     if (search) {
@@ -1606,6 +1605,5 @@ router.post("/searchemployee", (req, res) => {
 //     });
 //   }
 // });
-
 
 //#endregion

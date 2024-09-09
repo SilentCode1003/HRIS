@@ -3,9 +3,19 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable, Update } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse, JsonWarningResponse, MessageStatus, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonWarningResponse,
+  MessageStatus,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { InsertStatement, SelectStatement, UpdateStatement } = require("./repository/customhelper");
+const {
+  InsertStatement,
+  SelectStatement,
+  UpdateStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -17,8 +27,6 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
-
 
 router.get("/load", (req, res) => {
   try {
@@ -51,8 +59,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-
-
 router.post("/save", (req, res) => {
   try {
     let createby = req.session.fullname;
@@ -68,13 +74,9 @@ router.post("/save", (req, res) => {
       "createby",
       "createdate",
     ]);
-    let data = [[ 
-      employeeid,
-      actualrddate,
-      targetrddate,
-      status,
-      createby,
-      createdate]];
+    let data = [
+      [employeeid, actualrddate, targetrddate, status, createby, createdate],
+    ];
 
     let checkStatement = SelectStatement(
       "select * from change_shift where cs_employeeid =? and cs_actualrd= ?",
@@ -85,7 +87,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -108,7 +109,6 @@ router.post("/save", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getchange_shift", (req, res) => {
   try {
@@ -143,12 +143,10 @@ router.post("/getchange_shift", (req, res) => {
   }
 });
 
-
-
 router.put("/edit", (req, res) => {
   try {
-    const { changeshift, employeeid, 
-      actualrd, changerd, shiftstatus,} = req.body;
+    const { changeshift, employeeid, actualrd, changerd, shiftstatus } =
+      req.body;
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 
@@ -181,7 +179,6 @@ router.put("/edit", (req, res) => {
       columns.push("createby");
     }
 
-
     if (createdate) {
       data.push(createdate);
       columns.push("createdate");
@@ -192,7 +189,6 @@ router.put("/edit", (req, res) => {
       arguments.push("id");
     }
 
-
     let updateStatement = UpdateStatement(
       "change_shift",
       "cs",
@@ -200,26 +196,22 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-
-
-    console.log(updateStatement,'Update');
+    console.log(updateStatement, "Update");
 
     let checkStatement = SelectStatement(
       "select * from change_shift where cs_employeeid = ? and cs_actualrd = ? and cs_changerd = ? and cs_shiftstatus = ? and cs_createby = ? and cs_createdate = ?",
       [employeeid, actualrd, changerd, shiftstatus, createby, createdate]
     );
 
-    console.log(checkStatement,'check');
+    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
-        Update(updateStatement, data, (err, result) => {
+          Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            console.log(result);
 
             res.json(JsonSuccess());
           });
@@ -235,7 +227,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
 // router.post("/update", (req, res) => {
 //   try {
 //     let changeshift = req.body.changeshift;
@@ -246,7 +237,7 @@ router.put("/edit", (req, res) => {
 //     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 //     let shiftstatus = req.body.shiftstatus;
 
-//     let sql = `  UPDATE subgroup SET 
+//     let sql = `  UPDATE subgroup SET
 //     s_departmentid = '${departmentid}',
 //     s_name = '${subgroupname}',
 //     s_createby = '${createby}',
@@ -275,7 +266,6 @@ router.put("/edit", (req, res) => {
 //     console.log(error);
 //   }
 // });
-
 
 //#region FUNCTION
 function Check(sql) {

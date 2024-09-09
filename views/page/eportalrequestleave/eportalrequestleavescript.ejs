@@ -182,8 +182,8 @@
             var row = material_list_tbl.insertRow(1);
             var LEAVE_ID = row.insertCell(0);
             var LEAVE_TYPEID = row.insertCell(1);
-            var LEAVE_STARTDADTE = row.insertCell(2);
-            var LEAVE_ENDATE = row.insertCell(3);
+            var LEAVE_STARTDATE = row.insertCell(2);
+            var LEAVE_ENDDATE = row.insertCell(3);
             var LEAVE_TYPE = row.insertCell(4);
             var REASON = row.insertCell(5);
             var APPLIEDDATE = row.insertCell(6);
@@ -191,32 +191,21 @@
 
             LEAVE_ID.innerHTML = item.leaveid;
             LEAVE_TYPEID.innerHTML = item.leavetypeid;
-            LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
-            LEAVE_ENDATE.innerHTML = item.leaveenddate;
+            LEAVE_STARTDATE.innerHTML = item.leavestartdate;
+            LEAVE_ENDDATE.innerHTML = item.leaveenddate;
             LEAVE_TYPE.innerHTML = item.leavetype;
             REASON.innerHTML = item.leavereason;
             APPLIEDDATE.innerHTML = item.leaveapplieddate;
             ACTION.innerHTML =
               '<button id="viewBtn" class="btn text-primary view-btn" data-bs-toggle="modal" data-bs-target="#viewleave"><i class="fas fa-fw fa-eye"></i></button>';
 
-            $("#dataTableleaveApproved tbody").on("click", "tr", function () {
-              var dataRow = [];
-              $(this)
-                .closest("tr")
-                .find("td")
-                .each(function () {
-                  dataRow.push($(this).text());
-                });
-              masterleaveid = dataRow[1];
-              console.log(dataRow);
-            });
-
+            // Apply styles
             $.each(
               [
                 LEAVE_ID,
                 LEAVE_TYPEID,
-                LEAVE_STARTDADTE,
-                LEAVE_ENDATE,
+                LEAVE_STARTDATE,
+                LEAVE_ENDDATE,
                 LEAVE_TYPE,
                 REASON,
                 APPLIEDDATE,
@@ -228,13 +217,29 @@
               }
             );
           });
+
+          // Event delegation for row click
+          $("#dataTableleaveApproved").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+              .find("td")
+              .each(function () {
+                dataRow.push($(this).text());
+              });
+            masterleaveid = dataRow[1]; // Update global variable
+            console.log("Selected Leave ID:", masterleaveid);
+          });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) {
+          console.error("Error fetching approved leaves:", status, error);
+        },
       });
     });
 
     $(document).on("click", "#viewBtn", function () {
       $("#dataTableLeaves").find("tr:gt(0)").remove();
+      console.log(masterleaveid, "leaveid");
+
       $.ajax({
         type: "POST",
         url: "eportalrequestleave/getleavedates",
@@ -247,12 +252,12 @@
           console.log(data, "data");
           material_list_tbl = document.getElementById("dataTableLeaves");
 
-          const TittleContainer = $("#TittleContainer");
-          TittleContainer.empty();
+          // const TittleContainer = $("#TittleContainer");
+          // TittleContainer.empty();
 
-          const firstItem = data;
-          const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.leavetype}</h3>`;
-          TittleContainer.append(cardHtml);
+          // const firstItem = data;
+          // const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.leavetype}</h3>`;
+          // TittleContainer.append(cardHtml);
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);

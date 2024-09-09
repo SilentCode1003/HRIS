@@ -2,7 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { REQUEST } = require("./repository/dictionary");
+const { REQUEST } = require("./repository/enums");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
@@ -167,7 +167,7 @@ router.get("/loadactionname", (req, res) => {
 //         return;
 //       }
 
-//       console.log(result);
+//
 
 //       let selectQuery = `
 //       SELECT

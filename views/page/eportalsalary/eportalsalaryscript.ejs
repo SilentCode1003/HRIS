@@ -6,6 +6,7 @@
   let globaltinid = "";
   let globalphilhealthid = "";
   let globalpagibigid = "";
+  let globalaccrued13thmonth = "";
   let globalemployeeid = "";
   let globalfullname = "";
   let globalposition = "";
@@ -50,6 +51,8 @@
   let globalcalamity_loan = "";
   let globalrestday_ot = "";
   let globalsalary_loan = "";
+  let globalnumlate = "";
+  let globalnumabsent = "";
   let globalsuddendedductionsName = [];
   let globalsuddendedductionsAmount = [];
 
@@ -170,6 +173,10 @@
             const existingData = result.data;
             console.log(existingData);
             $.each(existingData, (key, item) => {
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
               $("#employeename").text(item.fullname);
               $("#position").text(item.position);
               $("#department").text(item.department);
@@ -199,7 +206,9 @@
               $("#holidayday").text(item.holidaydays);
               $("#leavepaydadys").text(item.leaveday);
               $("#restdayot").text(item.restotday);
+              $("#13thmonthpay").text(formatToCurrency(item.accrued13thmonth));
             });
+            
 
             $.ajax({
               url: "eportalsalary/loaddinamicamount",
@@ -265,6 +274,8 @@
               globalphilhealthid = item.philhealthid;
               $("#payslipdeppagibigid").text(item.pagibigid);
               globalpagibigid = item.pagibigid;
+              $("#payslipheader13thmonthpay").text(item.accrued13thmonth);
+              globalaccrued13thmonth = item.accrued13thmonth;
               $("#payslippayrolltype").text(item.payrolltype);
               globalpayrolltype = item.payrolltype;
               $("#payslipid").text(item.employeeid);
@@ -351,6 +362,8 @@
                 formatToCurrency(item.absent_deductions)
               );
               globalabsentdeductions = item.absent_deductions;
+              $("#payslipnumabsent").html("<strong> ( " + item.absent + " )</strong>");
+              globalnumabsent = item.absent;
               $("#paysliphealthcard").text(formatToCurrency(item.healthcard));
               globalhealthcard = item.healthcard;
               $("#payslipcalamity").text(formatToCurrency(item.calamity_loan));
@@ -375,6 +388,8 @@
               globalrestday_ot = item.restday_ot;
               $("#paysliplate").text(formatToCurrency(item.late_deductions));
               globallatedeductions = item.late_deductions;
+              $("#payslipnumlate").html("<strong> ( " + item.latehours + " : " + item.lateminutes + " )</strong>");
+              globalnumlate = (item.latehours + " : " + item.lateminutes);
               $("#payslipsalaryloan").text(formatToCurrency(item.salary_loan));
               globalsalary_loan = item.salary_loan;
               $("#paysliptotaldeductions").text(
@@ -617,6 +632,9 @@
           globalshortterm_loan: globalshortterm_loan,
           globalsterling_loan: globalsterling_loan,
           globalhousing_loan: globalhousing_loan,
+          globalnumlate: globalnumlate,
+          globalnumabsent: globalnumabsent,
+          globalaccrued13thmonth: globalaccrued13thmonth,
         },
         dataType: "text",
         success: function (data) {

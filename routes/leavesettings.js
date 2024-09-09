@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const e = require("express");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
@@ -34,7 +37,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -137,7 +139,6 @@ router.post("/setleaveperemployee", async (req, res) => {
   }
 });
 
-
 router.post("/getleavedates", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
@@ -162,8 +163,6 @@ router.post("/getleavedates", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "ld_");
 
@@ -178,7 +177,6 @@ router.post("/getleavedates", (req, res) => {
   }
 });
 
-
 router.post("/getleavesettings", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
@@ -188,7 +186,6 @@ router.post("/getleavesettings", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

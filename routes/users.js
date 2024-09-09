@@ -212,8 +212,6 @@ router.post("/getisgeofencetrue", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "mu_");
 
@@ -250,8 +248,6 @@ router.post("/getusers", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "mu_");

@@ -47,8 +47,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "mq_");
 
@@ -109,7 +107,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result.length !== 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -155,8 +152,6 @@ router.post("/getquestion", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "mq_");

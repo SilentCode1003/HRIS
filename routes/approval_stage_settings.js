@@ -2,10 +2,20 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { JsonErrorResponse, JsonDataResponse, JsonWarningResponse, JsonSuccess, MessageStatus } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonWarningResponse,
+  JsonSuccess,
+  MessageStatus,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { Select, InsertTable, Update } = require("./repository/dbconnect");
-const { InsertStatement, SelectStatement, UpdateStatement } = require("./repository/customhelper");
+const {
+  InsertStatement,
+  SelectStatement,
+  UpdateStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -37,23 +47,21 @@ router.get("/load", (req, res) => {
     INNER JOIN master_department on aprroval_stage_settings.ats_departmentid = md_departmentid
     INNER JOIN subgroup on aprroval_stage_settings.ats_subgroupid = s_id`;
 
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "ats_");
-  
-          console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ats_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.json(JsonErrorResponse(error));
   }
@@ -68,7 +76,6 @@ router.post("/save", (req, res) => {
     let subgroupid = req.body.subgroupid;
     let createddate = currentDate.format("YYYY-MM-DD HH:mm:ss");
 
-
     let sql = InsertStatement("aprroval_stage_settings", "ats", [
       "accessid",
       "departmentid",
@@ -77,13 +84,9 @@ router.post("/save", (req, res) => {
       "createdby",
       "createddate",
     ]);
-    let data = [[
-      accessid,
-      departmentid, 
-      subgroupid,
-      count, 
-      createdby, 
-      createddate]];
+    let data = [
+      [accessid, departmentid, subgroupid, count, createdby, createddate],
+    ];
     let checkStatement = SelectStatement(
       "select * from aprroval_stage_settings where ats_accessid=? and ats_departmentid=? and ats_subgroupid=?",
       [accessid, departmentid, subgroupid]
@@ -91,7 +94,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -133,14 +135,11 @@ router.post("/getstagesettings", (req, res) => {
     INNER JOIN master_department on aprroval_stage_settings.ats_departmentid = md_departmentid
     WHERE  ats_id = '${approvalstage}'`;
 
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ats_");
@@ -159,11 +158,10 @@ router.post("/getstagesettings", (req, res) => {
   }
 });
 
-
-
 router.put("/edit", (req, res) => {
   try {
-    const { approvalstage, accessid, approvalcount, departmentid, subgroupid } = req.body;
+    const { approvalstage, accessid, approvalcount, departmentid, subgroupid } =
+      req.body;
 
     console.log(accessid);
     console.log(approvalstage);
@@ -221,8 +219,6 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            console.log(result);
-
             res.json(JsonSuccess());
           });
         }
@@ -237,8 +233,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -250,4 +244,3 @@ function Check(sql) {
   });
 }
 //#endregion
-

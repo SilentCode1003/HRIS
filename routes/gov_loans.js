@@ -52,8 +52,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "gl_");
 
@@ -88,8 +86,6 @@ router.get("/loadreq", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "pd_");
 
@@ -103,7 +99,6 @@ router.get("/loadreq", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/save", (req, res) => {
   try {
@@ -161,7 +156,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -172,9 +166,12 @@ router.post("/save", (req, res) => {
             }
 
             let loanId = insertResult[0].id;
-            let forecastDates = generateForecastDates(effective_date, adjusted_duration);
+            let forecastDates = generateForecastDates(
+              effective_date,
+              adjusted_duration
+            );
             let loanstatus = GetValue(NPD());
-            let payment_type = 'VIA PAYSLIP';
+            let payment_type = "VIA PAYSLIP";
 
             let detailsData = forecastDates.map((date) => [
               employeeid,
@@ -215,8 +212,6 @@ router.post("/save", (req, res) => {
   }
 });
 
-
-
 router.post("/getgovloans", (req, res) => {
   try {
     let govloanid = req.body.govloanid;
@@ -239,8 +234,6 @@ router.post("/getgovloans", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
@@ -278,8 +271,6 @@ router.post("/getgovloansadvanced", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
@@ -361,8 +352,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            console.log(result);
 
             res.json(JsonSuccess());
           });

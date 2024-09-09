@@ -725,7 +725,6 @@ router.post("/update", async (req, res) => {
     mysql
       .Update(sql)
       .then((result) => {
-        console.log(result);
         res.json({
           msg: "success",
           data: result,
@@ -762,8 +761,6 @@ router.post("/getdeductother", (req, res) => {
     mysql.Select(sql, "Master_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -797,8 +794,6 @@ router.post("/getleave", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -868,7 +863,6 @@ router.post("/gethealth", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -907,7 +901,6 @@ router.post("/gettraining", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -946,7 +939,6 @@ router.post("/gettrainingforapp", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -986,7 +978,6 @@ router.post("/getdisciplinary", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -1239,7 +1230,7 @@ function GetDepartment(name, callback) {
   let sql = `select * from master_department where md_departmentname='${name}'`;
   mysql.Select(sql, "Master_Department", (err, result) => {
     if (err) callback(err, null);
-    // console.log(result);
+    //
     callback(null, result);
   });
 }
@@ -1248,7 +1239,7 @@ function GetPosition(name, callback) {
   let sql = `select * from master_position where mp_positionname='${name}'`;
   mysql.Select(sql, "Master_Position", (err, result) => {
     if (err) callback(err, null);
-    // console.log(result);
+    //
     callback(null, result);
   });
 }
@@ -1301,7 +1292,6 @@ async function saveUserRecord(
 
       Check(checkStatement)
         .then((result) => {
-          console.log(result);
           if (result != 0) {
             return res.json(JsonWarningResponse(MessageStatus.EXIST));
           } else {

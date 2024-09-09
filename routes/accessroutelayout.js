@@ -30,12 +30,7 @@ router.get("/", function (req, res, next) {
   //   fullname: "DEV42",
   //   accesstype: "Admin",
   // });
-  Validator(
-    req,
-    res,
-    "accessroutelayout",
-    "accessroutelayout"
-  );
+  Validator(req, res, "accessroutelayout", "accessroutelayout");
 });
 
 module.exports = router;
@@ -60,7 +55,7 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "marl_");
@@ -80,7 +75,7 @@ router.get("/load", (req, res) => {
 router.post("/save", (req, res) => {
   console.log("HIT");
   try {
-    let status = 'ACTIVE';
+    let status = "ACTIVE";
     let createdby =
       req.session.personelid == null ? "DEV42" : req.session.personelid;
     let createddate = GetCurrentDatetime();
@@ -98,7 +93,7 @@ router.post("/save", (req, res) => {
     ]);
 
     console.log(sql);
-    
+
     let data = [[route, layout, access, status, createdby, createddate]];
     let checkStatement = SelectStatement(
       "select * from master_access_route_layout where marl_route=? and marl_layout=? and marl_accessid=?",
@@ -107,7 +102,6 @@ router.post("/save", (req, res) => {
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
         if (result != 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
@@ -209,7 +203,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });

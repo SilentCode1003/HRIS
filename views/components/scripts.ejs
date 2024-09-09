@@ -74,6 +74,8 @@
 
 <!-- swal-->
 <script src="/javascripts/js/sweetalert.min.js"></script>
+<!-- Toastr-->
+<script src="javascripts/js/toastr.min.js"></script>
 
 <script src="/javascripts/js/scripts.js"></script>
 
@@ -106,53 +108,51 @@
 <!--PDF DOWNLOADER-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
 
-<script>
-  $(document).ready(function () {
-    $(document).on("click", "#logoutBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/login/logout",
-        success: function (result) {
-          swal({
-            title: "Ba Bye!!!",
-            text: "Log out Successfully",
-            icon: "success",
-            button: "Ba bye!!",
-          }).then((results) => {
-            window.location.reload();
-            location.replace("/");
-          });
-        },
-        error: function (err) {
-          errormsg(err);
-        },
-      });
-    });
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    $(document).on("click", "#logoutBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/ojtlogin/logout",
-        success: function (result) {
-          swal({
-            title: "Ba Bye!!!",
-            text: "Log out Successfully",
-            icon: "success",
-            button: "Ba bye!!",
-          }).then((results) => {
-            window.location.reload();
-            location.replace("/");
-          });
-        },
-        error: function (err) {
-          errormsg(err);
-        },
-      });
+<script>
+  $(document).on("click", "#logoutBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/login/logout",
+      success: function (result) {
+        swal({
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
+          icon: "success",
+          button: "Ba bye!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
     });
   });
-</script>
 
-<script>
+  $(document).on("click", "#logoutOjtBtn", function () {
+    $.ajax({
+      type: "POST",
+      url: "/ojtlogin/logout",
+      success: function (result) {
+        swal({
+          title: "Ba Bye!!!",
+          text: "Log out Successfully",
+          icon: "success",
+          button: "Ba bye!!",
+        }).then((results) => {
+          window.location.reload();
+          location.replace("/");
+        });
+      },
+      error: function (err) {
+        errormsg(err);
+      },
+    });
+  });
   function adjustTextareaHeight(textarea) {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
@@ -384,4 +384,197 @@
       noMatchRow.attr("id", "no-match-row");
     }
   }
+
+  //#region  Alerts
+
+  function success(title, text) {
+    toastr.success(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+  function info(title, message) {
+    swal({
+      title: title,
+      text: message,
+      icon: "info",
+      button: "OK!",
+    });
+  }
+  function warning(title, text) {
+    console.log(text);
+
+    toastr.warning(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "hide",
+    });
+  }
+  function errormsg(message) {
+    swal({
+      title: "Error",
+      text: message,
+      icon: "error",
+      button: "OK!",
+    });
+  }
+  function Loading(title) {
+    toastr.info(
+      `<strong>${title}</strong> <br>
+        <div style="text-align: center; margin-top: 5px;">
+          <div class="spinner-border" role="status" style="display: inline-block;">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>`,
+      null, // No title for the notification itself
+      {
+        closeButton: false,
+        debug: false,
+        newestOnTop: true,
+        progressBar: false,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "0", // Set to 0 to make it indefinite until manually cleared
+        timeOut: "0", // Set to 0 to make it indefinite until manually cleared
+        extendedTimeOut: "0", // Set to 0 to make it indefinite until manually cleared
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "hide",
+      }
+    );
+  }
+
+  function hideLoading() {
+    toastr.clear();
+    console.log("Toastr Cleared!");
+  }
+  //#endregion
+
+  //#region Dropdown
+  function AddDropdownData(dropdownID, activeData, inputID, hiddenID) {
+    for (const data of activeData) {
+      AddOption(dropdownID, data.display, data.value, inputID, hiddenID);
+    }
+  }
+
+  function AddOption(dropdownID, displayText, actualValue, inputID, hiddenID) {
+    const dropdownElement = document.getElementById(dropdownID);
+    const hiddenInput = document.getElementById(hiddenID);
+
+    const newOption = document.createElement("div");
+    newOption.className = "dropdown-option";
+    newOption.textContent = displayText;
+    newOption.setAttribute("data-value", actualValue);
+
+    newOption.addEventListener("click", function () {
+      const inputElement = document.getElementById(inputID);
+      inputElement.value = displayText;
+      hiddenInput.value = actualValue;
+      dropdownElement.style.display = "none";
+    });
+
+    dropdownElement.appendChild(newOption);
+
+    SetupDropdown(inputID, dropdownID, "dropdown-option");
+  }
+
+  function SetupDropdown(inputId, dropdownId, optionClass) {
+    const inputElement = document.getElementById(inputId);
+    const dropdownElement = document.getElementById(dropdownId);
+    const options = dropdownElement.getElementsByClassName(optionClass);
+
+    inputElement.addEventListener("click", function () {
+      dropdownElement.style.display = "block";
+    });
+
+    for (const option of options) {
+      option.addEventListener("click", function () {
+        inputElement.value = option.textContent;
+        const actualValue = option.getAttribute("data-value");
+        inputElement.setAttribute("data-actual-value", actualValue);
+        dropdownElement.style.display = "none";
+      });
+    }
+
+    inputElement.addEventListener("input", function () {
+      const value = inputElement.value.toUpperCase();
+      for (const option of options) {
+        if (option.textContent.toUpperCase().includes(value)) {
+          option.style.display = "block";
+        } else {
+          option.style.display = "none";
+        }
+      }
+      dropdownElement.style.display = "block";
+    });
+
+    document.addEventListener("click", function (event) {
+      const target = event.target;
+      if (!dropdownElement.contains(target) && target !== inputElement) {
+        dropdownElement.style.display = "none";
+      }
+    });
+  }
+  //#endregion
+
+  //#region Search Table
+  function filterTableRows(tablename, colcount, searchid) {
+    console.log("triggered search");
+
+    const searchQuery = $(searchid).val().trim().toLowerCase();
+    let foundMatches = false;
+
+    $("#no-match-row").remove();
+
+    $(tablename + " tbody tr").each(function () {
+      const rowData = $(this).text().toLowerCase();
+      if (rowData.includes(searchQuery)) {
+        $(this).show();
+        foundMatches = true;
+      } else {
+        $(this).hide();
+      }
+    });
+
+    if (!foundMatches) {
+      const noMatchRow = $("<tr>").append(
+        $("<td>", {
+          colspan: colcount,
+          class: "text-center",
+          text: "No Data Matched",
+        })
+      );
+      $(tablename + " tbody").append(noMatchRow);
+      noMatchRow.attr("id", "no-match-row");
+    }
+  }
+  //#endregion
 </script>

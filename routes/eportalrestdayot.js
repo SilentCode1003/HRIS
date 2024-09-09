@@ -12,7 +12,12 @@ const {
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const e = require("express");
-const { UpdateStatement, SelectStatement, GetCurrentDatetime, InsertStatement } = require("./repository/customhelper");
+const {
+  UpdateStatement,
+  SelectStatement,
+  GetCurrentDatetime,
+  InsertStatement,
+} = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -24,11 +29,10 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-
 router.get("/load", (req, res) => {
-    try {
-        let employeeid = req.session.employeeid;
-        let sql = `
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `
         SELECT 
             roa_rdotid,
             DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
@@ -42,34 +46,30 @@ router.get("/load", (req, res) => {
         WHERE roa_employeeid = '${employeeid}'
         AND roa_status = 'Pending'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.get("/loadapproved", (req, res) => {
-    try {
-        let employeeid = req.session.employeeid;
-        let sql = `
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `
         SELECT 
             roa_rdotid,
             DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
@@ -85,33 +85,30 @@ router.get("/loadapproved", (req, res) => {
         WHERE roa_employeeid = '${employeeid}'
         AND roa_status = 'Approved'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.get("/loadapplied", (req, res) => {
-    try {
-        let employeeid = req.session.employeeid;
-        let sql = `
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `
         SELECT 
             roa_rdotid,
             DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
@@ -127,34 +124,30 @@ router.get("/loadapplied", (req, res) => {
         WHERE roa_employeeid = '${employeeid}'
         AND roa_status = 'Applied'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
-
 router.get("/loadrejected", (req, res) => {
-    try {
-        let employeeid = req.session.employeeid;
-        let sql = `
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `
         SELECT 
             roa_rdotid,
             DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
@@ -170,33 +163,30 @@ router.get("/loadrejected", (req, res) => {
         WHERE roa_employeeid = '${employeeid}'
         AND roa_status = 'Rejected'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
 router.get("/loadcancelled", (req, res) => {
-    try {
-        let employeeid = req.session.employeeid;
-        let sql = `
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `
         SELECT 
             roa_rdotid,
             DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
@@ -212,33 +202,30 @@ router.get("/loadcancelled", (req, res) => {
         WHERE roa_employeeid = '${employeeid}'
         AND roa_status = 'Cancelled'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
 });
 
 router.post("/getrestdayot", (req, res) => {
-    try {
-        let rdotid = req.body.rdotid;
-        let sql = `SELECT
+  try {
+    let rdotid = req.body.rdotid;
+    let sql = `SELECT
         roa_rdotid,
         DATE_FORMAT(roa_timein, '%Y-%m-%d %H:%i:%s') AS roa_timein,
         DATE_FORMAT(roa_timeout, '%Y-%m-%d %H:%i:%s') AS roa_timeout,
@@ -252,44 +239,48 @@ router.post("/getrestdayot", (req, res) => {
         FROM restday_ot_approval
         WHERE roa_rdotid = '${rdotid}'`;
 
-        Select(sql, (err, result) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            }
-      
-            console.log(result);
-      
-            if (result != 0) {
-              let data = DataModeling(result, "roa_");
-      
-              console.log(data);
-              res.json(JsonDataResponse(data));
-            } else {
-              res.json(JsonDataResponse(result));
-            }
-          });
-    } catch (error) {
-        res.json(JsonErrorResponse(error));
-    }
-});
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 router.put("/edit", (req, res) => {
   try {
     let createdby = req.session.fullname;
     let createddate = GetCurrentDatetime();
-    const { rdotid, status, clockin, clockout, 
+    const {
+      rdotid,
+      status,
+      clockin,
+      clockout,
       total_hours,
-      attendancedate, payrolldate, 
-      subgroup, file, employeeid } = req.body;
+      attendancedate,
+      payrolldate,
+      subgroup,
+      file,
+      employeeid,
+    } = req.body;
 
     console.log(req.body);
 
     let data = [];
     let columns = [];
     let arguments = [];
-
 
     if (createdby) {
       data.push(createdby);
@@ -300,7 +291,6 @@ router.put("/edit", (req, res) => {
       data.push(createddate);
       columns.push("createdate");
     }
-
 
     if (total_hours) {
       data.push(total_hours);
@@ -369,7 +359,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });
@@ -385,7 +375,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-
 router.post("/save", async (req, res) => {
   try {
     let employeeid = req.session.employeeid;
@@ -396,17 +385,17 @@ router.post("/save", async (req, res) => {
     let payrolldate = req.body.payrolldate;
     let subgroupid = req.body.subgroupid;
     let file = req.body.file;
-    let status = 'Applied';
-    
+    let status = "Applied";
+
     let timeInDate = new Date(timein);
     let timeOutDate = new Date(timeout);
     let total_hours = 0;
-    
+
     if (timeInDate && timeOutDate && timeOutDate > timeInDate) {
       total_hours = (timeOutDate - timeInDate) / (1000 * 60 * 60);
-      total_hours = Math.floor(total_hours); 
+      total_hours = Math.floor(total_hours);
     }
-    
+
     let sqlSalary = `SELECT 
       CASE 
         WHEN ${total_hours} <= 3 THEN 0
@@ -449,22 +438,24 @@ router.post("/save", async (req, res) => {
         "approvalcount",
       ]);
 
-      let data = [[
-        employeeid,
-        fullname,
-        timein,
-        timeout,
-        attendancedate,
-        status,
-        total_hours,
-        ot_total,
-        file,
-        new Date().toISOString(),
-        employeeid,
-        payrolldate,
-        subgroupid,
-        0,
-      ]];
+      let data = [
+        [
+          employeeid,
+          fullname,
+          timein,
+          timeout,
+          attendancedate,
+          status,
+          total_hours,
+          ot_total,
+          file,
+          new Date().toISOString(),
+          employeeid,
+          payrolldate,
+          subgroupid,
+          0,
+        ],
+      ];
 
       let checkStatement = SelectStatement(
         "SELECT * FROM restday_ot_approval WHERE roa_employeeid=? AND roa_attendancedate=? AND roa_status=?",
@@ -496,9 +487,6 @@ router.post("/save", async (req, res) => {
   }
 });
 
-
-
-
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -510,9 +498,3 @@ function Check(sql) {
   });
 }
 //#endregion
-
-
-
-
-
-
