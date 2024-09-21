@@ -231,152 +231,160 @@ router.post("/getovertime", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `SELECT
-    pao_id AS approvalid,
-    CASE 
-        WHEN mh_date IS NOT NULL THEN mh_type
-        WHEN (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Monday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Tuesday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Wednesday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Thursday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Friday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Saturday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Sunday'
-        )
-        THEN 'Rest Day'
-        ELSE TIME_FORMAT(
-            JSON_UNQUOTE(JSON_EXTRACT(
-                CASE DAYNAME(pao_attendancedate)
-                    WHEN 'Monday' THEN ms_monday
-                    WHEN 'Tuesday' THEN ms_tuesday
-                    WHEN 'Wednesday' THEN ms_wednesday
-                    WHEN 'Thursday' THEN ms_thursday
-                    WHEN 'Friday' THEN ms_friday
-                    WHEN 'Saturday' THEN ms_saturday
-                    WHEN 'Sunday' THEN ms_sunday
-                END,
-                '$.time_in'
-            )),
-            '%h:%i %p'
-        )
-    END AS start_time,
-    CASE 
-        WHEN mh_date IS NOT NULL THEN mh_type
-        WHEN (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Monday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Tuesday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Wednesday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Thursday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Friday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Saturday'
-        ) OR (
-            JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_in')) = '00:00:00' 
-            AND JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_out')) = '00:00:00'
-            AND DAYNAME(pao_attendancedate) = 'Sunday'
-        )
-        THEN 'Rest Day'
-        ELSE TIME_FORMAT(
-            JSON_UNQUOTE(JSON_EXTRACT(
-                CASE DAYNAME(pao_attendancedate)
-                    WHEN 'Monday' THEN ms_monday
-                    WHEN 'Tuesday' THEN ms_tuesday
-                    WHEN 'Wednesday' THEN ms_wednesday
-                    WHEN 'Thursday' THEN ms_thursday
-                    WHEN 'Friday' THEN ms_friday
-                    WHEN 'Saturday' THEN ms_saturday
-                    WHEN 'Sunday' THEN ms_sunday
-                END,
-                '$.time_out'
-            )),
-            '%h:%i %p'
-        )
-    END AS end_time,
-    JSON_UNQUOTE(JSON_EXTRACT(
-        CASE DAYNAME(pao_attendancedate)
-            WHEN 'Monday' THEN ms_monday
-            WHEN 'Tuesday' THEN ms_tuesday
-            WHEN 'Wednesday' THEN ms_wednesday
-            WHEN 'Thursday' THEN ms_thursday
-            WHEN 'Friday' THEN ms_friday
-            WHEN 'Saturday' THEN ms_saturday
-            WHEN 'Sunday' THEN ms_sunday
-        END,
-        '$.time_in'
-    )) AS scheduledtimein,
-    JSON_UNQUOTE(JSON_EXTRACT(
-        CASE DAYNAME(pao_attendancedate)
-            WHEN 'Monday' THEN ms_monday
-            WHEN 'Tuesday' THEN ms_tuesday
-            WHEN 'Wednesday' THEN ms_wednesday
-            WHEN 'Thursday' THEN ms_thursday
-            WHEN 'Friday' THEN ms_friday
-            WHEN 'Saturday' THEN ms_saturday
-            WHEN 'Sunday' THEN ms_sunday
-        END,
-        '$.time_out'
-    )) AS scheduledtimeout,
-    mp_positionname AS positionname,
-    md_departmentname AS departmentname,
-    pao_fullname AS fullname,
-    DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS attendancedate,
-    DATE_FORMAT(pao_clockin, '%Y-%m-%dT%H:%i') AS clockin,
-    DATE_FORMAT(pao_clockout, '%Y-%m-%dT%H:%i') AS clockout,
-    pao_total_hours AS totalhours,
-    pao_early_ot AS earlyot,
-    pao_normal_ot AS normalot,
-    pao_night_differentials AS nightdiff,
-    DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS payrolldate,
-    pao_status AS status,
-    pao_night_hours_pay as nightotpay,
-    pao_normal_ot_pay as normalotpay,
-    pao_early_ot_pay as earlyotpay,
-    pao_total_ot_net_pay as totalotpay,
-    pao_reason AS reason,
-    pao_overtimeimage as overtimeimage
-FROM payroll_approval_ot
-INNER JOIN master_shift ON payroll_approval_ot.pao_employeeid = ms_employeeid
-INNER JOIN master_employee ON master_shift.ms_employeeid = me_id
-LEFT JOIN master_holiday ON pao_attendancedate = mh_date
-INNER JOIN master_department ON master_employee.me_department = md_departmentid
-INNER JOIN master_position ON master_employee.me_position = mp_positionid
-WHERE pao_id = '${approveot_id}'`;
+        pao_id AS approvalid,
+        CASE 
+            WHEN mh_date IS NOT NULL THEN mh_type
+            WHEN (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Monday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Tuesday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Wednesday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Thursday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Friday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Saturday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Sunday'
+            )
+            THEN 'Rest Day'
+            ELSE TIME_FORMAT(
+                JSON_UNQUOTE(JSON_EXTRACT(
+                    CASE DAYNAME(pao_attendancedate)
+                        WHEN 'Monday' THEN ms_monday
+                        WHEN 'Tuesday' THEN ms_tuesday
+                        WHEN 'Wednesday' THEN ms_wednesday
+                        WHEN 'Thursday' THEN ms_thursday
+                        WHEN 'Friday' THEN ms_friday
+                        WHEN 'Saturday' THEN ms_saturday
+                        WHEN 'Sunday' THEN ms_sunday
+                    END,
+                    '$.time_in'
+                )),
+                '%h:%i %p'
+            )
+        END AS start_time,
+        CASE 
+            WHEN mh_date IS NOT NULL THEN mh_type
+            WHEN (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_monday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Monday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_tuesday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Tuesday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_wednesday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Wednesday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_thursday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Thursday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_friday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Friday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_saturday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Saturday'
+            ) OR (
+                JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_in')) = '00:00:00' 
+                AND JSON_UNQUOTE(JSON_EXTRACT(ms_sunday, '$.time_out')) = '00:00:00'
+                AND DAYNAME(pao_attendancedate) = 'Sunday'
+            )
+            THEN 'Rest Day'
+            ELSE TIME_FORMAT(
+                JSON_UNQUOTE(JSON_EXTRACT(
+                    CASE DAYNAME(pao_attendancedate)
+                        WHEN 'Monday' THEN ms_monday
+                        WHEN 'Tuesday' THEN ms_tuesday
+                        WHEN 'Wednesday' THEN ms_wednesday
+                        WHEN 'Thursday' THEN ms_thursday
+                        WHEN 'Friday' THEN ms_friday
+                        WHEN 'Saturday' THEN ms_saturday
+                        WHEN 'Sunday' THEN ms_sunday
+                    END,
+                    '$.time_out'
+                )),
+                '%h:%i %p'
+            )
+        END AS end_time,
+        JSON_UNQUOTE(JSON_EXTRACT(
+            CASE DAYNAME(pao_attendancedate)
+                WHEN 'Monday' THEN ms_monday
+                WHEN 'Tuesday' THEN ms_tuesday
+                WHEN 'Wednesday' THEN ms_wednesday
+                WHEN 'Thursday' THEN ms_thursday
+                WHEN 'Friday' THEN ms_friday
+                WHEN 'Saturday' THEN ms_saturday
+                WHEN 'Sunday' THEN ms_sunday
+            END,
+            '$.time_in'
+        )) AS scheduledtimein,
+        JSON_UNQUOTE(JSON_EXTRACT(
+            CASE DAYNAME(pao_attendancedate)
+                WHEN 'Monday' THEN ms_monday
+                WHEN 'Tuesday' THEN ms_tuesday
+                WHEN 'Wednesday' THEN ms_wednesday
+                WHEN 'Thursday' THEN ms_thursday
+                WHEN 'Friday' THEN ms_friday
+                WHEN 'Saturday' THEN ms_saturday
+                WHEN 'Sunday' THEN ms_sunday
+            END,
+            '$.time_out'
+        )) AS scheduledtimeout,
+        mp_positionname AS positionname,
+        md_departmentname AS departmentname,
+        pao_fullname AS fullname,
+        DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS attendancedate,
+        DATE_FORMAT(pao_clockin, '%Y-%m-%dT%H:%i') AS clockin,
+        DATE_FORMAT(pao_clockout, '%Y-%m-%dT%H:%i') AS clockout,
+        pao_total_hours AS totalhours,
+        pao_early_ot AS earlyot,
+        pao_normal_ot AS normalot,
+        pao_night_differentials AS nightdiff,
+        DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS payrolldate,
+        pao_status AS status,
+        pao_night_hours_pay as nightotpay,
+        pao_normal_ot_pay as normalotpay,
+        pao_early_ot_pay as earlyotpay,
+        pao_total_ot_net_pay as totalotpay,
+        pao_reason AS reason,
+        pao_overtimeimage as overtimeimages,
+            (
+            SELECT ora_commnet 
+            FROM overtime_request_activity 
+            WHERE ora_overtimeid = pao_id
+            ORDER BY ora_date DESC
+            LIMIT 1
+        ) AS comment
+        FROM payroll_approval_ot
+        INNER JOIN master_shift ON payroll_approval_ot.pao_employeeid = ms_employeeid
+        INNER JOIN master_employee ON master_shift.ms_employeeid = me_id
+        LEFT JOIN master_holiday ON pao_attendancedate = mh_date
+        INNER JOIN master_department ON master_employee.me_department = md_departmentid
+        INNER JOIN master_position ON master_employee.me_position = mp_positionid
+        WHERE pao_id = '${approveot_id}'
+        LIMIT 1`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1391,6 +1399,9 @@ router.post("/getattendancedate", (req, res) => {
     console.log(attendancedate);
     let sql = `SELECT
     ma_attendanceid as pao_attendanceid,
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
+    ma_attendancedate as pao_attendancedate,
     CASE 
         WHEN mh_date IS NOT NULL THEN mh_type
         WHEN (

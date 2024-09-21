@@ -195,7 +195,6 @@ router.post("/loadpayslip", (req, res) => {
     p_restotday, 
     p_fullname, 
     p_remaining_leave, 
-    p_image, 
     p_position, 
     p_department, 
     p_payrolltype, 

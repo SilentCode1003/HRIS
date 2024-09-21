@@ -557,6 +557,24 @@
   transform: scale(1.1);
 }
 
+
+.btn-load-color {
+  float: right;
+  border-radius: 8px;
+  width: 100%;
+  height: 33px;
+  background-color: #3b75e0 !important;
+  border: 2px solid #fef8ea !important;
+  color: white !important;
+  text-shadow: 1px 1px 1px black !important;
+  font-size: 15px !important;
+}
+
+.btn-load-color:hover {
+  background-color: #3b75e0 !important;
+  transform: scale(1.1);
+}
+
 /* .btn-eportal-color h6 {
     font-weight: bold;
     font-family: 'Times New Roman';

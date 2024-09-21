@@ -8,6 +8,7 @@ const Holidays = require("date-holidays");
 const {
   UpdateStatement,
   SelectStatement,
+  InsertStatement,
 } = require("./repository/customhelper");
 const {
   JsonWarningResponse,
@@ -15,7 +16,7 @@ const {
   JsonSuccess,
   JsonErrorResponse,
 } = require("./repository/response");
-const { Update, Select } = require("./repository/dbconnect");
+const { Update, Select, InsertTable } = require("./repository/dbconnect");
 const holidaysPH = new Holidays("PH");
 
 /* GET home page. */
@@ -53,6 +54,55 @@ const getDOLEType = (holiday) => {
     ? "Non-Working Holiday"
     : "Regular Holiday";
 };
+
+router.post("/add", (req, res) => {
+  console.log("HIT");
+  try {
+    const { date, name, day, type } = req.body;
+    let status = 'Incoming';
+
+    console.log(req.body);
+
+    let sql = InsertStatement("master_holiday", "mh", [
+      "date",
+      "name",
+      "day",
+      "type",
+      "status",
+    ]);
+
+    console.log(sql);
+
+    let data = [[date, name, day, type, status]];
+    let checkStatement = SelectStatement(
+      "select * from master_holiday where mh_date=?",
+      [date]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
 
 // router.post("/generateholiday", async (req, res) => {
 //   try {
@@ -265,44 +315,6 @@ router.post("/getholiday", (req, res) => {
     });
   }
 });
-
-// router.post("/update", (req, res) => {
-//   try {
-//     let holidayid = req.body.holidayid;
-//     let day = req.body.day;
-//     let date = req.body.date;
-//     let name = req.body.name;
-//     let type = req.body.type;
-//     let sql = `UPDATE master_holiday SET
-//     mh_day = '${day}',
-//     mh_name = '${name}',
-//     mh_date = '${date}',
-//     mh_type = '${type}'
-//     where mh_holidayid = '${holidayid}'`;
-
-//     console.log(sql);
-
-//     mysql
-//       .Update(sql)
-//       .then((result) => {
-//
-//         res.json({
-//           msg: "success",
-//           data: result,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: "error",
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: error,
-//     });
-//   }
-// });
 
 router.put("/edit", (req, res) => {
   try {

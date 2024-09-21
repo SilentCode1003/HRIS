@@ -95,6 +95,107 @@
       });
     }
 
+    function addgetDayName(dateString) {
+      const date = new Date(dateString);
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      return days[date.getUTCDay()];
+    }
+
+    $("#addholidaydate").on("change", function () {
+      const selectedDate = $(this).val();
+      if (selectedDate) {
+        const dayName = addgetDayName(selectedDate);
+        $("#addholidayday").val(dayName);
+      } else {
+        $("#addholidayday").val("");
+      }
+    });
+
+    $(document).on("click", "#addholidaysavebtn", function () {
+      console.log('HIT');
+      
+      let id = holidayid;
+      let day = $("#addholidayday").val();
+      let date = $("#addholidaydate").val();
+      let name = $("#addholidayname").val();
+      let type = $("#addholidaytype").val();
+
+      var message = "";
+
+      if (day === "") {
+        message += "day is required. ";
+      }
+
+      if (date === "") {
+        message += "date is required. ";
+      }
+
+      if (name === "") {
+        message += "name is required. ";
+      }
+
+      if (type === "") {
+        message += "type is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        day = day.replace(/[^a-zA-Z0-9\s]/g, '');
+        date = date.replace(/[^0-9\-]/g, '');
+        name = name.replace(/[^a-zA-Z0-9\s]/g, '');
+        //type = type.replace(/[^a-zA-Z0-9\s]/g, '');
+        $.ajax({
+          type: "POST",
+          url: "/holiday/add",
+          data: {
+            holidayid: id,
+            day: day,
+            date: date,
+            name: name,
+            type: type,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
     $(document).on("click", "#generateHolidaysBtn", function (e) {
       const year = $("#yearInput").val();
       var message = "";
@@ -277,7 +378,7 @@
         day = day.replace(/[^a-zA-Z0-9\s]/g, '');
         date = date.replace(/[^0-9\-]/g, '');
         name = name.replace(/[^a-zA-Z0-9\s]/g, '');
-        type = type.replace(/[^a-zA-Z0-9\s]/g, '');
+        //type = type.replace(/[^a-zA-Z0-9\s]/g, '');
         $.ajax({
           type: "PUT",
           url: "/holiday/edit",

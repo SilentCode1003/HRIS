@@ -141,8 +141,10 @@ router.post("/getotapproval", (req, res) => {
     pao_total_ot_net_pay,
     DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_reason,
-    pao_status
+    pao_status,
+    s_name as pao_subgroupid
     from payroll_approval_ot
+    INNER JOIN subgroup on payroll_approval_ot.pao_subgroupid = s_id
     where pao_id = '${approveot_id}'`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {

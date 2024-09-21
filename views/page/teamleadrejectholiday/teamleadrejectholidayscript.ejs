@@ -1,0 +1,101 @@
+<script>
+    let holiday_id = "";
+    let base64String = "";
+  
+    $(document).ready(function () {
+      LoadTable();
+      searchTable();
+      LoadList();
+      LoadSubgroup();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableRejectedHoliday").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/teamleadrejectholiday/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              console.log(data);
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#holidayapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+                finalData.push({
+                  holidayid: item.holidayid,
+                  fullname: item.fullname,
+                  attendancedate: item.attendancedate,
+                  timein: item.timein,
+                  timeout: item.timeout,
+                  total_hours: item.total_hours,
+                  payrolldate: item.payrolldate,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            { data: "holidayid" },
+            { data: "fullname" },
+            { data: "attendancedate" },
+            { data: "timein" },
+            { data: "timeout" },
+            { data: "total_hours" },
+            { data: "payrolldate" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      
+      function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableRejectedHoliday");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+            }
+          }
+          if (found) {
+            tr[i].style.display = "";
+            found = false;
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    });
+  </script>
+  

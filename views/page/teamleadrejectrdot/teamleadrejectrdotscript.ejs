@@ -1,0 +1,245 @@
+<script>
+    let rdotid = "";
+  
+    $(document).ready(function () {
+      LoadTable();
+      searchTable();
+      LoadPayrollDate();
+      LoadSubgroup();
+      //LoadEditEmp();
+  
+      $(document).on("keyup", "#myInput", function () {
+        searchTable();
+      });
+  
+      function LoadTable() {
+        $("#dataTableRejectedRDOT").DataTable({
+          destroy: true,
+          processing: true,
+          serverSide: true,
+          paging: false,
+          searching: false,
+          info: false,
+          scrollY: 600,
+          scrollCollapse: true,
+          serverMethod: "GET",
+          ajax: {
+            url: "/teamleadrejectrdot/load",
+            dataSrc: (json) => {
+              var finalData = [];
+              var data = json.data;
+  
+              console.log(data);
+              $.each(data, (key, item) => {
+                var action = "";
+                var status = item.status;
+  
+                action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+  
+                finalData.push({
+                  // image: imgElement.outerHTML,
+                  rdotid: item.rdotid,
+                  fullname: item.fullname,
+                  attendancedate: item.attendancedate,
+                  timein: item.timein,
+                  timeout: item.timeout,
+                  totalhours: item.total_hours,
+                  payrolldate: item.payrolldate,
+                  status: item.status,
+                  action: action,
+                });
+              });
+  
+              return finalData;
+            },
+          },
+          columnDefs: [
+            {
+              targets: 1,
+              className: "td-indent",
+            },
+          ],
+          columns: [
+            // { data: "image" },
+            { data: "rdotid" },
+            { data: "fullname" },
+            { data: "attendancedate" },
+            { data: "timein" },
+            { data: "timeout" },
+            { data: "totalhours" },
+            { data: "payrolldate" },
+            { data: "status" },
+            { data: "action" },
+          ],
+          createdRow: function (row, data, dataIndex) {
+            $("td", row).each(function (index) {
+              this.style.textAlign = "center";
+              this.style.verticalAlign = "middle";
+            });
+          },
+          initComplete: function () {},
+        });
+      }
+  
+      function LoadPayrollDate() {
+        $.ajax({
+          type: "GET",
+          url: "/setpayrolldate/loadreqbeforepayout",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.payrolldate, item.payrolldate);
+              $(options).html(item.payrolldate);
+              $("#appliedpayrolldate").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      function LoadSubgroup() {
+        $.ajax({
+          type: "GET",
+          url: "/subgroup/getsubgroupallactive",
+          success: function (result) {
+            var data = result.data;
+  
+            $.each(data, function (key, item) {
+              var options = new Option(item.subgroupid, item.subgroupid);
+              $(options).html(item.subgroupname);
+              $("#subgroupid").append(options);
+            });
+          },
+          error: function (result) {
+            alert("error: " + result.data);
+          },
+        });
+      }
+  
+      $("#dataTableRejectedRDOT tbody").on("click", "tr", function () {
+        var dataRow = [];
+        $(this)
+          .closest("tr")
+          .find("td")
+          .each(function () {
+            dataRow.push($(this).text());
+          });
+        console.log(dataRow);
+        rdotid = dataRow[0];
+      });
+  
+      $(document).on("click", "#editBtn", function () {
+        $.ajax({
+          type: "POST",
+          url: "/teamleadrejectrdot/getrdotapproval",
+          data: {
+            rdotid: rdotid,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              const existingData = result.data;
+  
+              console.log(existingData);
+              
+  
+              $.each(existingData, (key, item) => {
+                $("#previewleave").attr(
+                  "src",
+                  "data:image/jpg;base64," + item.file
+                );
+                base64String = item.file;
+                $("#appliedotfullname").val(item.fullname);
+                $("#appliedattendancedate").val(item.attendancedate);
+                $("#appliedclockin").val(item.timein);
+                $("#appliedclockout").val(item.timeout);
+                $("#totalothours").val(item.total_hours);
+                $("#appliedpayrolldate").val(item.payrolldate);
+                $("#subgroupid").val(item.subgroupid);
+                $("#appliedstatus").val(item.status);
+              });
+              
+            } else {
+              swal("Error fetching employee data", message, "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "An error occurred while fetching employee data",
+              message,
+              "error"
+            );
+          },
+        });
+      });
+  
+  
+      $(document).on("change", "#otimage", function (e) {
+        const input = document.getElementById("otimage");
+        const file = input.files[0];
+  
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function () {
+          const preview = document.getElementById("previewleave");
+          preview.src = reader.result;
+        };
+        editimage();
+      });
+  
+      function editimage() {
+        const input = document.getElementById("otimage");
+        const file = input.files[0];
+  
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.src = e.target.result;
+  
+          img.onload = function () {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+  
+            const targetWidth = 250;
+            const targetHeight = 250;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+  
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+  
+            base64String = canvas
+              .toDataURL()
+              .replace("data:image/png;base64,", "");
+  
+            imageBase64Stringsep = base64String;
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+  
+      function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dataTableRejectedRDOT");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          for (j = 0; j < td.length; j++) {
+            if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+              found = true;
+            }
+          }
+          if (found) {
+            tr[i].style.display = "";
+            found = false;
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    });
+  </script>
+  

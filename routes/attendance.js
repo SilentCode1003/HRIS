@@ -209,6 +209,8 @@ router.post("/getloadforapp", (req, res) => {
     ORDER BY ma_attendancedate DESC
     limit 2`;
 
+    console.log(sql);
+
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -240,8 +242,8 @@ router.post("/filterforapp", (req, res) => {
     DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
     ma_devicein as devicein,
     ma_deviceout as deviceout,
-    CASE WHEN ma_gefenceidIn = 0 THEN (SELECT al_location from attendance_logs where al_attendanceid = ma_attendanceid and al_logtype='ClockIn') ELSE mgsIn.mgs_geofencename END AS geofencenameIn,
-    CASE WHEN ma_geofenceidOut = 0 THEN (SELECT al_location from attendance_logs where al_attendanceid = ma_attendanceid and al_logtype='ClockOut') ELSE mgsOut.mgs_geofencename END AS geofencenameOut,
+    ma_locationIn as geofencenameIn,
+    ma_locationOut as geofencenameOut, 
     CONCAT(
     FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
     FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'

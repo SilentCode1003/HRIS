@@ -1,6 +1,8 @@
 <script>
   let employeeid = "";
   let globaltotalretropay = 0;
+  let start = "";
+  let end = "";
 
   $(document).ready(function () {
     console.log("Initialize");
@@ -70,6 +72,8 @@
                 // image: imgElement.outerHTML,
                 employeeid: item.employeeid,
                 fullname: item.fullname,
+                payroll_start_date: item.payroll_start_date,
+                payroll_end_date: item.payroll_end_date,
                 salary: item.salary,
                 payslip_salary: item.payslip_salary,
                 payrolltype: item.payrolltype,
@@ -91,6 +95,8 @@
         columns: [
           { data: "employeeid" },
           { data: "fullname" },
+          { data: "payroll_start_date" },
+          { data: "payroll_end_date" },
           {
             data: "salary",
             render: function (data, type, row) {
@@ -286,6 +292,8 @@
         });
       console.log(dataRow);
       employeeid = dataRow[0];
+      start = dataRow[2];
+      end = dataRow[3];
     });
 
     $(document).on("click", "#viewBtn", function () {
@@ -296,6 +304,8 @@
         url: "/retropay/viewretropay",
         data: {
           employeeid: employeeid,
+          startpayrolldate: start,
+          endpayrolldate: end,
         },
         success: function (result) {
           if (result.msg === "success") {

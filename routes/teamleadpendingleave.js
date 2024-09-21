@@ -63,7 +63,7 @@ module.exports = router;
 //       });
 //     });
 //   } catch (error) {
-//     console.log(error);
+//     console.log(error);                                                
 //   }
 // });
 
@@ -104,6 +104,8 @@ router.get("/load", (req, res) => {
     console.log(error);
   }
 });
+
+
 
 router.post("/leaveaction", (req, res) => {
   console.log("HIT");

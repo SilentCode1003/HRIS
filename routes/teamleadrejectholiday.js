@@ -14,8 +14,8 @@ router.get("/", function (req, res, next) {
   Validator(
     req,
     res,
-    "teamleadapprovedholidaylayout",
-    "teamleadapprovedholiday"
+    "teamleadrejectholidaylayout",
+    "teamleadrejectholiday"
   );
 });
 
@@ -37,7 +37,7 @@ router.get("/load", (req, res) => {
       FROM payroll_holiday
       INNER JOIN
       master_employee ON payroll_holiday.ph_employeeid = me_id
-      WHERE me_department = '${departmentid}' AND ph_status = 'Approved'
+      WHERE me_department = '${departmentid}' AND ph_status = 'Rejected'
       AND ph_employeeid NOT IN (
         SELECT tu_employeeid FROM teamlead_user)`;
 
@@ -60,5 +60,5 @@ router.get("/load", (req, res) => {
      console.log(error);
      res.json(JsonErrorResponse(error));
     }
-  });
+});
   

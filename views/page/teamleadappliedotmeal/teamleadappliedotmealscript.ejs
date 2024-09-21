@@ -271,27 +271,35 @@
       let payrolldate = $("#otpayrolldate").val();
       let overtimestatus = $("#otstatus").val();
 
+      console.log(overtimestatus,'status');
+      
+
       var message = "";
 
       if (night_ot === "") {
-        message += "departmentname is required. ";
+        message += "Night OT is required. ";
       }
 
       if (earlyot === "") {
-        message += "departmentname is required. ";
+        message += "Early OT is required. ";
       }
 
       if (normal_ot === "") {
-        message += "departmenthead is required. ";
+        message += "Normal OT is required. ";
       }
 
       if (payrolldate === "") {
-        message += "status is required. ";
+        message += "Payroll Date is required. ";
       }
 
       if (overtimestatus === "Applied" || overtimestatus === "Pending") {
         message += "You Need to Approve or Disregard. ";
       }
+      
+      if (overtimestatus === "") {
+        message += "Status is required. ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
