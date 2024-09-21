@@ -310,7 +310,7 @@ router.get("/loadcancelled", (req, res) => {
   INNER JOIN
   master_employee ON attendance_request.ar_employeeid = me_id
   WHERE ar_employeeid ='${employeeid}'
-  AND ar_status = 'Cancelled'`;
+  AND ar_status = 'Cancel'`;
 
     Select(sql, (err, result) => {
       if (err) {

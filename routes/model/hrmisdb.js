@@ -77,6 +77,7 @@ exports.Leaves = (data) => {
       reason: key.l_leavereason,
       status: key.l_leavestatus,
       applieddate: key.l_leaveapplieddate,
+      typeleave: key.ml_leavetype,
     });
   });
 
@@ -754,6 +755,7 @@ exports.Payroll_Approval_Ot = (data) => {
       payrolldate: key.pao_payroll_date,
       reason: key.pao_reason,
       overtimestatus: key.pao_status,
+      subgroupid: key.pao_subgroupid,
     });
   });
 

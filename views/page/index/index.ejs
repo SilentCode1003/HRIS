@@ -635,6 +635,22 @@
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button>
+                            <button class="nav-link reqholiday-db" id="nav-reqholiday-tab"
+                                data-bs-toggle="tab" data-bs-target="#nav-reqholiday" type="button" role="tab"
+                                aria-controls="nav-reqholiday" aria-selected="false">
+                                <b>REQUEST HOLIDAY</b>
+                                <span id="loadHolidayBadge"
+                                    class="position-sticky translate-middle badge rounded-pill bg-danger">
+                                </span>
+                            </button>
+                            <button class="nav-link reqrestdayot-db" id="nav-reqrestdayot-tab"
+                                data-bs-toggle="tab" data-bs-target="#nav-reqrestdayot" type="button" role="tab"
+                                aria-controls="nav-reqrestdayot" aria-selected="false">
+                                <b>REQUEST RDOT</b>
+                                <span id="loadRestDayOTBadge"
+                                    class="position-sticky translate-middle badge rounded-pill bg-danger">
+                                </span>
+                            </button>
                             <button class="nav-link attendancestatus-db" id="nav-status-tab"
                                 data-bs-toggle="tab" data-bs-target="#nav-status" type="button" role="tab"
                                 aria-controls="nav-status" aria-selected="false">
@@ -744,6 +760,51 @@
                                                 <th class="font-tb">ID</th>
                                                 <th class="col-25 font-tb">Employee</th>
                                                 <th class="col-25 font-tb">Attendance Date</th>
+                                                <th class="col-25 font-tb">Time In</th>
+                                                <th class="col-25 font-tb">Time Out</th>
+                                                <th class="font-tb">Total Hours</th>
+                                                <th class="font-tb">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-reqholiday" role="tabpanel"
+                            aria-labelledby="nav-profile-tab">
+                            <div class="card-body">
+                                <div class="table-responsive" id="table-responsive-id">
+                                    <table class="table table-light table-bordered" id="dataTableholidayrequest">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th class="col-25 font-tb">Image</th> -->
+                                                <th class="font-tb">ID</th>
+                                                <th class="col-25 font-tb">Employee</th>
+                                                <th class="col-25 font-tb">Attendance Date</th>
+                                                <th>Holiday Type</th>
+                                                <th>Payroll Date</th>
+                                                <th>Time In</th>
+                                                <th>Time Out</th>
+                                                <th class="font-tb">Total Hours</th>
+                                                <th class="font-tb">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-reqrestdayot" role="tabpanel"
+                            aria-labelledby="nav-profile-tab">
+                            <div class="card-body">
+                                <div class="table-responsive" id="table-responsive-id">
+                                    <table class="table table-light table-bordered" id="dataTablerestdayotrequest">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th class="col-25 font-tb">Image</th> -->
+                                                <th class="font-tb">ID</th>
+                                                <th class="col-25 font-tb">Employee</th>
+                                                <th class="col-25 font-tb">Attendance Date</th>
+                                                <th class="col-25 font-tb">Payroll Date</th>
                                                 <th class="col-25 font-tb">Time In</th>
                                                 <th class="col-25 font-tb">Time Out</th>
                                                 <th class="font-tb">Total Hours</th>
@@ -1056,13 +1117,20 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-floating">
+                                      <input type="text" class="form-select border-form-modal" id="leavesubgroup" name="leavesubgroup"
+                                      aria-label="Floating label select example" disabled>
+                                      <label for="floatingInput">Sub Group</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating">
                                       <textarea type="text" class="form-control border-form-modal" id="leavecomment" name="leavecomment"
                                         placeholder="Comment"></textarea>
                                       <label for="floatingInput">Comment</label>
                                     </div>
-                                  </div>
-                              </div>
-                              <br>
+                                </div>
+                            </div>
+                            <br>
                             </form>
                           </div>
                         </div>
@@ -1077,7 +1145,6 @@
     </div>
 
     <!--Cash Advance Modal-->
-
     <div class="modal fade" id="pendingcamodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -1320,6 +1387,13 @@
                                     </div>
                                     <div class="col">
                                         <div class="form-floating">
+                                          <input type="text" class="form-select border-form-modal" id="otsubgroup" name="otsubgroup"
+                                          aria-label="Floating label select example" disabled>
+                                          <label for="floatingInput">Sub Group</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
                                             <input type="text" class="form-control border-form-modal" id="otreason"
                                                 name="otreason" placeholder="Reason" disabled>
                                             <label for="floatingInput">Reason</label>
@@ -1414,6 +1488,10 @@
                                                 <label for="empid" class="form-label">Employee ID</label>
                                                 <input type="text" class="form-control border-form-modal" id="empid" name="empid" disabled>
                                             </div>
+                                            <div class="col">
+                                                <label for="coasubgroupid" class="form-label">Subgroup ID</label>
+                                                <input type="text" class="form-control border-form-modal" id="coasubgroupid" name="coasubgroupid" disabled>
+                                            </div>
                                         </div>
 
                                         <div class="row g-3">
@@ -1439,3 +1517,303 @@
             </div>
         </div>
     </div>
+
+    <!--HOLIDAY MODAL-->
+    <div class="modal fade" id="holidayreqmodal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content content-size-modal">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+                        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+                    </lord-icon>
+                    <h3 class="modal-title" id="exampleModalLabel">Approve This Holiday ?</h3>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                            <div class="col g-6">
+                                <div class="p-4" style="width: 300px; margin-top: -100px;">
+                                    <div class="text-center">
+                                        <img id="previewholiday" src="https://via.placeholder.com/250"
+                                            class="rounded border-form-modal" alt="placeholder">
+                                    </div>
+                                    <br>
+                                    <div class="col">
+                                        <div class="col g-6">
+                                            <input type="file" name="otimage" id="otimage"
+                                                class="form-control border-form-modal" accept="image/*" disabled>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                            <form>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdayfname"
+                                                name="hdayfname" placeholder="First Name" disabled>
+                                            <label for="floatingInput">Full Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control border-form-modal" id="hdayatday"
+                                                    name="hdayatday" disabled>
+                                                <label for="floatingInput">Attendance Date</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdclockin"
+                                                name="hdclockin" placeholder="Address" disabled>
+                                            <label for="floatingInput">Clock In</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdclockout"
+                                                name="hdclockout" placeholder="Address" disabled>
+                                            <label for="floatingInput">Clock Out</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal"
+                                                id="hdtotalhours" name="hdtotalhours" placeholder="Address"
+                                                disabled>
+                                            <label for="floatingInput">Total Hours</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdtype"
+                                                name="hdtype" disabled>
+                                            <label for="floatingInput">Holiday Type</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="date" class="form-control border-form-modal" id="hdday"
+                                                name="hdday" disabled>
+                                            <label for="hdday">Holiday Day</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdsubgroup"
+                                                name="hdsubgroup" disabled>
+                                            <label for="otearly">Subgroup</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control border-form-modal" id="hdnormalot"
+                                                name="hdnormalot" placeholder="Phone Number" disabled>
+                                            <label for="floatingInput">Normal Overtime</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control border-form-modal" id="hdndot"
+                                                name="hdndot" placeholder="Phone Number" disabled>
+                                            <label for="floatingInput">Night Differentials</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select border-form-modal" id="hdpayrolldate"
+                                                name="hdpayrolldate" aria-label="Floating label select example">
+                                                <option selected>Choose...</option>
+                                            </select>
+                                            <label for="employeedepartment">Payroll Date</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <br>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select border-form-modal" id="hdstatus" name="hdstatus"
+                                                aria-label="Floating label select example">
+                                                <option value="Approved">Approved</option>
+                                                <option value="Applied">Applied</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Rejected">Reject</option>
+                                            </select>
+                                            <label for="floatingInput">Status</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="hdcomment"
+                                                name="hdcomment" placeholder="Reason">
+                                            <label for="floatingInput">Comment</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="holidaysavebutton">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--RDOT MODAL-->
+    <div class="modal fade" id="rdotreqmodal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content content-size-modal">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+                        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+                    </lord-icon>
+                    <h3 class="modal-title" id="exampleModalLabel">Approve This RDOT ?</h3>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                            <div class="col g-6">
+                                <div class="p-4" style="width: 300px; margin-top: -100px;">
+                                    <div class="text-center">
+                                        <img id="previewrdot" src="https://via.placeholder.com/250"
+                                            class="rounded border-form-modal" alt="placeholder">
+                                    </div>
+                                    <br>
+                                    <h2 class="border-top pb-3 mb-4 text-center modal-content-title">Avatar Preview</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                            <form>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="rdotfullname"
+                                                name="rdotfullname" placeholder="First Name" disabled>
+                                            <label for="floatingInput">Full Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control border-form-modal" id="rdotatdate"
+                                                    name="rdotatdate" disabled>
+                                                <label for="floatingInput">Attendance Date</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="rdotclockin"
+                                                name="rdotclockin" placeholder="Address" disabled>
+                                            <label for="floatingInput">Clock In</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="rdotclockout"
+                                                name="rdotclockout" placeholder="Address" disabled>
+                                            <label for="floatingInput">Clock Out</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal"
+                                                id="rdothours" name="rdothours" placeholder="Address"
+                                                disabled>
+                                            <label for="floatingInput">Total Hours</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="test" class="form-control border-form-modal" id="rdotsubgroup"
+                                                name="rdotsubgroup" placeholder="Phone Number" disabled>
+                                            <label for="floatingInput">Sub Group</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select border-form-modal" id="rdotpayrolldate"
+                                                name="rdotpayrolldate" aria-label="Floating label select example">
+                                                <option selected>Choose...</option>
+                                            </select>
+                                            <label for="employeedepartment">Payroll Date</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-3">
+                                    <br>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select border-form-modal" id="rdotstatus" name="rdotstatus"
+                                                aria-label="Floating label select example">
+                                                <option value="Approved">Approved</option>
+                                                <option value="Applied">Applied</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Rejected">Reject</option>
+                                            </select>
+                                            <label for="floatingInput">Status</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal" id="rdotcomment"
+                                                name="rdotcomment" placeholder="Reason">
+                                            <label for="floatingInput">Comment</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="reqrdotsavebutton">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+

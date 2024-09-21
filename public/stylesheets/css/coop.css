@@ -540,6 +540,8 @@ tr:hover {
 .employee-db,
 .geofence-db,
 .announcement-db,
+.reqholiday-db,
+.reqrestdayot-db,
 .bday-db {
   background-color: #7a1818 !important;
   color: white !important;
@@ -549,6 +551,8 @@ tr:hover {
   font-size: smaller !important;
 }
 
+.reqholiday-db:hover,
+.reqrestdayot-db:hover,
 .requestleave-db:hover,
 .requestcash-db:hover,
 .requestot-db:hover,
@@ -934,23 +938,16 @@ tr:hover {
 
 /*Attendance*/
 
-#previewleave {
-  margin-top: 100px;
-  width: 250px;
-  height: 250px;
-}
-
+#previewrdot,
+#previewholiday,
+#previewleave,
+#preview,
 #previewold {
   margin-top: 100px;
   width: 250px;
   height: 250px;
 }
 
-#preview {
-  margin-top: 100px;
-  width: 250px;
-  height: 250px;
-}
 
 #editpreview {
   width: 150px;

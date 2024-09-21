@@ -151,6 +151,7 @@
       let allowances = $("#allowances").val();
       let adjustments = $("#adjustments").val();
       let payrolltype = $("#payrolltype").val();
+      let effectivedate = $("#effectivedate").val();
 
       var message = "";
 
@@ -174,6 +175,10 @@
         message += "allowances is required ";
       }
 
+      if (effectivedate == "") {
+        message += "effectivedate is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -189,6 +194,7 @@
             monthly: parseFloat(monthly),
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -317,6 +323,7 @@
         .val()
         .replace(/[^\d.-]/g, "");
       let payrolltype = $("#editpayrolltype").val();
+      let effectivedate = $("#editeffectivedate").val();
 
       var message = "";
 
@@ -340,12 +347,16 @@
         message += "allowances is required. ";
       }
 
+      if (effectivedate === "") {
+        message += "effectivedate is required. "; 
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/salary/update",
+          type: "PUT",
+          url: "/salary/edit",
           data: {
             salaryid: id,
             employeeid: employeeid,
@@ -353,6 +364,7 @@
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
             payrolltype: payrolltype,
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {

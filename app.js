@@ -149,6 +149,10 @@ var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
 var staffhousehistoryRouter = require("./routes/staffhousehistory");
 var areaRouter = require("./routes/area");
 var areadeployemployeeRouter = require("./routes/areadeployemployee");
+var teamleadapprovedholidayRouter = require("./routes/teamleadapprovedholiday");
+var teamleadrejectholidayRouter = require("./routes/teamleadrejectholiday");
+var teamleadrdotRouter = require("./routes/teamleadrdot");
+var teamleadrejectrdotRouter = require("./routes/teamleadrejectrdot");
 
 var app = express();
 
@@ -306,6 +310,10 @@ app.use("/occupantdurationsetting", occupantdurationsettingRouter);
 app.use("/staffhousehistory", staffhousehistoryRouter);
 app.use("/area", areaRouter);
 app.use("/areadeployemployee", areadeployemployeeRouter);
+app.use("/teamleadapprovedholiday", teamleadapprovedholidayRouter);
+app.use("/teamleadrejectholiday", teamleadrejectholidayRouter);
+app.use("/teamleadrdot", teamleadrdotRouter);
+app.use("/teamleadrejectrdot", teamleadrejectrdotRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

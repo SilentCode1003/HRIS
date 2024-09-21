@@ -234,10 +234,19 @@ router.post("/getrestdayot", (req, res) => {
         roa_status,
         roa_total_hours,
         roa_file,
+        roa_admin_comment,
+          (
+          SELECT rra_comment 
+          FROM restdayot_request_activity 
+          WHERE rra_restdayotid = roa_rdotid
+          ORDER BY rra_date DESC
+          LIMIT 1
+        ) AS roa_comment,
         DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
         roa_subgroupid
         FROM restday_ot_approval
-        WHERE roa_rdotid = '${rdotid}'`;
+        WHERE roa_rdotid = '${rdotid}'
+        LIMIT 1`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -486,6 +495,7 @@ router.post("/save", async (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 //#region FUNCTION
 function Check(sql) {

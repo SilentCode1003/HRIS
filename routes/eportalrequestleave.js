@@ -468,11 +468,12 @@ router.post("/submit", async (req, res) => {
 router.post("/getleave", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `SELECT *
-    FROM leaves
-    WHERE l_employeeid = '${employeeid}'
-    ORDER BY l_leaveid DESC;`;
-    console.log(employeeid);
+    let sql = `SELECT *,
+        ml_leavetype
+        FROM leaves
+        INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
+        WHERE l_employeeid = '${employeeid}'
+        ORDER BY l_leaveid DESC`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
       if (err) console.error("Error: ", err);
