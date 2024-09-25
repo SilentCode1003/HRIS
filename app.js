@@ -153,6 +153,9 @@ var teamleadapprovedholidayRouter = require("./routes/teamleadapprovedholiday");
 var teamleadrejectholidayRouter = require("./routes/teamleadrejectholiday");
 var teamleadrdotRouter = require("./routes/teamleadrdot");
 var teamleadrejectrdotRouter = require("./routes/teamleadrejectrdot");
+const { log } = require("console");
+const { verify } = require("crypto");
+const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
 
@@ -172,7 +175,13 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // app.use(cors(corsOptions));
 
-app.use("/", indexRouter);
+
+
+app.use("/", loginlayoutRouter);
+app.use("/access", accessRouter);
+app.use("/mobile-api", mobileAPIRouter);
+app.use(verifyJWT)
+app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/employee", employeeRouter);
 app.use("/employeeprofile", employeeprofileRouter);
@@ -198,7 +207,6 @@ app.use("/ojt", ojtRouter);
 app.use("/announcement", announcementRouter);
 app.use("/settings", settingsRouter);
 app.use("/eportalsettings", eportalsettingsRouter);
-app.use("/access", accessRouter);
 app.use("/salary", salaryRouter);
 app.use("/deduction", deductionRouter);
 app.use("/requestcashadvance", requestcashadvanceRouter);
@@ -275,7 +283,6 @@ app.use("/teamleadappliedotmeal", teamleadappliedotmealRouter);
 app.use("/meal_request_activity", meal_request_activityRouter);
 app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
-app.use("/mobile-api", mobileAPIRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
 app.use("/sidebar", sidebarRouter);

@@ -57,7 +57,7 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/login/login",
+          url: "/login",
           data: {
             username: username,
             password: password,
@@ -81,7 +81,7 @@
                 } else if (result.data[0].accesstype === "Manager") {
                   location.replace("/teamleadindex");
                 } else {
-                  location.replace("/");
+                  location.replace("/index");
                 }
               });
             } else if (result.msg === "inactive") {

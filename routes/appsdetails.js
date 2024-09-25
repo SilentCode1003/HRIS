@@ -33,26 +33,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/loadforapp", (req, res) => {
-  try {
-    let sql = `SELECT * FROM  apps_details`;
-
-    mysql.Select(sql, "Apps_Details", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
-
 router.post("/save", (req, res) => {
   try {
     let appimage = req.body.appimage;

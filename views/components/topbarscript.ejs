@@ -616,7 +616,7 @@
     function loadNotifBadge() {
       $.ajax({
         type: "GET",
-        url: "/countunreadbadge",
+        url: "/index/countunreadbadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalUnread = result.data[0].Unreadcount;
@@ -635,7 +635,7 @@
       console.log("HIT");
       $.ajax({
         type: "GET",
-        url: "/loadnotif",
+        url: "/index/loadnotif",
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
@@ -644,7 +644,7 @@
             existingData.forEach((item) => {
               $.ajax({
                 type: "POST",
-                url: "/markread",
+                url: "/index/markread",
                 data: {
                   notificationId: item.notificationid,
                 },
@@ -714,7 +714,7 @@
       console.log("Clicked Notification ID:", notificationIdClicked);
       $.ajax({
         type: "POST",
-        url: "/viewnotif",
+        url: "/index/viewnotif",
         data: {
           notificationIdClicked: notificationIdClicked,
         },
@@ -749,7 +749,7 @@
       let id = notificationId;
       $.ajax({
         type: "POST",
-        url: "/readnotif",
+        url: "/index/readnotif",
         data: {
           notificationId: id,
         },
@@ -785,7 +785,7 @@
       let id = notificationId;
       $.ajax({
         type: "POST",
-        url: "/deleatenotif",
+        url: "/index/deleatenotif",
         data: {
           notificationId: id,
         },

@@ -604,7 +604,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalIT",
+        url: "/index/totalIT",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -679,7 +679,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalcabling",
+        url: "/index/totalcabling",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -754,7 +754,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalcandidate",
+        url: "/index/totalcandidate",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -829,7 +829,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalbagapuroapi",
+        url: "/index/totalbagapuroapi",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -904,7 +904,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/apprenticemodal",
+        url: "/index/apprenticemodal",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -974,7 +974,7 @@
     function loadtotalCard() {
       $.ajax({
         type: "GET",
-        url: "/countactive",
+        url: "/index/countactive",
         success: function (result) {
           if (result.msg === "success") {
             const totalActive = result.data.activeCount;
@@ -992,7 +992,7 @@
     function loadregularCard() {
       $.ajax({
         type: "GET",
-        url: "/countregular",
+        url: "/index/countregular",
         success: function (result) {
           if (result.msg === "success") {
             const totalRegular = result.data.regularCount;
@@ -1010,7 +1010,7 @@
     function loadprobitionaryCard() {
       $.ajax({
         type: "GET",
-        url: "/countprobitionary",
+        url: "/index/countprobitionary",
         success: function (result) {
           if (result.msg === "success") {
             const totalProbitionary = result.data.probitionaryCount;
@@ -1032,7 +1032,7 @@
     function loadresignedCard() {
       $.ajax({
         type: "GET",
-        url: "/countresigned",
+        url: "/index/countresigned",
         success: function (result) {
           if (result.msg === "success") {
             const totalResigned = result.data.resignedCount;
@@ -1054,7 +1054,7 @@
     function loadtotaladminCard() {
       $.ajax({
         type: "GET",
-        url: "/countadmin",
+        url: "/index/countadmin",
         success: function (result) {
           if (result.msg === "success") {
             const totalempadmin = result.data.adminCount;
@@ -1076,7 +1076,7 @@
     function loadtotalITCard() {
       $.ajax({
         type: "GET",
-        url: "/countit",
+        url: "/index/countit",
         success: function (result) {
           if (result.msg === "success") {
             const totalIT = result.data.ITCount;
@@ -1094,7 +1094,7 @@
     function loadtotalcablingCard() {
       $.ajax({
         type: "GET",
-        url: "/countcabling",
+        url: "/index/countcabling",
         success: function (result) {
           if (result.msg === "success") {
             const totalCabling = result.data.CablingCount;
@@ -1112,7 +1112,7 @@
     function loadtotalcandidateCard() {
       $.ajax({
         type: "GET",
-        url: "/countcandidate",
+        url: "/index/countcandidate",
         success: function (result) {
           if (result.msg === "success") {
             const totalCandidate = result.data.CandidateCount;
@@ -1130,7 +1130,7 @@
     function loadtotalbagapuroCard() {
       $.ajax({
         type: "GET",
-        url: "/countbagapuro",
+        url: "/index/countbagapuro",
         success: function (result) {
           if (result.msg === "success") {
             const totalBagapuro = result.data.BagapuroCount;
@@ -1148,7 +1148,7 @@
     function loadtotalapprenticeCard() {
       $.ajax({
         type: "GET",
-        url: "/countapprentice",
+        url: "/index/countapprentice",
         success: function (result) {
           if (result.msg === "success") {
             const totalApprentice = result.data.ApprenticeCount;
@@ -1166,7 +1166,7 @@
     function load1YearCard() {
       $.ajax({
         type: "GET",
-        url: "/count1year",
+        url: "/index/count1year",
         success: function (result) {
           if (result.msg === "success") {
             const total1year = result.data.Years1Count;
@@ -1186,7 +1186,7 @@
     function loadleaveBadge() {
       $.ajax({
         type: "GET",
-        url: "/countreqleavebadge",
+        url: "/index/countreqleavebadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalleave = result.data.leavereqCount;
@@ -1204,7 +1204,7 @@
     function loadCashBadge() {
       $.ajax({
         type: "GET",
-        url: "/countcashreqbadge",
+        url: "/index/countcashreqbadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalCa = result.data.CAreqCount;
@@ -1222,7 +1222,7 @@
     function loadOvertimeBadge() {
       $.ajax({
         type: "GET",
-        url: "/countovertimeot",
+        url: "/index/countovertimeot",
         success: function (result) {
           if (result.msg === "success") {
             const totalOT = result.data.OTreqCount;
@@ -1240,7 +1240,7 @@
     function loadCOABadge() {
       $.ajax({
         type: "GET",
-        url: "/countCOA",
+        url: "/index/countCOA",
         success: function (result) {
           if (result.msg === "success") {
             const totalCOA = result.data.COAreqCount;
@@ -1258,7 +1258,7 @@
     function loadHolidayBadge() {
       $.ajax({
         type: "GET",
-        url: "/countholiday",
+        url: "/index/countholiday",
         success: function (result) {
           if (result.msg === "success") {
             const totalHOLIDAY = result.data.HOLIDAYreqCount;
@@ -1277,7 +1277,7 @@
     function loadRDOTbadge() {
       $.ajax({
         type: "GET",
-        url: "/countrdot",
+        url: "/index/countrdot",
         success: function (result) {
           if (result.msg === "success") {
             const totalRDOT = result.data.RDOTreqCount;
@@ -1295,7 +1295,7 @@
     function loadattendanceBadge() {
       $.ajax({
         type: "GET",
-        url: "/countattendancebadge",
+        url: "/index/countattendancebadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalLATE = result.data.LATECount;
@@ -1343,7 +1343,7 @@
     function GenerateAnouncement() {
       $.ajax({
         type: "GET",
-        url: "/getbulletin",
+        url: "/index/getbulletin",
         // data: {
         //   bulletinid: id,
         // },
@@ -1403,7 +1403,7 @@
     function LoadBdayFolks() {
       $.ajax({
         type: "GET",
-        url: "/getbday",
+        url: "/index/getbday",
         success: function (result) {
           if (result.msg === "success") {
             const bdayData = result.data;
@@ -1460,7 +1460,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/load",
+        url: "/index/load",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1537,7 +1537,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -1703,7 +1703,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadCA",
+        url: "/index/loadCA",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1881,7 +1881,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqOT",
+        url: "/index/loadreqOT",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -2104,7 +2104,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqattendance",
+        url: "/index/loadreqattendance",
         success: function (json) {
           var finalData = [];
           var data = json.data;

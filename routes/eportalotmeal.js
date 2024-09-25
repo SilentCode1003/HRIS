@@ -26,7 +26,7 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.get("/load", (req, res) => {
+router.get("/loadPending", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT 
@@ -41,7 +41,118 @@ router.get("/load", (req, res) => {
     FROM  ot_meal_allowances
     INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
     WHERE oma_employeeid = '${employeeid}'
-    AND oma_status in ('Pending', 'Applied')`;
+    AND oma_status = 'Pending'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadApplied", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Applied'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadApproved", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Approved'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadRejected", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Rejected'`;
 
     Select(sql, (err, result) => {
       if (err) {
