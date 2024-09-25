@@ -1,9 +1,10 @@
 var express = require("express");
-const { Encrypter } = require("./repository/cryptography");
+const { Encrypter, EncrypterString } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 var router = express.Router();
 const nodemailer = require("nodemailer");
 const { UserLogin } = require("./repository/helper");
+const jwt = require("jsonwebtoken");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("loginlayout", { title: "Express" });
@@ -89,6 +90,12 @@ router.post("/login", (req, res) => {
                 let data = UserLogin(result);
 
                 data.forEach((user) => {
+                  req.session.jwt = EncrypterString(jwt.sign(JSON.stringify({
+                    employeeid: user.employeeid,
+                    fullname: user.fullname,
+                  }), process.env._SECRET_KEY), 
+                   {}
+                  );
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
@@ -103,7 +110,7 @@ router.post("/login", (req, res) => {
                   req.session.subgroupid = user.subgroupid;
                 });
                 console.log("accesstype", req.session.accesstype);
-
+                console.log(req.session.jwt, "JWT");
                 console.log(req.session.isgeofence, "data");
                 return res.json({
                   msg: "success",

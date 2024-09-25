@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const verifyJWT = require("../middleware/authenticator");
 var router = express.Router();
 const currentDate = moment();
 

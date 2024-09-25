@@ -568,7 +568,8 @@ exports.Validator = function (req, res, layout, route) {
         subgroupid: req.session.subgroupid,
       });
     } else {
-      res.redirect("/login");
+      res.redirect("/");
+      // res.redirect("/login");
     }
   });
 };

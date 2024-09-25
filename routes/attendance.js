@@ -186,49 +186,6 @@ router.post("/daterange", (req, res) => {
   }
 });
 
-router.post("/getloadforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `SELECT
-    CONCAT(me_lastname, " ", me_firstname) as employeeid,
-    TIME_FORMAT(ma_clockin, '%H:%i:%s') as clockin,
-    TIME_FORMAT(ma_clockout, '%H:%i:%s') as clockout,
-    DATE_FORMAT(ma_clockout, '%Y-%m-%d') as attendancedateout,
-    DATE_FORMAT(ma_clockin, '%Y-%m-%d') as attendancedatein,
-    ma_devicein as devicein,
-    ma_deviceout as deviceout,
-    ma_locationIn as geofencenameIn,
-    ma_locationOut as geofencenameOut, 
-    CONCAT(
-    FLOOR(TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) / 3600), 'h ',
-    FLOOR((TIMESTAMPDIFF(SECOND, ma_clockin, ma_clockout) % 3600) / 60), 'm'
-    ) AS totalhours
-    FROM master_attendance
-    INNER JOIN master_employee ON ma_employeeid = me_id
-    where ma_employeeid='${employeeid}'
-    ORDER BY ma_attendancedate DESC
-    limit 2`;
-
-    console.log(sql);
-
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    console.log("error", error);
-  }
-});
 
 router.post("/filterforapp", (req, res) => {
   try {

@@ -63,3 +63,19 @@ exports.DecrypterString = (hash) => {
     throw error;
   }
 };
+
+
+exports.EncrypterString = (password) => {
+  try {
+    let cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+    let encryptedData = cipher.update(password, "utf-8", "hex");
+    encryptedData += cipher.final("hex");
+
+    //callback(null, encryptedData);
+    return encryptedData;
+  } catch (error) {
+    throw error;
+    //callback(error, null);
+  }
+};
+

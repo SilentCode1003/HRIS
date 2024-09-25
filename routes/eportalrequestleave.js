@@ -600,37 +600,3 @@ router.post("/getunusedleave", (req, res) => {
     });
   }
 });
-
-router.post("/loadleavetypeforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `SELECT
-    ml_id, 
-    concat(me_lastname,' ',me_firstname) as ml_employeeid,
-    ml_tenure,
-    ml_leavetype,
-    ml_year,
-    ml_totalleavedays,
-    ml_unusedleavedays,
-    ml_usedleavedays,
-    ml_status
-    FROM master_leaves
-    inner join master_employee on master_leaves.ml_employeeid = me_id
-    where ml_employeeid = '${employeeid}'
-    and ml_year = year(curdate())`;
-
-    mysql.Select(sql, "Master_Leaves", (err, result) => {
-      if (err) console.error("Error :", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});

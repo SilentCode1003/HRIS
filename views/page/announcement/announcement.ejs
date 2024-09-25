@@ -41,7 +41,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
+<!-- <div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -98,6 +98,91 @@
           </div>
           <br>
         </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="announcementsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Add ANNOUNCEMENT</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="form-floating">
+                  <label class="form-label" for="customFile"></label>
+                  <div class="text-center">
+                    <img id="preview" src="https://via.placeholder.com/250" class="rounded border-form-modal" alt="placeholder">
+                  </div>
+                  <br>
+                  <input type="file" name="announcementimage" id="announcementimage" class="form-control border-form-modal" accept="image/*">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="announcementtittle" name="announcementtittle"
+                      placeholder="Department Name">
+                    <label for="floatingInput">Title</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-control border-form-modal" id="announcementtype" name="announcementtype">
+                      <option value="Event">Event</option>
+                      <option value="Announcement">Announcement</option>
+                    </select>
+                    <label for="announcementtype">Announcement Type</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="targetdate" name="targetdate"
+                      placeholder="Department Name">
+                    <label for="floatingInput">Start Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="enddate" name="enddate"
+                      placeholder="Department Name">
+                    <label for="floatingInput">End Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <textarea class="form-control border-form-modal" id="announcementdescription" name="announcementdescription"></textarea>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
       </div>
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
