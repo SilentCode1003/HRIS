@@ -736,7 +736,6 @@ exports.Payroll_Approval_Ot = (data) => {
   data.forEach((key, item) => {
     dataResult.push({
       approveot_id: key.pao_id,
-      image: key.pao_image,
       fullname: key.pao_fullname,
       employeeid: key.pao_employeeid,
       attendancedate: key.pao_attendancedate,
