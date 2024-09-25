@@ -1220,7 +1220,7 @@ router.post("/getloadforapp", (req, res) => {
     ORDER BY ma_attendancedate DESC
     limit 2`;
 
-    console.log(sql);
+    // console.log(sql);
 
     mysql
       .mysqlQueryPromise(sql)
