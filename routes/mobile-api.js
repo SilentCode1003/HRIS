@@ -31,6 +31,7 @@ const {
 } = require("./repository/customhelper");
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
+const { sq } = require("date-fns/locale");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -1134,6 +1135,40 @@ router.post("/viewpayslip", verifyJWT,(req, res) => {
   }
 });
 
+router.get("/loadreq", (req, res) => {
+  try {
+    let sql = `SELECT 
+    pd_payrollid,
+    pd_name,
+    pd_cutoff,
+    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+    FROM 
+    payroll_date
+    WHERE
+    pd_enddate >= CURDATE() OR pd_enddate IS NULL
+    ORDER BY 
+    pd_startdate
+    LIMIT 5`;
+
+    mysql.Select(sql, "Payroll_Date", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      //
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      mag: "error",
+      data: error,
+    });
+  }
+});
+
 
 //#endregion
 
@@ -2191,68 +2226,71 @@ router.post("/loadotcurrentmonth", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getovertime", verifyJWT,(req, res) => {
-  try {
-    let approveot_id = req.body.approveot_id;
-    let sql = `SELECT
-    pao_id AS approvalid,
-    JSON_UNQUOTE(JSON_EXTRACT(
-        CASE DAYNAME(pao_attendancedate)
-            WHEN 'Monday' THEN ms_monday
-            WHEN 'Tuesday' THEN ms_tuesday
-            WHEN 'Wednesday' THEN ms_wednesday
-            WHEN 'Thursday' THEN ms_thursday
-            WHEN 'Friday' THEN ms_friday
-            WHEN 'Saturday' THEN ms_saturday
-            WHEN 'Sunday' THEN ms_sunday
-        END,
-        '$.time_in'
-    )) AS scheduledtimein,
-    JSON_UNQUOTE(JSON_EXTRACT(
-        CASE DAYNAME(pao_attendancedate)
-            WHEN 'Monday' THEN ms_monday
-            WHEN 'Tuesday' THEN ms_tuesday
-            WHEN 'Wednesday' THEN ms_wednesday
-            WHEN 'Thursday' THEN ms_thursday
-            WHEN 'Friday' THEN ms_friday
-            WHEN 'Saturday' THEN ms_saturday
-            WHEN 'Sunday' THEN ms_sunday
-        END,
-        '$.time_out'
-    )) AS scheduledtimeout,
-    DATE_FORMAT(pao_attendancedate,  '%Y-%m-%d') AS attendancedate,
-    date_format(pao_clockin, '%Y-%m-%d %H:%i:%s') AS clockin,
-    date_format(pao_clockout, '%Y-%m-%d %H:%i:%s') AS clockout,
-    pao_status
-FROM payroll_approval_ot
-INNER JOIN master_shift ON payroll_approval_ot.pao_employeeid = ms_employeeid
-INNER JOIN master_employee ON master_shift.ms_employeeid = me_id
-LEFT JOIN master_holiday ON pao_attendancedate = mh_date
-INNER JOIN master_department ON master_employee.me_department = md_departmentid
-INNER JOIN master_position ON master_employee.me_position = mp_positionid
-WHERE pao_id = '${approveot_id}'`;
+// router.post("/getovertime", verifyJWT,(req, res) => {
+//   try {
+//     let approveot_id = req.body.approveot_id;
+//     let sql = `SELECT
+//         pao_id AS approvalid,
+//         JSON_UNQUOTE(JSON_EXTRACT(
+//             CASE DAYNAME(pao_attendancedate)
+//                 WHEN 'Monday' THEN ms_monday
+//                 WHEN 'Tuesday' THEN ms_tuesday
+//                 WHEN 'Wednesday' THEN ms_wednesday
+//                 WHEN 'Thursday' THEN ms_thursday
+//                 WHEN 'Friday' THEN ms_friday
+//                 WHEN 'Saturday' THEN ms_saturday
+//                 WHEN 'Sunday' THEN ms_sunday
+//             END,
+//             '$.time_in'
+//         )) AS scheduledtimein,
+//         JSON_UNQUOTE(JSON_EXTRACT(
+//             CASE DAYNAME(pao_attendancedate)
+//                 WHEN 'Monday' THEN ms_monday
+//                 WHEN 'Tuesday' THEN ms_tuesday
+//                 WHEN 'Wednesday' THEN ms_wednesday
+//                 WHEN 'Thursday' THEN ms_thursday
+//                 WHEN 'Friday' THEN ms_friday
+//                 WHEN 'Saturday' THEN ms_saturday
+//                 WHEN 'Sunday' THEN ms_sunday
+//             END,
+//             '$.time_out'
+//         )) AS scheduledtimeout,
+//         DATE_FORMAT(pao_attendancedate,  '%Y-%m-%d') AS attendancedate,
+//         date_format(pao_clockin, '%Y-%m-%d %H:%i:%s') AS clockin,
+//         date_format(pao_clockout, '%Y-%m-%d %H:%i:%s') AS clockout,
+//         pao_status
+//     FROM payroll_approval_ot
+//     INNER JOIN master_shift ON payroll_approval_ot.pao_employeeid = ms_employeeid
+//     INNER JOIN master_employee ON master_shift.ms_employeeid = me_id
+//     LEFT JOIN master_holiday ON pao_attendancedate = mh_date
+//     INNER JOIN master_department ON master_employee.me_department = md_departmentid
+//     INNER JOIN master_position ON master_employee.me_position = mp_positionid
+//     WHERE pao_id = '${approveot_id}'`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
+//     console.log(sql);
+    
+//     mysql
+//       .mysqlQueryPromise(sql)
+//       .then((result) => {
+//         res.json({
+//           msg: "success",
+//           data: result,
+//         });
+//         console.log(result);d
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       data: error,
+//     });
+//   }
+// });
 
 router.post("/getattendancedate", verifyJWT,(req, res) => {
   try {
@@ -2437,6 +2475,8 @@ LIMIT 1;
 router.post("/getovertime", verifyJWT,(req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
+    console.log(approveot_id,'approveot_id');
+    
     let sql = `SELECT
         pao_id AS approvalid,
         CASE 
@@ -2563,8 +2603,8 @@ router.post("/getovertime", verifyJWT,(req, res) => {
         md_departmentname AS departmentname,
         pao_fullname AS fullname,
         DATE_FORMAT(pao_attendancedate, '%W, %Y-%m-%d') AS attendancedate,
-        DATE_FORMAT(pao_clockin, '%Y-%m-%dT%H:%i') AS clockin,
-        DATE_FORMAT(pao_clockout, '%Y-%m-%dT%H:%i') AS clockout,
+        DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i') AS clockin,
+        DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i') AS clockout,
         pao_total_hours AS totalhours,
         pao_early_ot AS earlyot,
         pao_normal_ot AS normalot,
@@ -2600,6 +2640,7 @@ router.post("/getovertime", verifyJWT,(req, res) => {
           msg: "success",
           data: result,
         });
+        console.log(result,'check result');
       })
       .catch((error) => {
         res.json({

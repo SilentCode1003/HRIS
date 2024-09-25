@@ -36,7 +36,7 @@
 
     function searchEmployees(searchTerm) {
       $.ajax({
-        url: "/searchemployee",
+        url: "/index/searchemployee",
         method: "POST",
         data: { search: searchTerm },
         success: function (response) {
