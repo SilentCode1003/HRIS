@@ -751,7 +751,7 @@ router.post("/gettrainingforapp", verifyJWT, (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log("SQL query:", sql);
+        // console.log("SQL query:", sql);
 
         res.json({
           msg: "success",
