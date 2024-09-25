@@ -259,7 +259,7 @@ router.post("/announcementloadforapp", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/getnotif", verifyJWT,(req, res) => {
+router.post("/getnotif", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `call hrmis.GetNotification('${employeeid}')`;
@@ -322,7 +322,7 @@ router.post("/getannouncement", verifyJWT, (req, res) => {
 
 //#region APP HOMEPAGE
 
-router.get("/loadservertime", verifyJWT,(req, res) => {
+router.get("/loadservertime", verifyJWT, (req, res) => {
   try {
     let servertime = GetCurrentDatetimeSecconds();
     res.json(JsonDataResponse(servertime));
@@ -332,7 +332,7 @@ router.get("/loadservertime", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/latestlog", verifyJWT,(req, res) => {
+router.post("/latestlog", verifyJWT, (req, res) => {
   const employeeid = req.body.employeeid;
 
   console.log(employeeid);
@@ -351,7 +351,7 @@ router.post("/latestlog", verifyJWT,(req, res) => {
     );
 });
 
-router.post("/clockin", verifyJWT,(req, res) => {
+router.post("/clockin", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
   const locationin = req.body.locationin;
@@ -461,7 +461,7 @@ router.post("/clockin", verifyJWT,(req, res) => {
     });
 });
 
-router.post("/clockout", verifyJWT,(req, res) => {
+router.post("/clockout", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -532,7 +532,7 @@ router.post("/clockout", verifyJWT,(req, res) => {
     });
 });
 
-router.post("/selectgeofence", verifyJWT,(req, res) => {
+router.post("/selectgeofence", verifyJWT, (req, res) => {
   try {
     let departmentid = req.body.departmentid;
     let sql = `select * from master_geofence_settings
@@ -562,14 +562,13 @@ router.post("/selectgeofence", verifyJWT,(req, res) => {
   }
 });
 
-
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //#region EMPLOYEE PAGE
 
-router.post("/getgovid", verifyJWT,(req, res) => {
+router.post("/getgovid", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select
@@ -603,7 +602,7 @@ router.post("/getgovid", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/eportaldisciplinaryactionloadforapp", verifyJWT,(req, res) => {
+router.post("/eportaldisciplinaryactionloadforapp", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `        
@@ -641,10 +640,13 @@ router.post("/eportaldisciplinaryactionloadforapp", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getemployeeprofileforappbasicinformation", verifyJWT,(req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `SELECT 
+router.post(
+  "/getemployeeprofileforappbasicinformation",
+  verifyJWT,
+  (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let sql = `SELECT 
     me_id AS employeeid,
     md_departmentname AS department,
     mp_positionname AS position,
@@ -664,28 +666,29 @@ router.post("/getemployeeprofileforappbasicinformation", verifyJWT,(req, res) =>
     master_position ON master_employee.me_position = mp_positionid
     where me_id = '${employeeid}'`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
+      mysql
+        .mysqlQueryPromise(sql)
+        .then((result) => {
+          res.json({
+            msg: "success",
+            data: result,
+          });
+        })
+        .catch((error) => {
+          res.json({
+            msg: "error",
+            error,
+          });
         });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          error,
-        });
+    } catch (error) {
+      res.json({
+        msg: error,
       });
-  } catch (error) {
-    res.json({
-      msg: error,
-    });
+    }
   }
-});
+);
 
-router.post("/getemployee", verifyJWT,(req, res) => {
+router.post("/getemployee", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `    
@@ -768,15 +771,13 @@ router.post("/gettrainingforapp", verifyJWT, (req, res) => {
   }
 });
 
-
-
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //#region SETTINGS PAGE
 
-router.post("/loadshiftforapp", verifyJWT,(req, res) => {
+router.post("/loadshiftforapp", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `call hrmis.LoadShiftForApp('${employeeid}')`;
@@ -879,7 +880,7 @@ router.post("/updatepassword", verifyJWT, async (req, res) => {
 
 //#region PAYROLL
 
-router.post("/getpayrolldate", verifyJWT,(req, res) => {
+router.post("/getpayrolldate", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT 
@@ -924,7 +925,7 @@ router.post("/getpayrolldate", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/loadpayslip", verifyJWT,(req, res) => {
+router.post("/loadpayslip", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let payrolldate = req.body.payrolldate;
@@ -1022,7 +1023,7 @@ router.post("/loadpayslip", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -1033,7 +1034,7 @@ router.post("/loadpayslip", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/subgrouploadforapp", verifyJWT,(req, res) => {
+router.post("/subgrouploadforapp", verifyJWT, (req, res) => {
   try {
     let departmentid = req.body.departmentid;
     let sql = `select * 
@@ -1057,7 +1058,7 @@ router.post("/subgrouploadforapp", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getpayrolldate", verifyJWT,(req, res) => {
+router.post("/getpayrolldate", verifyJWT, (req, res) => {
   try {
     let sql = `SELECT DISTINCT 
     DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
@@ -1091,7 +1092,7 @@ router.post("/getpayrolldate", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/viewpayslip", verifyJWT,(req, res) => {
+router.post("/viewpayslip", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let password = req.body.password;
@@ -1107,7 +1108,8 @@ router.post("/viewpayslip", verifyJWT,(req, res) => {
       inner join master_user on master_employee.me_id = mu_employeeid
       where mu_password = '${encrypted}' and me_id = '${employeeid}'`;
 
-      mysql.mysqlQueryPromise(sql)
+      mysql
+        .mysqlQueryPromise(sql)
         .then((result) => {
           if (result.length !== 0) {
             res.json({
@@ -1168,7 +1170,6 @@ router.get("/loadreq", (req, res) => {
     });
   }
 });
-
 
 //#endregion
 
@@ -1327,8 +1328,8 @@ router.post("/login", (req, res) => {
                     ),
                   });
                 }
-                console.log(data, "data");
-                
+                // console.log(data, "data");
+
                 //console.log("accesstype", req.session.accesstype);
                 return res.json({
                   msg: "success",
@@ -1364,7 +1365,7 @@ router.post("/login", (req, res) => {
 
 //#region LOAN DETAILS
 
-router.post("/loadloansdetails", verifyJWT,(req, res) => {
+router.post("/loadloansdetails", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT * FROM gov_loan_details
@@ -1392,7 +1393,7 @@ router.post("/loadloansdetails", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/loadloans", verifyJWT,(req, res) => {
+router.post("/loadloans", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT * FROM gov_loans
@@ -1420,7 +1421,7 @@ router.post("/loadloans", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getgovloans", verifyJWT,(req, res) => {
+router.post("/getgovloans", verifyJWT, (req, res) => {
   try {
     let govloanid = req.body.govloanid;
     let sql = `SELECT
@@ -1446,7 +1447,7 @@ router.post("/getgovloans", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "gld_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -1502,7 +1503,7 @@ router.post("/loadcoa", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/submit",verifyJWT, async (req, res) => {
+router.post("/submit", verifyJWT, async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
@@ -1568,7 +1569,7 @@ router.post("/submit",verifyJWT, async (req, res) => {
             requesttype: REQUEST.COA,
           },
         ];
-        SendEmailNotification(employeeid,subgroupid, REQUEST.COA, emailbody);
+        SendEmailNotification(employeeid, subgroupid, REQUEST.COA, emailbody);
 
         res.json({ msg: "success" });
       }
@@ -1579,7 +1580,7 @@ router.post("/submit",verifyJWT, async (req, res) => {
   }
 });
 
-router.post("/gethomestatus2",verifyJWT, (req, res) => {
+router.post("/gethomestatus2", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
@@ -1612,8 +1613,7 @@ router.post("/gethomestatus2",verifyJWT, (req, res) => {
   }
 });
 
-
-router.post("/filterforapp",verifyJWT, (req, res) => {
+router.post("/filterforapp", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `       
@@ -1655,15 +1655,13 @@ router.post("/filterforapp",verifyJWT, (req, res) => {
   }
 });
 
-
-
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //#region REST DAY OT APPROVAL
 
-router.post("/loadrdot", verifyJWT,(req, res) => {
+router.post("/loadrdot", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `
@@ -1690,7 +1688,7 @@ router.post("/loadrdot", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -1701,7 +1699,7 @@ router.post("/loadrdot", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getrestdayot", verifyJWT,(req, res) => {
+router.post("/getrestdayot", verifyJWT, (req, res) => {
   try {
     let rdotid = req.body.rdotid;
     let sql = `SELECT
@@ -1736,7 +1734,7 @@ router.post("/getrestdayot", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -1747,7 +1745,7 @@ router.post("/getrestdayot", verifyJWT,(req, res) => {
   }
 });
 
-router.put("/editrdot", verifyJWT,(req, res) => {
+router.put("/editrdot", verifyJWT, (req, res) => {
   try {
     let createdby = req.body.fullname;
     let createddate = GetCurrentDatetime();
@@ -1863,7 +1861,7 @@ router.put("/editrdot", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/saverdot",verifyJWT, async (req, res) => {
+router.post("/saverdot", verifyJWT, async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let fullname = req.body.fullname;
@@ -1981,7 +1979,7 @@ router.post("/saverdot",verifyJWT, async (req, res) => {
 
 //#region HOLIDAY APPROVAL
 
-router.post("/loadholiday", verifyJWT,(req, res) => {
+router.post("/loadholiday", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
@@ -2007,7 +2005,7 @@ router.post("/loadholiday", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        //console.log(data);
+        ////console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -2019,7 +2017,7 @@ router.post("/loadholiday", verifyJWT,(req, res) => {
   }
 });
 
-router.put("/editholiday", verifyJWT,(req, res) => {
+router.put("/editholiday", verifyJWT, (req, res) => {
   try {
     let createdby = req.body.fullname;
     let createddate = GetCurrentDatetime();
@@ -2135,7 +2133,7 @@ router.put("/editholiday", verifyJWT,(req, res) => {
 
 //#region OVERTIME
 
-router.post("/loadovertime", verifyJWT,(req, res) => {
+router.post("/loadovertime", verifyJWT, (req, res) => {
   try {
     const { employeeid, startdate, enddate, overtimestatus } = req.body;
     let sql = `
@@ -2179,7 +2177,7 @@ router.post("/loadovertime", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/loadotcurrentmonth", verifyJWT,(req, res) => {
+router.post("/loadotcurrentmonth", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let overtimestatus = req.body.overtimestatus;
@@ -2268,7 +2266,7 @@ router.post("/loadotcurrentmonth", verifyJWT,(req, res) => {
 //     WHERE pao_id = '${approveot_id}'`;
 
 //     console.log(sql);
-    
+
 //     mysql
 //       .mysqlQueryPromise(sql)
 //       .then((result) => {
@@ -2292,7 +2290,7 @@ router.post("/loadotcurrentmonth", verifyJWT,(req, res) => {
 //   }
 // });
 
-router.post("/getattendancedate", verifyJWT,(req, res) => {
+router.post("/getattendancedate", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
@@ -2452,7 +2450,7 @@ LIMIT 1;
             if (result != 0) {
               let data = DataModeling(result, "pao_");
 
-              console.log(data);
+              //console.log(data);
               res.json(JsonDataResponse(data));
             } else {
               res.json(JsonDataResponse(result));
@@ -2472,11 +2470,11 @@ LIMIT 1;
   }
 });
 
-router.post("/getovertime", verifyJWT,(req, res) => {
+router.post("/getovertime", verifyJWT, (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
-    console.log(approveot_id,'approveot_id');
-    
+    console.log(approveot_id, "approveot_id");
+
     let sql = `SELECT
         pao_id AS approvalid,
         CASE 
@@ -2640,7 +2638,7 @@ router.post("/getovertime", verifyJWT,(req, res) => {
           msg: "success",
           data: result,
         });
-        console.log(result,'check result');
+        console.log(result, "check result");
       })
       .catch((error) => {
         res.json({
@@ -2656,7 +2654,7 @@ router.post("/getovertime", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/addrequstot", verifyJWT,(req, res) => {
+router.post("/addrequstot", verifyJWT, (req, res) => {
   try {
     let clockin = req.body.clockin;
     let clockout = req.body.clockout;
@@ -3113,7 +3111,7 @@ INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
   }
 });
 
-router.post("/update", verifyJWT,(req, res) => {
+router.post("/update", verifyJWT, (req, res) => {
   try {
     console.log("hit");
 
@@ -3630,14 +3628,13 @@ router.post("/update", verifyJWT,(req, res) => {
   }
 });
 
-
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //#region OVERTIME MEAL
 
-router.post("/loadotmeal", verifyJWT,(req, res) => {
+router.post("/loadotmeal", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT 
@@ -3673,7 +3670,7 @@ router.post("/loadotmeal", verifyJWT,(req, res) => {
   }
 });
 
-router.put("/edit", verifyJWT,(req, res) => {
+router.put("/edit", verifyJWT, (req, res) => {
   try {
     const {
       mealotid,
@@ -3798,7 +3795,7 @@ router.put("/edit", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getotmeal", verifyJWT,(req, res) => {
+router.post("/getotmeal", verifyJWT, (req, res) => {
   try {
     let mealotid = req.body.mealotid;
     let sql = `SELECT 
@@ -3825,7 +3822,7 @@ router.post("/getotmeal", verifyJWT,(req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "oma_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -3842,7 +3839,7 @@ router.post("/getotmeal", verifyJWT,(req, res) => {
 
 //#region LEAVES
 
-router.post("/countheader", verifyJWT,(req, res) => {
+router.post("/countheader", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT 
@@ -3874,7 +3871,7 @@ router.post("/countheader", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/loadheader", verifyJWT,(req, res) => {
+router.post("/loadheader", verifyJWT, (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
     let employeeid = req.body.employeeid;
@@ -3909,7 +3906,7 @@ router.post("/loadheader", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/loadleavetypeforapp", verifyJWT,(req, res) => {
+router.post("/loadleavetypeforapp", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT
@@ -3943,7 +3940,7 @@ router.post("/loadleavetypeforapp", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/getleave", verifyJWT,(req, res) => {
+router.post("/getleave", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT *,
@@ -3969,14 +3966,13 @@ router.post("/getleave", verifyJWT,(req, res) => {
   }
 });
 
-
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //#region CASH ADVANCE
 
-router.post("/getload", verifyJWT,(req, res) => {
+router.post("/getload", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `SELECT * FROM cash_advance WHERE ca_employeeid = '${employeeid}'
@@ -3998,7 +3994,7 @@ router.post("/getload", verifyJWT,(req, res) => {
   }
 });
 
-router.post("/cancelcashadvanced",verifyJWT, async (req, res) => {
+router.post("/cancelcashadvanced", verifyJWT, async (req, res) => {
   try {
     const cashadvanceid = req.body.cashadvanceid;
 
@@ -4023,7 +4019,7 @@ router.post("/cancelcashadvanced",verifyJWT, async (req, res) => {
   }
 });
 
-router.post("/submitforapp", verifyJWT,async (req, res) => {
+router.post("/submitforapp", verifyJWT, async (req, res) => {
   try {
     const employeeid = req.body.employeeid;
     const { amount, purpose } = req.body;
@@ -4098,6 +4094,5 @@ function getDeviceInformation(device) {
     return "web";
   }
 }
-
 
 //#endregion
