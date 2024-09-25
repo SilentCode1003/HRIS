@@ -433,7 +433,6 @@ router.post("/addrequstot", (req, res) => {
 
     let sql = `
     INSERT INTO payroll_approval_ot (
-    pao_image,
     pao_fullname,
     pao_employeeid,
     pao_attendancedate,
@@ -463,7 +462,6 @@ router.post("/addrequstot", (req, res) => {
     pao_overtimeimage
   )
 SELECT
-me.me_profile_pic AS pao_image,
 CONCAT(me.me_lastname, ' ', me.me_firstname) AS pao_fullname,
 me.me_id AS pao_employeeid,
 '${attendancedate}' AS pao_attendancedate,
@@ -884,12 +882,6 @@ router.post("/update", (req, res) => {
 
     let sql = `UPDATE payroll_approval_ot
     SET 
-        pao_image = (
-            SELECT me.me_profile_pic
-            FROM master_employee me
-            WHERE me.me_id = '${employeeid}'
-            LIMIT 1
-        ),
         pao_fullname = CONCAT(
             (
                 SELECT me.me_lastname

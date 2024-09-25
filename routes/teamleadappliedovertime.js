@@ -138,7 +138,6 @@ router.post("/getotapproval", (req, res) => {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
 	  pao_id,
-    pao_image,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
     DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
