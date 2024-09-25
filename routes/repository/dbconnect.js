@@ -13,7 +13,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
 Encrypter("m@iLcOwpaybLsol!2023", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
-});z
+});
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
