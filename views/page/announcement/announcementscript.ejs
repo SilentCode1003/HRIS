@@ -47,7 +47,7 @@
                 tittle: item.tittle,
                 type: item.type,
                 targetdate: item.targetdate,
-                description: item.description,
+                enddate: item.enddate,
                 createby: item.createby,
                 createdate: item.createdate,
                 status: item.status,
@@ -70,7 +70,7 @@
           { data: "tittle" },
           { data: "type" },
           { data: "targetdate" },
-          { data: "description" },
+          { data: "enddate" },
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },
@@ -145,7 +145,11 @@
       let tittle = $("#announcementtittle").val();
       let type = $("#announcementtype").val();
       let targetdate = $("#targetdate").val();
-      let description = $("#announcementdescription").val();
+      let enddate = $("#enddate").val();
+      let description = $("#announcementdescription").summernote("code"); // Capture the HTML content
+
+      console.log(tittle, type, targetdate, enddate, description);
+      
 
       var message = "";
 
@@ -158,6 +162,10 @@
       }
 
       if (type == "") {
+        message += "TITTLE ";
+      }
+
+      if (enddate == "") {
         message += "TITTLE ";
       }
 
@@ -180,6 +188,7 @@
             tittle: tittle,
             type: type,
             targetdate: targetdate,
+            enddate: enddate,
             description: description,
           },
           success: function (result) {
@@ -234,11 +243,16 @@
             $.each(existingData, (key, item) => {
               $("#editdepartmentid").val(item.bulletinid);
               $("#editannouncementtittle").val(item.tittle);
-              $("#editpreview").attr(
+              $("#previewleave").attr(
                 "src",
                 "data:image/jpg;base64," + item.image
               );
-              $("#editannouncementdescription").val(item.description);
+              $("#editannouncementdescription").summernote(
+                "code",
+                item.description
+              );
+              base64String = item.image;
+              $("#editenddate").val(item.enddate);
               $("#editannouncementstatus").val(item.status);
               $("#editannouncementtype").val(item.type);
               $("#edittargetdate").val(item.targetdate);
@@ -257,14 +271,58 @@
       });
     });
 
+    $("#editannouncementdescription").summernote({
+      placeholder: "Enter the description here...",
+      tabsize: 2,
+      height: 200,
+      toolbar: [
+        ["style", ["style"]],
+        ["font", ["bold", "italic", "underline", "clear"]],
+        ["fontname", ["fontname"]],
+        ["color", ["color"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["table", ["table"]],
+        ["insert", ["link", "picture", "video"]],
+        ["view", ["fullscreen", "codeview", "help"]],
+        ["custom", ["responsive"]],
+      ],
+      buttons: {
+        responsive: function (context) {
+          var ui = $.summernote.ui;
+          var button = ui.button({
+            contents: '<i class="fa fa-mobile"></i> Responsive',
+            tooltip: "Add responsive styles",
+            click: function () {
+              var currentContent = context.invoke("code");
+              var responsiveContent = `<div class="responsive">${currentContent}</div>`;
+              context.invoke("code", responsiveContent);
+            },
+          });
+          return button.render();
+        },
+      },
+    });
+
     $(document).on("click", "#editannouncementsavebtn", function () {
       let id = bulletinid;
-      let image = base64String;
       let tittle = $("#editannouncementtittle").val();
-      let description = $("#editannouncementdescription").val();
+      let description = $("#editannouncementdescription").summernote("code");
       let status = $("#editannouncementstatus").val();
       let type = $("#editannouncementtype").val();
       let targetdate = $("#edittargetdate").val();
+      let enddate = $("#editenddate").val();
+      let image = base64String;
+
+      console.log(id,'id');
+      console.log(tittle,'tittle');
+      console.log(description,'description');
+      console.log(status,'status');
+      console.log(type,'type');
+      console.log(targetdate,'targetdate');
+      console.log(enddate,'enddate');
+      console.log(image,'image');
+
+      
 
       var message = "";
 
@@ -292,18 +350,23 @@
         message += "targetdate is required. ";
       }
 
+      if (enddate === "") {
+        message += "enddate is required. ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/announcement/update",
+          type: "PUT",
+          url: "/announcement/edit",
           data: {
             bulletinid: id,
             image: image,
             tittle: tittle,
             type: type,
             targetdate: targetdate,
+            enddate: enddate,
             description: description,
             status: status,
           },
@@ -374,7 +437,7 @@
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = function () {
-        const preview = document.getElementById("editpreview");
+        const preview = document.getElementById("previewleave");
         preview.src = reader.result;
       };
       editimage();

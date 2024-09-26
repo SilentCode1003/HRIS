@@ -111,6 +111,46 @@ router.get("/load", (req, res) => {
 //   }
 // });
 
+
+router.post("/getreqinteamlead", (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let sql = `    
+      SELECT 
+        me_id,
+        me_profile_pic,
+        concat(me_lastname,' ',me_firstname) as ar_employeeid,
+        ar_attendace_date,
+        DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+        DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+        ar_total,
+        ar_createdate,
+        ar_status,
+        ar_reason,
+        ar_file,
+        ar_subgroupid
+      FROM attendance_request
+      INNER JOIN
+      master_employee ON attendance_request.ar_employeeid = me_id
+      WHERE ar_requestid = '${requestid}'
+      ORDER BY ar_requestid`;
+
+    mysql.Select(sql, "Attendance_Request", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
+  }
+});
+
 router.get("/loadactionname", (req, res) => {
   try {
     let accesstypeid = req.session.accesstypeid;
