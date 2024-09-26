@@ -3,6 +3,8 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable, Update } = require("./repository/dbconnect");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { Master_Geofence_Settings } = require("./model/hrmisdb");
 const {
   JsonErrorResponse,
   JsonDataResponse,
@@ -32,6 +34,7 @@ const {
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
 const { sq } = require("date-fns/locale");
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -561,6 +564,7 @@ router.post("/selectgeofence", verifyJWT, (req, res) => {
     });
   }
 });
+
 
 //#endregion
 
@@ -1137,7 +1141,7 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
   }
 });
 
-router.get("/loadreq", (req, res) => {
+router.post("/loadreqbeforepayout", verifyJWT,(req, res) => {
   try {
     let sql = `SELECT 
     pd_payrollid,
@@ -1149,10 +1153,13 @@ router.get("/loadreq", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
+    pd_payrolldate >= CURDATE()
     ORDER BY 
-    pd_startdate
+    pd_payrolldate
     LIMIT 5`;
+
+    //console.log(req.body,'body');
+    
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -1171,39 +1178,6 @@ router.get("/loadreq", (req, res) => {
   }
 });
 
-router.get("/loadreq", (req, res) => {
-  try {
-    let sql = `SELECT 
-    pd_payrollid,
-    pd_name,
-    pd_cutoff,
-    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
-    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
-    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
-    FROM 
-    payroll_date
-    WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
-    ORDER BY 
-    pd_startdate
-    LIMIT 5`;
-
-    mysql.Select(sql, "Payroll_Date", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      //
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      mag: "error",
-      data: error,
-    });
-  }
-});
 
 //#endregion
 
@@ -3990,6 +3964,43 @@ router.post("/getleave", verifyJWT, (req, res) => {
     res.json({
       msg: "error",
       error,
+    });
+  }
+});
+
+router.post("/loadheaderforapp", verifyJWT, (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    ml_leavetype as leavetype,
+    ml_totalleavedays as totalleave,
+    ml_unusedleavedays as unused,
+    ml_usedleavedays as used,
+    (select 
+    count(l_leavestatus) as Pending
+    from leaves
+    where l_leavestatus = 'Pending') as Pending
+    from master_leaves
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
     });
   }
 });
