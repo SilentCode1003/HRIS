@@ -25,7 +25,7 @@
                         <th>Title</th>
                         <th>Type</th>
                         <th>Target Date</th>
-                        <th class="col-25">Description</th>
+                        <th class="col-25">End Date</th>
                         <th>Created By</th>
                         <th>Created Date</th>
                         <th class="col-sm-1">Status</th>
@@ -41,72 +41,6 @@
 </div>
 
 <!-- Modal -->
-<!-- <div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header" id="modal-header">
-        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
-        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-        <h1 class="modal-title" id="exampleModalLabel">Add ANNOUNCEMENT</h1>
-        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-      </div>
-      <div class="modal-body" id="modal-body">
-        <form>
-          <div class="col">
-            <div class="form-floating">
-              <input type="text" class="form-control border-form-modal" id="announcementtittle" name="announcementtittle"
-                placeholder="Department Name">
-              <label for="floatingInput">Title</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <select class="form-control border-form-modal" id="announcementtype" name="announcementtype">
-                <option value="Event">Event</option>
-                <option value="Announcement">Announcement</option>
-              </select>
-              <label for="announcementtype">Announcement Type</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <textarea class="form-control border-form-modal custom-width-textarea" id="announcementdescription" name="announcementdescription" placeholder="Department Name"></textarea>
-              <label for="announcementdescription">Description</label>
-            </div>
-          </div>                  
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <input type="date" class="form-control border-form-modal" id="targetdate" name="targetdate"
-                placeholder="Department Name">
-              <label for="floatingInput">Target Date</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <label class="form-label" for="customFile"></label>
-              <input type="file" name="announcementimage" id="announcementimage" class="form-control border-form-modal" accept="image/*">
-              <br>
-              <div class="text-center">
-                <img id="preview" src="https://via.placeholder.com/250" class="rounded border-form-modal" alt="placeholder">
-              </div>
-            </div>
-          </div>
-          <br>
-        </form>
-      </div>
-      <div class="modal-footer" id="modal-footer">
-        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-modal-save" id="announcementsavebtn">Save</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="modal fade" id="announcementmodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -195,76 +129,92 @@
 <!-- Edit Modal -->
 <div class="modal fade" id="editannouncementmodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
-        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
-          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
-        </lord-icon>
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
         <h1 class="modal-title" id="exampleModalLabel">Edit Announcement</h1>
-        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
       </div>
       <div class="modal-body" id="modal-body">
-        <form>
-          <div class="col">
-            <div class="form-floating">
-              <input type="text" class="form-control border-form-modal" id="editannouncementtittle" name="editannouncementtittle"
-                placeholder="Department Name">
-              <label for="floatingInput">Tittle</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <select class="form-control border-form-modal" id="editannouncementtype" name="editannouncementtype">
-                <option value="Event">Event</option>
-                <option value="Announcement">Announcement</option>
-              </select>
-              <label for="announcementtype">Announcement Type</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <input type="text" class="form-control border-form-modal" id="editannouncementdescription"
-                name="editannouncementdescription" placeholder="Department Name">
-              <label for="floatingInput">Description</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <input type="date" class="form-control border-form-modal" id="edittargetdate" name="edittargetdate"
-                placeholder="Department Name">
-              <label for="floatingInput">Target Date</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <select class="form-select border-form-modal" id="editannouncementstatus" name="editannouncementstatus"
-                aria-label="Floating label select example">
-                <option selected>Choose...</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-              <label for="floatingSelectGrid">Announcement</label>
-            </div>
-          </div>
-          <br>
-          <div class="col">
-            <div class="form-floating">
-              <label class="form-label" for="customFile"></label>
-              <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control border-form-modal"
-                accept="image/*">
-              <br>
-              <div class="text-center">
-                <img id="editpreview" src="https://via.placeholder.com/250" style="height: 250px; width: 250px;" class="rounded border-form-modal" alt="placeholder">
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="form-floating">
+                  <label class="form-label" for="customFile"></label>
+                  <div class="text-center">
+                    <img id="previewleave" src="https://via.placeholder.com/250" class="rounded border-form-modal" alt="placeholder">
+                  </div>
+                  <br>
+                  <input type="file" name="editannouncementimage" id="editannouncementimage" class="form-control border-form-modal" accept="image/*">
+                </div>
               </div>
             </div>
           </div>
-          <br>
-        </form>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="editannouncementtittle" name="editannouncementtittle"
+                      placeholder="Department Name">
+                    <label for="floatingInput">Title</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-control border-form-modal" id="editannouncementtype" name="editannouncementtype">
+                      <option value="Event">Event</option>
+                      <option value="Announcement">Announcement</option>
+                    </select>
+                    <label for="editannouncementtype">Announcement Type</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="edittargetdate" name="edittargetdate"
+                      placeholder="Department Name">
+                    <label for="floatingInput">Start Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="editenddate" name="editenddate"
+                      placeholder="Department Name">
+                    <label for="floatingInput">End Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-control border-form-modal" id="editannouncementstatus" name="editannouncementstatus">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                    <label for="editannouncementstatus">Status</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <textarea class="form-control border-form-modal" id="editannouncementdescription" name="editannouncementdescription"></textarea>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
       </div>
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -273,3 +223,4 @@
     </div>
   </div>
 </div>
+

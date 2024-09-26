@@ -658,7 +658,7 @@
     function loadCashBadge() {
       $.ajax({
         type: "GET",
-        url: "/countcashreqbadge",
+        url: "/index/countcashreqbadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalCa = result.data.CAreqCount;
@@ -676,7 +676,7 @@
     function loadOvertimeBadge() {
       $.ajax({
         type: "GET",
-        url: "/countovertimeot",
+        url: "/index/countovertimeot",
         success: function (result) {
           if (result.msg === "success") {
             const totalOT = result.data.OTreqCount;
@@ -694,7 +694,7 @@
     function loadCOABadge() {
       $.ajax({
         type: "GET",
-        url: "/countCOA",
+        url: "/index/countCOA",
         success: function (result) {
           if (result.msg === "success") {
             const totalCOA = result.data.COAreqCount;
@@ -742,7 +742,7 @@
     function GenerateAnouncement() {
       $.ajax({
         type: "GET",
-        url: "/getbulletin",
+        url: "/index/getbulletin",
         // data: {
         //   bulletinid: id,
         // },
@@ -802,7 +802,7 @@
     function LoadBdayFolks() {
       $.ajax({
         type: "GET",
-        url: "/getbday",
+        url: "/index/getbday",
         success: function (result) {
           if (result.msg === "success") {
             const bdayData = result.data;
@@ -1019,7 +1019,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -1124,7 +1124,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadCA",
+        url: "/index/loadCA",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1303,7 +1303,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqOT",
+        url: "/index/loadreqOT",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1506,7 +1506,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqattendance",
+        url: "/index/loadreqattendance",
         success: function (json) {
           var finalData = [];
           var data = json.data;
