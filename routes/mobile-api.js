@@ -3,6 +3,7 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable, Update } = require("./repository/dbconnect");
+const { SendEmailNotification } = require("./repository/emailsender");
 const {
   JsonErrorResponse,
   JsonDataResponse,
@@ -32,6 +33,7 @@ const {
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
 const { sq } = require("date-fns/locale");
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -3990,6 +3992,43 @@ router.post("/getleave", verifyJWT, (req, res) => {
     res.json({
       msg: "error",
       error,
+    });
+  }
+});
+
+router.post("/loadheaderforapp", verifyJWT, (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    ml_leavetype as leavetype,
+    ml_totalleavedays as totalleave,
+    ml_unusedleavedays as unused,
+    ml_usedleavedays as used,
+    (select 
+    count(l_leavestatus) as Pending
+    from leaves
+    where l_leavestatus = 'Pending') as Pending
+    from master_leaves
+    where ml_employeeid = '${employeeid}'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        res.json({
+          msg: "success",
+          data: result,
+        });
+      })
+      .catch((error) => {
+        res.json({
+          msg: "error",
+          data: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
     });
   }
 });

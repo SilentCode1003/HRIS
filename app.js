@@ -180,6 +180,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", loginlayoutRouter);
 app.use("/access", accessRouter);
 app.use("/mobile-api", mobileAPIRouter);
+app.use("/forgotpassword", forgotpasswordRouter);
 app.use(verifyJWT)
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
@@ -304,7 +305,6 @@ app.use("/sudden_deductions", sudden_deductionsRouter);
 app.use("/generate13thmonth", generate13thmonthRouter);
 app.use("/usersubgroup", usersubgrouplayoutRouter);
 app.use("/eportalgovloans", eportalgovloansRouter);
-app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/enrolled_bank_acc", enrolled_bank_accRouter);
 app.use("/eportalrestdayot", eportalrestdayotRouter);
 app.use("/restdayot_request_activity", restdayot_request_activityRouter);

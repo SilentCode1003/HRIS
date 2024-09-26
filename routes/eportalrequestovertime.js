@@ -131,7 +131,7 @@ router.get("/loadapplied", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -172,7 +172,7 @@ router.get("/loadrejected", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -213,7 +213,7 @@ router.get("/loadcancelled", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
+        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
