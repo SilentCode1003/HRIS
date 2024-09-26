@@ -4,6 +4,7 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable, Update } = require("./repository/dbconnect");
 const { SendEmailNotification } = require("./repository/emailsender");
+const { Master_Geofence_Settings } = require("./model/hrmisdb");
 const {
   JsonErrorResponse,
   JsonDataResponse,
@@ -563,6 +564,7 @@ router.post("/selectgeofence", verifyJWT, (req, res) => {
     });
   }
 });
+
 
 //#endregion
 
@@ -1139,7 +1141,7 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
   }
 });
 
-router.get("/loadreq", (req, res) => {
+router.post("/loadreqbeforepayout", verifyJWT,(req, res) => {
   try {
     let sql = `SELECT 
     pd_payrollid,
@@ -1151,10 +1153,13 @@ router.get("/loadreq", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
+    pd_payrolldate >= CURDATE()
     ORDER BY 
-    pd_startdate
+    pd_payrolldate
     LIMIT 5`;
+
+    //console.log(req.body,'body');
+    
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -1173,39 +1178,6 @@ router.get("/loadreq", (req, res) => {
   }
 });
 
-router.get("/loadreq", (req, res) => {
-  try {
-    let sql = `SELECT 
-    pd_payrollid,
-    pd_name,
-    pd_cutoff,
-    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
-    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
-    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
-    FROM 
-    payroll_date
-    WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
-    ORDER BY 
-    pd_startdate
-    LIMIT 5`;
-
-    mysql.Select(sql, "Payroll_Date", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      //
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      mag: "error",
-      data: error,
-    });
-  }
-});
 
 //#endregion
 
