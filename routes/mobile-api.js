@@ -1171,6 +1171,40 @@ router.get("/loadreq", (req, res) => {
   }
 });
 
+router.get("/loadreq", (req, res) => {
+  try {
+    let sql = `SELECT 
+    pd_payrollid,
+    pd_name,
+    pd_cutoff,
+    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+    FROM 
+    payroll_date
+    WHERE
+    pd_enddate >= CURDATE() OR pd_enddate IS NULL
+    ORDER BY 
+    pd_startdate
+    LIMIT 5`;
+
+    mysql.Select(sql, "Payroll_Date", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      //
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      mag: "error",
+      data: error,
+    });
+  }
+});
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -2265,8 +2299,6 @@ router.post("/loadotcurrentmonth", verifyJWT, (req, res) => {
 //     INNER JOIN master_position ON master_employee.me_position = mp_positionid
 //     WHERE pao_id = '${approveot_id}'`;
 
-//     console.log(sql);
-
 //     mysql
 //       .mysqlQueryPromise(sql)
 //       .then((result) => {
@@ -2274,7 +2306,6 @@ router.post("/loadotcurrentmonth", verifyJWT, (req, res) => {
 //           msg: "success",
 //           data: result,
 //         });
-//         console.log(result);d
 //       })
 //       .catch((error) => {
 //         res.json({
@@ -2473,8 +2504,6 @@ LIMIT 1;
 router.post("/getovertime", verifyJWT, (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
-    console.log(approveot_id, "approveot_id");
-
     let sql = `SELECT
         pao_id AS approvalid,
         CASE 
@@ -2638,7 +2667,6 @@ router.post("/getovertime", verifyJWT, (req, res) => {
           msg: "success",
           data: result,
         });
-        console.log(result, "check result");
       })
       .catch((error) => {
         res.json({
@@ -4094,5 +4122,14 @@ function getDeviceInformation(device) {
     return "web";
   }
 }
+
+function calculateTotalHours(timein, timeout) {
+  const datetimeIn = new Date(timein);
+  const datetimeOut = new Date(timeout);
+  const timeDifferenceMs = datetimeOut - datetimeIn;
+  const totalHoursDecimal = timeDifferenceMs / (1000 * 60 * 60);
+  return totalHoursDecimal.toFixed(2);
+}
+
 
 //#endregion
