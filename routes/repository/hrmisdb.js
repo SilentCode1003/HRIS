@@ -1,6 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
 const { Encrypter, Decrypter } = require("./cryptography");
+const { logger } = require("./logger");
 require("dotenv").config();
 
 let password = "";
@@ -49,8 +50,8 @@ exports.Select = (sql, table, callback) => {
       return err;
     });
     connection.query(sql, (error, results, fields) => {
-
       if (error) {
+        logger.error(error);
         callback(error, null);
       }
 
@@ -269,7 +270,10 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Attendance_Request_Activity(results));
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    logger.error(error);
+    console.log(error);
+  }
 };
 
 exports.Insert = (stmt, todos, callback) => {
@@ -280,12 +284,14 @@ exports.Insert = (stmt, todos, callback) => {
 
     connection.query(stmt, [todos], (err, results, fields) => {
       if (err) {
+        logger.error(error);
         callback(err, null);
       }
 
       callback(null, `Row inserted ${results.affectedRows}`);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -1167,6 +1173,7 @@ exports.Update = async (sql) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (error, results, fields) => {
       if (error) {
+        logger.error(error, null);
         reject(error);
       } else {
         resolve(`Rows affected: ${results.affectedRows}`);
@@ -1179,12 +1186,14 @@ exports.UpdateMultiple = async (sql, data, callback) => {
   try {
     connection.query(sql, data, (error, results, fields) => {
       if (error) {
+        logger.error(error);
         callback(error, null);
       }
 
       callback(null, `Rows affected: ${results.affectedRows}`);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -1194,6 +1203,7 @@ exports.mysqlQueryPromise = (sql) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (error, results) => {
       if (error) {
+        logger.error(error);
         reject(error);
       } else {
         resolve(results);
@@ -1206,6 +1216,7 @@ exports.StoredProcedure = (sql, callback) => {
   try {
     connection.query(sql, (error, results, fields) => {
       if (error) {
+        logger.error(error);
         callback(error.message, null);
       }
       callback(null, results[0]);

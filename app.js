@@ -2,9 +2,10 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
+const {eventlogger, logger} = require("./routes/repository/logger");
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
@@ -165,7 +166,7 @@ SetMongo(app);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
@@ -175,13 +176,15 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // app.use(cors(corsOptions));
 
-
+app.use((req, res, next) => {
+  eventlogger(req, res, next);
+});
 
 app.use("/", loginlayoutRouter);
 app.use("/access", accessRouter);
 app.use("/mobile-api", mobileAPIRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
-app.use(verifyJWT)
+app.use(verifyJWT);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/employee", employeeRouter);
@@ -332,6 +335,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
+  logger.error(err);
 
   // // render the error page
   res.status(err.status || 500);
