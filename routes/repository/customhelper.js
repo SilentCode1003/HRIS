@@ -2,7 +2,9 @@ const fs = require("fs");
 const moment = require("moment");
 const LINQ = require("node-linq").LINQ;
 const { format } = require("date-fns");
-const { type } = require("os");
+const os = require("os");
+const interfaces = os.networkInterfaces();
+const axios = require('axios');
 
 //#region READ & WRITE JSON FILES
 exports.ReadJSONFile = function (filepath) {
@@ -205,9 +207,9 @@ exports.ConvertToDate = (datestring) => {
   }
 };
 
-exports.ConvertTo24Formart = (timestring) =>{
+exports.ConvertTo24Formart = (timestring) => {
   return moment(timestring, "h:mm a").format("HH:mm:ss");
-}
+};
 //#endregion
 
 //#region  SUMMARY REPORTS
@@ -573,3 +575,35 @@ exports.SelectStatementWithArray = (str, data) => {
   }
   return statement;
 };
+
+//#region Network Information
+
+exports.getNetwork = () => {
+  return new Promise((resolve, reject) => {
+    Object.keys(interfaces).forEach((interfaceName) => {
+      interfaces[interfaceName].forEach((iface) => {
+        // Filter for IPv4 addresses
+        if (iface.family === "IPv4" && !iface.internal) {
+          // console.log(`${interfaceName}: ${iface.address}`);
+          resolve(`${iface.address}`);
+        }
+      });
+    });
+  });
+};
+
+exports.GetIPAddress = () => {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.ipify.org?format=json')
+    .then(response => {
+      console.log(`Your IP address is: ${response.data.ip}`);
+      resolve(response.data.ip);
+    })
+    .catch(error => {
+      reject(error);
+      console.error('Error fetching IP address:', error);
+    });
+  });
+};
+
+//#endregion
