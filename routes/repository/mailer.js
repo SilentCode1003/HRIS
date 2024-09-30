@@ -24,7 +24,7 @@ exports.SendEmail = (to, subject, text) => {
   // Email content
 
   const mailOptions = {
-    from: `${process.env._EMAIL_USER}`,
+    from: process.env._EMAIL_FROM,
     to: to,
     subject: subject,
     html: text,

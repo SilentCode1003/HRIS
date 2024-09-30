@@ -1367,6 +1367,46 @@ router.post("/login", (req, res) => {
   }
 });
 
+router.post("/request", (req, res) => {
+  try {
+    const { employeeid } = req.body;
+
+    let sql = `select  
+              me_id,
+              concat(me_firstname, ' ', me_lastname) as me_fullname,
+              me_email,
+              mu_password as me_password
+              from master_employee
+              inner join master_user on mu_employeeid = me_id
+              inner join master_access on ma_accessid = mu_accesstype 
+              where me_id = ? 
+              and ma_accessname='Employee'`;
+    let cmd = SelectStatement(sql, [employeeid]);
+
+    
+    Select(cmd, (err, result) => {
+      if (err) {
+        res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length > 0) {
+        let data = DataModeling(result, "me_");
+
+        console.log(data);
+
+        SendRequestPassword(employeeid, "Forgot Password", data);
+
+        res.status(200).json(JsonSuccess());
+      } else {
+        res.status(404).json(JsonErrorResponse("Employee not found"));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -4002,6 +4042,92 @@ router.post("/loadheaderforapp", verifyJWT, (req, res) => {
       msg: "error",
       data: error,
     });
+  }
+});
+
+router.post("/submitleave", async (req, res) => {
+  try {
+    const {
+      employeeid,
+      startdate,
+      enddate,
+      leavetype,
+      reason,
+      image,
+      subgroup,
+      durationDays,
+      paidDays,
+      unpaidDays,
+    } = req.body;
+    const createdate = moment().format("YYYY-MM-DD HH:mm:ss");
+    const status = "Pending";
+    const approvedcount = "0";
+
+    console.log("Received request with data:", req.body);
+
+    // Calculate the date 3 days from now
+    const allowedStartDate = moment().add(3, "days").startOf("day");
+
+    // Convert startdate to a moment object
+    const startDateMoment = moment(startdate);
+
+    // Check if the startdate is within the allowed 3-day rule
+    if (startDateMoment.isBefore(allowedStartDate)) {
+      console.log("Start date is within the 3-day rule");
+      return res.json({ msg: "not allowed" });
+    }
+
+    const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
+    const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
+
+    if (employeeResult.length === 0) {
+      console.log("Invalid employee ID");
+      return res.json({ msg: "Invalid employee ID" });
+    }
+
+    const data = [
+      [
+        employeeid,
+        startdate,
+        enddate,
+        leavetype,
+        reason,
+        image,
+        status,
+        createdate,
+        durationDays,
+        paidDays,
+        unpaidDays,
+        subgroup,
+        approvedcount,
+      ],
+    ];
+
+    mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
+      if (insertErr) {
+        console.error("Error inserting leave record:", insertErr);
+        res.json({ msg: "insert_failed" });
+      } else {
+        console.log("Insert result:", insertResult);
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: createdate,
+            startdate: startdate,
+            enddate: enddate,
+            reason: reason,
+            requesttype: REQUEST.LEAVE,
+          },
+        ];
+        SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
+
+        res.json({ msg: "success" });
+      }
+    });
+  } catch (error) {
+    console.error("Error in /submit route:", error);
+    res.json({ msg: "error" });
   }
 });
 
