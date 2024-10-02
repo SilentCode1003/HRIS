@@ -45,7 +45,7 @@ const logEvents = async (message, logFilename) => {
 };
 
 const eventlogger = (req, res, next) => {
-    GetIPAddress().then((ipaddress) => {
+    getNetwork().then((ipaddress) => {
       logEvents(`${req.method}\t${req.url}\t${ipaddress}`, 'reqLog.log')
       next()
     })

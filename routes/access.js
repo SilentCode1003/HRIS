@@ -62,6 +62,27 @@ router.get("/load", (req, res) => {
   }
 });
 
+
+router.get("/loadlogin", (req, res) => {
+  try {
+    let sql = "select * from master_access where ma_status = 'Active'";
+
+    mysql.Select(sql, "Master_Access", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 router.post("/save", (req, res) => {
   try {
     let accessname = req.body.accessname;
