@@ -30,10 +30,10 @@ router.post("/request", (req, res) => {
               inner join master_user on mu_employeeid = me_id
               inner join master_access on ma_accessid = mu_accesstype 
               where me_id = ? 
-              and ma_accessname='Employee';
-`;
+              and ma_accessname='Employee'`;
     let cmd = SelectStatement(sql, [employeeid]);
 
+    
     Select(cmd, (err, result) => {
       if (err) {
         res.status(500).json(JsonErrorResponse(err));

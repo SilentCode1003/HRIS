@@ -253,6 +253,9 @@ router.post("/clockout", (req, res) => {
         const deviceout = getDeviceInformation(req.body.deviceout);
         const locationout = req.body.locationout;
 
+        console.log(locationout,'locationout');
+        
+
         const updateQuery = `
         UPDATE master_attendance
         SET
