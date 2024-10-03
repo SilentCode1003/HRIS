@@ -420,7 +420,21 @@ router.post("/clockin", verifyJWT, (req, res) => {
         });
       } else {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
-        const attendanceData = [
+
+        let sql = InsertStatement("master_attendance", "ma", [
+          "employeeid",
+          "attendancedate",
+          "clockin",
+          "latitudeIn",
+          "longitudein",
+          "devicein",
+          "gefenceidIn",
+          "locationIn",
+        ]);
+    
+        console.log(sql);
+
+        let data = [
           [
             employee_id,
             attendancedate,
@@ -432,26 +446,72 @@ router.post("/clockin", verifyJWT, (req, res) => {
             locationin,
           ],
         ];
-
-        mysql.InsertTable(
-          "master_attendance",
-          attendanceData,
-          (err, result) => {
-            if (err) {
-              console.error("Error inserting record:", err);
-              return res.status(500).json({
-                status: "error",
-                message: "Failed to insert attendance. Please try again.",
+    
+        //let data = [[route, layout, access, status, createdby, createddate]];
+        let checkStatement = SelectStatement(
+          "select * from master_attendance where ma_attendancedate=? and ma_employeeid=?",
+          [attendancedate, employee_id]
+        );
+    
+        Check(checkStatement)
+          .then((result) => {
+            if (result != 0) {
+              return res.json(JsonWarningResponse(MessageStatus.EXIST));
+            } else {
+              InsertTable(sql, data, (err, result) => {
+                if (err) {
+                  console.log(err);
+                  res.status(500).json({
+                    status: "error",
+                    message: "Failed to insert attendance. Please try again.",
+                  });
+                }
+                res.json({
+                  status: "success",
+                  message: "Clock-in successful.",
+                });
               });
             }
-
-            console.log("Insert result:", result);
+          })
+          .catch((error) => {
             res.json({
-              status: "success",
-              message: "Clock-in successful.",
-            });
-          }
-        );
+              status: "error",
+              message: "Internal server error. Please try again.",
+              data: error,
+            })
+          });
+        // const attendanceData = [
+        //   [
+        //     employee_id,
+        //     attendancedate,
+        //     clockinDateTime,
+        //     latitude,
+        //     longitude,
+        //     devicein,
+        //     geofenceid,
+        //     locationin,
+        //   ],
+        // ];
+
+        // mysql.InsertTable(
+        //   "master_attendance",
+        //   attendanceData,
+        //   (err, result) => {
+        //     if (err) {
+        //       console.error("Error inserting record:", err);
+        //       return res.status(500).json({
+        //         status: "error",
+        //         message: "Failed to insert attendance. Please try again.",
+        //       });
+        //     }
+
+        //     console.log("Insert result:", result);
+        //     res.json({
+        //       status: "success",
+        //       message: "Clock-in successful.",
+        //     });
+        //   }
+        // );
       }
     })
     .catch((error) => {
