@@ -284,7 +284,7 @@ exports.Insert = (stmt, todos, callback) => {
 
     connection.query(stmt, [todos], (err, results, fields) => {
       if (err) {
-        logger.error(error);
+        //logger.error(error);
         callback(err, null);
       }
 

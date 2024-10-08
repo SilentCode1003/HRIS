@@ -357,7 +357,9 @@ router.post("/latestlog", verifyJWT, (req, res) => {
 router.post("/clockin", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
-  const locationin = req.body.locationin;
+  let locationin = req.body.locationin;
+
+  locationin = RemoveApostrophe(locationin);
 
   console.log(locationin, "locationin");
 
@@ -447,7 +449,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
           ],
         ];
     
-        //let data = [[route, layout, access, status, createdby, createddate]];
         let checkStatement = SelectStatement(
           "select * from master_attendance where ma_attendancedate=? and ma_employeeid=?",
           [attendancedate, employee_id]
@@ -546,7 +547,9 @@ router.post("/clockout", verifyJWT, (req, res) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
         const deviceout = getDeviceInformation(req.body.deviceout);
-        const locationout = req.body.locationout;
+        let locationout = req.body.locationout;
+
+        locationout = RemoveApostrophe(locationout);
 
         const updateQuery = `
         UPDATE master_attendance
@@ -4326,6 +4329,10 @@ function calculateTotalHours(timein, timeout) {
   const timeDifferenceMs = datetimeOut - datetimeIn;
   const totalHoursDecimal = timeDifferenceMs / (1000 * 60 * 60);
   return totalHoursDecimal.toFixed(2);
+}
+
+function RemoveApostrophe(str) {
+  return str.replace(/'/g, "");
 }
 
 
