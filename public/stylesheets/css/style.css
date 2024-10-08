@@ -1,3 +1,5 @@
+@import url(style-inventory.css);
+
 .spaced-table tr {
   margin-bottom: 2rem; /* Adjust as needed */
   display: block;
@@ -1121,17 +1123,18 @@ body .fc-widget-header a {
 }
 
 .status-active {
-  background-color: #7ae4af;
-}
-
-.status-inactive {
-  background-color: #e47a7a;
-}
-
-.status-warning {
-  background-color: #e4bf7a;
-}
-
-.status-primary {
-  background-color: #7abde4;
+  border-radius: 6px;
+    cursor: default;
+    -webkit-box-align: center;
+    align-items: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    -webkit-box-pack: center;
+    justify-content: center;
+    text-transform: capitalize;
+    padding: 2rem 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    color: rgb(17, 141, 87);
 }

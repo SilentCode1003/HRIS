@@ -1,0 +1,291 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let question = "";
+    let status = "";
+    LoadTable();
+
+    const loader = `  
+              <tr id="loading-state">
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+              </tr>`;
+
+    const tbody = $("#dataTable tbody");
+    for (let i = 0; i < 12; i++) {
+      tbody.append(loader);
+    }
+
+    $("#dataTable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      // // console.log(dataRow);
+      id = dataRow[0];
+      question = dataRow[1];
+      status = dataRow[4];
+    });
+
+    $(document).on("click", "#addBtn", function () {
+      const question = $("#question").val();
+      let message = "";
+
+      const $btnIcon = $(this).find("#btnIcon");
+      const $btnSpinner = $(this).find("#btnSpinner");
+      $btnIcon.addClass("d-none");
+      $btnSpinner.removeClass("d-none");
+
+      if (question == "") {
+        message += "Question, ";
+      }
+      if (message != "") {
+        warning("Required", `Please fill up ${message}`);
+        $btnIcon.removeClass("d-none");
+        $btnSpinner.addClass("d-none");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/suggestionquestion/save",
+          data: {
+            question: question,
+          },
+          success: function (result) {
+            // console.log("ID:", result.data)
+
+            $("#question").val("");
+
+            if (result.msg == "success") {
+              LoadTable();
+              success("Saved", "Successfully");
+            }
+
+            if (result.msg == "exist") {
+              warning("Exist", `${question} already exist!`);
+            }
+            $btnIcon.removeClass("d-none");
+            $btnSpinner.addClass("d-none");
+          },
+          error: function (err) {
+            errormsg(err);
+            $btnIcon.removeClass("d-none");
+            $btnSpinner.addClass("d-none");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#activeBtn", function () {
+      // console.log(productid);
+      // console.log(status);
+      $.ajax({
+        type: "PATCH",
+        url: "/suggestionquestion/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      // console.log(productid);
+      // console.log(status);
+      $.ajax({
+        type: "PATCH",
+        url: "/suggestionquestion/status",
+        data: {
+          status: status,
+          id: id,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            success("Saved", "Successfully");
+          }
+
+          if (result.msg == "notexist") {
+            warning(`${id} does not exist!`);
+          }
+        },
+        error: function (err) {
+          errormsg(err);
+        },
+      });
+    });
+
+    //#region Update Suggestion Area
+    $(document).on("click", "#closeBtn", function () {
+      $("#questionmodal").val("");
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#questionidmodal").val(id);
+      $("#currentquestion").val(question);
+
+      $("#questionmodal").val("");
+      $("#Modal").modal("show");
+    });
+
+    $(document).on("click", "#updateBtn", function () {
+      let question = $("#questionmodal").val();
+      let id = $("#questionidmodal").val();
+      let message = "";
+
+      if (question == "") {
+        message += "New Area Name, ";
+      }
+      if (message != "") {
+        warning("Required", `Please fill up ${message}`);
+      } else {
+        $.ajax({
+          type: "PATCH",
+          url: "/suggestionquestion/update",
+          data: {
+            question: question,
+            id: id,
+          },
+          success: function (result) {
+            $("#Modal").modal("hide");
+            LoadTable();
+            success("Saved", "Successfully");
+          },
+          error: function (err) {
+            errormsg(err);
+          },
+        });
+      }
+    });
+    //#endregion
+
+    $("#search-input").on("input", function () {
+      filterTableRows("#dataTable", 6, "#search-input");
+    });
+
+    function populateProductsTable(data) {
+      const tableBody = $("#dataTable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          let action = "";
+          let spinner = $(
+            '<div class="spinner-border" style="width: 85px; height: 85px; role="status"><span class="visually-hidden"></span></div>'
+          );
+
+          if (item.status === "ACTIVE" || item.status === "Active") {
+            action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+          } else if (item.status === "INACTIVE" || item.status === "Inactive") {
+            action = `
+                              <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                              <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+          }
+
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.id,
+              "data-label": "ID",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: item.question,
+              "data-label": "Question",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: item.createdby.toUpperCase(),
+              "data-label": "Created By",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: ConvertDate(item.createddate),
+              "data-label": "Created Date",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              class: "custom-mobile-align",
+              "data-label": "Status",
+            }).append(
+              $("<div>", {
+                class: getStatusContainerBackground(item.status),
+              }).append(
+                $("<span>", {
+                  text: item.status,
+                  class: getStatusBackground(item.status),
+                })
+              )
+            ),
+            $("<td>", { html: action, "data-label": "Action" })
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+    function LoadTable() {
+      $(".progress").hide();
+      $(".progress").slideDown();
+
+      $.ajax({
+        url: "/suggestionquestion/load",
+        method: "GET",
+        dataType: "json",
+        xhrFields: {
+          onprogress: function (e) {
+            if (e.lengthComputable) {
+              var percentComplete = (e.loaded / e.total) * 100;
+              $(".progress-bar").css("width", percentComplete + "%");
+            }
+          },
+        },
+        success: function (data) {
+          setTimeout(function () {
+            $(".progress").slideUp(function () {
+              if (data.msg === "success") {
+                populateProductsTable(data.data);
+              } else {
+                console.error(data.msg);
+              }
+            });
+          }, 1000);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    }
+  });
+</script>

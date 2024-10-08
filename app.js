@@ -154,8 +154,12 @@ var teamleadapprovedholidayRouter = require("./routes/teamleadapprovedholiday");
 var teamleadrejectholidayRouter = require("./routes/teamleadrejectholiday");
 var teamleadrdotRouter = require("./routes/teamleadrdot");
 var teamleadrejectrdotRouter = require("./routes/teamleadrejectrdot");
-const { log } = require("console");
-const { verify } = require("crypto");
+var suggestionRouter = require("./routes/suggestion");
+var suggestionareaRouter = require("./routes/suggestionarea");
+var suggestionquestionRouter = require("./routes/suggestionquestion");
+var sessionRouter = require("./routes/session");
+
+
 const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
@@ -185,6 +189,7 @@ app.use("/access", accessRouter);
 app.use("/mobile-api", mobileAPIRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/applicant_registration", applicant_registrationRouter);
+app.use('/session', sessionRouter);
 app.use(verifyJWT);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
@@ -324,6 +329,9 @@ app.use("/teamleadapprovedholiday", teamleadapprovedholidayRouter);
 app.use("/teamleadrejectholiday", teamleadrejectholidayRouter);
 app.use("/teamleadrdot", teamleadrdotRouter);
 app.use("/teamleadrejectrdot", teamleadrejectrdotRouter);
+app.use("/suggestion", suggestionRouter);
+app.use("/suggestionarea", suggestionareaRouter);
+app.use("/suggestionquestion", suggestionquestionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -336,7 +344,6 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
   logger.error(err);
-
   // // render the error page
   res.status(err.status || 500);
   res.render("error");
