@@ -13,11 +13,7 @@ const logger = createLogger({
     format.errors({ stack: true }),
     format.colorize({ all: true }),
     format.printf(
-      (info) =>
-        `Time: ${GetCurrentDatetime()}} Level: ${info.level} Message:F ${
-          info.message
-        }`
-    )
+      (info) =>`Datetime: ${GetCurrentDatetime()} Status: ${info.status} | Level: ${info.level} | Message: ${info.message}`)
   ),
   transports: [
     new transports.File({
@@ -29,8 +25,8 @@ const logger = createLogger({
 
 const logEvents = async (message, logFilename) => {
   try {
-    const dateTime = `${format(new Date(), "yyyyMMdd\tHH:mm:ss")}`;
-    const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
+    const dateTime = GetCurrentDatetime();
+    const logItem = `Datetime ${dateTime} | ${message}\n`;
 
     if (!fs.existsSync(path.join(__dirname, "..", "logs"))) {
       await fsPromises.mkdir(path.join(__dirname, "..", "logs"));
@@ -46,7 +42,7 @@ const logEvents = async (message, logFilename) => {
 
 const eventlogger = (req, res, next) => {
     getNetwork().then((ipaddress) => {
-      logEvents(`${req.method}\t${req.url}\t${ipaddress}`, 'reqLog.log')
+      logEvents(`Type: ${req.method} | URI: ${req.url} | IP: ${ipaddress}`, 'reqLog.log')
       next()
     })
   }

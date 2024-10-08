@@ -1,11 +1,11 @@
 <!-- LOADER -->
-<div class="loader-wrapper">
+<!-- <div class="loader-wrapper">
   <div class="spinner"></div>
-</div>
+</div> -->
 <!-- LOADER -->
-<div class="loader-wrapper">
+<!-- <div class="loader-wrapper">
   <span class="loader"><span class="loader-inner"></span></span>
-</div>
+</div> -->
 
 <!-- Logout Modal-->
 <div
@@ -191,7 +191,7 @@
       input.value = defaultValue;
     }
   }
-  hidespinner();
+  // hidespinner();
   function showspinner() {
     console.log("show loader");
     $(".loader-wrapper").show();
@@ -357,36 +357,6 @@
     });
   });
 
-  function filterTableRows(tablename, colcount, searchid) {
-    console.log("triggered search");
-
-    const searchQuery = $(searchid).val().trim().toLowerCase();
-    let foundMatches = false;
-
-    $("#no-match-row").remove();
-
-    $(tablename + " tbody tr").each(function () {
-      const rowData = $(this).text().toLowerCase();
-      if (rowData.includes(searchQuery)) {
-        $(this).show();
-        foundMatches = true;
-      } else {
-        $(this).hide();
-      }
-    });
-
-    if (!foundMatches) {
-      const noMatchRow = $("<tr>").append(
-        $("<td>", {
-          colspan: colcount,
-          class: "text-center",
-          text: "No Data Matched",
-        })
-      );
-      $(tablename + " tbody").append(noMatchRow);
-      noMatchRow.attr("id", "no-match-row");
-    }
-  }
 
   //#region  Alerts
 
@@ -550,7 +520,7 @@
 
   //#region Search Table
   function filterTableRows(tablename, colcount, searchid) {
-    console.log("triggered search");
+    // console.log("triggered search");
 
     const searchQuery = $(searchid).val().trim().toLowerCase();
     let foundMatches = false;
@@ -579,5 +549,255 @@
       noMatchRow.attr("id", "no-match-row");
     }
   }
+  //#endregion
+
+  //#region Card Body Show
+  const toggleButton = document.getElementById("toggleButton");
+  const toggleView = document.querySelector(".toggle-view");
+  let isOpen = false;
+  if (toggleButton != null && toggleView != null) {
+    toggleButton.addEventListener("click", function () {
+      if (!isOpen) {
+        toggleView.style.display = "block";
+        toggleView.style.height = toggleView.scrollHeight + "px";
+        toggleButton.innerHTML = '<i class="fas fa-chevron-up"></i>';
+      } else {
+        toggleView.style.height = "0";
+        setTimeout(() => {
+          toggleView.style.display = "none";
+        }, 500);
+        toggleButton.innerHTML = '<i class="fas fa-plus"></i>';
+      }
+
+      isOpen = !isOpen;
+    });
+  }
+  //#endregion
+
+  //#region Status backgrounds
+  function getStatusBackground(status) {
+    switch (status) {
+      case "REQUEST":
+        return "status-pending";
+      case "REFUNDED":
+        return "status-pending";
+      case "PENDING":
+        return "status-pending";
+      case "COMPLETED":
+        return "status-success";
+      case "SOLD":
+        return "status-success";
+      case "Active":
+        return "status-success";
+      case "APPROVED":
+        return "status-success";
+      case "REPLACE":
+        return "status-inprogress";
+      case "RETURN":
+        return "status-inprogress";
+      case "IN PROGRESS":
+        return "status-inprogress";
+      case "DAMAGE":
+        return "status-warning";
+      case "Inactive":
+        return "status-warning";
+      case "CANCELLED":
+        return "status-warning";
+      case "NOT COMPLETE":
+        return "status-inprogress";
+      default:
+        return "";
+    }
+  }
+
+  function getStatusContainerBackground(status) {
+    switch (status) {
+      case "PENDING":
+        return "status-container-pd";
+      case "REQUEST":
+        return "status-container-pd";
+      case "REFUNDED":
+        return "status-container-pd";
+      case "COMPLETED":
+        return "status-container-sc";
+      case "SOLD":
+        return "status-container-sc";
+      case "Active":
+        return "status-container-sc";
+      case "APPROVED":
+        return "status-container-sc";
+      case "REPLACE":
+        return "status-container-inpg";
+      case "RETURN":
+        return "status-container-inpg";
+      case "IN PROGRESS":
+        return "status-container-inpg";
+      case "DAMAGE":
+        return "status-container-wr";
+      case "Inactive":
+        return "status-container-wr";
+      case "CANCELLED":
+        return "status-container-wr";
+      case "COMPLETE":
+        return "status-container-sc";
+      default:
+        return "";
+    }
+  }
+  //#endregion
+
+  //#region Toastr
+  function successlogin(title, text) {
+    return swal({
+      title: title,
+      text: text,
+      icon: "success",
+      buttons: {
+        confirm: {
+          text: "OK",
+          value: true,
+          visible: true,
+          className: "swal-button-ok",
+        },
+      },
+    }).then((result) => {
+      return new Promise((resolve, reject) => {
+        if (result === true) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  function Loading(title) {
+    toastr.info(
+      `<strong>${title}</strong> <br>
+        <div style="text-align: center; margin-top: 5px;">
+          <div class="spinner-border" role="status" style="display: inline-block;">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>`,
+      null,
+      {
+        closeButton: false,
+        debug: false,
+        newestOnTop: true,
+        progressBar: false,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "0",
+        timeOut: "0",
+        extendedTimeOut: "0",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "hide",
+      }
+    );
+  }
+
+  function success(title, text) {
+    toastr.success(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function warning(title, text) {
+    toastr.warning(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function info(title, text) {
+    toastr.info(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function errormsg(err) {
+    toastr.error(err, "Error!", {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+  //#endregion
+
+  //#region Date Converter Month:Day:Year:HH:MM
+  ConvertDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? "0" : ""
+    }${minutes} ${ampm}`;
+
+    return `${formattedDate} - ${formattedTime}`;
+  };
   //#endregion
 </script>
