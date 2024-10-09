@@ -6,6 +6,7 @@
   let globaltinid = "";
   let globalphilhealthid = "";
   let globalpagibigid = "";
+  let globalaccrued13thmonth = "";
   let globalemployeeid = "";
   let globalfullname = "";
   let globalposition = "";
@@ -40,7 +41,23 @@
   let globaltotaldeductions = "";
   let globaltotalnetpay = "";
   let globaltotalnetpaywords = "";
+  let globalloans = "";
+  let globalRestDay_OTpay = "";
+  let globalsterling_loan = "";
+  let globalwisp_deductions = "";
+  let globalhousing_loan = "";
+  let globaleducation_loan = "";
+  let globalshortterm_loan = "";
+  let globalcalamity_loan = "";
+  let globalrestday_ot = "";
+  let globalsalary_loan = "";
+  let globalnumlate = "";
+  let globalnumabsent = "";
+  let globalsuddendedductionsName = [];
+  let globalsuddendedductionsAmount = [];
 
+  console.log(globalsuddendedductionsAmount, "globalsuddendeductionsAmount");
+  console.log(globalsuddendedductionsName, "globalsuddendeductionsName");
 
   $(document).ready(function () {
     console.log("Initializee");
@@ -156,6 +173,10 @@
             const existingData = result.data;
             console.log(existingData);
             $.each(existingData, (key, item) => {
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
               $("#employeename").text(item.fullname);
               $("#position").text(item.position);
               $("#department").text(item.department);
@@ -170,15 +191,9 @@
               $("#payrolladjustments").text(
                 formatToCurrency(item.payroll_adjustments)
               );
-              $("#overtimemeal").text(
-                formatToCurrency(item.overtime_meal)
-              );
-              $("#loandeductions").text(
-                formatToCurrency(item.loans)
-              );
-              $("#leavepayprofile").text(
-                formatToCurrency(item.leave_pay)
-              );
+              $("#overtimemeal").text(formatToCurrency(item.overtime_meal));
+              $("#loandeductions").text(formatToCurrency(item.loans));
+              $("#leavepayprofile").text(formatToCurrency(item.leave_pay));
               $("#dailyrate").text(formatToCurrency(item.basic_perday));
               $("#allowances").text(formatToCurrency(item.allowances));
               $("#compensation").text(formatToCurrency(item.compensation));
@@ -190,6 +205,42 @@
               $("#absent").text(item.absent);
               $("#holidayday").text(item.holidaydays);
               $("#leavepaydadys").text(item.leaveday);
+              $("#restdayot").text(item.restotday);
+              $("#13thmonthpay").text(formatToCurrency(item.accrued13thmonth));
+            });
+            
+
+            $.ajax({
+              url: "eportalsalary/loaddinamicamount",
+              type: "POST",
+              contentType: "application/json", 
+              data: JSON.stringify({
+                payrolldate: payrolldate, 
+                employeeid: employeeid,
+              }),
+              dataType: "json",
+              success: function (response) {
+               
+                if (response && response.data) {
+
+                  $("#dinamicloanname").empty();
+                  $("#dinamicloandeductions").empty();
+
+                  response.data.forEach((item) => {
+                    $("#dinamicloanname").append(
+                      `<p class="mb-0 payroll-label">${item.loan_type}</p>`
+                    );
+                    $("#dinamicloandeductions").append(
+                      `<p class="text-muted mb-0">${(formatToCurrency(item.loan_amount))}</p>`
+                    );
+                  });
+                } else {
+                  console.error("Unexpected response format:", response);
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error("AJAX error:", status, error);
+              },
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -200,8 +251,6 @@
         },
       });
     });
-
-
 
     $(document).on("click", "#nav-payslip-tab", function () {
       $.ajax({
@@ -218,123 +267,213 @@
             console.log(existingData);
             $.each(existingData, (key, item) => {
               $("#payslipSSSid").text(item.sssid);
-              globalsssid = item.sssid
+              globalsssid = item.sssid;
               $("#payslipTINid").text(item.tinid);
-              globaltinid = item.tinid
+              globaltinid = item.tinid;
               $("#payslipphilhealthid").text(item.philhealthid);
-              globalphilhealthid = item.philhealthid
+              globalphilhealthid = item.philhealthid;
               $("#payslipdeppagibigid").text(item.pagibigid);
-              globalpagibigid = item.pagibigid
+              globalpagibigid = item.pagibigid;
+              $("#payslipheader13thmonthpay").text(item.accrued13thmonth);
+              globalaccrued13thmonth = item.accrued13thmonth;
               $("#payslippayrolltype").text(item.payrolltype);
-              globalpayrolltype = item.payrolltype
+              globalpayrolltype = item.payrolltype;
               $("#payslipid").text(item.employeeid);
-              globalemployeeid = item.employeeid
+              globalemployeeid = item.employeeid;
               $("#payslipname").text(item.fullname);
-              globalfullname = item.fullname
+              globalfullname = item.fullname;
               $("#payslipempname").text(item.fullname);
               $("#payslipposition").text(item.position);
-              globalposition = item.position
+              globalposition = item.position;
               $("#payslipdepartment").text(item.department);
-              globaldepartment = item.department
+              globaldepartment = item.department;
               $("#payslipremainingleave").text(item.remaining_leave);
-              globalremainingleave = item.remaining_leave
+              globalremainingleave = item.remaining_leave;
               $("#paysliprange").text(
                 formatDate(item.startdate) +
                   "- TO - " +
                   formatDate(item.enddate)
               );
-              globalstartdate = item.startdate
-              globalenddate = item.enddate
+              globalstartdate = item.startdate;
+              globalenddate = item.enddate;
               $("#payslipdate").text(formatDate(item.payrolldate));
-              globalpayrolldate = item.payrolldate
+              globalpayrolldate = item.payrolldate;
               $("#payslipbasic").text(formatToCurrency(item.salary));
-              globalsalary = item.salary
+              globalsalary = item.salary;
               $("#payslipperday").text(formatToCurrency(item.basic_perday));
-              globalperday = item.basic_perday
+              globalperday = item.basic_perday;
               $("#payslipallowances").text(formatToCurrency(item.allowances));
-              globalallowances = item.allowances
+              globalallowances = item.allowances;
               $("#payslipbasicadustments").text(
                 formatToCurrency(item.basic_adjustments)
               );
-              $("#paysliploans").text(
-                formatToCurrency(item.loans)
-              );
-              globalbasicadjustments = item.basic_adjustments
+              globalbasicadjustments = item.basic_adjustments;
+              $("#paysliploans").text(formatToCurrency(item.loans));
+              globalloans = item.loans;
               $("#payslippayrolladjustments").text(
                 formatToCurrency(item.payroll_adjustments)
               );
-              globalpayrolladjustments = item.payroll_adjustments
+              globalpayrolladjustments = item.payroll_adjustments;
               $("#payslipovertime").text(formatToCurrency(item.approveOT));
-              globalapproveot = item.approveOT
-              $("#payslipndpay").text(
-                formatToCurrency(item.approvedNightOT)
-              );
-              globalapprovednightot = item.approvedNightOT
+              globalapproveot = item.approveOT;
+              $("#payslipndpay").text(formatToCurrency(item.approvedNightOT));
+              globalapprovednightot = item.approvedNightOT;
               $("#payslipotpay").text(formatToCurrency(item.approveNormalOT));
-              globalapprovenormalot = item.approveNormalOT
+              globalapprovenormalot = item.approveNormalOT;
               $("#payslipearlypay").text(
                 formatToCurrency(item.approvedEarlyOT)
               );
-              globalapprovedearlyot = item.approvedEarlyOT
-              $("#payslipotmeal").text(
-                formatToCurrency(item.overtime_meal)
-              );
-              globalovertimemeal = item.overtime_meal
-              $("#payslipleavepay").text(
-                formatToCurrency(item.leave_pay)
-              );
-              globalleavepay = item.leave_pay
+              globalapprovedearlyot = item.approvedEarlyOT;
+              $("#payslipotmeal").text(formatToCurrency(item.overtime_meal));
+              globalovertimemeal = item.overtime_meal;
+              $("#payslipleavepay").text(formatToCurrency(item.leave_pay));
+              globalleavepay = item.leave_pay;
               $("#payslipregular").text(
                 formatToCurrency(item.regularholidayComp)
               );
-              globalregularholidaycomp = item.regularholidayComp
+              globalregularholidaycomp = item.regularholidayComp;
               $("#payslipspecial").text(
                 formatToCurrency(item.specialholidayComp)
               );
-              globalspecialholidaycomp = item.specialholidayComp
+              globalspecialholidaycomp = item.specialholidayComp;
               $("#payslipregularovertime").text(
                 formatToCurrency(item.regularholidayOT)
               );
-              globalregularholidayot = item.regularholidayOT
+              globalregularholidayot = item.regularholidayOT;
               $("#payslipspecialovertime").text(
                 formatToCurrency(item.specialholidayOT)
               );
-              globalspecialholidayot = item.specialholidayOT
+              globalspecialholidayot = item.specialholidayOT;
               $("#paysliptotal").text(formatToCurrency(item.overall_netpay));
-              globaloverallnetpay = item.overall_netpay
+              globaloverallnetpay = item.overall_netpay;
               $("#payslipsss").text(formatToCurrency(item.sss_dedcutions));
-              globalsssdeductions = item.sss_dedcutions
-              $("#payslippagibig").text(formatToCurrency(item.pagibigdeductions));
-              globalpagibigdeductions = item.pagibigdeductions
-              $("#paysliphdmf").text(formatToCurrency(item.philhealthdeductions));
-              globalphilhealthdeductions = item.philhealthdeductions
+              globalsssdeductions = item.sss_dedcutions;
+              $("#payslippagibig").text(
+                formatToCurrency(item.pagibigdeductions)
+              );
+              globalpagibigdeductions = item.pagibigdeductions;
+              $("#paysliphdmf").text(
+                formatToCurrency(item.philhealthdeductions)
+              );
+              globalphilhealthdeductions = item.philhealthdeductions;
               $("#paysliptin").text(formatToCurrency(item.tindeductions));
-              globaltindeductions = item.tindeductions
+              globaltindeductions = item.tindeductions;
               $("#payslipabsent").text(
                 formatToCurrency(item.absent_deductions)
               );
-              globalabsentdeductions = item.absent_deductions
+              globalabsentdeductions = item.absent_deductions;
+              $("#payslipnumabsent").html("<strong> ( " + item.absent + " )</strong>");
+              globalnumabsent = item.absent;
               $("#paysliphealthcard").text(formatToCurrency(item.healthcard));
-              globalhealthcard = item.healthcard
+              globalhealthcard = item.healthcard;
+              $("#payslipcalamity").text(formatToCurrency(item.calamity_loan));
+              globalcalamity_loan = item.calamity_loan;
+              $("#payslipshortterm").text(
+                formatToCurrency(item.shortterm_loan)
+              );
+              globalshortterm_loan = item.shortterm_loan;
+              $("#paysliphousing").text(formatToCurrency(item.housing_loan));
+              globalhousing_loan = item.housing_loan;
+              $("#payslipeducationloan").text(
+                formatToCurrency(item.education_loan)
+              );
+              globaleducation_loan = item.education_loan;
+              $("#payslipsterlingloan").text(
+                formatToCurrency(item.sterling_loan)
+              );
+              globalsterling_loan = item.sterling_loan;
+              $("#payslipwisp").text(formatToCurrency(item.wisp_deductions));
+              globalwisp_deductions = item.wisp_deductions;
+              $("#paysliprestdayot").text(formatToCurrency(item.restday_ot));
+              globalrestday_ot = item.restday_ot;
               $("#paysliplate").text(formatToCurrency(item.late_deductions));
-              globallatedeductions = item.late_deductions
+              globallatedeductions = item.late_deductions;
+              $("#payslipnumlate").html("<strong> ( " + item.latehours + " : " + item.lateminutes + " )</strong>");
+              globalnumlate = (item.latehours + " : " + item.lateminutes);
+              $("#payslipsalaryloan").text(formatToCurrency(item.salary_loan));
+              globalsalary_loan = item.salary_loan;
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.total_deductions)
               );
-              globaltotaldeductions = item.total_deductions
+              globaltotaldeductions = item.total_deductions;
               $("#paysliptotalnetpay").text(
                 formatToCurrency(item.total_netpay)
               );
-              globaltotalnetpay = item.total_netpay
-              $("#totalNetPayWords").text(
-                convertCurrencyToWords(item.total_netpay)
-              );
-              globaltotalnetpaywords = item.total_netpay
+              globaltotalnetpay = item.total_netpay;
+              // $("#totalNetPayWords").text(
+              //   convertCurrencyToWords(item.total_netpay)
+              // );
+              // globaltotalnetpaywords = item.total_netpay
 
-              const currencyAmount = total_netpay;
-              console.log(convertCurrencyToWords(currencyAmount));
+              // const currencyAmount = total_netpay;
+              // console.log(convertCurrencyToWords(currencyAmount));
 
               console.log("Setting salary:", item.salary);
+            });
+
+            $.ajax({
+              type: "POST",
+              url: "/generatepayroll/sudden_deduc_load",
+              data: {
+                payrolldate: payrolldate,
+              },
+              success: function (deductionResult) {
+                console.log("API Response:", deductionResult); // Debugging statement
+
+                if (deductionResult.msg === "success") {
+                  const suddenDeductions = deductionResult.data;
+
+                  console.log("Sudden Deductions Data:", suddenDeductions); // Debugging statement
+
+                  let deductionNameHtml = "";
+                  let deductionAmountHtml = "";
+
+                  // Clear global arrays before populating new data
+                  globalsuddendedductionsName = [];
+                  globalsuddendedductionsAmount = [];
+
+                  // Check if suddenDeductions is an array
+                  if (Array.isArray(suddenDeductions)) {
+                    // Iterate over each sudden deduction
+                    $.each(suddenDeductions, (index, deduction) => {
+                      console.log(`Processing Deduction ${index}:`, deduction); // Debugging statement
+
+                      deductionNameHtml += `<p>${deduction.deduction_name}</p>`;
+                      deductionAmountHtml += `<p>${formatToCurrency(
+                        deduction.amount
+                      )}</p>`;
+
+                      // Store data in global arrays
+                      globalsuddendedductionsName.push(
+                        deduction.deduction_name
+                      );
+                      globalsuddendedductionsAmount.push(deduction.amount);
+                    });
+
+                    // Update HTML containers with sudden deductions data
+                    $("#suddenDeductionsContainerName").html(deductionNameHtml);
+                    $("#suddenDeductionsContainerAmount").html(
+                      deductionAmountHtml
+                    );
+                  } else {
+                    console.error("Unexpected data format:", suddenDeductions); // Debugging statement
+                  }
+                } else {
+                  swal(
+                    "Error fetching sudden deductions data",
+                    deductionResult.msg,
+                    "error"
+                  );
+                }
+              },
+              error: function (err) {
+                console.error("AJAX Error:", err);
+                swal(
+                  "An error occurred while fetching sudden deductions data",
+                  err.message,
+                  "error"
+                );
+              },
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -345,7 +484,6 @@
         },
       });
     });
-
 
     $(document).on("click", "#nav-date-tab", function () {
       $(`#dataTablePayslip`).find("tr:gt(0)").remove();
@@ -431,7 +569,15 @@
     });
 
     $("#downloadpfd").click(function () {
-      console.log("hit");
+      console.log("Initiating PDF download...");
+
+      // Ensure global arrays have the correct data
+      console.log("GlobalsuddendeductionsName:", globalsuddendedductionsName);
+      console.log(
+        "GlobalsuddendeductionsAmount:",
+        globalsuddendedductionsAmount
+      );
+
       $.ajax({
         url: "/eportalsalary/generatepdf",
         type: "POST",
@@ -476,9 +622,24 @@
           globaltotaldeductions: globaltotaldeductions,
           globaltotalnetpay: globaltotalnetpay,
           globaltotalnetpaywords: globaltotalnetpaywords,
+          globalsuddendeductionsName: globalsuddendedductionsName,
+          globalsuddendeductionsAmount: globalsuddendedductionsAmount,
+          globalrestday_ot: globalrestday_ot,
+          globalsalary_loan: globalsalary_loan,
+          globalwisp_deductions: globalwisp_deductions,
+          globalcalamity_loan: globalcalamity_loan,
+          globaleducation_loan: globaleducation_loan,
+          globalshortterm_loan: globalshortterm_loan,
+          globalsterling_loan: globalsterling_loan,
+          globalhousing_loan: globalhousing_loan,
+          globalnumlate: globalnumlate,
+          globalnumabsent: globalnumabsent,
+          globalaccrued13thmonth: globalaccrued13thmonth,
         },
         dataType: "text",
         success: function (data) {
+          console.log("PDF data received from server:", data);
+
           const blob = b64toBlob(data, "application/pdf");
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);

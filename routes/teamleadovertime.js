@@ -17,7 +17,6 @@ router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
     let sql = `SELECT
-    pao_image,
     pao_id,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
@@ -135,7 +134,6 @@ router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
-    pao_image,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
     TIME_FORMAT(pao_clockin, '%H:%i:%s')  as pao_clockin,
@@ -156,8 +154,6 @@ router.post("/getotapproval", (req, res) => {
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",

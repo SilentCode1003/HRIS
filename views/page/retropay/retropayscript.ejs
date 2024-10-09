@@ -1,0 +1,757 @@
+<script>
+  let employeeid = "";
+  let globaltotalretropay = 0;
+  let start = "";
+  let end = "";
+
+  $(document).ready(function () {
+    console.log("Initialize");
+    LoadTable();
+    searchTable();
+    formatCurrencyValue();
+    LoadPayrollDate();
+    LoadList();
+    LoadAllPayrollDate();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    document
+      .getElementById("exportExcelBtn")
+      .addEventListener("click", function () {
+        exportTableToExcel(
+          "dataTablesalary",
+          "EmployeeSalary.xlsx",
+          function () {
+            swal(
+              "Update Successfully",
+              "You clicked the button!",
+              "success"
+            ).then((results) => {
+              window.location.reload();
+            });
+            LoadTable();
+          }
+        );
+      });
+
+    function LoadTable() {
+      $("#dataTableRetroPay").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/retropay/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                          <button id="viewBtn" class="btn text-primary" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewretrodetails"><i class="fas fa-fw fa-pen"></i></button>
+                      `;
+
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
+
+              finalData.push({
+                // image: imgElement.outerHTML,
+                employeeid: item.employeeid,
+                fullname: item.fullname,
+                payroll_start_date: item.payroll_start_date,
+                payroll_end_date: item.payroll_end_date,
+                salary: item.salary,
+                payslip_salary: item.payslip_salary,
+                payrolltype: item.payrolltype,
+                positionname: item.positionname,
+                departmentname: item.departmentname,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "employeeid" },
+          { data: "fullname" },
+          { data: "payroll_start_date" },
+          { data: "payroll_end_date" },
+          {
+            data: "salary",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          {
+            data: "payslip_salary",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "payrolltype" },
+          { data: "positionname" },
+          { data: "departmentname" },
+          { data: "action" },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var monthlyCell = $(row).find("td:eq(2)");
+          var allowancesCell = $(row).find("td:eq(3)");
+
+          monthlyCell.wrapInner("<span class='monthly-text'></span>");
+          allowancesCell.wrapInner("<span class='allowances-text'></span>");
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#paemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadAllPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/retropay/viewpayrolldates",
+        success: function (result) {
+          var data = result.data;
+          $("#startpd").empty();
+          $("#endpd").empty();
+          $.each(data, function (key, item) {
+            var option = new Option(item.payrolldate, item.payrolldate);
+            $("#startpd").append($(option).clone());
+            $("#endpd").append($(option).clone());
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#paemployeename").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#generateretro", function () {
+      let employeeid = $("#paemployeename").val();
+      let newmonthly = $("#newmonthly").val();
+      let newbasic = $("#newbasicadjustment").val();
+      let newallowance = $("#newallowance").val();
+      let start = $("#startpd").val();
+      let end = $("#endpd").val();
+
+      var message = "";
+
+      if (
+        employeeid == "" ||
+        newmonthly == "" ||
+        newbasic == "" ||
+        newallowance == "" ||
+        start == "" ||
+        end == ""
+      ) {
+        message +=
+          "employeeid, newmonthly, newbasic, newallowance, start, end is required ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        newmonthly = newmonthly.replace(/,/g, "").replace("₱", "");
+        newbasic = newbasic.replace(/,/g, "").replace("₱", "");
+        newallowance = newallowance.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/retropay/save",
+          data: {
+            employeeid: employeeid,
+            monthly: parseFloat(newmonthly),
+            startpayrolldate: start,
+            endpayrolldate: end,
+            basic_adjustments: parseFloat(newbasic),
+            allowances: parseFloat(newallowance),
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+            console.error("Error saving data:", err);
+          },
+        });
+      }
+    });
+
+    $("#dataTableRetroPay tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      employeeid = dataRow[0];
+      start = dataRow[2];
+      end = dataRow[3];
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $("#dataTableRetroPayDetails").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "POST",
+        url: "/retropay/viewretropay",
+        data: {
+          employeeid: employeeid,
+          startpayrolldate: start,
+          endpayrolldate: end,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
+              $("#retroempid").text(item.employeeid);
+              $("#retrofname").text(item.fullname);
+              $("#newsalary").text(formatCurrencyValue(item.salary));
+              $("#oldsalary").text(formatCurrencyValue(item.old_salary));
+              $("#totalretropay").text(formatCurrencyValue(item.retro_netpay));
+              $("#totaloldsalary").text(
+                formatCurrencyValue(item.payslip_netpay)
+              );
+              $("#totalretropaydiff").text(
+                formatCurrencyValue(item.total_retro_pay)
+              );
+              $("#adjustmenttotal").text(
+                formatCurrencyValue(item.total_retro_pay)
+              );
+              $("#adjustmentfname").text(item.fullname);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
+      $.ajax({
+        type: "POST",
+        url: "/retropay/getretropay",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const TittleContainer = $("#TittleContainer");
+            TittleContainer.empty();
+
+            const firstItem = existingData[0];
+            const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.loan_type}</h3>`;
+            $("#datename").text(firstItem.fullname);
+            TittleContainer.append(cardHtml);
+
+            var totalLoanAmount = 0;
+            var totalAmountPaid = 0;
+
+            var material_list_tbl = $("#dataTableRetroPayDetails").DataTable();
+            material_list_tbl.clear().draw();
+
+            $.each(existingData, function (key, item) {
+              totalLoanAmount += parseFloat(item.per_month);
+
+              var rowNode = material_list_tbl.row
+                .add([
+                  formatDate(item.payrolldate),
+                  formatCurrencyValue(item.payslip_netpay),
+                  formatCurrencyValue(item.total_netpay),
+                ])
+                .draw()
+                .node();
+
+              var statusCell = $(rowNode).find("td:eq(3)");
+              var statusText = item.loanstatus;
+              var statusClass = "";
+
+              switch (statusText) {
+                case "PAID":
+                  statusClass = "active-status";
+                  totalAmountPaid += parseFloat(item.per_month);
+                  break;
+                case "NOT PAID":
+                  statusClass = "pending-status";
+                  break;
+                default:
+                  statusClass = "";
+              }
+
+              statusCell.html(
+                `<span class="${statusClass}">${statusText}</span>`
+              );
+
+              $(rowNode).find("td").css({
+                "text-align": "center",
+                "vertical-align": "middle",
+              });
+            });
+
+            $("#totalloanamount").text(formatCurrencyValue(totalLoanAmount));
+            $("#totalamountpaid").text(formatCurrencyValue(totalAmountPaid));
+          } else {
+            swal("Error fetching");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr, status, error);
+        },
+      });
+    });
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreqbeforepayout",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#payrollDateSelect").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#addjustmentsaveBtn", function () {
+      let totalretropay = $("#adjustmenttotal").text();
+      let payrolldate = $("#payrollDateSelect").val();
+
+      console.log(totalretropay, "retropay");
+
+      var message = "";
+
+      if (totalretropay == "") {
+        message += "totalretropay is required ";
+      }
+
+      if (payrolldate == "") {
+        message += "payrolldate is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        totalretropay = totalretropay.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/retropay/insertadjustment",
+          data: {
+            employeeid: employeeid,
+            payrolldate: payrolldate,
+            totalretropay: parseFloat(totalretropay),
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              }).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+            console.error("Error saving data:", err);
+          },
+        });
+      }
+    });
+  });
+
+  //#region FUNCTIONS
+
+  // $("#msemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+
+  //   // Extract the whole number and decimal parts
+  //   var wholeNumber = numeric_val.slice(0, -2);
+  //   var decimalPart = numeric_val.slice(-2);
+
+  //   var formatted_val = formatNumber(wholeNumber);
+  //   formatted_val = "₱" + formatted_val;
+
+  //   // Add the decimal part if present
+  //   if (decimalPart.length > 0) {
+  //     formatted_val += "." + decimalPart;
+  //   } else if (blur) {
+  //     formatted_val += ".00"; // Add .00 if there are no decimal parts and it's blurred
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#msemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += "₱0.00";
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#editmsemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+
+  //   // Extract the whole number and decimal parts
+  //   var wholeNumber = numeric_val.slice(0, -2);
+  //   var decimalPart = numeric_val.slice(-2);
+
+  //   console.log("Whole Number:", wholeNumber);
+  //   console.log("Decimal Part:", decimalPart);
+
+  //   var formatted_val = formatNumber(wholeNumber);
+  //   formatted_val = "₱" + formatted_val;
+
+  //   // Add the decimal part if present
+  //   if (decimalPart.length > 0) {
+  //     formatted_val += "." + decimalPart;
+  //   } else if (blur) {
+  //     formatted_val += ".00";
+  //   }
+
+  //   console.log("Formatted Value:", formatted_val);
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#editmsemp").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+  //   input.val(formatted_val);
+  // }
+
+  // $("#adjustments").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // $("#editadjustments").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#allowances").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+
+  //   var numeric_val = input_val.replace(/\D/g, "");
+
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+
+  //   input.val(formatted_val);
+  // }
+
+  // $("#editallowances").on({
+  //   input: function () {
+  //     formatCurrency($(this));
+  //   },
+  //   blur: function () {
+  //     formatCurrency($(this), true);
+  //   },
+  // });
+
+  // function formatNumber(n) {
+  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // function formatCurrency(input, blur) {
+  //   var input_val = input.val();
+  //   var numeric_val = input_val.replace(/\D/g, "");
+  //   if (numeric_val === "" || numeric_val === "00") {
+  //     return;
+  //   }
+  //   var formatted_val = formatNumber(numeric_val);
+  //   formatted_val = "₱" + formatted_val;
+  //   if (blur) {
+  //     formatted_val += ".00";
+  //   }
+  //   input.val(formatted_val);
+  // }
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableRetroPay");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+
+  //#endregion
+</script>

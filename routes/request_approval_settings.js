@@ -7,6 +7,8 @@ const {
   JsonErrorResponse,
   JsonDataResponse,
 } = require("./repository/response");
+const { RES } = require("./repository/dictionary");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -31,10 +33,12 @@ router.get("/load", (req, res) => {
     ras_count,
     ras_createdby,
     ras_createdate,
-    ras_status
+    ras_status,
+    s_name as ras_subgroupid
     FROM request_approval_settings
     INNER JOIN master_department on 
-    request_approval_settings.ras_departmentid = md_departmentid`;
+    request_approval_settings.ras_departmentid = md_departmentid
+    INNER JOIN subgroup ON request_approval_settings.ras_subgroupid = subgroup.s_id`;
 
     mysql.Select(sql, "Request_Approval_Settings", (err, result) => {
       if (err) console.error("Error Fetching Data: ", err);
@@ -52,19 +56,55 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.post("/loadsubgroup", (req, res) => {
+  try {
+    let departmentid = req.body.departmentid;
+    let sql = ` SELECT
+    s_id,
+    s_name
+    FROM subgroup
+    WHERE s_departmentid = '${departmentid}'
+    AND s_status = 'Active'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "s_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 router.post("/save", (req, res) => {
   try {
     let departmentid = req.body.departmentid;
     let settingscount = req.body.settingscount;
     let createby = req.session.fullname;
+    let subgroupid = req.body.subgroupid;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     let status = "Active";
     let data = [];
 
-    data.push([departmentid, settingscount, createby, createdate, status]);
+    data.push([
+      departmentid,
+      settingscount,
+      createby,
+      createdate,
+      status,
+      subgroupid,
+    ]);
 
     let sql = `SELECT * FROM request_approval_settings WHERE 
-    ras_departmentid = '${departmentid}' AND ras_count = '${settingscount}'`;
+    ras_departmentid = '${departmentid}' AND ras_count = '${settingscount}' AND ras_subgroupid = '${subgroupid}'`;
 
     mysql.Select(sql, "Request_Approval_Settings", (err, result) => {
       if (err) console.error("Error :", err);
@@ -77,7 +117,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("request_approval_settings", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
           res.json({
             msg: "success",
             data: result,
@@ -102,14 +141,14 @@ router.post("/getapprovesettings", (req, res) => {
     ras_count,
     ras_createdby,
     ras_createdate,
-    ras_status
+    ras_status,
+    ras_subgroupid
     FROM request_approval_settings
     WHERE  ras_is = '${approvalsettings}'`;
 
     mysql.Select(sql, "Request_Approval_Settings", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

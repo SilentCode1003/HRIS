@@ -36,7 +36,7 @@
 
     function searchEmployees(searchTerm) {
       $.ajax({
-        url: "/searchemployee",
+        url: "/index/searchemployee",
         method: "POST",
         data: { search: searchTerm },
         success: function (response) {
@@ -613,14 +613,21 @@
     //   });
     // }
 
+    // Function to trigger a toast notification
+
     function loadNotifBadge() {
       $.ajax({
         type: "GET",
-        url: "/countunreadbadge",
+        url: "/index/countunreadbadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalUnread = result.data[0].Unreadcount;
             $("#badge-counter").text(totalUnread);
+
+            // Only show the toast if totalUnread is greater than 0
+            if (totalUnread > 0) {
+              showToastNotification(totalUnread);
+            }
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -631,11 +638,49 @@
       });
     }
 
+    //Function to trigger a toast notification
+    function showToastNotification(totalUnread) {
+      const toastContent = `
+        <div class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              You have ${totalUnread} unread notifications!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `;
+
+      // Append toast to the body or toast container
+      $("#toast-container").append(toastContent);
+
+      // Initialize and show the toast
+      $(".toast").toast("show");
+    }
+
+    // function loadNotifBadge() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/index/countunreadbadge",
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const totalUnread = result.data[0].Unreadcount;
+    //         $("#badge-counter").text(totalUnread);
+    //       } else {
+    //         console.error("Error fetching data:", result.msg);
+    //       }
+    //     },
+    //     error: function (err) {
+    //       console.error("AJAX error:", err.statusText);
+    //     },
+    //   });
+    // }
+
     $(document).on("click", "#alertsDropdown", function () {
       console.log("HIT");
       $.ajax({
         type: "GET",
-        url: "/loadnotif",
+        url: "/index/loadnotif",
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
@@ -644,7 +689,7 @@
             existingData.forEach((item) => {
               $.ajax({
                 type: "POST",
-                url: "/markread",
+                url: "/index/markread",
                 data: {
                   notificationId: item.notificationid,
                 },
@@ -714,7 +759,7 @@
       console.log("Clicked Notification ID:", notificationIdClicked);
       $.ajax({
         type: "POST",
-        url: "/viewnotif",
+        url: "/index/viewnotif",
         data: {
           notificationIdClicked: notificationIdClicked,
         },
@@ -749,7 +794,7 @@
       let id = notificationId;
       $.ajax({
         type: "POST",
-        url: "/readnotif",
+        url: "/index/readnotif",
         data: {
           notificationId: id,
         },
@@ -785,7 +830,7 @@
       let id = notificationId;
       $.ajax({
         type: "POST",
-        url: "/deleatenotif",
+        url: "/index/deleatenotif",
         data: {
           notificationId: id,
         },

@@ -23,6 +23,7 @@
                         <th class="col-sm-1">ID</th>
                         <th>Department Name</th>
                         <th>Total Authorized Approver</th>
+                        <th>Sub Group</th>
                         <th>Created By</th>
                         <th>Create Date</th>
                         <th>Status</th>
@@ -51,16 +52,29 @@
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select border-form-modal" id="departmentid" name="departmentid" aria-label="Floating label select example">
+                              <option selected disabled>Choose...</option>
                             </select>
                             <label for="floatingSelectGrid">Department Name</label>
                         </div>
                     </div>
-                    <br>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                      <div class="form-floating">
+                          <select class="form-select border-form-modal" id="subgroupname" name="subgroupname" aria-label="Floating label select example">
+                          </select>
+                          <label for="floatingSelectGrid">Sub Group Name</label>
+                      </div>
+                  </div>
+              </div>
+              <br>
+                <div class="row g-3">
                     <div class="col">
-                        <div class="form-floating">
-                            <input type="number" class="form-select border-form-modal" id="approver" name="approver" aria-label="Floating label select example">
-                            <label for="floatingSelectGrid">Authorized Approver</label>
-                        </div>
+                      <div class="form-floating">
+                        <input type="number" class="form-select border-form-modal" id="approver" name="approver" aria-label="Floating label select example">
+                        <label for="floatingSelectGrid">Authorized Approver</label>
+                      </div>
                     </div>
                 </div>
             </form>
@@ -115,6 +129,17 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                        <select class="form-select border-form-modal" id="editsubgroupname" name="editsubgroupname" aria-label="Floating label select example">
+                            <option selected disabled>Choose...</option>
+                        </select>
+                        <label for="floatingSelectGrid">Sub Group Name</label>
+                    </div>
+                </div>
+              </div>
             </form>
         </div>
         <div class="modal-footer" id="modal-footer">

@@ -67,7 +67,6 @@ router.post("/save", (req, res) => {
         mysql.InsertTable("subgroup", data, (err, result) => {
           if (err) console.error("Error: ", err);
 
-          console.log(result);
           res.json({
             msg: "success",
             data: result,
@@ -99,7 +98,36 @@ router.post("/getsubgroup", (req, res) => {
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/getsubgroupbydepartment", (req, res) => {
+  try {
+    let departmentid = req.body.departmentid;
+    let sql = ` SELECT
+    s_id,
+    s_departmentid,
+    s_name,
+    s_createby,
+    s_createdate,
+    s_status
+    FROM subgroup
+    WHERE s_departmentid = '${departmentid}'
+    AND s_status = 'Active'`;
+
+    mysql.Select(sql, "Subgroup", (err, result) => {
+      if (err) console.error("Error :", err);
+
       res.json({
         msg: "success",
         data: result,
@@ -149,5 +177,33 @@ router.post("/update", (req, res) => {
       data: error,
     });
     console.log(error);
+  }
+});
+
+router.get("/getsubgroupallactive", (req, res) => {
+  try {
+    let sql = ` SELECT
+    s_id,
+    s_departmentid,
+    s_name,
+    s_createby,
+    s_createdate,
+    s_status
+    FROM subgroup
+    WHERE s_status = 'Active'`;
+
+    mysql.Select(sql, "Subgroup", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
   }
 });

@@ -6,8 +6,8 @@
     LoadListEmp();
     LoadAccess();
     LoadEditAccess();
-    LoadSubgroup();
-    LoadEditSubgroup();
+    //LoadSubgroup();
+    //LoadEditSubgroup();
     searchTable();
 
     $(document).on("keyup", "#myInput", function () {
@@ -54,6 +54,7 @@
                 createby: item.createby,
                 createdate: item.createdate,
                 status: item.status,
+                isgeofence: item.isgeofence,
                 action: action,
               });
             });
@@ -76,15 +77,19 @@
           { data: "createby" },
           { data: "createdate" },
           { data: "status" },
+          { data: "isgeofence" },
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var statusCell = $(row).find("td:eq(6)");
+          var geofenceCell = $(row).find("td:eq(7)");
 
           var statusText = data.status;
+          var geofenceText = data.isgeofence;
 
           var statusClass = "";
+          var geofenceClass = "";
 
           switch (statusText.toLowerCase()) {
             case "active":
@@ -97,7 +102,19 @@
               statusClass = "";
           }
 
+          switch (geofenceText.toLowerCase()) {
+            case "active":
+              geofenceClass = "active-status";
+              break;
+            case "inactive":
+              geofenceClass = "inactive-status";
+              break;
+            default:
+              geofenceClass = "";
+          }
+
           statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+          geofenceCell.html(`<span class="${geofenceClass}">${geofenceText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -111,7 +128,7 @@
     $(document).on("click", "#userssavebtn", function () {
       let employeeid = $("#usersname").val();
       let accesstype = $("#usersaccesstype").val();
-      let subgroupid = $("#subgroupid").val();
+      //let subgroupid = $("#subgroupid").val();
 
       var message = "";
 
@@ -123,9 +140,9 @@
         message += "DESCRIPTION ";
       }
 
-      if (subgroupid == "") {
-        message += "subgroupid ";
-      }
+      // if (subgroupid == "") {
+      //   message += "subgroupid ";
+      // }
 
       if (message !== "") {
         swal("Validation Error", message, "error");
@@ -136,7 +153,7 @@
           data: {
             employeeid: employeeid,
             accesstype: accesstype,
-            subgroupid: subgroupid,
+            //subgroupid: subgroupid,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -185,43 +202,43 @@
     }
 
 
-    function LoadSubgroup() {
-      $.ajax({
-        type: "GET",
-        url: "/subgroup/load",
-        success: function (result) {
-          var data = result.data;
+    // function LoadSubgroup() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/subgroup/load",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.subgroupid, item.subgroupid);
-            $(options).html(item.subgroupname);
-            $("#subgroupid").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.subgroupid, item.subgroupid);
+    //         $(options).html(item.subgroupname);
+    //         $("#subgroupid").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
-    function LoadEditSubgroup() {
-      $.ajax({
-        type: "GET",
-        url: "/subgroup/load",
-        success: function (result) {
-          var data = result.data;
+    // function LoadEditSubgroup() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/subgroup/load",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.subgroupid, item.subgroupid);
-            $(options).html(item.subgroupname);
-            $("#editsubgroupid").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.subgroupid, item.subgroupid);
+    //         $(options).html(item.subgroupname);
+    //         $("#editsubgroupid").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
     function LoadAccess() {
       $.ajax({
@@ -283,13 +300,16 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
+            //console.log(existingData);
+
             $.each(existingData, (key, item) => {
               $("#editdepartmentid").val(item.userid);
               $("#editusername").val(item.username);
               //$("#editpassword").val(item.password);
               $("#editusersaccesstype").val(item.accesstype);
-              $("#editsubgroupid").val(item.subgroupid);
+              //$("#editsubgroupid").val(item.subgroupid);
               $("#editusersstatus").val(item.status);
+              $("#editgeofence").val(item.isgeofence);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -310,8 +330,9 @@
       let username = $("#editusername").val();
       //let password = $("#editpassword").val();
       let accesstype = $("#editusersaccesstype").val();
-      let subgroupid = $("#editsubgroupid").val();
+      //let subgroupid = $("#editsubgroupid").val();
       let status = $("#editusersstatus").val();
+      let isgeofence = $("#editgeofence").val();
 
       var message = "";
 
@@ -319,9 +340,9 @@
         message += "departmentname is required. ";
       }
 
-      if (subgroupid === "") {
-        message += "subgroupid is required. ";
-      }
+      // if (subgroupid === "") {
+      //   message += "subgroupid is required. ";
+      // }
 
       //if (password === "") {
       //message += "status is required. ";
@@ -339,15 +360,16 @@
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/users/update",
+          type: "PUT",
+          url: "/users/edit",
           data: {
             userid: id,
             username: username,
             //password: password,
             accesstype: accesstype,
-            subgroupid: subgroupid,
+            //subgroupid: subgroupid,
             status: status,
+            isgeofence: isgeofence,
           },
           success: function (result) {
             if (result.msg == "success") {

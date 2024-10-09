@@ -1,0 +1,727 @@
+<script>
+  let base64String = "";
+  let holidayid = "";
+  let employeeid = "<%= employeeid %>";
+  let totalLeaveGlobal = 0;
+  let unusedLeaveGlobal = "";
+  let totalusedGlobal = 0;
+  $(document).ready(function () {
+    console.log("Initialize");
+    LoadTable();
+    LoadPayrollDate();
+    LoadSubgroup();
+
+    function LoadTable() {
+      $("#dataTablePendingHoliday").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalrequestholiday/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#holidaymemodal"><i class="fas fa-fw fa-pen"></i></button>
+                    `;
+
+              finalData.push({
+                holidayid: item.holidayid,
+                attendancedate: item.attendancedate,
+                timein: item.timein,
+                timeout: item.timeout,
+                holidaytype: item.holidaytype,
+                total_hours: item.total_hours,
+                nightdiff_ot_total: item.nightdiff_ot_total,
+                normal_ot_total: item.normal_ot_total,
+                action: action,
+              });
+            });
+
+            console.log(finalData);
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "holidayid" },
+          { data: "attendancedate" },
+          { data: "timein" },
+          { data: "timeout" },
+          { data: "holidaytype" },
+          { data: "total_hours" },
+          { data: "nightdiff_ot_total" },
+          { data: "normal_ot_total" },
+          { data: "action" },
+        ],
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    function LoadListEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#leavesubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#approvedtable", function () {
+      console.log("Hit");
+      $("#dataTableApprovedHoliday").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestholiday/loadapproved",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableApprovedHoliday"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
+
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
+
+            $.each(
+              [
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#rejectedtable", function () {
+      console.log("Hit");
+      $("#dataTableRejectedHoliday").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestholiday/loadrejected",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableRejectedHoliday"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
+
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
+
+            $.each(
+              [
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#cancelledtable", function () {
+      console.log("Hit");
+      $("#dataTableHolidayCancelled").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestholiday/loadcancelled",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableHolidayCancelled"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
+
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
+
+            $.each(
+              [
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#holidaypayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#holidaysubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+    
+
+    // $(document).on("click", "#pendingleavesavebtn", function () {
+    //   let startdate = $("#startldate").val();
+    //   let enddate = $("#endldate").val();
+    //   let leavetype = $("#leavetype").val();
+    //   let reason = $("#leavereason").val();
+    //   let durationDays = $("#durationdays").val();
+    //   let paidDays = $("#paiddays").val();
+    //   let unpaidDays = $("#unpaiddays").val();
+    //   let image = base64String;
+    //   let subgroup = $("#leavesubgroup").val();
+
+    //   var message = "";
+
+    //   if (startdate == "") {
+    //     message += "Start Date is required ";
+    //   }
+
+    //   if (subgroup == "") {
+    //     message += "subgroup is required ";
+    //   }
+
+    //   if (enddate == "") {
+    //     message += "End Date is required ";
+    //   }
+
+    //   if (leavetype === "") {
+    //     message += "Leave Type is required ";
+    //   }
+
+    //   if (durationDays == "") {
+    //     message += "Reason is required ";
+    //   }
+
+    //   if (reason == "") {
+    //     message += "Reason is required ";
+    //   }
+
+    //   if (paidDays == "") {
+    //     message += "Paid Days is required ";
+    //   } else if (paidDays <= 0) {
+    //     message += "Paid Days must be greater than 0 ";
+    //   }
+
+    //   if (image == "") {
+    //     message += "Image is required ";
+    //   }
+
+    //   if (message !== "") {
+    //     swal("Validation Error", message, "error");
+    //   } else {
+    //     $.ajax({
+    //       type: "POST",
+    //       url: "/eportalrequestleave/submit",
+    //       data: {
+    //         employeeid: employeeid,
+    //         startdate: startdate,
+    //         enddate: enddate,
+    //         leavetype: leavetype,
+    //         reason: reason,
+    //         durationDays: durationDays,
+    //         paidDays: paidDays,
+    //         unpaidDays: unpaidDays,
+    //         image: image,
+    //         subgroup: subgroup,
+    //       },
+    //       success: function (result) {
+    //         if (result.msg == "success") {
+    //           swal(
+    //             "Update Successfully",
+    //             "You clicked the button!",
+    //             "success"
+    //           ).then((result) => {
+    //             window.location.reload();
+    //           });
+    //           LoadTable();
+    //         } else if (result.msg == "exist") {
+    //           swal("Exist", "Data already exists!", "warning");
+    //         }
+    //       },
+    //       error: function (err) {
+    //         swal("Error", "An error occurred while saving data.", "error");
+    //       },
+    //     });
+    //   }
+    // });
+
+    $(document).on("click", "#pendingleavesavebtn", function () {
+      let startdate = $("#startldate").val();
+      let enddate = $("#endldate").val();
+      let leavetype = $("#leavetype").val();
+      let reason = $("#leavereason").val();
+      let durationDays = $("#durationdays").val();
+      let paidDays = $("#paiddays").val();
+      let unpaidDays = $("#unpaiddays").val();
+      let image = base64String;
+      let subgroup = $("#leavesubgroup").val();
+
+      var message = "";
+
+      if (startdate == "") {
+        message += "Start Date is required ";
+      }
+
+      if (subgroup == "") {
+        message += "Subgroup is required ";
+      }
+
+      if (enddate == "") {
+        message += "End Date is required ";
+      }
+
+      if (leavetype === "") {
+        message += "Leave Type is required ";
+      }
+
+      if (durationDays == "") {
+        message += "Duration Days is required ";
+      }
+
+      if (reason == "") {
+        message += "Reason is required ";
+      }
+
+      if (paidDays == "") {
+        message += "Paid Days is required ";
+      } else if (paidDays <= 0) {
+        message += "Paid Days must be greater than 0 ";
+      }
+
+      if (image == "") {
+        message += "Image is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        console.log("Sending AJAX request with data:", {
+          employeeid: employeeid,
+          startdate: startdate,
+          enddate: enddate,
+          leavetype: leavetype,
+          reason: reason,
+          durationDays: durationDays,
+          paidDays: paidDays,
+          unpaidDays: unpaidDays,
+          image: image,
+          subgroup: subgroup,
+        });
+
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestleave/submit",
+          data: {
+            employeeid: employeeid,
+            startdate: startdate,
+            enddate: enddate,
+            leavetype: leavetype,
+            reason: reason,
+            durationDays: durationDays,
+            paidDays: paidDays,
+            unpaidDays: unpaidDays,
+            image: image,
+            subgroup: subgroup,
+          },
+          success: function (result) {
+            console.log("Received response:", result);
+            if (result.msg === "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg === "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            } else if (result.msg === "not allowed") {
+              swal("Error", "Not allowed", "error");
+            } else if (result.msg === "Invalid employee ID") {
+              swal("Error", "Invalid employee ID", "error");
+            } else {
+              swal("Error", "An unexpected error occurred.", "error");
+            }
+          },
+          error: function (err) {
+            console.error("AJAX error:", err);
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    //Edit Section
+
+    $("#dataTablePendingHoliday tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      holidayid = dataRow[0];
+      console.log(holidayid);
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "eportalrequestholiday/getreqholiday",
+        data: {
+          holidayid: holidayid,
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#holidayattendancedate").val(item.attendancedate);
+              $("#holidaytimein").val(item.timein);
+              $("#holidaytimeout").val(item.timeout);
+              $("#holidaystatus").val(item.status);
+              $("#holidaytype").val(item.holidaytype);
+              $("#holidaydate").val(item.holidaydate);
+              $("#holidayname").val(item.holidayname);
+              // $("#previewleave").attr(
+              //   "src",
+              //   "data:image/jpg;base64," + item.leaveimage
+              // );
+              //  $("#holidaysubgroup").val(item.totalleavedays);
+              // $("#editunusedleave").val(item.unusedleave);
+              // $("#editusedleave").val(item.usedleave);
+              // $("#editleaveyear").val(item.leaveyear);
+              // $("#editleavestatus").val(item.leavestatus);
+              // $("#editleaveduration").val(item.leaveduration);
+              // $("#editpaiddays").val(item.leavepaiddays);
+              // $("#editunpaiddays").val(item.leaveunpaiddays);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#holidaysavebtn", function () {
+      let id = holidayid;
+      let clockin = $("#holidaytimein").val();
+      let clockout = $("#holidaytimeout").val();
+      let payrolldate = $("#holidaypayrolldate").val();
+      let attendancedate = $("#holidayattendancedate").val();
+      let subgroup = $("#holidaysubgroup").val();
+      let status = $("#holidaystatus").val();
+      let holidayimage = base64String;
+
+      console.log(id);
+      console.log(clockin);
+      console.log(clockout);
+      console.log(payrolldate);
+      console.log(attendancedate);
+      console.log(subgroup);
+      console.log(status);
+      console.log(holidayimage);
+
+      var message = "";
+
+      if (id === "") {
+        message += "ID is required. ";
+      }
+
+      if (clockin === "") {
+        message += "Clockin is required. ";
+      }
+
+      if (clockout === "") {
+        message += "Clockout is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "Payrolldate is required. ";
+      }
+
+      if (attendancedate === "") {
+        message += "Attendancedate is required. ";
+      }
+
+      if (subgroup === "") {
+        message += "Subgroup is required. ";
+      }
+      
+      if (status === "") {
+        message += "Status is required. "; 
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        swal({
+          title: "Are you sure?",
+          text: `Do you want to '${status}' this request?`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willApprove) => {
+          if (willApprove) {
+            $.ajax({
+              type: "PUT",
+              url: "/eportalrequestholiday/edit",
+              data: {
+                holidayid: id,
+                status: status, 
+                clockin: clockin,
+                clockout: clockout,
+                attendancedate: attendancedate,
+                payrolldate: payrolldate,
+                subgroup: subgroup,
+                holidayimage: holidayimage,
+                employeeid: employeeid,
+              },
+              success: function (result) {
+                if (result.msg == "success") {
+                  swal(
+                    "Save Successfully",
+                    "You clicked the button!",
+                    "success"
+                  ).then((results) => {
+                    window.location.reload();
+                  });
+                  LoadTable();
+                }
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+              error: function (err) {
+                swal("Error", "An error occurred while saving data.", "error");
+              },
+            });
+          } else {
+            swal("Action Canceled", "", "info");
+          }
+        });
+      }
+    });
+  });
+
+  $(document).on("change", "#edituploadimage", function (e) {
+    const input = document.getElementById("edituploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("previewleave");
+      preview.src = reader.result;
+    };
+    imageUploadedleave();
+  });
+
+  function imageUploadedleave() {
+    const input = document.getElementById("edituploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#uploadimage", function (e) {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("preview");
+      preview.src = reader.result;
+    };
+    imageUploaded();
+  });
+
+  function imageUploaded() {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+</script>

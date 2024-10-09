@@ -1,6 +1,6 @@
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const e = require("express");
 const { mysqlQueryPromise } = require("./repository/hrmisdb");
 const { error } = require("jquery");

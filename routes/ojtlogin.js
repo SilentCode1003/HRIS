@@ -1,6 +1,6 @@
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
-const mysql = require('./repository/hrmisdb');
+const { Encrypter } = require("./repository/cryptography");
+const mysql = require("./repository/hrmisdb");
 const { error } = require("jquery");
 const { OjtLogin } = require("./repository/helper");
 var router = express.Router();
@@ -36,46 +36,47 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
 
       console.log(sql);
 
-      mysql.mysqlQueryPromise(sql)
-      .then((result) => {
-        if (result.length !== 0) {
+      mysql
+        .mysqlQueryPromise(sql)
+        .then((result) => {
+          if (result.length !== 0) {
             const user = result[0];
 
-            if (user.status === 'Active') {
-                let data = OjtLogin(result);
-    
-                console.log('result',result);
-    
-                data.forEach((user) => {
-                    req.session.image = user.image;
-                    req.session.ojtid = user.ojtid;
-                    req.session.fullname = user.fullname;
-                    req.session.accesstype = user.accesstype;
-                    req.session.departmentid = user.departmentid;
-                    req.session.status = user.status;
-                });
-    
-                return res.json({
-                    msg:'success',
-                    data: data,
-                });
+            if (user.status === "Active") {
+              let data = OjtLogin(result);
+
+              console.log("result", result);
+
+              data.forEach((user) => {
+                req.session.image = user.image;
+                req.session.ojtid = user.ojtid;
+                req.session.fullname = user.fullname;
+                req.session.accesstype = user.accesstype;
+                req.session.departmentid = user.departmentid;
+                req.session.status = user.status;
+              });
+
+              return res.json({
+                msg: "success",
+                data: data,
+              });
             } else {
-                return res.json({
-                    msg:'inactive',
-                    data: result,
-                });
+              return res.json({
+                msg: "inactive",
+                data: result,
+              });
             }
-        } else {
+          } else {
             return res.json({
-                msg:'incorrect',
+              msg: "incorrect",
             });
-        }
-      })
-      .catch((error) => {
-        res.json({
-            msg: error,
+          }
         })
-      })
+        .catch((error) => {
+          res.json({
+            msg: error,
+          });
+        });
     });
   } catch (error) {
     res.json({

@@ -2,8 +2,16 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { Select } = require("./repository/dbconnect");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
+const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -33,7 +41,8 @@ router.get("/load", (req, res) => {
   FROM attendance_request
   INNER JOIN
   master_employee ON attendance_request.ar_employeeid = me_id
-  where ar_employeeid ='${employeeid}'`;
+  where ar_employeeid ='${employeeid}'
+  AND ar_status = 'Pending'`;
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -66,16 +75,6 @@ router.post("/submit", async (req, res) => {
     let approvedcount = "0";
 
     let total = calculateTotalHours(timein, timeout);
-
-    console.log(
-      attendancedate,
-      timein,
-      timeout,
-      reason,
-      employeeid,
-      file,
-      approvedcount
-    );
 
     const Datenow = new Date();
     const inputDate = new Date(attendancedate);
@@ -116,6 +115,19 @@ router.post("/submit", async (req, res) => {
         res.json({ msg: "insert_failed" });
       } else {
         console.log(insertResult);
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            timein: timein,
+            timeout: timeout,
+            reason: reason,
+            status: status,
+            requesttype: REQUEST.COA,
+          },
+        ];
+        SendEmailNotification(employeeid,subgroupid, REQUEST.COA, emailbody);
+
         res.json({ msg: "success" });
       }
     });
@@ -145,7 +157,6 @@ router.post("/getreqCOA", (req, res) => {
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -200,6 +211,126 @@ router.post("/update", (req, res) => {
     res.json({
       msg: "error",
     });
+  }
+});
+
+router.get("/loadapproved", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    ar_requestid,
+    DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+    ar_total,
+    ar_createdate,
+    ar_status,
+    ar_reason
+  FROM attendance_request
+  INNER JOIN
+  master_employee ON attendance_request.ar_employeeid = me_id
+  WHERE ar_employeeid ='${employeeid}'
+  AND ar_status = 'Approved'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(err));
+  }
+});
+
+router.get("/loadrejected", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    ar_requestid,
+    DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+    ar_total,
+    ar_createdate,
+    ar_status,
+    ar_reason
+  FROM attendance_request
+  INNER JOIN
+  master_employee ON attendance_request.ar_employeeid = me_id
+  WHERE ar_employeeid ='${employeeid}'
+  AND ar_status = 'Rejected'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(err));
+  }
+});
+
+router.get("/loadcancelled", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    ar_requestid,
+    DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
+    DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+    DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+    ar_total,
+    ar_createdate,
+    ar_status,
+    ar_reason
+  FROM attendance_request
+  INNER JOIN
+  master_employee ON attendance_request.ar_employeeid = me_id
+  WHERE ar_employeeid ='${employeeid}'
+  AND ar_status = 'Cancel'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "ar_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(err));
   }
 });
 

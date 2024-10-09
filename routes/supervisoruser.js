@@ -1,11 +1,14 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -28,85 +31,85 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 router.post("/save", async (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let subgroupid = req.body.subgroupid;
+    let accesstype = 6;
+    let status = "Active";
+    let createby = req.session.fullname;
+    const createdate = currentDate.format("YYYY-MM-DD");
+
+    const existingUserQuery = `SELECT * FROM teamlead_user WHERE tu_employeeid = '${employeeid}' AND tu_accesstype = '${accesstype}'`;
+    const existingUserResult = await mysql.mysqlQueryPromise(
+      existingUserQuery,
+      [employeeid, accesstype]
+    );
+
+    if (existingUserResult.length > 0) {
+      return res.json({ msg: "exist" });
+    }
+
+    const employeeQuery = `SELECT me_id, me_firstname, me_lastname, me_birthday FROM master_employee WHERE me_id = '${employeeid}'`;
+
     try {
-      let employeeid = req.body.employeeid;
-      let subgroupid = req.body.subgroupid;
-      let accesstype = 6;
-      let status = "Active";
-      let createby = req.session.fullname;
-      const createdate = currentDate.format("YYYY-MM-DD");
-  
-      const existingUserQuery = `SELECT * FROM teamlead_user WHERE tu_employeeid = '${employeeid}' AND tu_accesstype = '${accesstype}'`;
-      const existingUserResult = await mysql.mysqlQueryPromise(
-        existingUserQuery,
-        [employeeid, accesstype]
-      );
-  
-      if (existingUserResult.length > 0) {
-        return res.json({ msg: "exist" });
-      }
-  
-      const employeeQuery = `SELECT me_id, me_firstname, me_lastname, me_birthday FROM master_employee WHERE me_id = '${employeeid}'`;
-  
-      try {
-        const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [
-          employeeid,
-        ]);
-  
-        if (employeeresult.length > 0) {
-          const employee = employeeresult[0];
-          const { username, password } = generateUsernameAndPassword(employee);
-  
-          Encrypter(password, async (err, encrypted) => {
-            if (err) {
-              console.error("Error: ", err);
-              res.json({ msg: "error" });
-            } else {
-              const data = [
-                [
-                  employeeid,
-                  username,
-                  encrypted,
-                  6,
-                  subgroupid,
-                  createby,
-                  createdate,
-                  status,
-                ],
-              ];
-  
-              mysql.InsertTable(
-                "teamlead_user",
-                data,
-                (inserterr, insertresult) => {
-                  if (inserterr) {
-                    console.error("Error inserting record: ", inserterr);
-                    res.json({ msg: "insert failed" });
-                  } else {
-                    console.log(insertresult);
-                    res.json({ msg: "success" });
-                  }
+      const employeeresult = await mysql.mysqlQueryPromise(employeeQuery, [
+        employeeid,
+      ]);
+
+      if (employeeresult.length > 0) {
+        const employee = employeeresult[0];
+        const { username, password } = generateUsernameAndPassword(employee);
+
+        Encrypter(password, async (err, encrypted) => {
+          if (err) {
+            console.error("Error: ", err);
+            res.json({ msg: "error" });
+          } else {
+            const data = [
+              [
+                employeeid,
+                username,
+                encrypted,
+                6,
+                subgroupid,
+                createby,
+                createdate,
+                status,
+              ],
+            ];
+
+            mysql.InsertTable(
+              "teamlead_user",
+              data,
+              (inserterr, insertresult) => {
+                if (inserterr) {
+                  console.error("Error inserting record: ", inserterr);
+                  res.json({ msg: "insert failed" });
+                } else {
+                  console.log(insertresult);
+                  res.json({ msg: "success" });
                 }
-              );
-            }
-          });
-        } else {
-          console.error("No employee found with that ID");
-          res.json({ msg: "No employee found with that ID" });
-        }
-      } catch (employeeerror) {
-        console.error("Error querying employee: ", employeeerror);
-        res.json({ msg: "error" });
+              }
+            );
+          }
+        });
+      } else {
+        console.error("No employee found with that ID");
+        res.json({ msg: "No employee found with that ID" });
       }
-    } catch (error) {
-      console.error("Error: ", error);
+    } catch (employeeerror) {
+      console.error("Error querying employee: ", employeeerror);
       res.json({ msg: "error" });
     }
-  });
-  
-  router.get("/load", (req, res) => {
-    try {
-      let sql = `SELECT 
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({ msg: "error" });
+  }
+});
+
+router.get("/load", (req, res) => {
+  try {
+    let sql = `SELECT 
       tu_userid,
       concat(me_firstname,' ',me_lastname) as tu_employeeid,
       tu_username,
@@ -120,74 +123,74 @@ router.post("/save", async (req, res) => {
       LEFT JOIN master_access ON teamlead_user.tu_accesstype = ma_accessid
       INNER JOIN subgroup ON teamlead_user.tu_subgroupid = s_id
       WHERE tu_accesstype = '6' `;
-  
-      Select(sql, (err, result) => {
-        if (err) {
-          console.error(err);
-          res.json(JsonErrorResponse(err));
-        }
-  
-        //console.log(result);
-  
-        if (result != 0) {
-          let data = DataModeling(result, "tu_");
-  
-          //console.log(data);
-          res.json(JsonDataResponse(data));
-        } else {
-          res.json(JsonDataResponse(result));
-        }
-      });
-    } catch (error) {
-      res.json(JsonErrorResponse(error));
-    }
-  });
-  
-  router.post("/update", async (req, res) => {
-    try {
-      let tluserid = req.body.tluserid;
-      let username = req.body.username;
-      let subgroupid = req.body.subgroupid;
-      let status = req.body.status;
-  
-      // Wrap the Encrypter function in a promise
-      // const encrypted = await new Promise((resolve, reject) => {
-      //   Encrypter(password, (err, result) => {
-      //     if (err) {
-      //       console.error("Error in Encrypter: ", err);
-      //       reject(err);
-      //     } else {
-      //       resolve(result);
-      //     }
-      //   });
-      // });
-  
-      let sqlupdate = `        
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "tu_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/update", async (req, res) => {
+  try {
+    let tluserid = req.body.tluserid;
+    let username = req.body.username;
+    let subgroupid = req.body.subgroupid;
+    let status = req.body.status;
+
+    // Wrap the Encrypter function in a promise
+    // const encrypted = await new Promise((resolve, reject) => {
+    //   Encrypter(password, (err, result) => {
+    //     if (err) {
+    //       console.error("Error in Encrypter: ", err);
+    //       reject(err);
+    //     } else {
+    //       resolve(result);
+    //     }
+    //   });
+    // });
+
+    let sqlupdate = `        
       UPDATE teamlead_user SET 
       tu_username = '${username}',
       tu_status ='${status}',
       tu_subgroupid = '${subgroupid}'
       WHERE tu_userid ='${tluserid}'`;
-  
-      const updateResult = await mysql.Update(sqlupdate);
-  
-      console.log(updateResult);
-  
-      res.json({
-        msg: "success",
-      });
-    } catch (error) {
-      console.error("Error: ", error);
-      res.json({
-        msg: "error",
-      });
-    }
-  });
-  
-  router.post("/getusers", (req, res) => {
-    try {
-      let tluserid = req.body.tluserid;
-      let sql = `
+
+    const updateResult = await mysql.Update(sqlupdate);
+
+    console.log(updateResult);
+
+    res.json({
+      msg: "success",
+    });
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({
+      msg: "error",
+    });
+  }
+});
+
+router.post("/getusers", (req, res) => {
+  try {
+    let tluserid = req.body.tluserid;
+    let sql = `
       SELECT 
           tu_username,
           tu_password,
@@ -196,41 +199,39 @@ router.post("/save", async (req, res) => {
           from teamlead_user
           inner join subgroup on teamlead_user.tu_subgroupid = s_id
           where tu_userid = '${tluserid}'`;
-  
-      mysql.Select(sql, "TeamLeader_User", (err, result) => {
-        if (err) console.error("Error: ", err);
-  
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      });
-    } catch (error) {
-      res.status(500).json({
-        msg: "Internal server error",
-        error: error,
-      });
-    }
-  });
-  
-  router.get("/subgroupload", (req, res) => {
-    try {
-      let sql = `select * from subgroup`;
-  
-      mysql.Select(sql, "Subgroup", (err, result) => {
-        if (err) console.error("Error: ", err);
-  
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      });
-    } catch (error) {
-      res.status(500).json({
-        msg: "Internal server error",
-        error: error,
-      });
-    }
-  });
-  
 
+    mysql.Select(sql, "TeamLeader_User", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error,
+    });
+  }
+});
+
+router.get("/subgroupload", (req, res) => {
+  try {
+    let sql = `select * from subgroup`;
+
+    mysql.Select(sql, "Subgroup", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal server error",
+      error: error,
+    });
+  }
+});

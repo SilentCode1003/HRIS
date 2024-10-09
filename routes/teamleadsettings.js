@@ -2,7 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { Encrypter, Decrypter } = require("./repository/crytography");
+const { Encrypter, Decrypter } = require("./repository/cryptography");
 var router = express.Router();
 const currentDate = moment();
 const bcrypt = require("bcrypt");
@@ -38,8 +38,6 @@ router.post("/getsettingsaccount", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,

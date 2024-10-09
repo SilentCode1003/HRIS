@@ -1,36 +1,146 @@
-<!-- <h1 class="font-weight-bold text-danger" id="head-title">Leave History</h1> -->
 <br>
 <br>
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
-    <div class="card-header ch-requestleave">
-        <h3>COA</h3>
-        <button type="button" id="applybtn" class="btn btn-eportal-color col-sm-2 col-add" data-bs-toggle="modal"
-            data-bs-target="#pendingmodal">
-            <b>Request Attendance</b>
+  <div class="card-header ch-requestleave">
+    <h3>COA</h3>
+    <div class="row g-2">
+      <div class="col"></div>
+      <div class="col-sm-2">
+        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#reqcoamodal">
+          <h6>Request Attendance</h6> 
         </button>
+      </div>
     </div>
-    <div class="card-body cbody-requestleave">
-        <table class="table table-light table-bordered" id="dataTablereqCOA">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Attendance Date</th>
-                    <th scope="col">Time In</th>
-                    <th scope="col">Time Out</th>
-                    <th scope="col">Total Hours</th>
-                    <th scope="col">Reason</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Applied Date</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+  
+  </div>
 </div>
 
+<div class="col">
+  <div class="card">
+      <div class="card-header ch-generate">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="true"><b>Pending</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Approved</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Rejected</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Cancelled</b>
+                  </button>
+              </div>
+          </nav>
+      </div>
+      <!-- Leave  Request -->
+      <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="row">
+                      <div class="col-xl-12 col-lg-12">
+                          <div class="card shadow mb-4">
+                            <div class="card-body cbody-requestleave">
+                                <table class="table table-light table-bordered" id="dataTablereqCOA">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Attendance Date</th>
+                                            <th scope="col">Time In</th>
+                                            <th scope="col">Time Out</th>
+                                            <th scope="col">Total Hours</th>
+                                            <th scope="col">Reason</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Applied Date</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                          <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Attendance Date</th>
+                                <th scope="col">Time In</th>
+                                <th scope="col">Time Out</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Applied Date</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                          <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Attendance Date</th>
+                                <th scope="col">Time In</th>
+                                <th scope="col">Time Out</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Applied Date</th>
+                                <!-- <th scope="col">Action</th> -->
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                          <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Attendance Date</th>
+                                <th scope="col">Time In</th>
+                                <th scope="col">Time Out</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Applied Date</th>
+                                <!-- <th scope="col">Action</th> -->
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
 <!-- Modal -->
-<div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="reqcoamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
@@ -86,10 +196,11 @@
         </div>
     </div>
 </div>
-<!--canccelled modal-->
+
+<!--view pending modal-->
 <div class="modal fade" id="allleavemodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
                 <h5 class="modal-title fs-5" id="exampleModalLabel">Pending COA</h5>
@@ -114,7 +225,6 @@
                             <label for="editpassword" class="form-label">Status</label>
                             <select class="form-control border-form-modal" id="editcoastatus" name="editcoastatus">
                                 <option value="Pending" selected>Pending</option>
-                                <option value="Approved">Approved</option>
                                 <option value="Cancel">Cancel</option>
                             </select>
                         </div>

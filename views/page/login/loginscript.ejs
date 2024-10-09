@@ -13,7 +13,7 @@
     function LoadAccess() {
       $.ajax({
         type: "GET",
-        url: "/access/load",
+        url: "/access/loadlogin",
         success: function (result) {
           var data = result.data;
 
@@ -57,7 +57,7 @@
       } else {
         $.ajax({
           type: "POST",
-          url: "/login/login",
+          url: "/login",
           data: {
             username: username,
             password: password,
@@ -76,8 +76,12 @@
                   location.replace("/teamleadindex");
                 } else if (result.data[0].accesstype === "Super Visor") {
                   location.replace("/teamleadindex");
+                } else if (result.data[0].accesstype === "Department Head") {
+                  location.replace("/teamleadindex");
+                } else if (result.data[0].accesstype === "Manager") {
+                  location.replace("/teamleadindex");
                 } else {
-                  location.replace("/");
+                  location.replace("/index");
                 }
               });
             } else if (result.msg === "inactive") {

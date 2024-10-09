@@ -2,6 +2,10 @@ const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const { Select, Update } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
+const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -19,7 +23,6 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `select
-    me_profile_pic as image,
     l_leaveid as leaveid ,
     me_id as newEmployeeId,
     concat(me_lastname,' ',me_firstname) as firstname,
@@ -72,11 +75,13 @@ router.post("/getleave", (req, res) => {
     l_leavestatus as leavestatus,
     l_leaveduration as leaveduration,
     l_leavepaiddays as leavepaiddays,
-    l_leaveunpaiddays as leaveunpaiddays
+    l_leaveunpaiddays as leaveunpaiddays,
+    s_name as leavesubgroupid
     FROM
     leaves 
     INNER JOIN master_leaves on leaves.l_leavetype = ml_id
     INNER JOIN master_employee on leaves.l_employeeid = me_id
+    INNER JOIN subgroup on leaves.l_subgroupid = s_id
     where l_leaveid = '${leaveid}'`;
 
     mysql
@@ -110,7 +115,6 @@ router.get("/loadCA", (req, res) => {
   try {
     let sql = `   
     select
-	  me_profile_pic as image,
     ca_cashadvanceid as employeeid,
     concat(me_lastname,' ',me_firstname) as firstname,
     ca_requestdate as requestdate,
@@ -147,7 +151,6 @@ router.get("/loadreqOT", (req, res) => {
   try {
     let sql = `   
     SELECT 
-    pao_image,
     pao_id,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%W, %M %d, %Y') as pao_attendancedate,
@@ -156,7 +159,8 @@ router.get("/loadreqOT", (req, res) => {
     DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') as  pao_clockout,
     pao_total_hours
     FROM payroll_approval_ot
-    WHERE pao_status = 'Applied'`;
+    WHERE pao_status = 'Applied'
+    order by pao_id ASC`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -177,7 +181,6 @@ router.get("/loadreqattendance", (req, res) => {
   try {
     let sql = `   
     SELECT 
-    me_profile_pic,
     ar_requestid,
     concat(me_lastname,' ' ,me_firstname) as  ar_employeeid,
     DATE_FORMAT(ar_attendace_date, '%W, %M %d, %Y') as ar_attendace_date,
@@ -186,7 +189,8 @@ router.get("/loadreqattendance", (req, res) => {
     ar_total
     FROM attendance_request
     INNER JOIN master_employee on ar_employeeid = me_id
-    WHERE ar_status = 'Pending'`;
+    WHERE ar_status = 'Pending'
+    order by ar_requestid ASC`;
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -202,6 +206,292 @@ router.get("/loadreqattendance", (req, res) => {
     });
   }
 });
+
+
+router.get("/loadHoliday", (req, res) => {
+  try {
+    let sql = `SELECT
+    ph_holidayid,
+    CONCAT(me_lastname,' ',me_firstname) as ph_fullname,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') AS ph_attendancedate,
+    ph_holidaytype,
+    DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %h:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %h:%i:%s') AS ph_timeout,
+    ph_total_hours
+    FROM payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    WHERE ph_status = 'Applied'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.post("/getholidayapproval", (req, res) => {
+  try {
+    let holidayid = req.body.holidayid;
+    let sql = `SELECT
+    ph_holidayid,
+    CONCAT(me_lastname,' ',me_firstname) as ph_fullname,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') AS ph_attendancedate,
+    ph_holidaytype,
+    DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %h:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %h:%i:%s') AS ph_timeout,
+    ph_total_hours,
+    ph_file,
+    DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') AS ph_holidaydate,
+    s_name as ph_subgroupid,
+    ph_status,
+    ph_normal_ot_total,
+    ph_nightdiff_ot_total
+    FROM payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    INNER JOIN subgroup ON payroll_holiday.ph_subgroupid = s_id
+    WHERE ph_holidayid = '${holidayid}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.put("/holidayaction", (req, res) => {
+  try {
+    const { holidayid, payrolldate, status, comment } =
+      req.body;
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (comment) {
+      data.push(comment);
+      columns.push("admin_comment");
+    }
+
+    if (status) {
+      data.push(status);
+      columns.push("status");
+    }
+
+    if (payrolldate) {
+      data.push(payrolldate);
+      columns.push("payrolldate");
+    }
+
+    if (holidayid) {
+      data.push(holidayid);
+      arguments.push("holidayid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "payroll_holiday",
+      "ph",
+      columns,
+      arguments
+    );
+
+    let checkStatement = SelectStatement(
+      "select * from payroll_holiday where ph_holidayid = ? and ph_status = ?",
+      [holidayid, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.get("/loadrdot", (req, res) => {
+  try {
+    let sql = `SELECT
+    roa_rdotid,
+    roa_fullname,
+    DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
+    DATE_FORMAT(roa_timein, '%Y-%m-%d %h:%i:%s') AS roa_timein,
+    DATE_FORMAT(roa_timeout, '%Y-%m-%d %h:%i:%s') AS roa_timeout,
+    DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
+    roa_total_hours 
+    FROM restday_ot_approval
+    INNER JOIN subgroup ON restday_ot_approval.roa_subgroupid = s_id
+    WHERE roa_status = 'Applied'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getrdotapproval", (req, res) => {
+  try {
+    let rdotid = req.body.rdotid;
+    let sql = `SELECT
+    roa_rdotid,
+    roa_fullname,
+    DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
+    DATE_FORMAT(roa_timein, '%Y-%m-%d %h:%i:%s') AS roa_timein,
+    DATE_FORMAT(roa_timeout, '%Y-%m-%d %h:%i:%s') AS roa_timeout,
+    roa_total_hours,
+    s_name as roa_subgroupid,
+    DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
+    roa_file,
+    roa_status
+    FROM restday_ot_approval
+    INNER JOIN subgroup ON restday_ot_approval.roa_subgroupid = s_id
+    WHERE roa_rdotid = '${rdotid}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.put("/rdotaction", (req, res) => {
+  try {
+    const { rdotid, payrolldate, status, comment } =
+      req.body;
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (comment) {
+      data.push(comment);
+      columns.push("admin_comment");
+    }
+
+    if (status) {
+      data.push(status);
+      columns.push("status");
+    }
+
+    if (payrolldate) {
+      data.push(payrolldate);
+      columns.push("payrolldate");
+    }
+
+    if (rdotid) {
+      data.push(rdotid);
+      arguments.push("rdotid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "restday_ot_approval",
+      "roa",
+      columns,
+      arguments
+    );
+
+    let checkStatement = SelectStatement(
+      "select * from restday_ot_approval where roa_rdotid = ? and roa_status = ?",
+      [rdotid, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 
 router.get("/getbulletin", (req, res) => {
   try {
@@ -259,7 +549,17 @@ router.get("/attendancestatus", (req, res) => {
         WHEN WEEKDAY(ma.ma_attendancedate) = 5 THEN JSON_UNQUOTE(ms.ms_saturday->'$.time_in')
         WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
     END AS scheduled_time_in,
-    TIMESTAMPDIFF(MINUTE, 
+		
+	CASE WHEN (CASE
+            WHEN WEEKDAY(ma.ma_attendancedate) = 0 THEN JSON_UNQUOTE(ms.ms_monday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 1 THEN JSON_UNQUOTE(ms.ms_tuesday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 2 THEN JSON_UNQUOTE(ms.ms_wednesday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 3 THEN JSON_UNQUOTE(ms.ms_thursday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 4 THEN JSON_UNQUOTE(ms.ms_friday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 5 THEN JSON_UNQUOTE(ms.ms_saturday->'$.time_in')
+            WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
+        END) = '00:00:00' THEN 'RESTDAY OT'
+        ELSE TIMESTAMPDIFF(MINUTE, 
         CONCAT(CAST(ma.ma_attendancedate AS DATE), ' ', 
         CASE
             WHEN WEEKDAY(ma.ma_attendancedate) = 0 THEN JSON_UNQUOTE(ms.ms_monday->'$.time_in')
@@ -271,7 +571,7 @@ router.get("/attendancestatus", (req, res) => {
             WHEN WEEKDAY(ma.ma_attendancedate) = 6 THEN JSON_UNQUOTE(ms.ms_sunday->'$.time_in')
         END), 
         ma.ma_clockin
-    ) AS minutes_late
+    )END AS minutes_late
 FROM
     master_attendance ma
 JOIN
@@ -386,6 +686,7 @@ WHERE
     console.log(error);
   }
 });
+
 
 //#endregion
 
@@ -512,6 +813,76 @@ router.get("/countCOA", (req, res) => {
             msg: "success",
             data: {
               COAreqCount: result[0].pending,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countholiday", (req, res) => {
+  try {
+    let sql = `    
+    SELECT count(*) as Applied
+    from payroll_holiday 
+    where 
+    ph_status = 'Applied'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              HOLIDAYreqCount: result[0].Applied,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countrdot", (req, res) => {
+  try {
+    let sql = `    
+    SELECT count(*) as Applied
+    from restday_ot_approval 
+    where 
+    roa_status = 'Applied'`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              RDOTreqCount: result[0].Applied,
             },
           });
         } else {
@@ -1329,8 +1700,6 @@ router.post("/viewnotif", (req, res) => {
     mysql.Select(sql, "Admin_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -1517,11 +1886,11 @@ router.post("/searchemployee", (req, res) => {
     SELECT me_id, me_firstname, me_lastname, me_profile_pic 
     FROM master_employee 
     WHERE CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
-    OR me_id LIKE '%${search}%'
-    OR me_firstname LIKE '%${search}%'
-    OR me_lastname LIKE '%${search}%'
-    OR me_middlename LIKE '%${search}%'`;
-    
+    OR me_id LIKE '${search}%'
+    OR me_firstname LIKE '${search}%'
+    OR me_lastname LIKE '${search}%'
+    OR me_middlename LIKE '${search}%'`;
+
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -1554,8 +1923,8 @@ router.post("/searchemployee", (req, res) => {
 //     const { search } = req.body;
 
 //     let sql = `
-//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic 
-//     FROM master_employee 
+//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic
+//     FROM master_employee
 //     WHERE 1`;
 
 //     if (search) {
@@ -1599,5 +1968,20 @@ router.post("/searchemployee", (req, res) => {
 //   }
 // });
 
+//#endregion
+
+
+
+//#region FUNCTION
+
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
 
 //#endregion

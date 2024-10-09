@@ -17,7 +17,6 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
-        me_profile_pic,
         ar_requestid,
         concat(me_lastname,' ',me_firstname) as ar_employeeid,
         DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
@@ -61,10 +60,12 @@ router.post("/getattendancerequest", (req, res) => {
         ar_createdate,
         ar_status,
         ar_reason,
-        ar_file
+        ar_file,
+        s_name as ar_subgroupid
       FROM attendance_request
       INNER JOIN
       master_employee ON attendance_request.ar_employeeid = me_id
+      INNER JOIN subgroup on attendance_request.ar_subgroupid = s_id
       WHERE ar_requestid = '${requestid}'
       ORDER BY ar_requestid`;
 

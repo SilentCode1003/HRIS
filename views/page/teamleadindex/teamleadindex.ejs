@@ -6,7 +6,7 @@
   <!-- First Card Row -->
   <div class="row g-3">
     <!-- COA Employee Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
       <div
         data-toggle="modal"
         id="totalCOA"
@@ -36,7 +36,7 @@
     </div>
 
     <!-- OVERTIME Employee Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
       <div
         data-toggle="modal"
         id="totalovertime"
@@ -66,7 +66,7 @@
     </div>
 
     <!-- LEAVE Employee Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
       <div
         data-toggle="modal"
         id="totalleave"
@@ -96,7 +96,7 @@
     </div>
 
     <!-- OT Meal Employee Card -->
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
       <div
         data-toggle="modal"
         id="totalotmeal"
@@ -111,6 +111,68 @@
                   class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
                 >
                   <b>OT Meal</b>
+                </div>
+                <div
+                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                ></div>
+              </div>
+              <div class="col-auto">
+                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+     <!-- Rest Day Ot Employee Card -->
+     <div class="col-lg-2 col-md-6">
+      <div
+        data-toggle="modal"
+        id="totalrestdayot"
+        data-target="#restdayOTmodal"
+        class="card-link"
+      >
+        <div id="totalrestdayotCard" class="card h-100 py-2 db-card">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                >
+                  <b>RD OT</b>
+                </div>
+                <div
+                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                ></div>
+              </div>
+              <div class="col-auto">
+                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Holiday request Employee Card -->
+    <div class="col-lg-2 col-md-6">
+      <div
+        data-toggle="modal"
+        id="totalholiday"
+        data-target="#holidayModal"
+        class="card-link"
+      >
+        <div id="totalholidayCard" class="card h-100 py-2 db-card">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                >
+                  <b>Holiday</b>
                 </div>
                 <div
                   class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
@@ -528,6 +590,140 @@
       </div>
     </div>
   </div>
+
+  <!-- Total Rest Day Ot  Modal -->
+  <div
+    class="modal fade"
+    id="restdayOTmodal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="totalCablingModal"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <div>
+            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+              Rest Day OT Request
+            </h3>
+          </div>
+          <br />
+          <input
+            id="myInputtotalotmeal"
+            class="db-modal-search"
+            type="text"
+            placeholder="  Search...."
+          />
+          <i class="bx bx-x" data-dismiss="modal"></i>
+        </div>
+        <div class="modal-body m-body" id="modal-body">
+          <div class="modal-table">
+            <div
+              class="table-responsive scrollable-table-container"
+              id="table-responsive-id"
+            >
+              <table
+                class="table custom-mobile-table table-light table-bordered"
+                id="totalrestdayottable"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="col-26">Name</th>
+                    <th>Attendance Date</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Total Overtime</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Table body content will be added dynamically using JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button
+            type="button"
+            class="btn btn-modal-close"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Total Holiday Day Ot  Modal -->
+  <div
+    class="modal fade"
+    id="holidayModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="totalCablingModal"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <div>
+            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+              Holiday Request
+            </h3>
+          </div>
+          <br />
+          <input
+            id="myInputtotalotmeal"
+            class="db-modal-search"
+            type="text"
+            placeholder="  Search...."
+          />
+          <i class="bx bx-x" data-dismiss="modal"></i>
+        </div>
+        <div class="modal-body m-body" id="modal-body">
+          <div class="modal-table">
+            <div
+              class="table-responsive scrollable-table-container"
+              id="table-responsive-id"
+            >
+              <table
+                class="table custom-mobile-table table-light table-bordered"
+                id="totalHolidayReqTable"
+              >
+                <thead class="table-header">
+                  <tr>
+                    <th class="col-26">Name</th>
+                    <th>Attendance Date</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Total Overtime</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Table body content will be added dynamically using JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button
+            type="button"
+            class="btn btn-modal-close"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
   <!-- Total  it Modal -->
   <div

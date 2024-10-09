@@ -4,26 +4,55 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
         <h3 class="title-card-table">Attendance</h3>
-        <div class="row g-4">
-            <div class="col">
-                <input id='myInput'  type='text' placeholder="  Search....">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input id='myInput' class="w-75"  type='text' placeholder="  Search....">
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                <input id="datepicker"  type="text" name="daterange">
+           <div class="col-sm-6">
+            <div class="row justify-content-end">
+                <div class="col-sm-4">
+                    <input id="datepicker"  type="text" name="daterange">
+                </div>
+                <div class="col-sm-3 ">
+                    <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+                </div>
             </div>
-            <div class="col-sm-1 col-add">
-                <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+           </div>
+            
+        </div>
+        <div class="row g-4 mt-1">
+
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <button id="checklogs" class="btn btn-add-color"><b>Check Logs</b></button>
+                    </div>
+                    
+                    <div class="col-sm-6 ">
+                        <button id="reportsBtn" class="btn btn-export-color"><b>Attendance Reports</b></button>
+                    </div>
+                </div>
+                
             </div>
-            <div class="col-sm-2 col-add">
-                <button id="checklogs" class="btn btn-add-color"><b>Check Logs</b></button>
-            </div>
-            <div class="col-sm-2 col-add">
-                <button class="btn btn-per-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
-                    <b>Export Per Employee</b>
-                </button>
-            </div>
-            <div class="col-sm-2 col-add">
-                <button id="exportBtn" class="btn btn-export-color"><b>Export All</b></button>
+
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <button class="btn btn-per-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+                            <b>Export Per Employee</b>
+                        </button>
+                    </div>
+                    <div class="col-sm-3 ">
+                        <button id="exportBtn" class="btn btn-export-color"><b>Export</b></button>
+                    </div>
+                    <div class="col-sm-3 ">
+                        <button id="importExcelBtn" class="btn btn-export-color"><b>Import</b></button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -129,3 +158,33 @@
         </div>
     </div>
 </div>
+
+<!-- Import Modal -->
+<div class="modal fade" id="importsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+          <h1 class="modal-title" id="exampleModalLabel">Import Migrated Logs of Employee </h1>
+          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <form>
+            <div class="form-control">
+              <div class="row">
+                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <input type="file" name="importexcelfile" id="importexcelfile">
+                  </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-modal-save" id="importexcelsavebtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -11,16 +14,10 @@ const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
-  Validator(
-    req,
-    res,
-    "meal_request_activitylayout",
-    "meal_request_activity"
-  );
+  Validator(req, res, "meal_request_activitylayout", "meal_request_activity");
 });
 
 module.exports = router;
-
 
 router.get("/load", (req, res) => {
   try {
@@ -44,8 +41,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "mra_");
@@ -94,8 +89,6 @@ router.post("/getotmealactivity", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "mra_");

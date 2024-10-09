@@ -6,6 +6,7 @@
     LoadList();
     LoadEditEmp();
     LoadPayrollDate();
+    LoadLoanType();
     EditLoadPayrollDate();
     searchTable();
     LoadAdvancedList();
@@ -293,6 +294,25 @@
       });
     }
 
+    function LoadLoanType() {
+      $.ajax({
+        type: "GET",
+        url: "/loan_type/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.name, item.name);
+            $(options).html(item.name);
+            $("#govloantype").append(options);
+          });
+        },
+        error: function (result) {
+          swal("error: " + result.data);
+        },
+      });
+    }
+
     function EditLoadPayrollDate() {
       $.ajax({
         type: "GET",
@@ -371,7 +391,8 @@
     // });
 
     $(document).on("click", "#viewBtn", function () {
-      $(`#dataTablegovermentdetails`).find("tr:gt(0)").remove();
+      $("#dataTablegovermentdetails").find("tr:gt(0)").remove();
+
       $.ajax({
         type: "POST",
         url: "/gov_loans/getgovloans",
@@ -384,84 +405,73 @@
             const TittleContainer = $("#TittleContainer");
             TittleContainer.empty();
 
-            // Use a flag to append the title only once
-            let titleAppended = false;
+          
+            const firstItem = existingData[0]; 
+            const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.loan_type}</h3>`;
+            $("#datename").text(firstItem.fullname);
+            TittleContainer.append(cardHtml);
 
-            $.each(existingData, (key, item) => {
-              if (!titleAppended) {
-                const cardHtml = `<h3 class="modal-title" id="">${item.fullname}'s ${item.loan_type}</h3>`;
-                $("#datename").text(item.fullname);
-                TittleContainer.append(cardHtml);
-                titleAppended = true; // Set the flag to true after appending the first title
+            var totalLoanAmount = 0;
+            var totalAmountPaid = 0;
+
+
+            var material_list_tbl = $("#dataTablegovermentdetails").DataTable();
+            material_list_tbl.clear().draw();
+
+            $.each(existingData, function (key, item) {
+
+              totalLoanAmount += parseFloat(item.per_month);
+
+              var rowNode = material_list_tbl.row
+                .add([
+                  formatDate(item.payrolldates),
+                  item.loan_type,
+                  formatCurrencyValue(item.per_month),
+                  item.loanstatus,
+                  item.paid_dates,
+                  item.payment_type,
+                ])
+                .draw()
+                .node();
+
+
+              var statusCell = $(rowNode).find("td:eq(3)");
+              var statusText = item.loanstatus;
+              var statusClass = "";
+
+              switch (statusText) {
+                case "PAID":
+                  statusClass = "active-status";
+
+                  totalAmountPaid += parseFloat(item.per_month);
+                  break;
+                case "NOT PAID":
+                  statusClass = "pending-status";
+                  break;
+                default:
+                  statusClass = "";
               }
+
+              statusCell.html(
+                `<span class="${statusClass}">${statusText}</span>`
+              );
+
+
+              $(rowNode).find("td").css({
+                "text-align": "center",
+                "vertical-align": "middle",
+              });
             });
+
+            $("#totalloanamount").text(formatCurrencyValue(totalLoanAmount));
+            $("#totalamountpaid").text(formatCurrencyValue(totalAmountPaid));
           } else {
             swal("Error fetching");
           }
-
-          var finalData = [];
-          var data = result.data;
-
-          if ($.fn.DataTable.isDataTable("#dataTablegovermentdetails")) {
-            $("#dataTablegovermentdetails").DataTable().destroy();
-          }
-          material_list_tbl = document.getElementById(
-            "dataTablegovermentdetails"
-          );
-
-          console.log(data);
-
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var PAYROLL_DATES = row.insertCell(0);
-            var LOAN_TYPE = row.insertCell(1);
-            var PER_MONTH = row.insertCell(2);
-            var LOAN_STATUS = row.insertCell(3);
-            var PAID_DATES = row.insertCell(4);
-            var PAYMENT_TYPE = row.insertCell(5);
-
-            PAYROLL_DATES.innerHTML = formatDate(item.payrolldates);
-            LOAN_TYPE.innerHTML = item.loan_type;
-            PER_MONTH.innerHTML = formatCurrencyValue(item.per_month);
-            LOAN_STATUS.innerHTML = item.loanstatus;
-            PAID_DATES.innerHTML = item.paid_dates;
-            PAYMENT_TYPE.innerHTML = item.payment_type;
-
-            $.each(
-              [
-                PAYROLL_DATES,
-                LOAN_TYPE,
-                PER_MONTH,
-                LOAN_STATUS,
-                PAID_DATES,
-                PAYMENT_TYPE,
-              ],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-            var statusCell = $(row).find("td:eq(3)");
-            var statusText = item.loanstatus;
-            var statusClass = "";
-
-            switch (statusText) {
-              case "PAID":
-                statusClass = "active-status";
-                break;
-              case "NOT PAID":
-                statusClass = "pending-status";
-                break;
-              default:
-                statusClass = "";
-            }
-
-            statusCell.html(
-              `<span class="${statusClass}">${statusText}</span>`
-            );
-          });
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) {
+          console.error(xhr, status, error);
+        },
       });
     });
 

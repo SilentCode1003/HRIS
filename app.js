@@ -2,8 +2,15 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
+const cors = require("cors");
+const {eventlogger, logger} = require("./routes/repository/logger");
+
+// const corsOptions = {
+//   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
+//   credentials: true,
+// };
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -67,8 +74,8 @@ var ojtreqabsentRouter = require("./routes/ojtreqabsent");
 var attendanceojtRouter = require("./routes/attendanceojt");
 var appsdetailsRouter = require("./routes/appsdetails");
 var otapprovalRouter = require("./routes/otapproval");
-var otherdeductionsRouter = require("./routes/otherdeductions");
-var otherdeductionsIDRouter = require("./routes/otherdeductionsID");
+var healthcarddeductionsRouter = require("./routes/healthcarddeductions");
+var healthcarddeductionsIDRouter = require("./routes/healthcarddeductionsID");
 var attendancerequestRouter = require("./routes/attendancerequest");
 var eportalrequestattendanceRouter = require("./routes/eportalrequestattendance");
 var setsetpayrolldateRouter = require("./routes/setpayrolldate");
@@ -114,8 +121,46 @@ var teamleadsettingsRouter = require("./routes/teamleadsettings");
 var sidebarRouter = require("./routes/sidebar");
 var medecinesRouter = require("./routes/medecines");
 var medecinesrequestRouter = require("./routes/medecines_request");
+var examRouter = require("./routes/exam");
+var question_typeRouter = require("./routes/question_type");
+var questionRouter = require("./routes/question");
+var ratingRouter = require("./routes/rating");
+var teamleadgeofenceempRouter = require("./routes/teamleadgeofenceemp");
+var applicant_registrationRouter = require("./routes/applicant_registration");
+var eportalrequestHolidayRouter = require("./routes/eportalrequestholiday");
+var teamleadholidayRouter = require("./routes/teamleadholiday");
+var teamleadtotalholidayRouter = require("./routes/teamleadtotalholiday");
+var holiday_request_activityRouter = require("./routes/holiday_request_activity");
+var loan_typeRouter = require("./routes/loan_type");
+var employer_contributionRouter = require("./routes/employer_contribution");
+var sudden_deductionsRouter = require("./routes/sudden_deductions");
+var generate13thmonthRouter = require("./routes/generate13thmonth");
+var usersubgrouplayoutRouter = require("./routes/usersubgroup");
+var eportalgovloansRouter = require("./routes/eportalgovloans");
+var forgotpasswordRouter = require("./routes/forgotpassword");
+var enrolled_bank_accRouter = require("./routes/enrolled_bank_acc");
+var eportalrestdayotRouter = require("./routes/eportalrestdayot");
+var restdayot_request_activityRouter = require("./routes/restdayot_request_activity");
+var teamleadappliedrdotRouter = require("./routes/teamleadappliedrdot");
+var teamleadapprovedrdotRouter = require("./routes/teamleadapprovedrdot");
+var retropayRouter = require("./routes/retropay");
+var staffhouseRouter = require("./routes/staffhouse");
+var staffhouseoccupantRouter = require("./routes/staffhouseoccupant");
+var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
+var staffhousehistoryRouter = require("./routes/staffhousehistory");
+var areaRouter = require("./routes/area");
+var areadeployemployeeRouter = require("./routes/areadeployemployee");
+var teamleadapprovedholidayRouter = require("./routes/teamleadapprovedholiday");
+var teamleadrejectholidayRouter = require("./routes/teamleadrejectholiday");
+var teamleadrdotRouter = require("./routes/teamleadrdot");
+var teamleadrejectrdotRouter = require("./routes/teamleadrejectrdot");
+var suggestionRouter = require("./routes/suggestion");
+var suggestionareaRouter = require("./routes/suggestionarea");
+var suggestionquestionRouter = require("./routes/suggestionquestion");
+var sessionRouter = require("./routes/session");
 
 
+const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
 
@@ -125,7 +170,7 @@ SetMongo(app);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
@@ -133,7 +178,20 @@ app.use(
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+// app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+  eventlogger(req, res, next);
+});
+
+app.use("/", loginlayoutRouter);
+app.use("/access", accessRouter);
+app.use("/mobile-api", mobileAPIRouter);
+app.use("/forgotpassword", forgotpasswordRouter);
+app.use("/applicant_registration", applicant_registrationRouter);
+app.use('/session', sessionRouter);
+app.use(verifyJWT);
+app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/employee", employeeRouter);
 app.use("/employeeprofile", employeeprofileRouter);
@@ -159,7 +217,6 @@ app.use("/ojt", ojtRouter);
 app.use("/announcement", announcementRouter);
 app.use("/settings", settingsRouter);
 app.use("/eportalsettings", eportalsettingsRouter);
-app.use("/access", accessRouter);
 app.use("/salary", salaryRouter);
 app.use("/deduction", deductionRouter);
 app.use("/requestcashadvance", requestcashadvanceRouter);
@@ -195,8 +252,8 @@ app.use("/ojtreqabsent", ojtreqabsentRouter);
 app.use("/attendanceojt", attendanceojtRouter);
 app.use("/appsdetails", appsdetailsRouter);
 app.use("/otapproval", otapprovalRouter);
-app.use("/otherdeductions", otherdeductionsRouter);
-app.use("/otherdeductionsID", otherdeductionsIDRouter);
+app.use("/healthcarddeductions", healthcarddeductionsRouter);
+app.use("/healthcarddeductionsID", healthcarddeductionsIDRouter);
 app.use("/attendancerequest", attendancerequestRouter);
 app.use("/eportalrequestattendance", eportalrequestattendanceRouter);
 app.use("/setpayrolldate", setsetpayrolldateRouter);
@@ -232,17 +289,49 @@ app.use("/supervisoruser", supervisoruserRouter);
 app.use("/change_shift", change_shiftRouter);
 app.use("/eportalotmeal", eportalotmealRouter);
 app.use("/payroll_adjustments", payroll_adjustmentsRouter);
-app.use("/teamleadappliedotmeal" , teamleadappliedotmealRouter);
+app.use("/teamleadappliedotmeal", teamleadappliedotmealRouter);
 app.use("/meal_request_activity", meal_request_activityRouter);
 app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
-app.use("/mobile-api", mobileAPIRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
-app.use("/medecines_request", medecinesrequestRouter);  
-
+app.use("/medecines_request", medecinesrequestRouter);
+app.use("/exam", examRouter);
+app.use("/question_type", question_typeRouter);
+app.use("/question", questionRouter);
+app.use("/rating", ratingRouter);
+app.use("/teamleadgeofenceemp", teamleadgeofenceempRouter);
+app.use("/eportalrequestholiday", eportalrequestHolidayRouter);
+app.use("/teamleadholiday", teamleadholidayRouter);
+app.use("/teamleadtotalholiday", teamleadtotalholidayRouter);
+app.use("/holiday_request_activity", holiday_request_activityRouter);
+app.use("/loan_type", loan_typeRouter);
+app.use("/employer_contribution", employer_contributionRouter);
+app.use("/sudden_deductions", sudden_deductionsRouter);
+app.use("/generate13thmonth", generate13thmonthRouter);
+app.use("/usersubgroup", usersubgrouplayoutRouter);
+app.use("/eportalgovloans", eportalgovloansRouter);
+app.use("/enrolled_bank_acc", enrolled_bank_accRouter);
+app.use("/eportalrestdayot", eportalrestdayotRouter);
+app.use("/restdayot_request_activity", restdayot_request_activityRouter);
+app.use("/teamleadappliedrdot", teamleadappliedrdotRouter);
+app.use("/teamleadapprovedrdot", teamleadapprovedrdotRouter);
+app.use("/retropay", retropayRouter);
+app.use("/staffhouse", staffhouseRouter);
+app.use("/staffhouseoccupant", staffhouseoccupantRouter);
+app.use("/occupantdurationsetting", occupantdurationsettingRouter);
+app.use("/staffhousehistory", staffhousehistoryRouter);
+app.use("/area", areaRouter);
+app.use("/areadeployemployee", areadeployemployeeRouter);
+app.use("/teamleadapprovedholiday", teamleadapprovedholidayRouter);
+app.use("/teamleadrejectholiday", teamleadrejectholidayRouter);
+app.use("/teamleadrdot", teamleadrdotRouter);
+app.use("/teamleadrejectrdot", teamleadrejectrdotRouter);
+app.use("/suggestion", suggestionRouter);
+app.use("/suggestionarea", suggestionareaRouter);
+app.use("/suggestionquestion", suggestionquestionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -254,7 +343,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  logger.error(err);
   // // render the error page
   res.status(err.status || 500);
   res.render("error");

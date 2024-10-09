@@ -21,8 +21,6 @@ router.post("/getshift", (req, res) => {
     mysql.StoredProcedure(sql, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -56,26 +54,7 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/loadshiftforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `call hrmis.LoadShiftForApp('${employeeid}')`;
 
-    mysql.StoredProcedure(sql, (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
 
 // router.post("/save", async (req, res) => {
 //   try {
@@ -121,7 +100,7 @@ router.post("/loadshiftforapp", (req, res) => {
 //         mysql.InsertTable("master_shift", data, (err, result) => {
 //           if (err) console.error("Error: ", err);
 
-//           console.log(result);
+//
 
 //           res.json({
 //             msg: "success",
@@ -149,7 +128,7 @@ router.post("/loadshiftforapp", (req, res) => {
 //     mysql.StoredProcedure(sql , (err, result) => {
 //       if (err) console.error("Error :", err)
 
-//       console.log(result);
+//
 //       res.json({
 //         msg:'success',
 //         data: result,
@@ -200,7 +179,6 @@ router.post("/save", async (req, res) => {
           });
         }
 
-        console.log(result);
         res.json({
           msg: "success",
           data: result,
@@ -245,8 +223,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,

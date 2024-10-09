@@ -3,6 +3,12 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const e = require("express");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
+const { Select } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 
 /* GET home page. */
@@ -31,7 +37,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -134,6 +139,44 @@ router.post("/setleaveperemployee", async (req, res) => {
   }
 });
 
+router.post("/getleavedates", (req, res) => {
+  try {
+    let leavesettingsid = req.body.leavesettingsid;
+    let sql = `
+    SELECT
+    ld_dateid,
+    CONCAT(me_lastname,' ',me_firstname) AS ld_fullname,
+    DATE_FORMAT(ld_leavedates, '%Y-%m-%d') AS ld_leavedates,
+    DATE_FORMAT(ld_leavedates, '%W') AS ld_day_name,
+    ml_leavetype AS ld_leavetype,
+    ml_year AS ld_year,
+    DATE_FORMAT(ld_payrolldate, '%Y-%m-%d') AS ld_payrolldate
+    FROM leave_dates
+    INNER JOIN master_leaves ON leave_dates.ld_leavetype = ml_id
+    INNER JOIN master_employee ON leave_dates.ld_employeeid = me_id
+    WHERE ml_id = '${leavesettingsid}'
+    `;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ld_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 router.post("/getleavesettings", (req, res) => {
   try {
     let leavesettingsid = req.body.leavesettingsid;
@@ -143,7 +186,6 @@ router.post("/getleavesettings", (req, res) => {
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,

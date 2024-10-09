@@ -1,0 +1,233 @@
+<body>
+    <!-- Table -->
+    <div class="card" id="tablecard">
+        <div class="card-header ch-coop">
+            <h3 class="title-card-table">Generate 13th Month</h3>
+            <div class="row g-4">
+                <div class="col">
+                    <input id="myInput" type="text" placeholder="Search....">
+                </div>
+                <div class="col-sm-2 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalTotalContribution" class="btn btn-export-color"><b>Reports</b></button>
+                </div>
+                <div class="col-sm-1 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalLoadContribution" class="btn btn-load-color"><b>Load</b></button>
+                </div>
+                <!-- <div class="col-sm-1 col-add">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalGenerateContribution" class="btn btn-add-color"><b>Generate</b></button>
+                </div> -->
+            </div> 
+        </div>
+
+        <!--modal for uploading bank statement-->
+        <div class="modal fade" id="openModalTotalContribution" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/hwpjjkev.json" trigger="loop" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Export Total Contribution</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="emplyrcontribution" name="emplyrcontribution"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Payroll Date</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="emplyrcontributionsaveBtn">Export</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!--modal for export reports total contribution-->
+        <div class="modal fade" id="openModalLoadContribution" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <lord-icon src="https://cdn.lordicon.com/cjbuodml.json" trigger="loop" class="db-hrmis"></lord-icon>
+                    <h1 class="modal-title" id="exampleModalLabel">Load Total 13th Month</h1>
+                    <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+                </div>
+                <div class="modal-body modal-batch-body" id="modal-body">
+                    <form>
+                        <!-- <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="loademplyrcontribution" name="loademplyrcontribution"
+                                  aria-label="Floating label select example">
+                                  <option selected disabled>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Year</label>
+                            </div>
+                        </div> -->
+                        <div class="row g-3">
+                          <div class="col">
+                              <div class="form-floating">
+                                  <select class="form-select border-form-modal" id="startpd" name="startpd" aria-label="Floating label select example">
+                                  </select>
+                                  <label for="floatingSelectGrid">Start Payroll Date</label>
+                              </div>
+                          </div>  
+                          <div class="col">
+                              <div class="form-floating">
+                                  <select class="form-select border-form-modal" id="endpd" name="endpd" aria-label="Floating label select example">
+                                  </select>
+                                  <label for="floatingSelectGrid">End Payroll Date</label>
+                              </div>
+                          </div>  
+                      </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-save" id="loademplyrcontributionsaveBtn">Load</button>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="progress" id="loadingBar" style="display: none;">
+                <div class="indeterminate"></div>
+            </div>
+
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-light table-bordered" id="dataTableEmployee13thMonth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Start Payroll Date</th>
+                            <th>End Payroll Date</th>
+                            <th>Thirteenth Month</th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="viewdetails" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">View 13th Month Details?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="preview" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                    </div>
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="card-body p-0">
+                          <ul class="list-group list-group-flush rounded-3">
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-work">Emplyee ID</p>
+                                  </div>
+                                  <p class="mb-0 p-number" id="13thmonthemployeeid"></p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-rest">Full Name</p>
+                                  </div>
+                                  <p class="mb-0 number-rest" id="13thmonthfullname">
+                                  </p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-work">Present Days</p>
+                                  </div>
+                                  <p class="mb-0 p-number" id="13thmonthpresent"></p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-rest">Absent Days</p>
+                                  </div>
+                                  <p class="mb-0 number-rest" id="13thmonthabsent"></p>
+                              </li>
+                              <!---->
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-work">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-work">Total Late Minutes</p>
+                                  </div>
+                                  <p class="mb-0 p-number" id="13thmonthlateminutes"></p>
+                              </li>
+                              <li
+                                  class="list-group-item d-flex justify-content-between align-items-center p-3 cell-rest">
+                                  <div class="col-sm-6">
+                                      <p class="mb-0 p-rest">Total Late Hours</p>
+                                  </div>
+                                  <p class="mb-0 number-rest" id="13thmonthlatehours">
+                                  </p>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <table class="table table-bordered" id="dataTable13thMonthDetails">
+                        <thead>
+                          <tr>
+                            <th class="date-range-table">Payroll Dates</th>
+                            <th class="date-range-table">Earned Pay</th>
+                            <th class="date-range-table">Deductions</th>
+                            <th class="date-range-table">Total Net Pay</th>
+                            <th class="date-range-table">Accrued 13th Month</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <div class="d-flex flex-column payslipname">
+                        <span class="empnamepayslip" id="totalretropaydiff"></span>
+                        <span class="text-center">Total Accrued 13th Month</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" data-bs-toggle="modal" data-bs-target="#proceedtopayrolladjustments">Proceed to Payroll Adjustments</button>
+            </div>            
+      </div>
+  </div>
+</div>
+

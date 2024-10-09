@@ -3,7 +3,10 @@ const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
 var router = express.Router();
@@ -108,7 +111,6 @@ ORDER BY
 
 router.get("/countcoacard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -117,16 +119,14 @@ router.get("/countcoacard", (req, res) => {
     FROM 
     attendance_request
     INNER JOIN master_employee ON attendance_request.ar_employeeid = me_id
-    WHERE ar_status = 'Pending' AND ar_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND ar_employeeid NOT IN (
-        SELECT tu_employeeid FROM teamlead_user)
-      AND ar_approvalcount = (
-        SELECT ats_count
-        FROM aprroval_stage_settings
-        WHERE ats_accessid = '${accesstypeid}'
-        AND ats_departmentid = '${departmentid}'
-    )`;
+    INNER JOIN 
+        aprroval_stage_settings ON 
+            aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+            aprroval_stage_settings.ats_subgroupid = attendance_request.ar_subgroupid AND
+            aprroval_stage_settings.ats_count = attendance_request.ar_approvalcount
+     WHERE 
+        ar_status = 'Pending' 
+        AND ar_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -157,7 +157,6 @@ router.get("/countcoacard", (req, res) => {
 
 router.get("/countovertimecard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -166,15 +165,14 @@ router.get("/countovertimecard", (req, res) => {
     FROM 
     payroll_approval_ot
     INNER JOIN master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    WHERE pao_status = 'Applied' AND pao_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND pao_employeeid NOT IN (
-    SELECT tu_employeeid FROM teamlead_user)
-	 AND pao_approvalcount = (
-    SELECT ats_count
-    FROM aprroval_stage_settings
-    WHERE ats_accessid = '${accesstypeid}'
-    AND ats_departmentid = '${departmentid}')`;
+     INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
+        WHERE 
+        pao_status = 'Applied' 
+            AND pao_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -205,7 +203,6 @@ router.get("/countovertimecard", (req, res) => {
 
 router.get("/countleavecard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -214,16 +211,14 @@ router.get("/countleavecard", (req, res) => {
     FROM 
     leaves
     INNER JOIN master_employee ON leaves.l_employeeid = me_id
-    WHERE l_leavestatus = 'Pending' AND l_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND l_employeeid NOT IN (
-        SELECT tu_employeeid FROM teamlead_user)
-      AND l_approvalcount = (
-        SELECT ats_count
-        FROM aprroval_stage_settings
-        WHERE ats_accessid = '${accesstypeid}'
-        AND ats_departmentid = '${departmentid}'
-    )`;
+     INNER JOIN 
+        aprroval_stage_settings ON 
+            aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+            aprroval_stage_settings.ats_subgroupid = leaves.l_subgroupid AND
+            aprroval_stage_settings.ats_count = leaves.l_approvalcount
+            WHERE 
+            l_leavestatus = 'Pending' 
+        AND l_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -254,7 +249,6 @@ router.get("/countleavecard", (req, res) => {
 
 router.get("/countotmealcard", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `    
@@ -263,16 +257,14 @@ router.get("/countotmealcard", (req, res) => {
     FROM 
     ot_meal_allowances
     INNER JOIN master_employee ON ot_meal_allowances.oma_employeeid = me_id
-    WHERE oma_status = 'Applied' AND oma_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND oma_employeeid NOT IN (
-    SELECT tu_employeeid FROM teamlead_user)
-    AND oma_approvalcount = (
-    SELECT ats_count
-    FROM aprroval_stage_settings
-    WHERE ats_accessid = '${accesstypeid}'
-    AND ats_departmentid = '${departmentid}')`;
-
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
+                aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
+    WHERE 
+        oma_status = 'Applied' 
+        AND oma_subgroupid IN (${subgroupid})`;
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -281,6 +273,96 @@ router.get("/countotmealcard", (req, res) => {
             msg: "success",
             data: {
               OTMEALCount: result[0].OTMEAL,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countrestdayotcard", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `    
+    SELECT 
+    count(*) AS RDOT
+    FROM 
+    restday_ot_approval
+    INNER JOIN master_employee ON restday_ot_approval.roa_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = restday_ot_approval.roa_subgroupid AND
+                aprroval_stage_settings.ats_count = restday_ot_approval.roa_approvalcount
+    WHERE 
+        roa_status = 'Applied' 
+        AND roa_subgroupid IN (${subgroupid})`;
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              RDOTCount: result[0].RDOT,
+            },
+          });
+        } else {
+          res.status(404).json({
+            msg: "Data not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching employee data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/countholidaycard", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `    
+    SELECT 
+    count(*) AS HOLIDAY
+    FROM 
+    payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
+    WHERE 
+        ph_status = 'Applied' 
+        AND ph_subgroupid IN (${subgroupid})`;
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: {
+              HOLIDAYCount: result[0].HOLIDAY,
             },
           });
         } else {
@@ -365,7 +447,6 @@ WHERE
 
 router.get("/totalcoa", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -377,16 +458,14 @@ router.get("/totalcoa", (req, res) => {
     ar_reason
     FROM attendance_request
     INNER JOIN master_employee ON attendance_request.ar_employeeid = me_id
-    WHERE ar_status = 'Pending' AND ar_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND ar_employeeid NOT IN (
-        SELECT tu_employeeid FROM teamlead_user)
-      AND ar_approvalcount = (
-        SELECT ats_count
-        FROM aprroval_stage_settings
-        WHERE ats_accessid = '${accesstypeid}'
-        AND ats_departmentid = '${departmentid}'
-    )`;
+    INNER JOIN 
+        aprroval_stage_settings ON 
+            aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+            aprroval_stage_settings.ats_subgroupid = attendance_request.ar_subgroupid AND
+            aprroval_stage_settings.ats_count = attendance_request.ar_approvalcount
+     WHERE 
+        ar_status = 'Pending' 
+        AND ar_subgroupid IN (${subgroupid})`;
 
     console.log(departmentid);
     console.log(subgroupid);
@@ -398,8 +477,6 @@ router.get("/totalcoa", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
@@ -417,7 +494,6 @@ router.get("/totalcoa", (req, res) => {
 
 router.get("/totalotmeal", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -429,23 +505,20 @@ router.get("/totalotmeal", (req, res) => {
     oma_otmeal_amount
     FROM ot_meal_allowances
     INNER JOIN master_employee ON ot_meal_allowances.oma_employeeid = me_id
-    WHERE oma_status = 'Applied' AND oma_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND oma_employeeid NOT IN (
-    SELECT tu_employeeid FROM teamlead_user)
-    AND oma_approvalcount = (
-    SELECT ats_count
-    FROM aprroval_stage_settings
-    WHERE ats_accessid = '${accesstypeid}'
-    AND ats_departmentid = '${departmentid}')`;
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
+                aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
+    WHERE 
+        oma_status = 'Applied' 
+        AND oma_subgroupid IN (${subgroupid})`;
 
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
@@ -463,7 +536,6 @@ router.get("/totalotmeal", (req, res) => {
 
 router.get("/totalot", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -475,20 +547,17 @@ router.get("/totalot", (req, res) => {
     pao_reason
     FROM payroll_approval_ot
     INNER JOIN master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    WHERE pao_status = 'Applied' AND pao_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND pao_employeeid NOT IN (
-    SELECT tu_employeeid FROM teamlead_user)
-	  AND pao_approvalcount = (
-    SELECT ats_count
-    FROM aprroval_stage_settings
-    WHERE ats_accessid = '${accesstypeid}'
-    AND ats_departmentid = '${departmentid}')`;
+    INNER JOIN 
+    aprroval_stage_settings ON 
+        aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+        aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
+        aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
+    WHERE 
+    pao_status = 'Applied' 
+        AND pao_subgroupid IN (${subgroupid})`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
       if (err) console.error("Error :!!", err);
-
-      console.log(result);
 
       res.json({
         msg: "success",
@@ -505,7 +574,6 @@ router.get("/totalot", (req, res) => {
 
 router.get("/totalleave", (req, res) => {
   try {
-    let departmentid = req.session.departmentid;
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
@@ -523,16 +591,14 @@ FROM
     leaves
 INNER JOIN 
     master_employee ON leaves.l_employeeid = me_id
-    WHERE l_leavestatus = 'Pending' AND l_subgroupid = '${subgroupid}'
-    AND me_department = '${departmentid}'
-    AND l_employeeid NOT IN (
-        SELECT tu_employeeid FROM teamlead_user)
-      AND l_approvalcount = (
-        SELECT ats_count
-        FROM aprroval_stage_settings
-        WHERE ats_accessid = '${accesstypeid}'
-        AND ats_departmentid = '${departmentid}'
-    )`;
+    INNER JOIN 
+    aprroval_stage_settings ON 
+        aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+        aprroval_stage_settings.ats_subgroupid = leaves.l_subgroupid AND
+        aprroval_stage_settings.ats_count = leaves.l_approvalcount
+        WHERE 
+        l_leavestatus = 'Pending' 
+    AND l_subgroupid IN (${subgroupid})`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -553,6 +619,88 @@ INNER JOIN
       msg: "error",
       data: error,
     });
+  }
+});
+
+router.get("/totalrestdayot", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
+    concat(me_lastname,' ',me_firstname) as roa_employeeid,
+    DATE_FORMAT(roa_attendancedate, '%W, %M %e, %Y') AS roa_attendancedate,
+    TIME_FORMAT(roa_timein, '%h:%i %p') roa_timein, 
+    TIME_FORMAT(roa_timeout, '%h:%i %p') roa_timeout,
+    roa_total_hours
+    FROM restday_ot_approval
+    INNER JOIN master_employee ON restday_ot_approval.roa_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = restday_ot_approval.roa_subgroupid AND
+                aprroval_stage_settings.ats_count = restday_ot_approval.roa_approvalcount
+    WHERE 
+        roa_status = 'Applied' 
+        AND roa_subgroupid IN (${subgroupid})`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/totalholiday", (req, res) => {
+  try {
+    let subgroupid = req.session.subgroupid;
+    let accesstypeid = req.session.accesstypeid;
+    let sql = `SELECT 
+    concat(me_lastname,' ',me_firstname) as ph_employeeid,
+    DATE_FORMAT(ph_attendancedate, '%W, %M %e, %Y') AS ph_attendancedate,
+    TIME_FORMAT(ph_timein, '%h:%i %p') ph_timein, 
+    TIME_FORMAT(ph_timeout, '%h:%i %p') ph_timeout,
+    ph_total_hours
+    FROM payroll_holiday
+    INNER JOIN master_employee ON payroll_holiday.ph_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
+                aprroval_stage_settings.ats_subgroupid = payroll_holiday.ph_subgroupid AND
+                aprroval_stage_settings.ats_count = payroll_holiday.ph_approvalcount
+    WHERE 
+        ph_status = 'Applied' 
+        AND ph_subgroupid IN (${subgroupid})`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 

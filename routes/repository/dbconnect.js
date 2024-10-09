@@ -1,6 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
-const { Encrypter, Decrypter } = require("./crytography");
+const { Encrypter, Decrypter } = require("./cryptography");
+const { logger } = require("./logger");
 require("dotenv").config();
 
 let password = "";
@@ -8,6 +9,11 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   if (err) console.error("Error: ", err);
   // console.log(encrypted);
   password = encrypted;
+});
+
+Decrypter("5915fa55a4d5470dfcfc44ddc154f06e", (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
 });
 
 const connection = mysql.createConnection({
@@ -22,6 +28,7 @@ exports.CheckConnection = () => {
   connection.connect((err) => {
     if (err) {
       console.error("Error connection to MYSQL database: ", err);
+      logger.error(error);
       return;
     }
     console.log("MySQL database connection established successfully!");
@@ -42,6 +49,7 @@ exports.Select = (sql, callback) => {
       callback(null, results);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -57,6 +65,7 @@ exports.Update = async (sql, data, callback) => {
       callback(null, `Rows affected: ${results.affectedRows}`);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -94,6 +103,7 @@ exports.Insert = (stmt, todos, callback) => {
       // console.log(Row inserted: ${results.affectedRows});
     });
   } catch (error) {
+    logger.error(error);
     callback(error, null);
   }
 };
@@ -101,6 +111,7 @@ exports.Insert = (stmt, todos, callback) => {
 exports.InsertTable = (sql, data, callback) => {
   this.Insert(sql, data, (err, result) => {
     if (err) {
+      logger.error(err);
       callback(err, null);
     }
     callback(null, result);

@@ -68,6 +68,7 @@ exports.Leaves = (data) => {
 
   data.forEach((key, item) => {
     dataResult.push({
+      leavetypeid: key.ml_id,
       leaveid: key.l_leaveid,
       employeeid: key.l_employeeid,
       leavestartdate: key.l_leavestartdate,
@@ -76,6 +77,7 @@ exports.Leaves = (data) => {
       reason: key.l_leavereason,
       status: key.l_leavestatus,
       applieddate: key.l_leaveapplieddate,
+      typeleave: key.ml_leavetype,
     });
   });
 
@@ -434,6 +436,7 @@ exports.Master_User = (data) => {
       subgroupid: key.mu_subgroupid,
       createby: key.mu_createby,
       createdate: key.mu_createdate,
+      isgeofence: key.mu_isgeofence,
       status: key.mu_status,
     });
   });
@@ -733,7 +736,6 @@ exports.Payroll_Approval_Ot = (data) => {
   data.forEach((key, item) => {
     dataResult.push({
       approveot_id: key.pao_id,
-      image: key.pao_image,
       fullname: key.pao_fullname,
       employeeid: key.pao_employeeid,
       attendancedate: key.pao_attendancedate,
@@ -752,6 +754,7 @@ exports.Payroll_Approval_Ot = (data) => {
       payrolldate: key.pao_payroll_date,
       reason: key.pao_reason,
       overtimestatus: key.pao_status,
+      subgroupid: key.pao_subgroupid,
     });
   });
 
@@ -830,6 +833,7 @@ exports.Attendance_Request = (data) => {
       requeststatus: key.ar_status,
       reason: key.ar_reason,
       file: key.ar_file,
+      subgroupid: key.ar_subgroupid,
     });
   });
 
@@ -1002,6 +1006,7 @@ exports.Request_Approval_Settings = (data) => {
       createby: key.ras_createdby,
       createdate: key.ras_createdate,
       status: key.ras_status,
+      subgroupid: key.ras_subgroupid,
     });
   });
 

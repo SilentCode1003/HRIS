@@ -1,4 +1,4 @@
-exports.GetValue = (abr) => {
+function GetValue(abr) {
   if (abr == "WH") return "WAREHOUSE";
   if (abr == "DLV") return "TO BE DELIVER TO CLIENT";
   if (abr == "NPD") return "NOT PAID";
@@ -33,141 +33,169 @@ exports.GetValue = (abr) => {
   if (abr == "DFCT") return "DEFECTIVE";
   if (abr == "RPLD") return "REPLACED";
   if (abr == "RPMT") return "REPLACEMENT";
-};
+}
 
 //#region STATUS CODE
-exports.RPLD = () => {
+function RPLD() {
   return "RPLD";
-};
-exports.RPMT = () => {
+}
+function RPMT() {
   return "RPMT";
-};
+}
 
-exports.WH = () => {
+function WH() {
   return "WH";
-};
+}
 
-exports.DFCT = () => {
+function DFCT() {
   return "DFCT";
-};
+}
 
-
-exports.DLV = () => {
+function DLV() {
   return "DLV";
-};
+}
 
-exports.NPD = () => {
+function NPD() {
   return "NPD";
-};
+}
 
-exports.SLD = () => {
+function SLD() {
   return "SLD";
-};
+}
 
-exports.PIC = () => {
+function PIC() {
   return "PIC";
-};
+}
 
-exports.PD = () => {
+function PD() {
   return "PD";
-};
+}
 
-exports.NSTK = () => {
+function NSTK() {
   return "NSTK";
-};
+}
 
-exports.REQ = () => {
+function REQ() {
   return "REQ";
-};
+}
 
-exports.PND = () => {
+function PND() {
   return "PND";
-};
+}
 
-exports.APD = () => {
+function APD() {
   return "APD";
-};
+}
 
-exports.ALLOC = () => {
+function ALLOC() {
   return "ALLOC";
-};
+}
 
-exports.REQB = () => {
+function REQB() {
   return "REQB";
-};
+}
 
-exports.WAIT = () => {
+function WAIT() {
   return "WAIT";
-};
+}
 
-exports.ALLOCP = () => {
+function ALLOCP() {
   return "ALLOCP";
-};
+}
 
-exports.RES = () => {
+function RES() {
   return "RES";
-};
+}
 
-exports.FAPR = () => {
+function FAPR() {
   return "FAPR";
-};
+}
 
-exports.SPR = () => {
+function SPR() {
   return "SPR";
-};
+}
 
-exports.DLY = () => {
+function DLY() {
   return "DLY";
-};
+}
 
-exports.RET = () => {
+function RET() {
   return "RET";
-};
+}
 
-exports.ACT = () => {
+function ACT() {
   return "ACT";
-};
+}
 
-exports.REM = () => {
+function REM() {
   return "REM";
-};
+}
 
-exports.UPD = () => {
+function UPD() {
   return "UPD";
-};
+}
 
-exports.INST = () => {
+function INST() {
   return "INST";
-};
+}
 
-exports.INACT = () => {
+function INACT() {
   return "INACT";
-};
+}
 
-exports.RSD = () => {
+function RSD() {
   return "RSD";
-};
+}
 
-exports.CLSD = () => {
+function CLSD() {
   return "CLSD";
-};
+}
 
-exports.OSR = () => {
+function OSR() {
   return "OSR";
-};
-exports.DND = () => {
+}
+function DND() {
   return "DND";
-};
+}
 
-exports.ASGN = () => {
+function ASGN() {
   return "ASGN";
-};
+}
 
-exports.RPRD = () => {
+function RPRD() {
   return "RPRD";
-};
+}
 
-exports.TRFR = () => {
+function TRFR() {
   return "TRFR";
-};
+}
 //#endregion
+//ENUM
+
+
+module.exports = {
+  GetValue,
+  ACT,
+  INACT,
+  PD,
+  NPD,
+  RPLD,
+  RPMT,
+  WH,
+  DFCT,
+  DLV,
+  SLD,
+  PIC,
+  NSTK,
+  REQ,
+  PND,
+  APD,
+  ALLOC,
+  REQB,
+  WAIT,
+  ALLOCP,
+  RES,
+  FAPR,
+  SPR,
+  DLY,
+};

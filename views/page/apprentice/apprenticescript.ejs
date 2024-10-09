@@ -172,7 +172,7 @@
       let jobstatus = $("#inputState").val();
 
       console.log(employeeid);
-      if (jobstatus === "probitionary") {
+      if (jobstatus === "probitionary" || jobstatus === "regular") {
         $.ajax({
           type: "POST",
           url: "/apprentice/update",

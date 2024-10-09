@@ -99,6 +99,53 @@
   </div>
 </div>
 
+<!-- View Modal -->
+<div class="modal fade" id="viewleave" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+          colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <div id="TittleContainer">
+        </div>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col-md-12">
+            <div class="row">
+              <table class="table table-bordered" id="dataTableLeaves">
+                <thead>
+                  <tr>
+                    <th class="date-range-table">Full Name</th>
+                    <th class="date-range-table">Leave Dates</th>
+                    <th class="date-range-table">Amount Paid</th>
+                    <th class="date-range-table">Leave Type</th>
+                    <th class="date-range-table">Leave Year</th>
+                    <th class="date-range-table">Payroll Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-end">
+              <div class="d-flex flex-column payslipname">
+                <span class="empnamepayslip" id="datename"></span>
+                <span class="text-center">Authorised Signatory</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="govermentloaneditbtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Modal Per Employee -->
 <div class="modal fade" id="addleavesettingsmodalperemployee" data-bs-backdrop="static" tabindex="-1"

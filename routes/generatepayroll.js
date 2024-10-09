@@ -4,11 +4,13 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
-const XLSX = require("xlsx","xlsx-style");
+const XLSX = require("xlsx", "xlsx-style");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -18,33 +20,125 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.post("/generateandaoadaayroll", (req, res) => {
+// router.post("/generateandaoadaayroll", async (req, res) => {
+//   try {
+//     let startdate = req.body.startdate;
+//     let enddate = req.body.enddate;
+
+//     let checkExistingSql = `SELECT gp_startdate, gp_enddate FROM generate_payroll
+//                             WHERE gp_startdate >= '${startdate}'
+//                             AND gp_enddate <= '${enddate}'`;
+
+//     let existingEntries = await mysql.mysqlQueryPromise(checkExistingSql);
+
+//     if (existingEntries.length > 0) {
+//       let existingDates = existingEntries.map((entry) => ({
+//         startdate: entry.gp_startdate,
+//         enddate: entry.gp_enddate,
+//       }));
+
+//       return res.json({
+//         msg: "exist",
+//         data: existingDates,
+//         message: "Payroll data already exists for the specified date range",
+//       });
+//     }
+
+//     let generateSql = `call hrmis.GeneratePayroll('${startdate}', '${enddate}')`;
+//     let loadSql = `call hrmis.LoadPayroll('${startdate}', '${enddate}')`;
+
+//     mysql
+//       .mysqlQueryPromise(generateSql)
+//       .then((generateResult) => {
+//         console.log("Payroll generated:", generateResult);
+//         return mysql.mysqlQueryPromise(loadSql);
+//       })
+//       .then((loadResult) => {
+//         console.log("Payroll loaded:", loadResult);
+//         res.json({
+//           msg: "success",
+//           data: loadResult,
+//         });
+//       })
+//       .catch((error) => {
+//         console.error("Error:", error);
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.json({
+//       msg: "error",
+//       data: error,
+//     });
+//   }
+// });
+
+router.post("/generateandaoadaayroll", async (req, res) => {
   try {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
+    let checkExistingSql = `SELECT gp_startdate, gp_enddate FROM generate_payroll 
+                            WHERE gp_startdate >= '${startdate}' 
+                            AND gp_enddate <= '${enddate}'`;
+
+    let existingEntries = await mysql.mysqlQueryPromise(checkExistingSql);
+
+    if (existingEntries.length > 0) {
+      let existingDates = existingEntries.map((entry) => ({
+        startdate: entry.gp_startdate,
+        enddate: entry.gp_enddate,
+      }));
+
+      return res.json({
+        msg: "exist",
+        data: existingDates,
+        message: "Payroll data already exists for the specified date range",
+      });
+    }
+
     let generateSql = `call hrmis.GeneratePayroll('${startdate}', '${enddate}')`;
     let loadSql = `call hrmis.LoadPayroll('${startdate}', '${enddate}')`;
+    try {
+      let generateResult = await mysql.mysqlQueryPromise(generateSql);
+      console.log("Payroll generated:", generateResult);
 
-    mysql
-      .mysqlQueryPromise(generateSql)
-      .then((generateResult) => {
-        console.log("Payroll generated:", generateResult);
-        return mysql.mysqlQueryPromise(loadSql);
-      })
-      .then((loadResult) => {
-        console.log("Payroll loaded:", loadResult);
-        res.json({
-          msg: "success",
-          data: loadResult,
-        });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        res.json({
-          msg: "error",
-          data: error,
-        });
+      let loadResult = await mysql.mysqlQueryPromise(loadSql);
+      console.log("Payroll loaded:", loadResult);
+      console.log(
+        "Load Result Structure:",
+        JSON.stringify(loadResult, null, 2)
+      );
+
+      let payrollDate;
+      if (
+        loadResult &&
+        loadResult.length > 0 &&
+        loadResult[0] &&
+        loadResult[0][0]
+      ) {
+        payrollDate = loadResult[0][0].PayrollDate;
+        console.log("Payroll Date Extracted:", payrollDate);
+      } else {
+        throw new Error("Payroll date not found in LoadPayroll result");
+      }
+      let contributionSql = `call hrmis.GenerateEmployersContribution('${payrollDate}')`;
+      let contributionResult = await mysql.mysqlQueryPromise(contributionSql);
+      console.log("Employers contribution generated:", contributionResult);
+
+      res.json({
+        msg: "success",
+        data: contributionResult,
       });
+    } catch (error) {
+      console.error("Error:", error);
+      res.json({
+        msg: "error",
+        data: error,
+      });
+    }
   } catch (error) {
     console.error("Error:", error);
     res.json({
@@ -53,6 +147,7 @@ router.post("/generateandaoadaayroll", (req, res) => {
     });
   }
 });
+
 
 router.post("/checkmissedlogs", (req, res) => {
   try {
@@ -78,6 +173,7 @@ router.post("/checkmissedlogs", (req, res) => {
   }
 });
 
+
 router.post("/loadpayroll", (req, res) => {
   try {
     let startdate = req.body.startdate;
@@ -87,7 +183,6 @@ router.post("/loadpayroll", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         res.json({
           msg: "success",
           data: result,
@@ -106,6 +201,7 @@ router.post("/loadpayroll", (req, res) => {
     });
   }
 });
+
 
 router.post("/loadpayslipsummary", (req, res) => {
   try {
@@ -134,6 +230,7 @@ router.post("/loadpayslipsummary", (req, res) => {
     });
   }
 });
+
 
 router.post("/loadpayslipdetailed", (req, res) => {
   try {
@@ -165,6 +262,7 @@ router.post("/loadpayslipdetailed", (req, res) => {
     });
   }
 });
+
 
 router.post("/getpayrolldate", (req, res) => {
   try {
@@ -200,6 +298,7 @@ router.post("/getpayrolldate", (req, res) => {
   }
 });
 
+
 router.post("/loadpayslipsummaryforapp", (req, res) => {
   try {
     let payrolldate = req.body.payrolldate;
@@ -221,6 +320,7 @@ router.post("/loadpayslipsummaryforapp", (req, res) => {
     });
   }
 });
+
 
 router.post("/exportfile", async (req, res) => {
   try {
@@ -286,8 +386,6 @@ router.get("/payrolldateload", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
-
       if (result != 0) {
         let data = DataModeling(result, "gp_");
 
@@ -302,7 +400,6 @@ router.get("/payrolldateload", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 
 // router.post("/exportbank", async (req, res) => {
@@ -345,7 +442,7 @@ router.get("/payrolldateload", (req, res) => {
 //       "Content-Type",
 //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 //     );
-//     res.send(excelBuffer); 
+//     res.send(excelBuffer);
 //   } catch (error) {
 //     res.json({
 //       msg: "error",
@@ -353,6 +450,7 @@ router.get("/payrolldateload", (req, res) => {
 //     });
 //   }
 // });
+
 
 router.post("/exportbank", async (req, res) => {
   try {
@@ -378,15 +476,19 @@ router.post("/exportbank", async (req, res) => {
       const cellAddress = XLSX.utils.encode_cell({ c: index, r: 0 });
       worksheet[cellAddress].s = {
         font: { bold: true },
-        alignment: { horizontal: "center" }
+        alignment: { horizontal: "center" },
       };
     });
 
     worksheet["!cols"] = headers.map((header, index) => ({
-      wch: index === 0 ? 30 : 20
+      wch: index === 0 ? 30 : 20,
     }));
 
-    const excelBuffer = XLSX.write(workbook, { type: "buffer", bookType: 'xlsx', bookSST: false });
+    const excelBuffer = XLSX.write(workbook, {
+      type: "buffer",
+      bookType: "xlsx",
+      bookSST: false,
+    });
 
     res.setHeader(
       "Content-Disposition",
@@ -405,3 +507,33 @@ router.post("/exportbank", async (req, res) => {
   }
 });
 
+
+router.post("/sudden_deduc_load", (req, res) => {
+  console.log("hit");
+  try {
+    let payrolldate = req.body.payrolldate;
+    let sql = `SELECT
+    sd_deduction_name,
+    sd_amount
+    FROM sudden_deductions
+    WHERE sd_payrolldate = '${payrolldate}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "sd_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});

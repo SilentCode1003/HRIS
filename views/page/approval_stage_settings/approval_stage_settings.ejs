@@ -21,8 +21,9 @@
                 <thead>
                     <tr>
                         <th class="col-sm-1">ID</th>
-                        <th>Access Name</th>
                         <th>Department Name</th>
+                        <th>Sub Group</th>
+                        <th>Access Name</th>
                         <th>Approve Count Need</th>
                         <th>Created By</th>
                         <th>Create Date</th>
@@ -61,8 +62,19 @@
                   <div class="col">
                     <div class="form-floating">
                       <select class="form-select border-form-modal" id="stagedepartmentname" name="stagedepartmentname">
+                        <option selected disabled>--Select Department--</option>
                       </select>
                       <label for="floatingSelectGrid">Department Name</label>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="form-select border-form-modal" id="stagesubgroupname" name="stagesubgroupname">
+                      </select>
+                      <label for="floatingSelectGrid">Subgroup Name</label>
                     </div>
                   </div>
                 </div>
@@ -114,6 +126,16 @@
                             <label for="floatingSelectGrid">Approve Count</label>
                         </div>
                     </div>
+                </div>
+                <br>
+                <div class="row g-3">
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="form-select border-form-modal" id="editstagesubgroupname" name="editstagesubgroupname">
+                      </select>
+                      <label for="floatingSelectGrid">Subgroup Name</label>
+                    </div>
+                  </div>
                 </div>
                 <br>
                 <div class="row g-3">

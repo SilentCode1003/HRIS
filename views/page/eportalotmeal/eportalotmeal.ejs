@@ -15,27 +15,150 @@
             </div>
         </div>
     </div>
-    <div class="card-body cbody-requestleave">
-        <table class="table table-light table-bordered" id="dataTableapplyOtmeal">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Attendance Date</th>
-                    <th scope="col">Clock In</th>
-                    <th scope="col">Clock Out</th>
-                    <th scope="col">Total Hours Overtime</th>
-                    <th scope="col">Sub Group Name</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
 </div>
 
-
-<!--Add Ot-->
+<div class="col">
+  <div class="card">
+      <div class="card-header ch-generate">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="true"><b>Pending</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="appliedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-applied" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Applied</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Approved</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Rejected</b>
+                  </button>
+                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
+                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                      aria-selected="false"><b>Cancelled</b>
+                  </button>
+              </div>
+          </nav>
+      </div>
+      <!-- Leave  Request -->
+      <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="card-body cbody-requestleave">
+                  <table class="table table-light table-bordered" id="dataTablePendingOtmeal">
+                      <thead>
+                          <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Attendance Date</th>
+                              <th scope="col">Clock In</th>
+                              <th scope="col">Clock Out</th>
+                              <th scope="col">Total Hours Overtime</th>
+                              <th scope="col">Sub Group Name</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Action</th>
+                          </tr>
+                      </thead>
+                  </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-applied" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableAppliedOtmeal">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Attendance Date</th>
+                              <th scope="col">Clock In</th>
+                              <th scope="col">Clock Out</th>
+                              <th scope="col">Total Hours Overtime</th>
+                              <th scope="col">Sub Group Name</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-light table-bordered" id="dataTableApprovedOtmeal">
+                      <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Attendance Date</th>
+                            <th scope="col">Clock In</th>
+                            <th scope="col">Clock Out</th>
+                            <th scope="col">Total Hours Overtime</th>
+                            <th scope="col">Sub Group Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                      </thead>
+                    </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-light table-bordered" id="dataTableRejectedOtmeal">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Attendance Date</th>
+                              <th scope="col">Clock In</th>
+                              <th scope="col">Clock Out</th>
+                              <th scope="col">Total Hours Overtime</th>
+                              <th scope="col">Sub Group Name</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+              aria-labelledby="nav-profile-tab">
+              <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-light table-bordered" id="dataTableCancelledOtmeal">
+                      <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Attendance Date</th>
+                            <th scope="col">Clock In</th>
+                            <th scope="col">Clock Out</th>
+                            <th scope="col">Total Hours Overtime</th>
+                            <th scope="col">Sub Group Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                      </thead>
+                    </table>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
 
 
 <!--Edit Modal-->

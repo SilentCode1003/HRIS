@@ -13,6 +13,12 @@
             <b>+ Add</b>
           </button>
         </div>
+        <div class="col-sm-1 col-add">
+          <button id="exportExcelBtn" class="btn btn-export-color"><b>Export</b></button>
+        </div>
+        <div class="col-sm-1 col-add">
+          <button id="importExcelBtn" class="btn btn-per-color"><b>Import</b></button>
+        </div>
       </div>
     </div>
     <div class="card-body">
@@ -90,9 +96,17 @@
                   </select>
                   <label for="floatingSelectGrid">Payroll Type</label>
               </div>
-          </div>
-           <br>       
-            </form>
+           </div>
+           <br>   
+           <div class="col">
+            <div class="form-floating">
+                <input type="date" class="form-control border-form-modal" id="effectivedate" name="effectivedate"
+                    placeholder="Effective Date">
+                <label for="effectivedate">Effective Date</label>
+            </div>
+          </div>                 
+          <br>     
+          </form>
         </div>
         <div class="modal-footer" id="modal-footer">
           <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -100,35 +114,35 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
-  <!-- Edit Modal -->
-  <div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
-          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
-        </lord-icon>
-          <h1 class="modal-title" id="exampleModalLabel">Edit Salary of Employee </h1>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select border-form-modal" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example" disabled>
-                          <option selected>Choose..</option>
-                        </select>
-                        <label for="floatingSelectGrid">Employee</label>
-                    </div>
-                </div>
-                 <br>
-                 <div class="col">
+<!-- Edit Modal -->
+<div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Edit Salary of Employee </h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+          <form>
+              <div class="col">
                   <div class="form-floating">
-                    <input type="text" class="form-control border-form-modal" id="editmsemp" 
-                    name="editmsemp" placeholder="Monthly Salary" oninput="formatPrice(event, this)">
-                    <label for="editmsemp">Edit Monthly Or Daily Salary</label>
+                      <select class="form-select border-form-modal" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example" disabled>
+                        <option selected>Choose..</option>
+                      </select>
+                      <label for="floatingSelectGrid">Employee</label>
+                  </div>
+              </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                  <input type="text" class="form-control border-form-modal" id="editmsemp" 
+                  name="editmsemp" placeholder="Monthly Salary" oninput="formatPrice(event, this)">
+                  <label for="editmsemp">Edit Monthly Or Daily Salary</label>
                 </div>
               </div>                                       
               <br>
@@ -138,77 +152,70 @@
                           placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
                       <label for="editallowances">Edit Monthly Allowances</label>
                   </div>
-              </div>                 
+              </div>                                                  
               <br> 
               <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
-                        placeholder="Adjustments">
-                    <label for="editallowances" oninput="formatPrice(event, this)">Edit Adjustments</label>
+                        placeholder="Adjustments" oninput="formatPrice(event, this)">
+                    <label for="editallowances">Edit Adjustments</label>
                 </div>
-            </div>                 
-            <br> 
-            <div class="col">
-              <div class="form-floating">
-                  <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
-                    <option value="Daily">Daily</option>
-                    <option value="Monthly">Monthly</option>
-                  </select>
-                  <label for="floatingSelectGrid">Edit Payroll Type</label>
+              </div>                 
+              <br> 
+              <div class="col">
+                <div class="form-floating">
+                    <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
+                      <option value="Daily">Daily</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                    <label for="floatingSelectGrid">Edit Payroll Type</label>
+                </div>
               </div>
-          </div>
-           <br>    
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="editsalarysavebtsn">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Edit Modal 
-  <div class="modal fade" id="editsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <i class='fas fa-money-bill' style='color:#0ebb39; font-size: 50px; margin: 3px;'></i>
-          <h3 class="modal-title" id="exampleModalLabel">Edit Salary of Employee </h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-body">
-            <form>
-                <div class="col">
-                    <div class="form-floating">
-                        <select class="form-select border-form-modal" id="editsalaryemp" name="editsalaryemp" aria-label="Floating label select example">
-                          <option selected>Choose..</option>
-                        </select>
-                        <label for="floatingSelectGrid">Employee</label>
-                    </div>
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="editeffectivedate" name="editeffectivedate"
+                        placeholder="Effective Date">
+                    <label for="editeffectivedate">Effective Date</label>
                 </div>
-                 <br>
-                 <div class="col">
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">₱</span>
-                        <input type="number" class="form-control border-form-modal" id="editmsemp" name="editmsemp" placeholder="Monthly Salary">
-                    </div>
-                </div>                            
-                <br>
-                <div class="col">
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">₱</span>
-                        <input type="number" class="form-control border-form-modal" id="editallowances" name="editallowances" placeholder="Monthly Allowances">
-                    </div>
-                </div>     
-                <br>
-            </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="editsalarysavebtsn">Save</button>
-        </div>
+              </div>                 
+              <br>      
+          </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editsalarysavebtsn">Save</button>
       </div>
     </div>
   </div>
-   -->
+</div>
+
+<!-- Import Modal -->
+<div class="modal fade" id="importsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Import Salary of Employee </h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <input type="file" name="importexcelfile" id="importexcelfile">
+                </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="importexcelsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

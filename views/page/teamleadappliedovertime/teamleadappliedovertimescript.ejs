@@ -1,10 +1,14 @@
 <script>
-  let approveot_id = "";
-
   $(document).ready(function () {
+    let approveot_id = "";
+    let attendancedate = "";
+    let clockin = "";
+    let clockout = "";
+
     LoadTable();
     searchTable();
     LoadList();
+    LoadSubgroup();
     //LoadEditEmp();
 
     $(document).on("keyup", "#myInput", function () {
@@ -89,7 +93,7 @@
     function LoadList() {
       $.ajax({
         type: "GET",
-        url: "/setpayrolldate/loadreq",
+        url: "/setpayrolldate/loadreqbeforepayout",
         success: function (result) {
           var data = result.data;
 
@@ -124,6 +128,25 @@
     //   });
     // }
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $("#dataTableOtapproval tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
@@ -134,6 +157,9 @@
         });
       console.log(dataRow);
       approveot_id = dataRow[0];
+      attendancedate = dataRow[2];
+      clockin = dataRow[3];
+      clockout = dataRow[4];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -148,7 +174,10 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#previewleave").attr("src", "data:image/jpg;base64," + item.overtimeimage);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.overtimeimage
+              );
               base64String = item.overtimeimage;
               $("#appliedotfullname").val(item.fullname);
               $("#appliedattendancedate").val(item.attendancedate);
@@ -161,6 +190,7 @@
               $("#appliedpayrolldate").val(item.payroll_date);
               $("#appliedreason").val(item.reason);
               $("#appliedstatus").val(item.status);
+              $("#subgroupid").val(item.subgroupid);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -176,12 +206,12 @@
       });
     });
 
-
     $(document).on("click", "#otsavebutton", function () {
       console.log("hit");
       let id = approveot_id;
       let requeststatus = $("#appliedstatus").val();
       let comment = $("#otcomment").val();
+      let subgroupid = $("#subgroupid").val();
 
       console.log(approveot_id, "LEAVE");
       console.log(requeststatus, "LEAVE");
@@ -189,7 +219,7 @@
 
       var message = "";
 
-      if (requeststatus === "") {
+      if (requeststatus === null) {
         message += "Status is required. ";
       }
 
@@ -207,6 +237,10 @@
             approveot_id: approveot_id,
             status: requeststatus,
             comment: comment,
+            subgroupid: subgroupid,
+            attendancedate: attendancedate,
+            clockin: clockin,
+            clockout: clockout,
           },
           success: function (result) {
             if (result.msg == "success") {

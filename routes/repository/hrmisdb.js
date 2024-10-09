@@ -1,6 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
-const { Encrypter, Decrypter } = require("./crytography");
+const { Encrypter, Decrypter } = require("./cryptography");
+const { logger } = require("./logger");
 require("dotenv").config();
 
 let password = "";
@@ -10,22 +11,20 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter('f88eb109c61062cba9e81cc9680af3fa', (err, encrypted) => {
-  if (err) console.error("Error: ", err);
-  console.log(encrypted);
-});
+// Decrypter("db29ed0ffd57d091dca64193118c4f5b", (err, encrypted) => {
+//   if (err) console.error("Error: ", err);
+//   console.log(encrypted);
+// });
 
 // Encrypter('101520122321', (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
 //   console.log(encrypted);
 // });
 
-
-Encrypter('5lsolutions101520', (err, encrypted) => {
-  if (err) console.error("Error: ", err);
-  console.log(encrypted);
-
-});
+// Encrypter("5lsolutions101520", (err, encrypted) => {
+//   if (err) console.error("Error: ", err);
+//   console.log(encrypted);
+// });
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,
@@ -51,9 +50,8 @@ exports.Select = (sql, table, callback) => {
       return err;
     });
     connection.query(sql, (error, results, fields) => {
-      //console.log(results);
-
       if (error) {
+        logger.error(error);
         callback(error, null);
       }
 
@@ -272,7 +270,10 @@ exports.Select = (sql, table, callback) => {
         callback(null, model.Attendance_Request_Activity(results));
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    logger.error(error);
+    console.log(error);
+  }
 };
 
 exports.Insert = (stmt, todos, callback) => {
@@ -283,12 +284,14 @@ exports.Insert = (stmt, todos, callback) => {
 
     connection.query(stmt, [todos], (err, results, fields) => {
       if (err) {
+        //logger.error(error);
         callback(err, null);
       }
 
       callback(null, `Row inserted ${results.affectedRows}`);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -355,7 +358,8 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_latitudein,
         ma_longitudein,
         ma_devicein,
-        ma_gefenceidIn) VALUES ?`;
+        ma_gefenceidIn,
+        ma_locationIn) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -614,9 +618,9 @@ exports.InsertTable = (tablename, data, callback) => {
         mu_username,
         mu_password,
         mu_accesstype,
-        mu_subgroupid,
         mu_createby,
         mu_createdate,
+        mu_isgeofence,
         mu_status) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
@@ -1116,7 +1120,8 @@ exports.InsertTable = (tablename, data, callback) => {
       ras_count,
       ras_createdby,
       ras_createdate,
-      ras_status) VALUES ?`;
+      ras_status,
+      ras_subgroupid) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {
@@ -1168,6 +1173,7 @@ exports.Update = async (sql) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (error, results, fields) => {
       if (error) {
+        logger.error(error, null);
         reject(error);
       } else {
         resolve(`Rows affected: ${results.affectedRows}`);
@@ -1180,12 +1186,14 @@ exports.UpdateMultiple = async (sql, data, callback) => {
   try {
     connection.query(sql, data, (error, results, fields) => {
       if (error) {
+        logger.error(error);
         callback(error, null);
       }
 
       callback(null, `Rows affected: ${results.affectedRows}`);
     });
   } catch (error) {
+    logger.error(error);
     console.log(error);
   }
 };
@@ -1195,6 +1203,7 @@ exports.mysqlQueryPromise = (sql) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (error, results) => {
       if (error) {
+        logger.error(error);
         reject(error);
       } else {
         resolve(results);
@@ -1207,6 +1216,7 @@ exports.StoredProcedure = (sql, callback) => {
   try {
     connection.query(sql, (error, results, fields) => {
       if (error) {
+        logger.error(error);
         callback(error.message, null);
       }
       callback(null, results[0]);

@@ -3,7 +3,10 @@ const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -49,39 +52,6 @@ router.post("/submit", async (req, res) => {
   }
 });
 
-router.post("/submitforapp", async (req, res) => {
-  try {
-    const employeeid = req.body.employeeid;
-    const { amount, purpose } = req.body;
-    const requestdate = currentDate.format("YYYY-MM-DD");
-    const status = "Pending";
-    const approvaldate = "On Process";
-
-    const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
-    const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
-
-    if (employeeResult.length === 0) {
-      return res.json({ msg: "Invalid employee ID" });
-    }
-
-    const data = [
-      [employeeid, requestdate, amount, purpose, status, approvaldate],
-    ];
-
-    mysql.InsertTable("cash_advance", data, (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error("Error inserting leave record: ", insertErr);
-        res.json({ msg: "insert_failed" });
-      } else {
-        console.log(insertResult);
-        res.json({ msg: "success" });
-      }
-    });
-  } catch (error) {
-    console.error("Error in /submit route: ", error);
-    res.json({ msg: "error" });
-  }
-});
 
 router.get("/load", (req, res) => {
   try {
@@ -97,7 +67,7 @@ router.get("/load", (req, res) => {
     AND ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    console.log(employeeid,'id');
+    console.log(employeeid, "id");
     console.log(sql);
 
     Select(sql, (err, result) => {
@@ -105,8 +75,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -121,7 +89,6 @@ router.get("/load", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.get("/approved", (req, res) => {
   try {
@@ -142,8 +109,6 @@ router.get("/approved", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -181,7 +146,6 @@ router.post("/getload", (req, res) => {
   }
 });
 
-
 router.post("/getpending", (req, res) => {
   try {
     let cashadvanceid = req.body.cashadvanceid;
@@ -205,8 +169,6 @@ router.post("/getpending", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
@@ -277,8 +239,6 @@ router.post("/getca", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");

@@ -1,7 +1,6 @@
 <script>
-  let salaryid = "";
-
   $(document).ready(function () {
+    let salaryid = "";
     console.log("Initialize");
     LoadTable();
     LoadListEmp();
@@ -12,6 +11,25 @@
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
+
+    document
+      .getElementById("exportExcelBtn")
+      .addEventListener("click", function () {
+        exportTableToExcel(
+          "dataTablesalary",
+          "EmployeeSalary.xlsx",
+          function () {
+            swal(
+              "Update Successfully",
+              "You clicked the button!",
+              "success"
+            ).then((results) => {
+              window.location.reload();
+            });
+            LoadTable();
+          }
+        );
+      });
 
     function LoadTable() {
       $("#dataTablesalary").DataTable({
@@ -30,7 +48,6 @@
             var finalData = [];
             var data = json.data;
 
-            console.log(data);
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
@@ -134,6 +151,7 @@
       let allowances = $("#allowances").val();
       let adjustments = $("#adjustments").val();
       let payrolltype = $("#payrolltype").val();
+      let effectivedate = $("#effectivedate").val();
 
       var message = "";
 
@@ -157,6 +175,10 @@
         message += "allowances is required ";
       }
 
+      if (effectivedate == "") {
+        message += "effectivedate is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -172,6 +194,7 @@
             monthly: parseFloat(monthly),
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -209,14 +232,12 @@
         type: "GET",
         url: "/employee/selectdistinctsalary",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#salaryemp").append(options);
-            console.log(item.fullname);
           });
         },
         error: function (result) {
@@ -230,14 +251,12 @@
         type: "GET",
         url: "/employee/loadedit",
         success: function (result) {
-          console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#editsalaryemp").append(options);
-            console.log(item.fullname);
           });
         },
         error: function (result) {
@@ -254,12 +273,10 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      console.log(dataRow);
       salaryid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
-      console.log("hit");
       $.ajax({
         type: "POST",
         url: "/salary/getsalary",
@@ -306,13 +323,7 @@
         .val()
         .replace(/[^\d.-]/g, "");
       let payrolltype = $("#editpayrolltype").val();
-
-      console.log("Salary ID:", id);
-      console.log("Employee ID:", employeeid);
-      console.log("Monthly Salary:", monthly);
-      console.log("Adjustments:", adjustments);
-      console.log("Allowances:", allowances);
-      console.log("Payroll Type:", payrolltype);
+      let effectivedate = $("#editeffectivedate").val();
 
       var message = "";
 
@@ -336,12 +347,16 @@
         message += "allowances is required. ";
       }
 
+      if (effectivedate === "") {
+        message += "effectivedate is required. "; 
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/salary/update",
+          type: "PUT",
+          url: "/salary/edit",
           data: {
             salaryid: id,
             employeeid: employeeid,
@@ -349,6 +364,7 @@
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
             payrolltype: payrolltype,
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -382,267 +398,160 @@
         });
       }
     });
-  });
 
-  //#region FUNCTIONS
-
-  // $("#msemp").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-
-  //   var numeric_val = input_val.replace(/\D/g, "");
-
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-
-  //   // Extract the whole number and decimal parts
-  //   var wholeNumber = numeric_val.slice(0, -2);
-  //   var decimalPart = numeric_val.slice(-2);
-
-  //   var formatted_val = formatNumber(wholeNumber);
-  //   formatted_val = "₱" + formatted_val;
-
-  //   // Add the decimal part if present
-  //   if (decimalPart.length > 0) {
-  //     formatted_val += "." + decimalPart;
-  //   } else if (blur) {
-  //     formatted_val += ".00"; // Add .00 if there are no decimal parts and it's blurred
-  //   }
-
-  //   input.val(formatted_val);
-  // }
-
-  // $("#msemp").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-
-  //   var numeric_val = input_val.replace(/\D/g, "");
-
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-  //   var formatted_val = formatNumber(numeric_val);
-  //   formatted_val = "₱" + formatted_val;
-  //   if (blur) {
-  //     formatted_val += "₱0.00";
-  //   }
-
-  //   input.val(formatted_val);
-  // }
-
-  // $("#editmsemp").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-
-  //   var numeric_val = input_val.replace(/\D/g, "");
-
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-
-  //   // Extract the whole number and decimal parts
-  //   var wholeNumber = numeric_val.slice(0, -2);
-  //   var decimalPart = numeric_val.slice(-2);
-
-  //   console.log("Whole Number:", wholeNumber);
-  //   console.log("Decimal Part:", decimalPart);
-
-  //   var formatted_val = formatNumber(wholeNumber);
-  //   formatted_val = "₱" + formatted_val;
-
-  //   // Add the decimal part if present
-  //   if (decimalPart.length > 0) {
-  //     formatted_val += "." + decimalPart;
-  //   } else if (blur) {
-  //     formatted_val += ".00";
-  //   }
-
-  //   console.log("Formatted Value:", formatted_val);
-
-  //   input.val(formatted_val);
-  // }
-
-  // $("#editmsemp").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-  //   var numeric_val = input_val.replace(/\D/g, "");
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-  //   var formatted_val = formatNumber(numeric_val);
-  //   formatted_val = "₱" + formatted_val;
-  //   if (blur) {
-  //     formatted_val += ".00";
-  //   }
-  //   input.val(formatted_val);
-  // }
-
-  // $("#adjustments").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // $("#editadjustments").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-
-  //   var numeric_val = input_val.replace(/\D/g, "");
-
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-  //   var formatted_val = formatNumber(numeric_val);
-  //   formatted_val = "₱" + formatted_val;
-  //   if (blur) {
-  //     formatted_val += ".00";
-  //   }
-
-  //   input.val(formatted_val);
-  // }
-
-  // $("#allowances").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-
-  //   var numeric_val = input_val.replace(/\D/g, "");
-
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-  //   var formatted_val = formatNumber(numeric_val);
-  //   formatted_val = "₱" + formatted_val;
-  //   if (blur) {
-  //     formatted_val += ".00";
-  //   }
-
-  //   input.val(formatted_val);
-  // }
-
-  // $("#editallowances").on({
-  //   input: function () {
-  //     formatCurrency($(this));
-  //   },
-  //   blur: function () {
-  //     formatCurrency($(this), true);
-  //   },
-  // });
-
-  // function formatNumber(n) {
-  //   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // function formatCurrency(input, blur) {
-  //   var input_val = input.val();
-  //   var numeric_val = input_val.replace(/\D/g, "");
-  //   if (numeric_val === "" || numeric_val === "00") {
-  //     return;
-  //   }
-  //   var formatted_val = formatNumber(numeric_val);
-  //   formatted_val = "₱" + formatted_val;
-  //   if (blur) {
-  //     formatted_val += ".00";
-  //   }
-  //   input.val(formatted_val);
-  // }
-
-  function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTablesalary");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    //#region FUNCTIONS
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablesalary");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
         }
       }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
+    }
+    //#endregion
+
+    //#region Import Salary
+    $(document).on("click", "#importExcelBtn", function () {
+      $("#importsalarymodal").modal("show");
+    });
+
+    $(document).on("click", "#importexcelsavebtn", function () {
+      let uploadData = $("#importexcelfile").val();
+      if (uploadData != "") {
+        Loading("Uploading, Please wait for a moment...");
+        UploadProcess();
       } else {
-        tr[i].style.display = "none";
+        warning("Warning!", "No File Chosen!");
+      }
+    });
+
+    function UploadProcess() {
+      //Reference the FileUpload element.
+      var fileUpload = document.getElementById("importexcelfile");
+
+      //Validate whether File is valid Excel file.
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          //For Browsers other than IE.
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcel(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            //For IE Browser.
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcel(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
       }
     }
-  }
 
-  //#endregion
+    function GetTableFromExcel(data) {
+      //Read the Excel File data in binary
+      var workbook = XLSX.read(data, {
+        type: "binary",
+      });
+
+      //get the name of First Sheet.
+      var Sheet = workbook.SheetNames[0];
+
+      //Read all rows from First Sheet into an JSON array.
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      //Create a HTML Table element.
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      //Add the header row.
+      var row = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+      //Add the data rows from Excel file.
+      for (var i = 0; i < excelRows.length; i++) {
+        //Add the data row.
+        var data = [];
+        var row = myTable.insertRow(-1);
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]];
+          data.push({
+            item: excelRows[i][columns[j]],
+          });
+        }
+        dataExcelArr.push({
+          employeeid: data[1].item,
+          monthly: data[2].item,
+          allowance: data[3].item,
+          adjustment: data[4].item,
+          payrolltype: data[5].item,
+        });
+      }
+      excelDataSave(dataExcelArr);
+    }
+
+    function excelDataSave(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      console.log(dataraw);
+      $.ajax({
+        type: "POST",
+        url: "/salary/upload",
+        data: {
+          data: dataraw,
+        },
+        success: function (result) {
+          hideLoading();
+          console.log("Message: ", result.msg);
+          if (result.msg != "success") {
+            warning("Info", result.msg);
+
+            $(document).on("click", "#txtBtn", function () {
+              downloadTxtFile(result.data, "existing_invalid_data.txt");
+            });
+          } else {
+            success("Saved!", "Data saved!");
+            $("#importsalarymodal").modal("hide");
+            $("#importexcelfile").val("");
+          }
+
+          LoadTable();
+        },
+
+        error: function (result) {
+          console.error(result);
+        },
+      });
+    }
+    //#endregion
+  });
 </script>

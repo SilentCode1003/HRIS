@@ -1,16 +1,140 @@
 <script>
-  let requestid = "";
-
   $(document).ready(function () {
+    let requestid = "";
     searchTable();
     LoadTable();
+    LoadSubgroup();
     //Loadactionname();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
 
+    $("#dataTableattendancerequest tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      requestid = dataRow[0];
+    });
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#editcoasubgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#editBtn", function () {
+      $("#editrequestmodal").modal("show");
+      $.ajax({
+        type: "POST",
+        url: "/teamleadpendingcoa/getreqinteamlead",
+        data: {
+          requestid: requestid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editpreview").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              $("#empid").val(item.emp_id);
+              $("#coafullname").val(item.employeeid);
+              $("#editattendancedate").val(item.attendancedate);
+              $("#edittimein").val(item.timein);
+              $("#edittimeout").val(item.timeout);
+              $("#coatotalhours").val(item.total);
+              $("#coacreatedate").val(item.createdate);
+              $("#coarequeststatus").val(item.requeststatus);
+              $("#editcoareason").val(item.reason);
+              $("#editcoasubgroupid").val(item.subgroupid);
+              $("#editpreviewfile").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#editcOAsavebtn", function () {
+      console.log("hit");
+      let id = requestid;
+      let requeststatus = $("#editcoastatus").val();
+      let subgroupid = $("#editcoasubgroupid").val();
+
+      var message = "";
+
+      if (requeststatus === "") {
+        message += "Status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Oops!!!", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/teamleadpendingcoa/attendanceaction",
+          data: {
+            requestid: requestid,
+            status: requeststatus,
+            subgroupid: subgroupid,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {});
+              $("#editcoastatus").val("Pending");
+              $("#editrequestmodal").modal("hide");
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
     function LoadTable() {
+      console.log("load table");
       $("#dataTableattendancerequest").DataTable({
         destroy: true,
         processing: true,
@@ -31,18 +155,17 @@
               var action = "";
               var status = item.status;
 
+              //data-bs-toggle="modal" data-bs-target="#editrequestmodal"
               action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
-                   `;
+                    <button id="editBtn" class="btn text-primary" name="editBtn" ><i class="fas fa-fw fa-pen"></i></button>`;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "90px";
-              imgElement.style.height = "90px";
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "90px";
+              // imgElement.style.height = "90px";
 
               finalData.push({
-                image: imgElement.outerHTML,
                 requestid: item.requestid,
                 employeeid: item.employeeid,
                 attendancedate: item.attendancedate,
@@ -65,7 +188,6 @@
           },
         ],
         columns: [
-          { data: "image" },
           { data: "requestid" },
           { data: "employeeid" },
           { data: "attendancedate" },
@@ -78,7 +200,7 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var requeststatusCell = $(row).find("td:eq(8)");
+          var requeststatusCell = $(row).find("td:eq(7)");
 
           var requeststatusText = data.requeststatus;
 
@@ -106,110 +228,11 @@
             this.style.verticalAlign = "middle";
           });
         },
-        initComplete: function () {},
+        initComplete: function () {
+          console.log("Done");
+        },
       });
     }
-
-    $("#dataTableattendancerequest tbody").on("click", "tr", function () {
-      var dataRow = [];
-      $(this)
-        .closest("tr")
-        .find("td")
-        .each(function () {
-          dataRow.push($(this).text());
-        });
-      console.log(dataRow);
-      requestid = dataRow[1];
-    });
-
-    $(document).on("click", "#editBtn", function () {
-      $.ajax({
-        type: "POST",
-        url: "/attendancerequest/getattendancerequest",
-        data: {
-          requestid: requestid,
-        },
-        success: function (result) {
-          if (result.msg === "success") {
-            const existingData = result.data;
-
-            $.each(existingData, (key, item) => {
-              $("#editpreview").attr(
-                "src",
-                "data:image/jpg;base64," + item.image
-              );
-              $("#empid").val(item.emp_id);
-              $("#coafullname").val(item.employeeid);
-              $("#editattendancedate").val(item.attendancedate);
-              $("#edittimein").val(item.timein);
-              $("#edittimeout").val(item.timeout);
-              $("#coatotalhours").val(item.total);
-              $("#coacreatedate").val(item.createdate);
-              $("#coarequeststatus").val(item.requeststatus);
-              $("#editcoareason").val(item.reason);
-              $("#editpreviewfile").attr(
-                "src",
-                "data:image/jpg;base64," + item.file
-              );
-            });
-          } else {
-            swal("Error fetching employee data", "success");
-          }
-        },
-        error: function (err) {
-          swal("An error occurred while fetching employee data", err, "error");
-        },
-      });
-    });
-
-    $(document).on("click", "#editcOAsavebtn", function () {
-      console.log("hit");
-      let id = requestid;
-      let requeststatus = $("#editcoastatus").val();
-
-      var message = "";
-
-      if (requeststatus === "") {
-        message += "Status is required. ";
-      }
-
-      if (message !== "") {
-        swal("Oops!!!", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "/teamleadpendingcoa/attendanceaction",
-          data: {
-            requestid: requestid,
-            status: requeststatus,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
-            }
-          },
-          error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
-          },
-        });
-      }
-    });
-
     function Loadactionname() {
       $.ajax({
         type: "GET",

@@ -7,8 +7,13 @@
     let bdaydiv = "";
     let approveot_id = "";
     let requestid = "";
+    let holidayid = "";
+    let base64String = "";
+    let rdotid = "";
     LoadEditEmp();
     LoadList();
+    LoadListHoliday();
+    LoadListRdot();
     //LoadTable();
     loadtotalCard();
     LoadBdayFolks();
@@ -17,6 +22,8 @@
     loadOvertimeBadge();
     loadCOABadge();
     loadattendanceBadge();
+    loadHolidayBadge();
+    loadRDOTbadge();
     loadregularCard();
     loadprobitionaryCard();
     loadresignedCard();
@@ -153,7 +160,7 @@
         }
       });
 
-      $(document).on("click", '.datacard', function () {
+      $(document).on("click", ".datacard", function () {
         const departmentId = $(this).data("department-id");
 
         console.log(departmentId, "id");
@@ -167,7 +174,7 @@
           success: function (response) {
             if (response.msg === "success") {
               renderDepartmentModal(response.data);
-              $('#totalCablingModal .h3').text(response.data.departmentName);
+              $("#totalCablingModal .h3").text(response.data.departmentName);
             } else {
               console.error("Error fetching department data:", response.data);
             }
@@ -178,7 +185,7 @@
         });
       });
 
-      function renderDepartmentModal (modalData) {
+      function renderDepartmentModal(modalData) {
         const departmentName = modalData[0].departmentName;
         $("#alldepartmentname").text(departmentName);
         console.log(departmentName);
@@ -597,7 +604,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalIT",
+        url: "/index/totalIT",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -672,7 +679,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalcabling",
+        url: "/index/totalcabling",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -747,7 +754,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalcandidate",
+        url: "/index/totalcandidate",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -822,7 +829,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/totalbagapuroapi",
+        url: "/index/totalbagapuroapi",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -897,7 +904,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/apprenticemodal",
+        url: "/index/apprenticemodal",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -967,7 +974,7 @@
     function loadtotalCard() {
       $.ajax({
         type: "GET",
-        url: "/countactive",
+        url: "/index/countactive",
         success: function (result) {
           if (result.msg === "success") {
             const totalActive = result.data.activeCount;
@@ -985,7 +992,7 @@
     function loadregularCard() {
       $.ajax({
         type: "GET",
-        url: "/countregular",
+        url: "/index/countregular",
         success: function (result) {
           if (result.msg === "success") {
             const totalRegular = result.data.regularCount;
@@ -1003,7 +1010,7 @@
     function loadprobitionaryCard() {
       $.ajax({
         type: "GET",
-        url: "/countprobitionary",
+        url: "/index/countprobitionary",
         success: function (result) {
           if (result.msg === "success") {
             const totalProbitionary = result.data.probitionaryCount;
@@ -1025,7 +1032,7 @@
     function loadresignedCard() {
       $.ajax({
         type: "GET",
-        url: "/countresigned",
+        url: "/index/countresigned",
         success: function (result) {
           if (result.msg === "success") {
             const totalResigned = result.data.resignedCount;
@@ -1047,7 +1054,7 @@
     function loadtotaladminCard() {
       $.ajax({
         type: "GET",
-        url: "/countadmin",
+        url: "/index/countadmin",
         success: function (result) {
           if (result.msg === "success") {
             const totalempadmin = result.data.adminCount;
@@ -1069,7 +1076,7 @@
     function loadtotalITCard() {
       $.ajax({
         type: "GET",
-        url: "/countit",
+        url: "/index/countit",
         success: function (result) {
           if (result.msg === "success") {
             const totalIT = result.data.ITCount;
@@ -1087,7 +1094,7 @@
     function loadtotalcablingCard() {
       $.ajax({
         type: "GET",
-        url: "/countcabling",
+        url: "/index/countcabling",
         success: function (result) {
           if (result.msg === "success") {
             const totalCabling = result.data.CablingCount;
@@ -1105,7 +1112,7 @@
     function loadtotalcandidateCard() {
       $.ajax({
         type: "GET",
-        url: "/countcandidate",
+        url: "/index/countcandidate",
         success: function (result) {
           if (result.msg === "success") {
             const totalCandidate = result.data.CandidateCount;
@@ -1123,7 +1130,7 @@
     function loadtotalbagapuroCard() {
       $.ajax({
         type: "GET",
-        url: "/countbagapuro",
+        url: "/index/countbagapuro",
         success: function (result) {
           if (result.msg === "success") {
             const totalBagapuro = result.data.BagapuroCount;
@@ -1141,7 +1148,7 @@
     function loadtotalapprenticeCard() {
       $.ajax({
         type: "GET",
-        url: "/countapprentice",
+        url: "/index/countapprentice",
         success: function (result) {
           if (result.msg === "success") {
             const totalApprentice = result.data.ApprenticeCount;
@@ -1159,7 +1166,7 @@
     function load1YearCard() {
       $.ajax({
         type: "GET",
-        url: "/count1year",
+        url: "/index/count1year",
         success: function (result) {
           if (result.msg === "success") {
             const total1year = result.data.Years1Count;
@@ -1179,7 +1186,7 @@
     function loadleaveBadge() {
       $.ajax({
         type: "GET",
-        url: "/countreqleavebadge",
+        url: "/index/countreqleavebadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalleave = result.data.leavereqCount;
@@ -1197,7 +1204,7 @@
     function loadCashBadge() {
       $.ajax({
         type: "GET",
-        url: "/countcashreqbadge",
+        url: "/index/countcashreqbadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalCa = result.data.CAreqCount;
@@ -1215,7 +1222,7 @@
     function loadOvertimeBadge() {
       $.ajax({
         type: "GET",
-        url: "/countovertimeot",
+        url: "/index/countovertimeot",
         success: function (result) {
           if (result.msg === "success") {
             const totalOT = result.data.OTreqCount;
@@ -1233,7 +1240,7 @@
     function loadCOABadge() {
       $.ajax({
         type: "GET",
-        url: "/countCOA",
+        url: "/index/countCOA",
         success: function (result) {
           if (result.msg === "success") {
             const totalCOA = result.data.COAreqCount;
@@ -1248,10 +1255,47 @@
       });
     }
 
+    function loadHolidayBadge() {
+      $.ajax({
+        type: "GET",
+        url: "/index/countholiday",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalHOLIDAY = result.data.HOLIDAYreqCount;
+            $("#loadHolidayBadge").text(totalHOLIDAY);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+
+    function loadRDOTbadge() {
+      $.ajax({
+        type: "GET",
+        url: "/index/countrdot",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalRDOT = result.data.RDOTreqCount;
+            $("#loadRestDayOTBadge").text(totalRDOT);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
     function loadattendanceBadge() {
       $.ajax({
         type: "GET",
-        url: "/countattendancebadge",
+        url: "/index/countattendancebadge",
         success: function (result) {
           if (result.msg === "success") {
             const totalLATE = result.data.LATECount;
@@ -1299,7 +1343,7 @@
     function GenerateAnouncement() {
       $.ajax({
         type: "GET",
-        url: "/getbulletin",
+        url: "/index/getbulletin",
         // data: {
         //   bulletinid: id,
         // },
@@ -1359,7 +1403,7 @@
     function LoadBdayFolks() {
       $.ajax({
         type: "GET",
-        url: "/getbday",
+        url: "/index/getbday",
         success: function (result) {
           if (result.msg === "success") {
             const bdayData = result.data;
@@ -1416,7 +1460,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/load",
+        url: "/index/load",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1425,15 +1469,15 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var LEAVE_ID = row.insertCell(1);
-            var FIRSTNAME = row.insertCell(2);
-            var LEAVE_STARTDADTE = row.insertCell(3);
-            var LEAVE_ENDATE = row.insertCell(4);
-            var LEAVE_TYPE = row.insertCell(5);
-            var REASON = row.insertCell(6);
-            var APPLIEDDATE = row.insertCell(7);
-            var ACTION = row.insertCell(8);
+            // var IMAGE = row.insertCell(0);
+            var LEAVE_ID = row.insertCell(0);
+            var FIRSTNAME = row.insertCell(1);
+            var LEAVE_STARTDADTE = row.insertCell(2);
+            var LEAVE_ENDATE = row.insertCell(3);
+            var LEAVE_TYPE = row.insertCell(4);
+            var REASON = row.insertCell(5);
+            var APPLIEDDATE = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
             action.id = "editBtn";
@@ -1449,16 +1493,16 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-              leaveid = dataRow[1];
+              leaveid = dataRow[0];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             LEAVE_ID.innerHTML = item.leaveid;
             FIRSTNAME.innerHTML = item.firstname;
             LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
@@ -1493,7 +1537,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -1521,6 +1565,7 @@
               $("#leaveduration").val(item.leaveduration);
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
+              $("#leavesubgroup").val(item.leavesubgroupid);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -1658,7 +1703,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadCA",
+        url: "/index/loadCA",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1667,14 +1712,14 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var CASHADVANCE_ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var REQUEST_DATE = row.insertCell(3);
-            var AMOUNT = row.insertCell(4);
-            var PURPOSE = row.insertCell(5);
-            var STATUS = row.insertCell(6);
-            var ACTION = row.insertCell(7);
+            // var IMAGE = row.insertCell(0);
+            var CASHADVANCE_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var REQUEST_DATE = row.insertCell(2);
+            var AMOUNT = row.insertCell(3);
+            var PURPOSE = row.insertCell(4);
+            var STATUS = row.insertCell(5);
+            var ACTION = row.insertCell(6);
 
             var action = document.createElement("button");
             action.id = "editCABtn";
@@ -1690,16 +1735,16 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-              cashadvanceid = dataRow[1];
+              cashadvanceid = dataRow[0];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             CASHADVANCE_ID.innerHTML = item.employeeid;
             NAME.innerHTML = item.firstname;
             REQUEST_DATE.innerHTML = item.requestdate;
@@ -1836,7 +1881,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqOT",
+        url: "/index/loadreqOT",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -1847,15 +1892,15 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var APPROVEDOT_ID = row.insertCell(1);
-            var NAME = row.insertCell(2);
-            var ATTENDANCE_DATE = row.insertCell(3);
-            var PAYROLL_DATE = row.insertCell(4);
-            var CLOCKIN = row.insertCell(5);
-            var CLOCKOUT = row.insertCell(6);
-            var TOTAL_HOURS = row.insertCell(7);
-            var ACTION = row.insertCell(8);
+            // var IMAGE = row.insertCell(0);
+            var APPROVEDOT_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var PAYROLL_DATE = row.insertCell(3);
+            var CLOCKIN = row.insertCell(4);
+            var CLOCKOUT = row.insertCell(5);
+            var TOTAL_HOURS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
             action.id = "editOTBTN";
@@ -1871,16 +1916,16 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-              approveot_id = dataRow[1];
+              approveot_id = dataRow[0];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             APPROVEDOT_ID.innerHTML = item.approveot_id;
             NAME.innerHTML = item.fullname;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -1978,6 +2023,7 @@
               $("#otpayrolldate").val(item.payrolldate);
               $("#otstatus").val(item.overtimestatus);
               $("#otreason").val(item.reason);
+              $("#otsubgroup").val(item.subgroupid);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -2058,7 +2104,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/loadreqattendance",
+        url: "/index/loadreqattendance",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -2069,14 +2115,14 @@
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
-            var IMAGE = row.insertCell(0);
-            var REQUEST_ID = row.insertCell(1);
-            var FULLNAME = row.insertCell(2);
-            var ATTENDANCE_DATE = row.insertCell(3);
-            var TIME_IN = row.insertCell(4);
-            var TIME_OUT = row.insertCell(5);
-            var TOTAL_HOURS = row.insertCell(6);
-            var ACTION = row.insertCell(7);
+            // var IMAGE = row.insertCell(0);
+            var REQUEST_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var TIME_IN = row.insertCell(3);
+            var TIME_OUT = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var ACTION = row.insertCell(6);
 
             var action = document.createElement("button");
             action.id = "editCOABTN";
@@ -2092,16 +2138,16 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-              requestid = dataRow[1];
+              requestid = dataRow[0];
             };
 
-            var imgElement = document.createElement("img");
-            imgElement.src = "data:image/jpg;base64," + item.image;
-            imgElement.alt = "Profile Image";
-            imgElement.style.width = "70px";
-            imgElement.style.height = "70px";
+            // var imgElement = document.createElement("img");
+            // imgElement.src = "data:image/jpg;base64," + item.image;
+            // imgElement.alt = "Profile Image";
+            // imgElement.style.width = "70px";
+            // imgElement.style.height = "70px";
 
-            IMAGE.appendChild(imgElement);
+            // IMAGE.appendChild(imgElement);
             REQUEST_ID.innerHTML = item.requestid;
             FULLNAME.innerHTML = item.employeeid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -2155,6 +2201,7 @@
               $("#coacreatedate").val(item.createdate);
               $("#coarequeststatus").val(item.requeststatus);
               $("#editcoareason").val(item.reason);
+              $("#coasubgroupid").val(item.subgroupid);
               $("#editpreviewfile").attr(
                 "src",
                 "data:image/jpg;base64," + item.file
@@ -2277,17 +2324,394 @@
       }
     });
 
+    //req holiday section-->
+    $(document).on("click", "#nav-reqholiday-tab", function () {
+      $("#dataTableholidayrequest").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/index/loadHoliday",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById(
+            "dataTableholidayrequest"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            // var IMAGE = row.insertCell(0);
+            var HOLIDAY_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var HOLIDAY_TYPE = row.insertCell(3);
+            var PAYROLL_DATE = row.insertCell(4);
+            var TIMEIN = row.insertCell(5);
+            var TIMEOUT = row.insertCell(6);
+            var TOTAL_HOURS = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+            var action = document.createElement("button");
+            action.id = "editHolidayBTN";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#holidayreqmodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                holidayid = dataRow[0];
+            };
+
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            NAME.innerHTML = item.fullname;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            PAYROLL_DATE.innerHTML = item.payrolldate;
+            TIMEIN.innerHTML = item.timein;
+            TIMEOUT.innerHTML = item.timeout;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                HOLIDAY_ID,
+                NAME,
+                ATTENDANCE_DATE,
+                HOLIDAY_TYPE,
+                PAYROLL_DATE,
+                TIMEIN,
+                TIMEOUT,
+                TOTAL_HOURS,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#leaveemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListHoliday() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#hdpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#editHolidayBTN", function () {
+      $.ajax({
+        type: "POST",
+        url: "/getholidayapproval",
+        data: {
+          holidayid: holidayid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            console.log(existingData,'data');
+            
+
+            $.each(existingData, (key, item) => {
+              $("#previewholiday").attr("src", "data:image/jpg;base64," + item.file);
+              base64String = item.file;
+              $("#hdayfname").val(item.fullname);
+              $("#hdayatday").val(item.attendancedate);
+              $("#hdtype").val(item.holidaytype);
+              $("#hdpayrolldate").val(item.payrolldate);
+              $("#hdclockin").val(item.timein);
+              $("#hdclockout").val(item.timeout);
+              $("#hdtotalhours").val(item.total_hours);
+              $("#hdday").val(item.holidaydate);
+              $("#hdsubgroup").val(item.subgroupid);
+              $("#hdstatus").val(item.status);
+              $("#hdnormalot").val(item.normal_ot_total);
+              $("#hdndot").val(item.nightdiff_ot_total);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#holidaysavebutton", function () {
+      let id = holidayid;
+      let payrolldate = $("#hdpayrolldate").val();
+      let status = $("#hdstatus").val();
+      let comment = $("#hdcomment").val();
+
+      var message = "";
+
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (status === "Applied" || status === "Pending") {
+        message += "You Need to Approve or Disregard. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/holidayaction",
+          data: {
+            holidayid: id,
+            payrolldate: payrolldate,
+            status: status,
+            comment: comment,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+
+    //req rdot section-->
+    $(document).on("click", "#nav-reqrestdayot-tab", function () {
+      $("#dataTablerestdayotrequest").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/index/loadrdot",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+
+          material_list_tbl = document.getElementById(
+            "dataTablerestdayotrequest"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            // var IMAGE = row.insertCell(0);
+            var RDOT_ID = row.insertCell(0);
+            var NAME = row.insertCell(1);
+            var ATTENDANCE_DATE = row.insertCell(2);
+            var PAYROLL_DATE = row.insertCell(3);
+            var TIMEIN = row.insertCell(4);
+            var TIMEOUT = row.insertCell(5);
+            var TOTAL_HOURS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            var action = document.createElement("button");
+            action.id = "editRdotBTN";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#rdotreqmodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                rdotid = dataRow[0];
+            };
+
+            RDOT_ID.innerHTML = item.rdotid;
+            NAME.innerHTML = item.fullname;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            PAYROLL_DATE.innerHTML = item.payrolldate;
+            TIMEIN.innerHTML = item.timein;
+            TIMEOUT.innerHTML = item.timeout;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                RDOT_ID,
+                NAME,
+                ATTENDANCE_DATE,
+                PAYROLL_DATE,
+                TIMEIN,
+                TIMEOUT,
+                TOTAL_HOURS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function LoadListRdot() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#rdotpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#editRdotBTN", function () {
+      $.ajax({
+        type: "POST",
+        url: "/getrdotapproval",
+        data: {
+          rdotid: rdotid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            console.log(existingData,'data');
+            $.each(existingData, (key, item) => {
+              $("#previewrdot").attr("src", "data:image/jpg;base64," + item.file);
+              base64String = item.file;
+              $("#rdotfullname").val(item.fullname);
+              $("#rdotatdate").val(item.attendancedate);
+              $("#rdotpayrolldate").val(item.payrolldate);
+              $("#rdotclockin").val(item.timein);
+              $("#rdotclockout").val(item.timeout);
+              $("#rdothours").val(item.total_hours);
+              $("#rdotsubgroup").val(item.subgroupid);
+              $("#rdotstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+    $(document).on("click", "#reqrdotsavebutton", function () {
+      let id = rdotid;
+      let payrolldate = $("#rdotpayrolldate").val();
+      let status = $("#rdotstatus").val();
+      let comment = $("#rdotcomment").val();
+      var message = "";
+
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (status === "Applied" || status === "Pending") {
+        message += "You Need to Approve or Disregard. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/rdotaction",
+          data: {
+            rdotid: id,
+            payrolldate: payrolldate,
+            status: status,
+            comment: comment,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+            } else if (result.msg == "exist") {
+              swal("Exist", "Data already exists!", "warning");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+
     //status attendance section-->>>>
     $(document).on("click", "#nav-status-tab", function () {
       $.ajax({
         type: "GET",
-        url: "/attendancestatus",
+        url: "/index/attendancestatus",
         success: function (result) {
           let latestatus = "";
           if (result.msg === "success") {
             const existingData = result.data;
             if (existingData.length === 0) {
-              latestatus += '<div><img src="/images/img/nolate.gif" class="d-block w-100 nolate-img" alt=""</div>';
+              latestatus +=
+                '<div><img src="/images/img/nolate.gif" class="d-block w-100 nolate-img" alt=""</div>';
             } else {
               let counter = 0;
               $.each(existingData, (key, item) => {

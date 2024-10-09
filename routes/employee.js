@@ -10,19 +10,26 @@ const {
   convertExcelDate,
   GetCurrentDatetime,
   GetCurrentDate,
+  SelectStatement,
+  InsertStatement,
 } = require("./repository/customhelper");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const {
   generateUsernameAndPasswordForApprentice,
 } = require("./repository/helper");
 const {
   generateUsernameAndPasswordforemployee,
 } = require("./repository/helper");
-const { sq } = require("date-fns/locale");
 const { GenerateExcel } = require("./repository/excel");
-const { Select } = require("./repository/dbconnect");
+const { Select, InsertTable } = require("./repository/dbconnect");
 const { DataModeling, RawData } = require("./model/hrmisdb");
-const { JsonDataResponse, JsonErrorResponse } = require("./repository/response");
+const {
+  JsonDataResponse,
+  JsonErrorResponse,
+  JsonWarningResponse,
+  MessageStatus,
+  JsonSuccess,
+} = require("./repository/response");
 
 const apprenticecurrentYear = moment().format("YYYY");
 const currentYear = moment().format("YY");
@@ -164,6 +171,7 @@ router.post("/saveold", async (req, res) => {
           }
           const userSaveResult = await saveUserRecord(
             req,
+            res,
             oldemployeeid,
             username,
             encryptedPassword
@@ -200,7 +208,6 @@ router.get("/selectdistinctshift", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
@@ -233,7 +240,6 @@ router.get("/selectdistinctsalary", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
@@ -539,14 +545,14 @@ router.get("/load", (req, res) => {
     LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
     LEFT JOIN master_position ON master_employee.me_position = mp_positionid
     WHERE
-    me_jobstatus IN ('regular', 'probitionary','apprentice')`;
+    me_jobstatus IN ('regular', 'probitionary','apprentice')
+    ORDER BY me_id DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
@@ -654,6 +660,7 @@ router.post("/save", async (req, res) => {
           }
           const userSaveResult = await saveUserRecord(
             req,
+            res,
             employeeId,
             username,
             encryptedPassword
@@ -718,7 +725,6 @@ router.post("/update", async (req, res) => {
     mysql
       .Update(sql)
       .then((result) => {
-        console.log(result);
         res.json({
           msg: "success",
           data: result,
@@ -755,8 +761,6 @@ router.post("/getdeductother", (req, res) => {
     mysql.Select(sql, "Master_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
-
       res.json({
         msg: "success",
         data: result,
@@ -790,8 +794,6 @@ router.post("/getleave", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
           data: result,
@@ -861,7 +863,6 @@ router.post("/gethealth", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -900,7 +901,6 @@ router.post("/gettraining", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -921,44 +921,6 @@ router.post("/gettraining", (req, res) => {
   }
 });
 
-router.post("/gettrainingforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = ` select
-    me_id as employeeid,
-    mt_trainingid as trainingid, 
-    mt_name as name,
-    mt_startdate as startdate,
-    mt_enddate as enddate,
-    mt_location as location,
-    mt_status as status
-    from master_training 
-    inner join master_employee on mt_employeeid = me_id
-    where mt_employeeid = '${employeeid}'`;
-
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        console.log(result);
-        console.log("SQL query:", sql);
-
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        return res.json({
-          msg: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      error,
-    });
-  }
-});
 
 router.post("/getdisciplinary", (req, res) => {
   try {
@@ -979,7 +941,6 @@ router.post("/getdisciplinary", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log(result);
         console.log("SQL query:", sql);
 
         res.json({
@@ -1232,7 +1193,7 @@ function GetDepartment(name, callback) {
   let sql = `select * from master_department where md_departmentname='${name}'`;
   mysql.Select(sql, "Master_Department", (err, result) => {
     if (err) callback(err, null);
-    // console.log(result);
+    //
     callback(null, result);
   });
 }
@@ -1241,12 +1202,18 @@ function GetPosition(name, callback) {
   let sql = `select * from master_position where mp_positionname='${name}'`;
   mysql.Select(sql, "Master_Position", (err, result) => {
     if (err) callback(err, null);
-    // console.log(result);
+    //
     callback(null, result);
   });
 }
 
-async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
+async function saveUserRecord(
+  req,
+  res,
+  oldemployeeid,
+  username,
+  encryptedPassword
+) {
   return new Promise((resolve, reject) => {
     const createdate = moment().format("YYYY-MM-DD");
     const createby = req.session ? req.session.fullname : null;
@@ -1256,9 +1223,20 @@ async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
 
     mysql.Select(sql, "Master_Access", (err, result) => {
       if (err) reject(err);
-
+      let geofenceValue = 1;
+      let status = "Active";
       let accessid = result[0].accessid;
-      const data = [
+      let sql = InsertStatement("master_user", "mu", [
+        "employeeid",
+        "username",
+        "password",
+        "accesstype",
+        "createby",
+        "createdate",
+        "status",
+        "isgeofence",
+      ]);
+      let data = [
         [
           oldemployeeid,
           username,
@@ -1266,19 +1244,34 @@ async function saveUserRecord(req, oldemployeeid, username, encryptedPassword) {
           accessid,
           createby,
           createdate,
-          "Active",
+          status,
+          geofenceValue,
         ],
       ];
+      let checkStatement = SelectStatement(
+        "select * from master_user where mu_employeeid=? and mu_accesstype=?",
+        [oldemployeeid, accessid]
+      );
 
-      mysql.InsertTable("master_user", data, (inserterr, insertResult) => {
-        if (inserterr) {
-          console.error("Error inserting user record: ", inserterr);
-          reject({ msg: "insert_failed" });
-        } else {
-          console.log("User record inserted: ", insertResult);
-          resolve({ msg: "success" });
-        }
-      });
+      Check(checkStatement)
+        .then((result) => {
+          if (result != 0) {
+            return res.json(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            InsertTable(sql, data, (err, result) => {
+              if (err) {
+                console.log(err);
+                res.json(JsonErrorResponse(err));
+              }
+
+              res.json(JsonSuccess());
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.json(JsonErrorResponse(error));
+        });
     });
   });
 }
@@ -1322,6 +1315,16 @@ function checkOldIdExists(oldemployeeid) {
       .catch((error) => {
         reject(error);
       });
+  });
+}
+
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
   });
 }
 //#endregion

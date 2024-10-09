@@ -1,0 +1,357 @@
+<script>
+  let deductionsid = "";
+  let base64String = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadPayrollDate();
+    searchTable();
+    EditPayrollDate();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableSuddenDeductions").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/sudden_deductions/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editsubgroupmodal"><i class="fas fa-fw fa-pen"></i></button>
+                            `;
+              finalData.push({
+                deductionsid: item.deductionsid,
+                deduction_name: item.deduction_name,
+                payrolldate: item.payrolldate,
+                amount: item.amount,
+                createdate: item.createdate,
+                createby: item.createby,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "deductionsid" },
+          { data: "deduction_name" },
+          { data: "payrolldate" },
+          {
+            data: "amount",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "createdate" },
+          { data: "createby" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          // var statusCell = $(row).find("td:eq(5)");
+
+          // var statusText = data.status;
+
+          // var statusClass = "";
+
+          // switch (statusText.toLowerCase()) {
+          //   case "active":
+          //     statusClass = "active-status";
+          //     break;
+          //   case "inactive":
+          //     statusClass = "inactive-status";
+          //     break;
+          //   default:
+          //     statusClass = "";
+          // }
+
+          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#sudpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#suddensaveBtn", function () {
+      let deduction_name = $("#suddedctionname").val();
+      let payroll_date = $("#sudpayrolldate").val();
+      let amount = $("#sudamount").val();
+      let file = base64String;
+      let description = $("#suddescription").val();
+
+      var message = "";
+
+      if (deduction_name == "") {
+        message += "Name is required ";
+      }
+
+      if (payroll_date == "") {
+        message += "Payroll Date is required ";
+      }
+
+      if (amount == "") {
+        message += "Amount is required ";
+      }
+
+      if (description == "") {
+        message += "Description is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        amount = amount.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/sudden_deductions/save",
+          data: {
+            deduction_name: deduction_name,
+            payroll_date: payroll_date,
+            amount: parseFloat(amount),
+            file: file,
+            description: description,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Maybe The Department and Approver Count combination already exists.",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+
+    function EditPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#editsudpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableSuddenDeductions tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+        deductionsid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/sudden_deductions/getsuddendeduction",
+        data: {
+            deductionsid: deductionsid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editsuddedctionname").val(item.deduction_name);
+              $("#editsudpayrolldate").val(item.payrolldate);
+              $("#editsudamount").val(formatCurrencyValue(item.amount));
+              $("#editsuddescription").val(item.description);
+              $("#editsudfile").val(item.file);
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#suddeneditBtn", function () {
+      let id = deductionsid;
+      let deduction_name = $("#editsuddedctionname").val();
+      let payroll_date = $("#editsudpayrolldate").val();
+      let amount = $("#editsudamount").val();
+      let description = $("#editsuddescription").val();
+      let file = base64String;
+      
+      let message = "";
+
+      if (deduction_name === "") {
+        message += "Deduction Name is required ";
+      }
+
+      if (payroll_date === "") {
+        message += "Payroll Date is required ";
+      }
+
+      if (amount === "") {
+        message += "Amount is required ";
+      }
+
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        amount = amount.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "PUT",
+          url: "/sudden_deductions/edit",
+          data: {
+            deductionsid: id,
+            deduction_name: deduction_name,
+            payroll_date: payroll_date,
+            amount: parseFloat(amount),
+            description: description,
+            file: file,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Data already exists!",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    function imageUploaded() {
+      const input = document.getElementById("sudfile");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableSuddenDeductions");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+</script>

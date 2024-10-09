@@ -86,7 +86,7 @@
             a.download = `bank_statement_${payrolldate}_${bankname}.xlsx`;
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a); 
+            document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
           },
           error: function (xhr, status, error) {
@@ -217,8 +217,21 @@
                   text: "Thank you for waiting ;)",
                   icon: "success",
                   button: "OK!",
-                }).then((results) => {
+                }).then(() => {
                   loadPayrollTable(startDate, endDate);
+                });
+              } else if (result.msg == "exist") {
+                let message =
+                  "Payroll data already exists for the following date ranges:\n";
+                result.data.forEach((entry) => {
+                  message += `Start Date: ${entry.startdate}, End Date: ${entry.enddate}\n`;
+                });
+
+                swal({
+                  title: "Existing Payroll Data",
+                  text: message,
+                  icon: "warning",
+                  button: "OK",
                 });
               } else {
                 swal(
@@ -229,9 +242,7 @@
               }
             },
             error: function (xhr, status, error) {
-              console.log("Error:", xhr.responseText);
-              clearInterval(interval);
-              swal.close();
+              console.error("Error:", error);
               swal(
                 "Error",
                 "An error occurred while generating and loading payroll.",
@@ -513,7 +524,15 @@
               );
               $("#overtimemeal").text(formatToCurrency(item.Overtime_Meal));
               $("#leavepayprofile").text(formatToCurrency(item.Leave_Pay));
-              $("#loandeductions").text(formatToCurrency(item.Loans));
+              let totalLoans = (parseFloat(item.Calamity_Loan) || 0) +
+              (parseFloat(item.Short_Term_Loan) || 0) +
+              (parseFloat(item.Housing_Loan) || 0) +
+              (parseFloat(item.Education_Loan) || 0) +
+              (parseFloat(item.Sterling_Loan) || 0) +
+              (parseFloat(item.Salary_Loan) || 0) +
+              (parseFloat(item.Wisp_Deductions) || 0);
+              let formattedTotal = formatToCurrency(totalLoans);
+              $("#loandeductions").text(formattedTotal);
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
               $("#allowances").text(formatToCurrency(item.Allowances));
               $("#compensation").text(formatToCurrency(item.Overall_Net_Pay));
@@ -525,6 +544,8 @@
               $("#absent").text(item.Absent);
               $("#holidayday").text(item.Holiday);
               $("#leavepaydadys").text(item.Leaveday);
+              $("#restdayot").text(item.RestDay_OT);
+              $("#13thmonthpay").text(formatToCurrency(item.Accrued13thMonth));
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -550,6 +571,9 @@
 
             console.log(existingData);
             $.each(existingData[0], (key, item) => {
+
+              console.log(existingData[0],'data');
+              
               $("#editpreview").attr(
                 "src",
                 "data:image/jpg;base64," + item.Image
@@ -559,6 +583,7 @@
               $("#payslipTINid").text(item.TINID);
               $("#payslipphilhealthid").text(item.PhilHealthID);
               $("#payslipdeppagibigid").text(item.PagIbigID);
+              $("#payslipheader13thmonthpay").text(formatToCurrency(item.Accrued13thMonth));
               $("#payslippayrolltype").text(item.PayrollType);
               $("#payslipid").text(item.EmployeeId);
               $("#payslipname").text(item.EmployeeFullName);
@@ -585,6 +610,9 @@
               $("#payslipndpay").text(
                 formatToCurrency(item.ApprovedNightDiffOt)
               );
+              $("#payslipndhoursmin").text(item.Night_diff_approved_hours);
+              $("#payslipothoursmin").text(item.Normal_ot_approved_hours);
+              $("#payslipearlyhoursmin").text(item.Early_ot_approved_hours);
               $("#payslipotpay").text(formatToCurrency(item.ApprovedNormalOt));
               $("#payslipearlypay").text(
                 formatToCurrency(item.ApprovedEarlyOt)
@@ -611,23 +639,74 @@
               $("#payslipabsent").text(
                 formatToCurrency(item.Absent_Deductions)
               );
+              $("#payslipnumabsent").html("<strong> ( " + item.Absent + " )</strong>");
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
-              $("#paysliplate").text(formatToCurrency(item.Late_Deductions));
-              $("#paysliploandeductions").text(formatToCurrency(item.Loans));
+              $("#payslipcalamity").text(formatToCurrency(item.Calamity_Loan));
+              $("#payslipshortterm").text(
+                formatToCurrency(item.Short_Term_Loan)
+              );
+              $("#paysliphousing").text(formatToCurrency(item.Housing_Loan));
+              $("#payslipeducationloan").text(
+                formatToCurrency(item.Study_Now_Pay_Later)
+              );
+              $("#payslipsterlingloan").text(
+                formatToCurrency(item.Sterling_Loan)
+              );
+              $("#paysliplate").html(formatToCurrency(item.Late_Deductions)); 
+              $("#payslipnumlate").html("<strong> ( " + item.Late_Hours + " : " + item.Late_Minutes + " )</strong>");
+              $("#payslipwisp").text(formatToCurrency(item.Wisp_Deductions));
+              $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
+              $("#payslipsalaryloan").text(formatToCurrency(item.Salary_Loan));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
               );
               $("#paysliptotalnetpay").text(
                 formatToCurrency(item.Total_Netpay)
               );
-              $("#totalNetPayWords").text(
-                convertCurrencyToWords(item.Total_Netpay)
-              );
+              // $("#totalNetPayWords").text(
+              //   convertCurrencyToWords(item.Total_Netpay)
+              // );
 
-              const currencyAmount = Total_Netpay;
-              console.log(convertCurrencyToWords(currencyAmount));
+              // const currencyAmount = Total_Netpay;
+              // console.log(convertCurrencyToWords(currencyAmount));
+            });
 
-              console.log("Setting salary:", item.Salary);
+            $.ajax({
+              type: "POST",
+              url: "/generatepayroll/sudden_deduc_load",
+              data: {
+                payrolldate: payrolldate,
+              },
+              success: function (deductionResult) {
+                if (deductionResult.msg === "success") {
+                  const suddenDeductions = deductionResult.data;
+                  let deductionNameHtml = "";
+                  let deductionAmountHtml = "";
+                  $.each(suddenDeductions, (index, deduction) => {
+                    deductionNameHtml += `<p>${deduction.deduction_name}</p>`;
+                    deductionAmountHtml += `<p>${formatToCurrency(
+                      deduction.amount
+                    )}</p>`;
+                  });
+                  $("#suddenDeductionsContainerName").html(deductionNameHtml);
+                  $("#suddenDeductionsContainerAmount").html(
+                    deductionAmountHtml
+                  );
+                } else {
+                  swal(
+                    "Error fetching sudden deductions data",
+                    deductionResult.msg,
+                    "error"
+                  );
+                }
+              },
+              error: function (err) {
+                swal(
+                  "An error occurred while fetching sudden deductions data",
+                  err.message,
+                  "error"
+                );
+              },
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -836,20 +915,20 @@
       return words.trim();
     }
 
-    function convertCurrencyToWords(currency) {
-      const parts = currency.split(".");
-      const integerPart = parseInt(parts[0].replace(",", ""));
-      const decimalPart = parseInt(parts[1] || 0);
+    // function convertCurrencyToWords(currency) {
+    //   const parts = currency.split(".");
+    //   const integerPart = parseInt(parts[0].replace(",", ""));
+    //   const decimalPart = parseInt(parts[1] || 0);
 
-      let words = convertToWords(integerPart);
-      words += " pesos";
+    //   let words = convertToWords(integerPart);
+    //   words += " pesos";
 
-      if (decimalPart > 0) {
-        words += " and " + convertToWords(decimalPart) + " centavos";
-      }
+    //   if (decimalPart > 0) {
+    //     words += " and " + convertToWords(decimalPart) + " centavos";
+    //   }
 
-      return words;
-    }
+    //   return words;
+    // }
 
     function searchTable() {
       var input, filter, found, table, tr, td, i, j;

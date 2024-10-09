@@ -1,4 +1,5 @@
 var express = require("express");
+const mysql = require("./repository/hrmisdb");
 const {
   JsonErrorResponse,
   JsonDataResponse,
@@ -45,7 +46,7 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "mm_");
@@ -64,17 +65,27 @@ router.get("/load", (req, res) => {
 
 router.post("/save", (req, res) => {
   try {
-    let createby = req.session.fullname; 
+    let createby = req.session.fullname;
+    let responsible = req.session.employeeid;
     let createddate = GetCurrentDatetime();
-    const { medecinename, medecinecategory, medecinequantity,
-      medecineexpdate, medecinedescription, medecinemanufacturer,
-      medecineimage
-     } = req.body;
+    const {
+      medecinename,
+      medecinecategory,
+      medecinegramsorml,
+      medecineunit,
+      medecinequantity,
+      medecineexpdate,
+      medecinedescription,
+      medecinemanufacturer,
+      medecineimage,
+    } = req.body;
 
     let sql = InsertStatement("master_medecines", "mm", [
       "name",
       "medecineimage",
       "category",
+      "grams_ml",
+      "unit",
       "description",
       "quantity",
       "expirydate",
@@ -83,38 +94,74 @@ router.post("/save", (req, res) => {
       "createby",
     ]);
 
-    console.log(InsertStatement);
+    let data = [
+      [
+        medecinename,
+        medecineimage,
+        medecinecategory,
+        medecinegramsorml,
+        medecineunit,
+        medecinedescription,
+        medecinequantity,
+        medecineexpdate,
+        medecinemanufacturer,
+        createddate,
+        createby,
+      ],
+    ];
 
-    let data = [[
-      medecinename, 
-      medecineimage, 
-      medecinecategory, 
-      medecinedescription, 
-      medecinequantity, 
-      medecineexpdate,
-      medecinemanufacturer,
-      createddate,
-      createby,
-    ]];
-    console.log(data);
     let checkStatement = SelectStatement(
-      "select * from master_medecines where mm_name=? and mm_category=?",      
+      "select * from master_medecines where mm_name=? and mm_category=?",
       [medecinename, medecinecategory]
     );
 
     Check(checkStatement)
       .then((result) => {
-        console.log(result);
-        if (result != 0) {
+        if (result.length !== 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
           InsertTable(sql, data, (err, result) => {
             if (err) {
               console.log(err);
-              res.json(JsonErrorResponse(err));
+              return res.json(JsonErrorResponse(err));
             }
 
-            res.json(JsonSuccess());
+            let newMedicineId = result[0].id;
+
+            console.log(newMedicineId);
+
+            let historySql = InsertStatement("medecine_history", "mh", [
+              "history_type",
+              "responsible",
+              "quantity",
+              "grams_ml",
+              "unit",
+              "medecine_name",
+              "createdate",
+              "createby",
+            ]);
+
+            let historyData = [
+              [
+                "New Stock",
+                responsible,
+                medecinequantity,
+                medecinegramsorml,
+                medecineunit,
+                newMedicineId,
+                createddate,
+                createby,
+              ],
+            ];
+
+            InsertTable(historySql, historyData, (err, result) => {
+              if (err) {
+                console.log(err);
+                return res.json(JsonErrorResponse(err));
+              }
+
+              res.json(JsonSuccess());
+            });
           });
         }
       })
@@ -123,19 +170,21 @@ router.post("/save", (req, res) => {
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    console.log(err);
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getmedecine", (req, res) => {
   try {
     let medecineid = req.body.medecineid;
     let sql = `SELECT 
+    mm_medecineid,
     mm_name,
     mm_medecineimage,
     mm_category,
+    mm_grams_ml,
+    mm_unit,
     mm_description,
     mm_quantity,
     DATE_FORMAT(mm_expirydate, '%Y-%m-%d') as mm_expirydate,
@@ -162,17 +211,22 @@ router.post("/getmedecine", (req, res) => {
   }
 });
 
-
-
 router.put("/edit", (req, res) => {
   try {
-    let createby = req.session.fullname; 
+    let createby = req.session.fullname;
     let createddate = GetCurrentDatetime();
-    const { medecinename, medecinecategory, medecinequantity, medecineexpdate
-      , medecinedescription, medecinemanufacturer, medecineimage, medecineid
-     } = req.body;
-
-    
+    const {
+      medecinename,
+      medecinecategory,
+      medecinequantity,
+      medecineexpdate,
+      medecinedescription,
+      medecinemanufacturer,
+      medecineimage,
+      medecineid,
+      meddossage,
+      medunit,
+    } = req.body;
 
     let data = [];
     let columns = [];
@@ -186,6 +240,16 @@ router.put("/edit", (req, res) => {
     if (medecineimage) {
       data.push(medecineimage);
       columns.push("medecineimage");
+    }
+
+    if (meddossage) {
+      data.push(meddossage);
+      columns.push("grams_ml");
+    }
+
+    if (medunit) {
+      data.push(medunit);
+      columns.push("unit");
     }
 
     if (medecinecategory) {
@@ -238,8 +302,14 @@ router.put("/edit", (req, res) => {
     console.log(updateStatement);
 
     let checkStatement = SelectStatement(
-      "select * from master_medecines where mm_name=? and mm_category=? and mm_manufacturer= ? and mm_createdate=? ",      
-      [medecinename, medecinecategory, medecinemanufacturer, createddate]
+      "select * from master_medecines where mm_name=? and mm_category=? and mm_manufacturer= ? and mm_createdate=? and mm_expirydate=? ",
+      [
+        medecinename,
+        medecinecategory,
+        medecinemanufacturer,
+        createddate,
+        medecineexpdate,
+      ]
     );
 
     Check(checkStatement)
@@ -250,7 +320,7 @@ router.put("/edit", (req, res) => {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
-            //console.log(result);
+            //
 
             res.json(JsonSuccess());
           });
@@ -262,6 +332,168 @@ router.put("/edit", (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/stockin", (req, res) => {
+  try {
+    let createby = req.session.fullname;
+    let createddate = GetCurrentDatetime();
+    let responsible = req.session.employeeid;
+    const { stockinpieces, gramsMl, unit, medecineid } = req.body;
+    let history_type = "Stock In";
+
+    let sql = InsertStatement("medecine_history", "mh", [
+      "history_type",
+      "responsible",
+      "quantity",
+      "grams_ml",
+      "unit",
+      "medecine_name",
+      "createdate",
+      "createby",
+    ]);
+
+    let data = [
+      [
+        history_type,
+        responsible,
+        stockinpieces,
+        gramsMl,
+        unit,
+        medecineid,
+        createddate,
+        createby,
+      ],
+    ];
+
+    let checkStatement = SelectStatement(
+      "select * from medecine_history where mh_history_type=? and mh_quantity=? and mh_grams_ml=? and mh_unit=? and mh_medecine_name=? and mh_createdate=? and mh_createby=?",
+      [
+        history_type,
+        stockinpieces,
+        gramsMl,
+        unit,
+        medecineid,
+        createddate,
+        createby,
+      ]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result.length !== 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              return res.json(JsonErrorResponse(err));
+            }
+
+            let updateSql = `UPDATE master_medecines SET mm_quantity = mm_quantity + '${stockinpieces}' WHERE mm_medecineid = '${medecineid}'`;
+
+            mysql
+              .Update(updateSql)
+              .then((result) => {
+                res.json({
+                  msg: "success",
+                  data: result,
+                });
+              })
+              .catch((error) => {
+                res.json({
+                  msg: "error",
+                  data: error,
+                });
+              });
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadstockin", (req, res) => {
+  try {
+    let sql = `SELECT 
+    mh_historyid,
+    mh_history_type,
+    mh_quantity,
+    mh_grams_ml,
+    mh_unit,
+    mm_name AS mh_medecine_name,
+    DATE_FORMAT(mh_createdate, '%Y-%m-%d %H:%i:%s') as mh_createdate,
+    mh_createby
+    FROM medecine_history
+    INNER JOIN master_medecines ON medecine_history.mh_medecine_name = mm_medecineid
+    WHERE mh_history_type IN ('Stock In','New Stock')
+    ORDER BY mh_historyid ASC`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "mh_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadstockout", (req, res) => {
+  try {
+    let sql = `SELECT 
+    mh_historyid,
+    mh_history_type,
+    mh_quantity,
+    mh_grams_ml,
+    mh_unit,
+    mm_name AS mh_medecine_name,
+    DATE_FORMAT(mh_createdate, '%Y-%m-%d %H:%i:%s') as mh_createdate,
+    mh_createby
+    FROM medecine_history
+    INNER JOIN master_medecines ON medecine_history.mh_medecine_name = mm_medecineid
+    WHERE mh_history_type IN ('Void','Stock Out')
+    ORDER BY mh_historyid ASC`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      //
+
+      if (result != 0) {
+        let data = DataModeling(result, "mh_");
+
+        //console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
     res.json(JsonErrorResponse(error));
   }
 });

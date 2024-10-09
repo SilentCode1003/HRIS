@@ -1,3 +1,5 @@
+@import url(style-inventory.css);
+
 .spaced-table tr {
   margin-bottom: 2rem; /* Adjust as needed */
   display: block;
@@ -101,6 +103,21 @@
   max-width: 100%;
   height: auto;
 }
+
+
+.eportal-leave {
+  color: white !important;
+  background-color: transparent !important;
+  font-size: 13px !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+}
+
+.eportal-leave:hover {
+  background-color: white !important;
+  color: #7a1818 !important;
+}
+
 
 @keyframes waveAnimation {
   0% {
@@ -1103,4 +1120,21 @@ body .fc-widget-header a {
   color: var(--clr-hamburger);
   padding: 0.375rem 0.75rem;
   border-radius: 0.2rem;
+}
+
+.status-active {
+  border-radius: 6px;
+    cursor: default;
+    -webkit-box-align: center;
+    align-items: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    -webkit-box-pack: center;
+    justify-content: center;
+    text-transform: capitalize;
+    padding: 2rem 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    color: rgb(17, 141, 87);
 }

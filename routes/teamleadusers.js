@@ -1,11 +1,14 @@
 const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
-const { Encrypter } = require("./repository/crytography");
+const { Encrypter } = require("./repository/cryptography");
 const { Validator } = require("./controller/middleware");
 const { generateUsernameAndPassword } = require("./repository/helper");
 const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
@@ -127,7 +130,7 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
+      //
 
       if (result != 0) {
         let data = DataModeling(result, "tu_");
@@ -218,32 +221,8 @@ router.get("/subgroupload", (req, res) => {
     let departmentid = req.session.departmentid;
     let sql = `select * 
     from subgroup
-    where s_departmentid = '${departmentid}'`;
-
-    mysql.Select(sql, "Subgroup", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-      error: error,
-    });
-  }
-});
-
-
-
-router.post("/subgrouploadforapp", (req, res) => {
-  try {
-    let departmentid = req.body.departmentid;
-    let sql = `select * 
-    from subgroup
-    where s_departmentid = '${departmentid}'`;
+    where s_departmentid = '${departmentid}'
+    AND s_status = 'Active'`;
 
     mysql.Select(sql, "Subgroup", (err, result) => {
       if (err) console.error("Error: ", err);

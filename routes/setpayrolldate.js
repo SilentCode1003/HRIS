@@ -27,7 +27,6 @@ router.get("/load", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      console.log(result);
       res.json({
         msg: "success",
         data: result,
@@ -61,7 +60,41 @@ router.get("/loadreq", (req, res) => {
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
 
-      //console.log(result);
+      //
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      mag: "error",
+      data: error,
+    });
+  }
+});
+
+router.get("/loadreqbeforepayout", (req, res) => {
+  try {
+    let sql = `SELECT 
+    pd_payrollid,
+    pd_name,
+    pd_cutoff,
+    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+    FROM 
+    payroll_date
+    WHERE
+    pd_payrolldate >= CURDATE()
+    ORDER BY 
+    pd_payrolldate
+    LIMIT 5`;
+
+    mysql.Select(sql, "Payroll_Date", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      //
       res.json({
         msg: "success",
         data: result,

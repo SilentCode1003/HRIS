@@ -1,0 +1,377 @@
+<script>
+  let startdate = "";
+  let enddate = "";
+  let PayrollDate = "";
+  let employeeid = "";
+  let contributionid = "";
+
+  $(document).ready(function () {
+    console.log("Initialize");
+    searchTable();
+    LoadPayrollDate();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/generatepayroll/payrolldateload",
+        success: function (result) {
+          var data = result.data;
+          function populateSelectOptions(selectElementId) {
+            var $select = $("#" + selectElementId);
+            $select.empty();
+
+            $select.append("<option selected disabled>Choose</option>");
+            $.each(data, function (key, item) {
+              var option = new Option(item.payrolldate, item.payrolldate);
+              $(option).html(item.payrolldate);
+              $select.append(option);
+            });
+          }
+          populateSelectOptions("loademplyrcontribution");
+          populateSelectOptions("genemplyrcontribution");
+          populateSelectOptions("emplyrcontribution");
+        },
+        error: function (result) {
+          showSweetAlert("Error", result.responseText, "error");
+        },
+      });
+    }
+
+    $(document).on("click", "#emplyrcontributionsaveBtn", function () {
+      let payrolldate = $("#emplyrcontribution").val();
+
+      if (!payrolldate) {
+        swal("Validation Error", "Payroll date is required.", "error");
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "/employer_contribution/exportreports",
+        data: JSON.stringify({ payrolldate: payrolldate }),
+        contentType: "application/json",
+        xhrFields: {
+          responseType: "blob",
+        },
+        success: function (blob) {
+          var url = window.URL.createObjectURL(blob);
+
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = `Employer_Contribution_${payrolldate}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          window.URL.revokeObjectURL(url);
+
+          swal(
+            "Success",
+            "The report has been downloaded successfully.",
+            "success"
+          );
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = "An unexpected error occurred.";
+          if (xhr.responseType === "blob") {
+            var reader = new FileReader();
+            reader.onload = function () {
+              try {
+                var errorJson = JSON.parse(reader.result);
+                errorMessage = errorJson.error || errorMessage;
+              } catch (e) {
+                errorMessage = reader.result || errorMessage;
+              }
+              swal("Error", errorMessage, "error");
+            };
+            reader.readAsText(xhr.response);
+          } else {
+            errorMessage = xhr.responseText || errorMessage;
+            swal("Error", errorMessage, "error");
+          }
+          console.error("AJAX Error:", xhr, status, error);
+        },
+      });
+    });
+
+    $("#loademplyrcontributionsaveBtn").click(function () {
+      let PayrollDate = $("#loademplyrcontribution").val();
+      loadEmployerContributionTable(PayrollDate);
+    });
+
+    function loadEmployerContributionTable(PayrollDate) {
+      swal({
+        title: "Loading Employer Contribution",
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+          swal.showLoading();
+        },
+      });
+      $("#dataTableEmployerContribution").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/employer_contribution/load",
+          data: {
+            payrolldate: PayrollDate,
+          },
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#actionmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+
+              finalData.push({
+                contributionid: item.contributionid,
+                fullname: item.fullname,
+                monthly: item.monthly,
+                payrolldate: item.payrolldate,
+                pagibig: item.pagibig,
+                sss: item.sss,
+                philhealth: item.philhealth,
+                contribution_total: item.contribution_total,
+                createdate: item.createdate,
+                action: action,
+              });
+              console.log(finalData);
+            });
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "contributionid" },
+          { data: "fullname" },
+          {
+            data: "monthly",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "payrolldate" },
+          {
+            data: "pagibig",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          {
+            data: "sss",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          {
+            data: "philhealth",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          {
+            data: "contribution_total",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "createdate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+          swal.close();
+        },
+      });
+    }
+
+    $("#dataTableEmployerContribution tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      contributionid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/employer_contribution/getcontribution",
+        data: {
+          contributionid: contributionid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#employeefullname").val(item.fullname);
+              $("#msccontribution").val(formatCurrencyValue(item.monthly));
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              $("#contributionpayrolldate").val(item.payrolldate);
+              $("#contributioncutoff").val(item.cutoff);
+              $("#employerpagibig").val(formatCurrencyValue(item.pagibig));
+              $("#employersss").val(formatCurrencyValue(item.sss));
+              $("#employerphilhealth").val(formatCurrencyValue(item.philhealth));
+              $("#employerwisp").val(formatCurrencyValue(item.wisp));
+              $("#emppagibig").val(formatCurrencyValue(item.emp_pagibig));
+              $("#empphilhealth").val(formatCurrencyValue(item.emp_philhealth));
+              $("#empsss").val(formatCurrencyValue(item.emp_sss));
+              $("#empwisp").val(formatCurrencyValue(item.emp_wisp));
+              $("#totalpagibig").val(formatCurrencyValue(item.pagibig + item.emp_pagibig));
+              $("#totalsss").val(formatCurrencyValue(item.sss + item.emp_sss));
+              $("#totalphilhealth").val(formatCurrencyValue(item.philhealth + item.emp_philhealth));
+              $("#totalwisp").val(formatCurrencyValue(item.wisp + item.emp_wisp));
+              $("#contributioncreatedate").val(item.createdate);
+            });
+          } else {
+            swal("Error fetching employee data", message, "error");
+          }
+        },
+        error: function (err) {
+          swal(
+            "An error occurred while fetching employee data",
+            message,
+            "error"
+          );
+        },
+      });
+    });
+
+
+
+    //#region function
+    $(document).on("change", "#editemployeeprofile", function (e) {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        const preview = document.getElementById("editpreview");
+        preview.src = reader.result;
+      };
+      editimage();
+    });
+
+    function editimage() {
+      const input = document.getElementById("editemployeeprofile");
+      const file = input.files[0];
+
+      var reader = new FileReader();
+      console.log("next");
+
+      reader.onload = function () {
+        base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+        imageBase64Stringsep = base64String;
+
+        console.log(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function convertCurrencyToWords(currency) {
+      const parts = currency.split(".");
+      const integerPart = parseInt(parts[0].replace(",", ""));
+      const decimalPart = parseInt(parts[1] || 0);
+
+      let words = convertToWords(integerPart);
+      words += " pesos";
+
+      if (decimalPart > 0) {
+        words += " and " + convertToWords(decimalPart) + " centavos";
+      }
+
+      return words;
+    }
+
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableEmployerContribution");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
+
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+    //#endregion
+  });
+</script>

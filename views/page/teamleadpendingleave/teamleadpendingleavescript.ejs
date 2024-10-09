@@ -1,9 +1,13 @@
 <script>
-  let leaveid = "";
   $(document).ready(function () {
+    let leaveid = "";
+    let startdate = "";
+    let enddate = "";
+
     LoadTable();
     searchTable();
     LoadEditEmp();
+    LoadSubgroup();
 
     $(document).on("keyup", "#myInput2", function () {
       searchTable();
@@ -31,7 +35,7 @@
               var status = item.status;
 
               action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#pendingmodal"><i class="fas fa-fw fa-pen"></i></button>
+                      <button id="editBtn" class="btn text-primary" name="editBtn"><i class="fas fa-fw fa-pen"></i></button>
                      `;
 
               finalData.push({
@@ -97,9 +101,12 @@
           dataRow.push($(this).text());
         });
       leaveid = dataRow[0];
+      startdate = dataRow[3];
+      enddate = dataRow[4];
     });
 
     $(document).on("click", "#editBtn", function () {
+      $("#pendingmodal").modal("show");
       $.ajax({
         type: "POST",
         url: "/getleave",
@@ -130,6 +137,7 @@
               $("#leaveduration").val(item.leaveduration);
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
+              $("#subgroupid").val(item.leavesubgroupid);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -141,11 +149,31 @@
       });
     });
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#leavesavebutton", function () {
       console.log("hit");
       let id = leaveid;
       let requeststatus = $("#reqleavestatus").val();
       let comment = $("#leavecomment").val();
+      let subgroupid = $("#subgroupid").val();
 
       console.log(leaveid, "LEAVE");
       console.log(requeststatus, "LEAVE");
@@ -171,6 +199,9 @@
             leaveid: leaveid,
             status: requeststatus,
             comment: comment,
+            subgroupid: subgroupid,
+            startdate: startdate,
+            enddate: enddate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -179,9 +210,9 @@
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
+              }).then((results) => {});
+              $("#reqleavestatus").val("");
+              $("#pendingmodal").modal("hide");
               LoadTable();
             } else {
               swal({
@@ -318,27 +349,27 @@
     //     });
     //   }
     // });
-  });
 
-  function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput2");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTablependingleave");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput2");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTablependingleave");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+          }
+        }
+        if (found) {
+          tr[i].style.display = "";
+          found = false;
+        } else {
+          tr[i].style.display = "none";
         }
       }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
-      } else {
-        tr[i].style.display = "none";
-      }
     }
-  }
+  });
 </script>

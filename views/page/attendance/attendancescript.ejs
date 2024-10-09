@@ -1,10 +1,9 @@
 <script>
-  let map;
-  let attendanceid = "";
-  let startdate = "";
-  let enddate = "";
-
   $(document).ready(function () {
+    let map;
+    let attendanceid = "";
+    let startdate = "";
+    let enddate = "";
     searchTable();
     LoadTable();
     LoadListEmp();
@@ -502,6 +501,98 @@
       });
     }
 
+    $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+      $("#reportsBtn").click(function () {
+        let startDate = picker.startDate.format("YYYY-MM-DD");
+        let endDate = picker.endDate.format("YYYY-MM-DD");
+        exportReports(startDate, endDate);
+      });
+    });
+
+    function exportReports(startDate, endDate) {
+      // Show SweetAlert loading modal
+      swal({
+        title: "Exporting Data",
+        text: "Please wait while we prepare your data...",
+        buttons: false,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        icon: "info",
+        content: {
+          element: "div",
+          attributes: {
+            innerHTML: `<div class="swal-loading-spinner"></div>`, // Optional: Add custom spinner here
+          },
+        },
+      });
+
+      $.ajax({
+        url: "/attendance/exportreports",
+        type: "POST",
+        data: {
+          startdate: startDate,
+          enddate: endDate,
+        },
+        xhrFields: {
+          responseType: "blob",
+        },
+        success: function (response) {
+          // Close SweetAlert loading modal
+          swal.close();
+
+          if (response) {
+            swal({
+              title: "Your Data is Ready",
+              text: "Download the attendance data?",
+              icon: "info",
+              buttons: {
+                confirm: "Yes, download it!",
+                cancel: "No, cancel",
+              },
+              dangerMode: true,
+            }).then((result) => {
+              if (result) {
+                var blob = response;
+
+                var url = URL.createObjectURL(blob);
+
+                var link = document.createElement("a");
+                link.href = url;
+                link.download = `Attendance_data_${startDate}_${endDate}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+              } else {
+                swal(
+                  "Cancelled",
+                  "Payroll data download cancelled :)",
+                  "error"
+                );
+              }
+            });
+          } else {
+            console.error("Error: Empty response");
+            swal(
+              "Error",
+              "Failed to export payroll data. Please try again later.",
+              "error"
+            );
+          }
+        },
+        error: function (xhr, status, error) {
+          // Close SweetAlert loading modal
+          swal.close();
+
+          console.error("Error:", error);
+          swal(
+            "Error",
+            "Failed to export payroll data. Please try again later.",
+            "error"
+          );
+        },
+      });
+    }
+
     function LoadListEmp() {
       $.ajax({
         type: "GET",
@@ -651,63 +742,193 @@
         },
       });
     }
-  });
 
-  $(function () {
-    $('input[name="daterange"]').daterangepicker(
-      {
-        opens: "middle",
-      },
-      function (start, end, label) {
-        console.log(
-          "A new date selection was made: " +
-            start.format("YYYY-MM-DD") +
-            " to " +
-            end.format("YYYY-MM-DD")
-        );
-      }
-    );
-  });
+    $(function () {
+      $('input[name="daterange"]').daterangepicker(
+        {
+          opens: "middle",
+        },
+        function (start, end, label) {
+          console.log(
+            "A new date selection was made: " +
+              start.format("YYYY-MM-DD") +
+              " to " +
+              end.format("YYYY-MM-DD")
+          );
+        }
+      );
+    });
 
-  $(function () {
-    $('input[name="daterangemodal"]').daterangepicker(
-      {
-        opens: "middle",
-      },
-      function (start, end, label) {
-        console.log(
-          "A bagong date selection was made: " +
-            start.format("YYYY-MM-DD") +
-            " to " +
-            end.format("YYYY-MM-DD")
-        );
-      }
-    );
-  });
+    $(function () {
+      $('input[name="daterangemodal"]').daterangepicker(
+        {
+          opens: "middle",
+        },
+        function (start, end, label) {
+          console.log(
+            "A bagong date selection was made: " +
+              start.format("YYYY-MM-DD") +
+              " to " +
+              end.format("YYYY-MM-DD")
+          );
+        }
+      );
+    });
 
-  function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableattendance");
-    tr = table.getElementsByTagName("tr");
+    function searchTable() {
+      var input, filter, found, table, tr, td, i, j;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("dataTableattendance");
+      tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      found = false;
+      for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td");
+        found = false;
 
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
-          break;
+        for (j = 0; j < td.length; j++) {
+          if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+
+        if (found) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
         }
       }
+    }
 
-      if (found) {
-        tr[i].style.display = "";
+    
+    //#region Import Salary
+    $(document).on("click", "#importExcelBtn", function () {
+      $("#importsalarymodal").modal("show");
+    });
+
+    $(document).on("click", "#importexcelsavebtn", function () {
+      let uploadData = $("#importexcelfile").val();
+      if (uploadData != "") {
+        Loading("Uploading, Please wait for a moment...");
+        UploadProcess();
       } else {
-        tr[i].style.display = "none";
+        warning("Warning!", "No File Chosen!");
+      }
+    });
+
+    function UploadProcess() {
+      //Reference the FileUpload element.
+      var fileUpload = document.getElementById("importexcelfile");
+
+      //Validate whether File is valid Excel file.
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          //For Browsers other than IE.
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcel(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            //For IE Browser.
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcel(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
       }
     }
-  }
+
+    function GetTableFromExcel(data) {
+      //Read the Excel File data in binary
+      var workbook = XLSX.read(data, {
+        type: "binary",
+      });
+
+      //get the name of First Sheet.
+      var Sheet = workbook.SheetNames[0];
+
+      //Read all rows from First Sheet into an JSON array.
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      //Create a HTML Table element.
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      //Add the header row.
+      var row = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+      //Add the data rows from Excel file.
+      for (var i = 0; i < excelRows.length; i++) {
+        //Add the data row.
+        var data = [];
+        var row = myTable.insertRow(-1);
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]];
+          data.push({
+            item: excelRows[i][columns[j]],
+          });
+        }
+        dataExcelArr.push({
+          id: data[0].item,
+          attendancedate: data[1].item,
+          logs: data[2].item,
+        });
+      }
+      excelDataSave(dataExcelArr);
+    }
+
+    function excelDataSave(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      console.log(dataraw);
+      $.ajax({
+        type: "POST",
+        url: "/attendance/migrateattendance",
+        data: {
+          data: dataraw,
+        },
+        success: function (result) {
+          hideLoading();
+          console.log("Message: ", result.msg);
+          if (result.msg != "success") {
+            warning("Info", result.msg);
+
+            $(document).on("click", "#txtBtn", function () {
+              downloadTxtFile(result.data, "existing_invalid_data.txt");
+            });
+          } else {
+            success("Saved!", "Data saved!");
+            $("#importsalarymodal").modal("hide");
+            $("#importexcelfile").val("");
+          }
+
+          LoadTable();
+        },
+
+        error: function (result) {
+          console.error(result);
+        },
+      });
+    }
+    //#endregion
+  });
 </script>

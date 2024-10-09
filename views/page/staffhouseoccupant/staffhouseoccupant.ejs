@@ -1,0 +1,270 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title mb-0 font-weight-bold">Staff House Occupant</h3>
+    <div class="row mb-2 mt-2">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            autocomplete="off"
+            id="staffhouse"
+            class="form-control"
+            placeholder="Select Staff House"
+            type="text"
+            name="staffhouse"
+          />
+          <input
+            autocomplete="off"
+            type="hidden"
+            id="staffhouseID"
+            name="staffhouseID"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">Select Staff House</span>
+          </div>
+        </div>
+        <div
+          class="custom-dropdown cdw-tableoption"
+          id="staffhouseDropdown"
+        ></div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            autocomplete="off"
+            id="employee"
+            class="form-control"
+            placeholder="Select Staff House"
+            type="text"
+            name="employee"
+          />
+          <input
+            autocomplete="off"
+            type="hidden"
+            id="employeeID"
+            name="employeeID"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">Select Employee</span>
+          </div>
+        </div>
+        <div
+          class="custom-dropdown cdw-tableoption"
+          id="employeeDropdown"
+        ></div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            autocomplete="off"
+            type="date"
+            class="form-control"
+            id="startdate"
+            name="startdate"
+            max=""
+          />
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">Start Date:</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            autocomplete="off"
+            type="date"
+            class="form-control"
+            id="enddate"
+            name="enddate"
+            max=""
+          />
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">End Date:</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3 justify-content-start">
+        <div class="col-md-6">
+          <button id="addBtn" class="btn btn-add-color w-75">Add</button>
+        </div>
+      </div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-title">
+        <h6 class="m-0 font-weight-bold">Staff House Occupant Table</h6>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <input
+            id="search"
+            type="text"
+            class="form-control"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+  
+      <div class="row mt-2">
+        <div class="table">
+          <table id="data-table" class="table table-bordered table-hover">
+            <thead>
+              <th>ID</th>
+              <th>Staff House</th>
+              <th>Employee</th>
+              <th>Duration Status</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Edit Date Modal -->
+<div
+class="modal fade"
+id="editDateModal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="editDateModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="editDateModalLabel">Edit Assigned Start Date & End Date</h5>
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="input-group">
+              <input
+                autocomplete="off"
+                type="date"
+                class="form-control"
+                id="startdatemodal"
+                name="startdatemodal"
+                max=""
+              />
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">New Start Date:</span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" id="id" />
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-sm-12">
+            <div class="input-group">
+              <input
+                autocomplete="off"
+                type="date"
+                class="form-control"
+                id="enddatemodal"
+                name="enddatemodal"
+                max=""
+              />
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">New End Date:</span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" class="form-control" id="id" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="row justify-content-end">
+        <button id="updateDateBtn" class="btn btn-add-color w-100">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Edit Staffhouse Modal -->
+<div
+class="modal fade"
+id="editStaffhouseModal"
+tabindex="-1"
+role="dialog"
+aria-labelledby="editStaffhouseModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="editStaffhouseModalLabel">Edit Assigned Staff House</h5>
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="input-group">
+              <input
+                autocomplete="off"
+                id="staffhousemodal"
+                class="form-control"
+                placeholder="Select Staff House"
+                type="text"
+                name="staffhousemodal"
+              />
+              <input
+                autocomplete="off"
+                type="hidden"
+                id="staffhousemodalID"
+                name="staffhousemodalID"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text">Select New Staff House</span>
+              </div>
+            </div>
+            <div class="custom-dropdown cdw-tableoption" id="staffhousemodalDropdown"></div>
+          </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <div class="row justify-content-end">
+        <button id="updateStaffhouseBtn" class="btn btn-add-color w-100">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,205 @@
+<script>
+  let userid = "";
+  let isgeofence = "";
+  $(document).ready(function () {
+    LoadTable();
+    //LoadList();
+    //LoadEditEmp();
+    searchTable();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableGeoTagging").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/teamleadgeofenceemp/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+            let action = "";
+
+            $.each(data, (key, item) => {
+              if (item.isgeofence === "Active") {
+                action = `
+                <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+              } else if (item.isgeofence === "Inactive") {
+                action = `
+                <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+              }
+
+              finalData.push({
+                userid: item.userid,
+                fullname: item.fullname,
+                accesstype: item.accesstype,
+                isgeofence: item.isgeofence,
+                createby: item.createby,
+                createdate: item.createdate,
+                action: action,
+              });
+            });
+            // $.each(data, (key, item) => {
+            //   var action = "";
+            //   var status = item.status;
+
+            //   action = `
+            //           <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editGeoFenceModal"><i class="fas fa-fw fa-pen"></i></button>
+            //          `;
+
+            //   finalData.push({
+            //     userid: item.userid,
+            //     fullname: item.fullname,
+            //     subgroupname: item.subgroupname,
+            //     isgeofence: item.isgeofence,
+            //     accesstype: item.accesstype,
+            //     createby: item.createby,
+            //     createdate: item.createdate,
+            //     action: action,
+            //   });
+            // });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "userid" },
+          { data: "fullname" },
+          { data: "accesstype" },
+          { data: "isgeofence" },
+          { data: "createby" },
+          { data: "createdate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var geofenceCell = $(row).find("td:eq(3)");
+          var geofenceText = data.isgeofence;
+          var geofenceClass = "";
+
+          switch (geofenceText.toLowerCase()) {
+            case "active":
+              geofenceClass = "active-status";
+              break;
+            case "inactive":
+              geofenceClass = "inactive-status";
+              break;
+            default:
+              geofenceClass = "";
+          }
+          geofenceCell.html(
+            `<span class="${geofenceClass}">${geofenceText}</span>`
+          );
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+
+    $("#dataTableGeoTagging tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      userid = dataRow[0];
+      isgeofence = dataRow[3];
+    });
+
+    $(document).on("click", "#activeBtn", function () {
+      console.log(userid);
+      console.log(isgeofence);
+      $.ajax({
+        type: "PUT",
+        url: "/teamleadgeofenceemp/status",
+        data: {
+          isgeofence: isgeofence,
+          userid: userid,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            swal( "Update Successfully", "You clicked the button!","success");
+          }
+
+          if (result.msg == "notexist") {
+            swal("Exist", "Data Not exists!", "warning");
+          }
+        },
+        error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#inactiveBtn", function () {
+      console.log(userid);
+      console.log(isgeofence);
+      $.ajax({
+        type: "PUT",
+        url: "/teamleadgeofenceemp/status",
+        data: {
+          isgeofence: isgeofence,
+          userid: userid,
+        },
+        success: function (result) {
+          if (result.msg == "success") {
+            LoadTable();
+            swal( "Update Successfully", "You clicked the button!","success");
+          }
+
+          if (result.msg == "notexist") {
+            swal("Exist", "Data Not exists!", "warning");
+          }
+        },
+        error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+        },
+      });
+    });
+  });
+
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableGeoTagging");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

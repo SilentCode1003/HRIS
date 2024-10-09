@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const verifyJWT = require("../middleware/authenticator");
 var router = express.Router();
 const currentDate = moment();
 
@@ -61,6 +62,27 @@ router.get("/load", (req, res) => {
   }
 });
 
+
+router.get("/loadlogin", (req, res) => {
+  try {
+    let sql = "select * from master_access where ma_status = 'Active'";
+
+    mysql.Select(sql, "Master_Access", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
+
 router.post("/save", (req, res) => {
   try {
     let accessname = req.body.accessname;
@@ -91,8 +113,6 @@ router.post("/save", (req, res) => {
           return;
         }
 
-        console.log(result);
-
         res.json({ msg: "success" });
       });
     });
@@ -118,8 +138,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(result);
-
         res.json({
           msg: "success",
         });
