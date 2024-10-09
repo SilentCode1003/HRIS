@@ -5,7 +5,7 @@ var cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
-const {eventlogger, logger} = require("./routes/repository/logger");
+const { eventlogger, logger } = require("./routes/repository/logger");
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
@@ -159,7 +159,6 @@ var suggestionareaRouter = require("./routes/suggestionarea");
 var suggestionquestionRouter = require("./routes/suggestionquestion");
 var sessionRouter = require("./routes/session");
 
-
 const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
@@ -178,6 +177,12 @@ app.use(
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//   })
+// );
+
 // app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
@@ -189,7 +194,7 @@ app.use("/access", accessRouter);
 app.use("/mobile-api", mobileAPIRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/applicant_registration", applicant_registrationRouter);
-app.use('/session', sessionRouter);
+app.use("/session", sessionRouter);
 app.use(verifyJWT);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);

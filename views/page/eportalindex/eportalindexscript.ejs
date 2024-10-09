@@ -13,6 +13,10 @@
     let geofenceData = {};
     let isgeofence = false; // Declare global variable for geofence status
 
+    let department = "<%= departmentname %>";
+    sessionStorage.setItem("employeeid", employeeid);
+    sessionStorage.setItem("department", department);
+
     LoadTable();
     LoadBdayFolks();
     GenerateAnouncement();
@@ -337,7 +341,7 @@
           text: "User location is required.",
           icon: "error",
         });
-        return; 
+        return;
       }
 
       if (userLocation.lat === null) {
@@ -355,7 +359,7 @@
           text: "Longitude is required.",
           icon: "error",
         });
-        return; 
+        return;
       }
 
       swal({
