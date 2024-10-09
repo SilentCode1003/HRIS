@@ -20,6 +20,8 @@ router.get("/getsession", function (req, res, next) {
     process.env._SECRET_KEY
   );
 
+  console.log("Employee ID: ",req.session.employeeid, "Department Name: ",req.session.departmentname);
+
   res.status(200).json({
     msg: "session",
     data: {

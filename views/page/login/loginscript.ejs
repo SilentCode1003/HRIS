@@ -29,13 +29,12 @@
       });
     }
 
-
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
       let accesstypeid = $("#loginUrl").val();
 
-      console.log(accesstypeid,'id');
+      console.log(accesstypeid, "id");
 
       var message = "";
 
@@ -46,7 +45,6 @@
       if (accesstypeid === "") {
         message += "accesstypeid ";
       }
-
 
       if (password === "") {
         message += ". ";
