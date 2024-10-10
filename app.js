@@ -5,7 +5,7 @@ var cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
-const { eventlogger, logger } = require("./routes/repository/logger");
+const { eventlogger, logger } = require("./middleware/logger");
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url

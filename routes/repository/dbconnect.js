@@ -1,7 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
 const { Encrypter, Decrypter } = require("./cryptography");
-const { logger } = require("./logger");
+const { logger } = require("../../middleware/logger");
 require("dotenv").config();
 
 let password = "";
