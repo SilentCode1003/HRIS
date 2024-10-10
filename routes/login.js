@@ -119,7 +119,7 @@ router.post("/login", (req, res) => {
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
-                  res.cookie("employeeid", user.departmentname, {
+                  res.cookie("department", user.departmentname, {
                     secure: true,
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
