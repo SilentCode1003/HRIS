@@ -115,10 +115,12 @@ router.post("/login", (req, res) => {
                   req.session.clientip = req.body.client_ipaddress;
 
                   res.cookie("employeeid", user.employeeid, {
+                    secure: true,
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
                   res.cookie("employeeid", user.departmentname, {
+                    secure: true,
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
