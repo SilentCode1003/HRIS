@@ -124,6 +124,24 @@ router.post("/login", (req, res) => {
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
+                  res.cookie(
+                    "token",
+                    EncrypterString(
+                      jwt.sign(
+                        JSON.stringify({
+                          employeeid: user.employeeid,
+                          fullname: user.fullname,
+                        }),
+                        process.env._SECRET_KEY
+                      ),
+                      {}
+                    ),
+                    {
+                      secure: true,
+                      sameSite: "None", // Allow cross-origin
+                      domain: ".5lsolutions.com", // For subdomains
+                    }
+                  );
                 });
 
                 // console.log("accesstype", req.session.accesstype);
