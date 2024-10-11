@@ -112,20 +112,36 @@ router.post("/login", (req, res) => {
                   req.session.geofenceid = user.geofenceid;
                   req.session.accesstypeid = user.accesstypeid;
                   req.session.subgroupid = user.subgroupid;
-                  req.session.clientip = req.body.client_ipaddress
+                  req.session.clientip = req.body.client_ipaddress;
 
                   res.cookie("employeeid", user.employeeid, {
-                    httpOnly: true,
                     secure: true,
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
-                  res.cookie("employeeid", user.departmentname, {
-                    httpOnly: true,
+                  res.cookie("department", user.departmentname, {
                     secure: true,
                     sameSite: "None", // Allow cross-origin
                     domain: ".5lsolutions.com", // For subdomains
                   });
+                  res.cookie(
+                    "token",
+                    EncrypterString(
+                      jwt.sign(
+                        JSON.stringify({
+                          employeeid: user.employeeid,
+                          fullname: user.fullname,
+                        }),
+                        process.env._SECRET_KEY
+                      ),
+                      {}
+                    ),
+                    {
+                      secure: true,
+                      sameSite: "None", // Allow cross-origin
+                      domain: ".5lsolutions.com", // For subdomains
+                    }
+                  );
                 });
 
                 // console.log("accesstype", req.session.accesstype);
