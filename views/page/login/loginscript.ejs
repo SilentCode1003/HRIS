@@ -1,5 +1,15 @@
 <script>
   $(document).ready(function () {
+    let client_ipaddress = ''
+    fetch('https://api.ipify.org?format=json')
+      .then((response) => response.json())
+      .then((data) => {
+        // document.getElementById('ip').textContent = data.ip
+        client_ipaddress = data.ip
+      })
+      .catch((error) => console.error('Error:', error))
+
+
     LoadAccess();
     // const loginUrlDropdown = document.getElementById("loginUrl");
 
@@ -29,13 +39,12 @@
       });
     }
 
-
     $(document).on("click", "#loginBtn", function () {
       let username = $("#username").val();
       let password = $("#password").val();
       let accesstypeid = $("#loginUrl").val();
 
-      console.log(accesstypeid,'id');
+      console.log(accesstypeid, "id");
 
       var message = "";
 
@@ -46,7 +55,6 @@
       if (accesstypeid === "") {
         message += "accesstypeid ";
       }
-
 
       if (password === "") {
         message += ". ";
@@ -62,6 +70,7 @@
             username: username,
             password: password,
             accesstypeid: accesstypeid,
+            client_ipaddress: client_ipaddress,
           },
           success: function (result) {
             if (result.msg === "success") {

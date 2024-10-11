@@ -1,7 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
 const { Encrypter, Decrypter } = require("./cryptography");
-const { logger } = require("./logger");
+const { logger } = require("../../middleware/logger");
 require("dotenv").config();
 
 let password = "";
@@ -28,7 +28,7 @@ exports.CheckConnection = () => {
   connection.connect((err) => {
     if (err) {
       console.error("Error connection to MYSQL database: ", err);
-      logger.error(error);
+      logger.error(err);
       return;
     }
     console.log("MySQL database connection established successfully!");

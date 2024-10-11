@@ -566,6 +566,7 @@ exports.Validator = function (req, res, layout, route) {
         geofenceid: req.session.geofenceid,
         departmentid: req.session.departmentid,
         subgroupid: req.session.subgroupid,
+        departmentname: req.session.departmentname,
       });
     } else {
       res.redirect("/");
