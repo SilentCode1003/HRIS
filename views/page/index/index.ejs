@@ -7,13 +7,30 @@
     </div>
 
      <!-- Greeting Row -->
-     <div class="row">
+     <!-- <div class="row">
         <div class="col-12 p-8">
             <h1 class="font-weight-bold text-uppercase mb-1 greet-text">
                 Welcome back <span class="font-semibold"><%= fullname %> | <%= accesstype %></span>
             </h1>
         </div>
-    </div>
+    </div> -->
+
+    <div class="d-flex flex-md-row align-items-center mb-3">
+        <h1 class="h2 h1-md font-weight-bold font-serif text-uppercase mb-4 mb-md-0 d-flex align-items-center py-4">
+          <span class="category-style">
+            Admin
+          </span>
+          <span class="slash-category ml-4">||</span>
+          <span class="d-flex  flex-md-row align-items-center text-shadow2 ms-4">
+            <span> Welcome back, <%= fullname %></span>
+            <img
+              src="./images/img/robot.gif"
+              alt="Hello Wave"
+              class="category-text"
+            />
+          </span>
+        </h1>
+      </div>
 
     <br>
 
@@ -22,7 +39,7 @@
         <!-- Total Employee Card -->
         <div data-toggle="modal" id="totalEMP" data-target="#totalEmployeeModal"
             class="card-link col-xl-2 col-sm-6 mb-4">
-            <div id="totalEmployeeCard" class="card h-100 py-2 db-card">
+            <div id="totalEmployeeCard" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -42,7 +59,7 @@
         <!-- Regular Employee Card -->
         <div data-toggle="modal" id="totalregularEMP" data-target="#regularEmployeeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="regularEmployeeCard" class="card h-100 py-2 db-card">
+            <div id="regularEmployeeCard" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -62,7 +79,7 @@
         <!-- Probationary Employee Card -->
         <div data-toggle="modal" id="totalprobiEMP" data-target="#probationaryEmployeeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="probationaryEmployeeCard" class="card h-100 py-2 db-card">
+            <div id="probationaryEmployeeCard" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -82,12 +99,12 @@
         <!-- Resigned Employee Card -->
         <div data-toggle="modal" id="totalresignedEMP" data-target="#resignedEmployeeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="resignedEmployeeCard" class="card h-100 py-2 db-card">
+            <div id="resignedEmployeeCard" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Resigned Employee</div>
+                                <b>Resigned Employee</b></div>
                             <div class="h5 mb-0 font-weight-bold card-text"></div>
                         </div>
                         <div class="col-auto">
@@ -101,12 +118,12 @@
          <!-- Total Candidate For Rgular Card -->
         <div data-toggle="modal" id="totalcandidate" data-target="#totalCandidateModal"
          class="card-link col-xl-2 col-md-6 mb-4">
-         <div id="totalempcandidate" class="card h-100 py-2 db-card">
+         <div id="totalempcandidate" class="db-card">
              <div class="card-body">
                  <div class="row no-gutters align-items-center">
                      <div class="col mr-2">
                          <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                             Candidate for Regularization </div>
+                            <b> Candidate for Regularization</b> </div>
                          <div class="h5 mb-0 font-weight-bold card-text">
                          </div>
                      </div>
@@ -121,12 +138,12 @@
         <!-- Total Apprentice Card -->
         <div data-toggle="modal" id="totalapprentice" data-target="#totalaApprenticeModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempapprentice" class="card h-100 py-2 db-card">
+            <div id="totalempapprentice" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Apprentice Sheet
+                                <b>Apprentice Sheet</b>
                             </div>
                             <div class="h5 mb-0 font-weight-bold card-text">
                             </div>
@@ -142,12 +159,12 @@
         <!-- Total Bagapuro Family Card -->
         <div data-toggle="modal" id="totalbagapuro" data-target="#totalaBagapuroModal"
             class="card-link col-xl-2 col-md-6 mb-4">
-            <div id="totalempbagapuro" class="card h-100 py-2 db-card">
+            <div id="totalempbagapuro" class="db-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
-                                Bagapuro Family
+                               <b> Bagapuro Family</b>
                             </div>
                             <div class="h5 mb-0 font-weight-bold card-text">
                             </div>
@@ -172,12 +189,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header" id="modal-header">
-                        <div>
-                            <h3 class="modal-title" id="exampleModalToggleLabel">Total Employee</h3>
-                        </div>
-                        <br>
-                        <input id='myInputtotal' class="db-modal-search" type='text' placeholder="  Search....">
-                        <i class='bx bx-x' data-dismiss="modal"></i>
+                        
+                        <div class="d-flex flex-column ">
+                            <div>
+                              <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Employee</h3>
+                          </div>
+                          <div>
+                            <input id='myInputtotal' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                          </div>
+                          </div>
+                          <i class='bx bx-x' data-dismiss="modal"></i>
                     </div>
                     <div class="modal-body" id="modal-body">
                         <div class="modal-table">
@@ -218,13 +239,16 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Regular Employee</h3>
-                    </div>
-                    <br>
-                    <input id='myInputRegular' class="db-modal-search" type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                   
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Regular Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputRegular' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -261,13 +285,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Probationary Employee</h3>
-                    </div>
-                    <br>
-                    <input id='myInputproba' class="db-modal-search" type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Probationary Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputproba' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -305,13 +331,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Resigned Employee</h3>
-                    </div>
-                    <br>
-                    <input id='myInputresigned' class="db-modal-search" type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Resigned Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputresigned' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -351,20 +379,22 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title" id="exampleModalToggleLabel">Admin Department</h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotaladmin' class="db-modal-search" type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>Admin Department</b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotaladmin' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
                         <div class="table-responsive scrollable-table-container" id="table-responsive-id">
                             <table class="table custom-mobile-table table-bordered table-light" id="totaladmintable">
                                 <thead class="table-header">
-                                    <!-- <th>Image</th> -->
+                                    
                                     <th class="col-sm-1">ID</th>
                                     <th class="col-26">Name</th>
                                     <th>Contact</th>
@@ -373,7 +403,7 @@
                                     <th>Tenure</th>
                                 </thead>
                                 <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -392,13 +422,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">IT Department</h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotalit' class="db-modal-search"  type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>IT Department</b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalit' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -433,13 +465,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="alldepartmentname"></h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotalcabling' class="db-modal-search"  type='text'
-                        placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="alldepartmentname"><b></b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalcabling' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-bs-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -462,7 +496,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -475,12 +509,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">Candidate for Regular</h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotalcandidate' class="db-modal-search" type='text' placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Candidate for Regular</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalcandidate' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -516,12 +553,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title" id="exampleModalToggleLabel">Bagapuro Family</h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotalbagapuro' class="db-modal-search" type='text' placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Bagapuro Family</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalbagapuro' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
@@ -557,12 +597,15 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" id="modal-header">
-                    <div>
-                        <h3 class="modal-title fs-6" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
-                    </div>
-                    <br>
-                    <input id='myInputtotalapprentice' class="db-modal-search" type='text' placeholder="  Search....">
-                    <i class='bx bx-x' data-dismiss="modal"></i>
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalapprentice' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
                 </div>
                 <div class="modal-body m-body" id="modal-body">
                     <div class="modal-table">
