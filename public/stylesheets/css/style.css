@@ -279,16 +279,15 @@
   border: 2px solid #fcf0d7 !important;
 }
 
-#myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
+
+/* #myInputtotalit, #myInputtotalcabling, #myInputtotaladmin, #myInputresigned, #myInputproba,
 #myInputRegular, #myInputtotal, #myInputtotalcandidate, #myInputtotalbagapuro, #myInputtotalapprentice   {
-  margin-left:700px;
   margin-right: 5px;
   margin-top: 5px;
-  float: right;
-  width: 150px;
-  height: 40px;
+  width: 50%;
+  padding: 4px !important;
   border-radius: 8px;
-}
+} */
 
 
 #myInput2 {

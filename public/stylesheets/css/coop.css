@@ -206,7 +206,7 @@ body{
 
 .sidebar-item span{
   color: white !important;
-  padding:8px;
+  padding: 4px;
 }
 .sidebar-item {
   transition: background-color 0.1s ease;
@@ -275,10 +275,10 @@ body{
   height: 60px;
   padding: 5px;
 }
+
 #modal-header {
     background-color: #7a1818 !important ;
-    color: white !important;
-    height: 80px;
+    color: white !important;   
 }
 .modal-footer .btn-submit {
     background-color: rgb(3, 226, 15) !important;
@@ -545,7 +545,7 @@ tr:hover {
 .bday-db {
   background-color: #7a1818 !important;
   color: white !important;
-  border-bottom: 1px solid white !important;
+  /* border-bottom: 1px solid white !important; */
   margin-top: 5px;
   margin-left: 5px;
   font-size: smaller !important;
@@ -582,9 +582,11 @@ tr:hover {
 #totalempapprentice, .department-card  {
   background-image: url(/images/img/employee.png);
   background-position: center;
-  background-repeat: no-repeat;
+  position: relative;
   background-size: cover;
   box-shadow: 0 5px 8px #3d0404 !important;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 
@@ -600,16 +602,14 @@ tr:hover {
 #totalempapprentice::before,
 #total1Year::before,
 .department-card:before {
-  background: linear-gradient(to top, rgba(255, 253, 253, 0.25) 0, rgba(129, 9, 9, 0.85) 100%);
-  content: "";
-  position: absolute;
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Position the overlay absolutely */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 3px;
-  height: 100%;
-  width: 100%;
+  background: linear-gradient(to top, rgba(59, 25, 25, 0.25) 0, rgba(129, 9, 9, 0.85) 100%);
+  z-index: 0 !important; 
 }
 
 #totalCOACard,
@@ -704,14 +704,33 @@ tr:hover {
       background-color: white !important;
   }
 
+  .btn-insert-save {
+    width: 100%;
+    margin-top: 3%;
+  }
+
+  .btn-delete-close {
+    width: 100%;
+  }
+
 }
 
 .card-text {
-  margin-left: 8px;
-  color: white !important;
   text-shadow: 3px 3px 3px #4f0202 !important;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
+  font-size: 14px;
+  color: white !important; /* This should apply unless overridden */
+  margin-bottom: 0px;
+  font-weight: bold;
+  margin: 1.3rem !important;
 }
+
+/* .custom-cardtext {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 3px 3px 3px #4f0202 !important;
+} */
+
 
 
 .greet-text {
@@ -724,18 +743,17 @@ tr:hover {
 
 
 .card-icon {
-  margin-right: 8px;
+  margin-right: 28px;
   color: white !important;
   text-shadow: 3px 3px 3px #4f0202 !important;
   font-size: 20px;
 }
 
 .db-modal-search {
-  width: 155px;
+  width: 100%;
   border: 2px solid #fef8ea !important;
   border-radius: 8px;
-  float: right;
-  margin-left: 65%;
+  padding: 4px;
 }
 .bx-x {
   color: white !important;
@@ -750,8 +768,14 @@ tr:hover {
 }
 
 .db-card {
-  border-left: 4px solid #751a1a !important;
-  border-radius: 8px;
+  border-left: 6px solid #660303 !important;
+  height: 9rem;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 3px;
+  padding-right: 3px;
+  cursor: pointer;
+  z-index: 0 !important
 }
 
 .btn-delete-close {
@@ -1035,7 +1059,7 @@ tr:hover {
 #totalholiday:hover,
 #total1year:hover,
 .department-card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .db-wholecard {
@@ -1153,16 +1177,19 @@ tr:hover {
 
 :root{
   --minus-15rem: calc(100% - 15rem);
-  --minus-6rem: calc(100% - 8rem);
+  --minus-6rem: calc(100% - 6.5rem);
 }
+  /* background-color: #8b2525 !important; */
 
-.navbar {
-  background-color: #8b2525 !important;
+  
+/* .navbar {
+   background: linear-gradient(to top, #442e2e, #b13434) !important;
   position: fixed !important;
   margin-left: 6.4rem;
   width: 75%;
   z-index: 2;
-}
+  border: 2px solid #442e2e;
+} */
 
 /* sidebar toggled*/
 /*default state*/
@@ -1205,7 +1232,8 @@ tr:hover {
  
   .footer-toggled{
     margin-left: 0 !important;
-  }container-fluid
+  }
+    
 } */
 .bars {
   margin-top: 30%;
@@ -1231,22 +1259,22 @@ tr:hover {
     margin-left: 0px !important;
   } */
 
-  .sidebar {
+  /* .sidebar {
     position: fixed;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-  }
+  } */
 
 
-  .navbar {
+  /* .navbar {
     margin-left: 14.5rem;
     width: var(--minus-15rem);
     border-radius: 12px;
     margin-bottom: 10px;
     margin-top: 13px;
     box-shadow: 0 4px 8px #3b3939 !important;
-  }
+  } */
 
   /* .navbar-toggled {
     margin-left: 0px !important;
@@ -1257,31 +1285,32 @@ tr:hover {
 /* mobile state */
 @media (max-width: 769px) {
   .content {
-    margin-left: 10px;
-    margin-right: 10px;
+    /* margin-left: 10px;
+    margin-right: 10px; */
+    padding: 12px !important;
   }
 
   .greet-text {
     font-size: 20px !important;
   }
 
-  .content-toggled {
+  /* .content-toggled {
     margin-left: 10px !important;
-  }
+  } */
 
   .footer-toggled {
     margin-left: 0px !important;
   }
 
-  .navbar {
+  /* .navbar {
     width: 75%;
     position: absolute !important;
-  }
+  } */
 
-  .navbar-toggled {
+  /* .navbar-toggled {
     margin-left: 0px !important;
     width: 100%;
-  }
+  } */
 
   /*--- employee page--*/
   /* #myInput,
@@ -3162,6 +3191,10 @@ div.drp-buttons {
   border-color: darkgreen !important;
 }
 
+.dropdown-option {
+  color: black !important;
+}
+
 .dropdown-option:hover {
   color: white !important;
   background-color: #05a0ed !important;
@@ -3198,7 +3231,7 @@ span#viewbtn {
   height: 40px;
   border-radius: 8px;
   border: 2px solid white !important;
-  margin-right: 8px;
+  margin-right: 28px;
 }
 
 .bank-card {
@@ -3234,7 +3267,53 @@ span#viewbtn {
   color:  white !important;
 }
 
+/* category-text */
+.category-text {
+  height: 10%;
+  width: 10%;
+  display: block;
+}
 
+.category-style {
+  box-shadow: 0 4px 8px #918b8b !important;
+  border-radius: 6px;
+  background-color: #009FBD !important;
+  border: 2px solid white !important;
+  padding: 6px;
+  font-size: x-large;
+  color: white !important;
+}
+
+.slash-category {
+  color: #009FBD !important;
+}
+
+.text-shadow2 {
+  font-family: "Bungee Tint", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 25px;
+}
+
+.body-color {
+  background-color: #fef8ea !important;
+}
+
+.header-bg {
+  background-color: #7a1818 !important;
+  color: white !important;
+}
+
+.card-size {
+  margin: 25px;
+}
+
+.card-size2 {
+  margin-top: 30px;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+}
 
 
 
