@@ -30,8 +30,9 @@
               var action = "";
               var status = item.status;
 
+              //data-bs-toggle="modal" data-bs-target="#editrequestmodal"
               action = `
-                    <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editrequestmodal"><i class="fas fa-fw fa-pen"></i></button>
+                    <button id="editBtn" class="btn text-primary" name="editBtn" ><i class="fas fa-fw fa-pen"></i></button>
                    `;
 
               // var imgElement = document.createElement("img");
@@ -123,6 +124,7 @@
     });
 
     $(document).on("click", "#editBtn", function () {
+      $("#editrequestmodal").modal("show");
       $.ajax({
         type: "POST",
         url: "/attendancerequest/getattendancerequest",
@@ -217,6 +219,7 @@
                         "You clicked the button!",
                         "success"
                       ).then((results) => {
+                        $("#editrequestmodal").modal("hide");
                         LoadTable();
                       });
                     }
