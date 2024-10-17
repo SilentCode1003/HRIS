@@ -48,15 +48,15 @@ function getLatestLog(employeeId) {
   });
 }
 
-function getDeviceInformation(device) {
-  console.log(device);
+// function getDeviceInformation(device) {
+//   console.log(device);
 
-  if (typeof device === "undefined" || " ") {
-    return "app";
-  } else {
-    return "web";
-  }
-}
+//   if (typeof device === "undefined" || " ") {
+//     return "app";
+//   } else {
+//     return "web";
+//   }
+// }
 
 router.get("/getisgefence", (req, res) => {
   console.log("hit");
@@ -462,7 +462,7 @@ router.post("/clockout", (req, res) => {
     .then((resultClockIn) => {
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = getDeviceInformation(req.body.deviceout);
+        const deviceout = req.body.deviceout;
 
         let sanitizedLocationOut = RemoveApostrophe(locationout);
 
