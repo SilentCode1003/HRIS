@@ -675,6 +675,9 @@ router.post("/saveliftdate", (req, res) => {
                   // Also update the liftdate in the hold_suspension table
                   let updateHoldSuspension = `UPDATE hold_suspension SET hs_lift_date = '${liftdate}', hs_status = '${status}' WHERE hs_id = ${adjournid}`;
 
+                  console.log(updateHoldSuspension,'UPDATE');
+                  
+
                   Update(updateHoldSuspension, [], (err, result) => {
                     if (err) {
                       console.error("Error updating hold suspension: ", err);

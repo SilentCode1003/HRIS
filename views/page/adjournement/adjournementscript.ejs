@@ -6,12 +6,7 @@
     LoadTable();
     LoadList();
     LoadEditEmp();
-    LoadPayrollDate();
-    LoadLoanType();
-    EditLoadPayrollDate();
     searchTable();
-    LoadAdvancedList();
-    AdvancedLoadPayrollDate();
     LoadViewEmp();
 
     $(document).on("keyup", "#myInput", function () {
@@ -207,7 +202,7 @@
     function LoadList() {
       $.ajax({
         type: "GET",
-        url: "/employee/load",
+        url: "/employee/loadwithshift",
         success: function (result) {
           var data = result.data;
 
@@ -223,29 +218,10 @@
       });
     }
 
-    function LoadAdvancedList() {
-      $.ajax({
-        type: "GET",
-        url: "/employee/load",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.id, item.id);
-            $(options).html(item.fullname);
-            $("#govloanadvancedemployeeid").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
-
     function LoadEditEmp() {
       $.ajax({
         type: "GET",
-        url: "/employee/load",
+        url: "/employee/loadwithshift",
         success: function (result) {
           var data = result.data;
 
@@ -264,7 +240,7 @@
     function LoadViewEmp() {
       $.ajax({
         type: "GET",
-        url: "/employee/load",
+        url: "/employee/loadwithshift",
         success: function (result) {
           var data = result.data;
 
@@ -272,82 +248,6 @@
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#viewadjournemployee").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
-
-    function LoadPayrollDate() {
-      $.ajax({
-        type: "GET",
-        url: "/gov_loans/loadreq",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#govloaneffectivedate").append(options);
-          });
-        },
-        error: function (result) {
-          swal("error: " + result.data);
-        },
-      });
-    }
-
-    function LoadLoanType() {
-      $.ajax({
-        type: "GET",
-        url: "/loan_type/load",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.name, item.name);
-            $(options).html(item.name);
-            $("#govloantype").append(options);
-          });
-        },
-        error: function (result) {
-          swal("error: " + result.data);
-        },
-      });
-    }
-
-    function EditLoadPayrollDate() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreq",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#addpayrolldateot").append(options);
-          });
-        },
-        error: function (result) {
-          swal("error: " + result.data);
-        },
-      });
-    }
-
-    function AdvancedLoadPayrollDate() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreq",
-        success: function (result) {
-          var data = result.data;
-
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#govloanadvancedpayrolldate").append(options);
           });
         },
         error: function (result) {

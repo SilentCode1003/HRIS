@@ -159,6 +159,7 @@ var suggestionareaRouter = require("./routes/suggestionarea");
 var suggestionquestionRouter = require("./routes/suggestionquestion");
 var sessionRouter = require("./routes/session");
 var adjournementRouter = require("./routes/adjournement");
+var adjournement_payRouter = require("./routes/adjournement_pay");
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -339,6 +340,7 @@ app.use("/suggestion", suggestionRouter);
 app.use("/suggestionarea", suggestionareaRouter);
 app.use("/suggestionquestion", suggestionquestionRouter);
 app.use("/adjournement", adjournementRouter);
+app.use("/adjournement_pay", adjournement_payRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
