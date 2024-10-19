@@ -99,6 +99,7 @@ router.post("/save", (req, res) => {
       "createby",
       "status",
     ]);
+
     let data = [
       [
         name,
@@ -113,22 +114,23 @@ router.post("/save", (req, res) => {
       ],
     ];
     let checkStatement = SelectStatement(
-      "select * from hold_suspension where hs_employeeid=? and hs_name=? and hs_description=? and hs_startdate=? and hs_enddate=?",
-      [employeeid, name, description, startdate, enddate]
+      "SELECT * FROM hold_suspension WHERE hs_employeeid = ? AND hs_status = ? AND hs_startdate <= NOW() AND (hs_enddate IS NULL OR hs_enddate > NOW())",
+      [employeeid, status]
     );
 
     Check(checkStatement)
       .then((result) => {
-        if (result != 0) {
+        if (result.length > 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
+          // If no active suspension exists, insert the new record
           InsertTable(sql, data, (err, result) => {
             if (err) {
               console.log(err);
               res.json(JsonErrorResponse(err));
+            } else {
+              res.json(JsonSuccess());
             }
-
-            res.json(JsonSuccess());
           });
         }
       })
@@ -177,6 +179,7 @@ router.post("/getadjournemployee", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 router.put("/edit", (req, res) => {
   try {
@@ -245,24 +248,45 @@ router.put("/edit", (req, res) => {
 
     console.log(updateStatement);
 
+    // Check if this employee already has an active suspension that hasn't ended
     let checkStatement = SelectStatement(
-      "select * from hold_suspension where hs_employeeid=? and hs_name=? and hs_description=? and hs_startdate=? and hs_enddate=? and hs_status=?",
-      [employeeid, name, description, startdate, enddate, status]
+      `SELECT * FROM hold_suspension 
+      WHERE hs_employeeid = ? 
+      AND hs_status = 'Active' 
+      AND (hs_enddate IS NULL OR hs_enddate > NOW())`,
+      [employeeid]
     );
 
     Check(checkStatement)
       .then((result) => {
-        if (result != 0) {
+        if (result.length > 0 && status === "Active") {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
-
-            console.log(result);
-
-            res.json(JsonSuccess());
-          });
         }
+
+        let duplicateCheck = SelectStatement(
+          "SELECT * FROM hold_suspension WHERE hs_employeeid=? AND hs_name=? AND hs_description=? AND hs_startdate=? AND hs_enddate=? AND hs_status=?",
+          [employeeid, name, description, startdate, enddate, status]
+        );
+
+        Check(duplicateCheck)
+          .then((duplicateResult) => {
+            if (duplicateResult.length > 0) {
+              return res.json(JsonWarningResponse(MessageStatus.EXIST));
+            } else {
+              Update(updateStatement, data, (err, result) => {
+                if (err) {
+                  console.error("Error: ", err);
+                  res.json(JsonErrorResponse(err));
+                } else {
+                  res.json(JsonSuccess());
+                }
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            res.json(JsonErrorResponse(error));
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -273,6 +297,7 @@ router.put("/edit", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 router.post("/addlift", (req, res) => {
   try {
@@ -306,147 +331,6 @@ router.post("/addlift", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-// router.post("/saveliftdate", (req, res) => {
-//   try {
-//     const { adjournid, liftdate, employeeid } = req.body;
-//     let createby = req.session.fullname;
-//     let createdate = GetCurrentDatetime();
-//     let status = "Lifted";
-
-//     // Step 1: Retrieve data from hold_suspension table using adjournid
-//     let selectHoldSuspension = `SELECT hs_employeeid, hs_startdate, hs_lift_date FROM hold_suspension WHERE hs_id = ${adjournid}`;
-
-//     Select(selectHoldSuspension, (err, holdSuspensionData) => {
-//       if (err) {
-//         return res.json(JsonErrorResponse(err));
-//       }
-
-//       if (holdSuspensionData.length === 0) {
-//         return res.json(
-//           JsonWarningResponse("No record found for the given adjournid.")
-//         );
-//       }
-
-//       let { hs_employeeid, hs_startdate, hs_lift_date } = holdSuspensionData[0];
-
-//       // Step 2: Calculate suspension duration in days (from hs_startdate to hs_liftdate)
-//       let startDate = new Date(hs_startdate);
-//       let liftDate = new Date(liftdate); // Using the provided liftdate
-//       let durationDays = Math.ceil(
-//         (liftDate - startDate) / (1000 * 60 * 60 * 24)
-//       );
-
-//       // Step 3: Get the monthly salary of the employee from master_salary table
-//       let selectSalary = `SELECT ms_monthly FROM master_salary WHERE ms_employeeid = ${employeeid}`;
-
-//       Select(selectSalary, (err, salaryData) => {
-//         if (err) {
-//           return res.json(JsonErrorResponse(err));
-//         }
-
-//         if (salaryData.length === 0) {
-//           return res.json(
-//             JsonWarningResponse(
-//               "Salary information not found for the employee."
-//             )
-//           );
-//         }
-
-//         let ms_monthly = salaryData[0].ms_monthly;
-
-//         // Step 4: Calculate the salary per day and total suspension pay
-//         let salaryPerDay = ms_monthly / 30; // Assuming 30 days in a month
-//         let totalSuspensionPay = salaryPerDay * durationDays;
-
-//         // Step 5: Prepare the UpdateStatement and InsertStatement
-//         let data = [];
-//         let columns = [];
-//         let arguments = [];
-
-//         if (status) {
-//           data.push(status);
-//           columns.push("status");
-//         }
-
-//         if (liftdate) {
-//           data.push(liftdate);
-//           columns.push("lift_date");
-//         }
-
-//         if (adjournid) {
-//           data.push(adjournid);
-//           arguments.push("id");
-//         }
-
-//         let updateStatement = UpdateStatement(
-//           "hold_suspension",
-//           "hs",
-//           columns,
-//           arguments
-//         );
-
-//         let insertStatement = InsertStatement("hold_suspension_pay", "hsp", [
-//           "hold_suspensionid",
-//           "employeeid",
-//           "lift_date",
-//           "duration_day",
-//           "salary_per_day",
-//           "total_suspension_pay",
-//         ]);
-
-//         let suspensionPayData = [
-//           [
-//             adjournid,
-//             hs_employeeid,
-//             liftdate,
-//             durationDays,
-//             salaryPerDay,
-//             totalSuspensionPay,
-//           ],
-//         ];
-
-//         // Step 6: Check if the record already exists based on hs_employeeid and liftdate
-//         let checkStatement = `SELECT * FROM hold_suspension WHERE hs_employeeid=${employeeid} AND hs_lift_date=${liftdate}`;
-
-//         Select(checkStatement, (err, checkResult) => {
-//           if (err) {
-//             return res.json(JsonErrorResponse(err));
-//           }
-
-//           if (checkResult.length != 0) {
-//             return res.json(JsonWarningResponse("Record already exists."));
-//           }
-
-//           // Step 7: Update hold_suspension with lift date and insert into hold_suspension_pay
-//           Update(updateStatement, data, (err, result) => {
-//             if (err) {
-//               console.error("Error: ", err);
-//               return res.json(JsonErrorResponse(err));
-//             }
-
-//             console.log(result);
-//             InsertTable(insertStatement, suspensionPayData, (err, result) => {
-//               if (err) {
-//                 console.error(err);
-//                 return res.json(JsonErrorResponse(err));
-//               }
-
-//               res.json(
-//                 JsonSuccess(
-//                   "Lift date updated and suspension pay inserted successfully"
-//                 )
-//               );
-//             });
-//           });
-//         });
-//       });
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
 
 router.post("/saveliftdate", (req, res) => {
   try {

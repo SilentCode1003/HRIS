@@ -186,7 +186,7 @@
             } else {
               swal({
                 title: "Exist",
-                text: "Data already exists!",
+                text: "This Employee has an active or unfinished suspension. Please end or cancel the suspension before adding a new one.",
                 icon: "warning",
                 button: "OK!",
               });
@@ -451,7 +451,7 @@
             } else if (result.msg == "exist") {
               swal({
                 title: "Exist",
-                text: "Data already exists!",
+                text: "This employee has an ongoing active suspension.",
                 icon: "warning",
                 button: "OK!",
               });

@@ -243,6 +243,7 @@ router.post("/loadpayslip", (req, res) => {
     p_payroll_adjustments, 
     p_overtime_meal, 
     p_leave_pay, 
+    p_suspension_pay,
     p_overall_netpay, 
     p_absent_deductions, 
     p_wisp_deductions, 
