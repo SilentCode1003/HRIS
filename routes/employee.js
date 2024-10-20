@@ -570,6 +570,43 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.get("/loadwithshift", (req, res) => {
+  try {
+    let sql = `
+    SELECT   
+    me_id,
+    CONCAT(master_employee.me_lastname, " ", master_employee.me_firstname) AS me_fullname,
+    me_phone,
+    me_email,
+    me_jobstatus
+    FROM 
+        master_employee
+    INNER JOIN 
+        master_shift
+    ON 
+        me_id = ms_employeeid`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "me_");
+
+        console.log(data);
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 router.post("/save", async (req, res) => {
   try {
     const {

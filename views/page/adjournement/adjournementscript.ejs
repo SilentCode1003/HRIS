@@ -1,0 +1,581 @@
+<script>
+  let id = "";
+  let globalEmployeeid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    LoadEditEmp();
+    searchTable();
+    LoadViewEmp();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableEmployeeAdjournment").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/adjournement/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+              action = `
+                        <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editadjournmentmodal"><i class="fas fa-pen"></i></button>
+                        <button id="liftBtn" class="btn text-success" name="liftBtn" data-bs-toggle="modal" data-bs-target="#liftadjournmodal"><i class="fas fa-plus"></i></button>
+                        <button id="viewBtn" class="btn text-warning" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewadjournmentmodal"><i class="fas fa-eye"></i></button>
+                       `;
+              finalData.push({
+                id: item.id,
+                fullname: item.fullname,
+                name: item.name,
+                startdate: item.startdate,
+                enddate: item.enddate,
+                liftdate: item.liftdate,
+                createby: item.createby,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "fullname" },
+          { data: "name" },
+          { data: "startdate" },
+          { data: "enddate" },
+          { data: "liftdate" },
+          { data: "createby" },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(7)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    $("#adjournemployee").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjournmentSaveBtn", function () {
+      let employeeid = $("#adjournemployee").val();
+      let title = $("#adjourntitle").val();
+      let startdate = $("#adjournstart").val();
+      let enddate = $("#adjournend").val();
+      let description = $("#adjourndesc").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "employeeid is required ";
+      }
+
+      if (title === "") {
+        message += "title is required ";
+      }
+
+      if (startdate === "") {
+        message += "startdate is required ";
+      }
+
+      if (enddate === "") {
+        message += "enddate is required ";
+      }
+
+      if (description === "") {
+        message += "description is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/adjournement/save",
+          data: {
+            employeeid: employeeid,
+            name: title,
+            startdate: startdate,
+            enddate: enddate,
+            description: description,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else {
+              swal({
+                title: "Exist",
+                text: "This Employee has an active or unfinished suspension. Please end or cancel the suspension before adding a new one.",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/loadwithshift",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#adjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/loadwithshift",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editadjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadViewEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/loadwithshift",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#viewadjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableEmployeeAdjournment tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      id = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/adjournement/getadjournemployee",
+        data: {
+          adjournid: id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editadjournemployee").val(item.employeeid);
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
+              $("#editadjourntitle").val(item.name);
+              $("#editadjournstart").val(item.startdate);
+              $("#editadjournend").val(item.enddate);
+              $("#editadjourndesc").val(item.description);
+              $("#editajournstatus").val(item.status);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      //let adjournid = $(this).data("id"); // Assuming you're passing the adjourn ID with data-id attribute in the button
+
+      // First, get the adjournment employee details
+      $.ajax({
+        type: "POST",
+        url: "/adjournement/getadjournemployee",
+        data: { adjournid: id },
+        success: function (result) {
+          if (result.msg === "success") {
+            const data = result.data[0]; // Assuming result.data is an array
+
+            // Set form values
+            $("#viewadjournemployee").val(data.employeeid);
+            $("#viewadjourntitle").val(data.name);
+            $("#viewadjournstart").val(data.startdate);
+            $("#viewadjournend").val(data.enddate);
+            $("#viewajournstatus").val(data.status);
+            $("#viewadjourndesc").val(data.description);
+
+            // Set image
+            //$("#previewold").attr("src", data.hs_image);
+            $("#previewold").attr("src", "data:image/jpg;base64," + data.image);
+          } else {
+            swal("Error", "Could not fetch employee details.", "error");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching employee details:", error);
+          swal("Error", "Error fetching employee details.", "error");
+        },
+      });
+
+      // Next, get the adjournment dates details for the table
+      $.ajax({
+        type: "POST",
+        url: "/adjournement/viewdatesdetails",
+        data: { adjournid: id },
+        success: function (result) {
+          if (result.msg === "success") {
+            const tableBody = $("#viewadjournmentmodal table tbody");
+            tableBody.empty(); // Clear existing table data
+
+            $.each(result.data, function (index, item) {
+              const adjournStatus =
+                item.adjourn_status === null ? "Clear" : item.adjourn_status;
+              let statusClass = "";
+              switch (adjournStatus) {
+                case "Adjourned":
+                  statusClass = "project-based-status"; // Class for Adjourned
+                  break;
+                case "Lifted":
+                  statusClass = "probationary-status"; // Class for Lifted
+                  break;
+                case "Clear":
+                  statusClass = "regular-status"; // Class for Clear
+                  break;
+                case "Rest Day":
+                  statusClass = "apprentice-status"; // Class for Clear
+                  break;
+                default:
+                  statusClass = ""; 
+              }
+
+              // Create the table row with the class applied
+              const tableRow = `
+        <tr>
+          <td>${item.employeeid}</td>
+          <td>${item.date_value}</td>
+          <td>${item.day_name}</td>
+          <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
+        </tr>`;
+
+              tableBody.append(tableRow);
+            });
+          } else {
+            swal("Error", "Could not fetch adjournment details.", "error");
+          }
+        },
+
+        error: function (xhr, status, error) {
+          console.error("Error fetching adjournment dates:", error);
+          swal("Error", "Error fetching adjournment dates.", "error");
+        },
+      });
+
+      // Finally, open the modal after fetching the data
+      $("#viewadjournmentmodal").modal("show");
+    });
+
+    $(document).on("click", "#adjournmentEditBtn", function () {
+      let adjournid = id;
+      let employeeid = $("#editadjournemployee").val();
+      let startdate = $("#editadjournstart").val();
+      let name = $("#editadjournname").val();
+      let enddate = $("#editadjournend").val();
+      let description = $("#editadjourndesc").val();
+      let status = $("#editajournstatus").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "Employee Name is required ";
+      }
+
+      if (startdate === "") {
+        message += "startdate is required ";
+      }
+
+      if (enddate === "") {
+        message += "enddate is required ";
+      }
+
+      if (description === "") {
+        message += "description is required ";
+      }
+
+      if (status === "") {
+        message += "status is required ";
+      }
+
+      if (name === "") {
+        message += "name is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "adjournement/edit",
+          data: {
+            adjournid: adjournid,
+            employeeid: employeeid,
+            startdate: startdate,
+            enddate: enddate,
+            name: name,
+            description: description,
+            status: status,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "This employee has an ongoing active suspension.",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#liftBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/adjournement/addlift",
+        data: {
+          adjournid: id,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              const TittleContainer = $("#TittleContainer");
+              TittleContainer.empty();
+
+              const firstItem = existingData[0];
+              const cardHtml = `<h3 class="modal-title" id="">Lift ${firstItem.fullname}'s ${firstItem.name}</h3>`;
+              $("#datename").text(firstItem.fullname);
+              TittleContainer.append(cardHtml);
+
+              $("#adjournliftdate").val(item.lift_date);
+              globalEmployeeid = item.employeeid;
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjournLiftDateSaveBtn", function () {
+      let adjournid = id;
+      let employeeid = globalEmployeeid;
+      let liftdate = $("#adjournliftdate").val();
+      var message = "";
+
+      if (liftdate === "") {
+        message += "Lift Date is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "adjournement/saveliftdate",
+          data: {
+            adjournid: adjournid,
+            liftdate: liftdate,
+            employeeid: employeeid,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableEmployeeAdjournment");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>

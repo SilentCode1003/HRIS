@@ -39,6 +39,7 @@
               finalData.push({
                 governmentid: item.governmentid,
                 employeeid: item.employeeid,
+                fullname: item.fullname,
                 idtype: item.idtype,
                 idnumber: item.idnumber,
                 issuedate: item.issuedate,
@@ -61,6 +62,7 @@
         columns: [
           { data: "governmentid" },
           { data: "employeeid" },
+          { data: "fullname" },
           { data: "idtype" },
           { data: "idnumber" },
           { data: "issuedate" },
@@ -71,9 +73,9 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var statusCell = $(row).find("td:eq(7)");
-          var idtypeCell = $(row).find("td:eq(2)");
-          var idnumberCell = $(row).find("td:eq(3)");
+          var statusCell = $(row).find("td:eq(8)");
+          var idtypeCell = $(row).find("td:eq(3)");
+          var idnumberCell = $(row).find("td:eq(4)");
 
           var statusText = data.status;
           var idtypeText = data.idtype;
