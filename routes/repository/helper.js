@@ -486,7 +486,7 @@ exports.EmailNotification = (details) => {
                 <div class="row mt-4">
                 <div class="col-half">
                         <h6 class="label-title">${
-                          timeout == undefined ? "Start Date" : "Time In"
+                          timeout == undefined ? "Start Date" : "Time Out"
                         }:</h6>
                         <h6 class="label-value">${
                           timeout == undefined ? enddate : timeout

@@ -3,21 +3,18 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
-    <h3>Request Overtime</h3>
-    <div class="row g-2">
-      <div class="col"></div>
-      <div class="col-sm-2">
-        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#addmodal">
-          <h6>Request Overtime</h6> 
+    <h3 class="m-4">Request Overtime</h3>
+    <div class="d-flex gap-4 m-2 mb-4 justify-content-end attendance-field">
+      <div class="flex">
+        <button type="button" id="applybtn" class="btn btn-add-color font-weight-bold" data-bs-toggle="modal" data-bs-target="#addmodal">
+            <i class="bi bi-clock mr-2"></i>Request Overtime 
         </button>
       </div>
     </div>
-  
   </div>
-</div>
 
-<div class="col">
-  <div class="card">
+
+
       <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -169,8 +166,8 @@
             </div>
           </div>
       </div>
-  </div>
-</div>
+  
+
 
 <!--Add Ot-->
 <div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -395,6 +392,7 @@
                     </div>
                 </form>
             </div>
+        </div>
             <div class="modal-footer" id="modal-footer">
                 <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-modal-save" id="applyovertimesavebtn">Save</button>

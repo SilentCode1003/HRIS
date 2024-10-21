@@ -4,20 +4,20 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header cheader-attendance">
-        <h3>Attendance</h3>
-        <div class="row g-2">
+        <h3 class="m-4">Attendance</h3>
+        <div class="d-flex gap-4 m-2 mb-4 attendance-field">
             <div class="col">
-                <input id='myInput' type='text' placeholder="  Search....">
+                <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
             </div>
-            <div class="col-md-2">
+            <div class="flex">
                 <input id="datepicker" type="text" name="daterange" class="form-control" placeholder="Select a Date" />
               </div>
-              <div class="col-sm-1 col-add">
-                <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+              <div class="flex">
+                <button id="loaddate" class="btn btn-load-color"><i class="bi bi-arrow-clockwise mr-2"></i><b>Load</b></button>
               </div>
-            <div class="col-sm-1 col-add">
-                <button type="button" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
-                    <b>Export</b>
+            <div class="flex">
+                <button type="button" class="btn btn-export-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
+                    <i class="bi bi-database-fill-gear mr-2"></i><b>Export</b>
                  </button>
             </div>
         </div>
