@@ -1,15 +1,18 @@
+<br>
+<br>
+
 <div class="card">
-  <div class="card-header">
-    <h3 class="card-title mb-0 font-weight-bold">Occupant Duration Settings</h3>
+  <div class="card-header header-bg">
+    <h3 class="card-title ch-text">Occupant Duration Settings</h3>
     <div class="card">
-      <div class="card-body">
+      <div class="card-body ch-body">
         <div class="form">
           <div class="row">
             <div class="col-sm-12 col-md-4 col-lg-4">
               <input
                 autocomplete="off"
                 type="text"
-                class="form-control"
+                class="form-control border-form-modal"
                 id="name"
                 placeholder="Alias or Name e.g. Two weeks"
               />
@@ -20,37 +23,37 @@
               <input
                 autocomplete="off"
                 type="number"
-                class="form-control strong"
+                class="form-control strong border-form-modal"
                 id="duration"
                 placeholder="Duration in days e.g. 3"
               />
             </div>
           </div>
-          <div class="row mt-4 justify-content-start">
-            <div class="col-sm-3 col-md-3 col-lg-3">
-              <button id="addBtn" class="btn btn-add-color w-75">Add</button>
+          <div class="d-flex mt-4 justify-content-end">
+            <div class="flex">
+              <button id="addBtn" class="btn btn-add-color"><i class="bi bi-plus mr-2"></i><b>Add</b></button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body header-bg">
     <div class="card-title">
-      <h6 class="m-0 font-weight-bold">Occupant Duration Settings Table</h6>
+      <h6 class="ch-text"><b>Occupant Duration Settings Table</b></h6>
     </div>
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6 mb-3 m-2">
         <input
           id="search"
           type="text"
-          class="form-control"
-          placeholder="Search"
+          class="form-control pl-2 font-weight-bold"
+          placeholder="Search...."
         />
       </div>
     </div>
 
-    <div class="row mt-2">
+    <div class="row mt-2 m-2">
       <div class="table">
         <table id="data-table" class="table table-bordered table-hover">
           <thead>
