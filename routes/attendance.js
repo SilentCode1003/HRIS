@@ -532,6 +532,9 @@ router.post("/exportreports", async (req, res) => {
   try {
     const { startdate, enddate } = req.body;
 
+    console.log(req.body);
+    
+
     // Define the SQL command to call the stored procedure
     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
 

@@ -1,0 +1,420 @@
+<br>
+
+<!-- Table -->
+<div class="card" id="tablecard">
+    <div class="card-header ch-coop">
+        <h3 class="title-card-table">Employee Adjournment</h3>
+        <div class="row g-2">
+            <div class="col">
+                <input id='myInput'  type='text' placeholder="  Search....">
+            </div>
+            <div class="col-sm-1 col-add">
+                <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addadjournmentmodal">
+                    <b>+ Add</b>
+                  </button>
+            </div>
+        </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableEmployeeAdjournment">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee ID</th>
+                        <th>Title</th>
+                        <th>Start Date</th>
+                        <th>End Date</th> 
+                        <th>Lift Date</th>
+                        <th>Create By</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addadjournmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Add Employee Adjournment</h3>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                    <div class="col g-6">
+                      <div class="p-4" style="width: 300px; margin-top: -100px;">
+                        <div class="text-center">
+                          <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                        </div>
+                        <br>
+                        <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                    <form>
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="adjournemployee" name="adjournemployee" aria-label="Floating label select example">
+                                  <option selected disabled>Select Employee</option>
+                                </select>
+                                <label for="floatingSelectGrid">Employee ID</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" class="form-control border-form-modal" id="adjourntitle" name="adjourntitle" placeholder="Title">
+                                <label for="adjourntitle">Title</label>
+                            </div>
+                        </div>
+                      </div>                             
+                      <br>
+                      <div class="row g-3">
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="adjournstart" name="adjournstart" placeholder="Start Date">
+                            <label for="floatingInput">Start Date</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                            <input type="date" class="form-control border-form-modal" id="adjournend" name="adjournend" placeholder="End Date">
+                            <label for="floatingInput">End Date</label>
+                            </div>
+                        </div>
+                      </div>
+                      <br>
+                    <div class="row g-3">
+                        <label for="hoursInput">Adjournement Description</label>
+                        <div class="col">
+                            <div class="form-floating">
+                                <textarea type="text" class="form-control border-form-modal" id="adjourndesc" name="adjourndesc"
+                                          placeholder="Description" oninput="adjustTextareaHeight(this)"></textarea>
+                                <label for="floatingInput">Adjournement Description</label>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="adjournmentSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal fade" id="viewadjournmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">View Employee Adjournment</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                      <div class="p-4" style="width: 300px; margin-top: -100px;">
+                          <div class="text-center">
+                              <img id="previewold" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                          </div>
+                          <br>
+                          <h2 class="pb-3 mb-4 text-center modal-content-title">File Preview</h2>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                      <br>
+                      <div class="row g-3">
+                          <div class="col">
+                              <div class="form-floating">
+                                  <select class="form-select border-form-modal" id="viewadjournemployee" name="viewadjournemployee" aria-label="Floating label select example" disabled>
+                                  </select>
+                                  <label for="floatingSelectGrid">Employee ID</label>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input type="text" class="form-control border-form-modal" id="viewadjourntitle" name="viewadjourntitle" placeholder="Title">
+                                  <label for="adjourntitle">Title</label>
+                              </div>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                          <div class="col">
+                              <div class="form-floating">
+                                  <select class="form-select border-form-modal" id="viewajournstatus" name="viewajournstatus" aria-label="Floating label select example">
+                                      <option value="Active">Active</option>
+                                      <option value="Inactive">Inactive</option>
+                                      <option value="Lifted">Lifted</option>
+                                  </select>
+                                  <label for="floatingSelectGrid">Status</label>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input type="date" class="form-control border-form-modal" id="viewadjournstart" name="viewadjournstart" placeholder="Start Date">
+                                  <label for="floatingInput">Start Date</label>
+                              </div>
+                          </div>
+                          <div class="col">
+                              <div class="form-floating">
+                                  <input type="date" class="form-control border-form-modal" id="viewadjournend" name="viewadjournend" placeholder="End Date">
+                                  <label for="floatingInput">End Date</label>
+                              </div>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row g-3">
+                          <label for="hoursInput">Adjournement Description</label>
+                          <div class="col">
+                              <div class="form-floating">
+                                  <textarea type="text" class="form-control border-form-modal" id="viewadjourndesc" name="viewadjourndesc" placeholder="Address" style="height: 8rem;" oninput="adjustTextareaHeight(this)"></textarea>
+                                  <label for="floatingInput">Adjournement Description</label>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              
+              <!-- Table at the bottom -->
+              <div class="col-xl-12 col-lg-12 mt-4">
+                  <div class="table-responsive">
+                      <table class="table table-bordered table-striped">
+                          <thead class="table-dark">
+                              <tr>
+                                  <th scope="col">Employee ID</th>
+                                  <th scope="col">Dates</th>
+                                  <th scope="col">Day Name</th>
+                                  <th scope="col">Status</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editadjournmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Edit Employee Adjournment</h3>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+              </div>
+              <div class="modal-body" id="modal-body">
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                    <div class="col g-6">
+                        <div class="p-4" style="width: 300px; margin-top: -100px;">
+                            <div class="text-center">
+                                <img id="preview" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                            </div>
+                            <br>
+                            <h2 class="pb-3 mb-4 text-center modal-content-title">File Preview</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                    <form>
+                        <br>
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select class="form-select border-form-modal" id="editadjournemployee" name="editadjournemployee" aria-label="Floating label select example" disabled>
+                                    </select>
+                                    <label for="floatingSelectGrid">Employee ID</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control border-form-modal" id="editadjourntitle" name="editadjourntitle" placeholder="Title">
+                                    <label for="adjourntitle">Title</label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select class="form-select border-form-modal" id="editajournstatus" name="editajournstatus" aria-label="Floating label select example">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    <label for="floatingSelectGrid">Status</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control border-form-modal" id="editadjournstart" name="editadjournstart" placeholder="Start Date">
+                                    <label for="floatingInput">Start Date</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control border-form-modal" id="editadjournend" name="editadjournend" placeholder="End Date">
+                                    <label for="floatingInput">End Date</label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row g-3">
+                            <label for="hoursInput">Adjournement Description</label>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <textarea type="text" class="form-control border-form-modal" id="editadjourndesc" name="editadjourndesc" placeholder="Address" style="height: 8rem;" oninput="adjustTextareaHeight(this)"></textarea>
+                                    <label for="floatingInput">Adjournement Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="adjournmentEditBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lift Modal -->
+<div class="modal fade" id="liftadjournmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <div id="TittleContainer">
+                </div>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                        <input type="date" class="form-control border-form-modal" id="adjournliftdate" name="adjournliftdate" placeholder="Lift Date">
+                        <label for="floatingInput">Lift Date</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="adjournLiftDateSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+<!-- <div class="modal fade" id="advancedgovloansmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">Advanced Payment</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div class="row">
+          <div class="col-md-6" style="padding: 20px;">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Payroll Date</th>
+                    <th scope="col">Select</th>
+                  </tr>
+                </thead>
+                <tbody id="payrolldates-table-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <form>
+              <div class="form-floating mb-3">
+                <select class="form-select border-form-modal" id="govloanadvancedemployeeid" name="govloanadvancedemployeeid" disabled>
+                </select>
+                <label for="govloanemployeeid">Employee ID</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-form-modal" id="govloanadvancedtype" name="govloanadvancedtype" placeholder="Loan Type" readonly>
+                <label for="govloantype">Loan Type</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-form-modal" id="govloanadvancedrecived" name="govloanadvancedrecived" placeholder="Amount Received" oninput="formatPrice(event, this)" readonly>
+                <label for="govloanrecieved">Amount Received</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-form-modal" id="govloanadvancedpermonth" name="govloanadvancedpermonth" placeholder="Deductions Per Month" oninput="formatPrice(event, this)" readonly>
+                <label for="govloanpermonth">Deductions Per Month</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select class="form-control border-form-modal" id="govloanpaymenttypeadvanced" name="govloanpaymenttypeadvanced" placeholder="govloanpaymenttype Durations">
+                  <option value="VIA PAYSLIP">Deduct via payslip</option>
+                  <option value="VIA OTC">Deduct Over The Counter</option>
+                </select>
+                <label for="govpayrolldates">Payment Type</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select class="form-select border-form-modal" id="govloanadvancedpayrolldate" name="govloanadvancedpayrolldate" aria-label="Select Start Date">
+                </select>
+                <label for="govloaneffectivedate">Select Payroll Date</label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="govloanadvancedsaveBTN">Save</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+

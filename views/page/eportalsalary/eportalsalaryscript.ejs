@@ -30,6 +30,7 @@
   let globalspecialholidaycomp = "";
   let globalregularholidayot = "";
   let globalspecialholidayot = "";
+  let globalsuspension_pay = "";
   let globaloverallnetpay = "";
   let globalsssdeductions = "";
   let globalpagibigdeductions = "";
@@ -344,6 +345,21 @@
                 formatToCurrency(item.specialholidayOT)
               );
               globalspecialholidayot = item.specialholidayOT;
+
+               // Get the suspension pay value
+               let suspensionPay = item.suspension_pay;
+
+              // Check if the value is 0
+              if (suspensionPay === 0) {
+                $("#payslipsuspensionpay").closest("tr").hide();
+              } else {
+                $("#payslipsuspensionpay").closest("tr").show();
+                $("#payslipsuspensionpay").text(
+                  formatToCurrency(suspensionPay)
+                );
+              }
+              globalsuspension_pay = item.suspension_pay;
+
               $("#paysliptotal").text(formatToCurrency(item.overall_netpay));
               globaloverallnetpay = item.overall_netpay;
               $("#payslipsss").text(formatToCurrency(item.sss_dedcutions));
@@ -635,6 +651,7 @@
           globalnumlate: globalnumlate,
           globalnumabsent: globalnumabsent,
           globalaccrued13thmonth: globalaccrued13thmonth,
+          globalsuspension_pay: globalsuspension_pay,
         },
         dataType: "text",
         success: function (data) {

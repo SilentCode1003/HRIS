@@ -11,7 +11,35 @@
       searchTable();
     });
 
+    // $(function () {
+    //   $('input[type="date"]').on("change", function () {
+    //     var dateInput = this.value;
+    //     var date = new Date(dateInput);
+    //     var options = { weekday: "long" };
+    //     var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+
+    //     if (this.id === "targetdate") {
+    //       $("#targetdayName").val(dayName);
+    //     } else if (this.id === "actualdate") {
+    //       $("#actualdayName").val(dayName);
+    //     }
+    //   });
+    // });
+
     $(function () {
+      var dtToday = new Date();
+
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+      if (month < 10) month = "0" + month.toString();
+      if (day < 10) day = "0" + day.toString();
+
+      var minDate = year + "-" + month + "-" + day;
+
+      $("#targetdate").attr("min", minDate);
+      $("#actualdate").attr("min", minDate);
+
       $('input[type="date"]').on("change", function () {
         var dateInput = this.value;
         var date = new Date(dateInput);
@@ -176,7 +204,7 @@
     function LoadListEdit() {
       $.ajax({
         type: "GET",
-        url: "/teamleadshift/selectdistinct",
+        url: "/teamleadshift/selectshift",
         success: function (result) {
           var data = result.data;
 
@@ -228,6 +256,43 @@
           console.error("An error occurred while fetching employee data", err);
           swal("An error occurred while fetching employee data", msg, "error");
         },
+      });
+    });
+
+    $(function () {
+      var dtToday = new Date();
+
+      // Get current date details
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+
+      // Pad the month and day with leading zeros if necessary
+      if (month < 10) month = "0" + month.toString();
+      if (day < 10) day = "0" + day.toString();
+
+      // Format the minimum date as YYYY-MM-DD
+      var minDate = year + "-" + month + "-" + day;
+
+      // Set the minimum date for the edit fields
+      $("#edittargetdate").attr("min", minDate);
+      $("#editactualdate").attr("min", minDate);
+
+      // Event listener for date inputs to update the corresponding day name
+      $('input[type="date"]').on("change", function () {
+        var dateInput = this.value;
+        var date = new Date(dateInput);
+
+        // Format the day name using Intl.DateTimeFormat
+        var options = { weekday: "long" };
+        var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+
+        // Update the day name based on which edit date input was changed
+        if (this.id === "edittargetdate") {
+          $("#edittargetdayName").val(dayName); // Target the corresponding day name field for target date
+        } else if (this.id === "editactualdate") {
+          $("#editactualdayName").val(dayName); // Target the corresponding day name field for actual date
+        }
       });
     });
 

@@ -1,0 +1,366 @@
+<script>
+  let id = "";
+  let globalEmployeeid = "";
+
+  $(document).ready(function () {
+    LoadTable();
+    LoadList();
+    LoadEditEmp();
+    LoadPayrollDate();
+    searchTable();
+    LoadViewEmp();
+
+    $(document).on("keyup", "#myInput", function () {
+      searchTable();
+    });
+
+    function LoadTable() {
+      $("#dataTableEmployeeAdjournment").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/adjournement_pay/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+              action = `
+                          <button id="viewBtn" class="btn text-warning" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewadjournmentmodal"><i class="fas fa-eye"></i></button>
+                         `;
+              finalData.push({
+                id: item.id,
+                hold_suspensionid: item.hold_suspensionid,
+                fullname: item.fullname,
+                lift_date: item.lift_date,
+                duration_day: item.duration_day,
+                salary_per_day: item.salary_per_day,
+                payrolldate: item.payrolldate,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "hold_suspensionid" },
+          { data: "fullname" },
+          { data: "lift_date" },
+          { data: "duration_day" },
+          {
+            data: "salary_per_day",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "payrolldate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+
+        initComplete: function () {},
+      });
+    }
+
+    $("#adjournemployee").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    function LoadList() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#adjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadEditEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editadjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadViewEmp() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#viewadjournemployee").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreqbeforepayout",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#adjournpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#dataTableEmployeeAdjournment tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      id = dataRow[0];
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/adjournement_pay/getadjournemployee",
+        data: { adjournid: id },
+        success: function (result) {
+          if (result.msg === "success") {
+            const data = result.data[0];
+            $("#viewadjournemployee").val(data.employeeid);
+            globalEmployeeid = data.employeeid;
+            $("#viewadjourntitle").val(data.name);
+            $("#viewadjournstart").val(data.startdate);
+            $("#viewadjournend").val(data.enddate);
+            $("#viewajournstatus").val(data.status);
+            $("#viewadjourndesc").val(data.description);
+            $("#adjournpayrolldate").val(data.payrolldate);
+            $("#adjourndailyrate").val(formatCurrencyValue(data.salary_per_day));
+            $("#adjournementotalpay").val(formatCurrencyValue(data.total_suspension_pay));
+            $("#previewold").attr("src", "data:image/jpg;base64," + data.image);
+          } else {
+            swal("Error", "Could not fetch employee details.", "error");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching employee details:", error);
+          swal("Error", "Error fetching employee details.", "error");
+        },
+      });
+      $.ajax({
+        type: "POST",
+        url: "/adjournement_pay/viewdatesdetails",
+        data: { adjournid: id },
+        success: function (result) {
+          if (result.msg === "success") {
+            const tableBody = $("#viewadjournmentmodal table tbody");
+            tableBody.empty(); 
+
+            $.each(result.data, function (index, item) {
+              const adjournStatus =
+                item.adjourn_status === null ? "Clear" : item.adjourn_status;
+              let statusClass = "";
+              switch (adjournStatus) {
+                case "Adjourned":
+                  statusClass = "project-based-status"; 
+                  break;
+                case "Lifted":
+                  statusClass = "probationary-status"; 
+                  break;
+                case "Clear":
+                  statusClass = "regular-status";
+                  break;
+                case "Rest Day":
+                  statusClass = "apprentice-status"; 
+                  break;
+                default:
+                  statusClass = "";
+              }
+
+              const tableRow = `
+                <tr>
+                    <td>${item.employeeid}</td>
+                    <td>${item.date_value}</td>
+                    <td>${item.day_name}</td>
+                    <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
+                </tr>`;
+
+              tableBody.append(tableRow);
+            });
+          } else {
+            swal("Error", "Could not fetch adjournment details.", "error");
+          }
+        },
+
+        error: function (xhr, status, error) {
+          console.error("Error fetching adjournment dates:", error);
+          swal("Error", "Error fetching adjournment dates.", "error");
+        },
+      });
+      $("#viewadjournmentmodal").modal("show");
+    });
+
+
+    $(document).on("click", "#adjournmentPaySaveBtn", function () {
+      let adjournid = id;
+      let payrolldate = $("#adjournpayrolldate").val();
+      let employeeid = globalEmployeeid;
+
+      var message = "";
+
+      if (payrolldate === "") {
+        message += "Payroll Date is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "adjournement_pay/edit",
+          data: {
+            adjournid: adjournid,
+            payrolldate: payrolldate,
+            employeeid: employeeid,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Adjournment Pay Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            } else {
+              swal(
+                "Data already exists!",
+                "You clicked the button!",
+                "warning"
+              );
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+  function searchTable() {
+    var input, filter, found, table, tr, td, i, j;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTableEmployeeAdjournment");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td");
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+        }
+      }
+      if (found) {
+        tr[i].style.display = "";
+        found = false;
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+</script>
