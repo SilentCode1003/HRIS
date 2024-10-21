@@ -624,10 +624,6 @@
             if (bdayData.length === 0) {
               bdaydiv = `<div class="carousel-item active">
                                     <img src="/images/img/nobday.jpg" class="d-block w-100 nobday-img" alt="Default Image">
-                                    <div class="carousel-caption d-md-block">
-                                        <h1 class="no-text">NO</h1>
-                                          <h1 class="nobday">Birthdays for today ...</h1>
-                                    </div>
                                 </div>`;
             } else {
               $.each(bdayData, (key, item) => {
@@ -637,9 +633,10 @@
 
 
                                 <div class="bday-eportal">
-                                  <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="d-flex bday-img-eportal t-5 rounded-circle" alt="...">
-                                <p class="bday-greet">Happy Birthday</p>
-                                    <h5 id="employeeid${counterbday}" class="fname-eportal">${item.firstname}</h5>
+                                   <h1 class="bday-greet">Happy Birthday</h1>
+                                  <img id="preview${counterbday}" src="data:image/jpg;base64,${item.profilePicturePath}" class="bday-img-eportal t-5 rounded-circle" alt="..."> 
+                               
+                                    <h5 id="employeeid${counterbday}" class="fname-eportal ribbon">${item.firstname}</h5>
                                     <h6 id="bdaydate${counterbday}" class="bdaydate-eportal">${item.birthday}</h6>
 
                                 <button class="carousel-control-prev" type="button"
@@ -690,7 +687,7 @@
 
 
                                 <div class="announcement-hrmis">
-                                    <h6 id="announcedate${counter}" class="a-date">${item.targetdate}</h6>
+                                    <h6 id="announcedate${counter}" class="a-date text-center">${item.targetdate}</h6>
                                     <h6 id="announcetitle${counter}" class="announce-title">${item.title}</h6>
                                     <p id="announcedesc${counter}" class="a-des">${item.description}</p>
                                 <button class="carousel-control-prev" type="button"

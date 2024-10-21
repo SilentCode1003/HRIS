@@ -291,13 +291,6 @@
 
 
 #myInput2 {
-  /* float: left;
-  border: none;
-  height: 33px;
-  width: 300px;
-  margin-right: 5px;
-  border-radius: 8px;
-  border: 2px solid #F5E0B3 !important; */
   float: left;
   border: none;
   height: 33px;
@@ -352,6 +345,7 @@ table th {
   background-color: #7a1818  !important;
   color: white !important;
 }
+
 /* .card .card-header {
   height: 50px;
 } */
@@ -540,15 +534,11 @@ form select:not(#inputState) {
 
 .custom-dropdown {
   display: none;
-  width: 100%;
-  border: 2px solid #555454;
-  max-height: 100px;
   overflow-y: auto;
   position: absolute;
   background-color: white;
-  width: 36.7vw;
+  width: 38.5vw;
   z-index: 1000;
-  border-radius: 0.275rem;
   text-align: center;
 }
 

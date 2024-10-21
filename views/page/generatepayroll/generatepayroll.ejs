@@ -2,26 +2,28 @@
     <!-- Table -->
     <div class="card" id="tablecard">
         <div class="card-header ch-coop">
-            <h3 class="title-card-table">Generate Payroll</h3>
-            <div class="row g-4">
+            <h3 class="title-card-table m-4">Generate Payroll</h3>
+            <div class="d-flex gap-4 m-2 mb-4 attendance-field">
                 <div class="col">
-                    <input id="myInput" type="text" placeholder="Search....">
+                    <input id="myInput" class="pl-2 font-weight-bold" type="text" placeholder="Search....">
                 </div>
-                <div class="col-md-2">
+               <div class="d-flex gap-4 justify-content-end attendance-field">
+                <div class="flex">
                     <input id="datepicker" type="text" name="daterange">
                 </div>
-                <div class="col-sm-2 col-add">
-                    <button data-bs-toggle="modal" data-bs-target="#openModalBank" class="btn btn-export-color"><b>Bank Statement</b></button>
+                <div class="flex">
+                    <button data-bs-toggle="modal" data-bs-target="#openModalBank" class="btn btn-empPer-color"><i class="bi bi-bank2 mr-2"></i><b>Bank Statement</b></button>
                 </div>
-                <div class="col-sm-1 col-add">
-                    <button id="loadbutton" class="btn btn-load-color"><b>Load</b></button>
+                <div class="flex">
+                    <button id="loadbutton" class="btn btn-load-color"><i class="bi bi-arrow-clockwise mr-2"></i><b>Load</b></button>
                 </div>
-                <div class="col-sm-2 col-add">
-                    <button id="generateButton" class="btn btn-add-color"><b>Generate</b></button>
+                <div class="flex">
+                    <button id="generateButton" class="btn btn-add-color"><i class="bi bi-gear-wide mr-2"></i><b>Generate</b></button>
                 </div>
-                <div class="col-sm-1 col-add">
-                    <button id="exportBtn" class="btn btn-export-color"><b>Export</b></button>
+                <div class="flex">
+                    <button id="exportBtn" class="btn btn-export-color"><i class="bi bi-database-fill-gear mr-2"></i><b>Export</b></button>
                 </div>
+               </div>
             </div> 
         </div>
 

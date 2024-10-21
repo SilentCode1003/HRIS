@@ -3,19 +3,21 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header ch-coop">
-      <h3 class="title-card-table">Retro Active Pay</h3>
-      <div class="row g-2">
+      <h3 class="title-card-table m-4">Retro Active Pay</h3>
+      <div class="d-flex gap-4 m-2 mb-4 attendance-field">
         <div class="col">
-          <input id='myInput'  type='text' placeholder="  Search....">
+          <input id='myInput' class="pl-2 font-weight-bold"  type='text' placeholder="  Search....">
         </div>
-        <div class="col-sm-1 col-add">
+       <div class="d-flex gap-4 justify-content-end attendance-field">
+        <div class="flex">
           <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addretromodal">
             <b>+ Add</b>
           </button>
         </div>
-        <div class="col-sm-1 col-add">
-          <button id="exportExcelBtn" class="btn btn-export-color"><b>Export</b></button>
+        <div class="flex">
+          <button id="exportExcelBtn" class="btn btn-export-color"><i class="bi bi-database-fill-gear mr-2"></i><b>Export</b></button>
       </div>
+       </div>
       </div>
     </div>
     <div class="card-body">

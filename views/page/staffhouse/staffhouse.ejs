@@ -1,65 +1,71 @@
+<br>
+<br>
+
 <div class="card">
-  <div class="card-header">
-    <h3 class="card-title mb-0 font-weight-bold">Staff House</h3>
+  <div class="card-header header-bg">
+    <h3 class="card-title ch-text">Staff House</h3>
     <div class="card">
-      <div class="card-body">
+      <div class="card-body ch-body">
         <div class="form">
-          <div class="row">
+          <div class="row align-items-center">
             <div class="col-sm-12 col-md-4 col-lg-4">
               <input
                 type="text"
-                class="form-control"
+                class="form-control border-form-modal"
                 id="name"
                 placeholder="Alias or Name e.g. Polo Drive"
               />
             </div>
+
+            
+            </div>
           </div>
           <div class="row mt-2">
             <div class="col-sm-12 col-md-4 col-lg-4">
               <input
                 type="text"
-                class="form-control strong"
+                class="form-control strong border-form-modal"
                 id="tel"
                 placeholder="Contact Number e.g. 0926-262-8210"
               />
-            </div>
           </div>
           <div class="row mt-2">
-            <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="col-sm-12">
               <textarea
                 name="address"
                 id="address"
-                class="form-control"
+                class="form-control border-form-modal"
                 placeholder="Address e.g. 39 Macaria Ave, Pacita 1, Brgy. San Francisco, Biñan, Laguna, 4024"
               ></textarea>
             </div>
           </div>
 
-          <div class="row mt-4 justify-content-start">
-            <div class="col-sm-3 col-md-3 col-lg-3">
-              <button id="addBtn" class="btn btn-add-color w-75">Add</button>
+          <div class="d-flex mt-4 justify-content-end">
+            <div class="flex">
+              <button id="addBtn" class="btn btn-add-color"><i class="bi bi-plus mr-2"></i><b>Add</b></button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="card-body">
+
+  <div class="card-body header-bg">
     <div class="card-title">
-      <h6 class="m-0 font-weight-bold">Staff House Table</h6>
+      <h6 class="ch-text"><b>Staff House Table</b></h6>
     </div>
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6 mb-3 m-2">
         <input
           id="search"
           type="text"
-          class="form-control"
-          placeholder="Search"
+          class="form-control pl-2 font-weight-bold"
+          placeholder="Search...."
         />
       </div>
     </div>
 
-    <div class="row mt-2">
+    <div class="row mt-2 m-2">
       <div class="table">
         <table id="data-table" class="table table-bordered table-hover">
           <thead>
@@ -88,24 +94,24 @@
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header header-bg">
         <h5 class="modal-title" id="editModalLabel">Edit Staff House</h5>
         <button
           type="button"
-          class="close"
+          class="close staff-close"
           data-bs-dismiss="modal"
           aria-label="Close"
         >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body ch-body">
         <div class="form">
           <div class="row">
             <div class="col-sm-12">
               <input
                 type="text"
-                class="form-control"
+                class="form-control border-form-modal"
                 id="namemodal"
                 placeholder="Alias or Name e.g. Polo Drive"
               />
@@ -116,7 +122,7 @@
             <div class="col-sm-12">
               <input
                 type="text"
-                class="form-control strong"
+                class="form-control strong border-form-modal"
                 id="telmodal"
                 placeholder="Contact Number e.g. 0926-262-8210"
               />
@@ -127,16 +133,16 @@
               <textarea
                 name="address"
                 id="addressmodal"
-                class="form-control"
+                class="form-control border-form-modal"
                 placeholder="Address e.g. 39 Macaria Ave, Pacita 1, Brgy. San Francisco, Biñan, Laguna, 4024"
               ></textarea>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer header-bg">
         <div class="row justify-content-end">
-          <button id="updateBtn" class="btn btn-add-color w-100">Update</button>
+          <button id="updateBtn" class="btn btn-add-color w-100"><b>Update</b></button>
         </div>
       </div>
     </div>

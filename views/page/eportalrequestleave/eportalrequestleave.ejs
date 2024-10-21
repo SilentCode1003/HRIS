@@ -4,59 +4,47 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
-    <h3>My Leaves</h3>
-    <div class="row g-2">
-      <div class="col-md-6">
-        <div class="input-group input-group-sm mb-3">
-          <label for="pendingleavename" class="form-label fw-bold text-white" style="margin-right: 5%;">Leave Type :</label>
-        <select class="form-select payslipemp" id="leavetypeheader">
-          <option selected disabled>Select Leave Type First</option> 
-           
-        </select>
+    <h3 class="m-4">My Leaves</h3>
+    
+      <div class="pl-4">
+        <div class="col-md-6">
+          <div class="input-group input-group-sm mb-3">
+            <label for="pendingleavename" class="form-label fw-bold text-white" style="margin-right: 5%;">Leave Type :</label>
+          <select class="form-select payslipemp" id="leavetypeheader">
+            <option selected disabled>Select Leave Type First</option> 
+          </select>
+          </div>
         </div>
-      </div>
-      <div class="col" style="margin-left: 5%;">
-        <div>
-          <label class="fw-bold text-white">Leave Total Per Year : </label>
-          <small class="payslipemp text-white" id="leaveperyearheader"></small>
+        <div class="col" >
+          <div>
+            <label class="fw-bold text-white">Leave Total Per Year : </label>
+            <small class="payslipemp text-white" id="leaveperyearheader"></small>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="row g-2">
-      <div class="col-md-6"></div>
-        <div class="col" style="margin-left: 5%;">
+        <div class="col" >
           <div>
             <span class="fw-bold text-white">Leave Credits Unused : </span>
             <small class="ms-3 payslipemp text-white" id="Unusedleaveheader"></small>
           </div>
         </div>
-    </div>
-
-    <div class="row g-2">
-      <div class="col-md-6"></div>
-      <div class="col" style="margin-left: 5%;">
-        <div>
+        <div class="col" >
           <span class="fw-bold text-white">Leave Credits Used : </span>
           <small class="ms-3 payslipemp text-white" id="UsedleaveHeader"></small>
         </div>
       </div>
-    </div>
-  
-    <div class="row g-2">
-      <div class="col"></div>
-      <div class="col-sm-2">
-        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#pendingmodal">
-          <h6>Apply Leave</h6>
+
+      <br>
+
+    <div class="d-flex gap-4 m-2 mb-4 justify-content-end attendance-field">
+      <div class="flex">
+        <button type="button" id="applybtn" class="btn btn-add-color font-weight-bold" data-bs-toggle="modal" data-bs-target="#pendingmodal">
+          <i class="bi bi-calendar2-week mr-2"></i>Apply Leave
         </button>
       </div>
     </div>
   
   </div>
-</div>
 
-<div class="col">
-  <div class="card">
       <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -166,8 +154,8 @@
             </div>
           </div>
       </div>
-  </div>
-</div>
+
+
 
  <!-- Modal -->
 <div class="modal fade" id="pendingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -385,6 +373,7 @@
                     </div>
                     <br>
                   </form>
+                </div>
                 </div>
               </div>
             </div>
