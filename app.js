@@ -6,11 +6,21 @@ var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
 const { eventlogger, logger } = require("./middleware/logger");
+const cron = require("node-cron");
+const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_status");
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
 //   credentials: true,
 // };
+
+
+// Schedule the function to run every day at 23:59 (11:59 PM)
+cron.schedule("0 0 * * *", () => {
+  console.log("Running daily attendance status insertion...");
+  insertDailyAttendanceStatus();
+});
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
