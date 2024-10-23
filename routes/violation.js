@@ -66,7 +66,6 @@ router.get("/load", (req, res) => {
 
     mysql.Select(sql, "Master_Violation", (err, result) => {
       if (err) console.error("Error: ", err);
-
       res.json({
         msg: "success",
         data: result,
@@ -78,6 +77,63 @@ router.get("/load", (req, res) => {
     });
   }
 });
+
+
+//router.get("/load", (req, res) => {
+//   try {
+//     let sql = `SELECT 
+//     mv_violationid,
+//     mv_description,
+//     mda_actioncode as mv_actionid,
+//     mv_createby,
+//     mv_createdate,
+//     mv_status
+//     from master_violation
+//     LEFT JOIN master_disciplinary_action ON master_violation.mv_actionid = mda_actionid`;
+
+//     mysql.Select(sql, "Master_Violation", (err, result) => {
+//       if (err) console.error("Error: ", err);
+
+//       console.log(result, "res");
+//       let data = [];
+
+//       for (const violation in result) {
+//         const {
+//           violationid,
+//           description,
+//           actionid,
+//           createby,
+//           createdate,
+//           status,
+//         } = result[violation];
+//         if (
+//           description.includes("tardiness ") ||
+//           description.includes("Tardiness") ||
+//           description.includes("absence ") ||
+//           description.includes("Absence ")
+//         ) {
+//           data.push({
+//             violationid: violationid,
+//             description: description,
+//             actionid: actionid,
+//             createby: createby,
+//             createdate: createdate,
+//             status: status,
+//           });
+//         }
+//       }
+
+//       res.json({
+//         msg: "success",
+//         data: data,
+//       });
+//     });
+//   } catch (error) {
+//     res.json({
+//       msg: error,
+//     });
+//   }
+// });
 
 router.post("/save", async (req, res) => {
   try {
