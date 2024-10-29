@@ -295,6 +295,7 @@ router.post("/latestlogforapp", (req, res) => {
 //     });
 // });
 
+
 router.post("/clockout", (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude, geofenceid } = req.body;
