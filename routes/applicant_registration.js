@@ -1259,7 +1259,6 @@ router.post("/viewdata", (req, res) => {
   }
 });
 
-
 router.put("/update_personal", (req, res) => {
   try {
     const { 
@@ -1650,51 +1649,128 @@ router.put("/update_career", (req, res) => {
   }
 });
 
+// router.put("/update_education", (req, res) => {
+//   try {
+//     const { 
+      
+//     } = req.body;
+
+//     let data = [];
+//     let columns = [];
+//     let arguments = [];
+
+//     if (firstName) {
+//       data.push(firstName);
+//       columns.push("attainment");
+//     }
+
+//     if (lastName) {
+//       data.push(lastName);
+//       columns.push("schoolname");
+//     }
+
+//     if (middleName) {
+//       data.push(middleName);
+//       columns.push("start");
+//     }
+
+//     if (nickName) {
+//       data.push(nickName);
+//       columns.push("end");
+//     }
+
+//     if (presentPhoneNumber) {
+//       data.push(presentPhoneNumber);
+//       columns.push("isgraduate");
+//     }
+
+//     if (presentAddress) {
+//       data.push(presentAddress);
+//       columns.push("highest_level");
+//     }
+
+//     if (applicantId) {
+//       data.push(applicantId);
+//       arguments.push("education_id");
+//     }
+
+//     let updateStatement = UpdateStatement(
+//       "applicant_education",
+//       "ae",
+//       columns,
+//       arguments
+//     );
+
+//     console.log(updateStatement);
+
+//     Update(updateStatement, data, (err, result) => {
+//       if (err) console.error("Error: ", err);
+//       res.json(JsonSuccess());
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
 router.put("/update_education", (req, res) => {
   try {
-    const { 
-      
+    const {
+      ae_education_id,   // Unique ID for the record
+      ae_applicantid,     // Applicant ID
+      ae_attainment,      // Education level (e.g., College, Highschool)
+      ae_schoolname,      // School name
+      ae_start,           // Start year
+      ae_end,             // End year
+      ae_isgraduate,      // Graduation status
+      ae_highest_level    // Highest level or honors
     } = req.body;
 
     let data = [];
     let columns = [];
     let arguments = [];
 
-    if (firstName) {
-      data.push(firstName);
-      columns.push("attainment");
+    // Populate columns and data based on provided values
+    if (ae_attainment) {
+      data.push(ae_attainment);
+      columns.push("ae_attainment");
     }
 
-    if (lastName) {
-      data.push(lastName);
-      columns.push("schoolname");
+    if (ae_schoolname) {
+      data.push(ae_schoolname);
+      columns.push("ae_schoolname");
     }
 
-    if (middleName) {
-      data.push(middleName);
-      columns.push("start");
+    if (ae_start) {
+      data.push(ae_start);
+      columns.push("ae_start");
     }
 
-    if (nickName) {
-      data.push(nickName);
-      columns.push("end");
+    if (ae_end) {
+      data.push(ae_end);
+      columns.push("ae_end");
     }
 
-    if (presentPhoneNumber) {
-      data.push(presentPhoneNumber);
-      columns.push("isgraduate");
+    if (ae_isgraduate) {
+      data.push(ae_isgraduate);
+      columns.push("ae_isgraduate");
     }
 
-    if (presentAddress) {
-      data.push(presentAddress);
-      columns.push("highest_level");
+    if (ae_highest_level) {
+      data.push(ae_highest_level);
+      columns.push("ae_highest_level");
     }
 
-    if (applicantId) {
-      data.push(applicantId);
-      arguments.push("education_id");
+    if (ae_education_id) {
+      arguments.push(`ae_education_id = ?`);
+      data.push(ae_education_id);  // Use ae_education_id in the WHERE clause
     }
 
+    if (arguments.length === 0) {
+      return res.status(400).json({ error: "No ID provided for the update." });
+    }
+
+    // Dynamically construct the update SQL statement
     let updateStatement = UpdateStatement(
       "applicant_education",
       "ae",
@@ -1702,18 +1778,22 @@ router.put("/update_education", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
+    console.log(updateStatement); // For debugging
 
+    // Perform the update
     Update(updateStatement, data, (err, result) => {
-      if (err) console.error("Error: ", err);
-      res.json(JsonSuccess());
+      if (err) {
+        console.error("Error: ", err);
+        return res.status(500).json({ error: "Database update failed." });
+      }
+
+      res.json({ success: true, message: "Record updated successfully!" });
     });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    res.status(500).json({ error: "Server error." });
   }
 });
-
 
 
 //#endregion
