@@ -11,7 +11,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("5870761ef0a899174f425b0cb0756fdd", (err, encrypted) => {
+Decrypter("7d3acfc73786454aa082c11a6f2224f3", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -382,7 +382,9 @@ exports.InsertTable = (tablename, data, callback) => {
         ma_gefenceidIn,
         ma_geofenceidOut,
         ma_devicein,
-        ma_deviceout) VALUES ?`;
+        ma_deviceout,
+        ma_locationIn,
+        ma_locationOut) VALUES ?`;
 
     this.Insert(sql, data, (err, result) => {
       if (err) {

@@ -22,6 +22,7 @@ const {
 } = require("./repository/customhelper");
 const { generateUsernamefoApplicant } = require("./repository/helper");
 const { DataModeling, RawData } = require("./model/hrmisdb");
+const { log } = require("winston");
 const applicantcurrentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");
 
@@ -327,6 +328,8 @@ router.post("/register_education", (req, res) => {
                 if (err) {
                   return reject(JsonErrorResponse(err));
                 }
+                console.log(result,'result'); 
+                
                 resolve(JsonSuccess());
               });
             });
@@ -429,8 +432,8 @@ router.post("/register_career", (req, res) => {
       "sixth",
     ];
 
-    for (const level of employerLevels) {
-      if (!careerData[level]) continue;
+    employerLevels.forEach((level) => {
+      if (!careerData[level]) return;
 
       const {
         name: carrer_employer,
@@ -445,6 +448,7 @@ router.post("/register_career", (req, res) => {
 
       let sql = InsertStatement("applicant_career", "ac", [
         "applicantid",
+        "attainment",
         "employer",
         "start",
         "end",
@@ -458,6 +462,7 @@ router.post("/register_career", (req, res) => {
       let data = [
         [
           applicantId,
+          level,
           carrer_employer,
           career_start_date,
           career_end_date,
@@ -480,7 +485,7 @@ router.post("/register_career", (req, res) => {
         .then((result) => {
           console.log(`Check Result for ${level}:`, result);
 
-          if (result.length != 0) {
+          if (result.length !== 0) {
             console.log(`Entry already exists for ${level}`);
             return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
           } else {
@@ -502,16 +507,17 @@ router.post("/register_career", (req, res) => {
         });
 
       careerPromises.push(promise);
-    }
+    });
 
     const seminarList = [
-      seminars,
-      secondSeminars,
-      thirdSeminars,
-      fourthSeminars,
-      fifthSeminars,
+      { data: seminars, attainment: "seminar" },
+      { data: secondSeminars, attainment: "secondSeminars" },
+      { data: thirdSeminars, attainment: "thirdSeminars" },
+      { data: fourthSeminars, attainment: "fourthSeminars" },
+      { data: fifthSeminars, attainment: "fifthSeminars" },
     ];
-    seminarList.forEach((seminar, index) => {
+
+    seminarList.forEach(({ data: seminar, attainment }) => {
       if (!seminar) return;
 
       const { seminarName: as_seminar_name, dateSeminar: as_seminar_date } =
@@ -519,22 +525,32 @@ router.post("/register_career", (req, res) => {
 
       let sql = InsertStatement("applicant_seminar", "as", [
         "applicantid",
+        "attainment",
         "seminar_name",
         "seminar_date",
       ]);
 
-      console.log(`SQL Statement for seminar ${index + 1}:`, sql);
+      console.log(`SQL Statement for ${attainment}:`, sql);
 
-      let data = [[applicantId, as_seminar_name, as_seminar_date]];
+      let data = [
+        [
+          applicantId,
+          attainment, 
+          as_seminar_name,
+          as_seminar_date,
+        ],
+      ];
+
+      console.log(`Data for ${attainment}:`, data);
 
       seminarPromises.push(
         new Promise((resolve, reject) => {
           InsertTable(sql, data, (err, result) => {
             if (err) {
-              console.log(`Error inserting seminar ${index + 1}:`, err);
+              console.log(`Error inserting ${attainment}:`, err);
               return reject(JsonErrorResponse(err));
             }
-            console.log(`Successfully inserted seminar ${index + 1}`);
+            console.log(`Successfully inserted ${attainment}`);
             resolve(JsonSuccess());
           });
         })
@@ -597,14 +613,54 @@ router.post("/register_seminar", (req, res) => {
 
 router.post("/register_family", (req, res) => {
   try {
-    const { applicantId, mother, siblings, spouse, children } = req.body;
+    const { applicantId, 
+      father, 
+      mother, 
+      siblings, 
+      siblings2, 
+      siblings3, 
+      siblings4, 
+      siblings5, 
+      siblings6, 
+      siblings7, 
+      siblings8, 
+      spouse, 
+      children,
+      children2, 
+      children3,  
+      children4, 
+      children5, 
+      children6, 
+      children7, 
+      children8
+    } = req.body;
+
+    console.log(req.body,'body');
+    
 
     const familyMembers = [
+      { ...father, relation: "father" },
       { ...mother, relation: "mother" },
       { ...siblings, relation: "siblings" },
+      { ...siblings2, relation: "siblings2" },
+      { ...siblings3, relation: "siblings3" },
+      { ...siblings4, relation: "siblings4" },
+      { ...siblings5, relation: "siblings5" },
+      { ...siblings6, relation: "siblings6" },
+      { ...siblings7, relation: "siblings7" },
+      { ...siblings8, relation: "siblings8" },
       { ...spouse, relation: "spouse" },
       { ...children, relation: "children" },
+      { ...children2, relation: "children2" },
+      { ...children3, relation: "children3" },
+      { ...children4, relation: "children4" },
+      { ...children5, relation: "children5" },
+      { ...children6, relation: "children6" },
+      { ...children7, relation: "children7" },
+      { ...children8, relation: "children8" },
     ];
+    console.log(familyMembers,'familyMembers');
+    
 
     let sql = InsertStatement("applicant_family", "af", [
       "applicantid",
@@ -637,6 +693,9 @@ router.post("/register_family", (req, res) => {
           birthday,
         ],
       ];
+
+      console.log(data,'data');
+      
 
       let checkStatement = SelectStatement(
         "select * from applicant_family where af_applicantid=? and af_name=? and af_relation=?",
@@ -678,54 +737,90 @@ router.post("/register_family", (req, res) => {
 
 router.post("/register_reference", (req, res) => {
   try {
-    const { applicantId, references } = req.body;
+    const { applicantId, ...references } = req.body;
 
-    const {
-      name: reference_name,
-      occupation: reference_occupation,
-      address: reference_complete_address,
-      telephone: reference_contact_no,
-    } = references;
+    console.log(req.body,'req.body');
 
-    let sql = InsertStatement("applicant_references", "ar", [
-      "applicantid",
-      "references_name",
-      "occupation",
-      "complete_address",
-      "contact_no",
-    ]);
+    const referencesPromises = [];
 
-    let data = [
-      [
-        applicantId,
-        reference_name,
-        reference_occupation,
-        reference_complete_address,
-        reference_contact_no,
-      ],
+    const referencesLevels = [
+      "references",
+      "references2",
+      "references3",
     ];
 
-    let checkStatement = SelectStatement(
-      "select * from applicant_references where ar_applicantid=? and ar_references_name=? and ar_occupation=?",
-      [applicantId, reference_name, reference_occupation]
-    );
+    referencesLevels.forEach((level) => {
+      if (!references[level]) return;
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result.length != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, result) => {
-            if (err) {
-              console.log(err);
-              return res.json(JsonErrorResponse(err));
-            }
-            res.json(JsonSuccess());
-          });
-        }
+      const {
+        name: reference_name,
+        occupation: reference_occupation,
+        address: reference_complete_address,
+        telephone: reference_contact_no,
+      } = references[level];
+
+      let sql = InsertStatement("applicant_references", "ar", [
+        "applicantid",
+        "attainment",
+        "references_name",
+        "occupation",
+        "complete_address",
+        "contact_no",
+      ]);
+  
+      let data = [
+        [
+          applicantId,
+          level,
+          reference_name,
+          reference_occupation,
+          reference_complete_address,
+          reference_contact_no,
+        ],
+      ];
+
+      console.log(data,'data');
+      
+  
+      let checkStatement = SelectStatement(
+        "select * from applicant_references where ar_applicantid=? and ar_references_name=? and ar_occupation=?",
+        [applicantId, reference_name, reference_occupation]
+      );
+
+      const promise = Check(checkStatement)
+        .then((result) => {
+          console.log(`Check Result for ${level}:`, result);
+
+          if (result.length !== 0) {
+            console.log(`Entry already exists for ${level}`);
+            return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            return new Promise((resolve, reject) => {
+              InsertTable(sql, data, (err, result) => {
+                if (err) {
+                  console.log(`Error inserting ${level}:`, err);
+                  return reject(JsonErrorResponse(err));
+                }
+                console.log(`Successfully inserted ${level}`);
+                resolve(JsonSuccess());
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(`Error checking ${level}:`, error);
+          return JsonErrorResponse(error);
+        });
+
+        referencesPromises.push(promise);
+    });
+
+    Promise.all([...referencesPromises])
+      .then((results) => {
+        res.json(results);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(`Error in Promise.all:`, error);
         res.json(JsonErrorResponse(error));
       });
   } catch (error) {
@@ -737,287 +832,6 @@ router.post("/register_reference", (req, res) => {
 //#endregion
 
 //#region UPDATE DATA
-
-// router.post("/viewdata", (req, res) => {
-//   try {
-//     let applicant_id = req.body.applicantId;
-
-//     console.log(req.body.applicantId);
-    
-//     let sql = `
-//       SELECT 
-//         -- Master Applicant Personal
-//         map.map_applicantid AS map_applicantid,
-//         map.map_firstname AS map_firstname,
-//         map.map_lastname AS map_lastname,
-//         map.map_middlename AS map_middlename,
-//         map.map_nickname AS map_nickname,
-//         map.map_phone_no AS map_phone_no,
-//         map.map_address AS map_address,
-//         map.map_provincial_address AS map_provincial_address,
-//         map.map_provincial_phone_address AS map_provincial_phone_address,
-//         map.map_gender AS map_gender,
-//         map.map_civil_status AS map_civil_status,
-//         map.map_age AS map_age,
-//         DATE_FORMAT(map.map_birthday, '%Y-%m-%d') AS map_birthday,
-//         map.map_birthplace AS map_birthplace,
-//         map.map_citizenship AS map_citizenship,
-//         map.map_height AS map_height,
-//         map.map_weight AS map_weight,
-//         map.map_physical_limit AS map_physical_limit,
-//         map.map_sss_no AS map_sss_no,
-//         map.map_tin_no AS map_tin_no,
-//         map.map_language AS map_language,
-//         map.map_isrelated AS map_isrelated,
-//         map.map_related_emp AS map_related_emp,
-//         map.map_isApplied AS map_isApplied,
-//         map.map_isAppliedYes AS map_isAppliedYes,
-//         map.map_isCharged AS map_isCharged,
-//         map.map_isChargedYes AS map_isChargedYes,
-//         map.map_isIllness AS map_isIllness,
-//         map.map_isDrive AS map_isDrive,
-//         map.map_isDriveYes AS map_isDriveYes,
-//         map.map_isLicense AS map_isLicense,
-//         map.map_specialSkills AS map_specialSkills,
-//         map.map_hobbies AS map_hobbies,
-//         map.map_positionPreferred AS map_positionPreferred,
-//         map.map_salary AS map_salary,
-//         DATE_FORMAT(map.map_dateAvailable, '%Y-%m-%d') AS map_dateAvailable,
-//         map.map_isAccept AS map_isAccept,
-//         map.map_isAcceptNo AS map_isAcceptNo,
-//         map.map_isDischarged AS map_isDischarged,
-//         map.map_relative AS map_relative,
-//         map.map_deptReferences AS map_deptReferences,
-//         map.map_recommendedBy AS map_recommendedBy,
-//         map.map_referredTo AS map_referredTo,
-//         map.map_personEmergency AS map_personEmergency,
-//         map.map_relationship AS map_relationship,
-//         map.map_emergencyAddress AS map_emergencyAddress,
-//         map.map_emergencyPhoneNumber AS map_emergencyPhoneNumber,
-
-//         -- Applicant Career
-//         ac.ac_career_id AS map_ac_career_id,
-//         ac.ac_employer AS map_ac_employer,
-//         ac.ac_start AS map_ac_start,
-//         ac.ac_end AS map_ac_end,
-//         ac.ac_position AS map_ac_position,
-//         ac.ac_supervisor AS map_ac_supervisor,
-//         ac.ac_reason AS map_ac_reason,
-
-//         -- Applicant Education
-//         ae.ae_education_id AS map_ae_education_id,
-//         ae.ae_attainment AS map_ae_attainment,
-//         ae.ae_schoolname AS map_ae_schoolname,
-//         ae.ae_start AS map_ae_start,
-//         ae.ae_end AS map_ae_end,
-//         ae.ae_isgraduate AS map_ae_isgraduate,
-//         ae.ae_highest_level AS map_ae_highest_level,
-
-//         -- Applicant Family
-//         af.af_familyid AS map_af_familyid,
-//         af.af_name AS map_af_name,
-//         af.af_relation AS map_af_relation,
-//         af.af_age AS map_af_age,
-//         af.af_occupation AS map_af_occupation,
-//         af.af_company_position AS map_af_company_position,
-//         af.af_birthday AS map_af_birthday,
-
-//         -- Applicant Other Exam
-//         aoe.aoe_examid AS map_aoe_examid,
-//         aoe.aoe_examname AS map_aoe_examname,
-//         aoe.aoe_exam_date AS map_aoe_exam_date,
-//         aoe.aoe_placetaken AS map_aoe_placetaken,
-
-//         -- Applicant References
-//         ar.ar_referencesid AS map_ar_referencesid,
-//         ar.ar_references_name AS map_ar_references_name,
-//         ar.ar_occupation AS map_ar_occupation,
-//         ar.ar_complete_address AS map_ar_complete_address,
-//         ar.ar_contact_no AS map_ar_contact_no,
-
-//         -- Applicant Seminar
-//         sa.as_seminarid AS map_as_seminarid,
-//         sa.as_seminar_name AS map_as_seminar_name,
-//         sa.as_seminar_date AS map_as_seminar_date,
-
-//         -- Applicant User
-//         au.au_userid AS map_au_userid,
-//         au.au_username AS map_au_username,
-//         au.au_status AS map_au_status,
-//         au.au_createdate AS map_au_createdate
-
-//       FROM 
-//         master_applicant_personal map
-//       LEFT JOIN applicant_career ac ON map.map_applicantid = ac.ac_applicantid
-//       LEFT JOIN applicant_education ae ON map.map_applicantid = ae.ae_applicantid
-//       LEFT JOIN applicant_family af ON map.map_applicantid = af.af_applicantid
-//       LEFT JOIN applicant_other_exam aoe ON map.map_applicantid = aoe.aoe_applicantid
-//       LEFT JOIN applicant_references ar ON map.map_applicantid = ar.ar_applicantid
-//       LEFT JOIN applicant_seminar sa ON map.map_applicantid = sa.as_applicantid
-//       LEFT JOIN applicant_user au ON map.map_applicantid = au.au_applicantid
-//       WHERE map.map_applicantid = '${applicant_id}'`;
-
-//     Select(sql, (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         res.json(JsonErrorResponse(err));
-//       }
-
-//       if (result.length > 0) {
-//         let data = DataReturn(result, "map_");
-//         res.json(JsonDataResponse(data));
-//         console.log(data,'structure');  
-//       } else {
-//         res.json(JsonDataResponse([]));
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
-// router.post("/viewdata", (req, res) => {
-//   try {
-//     let applicant_id = req.body.applicantId;
-
-//     console.log(req.body.applicantId);
-    
-//     // List to store results from each table
-//     let resultsList = [];
-
-//     // Master Applicant Personal query
-//     let sqlPersonal = `
-//       SELECT 
-//         map_applicantid AS map_applicantid,
-//         map_firstname AS map_firstname,
-//         map_lastname AS map_lastname,
-//         map_middlename AS map_middlename,
-//         map_nickname AS map_nickname,
-//         map_phone_no AS map_phone_no,
-//         map_address AS map_address,
-//         map_provincial_address AS map_provincial_address,
-//         map_provincial_phone_address AS map_provincial_phone_address,
-//         map_gender AS map_gender,
-//         map_civil_status AS map_civil_status,
-//         map_age AS map_age,
-//         DATE_FORMAT(map_birthday, '%Y-%m-%d') AS map_birthday,
-//         map_birthplace AS map_birthplace,
-//         map_citizenship AS map_citizenship,
-//         map_height AS map_height,
-//         map_weight AS map_weight,
-//         map_physical_limit AS map_physical_limit,
-//         map_sss_no AS map_sss_no,
-//         map_tin_no AS map_tin_no,
-//         map_language AS map_language,
-//         map_isrelated AS map_isrelated,
-//         map_related_emp AS map_related_emp,
-//         map_isApplied AS map_isApplied,
-//         map_isAppliedYes AS map_isAppliedYes,
-//         map_isCharged AS map_isCharged,
-//         map_isChargedYes AS map_isChargedYes,
-//         map_isIllness AS map_isIllness,
-//         map_isDrive AS map_isDrive,
-//         map_isDriveYes AS map_isDriveYes,
-//         map_isLicense AS map_isLicense,
-//         map_specialSkills AS map_specialSkills,
-//         map_hobbies AS map_hobbies,
-//         map_positionPreferred AS map_positionPreferred,
-//         map_salary AS map_salary,
-//         DATE_FORMAT(map_dateAvailable, '%Y-%m-%d') AS map_dateAvailable,
-//         map_isAccept AS map_isAccept,
-//         map_isAcceptNo AS map_isAcceptNo,
-//         map_isDischarged AS map_isDischarged,
-//         map_relative AS map_relative,
-//         map_deptReferences AS map_deptReferences,
-//         map_recommendedBy AS map_recommendedBy,
-//         map_referredTo AS map_referredTo,
-//         map_personEmergency AS map_personEmergency,
-//         map_relationship AS map_relationship,
-//         map_emergencyAddress AS map_emergencyAddress,
-//         map_emergencyPhoneNumber AS map_emergencyPhoneNumber
-//       FROM master_applicant_personal
-//       WHERE map_applicantid = '${applicant_id}'`;
-
-//     Select(sqlPersonal, (err, personalResult) => {
-//       if (err) {
-//         console.error(err);
-//         res.json(JsonErrorResponse(err));
-//         return;
-//       }
-
-//       if (personalResult.length > 0) {
-//         let personalData = DataReturn(personalResult, "map_");
-//         resultsList.push({ personal_info: personalData });
-//       }
-
-//       // Continue with other queries after the personal result is fetched
-      
-//       // Applicant Career query
-//       let sqlCareer = `
-//         SELECT 
-//           ac_career_id AS map_ac_career_id,
-//           ac_employer AS map_ac_employer,
-//           ac_start AS map_ac_start,
-//           ac_end AS map_ac_end,
-//           ac_position AS map_ac_position,
-//           ac_supervisor AS map_ac_supervisor,
-//           ac_reason AS map_ac_reason
-//         FROM applicant_career
-//         WHERE ac_applicantid = '${applicant_id}'`;
-
-//       Select(sqlCareer, (err, careerResult) => {
-//         if (err) {
-//           console.error(err);
-//           res.json(JsonErrorResponse(err));
-//           return;
-//         }
-
-//         if (careerResult.length > 0) {
-//           let careerData = DataReturn(careerResult, "map_");
-//           resultsList.push({ applicant_career: careerData });
-//         }
-
-//         // Continue with other queries...
-
-//         // Applicant Education query
-//         let sqlEducation = `
-//           SELECT 
-//             ae_education_id AS map_ae_education_id,
-//             ae_attainment AS map_ae_attainment,
-//             ae_schoolname AS map_ae_schoolname,
-//             ae_start AS map_ae_start,
-//             ae_end AS map_ae_end,
-//             ae_isgraduate AS map_ae_isgraduate,
-//             ae_highest_level AS map_ae_highest_level
-//           FROM applicant_education
-//           WHERE ae_applicantid = '${applicant_id}'`;
-
-//         Select(sqlEducation, (err, educationResult) => {
-//           if (err) {
-//             console.error(err);
-//             res.json(JsonErrorResponse(err));
-//             return;
-//           }
-
-//           if (educationResult.length > 0) {
-//             let educationData = DataReturn(educationResult, "map_");
-//             resultsList.push({ applicant_education: educationData });
-//           }
-
-//           // After fetching all data, send response with all results
-//           res.json(JsonDataResponse(resultsList));
-
-//           console.log(resultsList);
-          
-//         });
-//       });
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
 
 router.post("/viewdata", (req, res) => {
   try {
@@ -1092,6 +906,7 @@ router.post("/viewdata", (req, res) => {
         SELECT 
           ac_career_id AS map_ac_career_id,
           ac_employer AS map_ac_employer,
+          ac_attainment AS map_ac_attainment,
           ac_start AS map_ac_start,
           ac_end AS map_ac_end,
           ac_position AS map_ac_position,
@@ -1184,6 +999,7 @@ router.post("/viewdata", (req, res) => {
               let sqlReferences = `
                 SELECT 
                   ar_referencesid AS map_ar_referencesid,
+                  ar_attainment AS map_ar_attainment,
                   ar_references_name AS map_ar_references_name,
                   ar_occupation AS map_ar_occupation,
                   ar_complete_address AS map_ar_complete_address,
@@ -1206,6 +1022,7 @@ router.post("/viewdata", (req, res) => {
                 let sqlSeminar = `
                   SELECT 
                     as_seminarid AS map_as_seminarid,
+                    as_attainment AS map_as_attainment,
                     as_seminar_name AS map_as_seminar_name,
                     DATE_FORMAT(as_seminar_date, '%Y-%m-%d') AS map_as_seminar_date
                   FROM applicant_seminar
@@ -1261,7 +1078,7 @@ router.post("/viewdata", (req, res) => {
 
 router.put("/update_personal", (req, res) => {
   try {
-    const { 
+    const {
       applicantId,
       firstName,
       lastName,
@@ -1585,215 +1402,402 @@ router.put("/update_personal", (req, res) => {
   }
 });
 
-router.put("/update_career", (req, res) => {
+router.put("/update_education", (req, res) => {
   try {
-    const { 
-      
-    } = req.body;
+    const educationLevels = [
+      "elementary",
+      "highschool",
+      "college",
+      "graduate",
+      "others",
+    ];
+    let updateCount = 0;
 
-    let data = [];
-    let columns = [];
-    let arguments = [];
+    educationLevels.forEach((level) => {
+      const section = req.body[level];
 
-    if (firstName) {
-      data.push(firstName);
-      columns.push("employer");
-    }
+      console.log(section, "body");
 
-    if (lastName) {
-      data.push(lastName);
-      columns.push("start");
-    }
+      if (section && section.ae_education_id) {
+        let data = [];
+        let columns = [];
+        let arguments = ["education_id"];
 
-    if (middleName) {
-      data.push(middleName);
-      columns.push("end");
-    }
+        if (section.ae_schoolname) {
+          data.push(section.ae_schoolname);
+          columns.push("schoolname");
+        }
+        if (section.ae_start) {
+          data.push(section.ae_start);
+          columns.push("start");
+        }
+        if (section.ae_end) {
+          data.push(section.ae_end);
+          columns.push("end");
+        }
+        if (section.ae_isgraduate) {
+          data.push(section.ae_isgraduate);
+          columns.push("isgraduate");
+        }
+        if (section.ae_highest_level) {
+          data.push(section.ae_highest_level);
+          columns.push("highest_level");
+        }
 
-    if (nickName) {
-      data.push(nickName);
-      columns.push("position");
-    }
+        data.push(section.ae_education_id);
 
-    if (presentPhoneNumber) {
-      data.push(presentPhoneNumber);
-      columns.push("supervisor");
-    }
+        if (columns.length > 0) {
+          const updateStatement = UpdateStatement(
+            "applicant_education",
+            "ae",
+            columns,
+            arguments
+          );
 
-    if (presentAddress) {
-      data.push(presentAddress);
-      columns.push("reason");
-    }
+          Update(updateStatement, data, (err, result) => {
+            if (err) {
+              console.error(`Error updating ${level}:`, err);
+              return res.status(500).json({ error: "Database update failed." });
+            }
 
-    if (applicantId) {
-      data.push(applicantId);
-      arguments.push("career_id");
-    }
+            updateCount++;
 
-    let updateStatement = UpdateStatement(
-      "applicant_career",
-      "ac",
-      columns,
-      arguments
-    );
-
-    console.log(updateStatement);
-
-    Update(updateStatement, data, (err, result) => {
-      if (err) console.error("Error: ", err);
-      res.json(JsonSuccess());
+            if (
+              updateCount ===
+              educationLevels.filter(
+                (level) => req.body[level]?.ae_education_id
+              ).length
+            ) {
+              res.json({
+                success: true,
+                message: "Records updated successfully!",
+              });
+            }
+          });
+        }
+      }
     });
   } catch (error) {
-    console.log(error);
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Server error." });
+  }
+});
+
+router.put("/update_career", (req, res) => {
+  try {
+    const {
+      present,
+      second,
+      third,
+      fourth,
+      fifth,
+      sixth,
+      seminars,
+      secondSeminars,
+      thirdSeminars,
+      fourthSeminars,
+      fifthSeminars,
+    } = req.body;
+
+    console.log(req.body,'body');
+    
+
+    const careerEntries = [present, second, third, fourth, fifth, sixth];
+    const seminarEntries = [seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars];
+
+    const careerPromises = [];
+    const seminarPromises = [];
+
+    careerEntries.forEach((career) => {
+      if (career && career.ac_employer) {
+        let data = [];
+        let columns = [];
+        let arguments = [];
+
+        if (career.ac_employer) {
+          data.push(career.ac_employer);
+          columns.push("employer");
+        }
+        
+        if (career.ac_start) {
+          data.push(career.ac_start);
+          columns.push("start");
+        }
+
+        if (career.ac_end) {
+          data.push(career.ac_end);
+          columns.push("end");
+        }
+
+        if (career.ac_position) {
+          data.push(career.ac_position);
+          columns.push("position");
+        }
+
+        if (career.ac_supervisor) {
+          data.push(career.ac_supervisor);
+          columns.push("supervisor");
+        }
+
+        if (career.ac_reason) {
+          data.push(career.ac_reason);
+          columns.push("reason");
+        }
+
+        if (career.ac_career_id) {
+          data.push(career.ac_career_id);
+          arguments.push("career_id");
+        }
+
+        let updateStatement = UpdateStatement(
+          "applicant_career",
+          "ac",
+          columns,
+          arguments);
+
+        careerPromises.push(
+          new Promise((resolve, reject) => {
+            Update(updateStatement, data, (err, result) => {
+              if (err) {
+                console.error("Error updating career:", err);
+                return reject(JsonErrorResponse(err));
+              }
+              resolve(JsonSuccess());
+            });
+          })
+        );
+      }
+    });
+
+    seminarEntries.forEach((seminar) => {
+      if (seminar && seminar.as_seminar_name) {
+        let data = [];
+        let columns = [];
+        let arguments = [];
+
+        if (seminar.as_seminar_name) {
+          data.push(seminar.as_seminar_name);
+          columns.push("seminar_name");
+        }
+        if (seminar.as_seminar_date) {
+          data.push(seminar.as_seminar_date);
+          columns.push("seminar_date");
+        }
+
+        if (seminar.as_seminarid) {
+          data.push(seminar.as_seminarid);
+          arguments.push("seminarid");
+        }
+
+        let updateStatement = UpdateStatement("applicant_seminar", "as", columns, arguments);
+
+        seminarPromises.push(
+          new Promise((resolve, reject) => {
+            Update(updateStatement, data, (err, result) => {
+              if (err) {
+                console.error("Error updating seminar:", err);
+                return reject(JsonErrorResponse(err));
+              }
+              resolve(JsonSuccess());
+            });
+          })
+        );
+      }
+    });
+
+    Promise.all([...careerPromises, ...seminarPromises])
+      .then((results) => {
+        res.json(results);
+      })
+      .catch((error) => {
+        console.error("Error in Promise.all:", error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error("Catch block error:", error);
     res.json(JsonErrorResponse(error));
   }
 });
 
-// router.put("/update_education", (req, res) => {
-//   try {
-//     const { 
-      
-//     } = req.body;
-
-//     let data = [];
-//     let columns = [];
-//     let arguments = [];
-
-//     if (firstName) {
-//       data.push(firstName);
-//       columns.push("attainment");
-//     }
-
-//     if (lastName) {
-//       data.push(lastName);
-//       columns.push("schoolname");
-//     }
-
-//     if (middleName) {
-//       data.push(middleName);
-//       columns.push("start");
-//     }
-
-//     if (nickName) {
-//       data.push(nickName);
-//       columns.push("end");
-//     }
-
-//     if (presentPhoneNumber) {
-//       data.push(presentPhoneNumber);
-//       columns.push("isgraduate");
-//     }
-
-//     if (presentAddress) {
-//       data.push(presentAddress);
-//       columns.push("highest_level");
-//     }
-
-//     if (applicantId) {
-//       data.push(applicantId);
-//       arguments.push("education_id");
-//     }
-
-//     let updateStatement = UpdateStatement(
-//       "applicant_education",
-//       "ae",
-//       columns,
-//       arguments
-//     );
-
-//     console.log(updateStatement);
-
-//     Update(updateStatement, data, (err, result) => {
-//       if (err) console.error("Error: ", err);
-//       res.json(JsonSuccess());
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
-router.put("/update_education", (req, res) => {
+router.put("/update_family", (req, res) => {
   try {
     const {
-      ae_education_id,   // Unique ID for the record
-      ae_applicantid,     // Applicant ID
-      ae_attainment,      // Education level (e.g., College, Highschool)
-      ae_schoolname,      // School name
-      ae_start,           // Start year
-      ae_end,             // End year
-      ae_isgraduate,      // Graduation status
-      ae_highest_level    // Highest level or honors
+      father,
+      mother,
+      siblings,
+      siblings2,
+      siblings3,
+      siblings4,
+      siblings5,
+      siblings6,
+      siblings7,
+      siblings8,
+      spouse,
+      children,
+      children2,
+      children3,
+      children4,
+      children5,
+      children6,
+      children7,
+      children8,
     } = req.body;
 
-    let data = [];
-    let columns = [];
-    let arguments = [];
+    console.log(req.body,'req.body');
+    
+    const familyEntries = [
+      father,
+      mother,
+      siblings,
+      siblings2,
+      siblings3,
+      siblings4,
+      siblings5,
+      siblings6,
+      siblings7,
+      siblings8,
+      spouse,
+      children,
+      children2,
+      children3,
+      children4,
+      children5,
+      children6,
+      children7,
+      children8,
+    ];
 
-    // Populate columns and data based on provided values
-    if (ae_attainment) {
-      data.push(ae_attainment);
-      columns.push("ae_attainment");
-    }
+    const familyPromises = [];
 
-    if (ae_schoolname) {
-      data.push(ae_schoolname);
-      columns.push("ae_schoolname");
-    }
+    familyEntries.forEach((familyMember) => {
+      if (familyMember && familyMember.af_name) {
+        let data = [];
+        let columns = [];
+        let arguments = [];
 
-    if (ae_start) {
-      data.push(ae_start);
-      columns.push("ae_start");
-    }
+        if (familyMember.af_name) {
+          data.push(familyMember.af_name);
+          columns.push("name");
+        }
+        if (familyMember.af_age) {
+          data.push(familyMember.af_age);
+          columns.push("age");
+        }
+        if (familyMember.af_birthday) {
+          data.push(familyMember.af_birthday);
+          columns.push("birthday");
+        }
+        if (familyMember.af_company_position) {
+          data.push(familyMember.af_company_position);
+          columns.push("company_position");
+        }
+        if (familyMember.af_occupation) {
+          data.push(familyMember.af_occupation);
+          columns.push("occupation");
+        }
 
-    if (ae_end) {
-      data.push(ae_end);
-      columns.push("ae_end");
-    }
+        if (familyMember.af_familyid) {
+          data.push(familyMember.af_familyid);
+          arguments.push("familyid");
+        }
 
-    if (ae_isgraduate) {
-      data.push(ae_isgraduate);
-      columns.push("ae_isgraduate");
-    }
+        let updateStatement = UpdateStatement("applicant_family", "af", columns, arguments);
 
-    if (ae_highest_level) {
-      data.push(ae_highest_level);
-      columns.push("ae_highest_level");
-    }
+        console.log(updateStatement,'updateStatement');
+        
 
-    if (ae_education_id) {
-      arguments.push(`ae_education_id = ?`);
-      data.push(ae_education_id);  // Use ae_education_id in the WHERE clause
-    }
-
-    if (arguments.length === 0) {
-      return res.status(400).json({ error: "No ID provided for the update." });
-    }
-
-    // Dynamically construct the update SQL statement
-    let updateStatement = UpdateStatement(
-      "applicant_education",
-      "ae",
-      columns,
-      arguments
-    );
-
-    console.log(updateStatement); // For debugging
-
-    // Perform the update
-    Update(updateStatement, data, (err, result) => {
-      if (err) {
-        console.error("Error: ", err);
-        return res.status(500).json({ error: "Database update failed." });
+        familyPromises.push(
+          new Promise((resolve, reject) => {
+            Update(updateStatement, data, (err, result) => {
+              if (err) {
+                console.error("Error updating family member:", err);
+                return reject(JsonErrorResponse(err));
+              }
+              resolve(JsonSuccess());
+            });
+          })
+        );
       }
-
-      res.json({ success: true, message: "Record updated successfully!" });
     });
+
+    Promise.all(familyPromises)
+      .then((results) => {
+        res.json(results);
+      })
+      .catch((error) => {
+        console.error("Error in Promise.all:", error);
+        res.json(JsonErrorResponse(error));
+      });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error." });
+    console.error("Catch block error:", error);
+    res.json(JsonErrorResponse(error));
   }
 });
+
+router.put("/update_references", (req, res) => {
+  try {
+    const { references, references2, references3 } = req.body;
+    const referenceEntries = [references, references2, references3];
+    const referencePromises = [];
+    referenceEntries.forEach((reference) => {
+      if (reference && reference.ar_references_name) {
+        let data = [];
+        let columns = [];
+        let arguments = [];
+
+        if (reference.ar_references_name) {
+          data.push(reference.ar_references_name);
+          columns.push("references_name");
+        }
+        if (reference.ar_complete_address) {
+          data.push(reference.ar_complete_address);
+          columns.push("complete_address");
+        }
+        if (reference.ar_contact_no) {
+          data.push(reference.ar_contact_no);
+          columns.push("contact_no");
+        }
+        if (reference.ar_occupation) {
+          data.push(reference.ar_occupation);
+          columns.push("occupation");
+        }
+
+        if (reference.ar_referencesid) {
+          data.push(reference.ar_referencesid);
+          arguments.push("referencesid");
+        }
+
+        let updateStatement = UpdateStatement("applicant_references", "ar", columns, arguments);
+
+        referencePromises.push(
+          new Promise((resolve, reject) => {
+            Update(updateStatement, data, (err, result) => {
+              if (err) {
+                console.error("Error updating reference:", err);
+                return reject(JsonErrorResponse(err));
+              }
+              resolve(JsonSuccess());
+            });
+          })
+        );
+      }
+    });
+
+    Promise.all(referencePromises)
+      .then((results) => {
+        res.json(results);
+      })
+      .catch((error) => {
+        console.error("Error in Promise.all:", error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error("Catch block error:", error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 
 
 //#endregion
@@ -2100,8 +2104,5 @@ async function saveUserRecord(req, res, applicantid, username) {
 
 //   return data;
 // }
-
-
-
 
 //#endregion

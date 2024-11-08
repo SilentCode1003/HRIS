@@ -467,7 +467,6 @@ router.get("/totalcoa", (req, res) => {
         ar_status = 'Pending' 
         AND ar_subgroupid IN (${subgroupid})`;
 
-    console.log(departmentid);
     console.log(subgroupid);
     console.log(accesstypeid);
     console.log(sql);

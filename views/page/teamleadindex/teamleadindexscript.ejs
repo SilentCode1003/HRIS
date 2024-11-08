@@ -92,8 +92,8 @@
         type: "GET",
         url: "/teamleadindex/totalcoa",
         success: function (json) {
+          var finalData = [];
           var data = json.data;
-
           populatedatatable(data);
         },
         error: function (xhr, status, error) {},
@@ -129,7 +129,7 @@
               "data-label": "Attendance Date",
               class: "custom-mobile-align",
             }),
-            $("<td>", {
+            $("<td>", {     
               text: item.timein,
               "data-label": "Time In",
               class: "custom-mobile-align",

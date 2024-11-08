@@ -18,6 +18,7 @@ const {
 } = require("./repository/response");
 const { Update, Select, InsertTable } = require("./repository/dbconnect");
 const holidaysPH = new Holidays("PH");
+const axios = require("axios");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -26,6 +27,65 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
+
+// router.post("/testholiday", async (req, res) => {
+//   try {
+//     const year = req.body.year
+//       ? parseInt(req.body.year, 10)
+//       : new Date().getFullYear();
+//     console.log(`Requested Year: ${year}`);
+
+//     const existingHolidaysQuery = `SELECT mh_date FROM master_holiday WHERE mh_date LIKE '%${year}%'`;
+//     const existingHolidays = await mysql.mysqlQueryPromise(existingHolidaysQuery);
+
+//     if (existingHolidays && existingHolidays.length > 0) {
+//       console.log(`Holidays for the year ${year} already exist in the database.`);
+//       return res.json({
+//         msg: "exist",
+//         data: existingHolidays,
+//         info: `Holidays for the year ${year} already exist in the database.`,
+//       });
+//     }
+
+//     // Fetch holidays from the Official Gazette API with error handling
+//     let allHolidays;
+//     try {
+//       const response = await axios.get(`http://localhost:3005/holidays?year=${year}`);
+//       allHolidays = response.data;
+//     } catch (error) {
+//       console.error("Failed to fetch holidays from Official Gazette API:", error.message);
+//       return res.status(500).json({
+//         msg: "Failed to fetch holidays from Official Gazette API",
+//         error: error.message,
+//       });
+//     }
+
+//     console.log("All Holidays from Official Gazette API:", allHolidays);
+
+//     // Map holidays to your simplified structure
+//     const simplifiedHolidays = allHolidays.map((holiday) => ({
+//       day: getDayOfWeek(holiday.date),
+//       date: removeTimeFromDate(holiday.date),
+//       name: holiday.name,
+//       type: getDOLEType(holiday),
+//     }));
+
+//     simplifiedHolidays.forEach((holiday) =>
+//       console.log(`${holiday.day} - ${holiday.date} - ${holiday.name} (${holiday.type})`)
+//     );
+
+//     res.json({
+//       msg: "success",
+//       data: simplifiedHolidays,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       msg: "Internal server error",
+//       error: error.message,
+//     });
+//   }
+// });
 
 const removeTimeFromDate = (dateStr) => dateStr.split(" ")[0];
 

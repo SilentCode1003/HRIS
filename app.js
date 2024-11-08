@@ -8,6 +8,8 @@ const cors = require("cors");
 const { eventlogger, logger } = require("./middleware/logger");
 const cron = require("node-cron");
 const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_status");
+const swaggerDocs = require('./document/swagger');
+const swaggerUi = require('swagger-ui-express');
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
@@ -197,6 +199,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // app.use(cors(corsOptions));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use((req, res, next) => {
   eventlogger(req, res, next);
 });
@@ -219,7 +223,6 @@ app.use("/approvedleave", approvedleaveRouter);
 app.use("/rejectedleave", rejectedleaveRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/shift", shiftRouter);
-app.use("/trainings", trainingsRouter);
 app.use("/position", positionRouter);
 app.use("/disciplinary", disciplinaryRouter);
 app.use("/disciplinaryaction", disciplinaryactionRouter);
@@ -312,6 +315,7 @@ app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
+app.use("/trainings", trainingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
 app.use("/medecines_request", medecinesrequestRouter);
