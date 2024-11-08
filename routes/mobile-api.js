@@ -354,7 +354,7 @@ router.post("/latestlog", verifyJWT, (req, res) => {
     );
 });
 
-router.post("/clockin", verifyJWT,(req, res) => {
+router.post("/clockin", (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
   let locationin = req.body.locationin;
@@ -364,7 +364,6 @@ router.post("/clockin", verifyJWT,(req, res) => {
 
   locationin = RemoveApostrophe(locationin);
 
-  // Validate all required fields
   if (!employee_id) {
     return res.status(401).json({
       status: "error",
@@ -372,34 +371,24 @@ router.post("/clockin", verifyJWT,(req, res) => {
     });
   }
 
-  // if (!geofenceid) {
-  //   return res.status(400).json({
-  //     status: "error",
-  //     message: "Geofence ID cannot be null.",
-  //   });
-  // }
-
   if (!locationin) {
     return res.status(400).json({
       status: "error",
       message: "We Can't Find Your Location",
     });
   }
-
   if (latitude === null || latitude === undefined) {
     return res.status(400).json({
       status: "error",
       message: "Latitude cannot be null.",
     });
   }
-
   if (longitude === null || longitude === undefined) {
     return res.status(400).json({
       status: "error",
       message: "Longitude cannot be null.",
     });
   }
-
   if (!devicein) {
     return res.status(400).json({
       status: "error",
@@ -407,7 +396,6 @@ router.post("/clockin", verifyJWT,(req, res) => {
     });
   }
 
-  // Get the current attendance date
   const attendancedate = moment().format("YYYY-MM-DD");
 
   const checkExistingClockInQuery = `
@@ -426,7 +414,6 @@ router.post("/clockin", verifyJWT,(req, res) => {
       AND ma_clockout IS NULL
   `;
 
-  // Fetch scheduled timein from attendance_status
   const fetchScheduledTimeInQuery = `
     SELECT as_scheduled_timein 
     FROM attendance_status 
@@ -445,17 +432,23 @@ router.post("/clockin", verifyJWT,(req, res) => {
       Promise.resolve([])
     );
 
-  executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery, fetchScheduledTimeInQuery])
+  executeSequentialQueries([
+    checkExistingClockInQuery,
+    checkMissingClockOutQuery,
+    fetchScheduledTimeInQuery,
+  ])
     .then(([resultClockIn, resultMissingClockOut, resultScheduledTimeIn]) => {
       if (resultClockIn.length > 0) {
         return res.json({
           status: "exist",
-          message: "Clock-in not allowed. Employee already clocked in on the same day.",
+          message:
+            "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (resultMissingClockOut.length > 0) {
         return res.json({
           status: "disabled",
-          message: "Clock-in not allowed. Missing clock-out on the previous day.",
+          message:
+            "Clock-in not allowed. Missing clock-out on the previous day.",
         });
       } else if (resultScheduledTimeIn.length === 0) {
         return res.status(400).json({
@@ -466,59 +459,31 @@ router.post("/clockin", verifyJWT,(req, res) => {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const scheduledTimeIn = resultScheduledTimeIn[0].as_scheduled_timein;
 
-        // Check if scheduled timein is 00:00:00, meaning it's a Rest Day
+        let status, minutesDifference = 0, hoursDifference = 0;
+
         if (scheduledTimeIn === "00:00:00") {
-          // Update as_status to "Rest Day" without any late or early checks
-          const updateRestDayStatusQuery = `
-            UPDATE attendance_status 
-            SET as_status = 'Rest Day' 
-            WHERE as_employeeid = '${employee_id}' 
-              AND as_attendance_date = '${attendancedate}'
-          `;
+          status = "Rest Day OT";
+        } else {
+          const clockInMoment = moment(clockinDateTime, "YYYY-MM-DD HH:mm:ss");
+          const scheduledTimeInMoment = moment(
+            `${attendancedate} ${scheduledTimeIn}`,
+            "YYYY-MM-DD HH:mm:ss"
+          );
 
-          return mysql.mysqlQueryPromise(updateRestDayStatusQuery)
-            .then(() => {
-              return res.json({
-                status: "success",
-                message: "Clock-in successful. It's a rest day.",
-              });
-            })
-            .catch((updateError) => {
-              console.error("Error updating rest day status:", updateError);
-              return res.status(500).json({
-                status: "error",
-                message: "Failed to update rest day status.",
-              });
-            });
-        }
-
-        // Compare clock-in time with the scheduled time
-        const clockInMoment = moment(clockinDateTime, "YYYY-MM-DD HH:mm:ss");
-        const scheduledTimeInMoment = moment(
-          `${attendancedate} ${scheduledTimeIn}`,
-          "YYYY-MM-DD HH:mm:ss"
-        );
-
-        let status = "On Time";
-        let minutesDifference = 0;
-        let hoursDifference = 0;
-
-        if (clockInMoment.isBefore(scheduledTimeInMoment)) {
-          // Early clock-in
-          status = "Early";
-          minutesDifference = scheduledTimeInMoment.diff(clockInMoment, "minutes");
-          hoursDifference = Math.floor(minutesDifference / 60);
-          minutesDifference %= 60;
-        } else if (clockInMoment.isAfter(scheduledTimeInMoment)) {
-          // Late clock-in
-          status = "Late";
-          minutesDifference = clockInMoment.diff(scheduledTimeInMoment, "minutes");
+          if (clockInMoment.isBefore(scheduledTimeInMoment)) {
+            status = "Early";
+            minutesDifference = scheduledTimeInMoment.diff(clockInMoment, "minutes");
+          } else if (clockInMoment.isAfter(scheduledTimeInMoment)) {
+            status = "Late";
+            minutesDifference = clockInMoment.diff(scheduledTimeInMoment, "minutes");
+          } else {
+            status = "On Time";
+          }
           hoursDifference = Math.floor(minutesDifference / 60);
           minutesDifference %= 60;
         }
 
-        // Insert attendance record into the master_attendance table
-        let insertAttendanceQuery = InsertStatement("master_attendance", "ma", [
+        const insertAttendanceQuery = InsertStatement("master_attendance", "ma", [
           "employeeid",
           "attendancedate",
           "clockin",
@@ -529,7 +494,7 @@ router.post("/clockin", verifyJWT,(req, res) => {
           "locationIn",
         ]);
 
-        let attendanceData = [
+        const attendanceData = [
           [
             employee_id,
             attendancedate,
@@ -542,8 +507,7 @@ router.post("/clockin", verifyJWT,(req, res) => {
           ],
         ];
 
-        // Check if the attendance record already exists
-        let checkStatement = SelectStatement(
+        const checkStatement = SelectStatement(
           "SELECT * FROM master_attendance WHERE ma_attendancedate=? AND ma_employeeid=?",
           [attendancedate, employee_id]
         );
@@ -553,40 +517,44 @@ router.post("/clockin", verifyJWT,(req, res) => {
             if (result.length !== 0) {
               return res.json(JsonWarningResponse(MessageStatus.EXIST));
             } else {
-              InsertTable(insertAttendanceQuery, attendanceData, (err, result) => {
-                if (err) {
-                  console.log(err);
-                  return res.status(500).json({
-                    status: "error",
-                    message: "Failed to insert attendance. Please try again.",
-                  });
-                }
-
-                // Update the attendance_status table
-                const updateAttendanceStatusQuery = `
-                  UPDATE attendance_status 
-                  SET as_status = '${status}', 
-                      as_minutes = ${minutesDifference}, 
-                      as_hours = ${hoursDifference} 
-                  WHERE as_employeeid = '${employee_id}' 
-                    AND as_attendance_date = '${attendancedate}'
-                `;
-
-                mysql.mysqlQueryPromise(updateAttendanceStatusQuery)
-                  .then(() => {
-                    return res.json({
-                      status: "success",
-                      message: "Clock-in successful.",
-                    });
-                  })
-                  .catch((updateError) => {
-                    console.error("Error updating attendance status:", updateError);
+              InsertTable(
+                insertAttendanceQuery,
+                attendanceData,
+                (err, result) => {
+                  if (err) {
+                    console.log(err);
                     return res.status(500).json({
                       status: "error",
-                      message: "Failed to update attendance status.",
+                      message: "Failed to insert attendance. Please try again.",
                     });
-                  });
-              });
+                  }
+
+                  const updateAttendanceStatusQuery = `
+                    UPDATE attendance_status 
+                    SET as_status = '${status}', 
+                        as_minutes = ${minutesDifference}, 
+                        as_hours = ${hoursDifference} 
+                    WHERE as_employeeid = '${employee_id}' 
+                      AND as_attendance_date = '${attendancedate}'
+                  `;
+
+                  mysql
+                    .mysqlQueryPromise(updateAttendanceStatusQuery)
+                    .then(() => {
+                      return res.json({
+                        status: "success",
+                        message: "Clock-in successful.",
+                      });
+                    })
+                    .catch((updateError) => {
+                      console.error("Error updating attendance status:", updateError);
+                      return res.status(500).json({
+                        status: "error",
+                        message: "Failed to update attendance status.",
+                      });
+                    });
+                }
+              );
             }
           })
           .catch((error) => {
@@ -608,7 +576,6 @@ router.post("/clockin", verifyJWT,(req, res) => {
       });
     });
 });
-
 
 // router.post("/clockin", verifyJWT, (req, res) => {
 //   const employee_id = req.body.employeeid;
