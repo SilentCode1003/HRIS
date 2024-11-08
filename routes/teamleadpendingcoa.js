@@ -367,6 +367,8 @@ router.post("/attendanceaction", (req, res) => {
                   let geofenceout = "1";
                   let devicein = "app";
                   let deviceout = "app";
+                  let locationin = "COA";
+                  let locationout = "COA";
 
                   if (checkResult.length > 0) {
                     let updateQuery = `
@@ -380,7 +382,9 @@ router.post("/attendanceaction", (req, res) => {
                   ma_gefenceidIn = '${geofencein}',
                   ma_geofenceidOut = '${geofenceout}',
                   ma_devicein = '${devicein}',
-                  ma_deviceout = '${deviceout}'
+                  ma_deviceout = '${deviceout}',
+                  ma_locationIn = '${locationin}',
+                  ma_locationOut = '${locationout}'
               WHERE ma_employeeid = '${employeeid}' AND ma_attendancedate = '${attendancedate}'`;
 
                     mysql
@@ -413,6 +417,8 @@ router.post("/attendanceaction", (req, res) => {
                       geofenceout,
                       devicein,
                       deviceout,
+                      locationin,
+                      locationout,
                     ]);
 
                     mysql.InsertTable(

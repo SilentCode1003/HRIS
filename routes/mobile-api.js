@@ -35,6 +35,7 @@ const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
 const { sq } = require("date-fns/locale");
 const { REQUEST } = require("./repository/enums");
+const { log } = require("winston");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -354,7 +355,7 @@ router.post("/latestlog", verifyJWT, (req, res) => {
     );
 });
 
-router.post("/clockin", (req, res) => {
+router.post("/clockin", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const geofenceid = req.body.geofenceid;
   let locationin = req.body.locationin;
@@ -459,7 +460,9 @@ router.post("/clockin", (req, res) => {
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const scheduledTimeIn = resultScheduledTimeIn[0].as_scheduled_timein;
 
-        let status, minutesDifference = 0, hoursDifference = 0;
+        let status,
+          minutesDifference = 0,
+          hoursDifference = 0;
 
         if (scheduledTimeIn === "00:00:00") {
           status = "Rest Day OT";
@@ -472,10 +475,16 @@ router.post("/clockin", (req, res) => {
 
           if (clockInMoment.isBefore(scheduledTimeInMoment)) {
             status = "Early";
-            minutesDifference = scheduledTimeInMoment.diff(clockInMoment, "minutes");
+            minutesDifference = scheduledTimeInMoment.diff(
+              clockInMoment,
+              "minutes"
+            );
           } else if (clockInMoment.isAfter(scheduledTimeInMoment)) {
             status = "Late";
-            minutesDifference = clockInMoment.diff(scheduledTimeInMoment, "minutes");
+            minutesDifference = clockInMoment.diff(
+              scheduledTimeInMoment,
+              "minutes"
+            );
           } else {
             status = "On Time";
           }
@@ -483,16 +492,20 @@ router.post("/clockin", (req, res) => {
           minutesDifference %= 60;
         }
 
-        const insertAttendanceQuery = InsertStatement("master_attendance", "ma", [
-          "employeeid",
-          "attendancedate",
-          "clockin",
-          "latitudeIn",
-          "longitudein",
-          "devicein",
-          "gefenceidIn",
-          "locationIn",
-        ]);
+        const insertAttendanceQuery = InsertStatement(
+          "master_attendance",
+          "ma",
+          [
+            "employeeid",
+            "attendancedate",
+            "clockin",
+            "latitudeIn",
+            "longitudein",
+            "devicein",
+            "gefenceidIn",
+            "locationIn",
+          ]
+        );
 
         const attendanceData = [
           [
@@ -547,7 +560,10 @@ router.post("/clockin", (req, res) => {
                       });
                     })
                     .catch((updateError) => {
-                      console.error("Error updating attendance status:", updateError);
+                      console.error(
+                        "Error updating attendance status:",
+                        updateError
+                      );
                       return res.status(500).json({
                         status: "error",
                         message: "Failed to update attendance status.",
@@ -656,7 +672,7 @@ router.post("/clockin", (req, res) => {
 //           "gefenceidIn",
 //           "locationIn",
 //         ]);
-    
+
 //         console.log(sql);
 
 //         let data = [
@@ -671,12 +687,12 @@ router.post("/clockin", (req, res) => {
 //             locationin,
 //           ],
 //         ];
-    
+
 //         let checkStatement = SelectStatement(
 //           "select * from master_attendance where ma_attendancedate=? and ma_employeeid=?",
 //           [attendancedate, employee_id]
 //         );
-    
+
 //         Check(checkStatement)
 //           .then((result) => {
 //             if (result != 0) {
@@ -850,6 +866,132 @@ router.post("/selectgeofence", verifyJWT, (req, res) => {
     });
   }
 });
+
+router.post("/offlineclockin", async (req, res) => {
+  try {
+    const records = req.body;
+
+    console.log(records, "records");
+
+    for (const record of records) {
+      const { employeeid, attendancedate, datetime, type } = record;
+      const location = "Offline";
+      const lat = "0.00";
+      const long = "0.00";
+      const device = "app";
+
+      if (type === "Clock In") {
+        const clockInSQL = InsertStatement("master_attendance", "ma", [
+          "employeeid",
+          "attendancedate",
+          "clockin",
+          "latitudeIn",
+          "longitudein",
+          "devicein",
+          "locationIn",
+        ]);
+
+        const clockinData = [
+          [employeeid, attendancedate, datetime, lat, long, device, location],
+        ];
+
+        const clockinCheckStatement = SelectStatement(
+          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ?",
+          [employeeid, attendancedate]
+        );
+
+        try {
+          const result = await Check(clockinCheckStatement);
+          if (result.length > 0) {
+            return res.json(JsonWarningResponse(MessageStatus.EXIST));
+          } else {
+            await new Promise((resolve, reject) => {
+              InsertTable(clockInSQL, clockinData, (err) => {
+                if (err) {
+                  console.log(err);
+                  return reject(JsonErrorResponse(err));
+                }
+                console.log(`Inserted Clock IN for ${employeeid} on ${attendancedate}`);
+                resolve();
+              });
+            });
+          }
+        } catch (error) {
+          console.log(error);
+          return res.json(JsonErrorResponse(error));
+        }
+      } else if (type === "Clock Out") {
+        let data = [];
+        let columns = [];
+        let arguments = [];
+
+        if (datetime) {
+          data.push(datetime);
+          columns.push("clockout");
+        }
+
+        if (lat) {
+          data.push(lat);
+          columns.push("latitudeout");
+        }
+
+        if (long) {
+          data.push(long);
+          columns.push("longitudeout");
+        }
+
+        if (location) {
+          data.push(location);
+          columns.push("locationOut");
+        }
+
+        if (employeeid) {
+          arguments.push(employeeid);
+        }
+
+        if (attendancedate) {
+          arguments.push(attendancedate);
+        }
+
+        if (columns.length > 0 && arguments.length > 0) {
+          let updateStatement = UpdateStatement(
+            "master_attendance",
+            "ma",
+            columns,
+            ["employeeid", "attendancedate"]
+          );
+
+          // Combine the data for update
+          const updateData = [...data, employeeid, attendancedate];
+
+          console.log(updateData, "updateData");
+          console.log(updateStatement, "updateStatement");
+
+          await new Promise((resolve, reject) => {
+            Update(updateStatement, updateData, (err, result) => {
+              if (err) {
+                console.error("Error updating clock-out:", err);
+                return reject(JsonErrorResponse(err));
+              } else {
+                console.log(`Updated Clock Out for ${employeeid} on ${attendancedate}, Rows affected: ${result}`);
+                resolve();
+              }
+            });
+          });
+        } else {
+          console.log("No columns to update for Clock Out.");
+        }
+      }
+    }
+
+    res.json(JsonSuccess());
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 
 
 //#endregion
@@ -1428,7 +1570,7 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/loadreqbeforepayout", verifyJWT,(req, res) => {
+router.post("/loadreqbeforepayout", verifyJWT, (req, res) => {
   try {
     let sql = `SELECT 
     pd_payrollid,
@@ -1446,7 +1588,6 @@ router.post("/loadreqbeforepayout", verifyJWT,(req, res) => {
     LIMIT 5`;
 
     //console.log(req.body,'body');
-    
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -1464,7 +1605,6 @@ router.post("/loadreqbeforepayout", verifyJWT,(req, res) => {
     });
   }
 });
-
 
 //#endregion
 
@@ -1670,7 +1810,6 @@ router.post("/request", (req, res) => {
               and ma_accessname='Employee'`;
     let cmd = SelectStatement(sql, [employeeid]);
 
-    
     Select(cmd, (err, result) => {
       if (err) {
         res.status(500).json(JsonErrorResponse(err));
@@ -1692,7 +1831,6 @@ router.post("/request", (req, res) => {
     res.status(500).json(JsonErrorResponse(error));
   }
 });
-
 
 //#endregion
 
@@ -4407,7 +4545,7 @@ router.post("/submitleave", async (req, res) => {
             requesttype: REQUEST.LEAVE,
           },
         ];
-        SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
+        SendEmailNotification(employeeid, subgroup, REQUEST.LEAVE, emailbody);
 
         res.json({ msg: "success" });
       }
@@ -4558,6 +4696,5 @@ function calculateTotalHours(timein, timeout) {
 function RemoveApostrophe(str) {
   return str.replace(/'/g, "");
 }
-
 
 //#endregion
