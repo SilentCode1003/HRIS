@@ -71,7 +71,7 @@ body{
 }
 
 #map, #editMap {
-  height: 420px;
+  height: 480px;
   z-index: 1;
   border: 2px solid rgb(210, 208, 208) !important;
   border-top-left-radius: 8px;
@@ -1183,7 +1183,7 @@ tr:hover {
 
 .db-custom-cards  {
   background-color: #fef8ea !important;
-  height: 548px;
+  height: 600px;
   overflow: auto;
   width: 100%;
   border-bottom-left-radius: 5px;
@@ -1633,32 +1633,26 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
 
 .announcement-hrmis {
   background-color: white !important;
-  height: 350px;
+  height: 310px;
   padding: 15px !important;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   position: relative;
 }
 
 .hrmis-img-announce {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  height: 200px;
-  border: 2px solid #7a1818 !important;
+  height: 250px;
 }
 
 .announce-title {
   margin: 6%;
   color: black  !important;
   text-transform: uppercase;
-  font-size: 13px;
   font-weight: bold;
   text-align: center;
+  font-size: 13px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .a-des {
-  color: black !important;
   font-style: italic;
   margin-top: 3%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1668,9 +1662,9 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
 .a-date {
   color: black !important;
   font-weight: bold;
-  font-size: 12px;
-  margin-top: 2%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 2%;
+  font-size: 12px;
 }
 
 .prev-hrmis, .next-hrmis {
@@ -1684,7 +1678,7 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 550px;
+  height: 565px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -1709,6 +1703,16 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
   width: 190px;
   border: 3px solid rgb(233, 187, 3) !important;
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+  margin-top: 6%;
+}
+
+.fname-eportal {
+  color: white !important;
+  text-align: center;
+  padding: 6px;
+  text-shadow: 1px 1px 2px black !important;
+  font-size: 20px;
+  margin-top: 1.5rem;
 }
 
 /* .confetti {
@@ -1722,15 +1726,6 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
   background-size: auto;
   background-position: top;
 } */
-
-.fname-eportal {
-  color: white !important;
-  text-align: center;
-  padding: 6px;
-  text-shadow: 1px 1px 2px black !important;
-  font-size: 20px;
-  margin-top: 1.5rem;
-}
 
 
 .bday-greet {
@@ -2988,7 +2983,7 @@ div.drp-buttons {
 }
 
 .nolate-img {
-  height: 465px !important;
+  height: 530px !important;
   border-radius: 8px;
   border: 2px solid gray !important;
 }
