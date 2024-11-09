@@ -876,9 +876,9 @@ router.post("/offlineclockin", async (req, res) => {
     for (const record of records) {
       const { employeeid, attendancedate, datetime, type } = record;
       const location = "Offline";
-      const lat = "0.00";
-      const long = "0.00";
-      const device = "app";
+      const lat = "0.1";
+      const long = "0.1";
+      const device = "App";
 
       if (type === "Clock In") {
         const clockInSQL = InsertStatement("master_attendance", "ma", [
@@ -943,6 +943,11 @@ router.post("/offlineclockin", async (req, res) => {
         if (location) {
           data.push(location);
           columns.push("locationOut");
+        }
+
+        if (device) {
+          data.push(device);
+          columns.push("deviceout");
         }
 
         if (employeeid) {
