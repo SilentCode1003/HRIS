@@ -115,6 +115,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script>
+  document.addEventListener("contextmenu", function (event) {
+    event.preventDefault();
+  });
+
+  document.onkeydown = function (e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey &&
+        e.shiftKey &&
+        (e.key === "I" || e.key === "J" || e.key === "C")) ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
   $(document).on("click", "#logoutBtn", function () {
     $.ajax({
       type: "POST",
@@ -356,7 +372,6 @@
       toggleSidebarAndNavbar();
     });
   });
-
 
   //#region  Alerts
 

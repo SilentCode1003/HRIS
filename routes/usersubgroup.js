@@ -87,7 +87,7 @@ router.get("/loaduserid", (req, res) => {
         FROM master_user
         INNER JOIN master_employee ON master_user.mu_employeeid = me_id
         INNER JOIN master_access ON master_user.mu_accesstype = ma_accessid
-        WHERE ma_accessname IN ('Super Visor', 'Team Leader', 'Department Head', 'Manager')`;
+        WHERE ma_accessname IN ('Supervisor', 'Team Leader', 'Department Head', 'Manager')`;
 
     Select(sql, (err, result) => {
       if (err) {
