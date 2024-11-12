@@ -64,11 +64,12 @@
 
               finalData.push({
                 // image: imgElement.outerHTML,
-                salaryid: item.salaryid,
+                id: item.id,
+                number: item.number,
                 employeeid: item.employeeid,
                 monthly: item.monthly,
                 allowances: item.allowances,
-                adjustments: item.adjustments,
+                basic_adjustments: item.basic_adjustments,
                 payrolltype: item.payrolltype,
                 action: action,
               });
@@ -84,7 +85,8 @@
           },
         ],
         columns: [
-          { data: "salaryid" },
+          { data: "id" },
+          { data: "number" },
           { data: "employeeid" },
           {
             data: "monthly",
@@ -111,7 +113,7 @@
             },
           },
           {
-            data: "adjustments",
+            data: "basic_adjustments",
             render: function (data, type, row) {
               return (
                 "₱" +
