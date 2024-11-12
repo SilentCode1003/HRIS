@@ -4,6 +4,7 @@
     LoadTable();
     searchTable();
     LoadEditEmp();
+    LoadSubgroup();
 
     $(document).on("keyup", "#myInput2", function () {
       searchTable();
@@ -85,6 +86,25 @@
       });
     }
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#subgroupid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     function LoadEditEmp() {
       $.ajax({
         type: "GET",
@@ -118,7 +138,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
