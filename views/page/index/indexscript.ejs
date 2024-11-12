@@ -23,6 +23,7 @@
     loadCOABadge();
     loadattendanceBadge();
     loadHolidayBadge();
+    LoadSubgroup();
     loadRDOTbadge();
     loadregularCard();
     loadprobitionaryCard();
@@ -1528,6 +1529,26 @@
         error: function (xhr, status, error) {},
       });
     });
+
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#leavesubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
 
     $(document).on("click", "#editBtn", function () {
       $.ajax({

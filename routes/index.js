@@ -76,7 +76,7 @@ router.post("/getleave", (req, res) => {
     l_leaveduration as leaveduration,
     l_leavepaiddays as leavepaiddays,
     l_leaveunpaiddays as leaveunpaiddays,
-    s_name as leavesubgroupid
+    l_subgroupid as leavesubgroupid
     FROM
     leaves 
     INNER JOIN master_leaves on leaves.l_leavetype = ml_id
