@@ -1273,7 +1273,6 @@
       });
     }
 
-
     function loadRDOTbadge() {
       $.ajax({
         type: "GET",
@@ -2362,7 +2361,7 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-                holidayid = dataRow[0];
+              holidayid = dataRow[0];
             };
 
             HOLIDAY_ID.innerHTML = item.holidayid;
@@ -2446,11 +2445,13 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
-            console.log(existingData,'data');
-            
+            console.log(existingData, "data");
 
             $.each(existingData, (key, item) => {
-              $("#previewholiday").attr("src", "data:image/jpg;base64," + item.file);
+              $("#previewholiday").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
               base64String = item.file;
               $("#hdayfname").val(item.fullname);
               $("#hdayatday").val(item.attendancedate);
@@ -2522,7 +2523,6 @@
       }
     });
 
-
     //req rdot section-->
     $(document).on("click", "#nav-reqrestdayot-tab", function () {
       $("#dataTablerestdayotrequest").find("tr:gt(0)").remove();
@@ -2564,7 +2564,7 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-                rdotid = dataRow[0];
+              rdotid = dataRow[0];
             };
 
             RDOT_ID.innerHTML = item.rdotid;
@@ -2627,9 +2627,12 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-            console.log(existingData,'data');
+            console.log(existingData, "data");
             $.each(existingData, (key, item) => {
-              $("#previewrdot").attr("src", "data:image/jpg;base64," + item.file);
+              $("#previewrdot").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
               base64String = item.file;
               $("#rdotfullname").val(item.fullname);
               $("#rdotatdate").val(item.attendancedate);
@@ -2694,7 +2697,6 @@
         });
       }
     });
-
 
     //status attendance section-->>>>
     $(document).on("click", "#nav-status-tab", function () {
