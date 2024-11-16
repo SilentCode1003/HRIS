@@ -1883,13 +1883,10 @@ router.post("/searchemployee", (req, res) => {
     const { search } = req.body;
 
     let sql = `
-    SELECT me_id, me_firstname, me_lastname, me_profile_pic 
-    FROM master_employee 
-    WHERE CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
-    OR me_id LIKE '${search}%'
-    OR me_firstname LIKE '${search}%'
-    OR me_lastname LIKE '${search}%'
-    OR me_middlename LIKE '${search}%'`;
+    SELECT me_id, me_firstname, me_lastname, me_profile_pic
+    FROM master_employee
+    WHERE CONCAT(me_id, ' ', me_firstname, ' ', me_lastname) LIKE '%${search}%'
+    LIMIT 10`;
 
     mysql
       .mysqlQueryPromise(sql)

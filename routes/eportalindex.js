@@ -419,12 +419,12 @@ router.post("/clockin", (req, res) => {
       message: "Unauthorized. Employee not logged in.",
     });
   }
-  if (!geofenceid) {
-    return res.status(400).json({
-      status: "error",
-      message: "Geofence ID cannot be null.",
-    });
-  }
+  // if (!geofenceid) {
+  //   return res.status(400).json({
+  //     status: "error",
+  //     message: "Geofence ID cannot be null.",
+  //   });
+  // }
   if (!locationin) {
     return res.status(400).json({
       status: "error",
