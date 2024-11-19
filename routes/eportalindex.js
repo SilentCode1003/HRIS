@@ -322,12 +322,12 @@ router.post("/clockout", (req, res) => {
     });
   }
 
-  if (!geofenceid) {
-    return res.status(400).json({
-      status: "error",
-      message: "Geofence ID cannot be null.",
-    });
-  }
+  // if (!geofenceid) {
+  //   return res.status(400).json({
+  //     status: "error",
+  //     message: "Geofence ID cannot be null.",
+  //   });
+  // }
 
   if (!locationout) {
     return res.status(400).json({

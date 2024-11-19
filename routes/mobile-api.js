@@ -119,6 +119,45 @@ router.post("/loadnotif", verifyJWT, (req, res) => {
   }
 });
 
+router.get("/loadpopupnotif", (req, res) => {
+  try {
+    let sql = `
+    SELECT
+    mb_image AS image,
+    mb_tittle AS title,
+    mb_type as type,
+    mb_targetdate as targetdate,
+    mb_description AS description
+    FROM master_bulletin
+    WHERE (mb_type = 'Announcement' OR (mb_type = 'Event' AND mb_targetdate >= CURDATE()))`;
+
+    mysql
+      .mysqlQueryPromise(sql)
+      .then((result) => {
+        if (result.length > 0) {
+          res.status(200).json({
+            msg: "success",
+            data: result,
+          });
+        } else {
+          res.status(404).json({
+            msg: "Department not found",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          msg: "Error fetching department data",
+          error: error,
+        });
+      });
+  } catch (error) {
+    res.json({
+      msg: error,
+    });
+  }
+});
+
 router.post("/readnotif", verifyJWT, (req, res) => {
   try {
     let notificationId = req.body.notificationId;
@@ -3138,6 +3177,7 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     let subgroup = req.body.subgroup;
     let approvecount = 0;
     let overtimeimage = req.body.overtimeimage;
+    let deviceaction = "Web Manual";
 
     console.log(clockin, "clockin");
     console.log(clockout, "clockout");
@@ -3148,575 +3188,247 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     console.log(subgroup, "subgroup");
     console.log(approvecount, "approvecount");
     console.log(employeeid, "employeeid");
+    console.log(deviceaction, "deviceaction");
 
-    let sql = `
-    INSERT INTO payroll_approval_ot (
-    pao_fullname,
-    pao_employeeid,
-    pao_attendancedate,
-    pao_clockin,
-    pao_clockout,
-    pao_total_hours,
-    pao_night_differentials,
-    pao_early_ot,
-    pao_normal_ot,
-    pao_minutes_ot,
-    pao_night_minutes_ot,
-    pao_night_pay,
-    pao_total_night_min_ot,
-    pao_normal_pay,
-    pao_total_min_ot,
-    pao_night_hours_pay,
-    pao_night_minutes_pay,
-    pao_normal_ot_pay,
-    pao_normal_ot_minutes_pay,
-    pao_early_ot_pay,
-    pao_total_ot_net_pay,
-    pao_payroll_date,
-    pao_reason,
-    pao_status,
-    pao_subgroupid,
-    pao_approvalcount,
-    pao_overtimeimage
-  )
-SELECT
-CONCAT(me.me_lastname, ' ', me.me_firstname) AS pao_fullname,
-me.me_id AS pao_employeeid,
-'${attendancedate}' AS pao_attendancedate,
-'${clockin}' AS pao_clockin,
-'${clockout}' AS pao_clockout,
-COALESCE(HOUR(TIMEDIFF('${clockout}', '${clockin}')), 0) AS pao_total_hours,
-LEAST(
-    CASE
-        WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
-            AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
-        THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
-        ELSE 0
-    END,
-    8
-) AS pao_night_differentials,
-    CASE
-    WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))))
-    ELSE 0
-END AS pao_early_ot,
-CASE
-    WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-        AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    ELSE 0
-END AS pao_normal_ot,
-    COALESCE(
-    CASE
-        WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-            END
-        ELSE 0
-    END, 0
-) AS pao_minutes_ot,
-    COALESCE(
-    CASE 
-        WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
-        THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
-        ELSE 0 
-    END, 0
-) AS pao_night_minutes_ot,
-ROUND(COALESCE(
-CASE 
-    WHEN s.ms_payrolltype = 'Daily' 
-    THEN s.ms_monthly / 8 * 1.25 * 1.10
-    ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
-END, 0), 2) * LEAST(
-CASE
-    WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
-        AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
-    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))), 0)
-    ELSE 0
-END,
-8
-) + (ROUND(COALESCE(
-CASE 
-    WHEN s.ms_payrolltype = 'Daily' 
-    THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
-    ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
-END, 0), 2) * COALESCE(
-CASE 
-    WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
-    THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
-    ELSE 0 
-END, 0)
-) AS pao_night_pay,
-ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
-    END, 0), 2) * COALESCE(
-    CASE 
-        WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
-        THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
-        ELSE 0 
-    END, 0
-)AS pao_total_night_min_ot,
-ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
-    END, 0), 2) * (CASE
-    WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-        AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    ELSE 0
-END) + (ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-    END, 0), 2) * (COALESCE(
-    CASE
-        WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-            END
-        ELSE 0
-    END, 0
-    )))AS pao_normal_pay,
-    ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-    END, 0), 2) * (COALESCE(
-    CASE
-        WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-            END
-        ELSE 0
-    END, 0
-))
-    AS pao_total_min_ot,
-ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 * 1.10
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
-    END, 0), 2) AS pao_night_hours_pay,
-ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
-    END, 0), 2) AS pao_night_minutes_pay,
-ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25
-    END, 0), 2) AS pao_normal_ot_pay,
-        ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-    END, 0), 2) AS pao_normal_ot_minutes_pay,
-ROUND(
-    COALESCE(
-        CASE
-            WHEN s.ms_payrolltype = 'Daily' 
-            THEN s.ms_monthly / 8 * 1.25 
-            ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
-        END, 0
-    ) * 
-    CASE
-        WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-        THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))), 0)
-        ELSE 0
-    END, 2
-) AS pao_early_ot_pay,
-((ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 * 1.10
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
-    END, 0), 2) * LEAST(
-    CASE
-        WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
-            AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
-        THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
-        ELSE 0
-    END,
-    8
-)) + (ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
-    END, 0), 2) * COALESCE(
-    CASE 
-        WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
-        THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
-        ELSE 0 
-    END, 0
-)) + 
-(ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
-    END, 0), 2) * (CASE
-    WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-        AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-    ELSE 0
-END)) +
-(ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
-    END, 0), 2) * (CASE
-    WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-    THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))), 0)
-    ELSE
-        0
-END)) + (ROUND(COALESCE(
-    CASE 
-        WHEN s.ms_payrolltype = 'Daily' 
-        THEN s.ms_monthly / 8 * 1.25 / 60
-        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-    END, 0), 2) * (COALESCE(
-    CASE
-        WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-            END
-        WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
-            CASE 
-                WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-                THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-                ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-            END
-        ELSE 0
-    END, 0
-    )))) AS pao_total_ot_net_pay,
-'${payrolldate}' AS pao_payroll_date,
-'${reason}' AS pao_reason,
-'${overtimestatus}' AS pao_status,
-'${subgroup}' AS pao_subgroupid,
-'${approvecount}' AS pao_approvalcount,
-'${overtimeimage}' AS pao_overtimeimage
-FROM master_salary s
-INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-    WHERE me_id = '${employeeid}'
-    LIMIT 1`;
+    let checkStatement = SelectStatement(
+    "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
+        [employeeid, attendancedate, overtimestatus]
+    );
 
-    Select(sql, (err, result) => {
-      if (err) {
-        console.error(err);
-        res.json(JsonErrorResponse(err));
-      } else {
-        res.json(JsonDataResponse(result));
-      }
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
+    console.log(checkStatement, "check");
 
-router.post("/update", verifyJWT, (req, res) => {
-  try {
-    console.log("hit");
-
-    let approveot_id = req.body.approveot_id;
-    let clockin = req.body.clockin;
-    let clockout = req.body.clockout;
-    let attendancedate = req.body.attendancedate;
-    let payrolldate = req.body.payrolldate;
-    let employeeid = req.body.employeeid;
-    let overtimestatus = req.body.overtimestatus;
-    let reason = req.body.reason;
-    let subgroup = req.body.subgroup;
-    let overtimeimage = req.body.overtimeimage;
-
-    let sql = `UPDATE payroll_approval_ot
-    SET 
-        pao_fullname = CONCAT(
-            (
-                SELECT me.me_lastname
-                FROM master_employee me
-                WHERE me.me_id = '${employeeid}'
-                LIMIT 1
-            ),
-            ' ',
-            (
-                SELECT me.me_firstname
-                FROM master_employee me
-                WHERE me.me_id = '${employeeid}'
-                LIMIT 1
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          let sql = `
+          INSERT INTO payroll_approval_ot (
+                pao_device_use,
+                pao_fullname,
+                pao_employeeid,
+                pao_attendancedate,
+                pao_clockin,
+                pao_clockout,
+                pao_total_hours,
+                pao_night_differentials,
+                pao_early_ot,
+                pao_normal_ot,
+                pao_minutes_ot,
+                pao_night_minutes_ot,
+                pao_night_pay,
+                pao_total_night_min_ot,
+                pao_normal_pay,
+                pao_total_min_ot,
+                pao_night_hours_pay,
+                pao_night_minutes_pay,
+                pao_normal_ot_pay,
+                pao_normal_ot_minutes_pay,
+                pao_early_ot_pay,
+                pao_total_ot_net_pay,
+                pao_payroll_date,
+                pao_reason,
+                pao_status,
+                pao_subgroupid,
+                pao_approvalcount,
+                pao_overtimeimage
             )
-        ),
-        pao_employeeid = '${employeeid}',
-        pao_attendancedate = '${attendancedate}',
-        pao_clockin = '${clockin}',
-        pao_clockout = '${clockout}',
-        pao_total_hours = COALESCE(HOUR(TIMEDIFF('${clockout}', '${clockin}')), 0),
-        pao_night_differentials = LEAST(
-            CASE
-                WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
-                    AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <= CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
-                THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
-                ELSE 0
-            END,
-            8
-        ),
-        pao_early_ot =  ( SELECT CASE
-                        WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-                        THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))))
+            SELECT
+               '${deviceaction}' AS pao_device_use,
+                CONCAT(me.me_lastname, ' ', me.me_firstname) AS pao_fullname,
+                me.me_id AS pao_employeeid,
+                '${attendancedate}' AS pao_attendancedate,
+                '${clockin}' AS pao_clockin,
+                '${clockout}' AS pao_clockout,
+                COALESCE(HOUR(TIMEDIFF('${clockout}', '${clockin}')), 0) AS pao_total_hours,
+                LEAST(
+                    CASE
+                        WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
+                            AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
+                        THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
                         ELSE 0
-                    END FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-        pao_normal_ot =  (SELECT CASE
-					WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-						AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-					THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-					WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-					THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-					ELSE 0
-				END FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-	  pao_minutes_ot =  (SELECT COALESCE(
+                    END,
+                    8
+                ) AS pao_night_differentials,
+                CASE
+					-- Clock-in before or on the scheduled time-in
+					WHEN '${clockin}' <= 
 					CASE
+						-- Monday
+						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+						-- Tuesday
+						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+						-- Wednesday
+						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+						-- Thursday
+						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+						-- Friday
+						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+						-- Saturday
+						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+						-- Sunday
+						ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+					END
+					THEN COALESCE(HOUR(TIMEDIFF(
+						CASE
+							-- Handle each day for clock-in
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+						END, '${clockin}'))
+					)
+					ELSE 0
+				END AS pao_early_ot,
+               CASE
+					-- Clock-out before or on 22:00 but after the scheduled time-out
+					WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+						 AND '${clockout}' >= 
+						 CASE
+							 -- Monday
+							 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							 -- Tuesday
+							 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							 -- Wednesday
+							 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							 -- Thursday
+							 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							 -- Friday
+							 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							 -- Saturday
+							 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							 -- Sunday
+							 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						 END
+					THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+						CASE
+							-- Handle each day accordingly
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						END))
+					)
+					-- Clock-out after 22:00
+					WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+					THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+						CASE
+							-- Handle each day accordingly
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						END))
+					)
+					ELSE 0
+				END AS pao_normal_ot,
+				COALESCE(
+					CASE
+						-- Monday
 						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+								-- Clock-out beyond 22:00:00
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+										60 -- ensures only excess minutes up to 22:00:00
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Tuesday
 						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Wednesday
 						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Thursday
 						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Friday
 						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Saturday
 						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Sunday
 						WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
 							END
 						ELSE 0
 					END, 0
-				) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-	  pao_night_minutes_ot =  (SELECT COALESCE(
+				) AS pao_minutes_ot,
+				  COALESCE(
 					CASE 
 						WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
 						THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
 						ELSE 0 
 					END, 0
-				) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-      pao_night_pay = (SELECT ROUND(COALESCE(
+				) AS pao_night_minutes_ot,
+                ROUND(COALESCE(
 				CASE 
 					WHEN s.ms_payrolltype = 'Daily' 
 					THEN s.ms_monthly / 8 * 1.25 * 1.10
@@ -3740,13 +3452,8 @@ router.post("/update", verifyJWT, (req, res) => {
 					THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
 					ELSE 0 
 				END, 0)
-			) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-		pao_total_night_min_ot =  (SELECT ROUND(COALESCE(
+			) AS pao_night_pay,
+				ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
@@ -3757,188 +3464,275 @@ router.post("/update", verifyJWT, (req, res) => {
 						THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
 						ELSE 0 
 					END, 0
-				)
-				END FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-        pao_normal_pay = (SELECT ROUND(COALESCE(
+				)AS pao_total_night_min_ot,
+                ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
                     END, 0), 2) * (CASE
-                    WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-                        AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-                    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-                    WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-                    THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-                    ELSE 0
-                END) + (ROUND(COALESCE(
+						-- Clock-out before or on 22:00 but after the scheduled time-out
+						WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+							 AND '${clockout}' >= 
+							 CASE
+								 -- Monday
+								 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								 -- Tuesday
+								 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								 -- Wednesday
+								 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								 -- Thursday
+								 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								 -- Friday
+								 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								 -- Saturday
+								 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								 -- Sunday
+								 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							 END
+						THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+							CASE
+								-- Handle each day accordingly
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							END))
+						)
+						-- Clock-out after 22:00
+						WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+						THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+							CASE
+								-- Handle each day accordingly
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							END))
+						)
+						ELSE 0
+					END) + (ROUND(COALESCE(
+                    CASE 
+                        WHEN s.ms_payrolltype = 'Daily' 
+                        THEN s.ms_monthly / 8 * 1.25 / 60
+                        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
+                    END, 0), 2) * (COALESCE(
+							CASE
+								-- Monday
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
+									CASE 
+										-- Clock-out beyond 22:00:00
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+												60 -- ensures only excess minutes up to 22:00:00
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Tuesday
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Wednesday
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Thursday
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Friday
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Saturday
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Sunday
+								WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+									END
+								ELSE 0
+							END, 0
+						)))AS pao_normal_pay,
+                 ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 / 60
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
                     END, 0), 2) * (COALESCE(
 					CASE
+						-- Monday
 						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+								-- Clock-out beyond 22:00:00
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+										60 -- ensures only excess minutes up to 22:00:00
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Tuesday
 						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Wednesday
 						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Thursday
 						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Friday
 						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Saturday
 						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Sunday
 						WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
 							END
 						ELSE 0
 					END, 0
-				  ))) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-	pao_total_min_ot =  (SELECT ROUND(COALESCE(
-                    CASE 
-                        WHEN s.ms_payrolltype = 'Daily' 
-                        THEN s.ms_monthly / 8 * 1.25 / 60
-                        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-                    END, 0), 2) * (COALESCE(
-					CASE
-						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-							END
-						WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
-							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-							END
-						ELSE 0
-					END, 0
-				)) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-      pao_night_hours_pay = (SELECT ROUND(COALESCE(
+				))
+                 AS pao_total_min_ot,
+                ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 * 1.10
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
-                    END, 0), 2) 
-                        FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-	  pao_night_minutes_pay =  (SELECT ROUND(COALESCE(
+                    END, 0), 2) AS pao_night_hours_pay,
+				ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
                         ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
-                    END, 0), 2)
-				END FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-      pao_normal_ot_pay = ( SELECT ROUND(COALESCE(
+                    END, 0), 2) AS pao_night_minutes_pay,
+                ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25
-                    END, 0), 2)
-                        FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-	  pao_normal_ot_minutes_pay = ( SELECT ROUND(COALESCE(
+                    END, 0), 2) AS pao_normal_ot_pay,
+                     ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 / 60
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
-                    END, 0), 2)
-                        FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-      pao_early_ot_pay = (SELECT ROUND(
+                    END, 0), 2) AS pao_normal_ot_minutes_pay,
+                ROUND(
                     COALESCE(
                         CASE
                             WHEN s.ms_payrolltype = 'Daily' 
@@ -3947,17 +3741,40 @@ router.post("/update", verifyJWT, (req, res) => {
                         END, 0
                     ) * 
                     CASE
-                        WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-                        THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))), 0)
-                        ELSE 0
-                    END, 2
-                ) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),
-      pao_total_ot_net_pay =  (SELECT ((ROUND(COALESCE(
+					-- Clock-in before or on the scheduled time-in
+					WHEN '${clockin}' <= 
+					CASE
+						-- Monday
+						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+						-- Tuesday
+						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+						-- Wednesday
+						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+						-- Thursday
+						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+						-- Friday
+						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+						-- Saturday
+						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+						-- Sunday
+						ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+					END
+					THEN COALESCE(HOUR(TIMEDIFF(
+						CASE
+							-- Handle each day for clock-in
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+						END, '${clockin}'))
+					)
+					ELSE 0
+				END, 2
+                ) AS pao_early_ot_pay,
+                ((ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 * 1.10
@@ -3988,117 +3805,1082 @@ router.post("/update", verifyJWT, (req, res) => {
                         THEN s.ms_monthly / 8 * 1.25 
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
                     END, 0), 2) * (CASE
-                    WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
-                        AND '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
-                    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-                    WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
-                    THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME))))
-                    ELSE 0
-                END)) +
+					-- Clock-out before or on 22:00 but after the scheduled time-out
+					WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+						 AND '${clockout}' >= 
+						 CASE
+							 -- Monday
+							 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							 -- Tuesday
+							 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							 -- Wednesday
+							 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							 -- Thursday
+							 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							 -- Friday
+							 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							 -- Saturday
+							 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							 -- Sunday
+							 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						 END
+					THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+						CASE
+							-- Handle each day accordingly
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						END))
+					)
+					-- Clock-out after 22:00
+					WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+					THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+						CASE
+							-- Handle each day accordingly
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+						END))
+					)
+					ELSE 0
+				END
+				)) +
                 (ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
                     END, 0), 2) * (CASE
-                    WHEN '${clockin}' <= CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
-                    THEN COALESCE(HOUR(TIMEDIFF('${clockin}', CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME))), 0)
-                    ELSE
-                        0
-                END)) + (ROUND(COALESCE(
+				-- Clock-in before or on the scheduled time-in
+				WHEN '${clockin}' <= 
+				CASE
+					-- Monday
+					WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+					-- Tuesday
+					WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+					-- Wednesday
+					WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+					-- Thursday
+					WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+					-- Friday
+					WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+					-- Saturday
+					WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+					-- Sunday
+					ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+				END
+				THEN COALESCE(HOUR(TIMEDIFF(
+					CASE
+						-- Handle each day for clock-in
+						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+						ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+					END, '${clockin}'))
+				)
+				ELSE 0
+			END)) + (ROUND(COALESCE(
                     CASE 
                         WHEN s.ms_payrolltype = 'Daily' 
                         THEN s.ms_monthly / 8 * 1.25 / 60
                         ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
                     END, 0), 2) * (COALESCE(
 					CASE
+						-- Monday
 						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+								-- Clock-out beyond 22:00:00
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+										60 -- ensures only excess minutes up to 22:00:00
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Tuesday
 						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Wednesday
 						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Thursday
 						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Friday
 						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Saturday
 						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
 							END
+						-- Sunday
 						WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
 							CASE 
-								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
-								THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
-								ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+								WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+									LEAST(
+										MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+										CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+										60
+									)
+								ELSE 
+									MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
 							END
 						ELSE 0
 					END, 0
-				  )))) FROM master_salary s
-                INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
-                INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
-                INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
-                WHERE me_id = '${employeeid}'
-                LIMIT 1),        
-        pao_payroll_date = '${payrolldate}',
-        pao_reason = '${reason}',
-        pao_status = '${overtimestatus}',
-        pao_subgroupid = '${subgroup}',
-        pao_overtimeimage = '${overtimeimage}'
-    WHERE pao_id = '${approveot_id}'`;
-
-    console.log(clockin);
-    console.log(clockout);
-    console.log(attendancedate);
-    console.log(payrolldate);
-    console.log(reason);
-    console.log(overtimestatus);
-    console.log(approveot_id);
-    console.log(subgroup);
-
-    mysql
-      .Update(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
+				)))) AS pao_total_ot_net_pay,
+				'${payrolldate}' AS pao_payroll_date,
+				'${reason}' AS pao_reason,
+                '${overtimestatus}' AS pao_status,
+				'${subgroup}' AS pao_subgroupid,
+				'${approvecount}' AS pao_approvalcount,
+                '${overtimeimage}' AS pao_overtimeimage
+            FROM master_salary s
+            INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+            INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+            INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+            WHERE me_id = '${employeeid}'
+            LIMIT 1`;
+          Select(sql, (err, insertresult) => {
+            if (err) {
+              console.error(err);
+              res.json(JsonErrorResponse(err));
+            } else {
+              res.json(JsonDataResponse(insertresult));
+            }
+          });
+        }
       })
       .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
+        console.log(error);
+        res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
 });
+
+router.post("/update", verifyJWT, (req, res) => {
+  try {
+    console.log("hit");
+
+    let approveot_id = req.body.approveot_id;
+    let clockin = req.body.clockin;
+    let clockout = req.body.clockout;
+    let attendancedate = req.body.attendancedate;
+    let payrolldate = req.body.payrolldate;
+    let employeeid = req.body.employeeid;
+    let overtimestatus = req.body.overtimestatus;
+    let reason = req.body.reason;
+    let subgroup = req.body.subgroup;
+    let overtimeimage = req.body.overtimeimage;
+    let deviceaction = "Web Automated";
+
+    let checkStatement = SelectStatement(
+      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
+      [employeeid, attendancedate, overtimestatus]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          let sql = `
+          UPDATE payroll_approval_ot SET 
+            pao_device_use = '${deviceaction}',
+            pao_fullname = CONCAT(
+                (
+                    SELECT me.me_lastname
+                    FROM master_employee me
+                    WHERE me.me_id = '${employeeid}'
+                    LIMIT 1
+                ),
+                ' ',
+                (
+                    SELECT me.me_firstname
+                    FROM master_employee me
+                    WHERE me.me_id = '${employeeid}'
+                    LIMIT 1
+                )
+            ),
+            pao_employeeid = '${employeeid}',
+            pao_attendancedate = '${attendancedate}',
+            pao_clockin = '${clockin}',
+            pao_clockout = '${clockout}',
+            pao_total_hours = COALESCE(HOUR(TIMEDIFF('${clockout}', '${clockin}')), 0),
+            pao_night_differentials = LEAST(
+                CASE
+                    WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
+                        AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <= CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
+                    THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
+                    ELSE 0
+                END,
+                8
+            ),
+            pao_early_ot =  ( SELECT CASE
+						-- Clock-in before or on the scheduled time-in
+						WHEN '${clockin}' <= 
+						CASE
+							-- Monday
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+							-- Tuesday
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+							-- Wednesday
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+							-- Thursday
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+							-- Friday
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+							-- Saturday
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+							-- Sunday
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+						END
+						THEN COALESCE(HOUR(TIMEDIFF(
+							CASE
+								-- Handle each day for clock-in
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+							END, '${clockin}'))
+						)
+						ELSE 0
+							END FROM master_salary s
+						INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+						INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+						INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+						WHERE me_id = '${employeeid}'
+						LIMIT 1),
+			pao_normal_ot =  (SELECT CASE
+								-- Clock-out before or on 22:00 but after the scheduled time-out
+								WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+									 AND '${clockout}' >= 
+									 CASE
+										 -- Monday
+										 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+										 -- Tuesday
+										 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+										 -- Wednesday
+										 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+										 -- Thursday
+										 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+										 -- Friday
+										 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+										 -- Saturday
+										 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+										 -- Sunday
+										 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+									 END
+								THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+									CASE
+										-- Handle each day accordingly
+										WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+										ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+									END))
+								)
+								-- Clock-out after 22:00
+								WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+								THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+									CASE
+										-- Handle each day accordingly
+										WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+										ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+									END))
+								)
+								ELSE 0
+								END FROM master_salary s
+								INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+								INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+								INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+								WHERE me_id = '${employeeid}'
+								LIMIT 1),
+            pao_minutes_ot =  (SELECT COALESCE(
+                        CASE
+                            WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+                                END
+                            WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
+                                CASE 
+                                    WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME) 
+                                    THEN MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+                                    ELSE MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+                                END
+                            ELSE 0
+                        END, 0
+                    ) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_night_minutes_ot =  (SELECT COALESCE(
+                        CASE 
+                            WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
+                            THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
+                            ELSE 0 
+                        END, 0
+                    ) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_night_pay = (SELECT ROUND(COALESCE(
+                    CASE 
+                        WHEN s.ms_payrolltype = 'Daily' 
+                        THEN s.ms_monthly / 8 * 1.25 * 1.10
+                        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
+                    END, 0), 2) * LEAST(
+                    CASE
+                        WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
+                            AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
+                        THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))), 0)
+                        ELSE 0
+                    END,
+                    8
+                ) + (ROUND(COALESCE(
+                    CASE 
+                        WHEN s.ms_payrolltype = 'Daily' 
+                        THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
+                        ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
+                    END, 0), 2) * COALESCE(
+                    CASE 
+                        WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
+                        THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
+                        ELSE 0 
+                    END, 0)
+                ) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_total_night_min_ot =  (SELECT ROUND(COALESCE(
+                        CASE 
+                            WHEN s.ms_payrolltype = 'Daily' 
+                            THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
+                            ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
+                        END, 0), 2) * COALESCE(
+                        CASE 
+                            WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
+                            THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
+                            ELSE 0 
+                        END, 0
+                    )
+                    END FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_normal_pay = (SELECT ROUND(COALESCE(
+                    CASE 
+                        WHEN s.ms_payrolltype = 'Daily' 
+                        THEN s.ms_monthly / 8 * 1.25 
+                        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
+                    END, 0), 2) * (CASE
+						-- Clock-out before or on 22:00 but after the scheduled time-out
+						WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+							 AND '${clockout}' >= 
+							 CASE
+								 -- Monday
+								 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								 -- Tuesday
+								 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								 -- Wednesday
+								 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								 -- Thursday
+								 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								 -- Friday
+								 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								 -- Saturday
+								 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								 -- Sunday
+								 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							 END
+						THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+							CASE
+								-- Handle each day accordingly
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							END))
+						)
+						-- Clock-out after 22:00
+						WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+						THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+							CASE
+								-- Handle each day accordingly
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+							END))
+						)
+						ELSE 0
+					END) + (ROUND(COALESCE(
+                    CASE 
+                        WHEN s.ms_payrolltype = 'Daily' 
+                        THEN s.ms_monthly / 8 * 1.25 / 60
+                        ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
+                    END, 0), 2) * (COALESCE(
+							CASE
+								-- Monday
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
+									CASE 
+										-- Clock-out beyond 22:00:00
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+												60 -- ensures only excess minutes up to 22:00:00
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Tuesday
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Wednesday
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Thursday
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Friday
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Saturday
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Sunday
+								WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+									END
+								ELSE 0
+							END, 0
+						))) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+         pao_total_min_ot =  (SELECT ROUND(COALESCE(
+						CASE 
+							WHEN s.ms_payrolltype = 'Daily' 
+							THEN s.ms_monthly / 8 * 1.25 / 60
+							ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
+						END, 0), 2) * (COALESCE(
+						CASE
+							-- Monday
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
+								CASE 
+									-- Clock-out beyond 22:00:00
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+											60 -- ensures only excess minutes up to 22:00:00
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Tuesday
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Wednesday
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Thursday
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Friday
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Saturday
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+								END
+							-- Sunday
+							WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
+								CASE 
+									WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+										LEAST(
+											MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+											CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+											60
+										)
+									ELSE 
+										MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+								END
+							ELSE 0
+						END, 0
+					)) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_night_hours_pay = (SELECT ROUND(COALESCE(
+                        CASE 
+                            WHEN s.ms_payrolltype = 'Daily' 
+                            THEN s.ms_monthly / 8 * 1.25 * 1.10
+                            ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
+                        END, 0), 2) 
+                            FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_night_minutes_pay =  (SELECT ROUND(COALESCE(
+                        CASE 
+                            WHEN s.ms_payrolltype = 'Daily' 
+                            THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
+                            ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
+                        END, 0), 2)
+                    END FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_normal_ot_pay = ( SELECT ROUND(COALESCE(
+                        CASE 
+                            WHEN s.ms_payrolltype = 'Daily' 
+                            THEN s.ms_monthly / 8 * 1.25
+                            ELSE s.ms_monthly / 313 * 12 / 8  * 1.25
+                        END, 0), 2)
+                            FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_normal_ot_minutes_pay = ( SELECT ROUND(COALESCE(
+                        CASE 
+                            WHEN s.ms_payrolltype = 'Daily' 
+                            THEN s.ms_monthly / 8 * 1.25 / 60
+                            ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
+                        END, 0), 2)
+                            FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_early_ot_pay = (SELECT ROUND(
+						COALESCE(
+							CASE
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 
+								ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
+							END, 0
+						) * 
+						CASE
+						-- Clock-in before or on the scheduled time-in
+						WHEN '${clockin}' <= 
+						CASE
+							-- Monday
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+							-- Tuesday
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+							-- Wednesday
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+							-- Thursday
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+							-- Friday
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+							-- Saturday
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+							-- Sunday
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+						END
+						THEN COALESCE(HOUR(TIMEDIFF(
+							CASE
+								-- Handle each day for clock-in
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+							END, '${clockin}'))
+						)
+						ELSE 0
+					END, 2
+					) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+            pao_total_ot_net_pay =  (SELECT ((ROUND(COALESCE(
+							CASE 
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 * 1.10
+								ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 * 1.10 
+							END, 0), 2) * LEAST(
+							CASE
+								WHEN (('${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)) 
+									AND (CAST(CONCAT(DATE('${clockout}'), ' ', '00:00:00') AS DATETIME)) <=  CAST(CONCAT(DATE('${clockout}'), ' ', '06:00:00') AS DATETIME))
+								THEN COALESCE(HOUR(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME))))
+								ELSE 0
+							END,
+							8
+						)) + (ROUND(COALESCE(
+							CASE 
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 * 1.10 / 60
+								ELSE s.ms_monthly / 313 * 12 / 8 * 1.25 * 1.10 / 60 
+							END, 0), 2) * COALESCE(
+							CASE 
+								WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
+								THEN MINUTE(TIMEDIFF('${clockout}', CONCAT(DATE('${attendancedate}'), ' 22:00:00')))
+								ELSE 0 
+							END, 0
+						)) + 
+						(ROUND(COALESCE(
+							CASE 
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 
+								ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
+							END, 0), 2) * (CASE
+							-- Clock-out before or on 22:00 but after the scheduled time-out
+							WHEN '${clockout}' <= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) 
+								 AND '${clockout}' >= 
+								 CASE
+									 -- Monday
+									 WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+									 -- Tuesday
+									 WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+									 -- Wednesday
+									 WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+									 -- Thursday
+									 WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+									 -- Friday
+									 WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+									 -- Saturday
+									 WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+									 -- Sunday
+									 ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+								 END
+							THEN COALESCE(HOUR(TIMEDIFF('${clockout}', 
+								CASE
+									-- Handle each day accordingly
+									WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+									ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+								END))
+							)
+							-- Clock-out after 22:00
+							WHEN '${clockout}' >= CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME)
+							THEN COALESCE(HOUR(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+								CASE
+									-- Handle each day accordingly
+									WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_out') AS DATETIME)
+									WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_out') AS DATETIME)
+									ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_out') AS DATETIME)
+								END))
+							)
+							ELSE 0
+						END
+						)) +
+						(ROUND(COALESCE(
+							CASE 
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 
+								ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 
+							END, 0), 2) * (CASE
+						-- Clock-in before or on the scheduled time-in
+						WHEN '${clockin}' <= 
+						CASE
+							-- Monday
+							WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+							-- Tuesday
+							WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+							-- Wednesday
+							WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+							-- Thursday
+							WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+							-- Friday
+							WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+							-- Saturday
+							WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+							-- Sunday
+							ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+						END
+						THEN COALESCE(HOUR(TIMEDIFF(
+							CASE
+								-- Handle each day for clock-in
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+							END, '${clockin}'))
+						)
+						ELSE 0
+					END)) + (ROUND(COALESCE(
+							CASE 
+								WHEN s.ms_payrolltype = 'Daily' 
+								THEN s.ms_monthly / 8 * 1.25 / 60
+								ELSE s.ms_monthly / 313 * 12 / 8  * 1.25 / 60
+							END, 0), 2) * (COALESCE(
+							CASE
+								-- Monday
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN 
+									CASE 
+										-- Clock-out beyond 22:00:00
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME))),
+												60 -- ensures only excess minutes up to 22:00:00
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_monday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Tuesday
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_tuesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Wednesday
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_wednesday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Thursday
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_thursday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Friday
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_friday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Saturday
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_saturday, '$.time_out'))) AS DATETIME)))
+									END
+								-- Sunday
+								WHEN DAYOFWEEK('${attendancedate}') = 1 THEN 
+									CASE 
+										WHEN '${clockout}' > CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME) THEN 
+											LEAST(
+												MINUTE(TIMEDIFF(CAST(CONCAT('${attendancedate}', ' ', '22:00:00') AS DATETIME), 
+												CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME))),
+												60
+											)
+										ELSE 
+											MINUTE(TIMEDIFF('${clockout}', CAST(CONCAT('${attendancedate}', ' ', JSON_UNQUOTE(JSON_EXTRACT(ms.ms_sunday, '$.time_out'))) AS DATETIME)))
+									END
+								ELSE 0
+							END, 0
+						)))) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),        
+            pao_payroll_date = '${payrolldate}',
+            pao_reason = '${reason}',
+            pao_status = '${overtimestatus}',
+            pao_subgroupid = '${subgroup}',
+            pao_overtimeimage = '${overtimeimage}'
+            WHERE pao_id = '${approveot_id}'`;
+
+          console.log(clockin);
+          console.log(clockout);
+          console.log(attendancedate);
+          console.log(payrolldate);
+          console.log(reason);
+          console.log(overtimestatus);
+          console.log(approveot_id);
+          console.log(subgroup);
+
+          console.log(sql, "sql");
+
+          mysql
+            .Update(sql)
+            .then((result) => {
+              res.json(JsonSuccess());
+              console.log(result, "result");
+            })
+            .catch((error) => {
+              res.json(JsonErrorResponse(error));
+              console.log(error, "error");
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 
 //#endregion
 

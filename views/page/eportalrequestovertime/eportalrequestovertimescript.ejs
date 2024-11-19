@@ -177,6 +177,8 @@
                 } else {
                   combinedTime = `${item.starttime} - ${item.endtime}`;
                 }
+                $("#addappliedotstart").text(item.clockin);
+                $("#addappliedotend").text(item.clockout);
                 $("#addotshiftscheduled").text(combinedTime);
                 $("#otpositionname").text(item.schedtimein);
                 $("#otdepartmentname").text(item.schedtimeout);
@@ -485,19 +487,17 @@
     document
       .getElementById("addappliedday")
       .addEventListener("change", function () {
-        const selectedDate = this.value; // Get the selected date
+        const selectedDate = this.value; 
         const datetimeInput = document.getElementById("addappliedotstart");
 
-        // Check if a valid date is selected
         if (selectedDate) {
           const formattedDate = new Date(selectedDate);
-          // Format the date to match the format required by datetime-local input
           const formattedDateString = `${
             formattedDate.toISOString().split("T")[0]
           }T00:00`;
-          datetimeInput.value = formattedDateString; // Set the datetime-local input to the selected date
+          datetimeInput.value = formattedDateString; 
         } else {
-          datetimeInput.value = ""; // Clear the datetime-local input if no date is selected
+          datetimeInput.value = "";
         }
       });
 
@@ -563,16 +563,9 @@
           return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
 
-        // function extractDate(dateString) {
-        //   let dateParts = dateString.split(", ")[1];
-        //   return dateParts;
-        // }
-
         let formattedClockin = formatDateTime(clockin);
         let formattedClockout = formatDateTime(clockout);
-        // let attendancedateFormatted = extractDate(attendancedate);
 
-        //console.log(attendancedateFormatted, "formatday");
         console.log(formattedClockin, "format");
         console.log(formattedClockout, "format");
 
@@ -591,9 +584,9 @@
             overtimeimage: overtimeimage,
           },
           success: function (result) {
-            if (result.msg == "success") {
+            if (result.msg === "success") {
               swal({
-                title: "Update Successfully",
+                title: "Save Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
@@ -601,16 +594,14 @@
                 window.location.reload();
               });
               LoadTable();
-            } else {
-              swal(
-                "Data already exists!",
-                "You clicked the button!",
-                "warning"
-              );
+            } else if (result.msg === "exist") {
+              swal({
+                title: "Exist",
+                text: "Looks like you already have a file for Overtime this Day.",
+                icon: "warning",
+                button: "OK!",
+              });
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");
@@ -674,9 +665,9 @@
               $("#schedtimeout").text(item.scheduledtimeout);
               $("#previewleave").attr(
                 "src",
-                "data:image/jpg;base64," + item.overtimeimage
+                "data:image/jpg;base64," + item.overtimeimages
               );
-              base64String = item.overtimeimage;
+              base64String = item.overtimeimages;
 
               console.log(item.clockin);
               console.log(item.clockout);
@@ -821,19 +812,24 @@
             overtimeimage: overtimeimage,
           },
           success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
+            if (result.msg === "success") {
+              swal({
+                title: "Save Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
                 window.location.reload();
               });
               LoadTable();
+            } else if (result.msg === "exist") {
+              swal({
+                title: "Exist",
+                text: "Looks like you already have a file for Overtime this Day.",
+                icon: "warning",
+                button: "OK!",
+              });
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");

@@ -2,6 +2,71 @@
   let adjustmentid = "";
 
   $(document).ready(function () {
+    const manualMemoTab = $("#manualMemoTab");
+    const automationTab = $("#automationTab");
+    const dynamicButtonContainer = $("#dynamicButton");
+    const titleCard = $("#titleCard");
+
+    if (
+      manualMemoTab.length &&
+      automationTab.length &&
+      dynamicButtonContainer.length
+    ) {
+      console.log("Elements found: Adding event listeners.");
+
+      function updateButton(isManualMemo) {
+        if (isManualMemo) {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#adjustmentmodal">
+                <b>+ Additionals</b>
+              </button>
+            </div>
+            <div class="flex">
+              <button class="btn btn-load-color" data-bs-toggle="modal" data-bs-target="#importsalarymodal">
+                <i class="bi bi-box-arrow-in-down mr-2"></i><b>Import Additionals</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Payroll Adjustments - Additionals");
+          console.log("Buttons set for Additional Adjustments.");
+        } else {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button id="addDeductionBtn" type="button" class="btn btn-add-color">
+                <b>+ Deductions</b>
+              </button>
+            </div>
+            <div class="flex">
+              <button id="importDeducBtn" class="btn btn-load-color">
+                <i class="bi bi-box-arrow-in-down mr-2"></i><b>Import Deductions</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Payroll Adjustments - Deductions");
+          console.log("Buttons set for Deductions Adjustments.");
+        }
+      }
+
+      manualMemoTab.on("click", function () {
+        updateButton(true);
+      });
+
+      automationTab.on("click", function () {
+        updateButton(false);
+      });
+
+      updateButton(true);
+    } else {
+      console.error("One or more elements are missing:", {
+        manualMemoTab: manualMemoTab.length,
+        automationTab: automationTab.length,
+        dynamicButtonContainer: dynamicButtonContainer.length,
+      });
+    }
+
+    //#region Additionals Adjustments
+
     LoadTable();
     LoadList();
     searchTable();
@@ -298,10 +363,7 @@
               $("#editpapayrolldate").val(item.payrolldate);
               $("#editstatuspa").val(item.adjustmentstatus);
               $("#editpareason").val(item.reason);
-              $("#preview").attr(
-                "src",
-                "data:image/jpg;base64," + item.image
-              );
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
@@ -323,8 +385,6 @@
       let payrolldate = $("#editpapayrolldate").val();
       let adjustmentstatus = $("#editstatuspa").val();
       let reason = $("#editpareason").val();
-
-
 
       let message = "";
 
@@ -395,6 +455,159 @@
       }
     });
 
+    //#region Import Additionals
+    $(document).on("click", "#importexcelsavebtn", function () {
+      let uploadData = $("#importexcelfile").val();
+      if (uploadData != "") {
+        Loading("Uploading, Please wait for a moment...");
+        UploadProcess();
+      } else {
+        warning("Warning!", "No File Chosen!");
+      }
+    });
+
+    function UploadProcess() {
+      var fileUpload = document.getElementById("importexcelfile");
+
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcel(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcel(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
+      }
+    }
+
+    function GetTableFromExcel(data) {
+      var workbook = XLSX.read(data, { type: "binary" });
+
+      var Sheet = workbook.SheetNames[0];
+
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      var headerRow = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+
+      function convertExcelDate(serial) {
+        const startDate = new Date(1899, 11, 30);
+        startDate.setDate(startDate.getDate() + serial);
+        const year = startDate.getFullYear();
+        const month = String(startDate.getMonth() + 1).padStart(2, "0");
+        const day = String(startDate.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatAdjustAmount(amount) {
+        return parseFloat(amount.replace(/[₱,]/g, ""));
+      }
+
+      for (var i = 0; i < excelRows.length; i++) {
+        var data = [];
+        var row = myTable.insertRow(-1);
+
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]] ?? "";
+          data.push({ item: excelRows[i][columns[j]] });
+        }
+
+        const transformedPayrollDate = convertExcelDate(data[2]?.item);
+        const transformedAdjustAmount = formatAdjustAmount(data[4]?.item);
+
+        dataExcelArr.push({
+          employeeid: data[1]?.item || "",
+          payrolldate: transformedPayrollDate || "",
+          adjustmenttype: data[3]?.item || "",
+          adjust_amount: transformedAdjustAmount || "",
+          reason: data[5]?.item || "",
+        });
+      }
+
+      console.log("Data Row:", data);
+
+      excelDataSave(dataExcelArr);
+    }
+
+    function excelDataSave(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      console.log(dataraw);
+
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/upload",
+        data: { data: dataraw },
+        success: function (result) {
+          hideLoading();
+          console.log("Message: ", result.msg);
+
+          if (result.msg === "success") {
+            success("Saved!", "Data saved!");
+            $("#importsalarymodal").modal("hide");
+            $("#importexcelfile").val("");
+          } else if (result.msg === "Some records already exist") {
+            let existingDataHtml = document.createElement("div");
+            result.data.forEach((row) => {
+              let record = document.createElement("p");
+              record.innerHTML = `Employee ID: ${row.employeeid}, Payroll Date: ${row.payrolldate}, Adjustment Type: ${row.adjustmenttype}, Amount: ${row.adjust_amount}, Reason: ${row.reason}`;
+              existingDataHtml.appendChild(record);
+            });
+
+            swal({
+              icon: "warning",
+              title: "Info",
+              content: existingDataHtml,
+              button: "OK",
+            });
+          }
+
+          LoadTable();
+        },
+
+        error: function (result) {
+          console.error(result);
+        },
+      });
+    }
+
+    function downloadTxtFile(content, filename) {
+      const element = document.createElement("a");
+      const file = new Blob([content], { type: "text/plain" });
+      element.href = URL.createObjectURL(file);
+      element.download = filename;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    //#endregion
+
     function searchTable() {
       var input, filter, found, table, tr, td, i, j;
       input = document.getElementById("myInput");
@@ -416,5 +629,587 @@
         }
       }
     }
+
+    //#endregion
+
+    //#region Deductions Adjustments
+
+    $(document).on("click", "#addDeductionBtn", function () {
+      $("#adjustmentmodaldeductions").modal("show");
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $("#editadjustmentmodaldeductions").modal("show");
+    });
+
+    LoadEmpDeduc();
+    LoadPDDeduc();
+    LoadListEditDeductions();
+    EditPayrollDateDeductions();
+
+    $(document).on("click", "#automationTab", function () {
+      console.log("Hit");
+      $("#dataTablePayrollDeductions").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/payroll_adjustments/loaddeductions",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById(
+            "dataTablePayrollDeductions"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var ADJUSTMENT_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var ADJUSTMENT_TYPE = row.insertCell(2);
+            var ADJUSTMENT_AMOUNT = row.insertCell(3);
+            var PAYROLLDATE = row.insertCell(4);
+            var CREATE_BY = row.insertCell(5);
+            var ADJUSTMENT_STATUS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            ADJUSTMENT_ID.innerHTML = item.adjustmentid;
+            FULLNAME.innerHTML = item.fullname;
+            ADJUSTMENT_TYPE.innerHTML = item.adjustmenttype;
+
+            ADJUSTMENT_AMOUNT.innerHTML =
+              "₱" +
+              parseFloat(item.adjust_amount).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+
+            PAYROLLDATE.innerHTML = item.payrolldate;
+            CREATE_BY.innerHTML = item.createby;
+
+            var adjustmentStatus = item.adjustmentstatus;
+            var statusClass = "";
+            switch (adjustmentStatus.toLowerCase()) {
+              case "active":
+                statusClass = "active-status";
+                break;
+              case "inactive":
+                statusClass = "inactive-status";
+                break;
+              default:
+                statusClass = "";
+            }
+            ADJUSTMENT_STATUS.innerHTML = `<span class="${statusClass}">${adjustmentStatus}</span>`;
+
+            ACTION.innerHTML =
+              '<button id="viewBtn" class="btn text-primary view-btn"><i class="fas fa-fw fa-eye"></i></button>';
+            $.each(
+              [
+                ADJUSTMENT_ID,
+                FULLNAME,
+                ADJUSTMENT_TYPE,
+                ADJUSTMENT_AMOUNT,
+                PAYROLLDATE,
+                CREATE_BY,
+                ADJUSTMENT_STATUS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+
+          $("#dataTablePayrollDeductions").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+              .find("td")
+              .each(function () {
+                dataRow.push($(this).text());
+              });
+            adjustmentid = dataRow[0];
+            console.log("Selected Leave ID:", adjustmentid);
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching approved leaves:", status, error);
+        },
+      });
+    });
+
+    function LoadEmpDeduc() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#paemployeenamedeductions").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPDDeduc() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreqbeforepayout",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#papayrolldatedeductions").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadListEditDeductions() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editpaemployeenamedeductions").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditPayrollDateDeductions() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreqbeforepayout",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#editpapayrolldatedeductions").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#paemployeenamedeductions").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewholiday").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjustmentsavebtndeductions", function () {
+      let employeeid = $("#paemployeenamedeductions").val();
+      let payrolldate = $("#papayrolldatedeductions").val();
+      let adjustmenttype = $("#patypedeductions").val();
+      let adjustmentamount = $("#paamountdeductions").val();
+      let adjustmentreason = $("#pareasondeductions").val();
+      let origindate = $("#paorigindatedeductions").val();
+
+      var message = "";
+
+      if (employeeid == "") {
+        message += "Employee Name is required ";
+      }
+
+      if (adjustmenttype == "") {
+        message += "Type is required ";
+      }
+
+      if (adjustmentamount == "") {
+        message += "Amount is required ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        adjustmentamount = adjustmentamount.replace(/,/g, "").replace("₱", "");
+        $.ajax({
+          type: "POST",
+          url: "/payroll_adjustments/savedeductions",
+          data: {
+            employeeid: employeeid,
+            adjustmenttype: adjustmenttype,
+            payrolldate: payrolldate,
+            adjustmentamount: parseFloat(adjustmentamount),
+            adjustmentreason: adjustmentreason,
+            origindate: origindate,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal({
+                title: "Saved Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((results) => {
+                $("#automationTab").click();
+                $("#adjustmentmodaldeductions").modal("hide");
+              });
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
+            }
+          },
+          error: function (err) {
+            swal("Data already exist!", "You clicked the button!", "warning");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getpayrolladjustmentdeductions",
+        data: {
+          adjustmentid: adjustmentid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#editpaemployeenamedeductions").val(item.employeeid);
+              $("#editpaorigindatedeductions").val(item.origindate);
+              $("#editpatypedeductions").val(item.adjustmenttype);
+              $("#editpaamountdeductions").val(item.adjust_amount);
+              $("#editpapayrolldatedeductions").val(item.payrolldate);
+              $("#editstatuspadeductions").val(item.adjustmentstatus);
+              $("#editpareasondeductions").val(item.reason);
+              $("#previewrdot").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+            });
+          } else {
+            swal("Error fetching employee data", msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", msg, "error");
+        },
+      });
+    });
+
+    $("#editpaemployeenamedeductions").on("change", function () {
+      let employeeid = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewrdot").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#adjustmenteditbtndeductions", function () {
+      let id = adjustmentid;
+      let employeeid = $("#editpaemployeenamedeductions").val();
+      let origindate = $("#editpaorigindatedeductions").val();
+      let adjustmenttype = $("#editpatypedeductions").val();
+      let adjust_amount = $("#editpaamountdeductions").val();
+      let payrolldate = $("#editpapayrolldatedeductions").val();
+      let adjustmentstatus = $("#editstatuspadeductions").val();
+      let reason = $("#editpareasondeductions").val();
+
+      let message = "";
+
+      if (employeeid === "") {
+        message += "employeeid ID is required. ";
+      }
+
+      if (adjustmenttype === "") {
+        message += "adjustmenttype is required. ";
+      }
+
+      if (adjust_amount === "") {
+        message += "adjust_amount is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "payrolldate is required. ";
+      }
+
+      if (adjustmentstatus === "") {
+        message += "adjustmentstatus is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "PUT",
+          url: "/payroll_adjustments/editdeductions",
+          data: {
+            adjustmentid: id,
+            employeeid: employeeid,
+            origindate: origindate,
+            adjustmenttype: adjustmenttype,
+            adjust_amount: adjust_amount,
+            payrolldate: payrolldate,
+            adjustmentstatus: adjustmentstatus,
+            reason: reason,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal({
+                title: "Update Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then(() => {
+                $("#automationTab").click();
+                $("#editadjustmentmodaldeductions").modal("hide");
+              });
+            } else if (result.msg === "exist") {
+              swal(
+                "Exist",
+                "Maybe The Department and Approver Count combination already exists.",
+                "warning"
+              );
+            } else {
+              swal("Error", "An error occurred while updating.", "error");
+            }
+          },
+          error: function (err) {
+            swal(
+              "Error",
+              "An error occurred while making the request.",
+              "error"
+            );
+          },
+        });
+      }
+    });
+
+    //#region Import Deductions
+
+
+    $(document).on("click", "#importDeducBtn", function () {
+      $("#importsalarymodaldeductions").modal("show");
+    });
+
+
+    $(document).on("click", "#importexcelsavebtndeductions", function () {
+      let uploadData = $("#importexcelfiledeductions").val();
+      if (uploadData != "") {
+        Loading("Uploading, Please wait for a moment...");
+        UploadProcessDeductions();
+      } else {
+        warning("Warning!", "No File Chosen!");
+      }
+    });
+
+    function UploadProcessDeductions() {
+      var fileUpload = document.getElementById("importexcelfiledeductions");
+
+      var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx|.csv|.ods)$/;
+      if (regex.test(fileUpload.value.toLowerCase())) {
+        if (typeof FileReader != "undefined") {
+          var reader = new FileReader();
+
+          if (reader.readAsBinaryString) {
+            reader.onload = function (e) {
+              GetTableFromExcelDeductions(e.target.result);
+            };
+            reader.readAsBinaryString(fileUpload.files[0]);
+          } else {
+            reader.onload = function (e) {
+              var data = "";
+              var bytes = new Uint8Array(e.target.result);
+              for (var i = 0; i < bytes.byteLength; i++) {
+                data += String.fromCharCode(bytes[i]);
+              }
+              GetTableFromExcelDeductions(data);
+            };
+            reader.readAsArrayBuffer(fileUpload.files[0]);
+          }
+        } else {
+          warning("Upload", "This browser does not support HTML5.");
+        }
+      } else {
+        warning("Upload", "Please upload a valid Excel file.");
+      }
+    }
+
+    function GetTableFromExcelDeductions(data) {
+      var workbook = XLSX.read(data, { type: "binary" });
+
+      var Sheet = workbook.SheetNames[0];
+
+      var excelRows = XLSX.utils.sheet_to_row_object_array(
+        workbook.Sheets[Sheet]
+      );
+      var columns = Object.keys(excelRows[0]);
+
+      var myTable = document.createElement("table");
+      myTable.border = "1";
+
+      var headerRow = myTable.insertRow(-1);
+
+      var dataExcelArr = [];
+
+      function convertExcelDate(serial) {
+        const startDate = new Date(1899, 11, 30);
+        startDate.setDate(startDate.getDate() + serial);
+        const year = startDate.getFullYear();
+        const month = String(startDate.getMonth() + 1).padStart(2, "0");
+        const day = String(startDate.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatAdjustAmount(amount) {
+        return parseFloat(amount.replace(/[₱,]/g, ""));
+      }
+
+      for (var i = 0; i < excelRows.length; i++) {
+        var data = [];
+        var row = myTable.insertRow(-1);
+
+        for (var j = 0; j < columns.length; j++) {
+          var cell = row.insertCell(-1);
+          cell.innerHTML = excelRows[i][columns[j]] ?? "";
+          data.push({ item: excelRows[i][columns[j]] });
+        }
+
+        const transformedPayrollDate = convertExcelDate(data[2]?.item);
+        const transformedAdjustAmount = formatAdjustAmount(data[4]?.item);
+
+        dataExcelArr.push({
+          employeeid: data[1]?.item || "",
+          payrolldate: transformedPayrollDate || "",
+          adjustmenttype: data[3]?.item || "",
+          adjust_amount: transformedAdjustAmount || "",
+          reason: data[5]?.item || "",
+        });
+      }
+
+      console.log("Data Row:", data);
+
+      excelDataSaveDeductions(dataExcelArr);
+    }
+
+    function excelDataSaveDeductions(data) {
+      var dataraw = JSON.stringify(data, null, 2);
+      console.log(dataraw);
+
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/uploaddeductions",
+        data: { data: dataraw },
+        success: function (result) {
+          hideLoading();
+          console.log("Message: ", result.msg);
+
+          if (result.msg === "success") {
+            success("Saved!", "Data saved!");
+            $("#importsalarymodal").modal("hide");
+            $("#importexcelfile").val("");
+          } else if (result.msg === "Some records already exist") {
+            let existingDataHtml = document.createElement("div");
+            result.data.forEach((row) => {
+              let record = document.createElement("p");
+              record.innerHTML = `Employee ID: ${row.employeeid}, Payroll Date: ${row.payrolldate}, Adjustment Type: ${row.adjustmenttype}, Amount: ${row.adjust_amount}, Reason: ${row.reason}`;
+              existingDataHtml.appendChild(record);
+            });
+
+            swal({
+              icon: "warning",
+              title: "Info",
+              content: existingDataHtml,
+              button: "OK",
+            });
+          }
+          $("#automationTab").click();
+          $("#importsalarymodaldeductions").modal("hide");
+        },
+
+        error: function (result) {
+          console.error(result);
+        },
+      });
+    }
+
+    function downloadTxtFileDeductions(content, filename) {
+      const element = document.createElement("a");
+      const file = new Blob([content], { type: "text/plain" });
+      element.href = URL.createObjectURL(file);
+      element.download = filename;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    //#endregion
+
+    //#endregion
   });
 </script>
