@@ -437,7 +437,7 @@ exports.EmailNotification = (details) => {
     <div class="container">
         <div class="card">
             <div class="card-header header-style">
-                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <img rel src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="card-logo">
                 <b class="header-title">Solutions Supply and Allied Services Corp.</b>
                 <h2 class="line-title">${requesttype} Request</h2>
             </div>
@@ -503,7 +503,7 @@ exports.EmailNotification = (details) => {
 
             <div class="card-footer">
                 <span class="title-footer">Chronus MTK Powered by </span>
-                <a href="https://www.5lsolutions.com/" class="company-link"><img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo">Solutions Supply and Allied Services Corp.</a>
+                <a href="https://www.5lsolutions.com/" class="company-link"><img src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="company-logo">Solutions Supply and Allied Services Corp.</a>
             </div>
         </div>
     </div>
@@ -547,7 +547,7 @@ exports.ForgotPasswordTemplate = (details) => {
     <div class="container">
         <div class="card">
             <div class="card-header header-style">
-                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <img rel src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="card-logo">
                 <b class="header-title">Solutions Supply and Allied Services Corp.</b>
                 <h2 class="line-title">Forgot Password</h2>
             </div>
@@ -584,7 +584,7 @@ exports.ForgotPasswordTemplate = (details) => {
 
             <div class="card-footer">
                 <span class="title-footer">Chronus MTK Powered by </span>
-                <a href="https://www.5lsolutions.com/" class="company-link"> <img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo"> Solutions Supply and Allied Services Corp.</a>
+                <a href="https://www.5lsolutions.com/" class="company-link"> <img src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="company-logo"> Solutions Supply and Allied Services Corp.</a>
             </div>
         </div>
     </div>
