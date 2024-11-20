@@ -13,10 +13,11 @@ const {
   InsertStatement,
   SelectStatement,
 } = require("./repository/customhelper");
-const { REQUEST } = require("./repository/dictionary");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
+
+const { REQUEST } = require("./repository/enums");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -201,7 +202,7 @@ router.post("/otmealaction", (req, res) => {
       [employeeid, otmealid]
     );
 
-    console.log(checkStatement, "result");
+    // console.log(checkStatement, "result");
 
     InsertTable(sql, data, (err, result) => {
       if (err) {
