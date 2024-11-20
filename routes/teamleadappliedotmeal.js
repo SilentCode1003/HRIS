@@ -197,10 +197,11 @@ router.post("/otmealaction", (req, res) => {
         comment,
       ],
     ];
-    let checkStatement = SelectStatement(
-      "select * from meal_request_activity where mra_employeeid=? and mra_mealid=?",
-      [employeeid, otmealid]
-    );
+
+    // let checkStatement = SelectStatement(
+    //   "select * from meal_request_activity where mra_employeeid=? and mra_mealid=?",
+    //   [employeeid, otmealid]
+    // );
 
     // console.log(checkStatement, "result");
 
@@ -220,7 +221,12 @@ router.post("/otmealaction", (req, res) => {
           requesttype: REQUEST.OTMEAL,
         },
       ];
-      SendEmailNotificationEmployee(employeeid, subgroupid, emailbody);
+      SendEmailNotificationEmployee(
+        employeeid,
+        subgroupid,
+        REQUEST.OTMEAL,
+        emailbody
+      );
 
       res.json(JsonSuccess());
     });
