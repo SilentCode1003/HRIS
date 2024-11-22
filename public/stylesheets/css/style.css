@@ -1,4 +1,5 @@
 @import url(style-inventory.css);
+@import url(webview-cards.css);
 
 .spaced-table tr {
   margin-bottom: 2rem; /* Adjust as needed */
