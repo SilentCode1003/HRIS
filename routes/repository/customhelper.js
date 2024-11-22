@@ -210,6 +210,22 @@ exports.ConvertToDate = (datestring) => {
 exports.ConvertTo24Formart = (timestring) => {
   return moment(timestring, "h:mm a").format("HH:mm:ss");
 };
+
+exports.GenerateDates = (startDate, endDate) => {
+  const dates = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    // Format the date as YYYY-MM-DD
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    dates.push(formattedDate);
+
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+};
 //#endregion
 
 //#region  SUMMARY REPORTS

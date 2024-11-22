@@ -815,4 +815,123 @@
     return `${formattedDate} - ${formattedTime}`;
   };
   //#endregion
+
+  //#region AJAX CALLS
+  //@use for updating/saving/inserting data
+  Upsert = (type, url, data, callback) => {
+    $.ajax({
+      type: type,
+      url: url,
+      data: data,
+      success: function (result) {
+        callback(result);
+      },
+      error: function (err) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+
+  //@use for fetching GET data
+  Fetch = (url, callback) => {
+    $.ajax({
+      url: url,
+      method: "GET",
+      dataType: "json",
+      success: function (result) {
+        callback(result);
+      },
+      error: function (err) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+
+  //@use for fetching data with progress bar
+  FetchTableData = (url, callback) => {
+    $(".progress").hide();
+    $(".progress").slideDown();
+
+    $.ajax({
+      url: url,
+      type: "GET",
+      xhrFields: {
+        onprogress: function (e) {
+          if (e.lengthComputable) {
+            let percentComplete = (e.loaded / e.total) * 100;
+            $(".progress-bar").css("width", percentComplete + "%");
+          }
+        },
+      },
+      success: function (result) {
+        setTimeout(function () {
+          $(".progress").slideUp(function () {
+            const data = result.data;
+            if (result.msg === "success") {
+              callback(data);
+            } else {
+              console.error(result.msg);
+            }
+          });
+        }, 1000);
+      },
+      error: function (error) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+  //#endregion
+
+  //#region Ajax Utility
+  const Query = (url, type, data = null) => {
+    return new Promise((resolve, reject) => {
+      let ajaxOptions = {
+        url: url,
+        method: type,
+        dataType: "json",
+        success: function (result) {
+          resolve(result);
+        },
+        error: function (err) {
+          reject(err);
+          warning(
+            "Error",
+            "An error occurred while communicating with the server."
+          );
+        },
+      };
+
+      if (["PUT", "POST", "PATCH", "DELETE"].includes(type) && data) {
+        ajaxOptions.data = JSON.stringify(data);
+        ajaxOptions.contentType = "application/json";
+      }
+
+      $.ajax(ajaxOptions);
+    });
+  };
+
+  const queryUtility = {
+    async Load(url) {
+      return await Query(url, "GET");
+    },
+    async Save(url, data) {
+      return await Query(url, "POST", data);
+    },
+    async Update(url, data) {
+      return await Query(url, "PUT", data);
+    },
+    async Delete(url, data) {
+      return await Query(url, "DELETE", data);
+    },
+  };
+  //#endregion
 </script>
