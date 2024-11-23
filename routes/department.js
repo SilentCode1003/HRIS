@@ -7,7 +7,6 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('departmentlayout', { title: 'Express' });
   Validator(req, res, "departmentlayout", "department");
 });
 
@@ -217,9 +216,6 @@ router.post("/loadmodal", (req, res) => {
     WHERE
     md_departmentid = '${departmentid}'
     and  me_jobstatus IN ('regular', 'probitionary', 'apprentice')`;
-
-    console.log(sql);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {

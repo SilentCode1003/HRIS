@@ -48,7 +48,6 @@ router.post("/save", async (req, res) => {
     let location = req.body.location;
     let status = "Active";
     let data = [];
-    console.log("Recieved employee name:", employeeid);
 
     const employeename = `SELECT * FROM master_training WHERE mt_employeeid = '${employeeid}' AND mt_name = '${name}'`;
     const checkParams = [employeeid, name];
@@ -72,7 +71,6 @@ router.post("/save", async (req, res) => {
         console.error("Error inserting record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         res.json({ msg: "success" });
       }
     });

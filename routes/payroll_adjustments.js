@@ -72,9 +72,6 @@ router.get("/load", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
-
       if (result != 0) {
         let data = DataModeling(result, "pa_");
 
@@ -132,8 +129,6 @@ router.post("/save", (req, res) => {
       [employeeid, adjustmenttype, origindate]
     );
 
-    console.log(checkStatement);
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -182,8 +177,6 @@ router.post("/getpayrolladjustment", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
 
       if (result != 0) {
         let data = DataModeling(result, "pa_");
@@ -269,14 +262,10 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(data);
-
     let checkStatement = SelectStatement(
       "SELECT * FROM payroll_adjustments WHERE pa_employeeid =? and pa_adjustmenttype= ? and pa_origindate= ? and pa_adjustmentstatus =?",
       [employeeid, adjustmenttype, origindate, adjustmentstatus]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
@@ -306,7 +295,6 @@ router.post("/upload", (req, res) => {
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     let adjustmentstatus = "Active";
-    console.log(data, 'Import Data');
 
     let dataJson = JSON.parse(data);
     let existingAdjustments = [];
@@ -319,11 +307,9 @@ router.post("/upload", (req, res) => {
         let cmd = SelectStatement(sql, [employeeid, payrolldate, adjustmenttype]);
         Select(cmd, (err, result) => {
           if (result && result.length > 0) {
-            // Add existing entry to the list
             existingAdjustments.push(row);
             resolve();
           } else {
-            // Insert new record if it does not exist
             let cmd = InsertStatement("payroll_adjustments", "pa", [
               "employeeid",
               "payrolldate",
@@ -379,8 +365,6 @@ router.get("/loaddeductions", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
 
       if (result != 0) {
         let data = DataModeling(result, "pad_");
@@ -438,9 +422,6 @@ router.post("/savedeductions", (req, res) => {
       "SELECT * FROM payroll_adjustments_deductions WHERE pad_employeeid =? and pad_adjustmenttype= ? and pad_origindate= ?",
       [employeeid, adjustmenttype, origindate]
     );
-
-    console.log(checkStatement);
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -490,8 +471,6 @@ router.post("/getpayrolladjustmentdeductions", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
 
       if (result != 0) {
         let data = DataModeling(result, "pad_");
@@ -577,14 +556,10 @@ router.put("/editdeductions", (req, res) => {
       arguments
     );
 
-    console.log(data);
-
     let checkStatement = SelectStatement(
       "SELECT * FROM payroll_adjustments_deductions WHERE pad_employeeid =? and pad_adjustmenttype= ? and pad_origindate= ? and pad_adjustmentstatus =?",
       [employeeid, adjustmenttype, origindate, adjustmentstatus]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
@@ -615,7 +590,6 @@ router.post("/uploaddeductions", (req, res) => {
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
     let adjustmentstatus = "Active";
-    console.log(data, 'Import Data');
 
     let dataJson = JSON.parse(data);
     let existingAdjustments = [];
@@ -628,11 +602,9 @@ router.post("/uploaddeductions", (req, res) => {
         let cmd = SelectStatement(sql, [employeeid, payrolldate, adjustmenttype]);
         Select(cmd, (err, result) => {
           if (result && result.length > 0) {
-            // Add existing entry to the list
             existingAdjustments.push(row);
             resolve();
           } else {
-            // Insert new record if it does not exist
             let cmd = InsertStatement("payroll_adjustments_deductions", "pad", [
               "employeeid",
               "payrolldate",

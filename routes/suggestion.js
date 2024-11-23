@@ -49,8 +49,6 @@ router.post("/save", function (req, res) {
     const { employeeid, suggestionareaid, details } = req.body;
     const date = GetCurrentDatetime();
 
-    console.log(req.body);
-
     let sql = InsertStatement("suggestion", "s", [
       "employee_id",
       "suggestion_area_id",

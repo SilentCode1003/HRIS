@@ -49,8 +49,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mq_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -155,8 +153,6 @@ router.post("/getquestion", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mq_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -236,8 +232,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
 
     let checkStatement = SelectStatement(
       "select * from master_question where mq_examid=? and mq_question_text=? and mq_question_typeid=? and mq_question_choices=? and mq_question_answer=? and mq_question_image=?",

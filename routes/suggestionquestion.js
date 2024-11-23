@@ -59,19 +59,12 @@ router.get("/load", function (req, res) {
         "select * from suggestion_question where sq_question = ?",
         [question]
       );
-  
-      console.log(sql_check);
-      console.log(cmd);
-      
       
       Select(sql_check, (err, result) => {
         if (err) {
           console.log(err);
           return res.status(500).json({ msg: "error" });
-        }
-  
-        console.log(result);
-        
+        }    
   
         if (result.length != 0) {
           return res.json({ msg: "exist" });
@@ -102,8 +95,6 @@ router.get("/load", function (req, res) {
               if (err) {
                   console.log(err);
               }
-              
-              console.log(result);
           });
           
           res.status(200).json({ msg: "success" });
@@ -125,8 +116,6 @@ router.get("/load", function (req, res) {
               if (err) {
                   console.log(err);
               }
-              
-              console.log(result);
           });
           
           res.status(200).json({ msg: "success" });

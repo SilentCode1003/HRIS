@@ -48,21 +48,7 @@ router.post("/update", async (req, res) => {
   try {
     let userid = req.body.userid;
     let username = req.body.username;
-    //let password = req.body.password;
-    //let accesstype = req.body.accesstype;
     let status = req.body.status;
-
-    // Wrap the Encrypter function in a promise
-    // const encrypted = await new Promise((resolve, reject) => {
-    //   Encrypter(password, (err, result) => {
-    //     if (err) {
-    //       console.error("Error in Encrypter: ", err);
-    //       reject(err);
-    //     } else {
-    //       resolve(result);
-    //     }
-    //   });
-    // });
 
     let sqlupdate = `UPDATE ojt_user SET 
       ou_username = '${username}',
@@ -70,8 +56,6 @@ router.post("/update", async (req, res) => {
       WHERE ou_userid ='${userid}'`;
 
     const updateResult = await mysql.Update(sqlupdate);
-
-    console.log(updateResult);
 
     res.json({
       msg: "success",
@@ -118,8 +102,6 @@ router.post("/save", async (req, res) => {
     let createby = req.session.fullname;
     const createdate = currentDate.format("YYYY-MM-DD");
 
-    console.log(ojtID, "ID");
-
     const existingUserQuery = `SELECT * FROM ojt_user WHERE ou_ojtid = '${ojtID}' AND ou_accesstype = '${accesstype}'`;
     const existingUserResult = await mysql.mysqlQueryPromise(
       existingUserQuery,
@@ -155,7 +137,6 @@ router.post("/save", async (req, res) => {
                 console.error("Error inserting record: ", inserterr);
                 res.json({ msg: "insert failed" });
               } else {
-                console.log(insertresult);
                 res.json({ msg: "success" });
               }
             });

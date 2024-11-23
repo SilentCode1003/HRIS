@@ -45,8 +45,6 @@ function getDeviceInformation(req) {
 router.post("/latestlog", (req, res) => {
   const ojtid = req.body.ojtid;
 
-  console.log(ojtid);
-
   getLatestLog(ojtid)
     .then((latestLog) => {
       res.json({
@@ -91,8 +89,6 @@ router.post("/clockin", (req, res) => {
       AND oa_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
       AND oa_clockout IS NULL
   `;
-
-  console.log(checkMissingClockOutQuery);
 
   const executeSequentialQueries = (queries) =>
     queries.reduce(
@@ -144,8 +140,6 @@ router.post("/clockin", (req, res) => {
               message: "Failed to insert attendance. Please try again.",
             });
           }
-
-          console.log("Insert result:", result);
           res.json({
             status: "success",
             message: "Clock-in successful.",
@@ -169,7 +163,6 @@ router.post("/clockout", (req, res) => {
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
   const geofenceid = req.body.geofenceid;
 
-  console.log(ojt_id);
 
   const checkExistingClockInQuery = `
   SELECT oa_ojtid, oa_attendancedate
@@ -204,14 +197,12 @@ router.post("/clockout", (req, res) => {
         mysql
           .Update(updateQuery)
           .then((updateResult) => {
-            console.log(updateResult);
             res.json({
               status: "success",
               message: "Clock-out successful.",
             });
           })
           .catch((updateError) => {
-            console.log(updateError);
             res.json({
               status: "error",
               message: "Error updating clock-out record.",

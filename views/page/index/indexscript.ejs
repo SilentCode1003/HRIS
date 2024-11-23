@@ -2,6 +2,7 @@
   $(document).ready(function () {
     //#region declaration
     let leaveid = "";
+    let globalemployeeid = "";
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
@@ -1564,6 +1565,7 @@
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
               $("#leaveemployeename").val(item.fullname);
+              globalemployeeid = item.employee;
               $("#reqleavetype").val(item.leavetype);
               $("#leavestartdate").val(item.leavestartdate);
               $("#leaveenddate").val(item.leaveenddate);
@@ -1582,6 +1584,9 @@
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
               $("#leavesubgroup").val(item.leavesubgroupid);
+
+              console.log(item.fullname,"fullname");
+              
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -1626,12 +1631,15 @@
     $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
       let status = $("#reqleavestatus").val();
+      let employeeid = globalemployeeid;
       let leavestartdate = $("#leavestartdate").val();
       let leaveenddate = $("#leaveenddate").val();
       let leaveduration = $("#leaveduration").val();
       let leavepaidays = $("#paiddays").val();
       let leaveunpaiddays = $("#unpaiddays").val();
       let comment = $("#leavecomment").val();
+
+      console.log(employeeid,'employeeid');
 
       var message = "";
 
@@ -1680,6 +1688,7 @@
               data: {
                 leaveid: id,
                 status: status,
+                employeeid: employeeid,
                 leavestartdate: leavestartdate,
                 leaveenddate: leaveenddate,
                 leaveduration: leaveduration,
@@ -1688,15 +1697,36 @@
                 comment: comment,
               },
               success: function (result) {
-                if (result.msg == "success") {
+                if (result.msg === "success") {
                   swal(
                     "Save Successfully",
                     "You clicked the button!",
                     "success"
-                  ).then((results) => {
+                  ).then(() => {
                     window.location.reload();
                   });
-                  LoadTable();
+                } else if (result.msg === "conflict") {
+                  const conflictingDates = result.conflictingDates.join(", ");
+                  swal({
+                    title: "You Need to Reject this Request",
+                    text: `The following dates are already taken: ${conflictingDates}`,
+                    icon: "warning",
+                    button: "OK",
+                  });
+                } else if (result.msg === "error") {
+                  swal({
+                    title: "Error",
+                    text: "An unexpected error occurred while saving data.",
+                    icon: "error",
+                    button: "OK",
+                  });
+                } else {
+                  swal({
+                    title: "Unknown Response",
+                    text: "The server returned an unknown response.",
+                    icon: "warning",
+                    button: "OK",
+                  });
                 }
               },
               error: function (err) {
@@ -2022,8 +2052,8 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
-              base64String = item.image;
+              $("#preview").attr("src", "data:image/jpg;base64," + item.overtimeimage);
+              base64String = item.overtimeimage;
               $("#otfullname").val(item.fullname);
               $("#otdate").val(item.attendancedate);
               $("#otclockin").val(item.clockin);
@@ -2893,7 +2923,6 @@
         },
       };
 
-      // Create employee chart
       const employeeChart = new Chart(employeeCtx, {
         type: "pie",
         data: employeeDataConfig,

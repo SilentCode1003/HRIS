@@ -1,5 +1,4 @@
 const mysql = require("./repository/hrmisdb");
-//const moment = require('moment');
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { Select, InsertTable } = require("./repository/dbconnect");
@@ -17,7 +16,6 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 var router = express.Router();
-//const currentDate = moment();
 
 /* GET home page. */
 
@@ -41,8 +39,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "lt_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

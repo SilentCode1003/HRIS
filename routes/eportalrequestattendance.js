@@ -114,7 +114,6 @@ router.post("/submit", async (req, res) => {
         console.error("Error inserting leave record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         let emailbody = [
           {
             employeename: employeeid,
@@ -152,7 +151,6 @@ router.post("/getreqCOA", (req, res) => {
     FROM attendance_request
     WHERE ar_employeeid='${employeeid}' AND ar_requestid = '${requestid}'
     ORDER BY ar_requestid DESC`;
-    console.log(employeeid);
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -194,7 +192,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(sqlupdate);
 
         res.json({
           msg: "success",
@@ -237,13 +234,8 @@ router.get("/loadapproved", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ar_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -278,12 +270,8 @@ router.get("/loadrejected", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ar_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -318,12 +306,8 @@ router.get("/loadcancelled", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ar_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

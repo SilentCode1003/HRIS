@@ -57,7 +57,6 @@ router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
     mb_bulletinid,
-    mb_image,
     mb_tittle,
     mb_type,
     mb_targetdate,

@@ -70,8 +70,6 @@ router.post("/save", function (req, res, next) {
         for (const d of data) {
           const { name, duration } = d;
 
-          console.log(name, duration, status);
-
           let sql = InsertStatement("occupant_duration_settings", "ods", [
             "name",
             "duration",
@@ -83,10 +81,6 @@ router.post("/save", function (req, res, next) {
             if (err) {
               console.log(err);
             }
-
-            console.log(result);
-
-            console.log("Data saved successfully");
           });
         }
 
@@ -123,9 +117,6 @@ router.post("/status", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-
-      console.log(result);
-
       res.status(200).json({
         status: "Success",
         message: "Data updated successfully",
@@ -142,9 +133,6 @@ router.post("/status", function (req, res, next) {
 router.post("/update", function (req, res, next) {
   try {
     const { id, name, duration } = req.body;
-
-    console.log(id, name, duration);
-
     let cmd = UpdateStatement(
       "occupant_duration_settings",
       "ods",
@@ -157,8 +145,6 @@ router.post("/update", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-
-      console.log(result);
 
       res.status(200).json({
         status: "Success",

@@ -47,21 +47,11 @@ router.get("/load", (req, res) => {
     if (result != 0) {
       let data = DataModeling(result, "ms_");
 
-      console.log(data);
       res.json(JsonDataResponse(data));
     } else {
       res.json(JsonDataResponse(result));
     }
   });
-
-    // mysql.Select(sql, "Master_Salary", (err, result) => {
-    //   if (err) console.error("Error: ", err);
-
-    //   res.json({
-    //     msg: "success",
-    //     data: result,
-    //   });
-    // });
   } catch (error) {
     res.json({
       msg: error,
@@ -155,7 +145,6 @@ router.put("/edit", async (req, res) => {
     let oldSalaryResult = await mysql.mysqlQueryPromise(Oldquery);
 
     const oldSalary = oldSalaryResult[0]?.ms_monthly || 0;
-    console.log(oldSalary, 'oldSalary');
 
     let data = [];
     let columns = [];
@@ -198,7 +187,6 @@ router.put("/edit", async (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
     await Update(updateStatement, data, async (err, result) => {
       if (err) {
         console.error("Error: ", err);
@@ -208,7 +196,6 @@ router.put("/edit", async (req, res) => {
       if (effectivedate) {
         const mes_perday_old_salary = (oldSalary / 313) * 12;
 
-        console.log(mes_perday_old_salary, 'mes_perday_old_salary');
 
         let mes_perday_new_salary;
         if (payrolltype === "Monthly") {
@@ -300,7 +287,6 @@ router.post("/upload", (req, res) => {
           for (const content of data) {
             const { id, employeeid } = content;
 
-            console.log(employeeid);
 
             let sqlupdate = UpdateStatement(
               "master_salary",

@@ -209,6 +209,7 @@
 
     $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
+      let employeeid = $("#leaveemployeename").val(); 
       let status = $("#reqleavestatus").val();
       let leavestartdate = $("#leavestartdate").val();
       let leaveenddate = $("#leaveenddate").val();
@@ -216,6 +217,8 @@
       let leavepaidays = $("#paiddays").val();
       let leaveunpaiddays = $("#unpaiddays").val();
       let comment = $("#leavecomment").val();
+
+      console.log(employeeid, "employeeid");
 
       var message = "";
 
@@ -263,6 +266,7 @@
               url: "/allleave/update",
               data: {
                 leaveid: id,
+                employeeid: employeeid,
                 status: status,
                 leavestartdate: leavestartdate,
                 leaveenddate: leaveenddate,
@@ -272,15 +276,37 @@
                 comment: comment,
               },
               success: function (result) {
-                if (result.msg == "success") {
+                if (result.msg === "success") {
                   swal(
                     "Save Successfully",
                     "You clicked the button!",
                     "success"
-                  ).then((results) => {
+                  ).then(() => {
                     window.location.reload();
                   });
                   LoadTable();
+                } else if (result.msg === "conflict") {
+                  const conflictingDates = result.conflictingDates.join(", ");
+                  swal({
+                    title: "You Need to Reject this Request",
+                    text: `The following dates are already taken: ${conflictingDates}`,
+                    icon: "warning",
+                    button: "OK",
+                  });
+                } else if (result.msg === "error") {
+                  swal({
+                    title: "Error",
+                    text: "An unexpected error occurred while saving data.",
+                    icon: "error",
+                    button: "OK",
+                  });
+                } else {
+                  swal({
+                    title: "Unknown Response",
+                    text: "The server returned an unknown response.",
+                    icon: "warning",
+                    button: "OK",
+                  });
                 }
               },
               error: function (err) {

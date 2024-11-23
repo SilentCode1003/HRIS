@@ -18,8 +18,6 @@ router.post("/login", (req, res) => {
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
 
-      console.log(encrypted);
-
       let sql = `
       select 
 mo_id as ojtid,
@@ -34,8 +32,6 @@ left join master_ojt on ou_ojtid = mo_id
 left join master_department on md_departmentid = mo_department
 where ou_username = '${username}' and ou_password = '${encrypted}'`;
 
-      console.log(sql);
-
       mysql
         .mysqlQueryPromise(sql)
         .then((result) => {
@@ -44,8 +40,6 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
 
             if (user.status === "Active") {
               let data = OjtLogin(result);
-
-              console.log("result", result);
 
               data.forEach((user) => {
                 req.session.image = user.image;

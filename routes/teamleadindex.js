@@ -18,9 +18,6 @@ router.get("/", function (req, res, next) {
   // Validator(req, res, "indexlayout");
   Validator(req, res, "teamleadindexlayout", "teamleadindex");
 });
-// router.get("/", function (req, res, next) {
-//   ValidatorForTeamLead(req, res, "teamleadindexlayout", "teamleadindex");
-// });
 
 module.exports = router;
 
@@ -467,10 +464,6 @@ router.get("/totalcoa", (req, res) => {
         ar_status = 'Pending' 
         AND ar_subgroupid IN (${subgroupid})`;
 
-    console.log(subgroupid);
-    console.log(accesstypeid);
-    console.log(sql);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -479,8 +472,6 @@ router.get("/totalcoa", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ar_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -521,8 +512,6 @@ router.get("/totalotmeal", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -650,8 +639,6 @@ router.get("/totalrestdayot", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -691,8 +678,6 @@ router.get("/totalholiday", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

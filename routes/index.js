@@ -1,5 +1,4 @@
 const mysql = require("./repository/hrmisdb");
-//const moment = require('moment');
 var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
@@ -7,7 +6,6 @@ const { Select, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
 var router = express.Router();
-//const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -231,8 +229,6 @@ router.get("/loadHoliday", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -276,8 +272,6 @@ router.post("/getholidayapproval", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -375,8 +369,6 @@ router.get("/loadrdot", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -414,8 +406,6 @@ router.post("/getrdotapproval", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -491,11 +481,8 @@ router.put("/rdotaction", (req, res) => {
   }
 });
 
-
-
 router.get("/getbulletin", (req, res) => {
   try {
-    // let bulletinid = req.body.bulletinid;
     let sql = `
     SELECT
     mb_image AS image,
@@ -989,7 +976,6 @@ router.get("/countprobitionary", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -1027,7 +1013,6 @@ router.get("/countregular", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -1066,7 +1051,6 @@ router.get("/countadmin", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -1105,7 +1089,6 @@ router.get("/countit", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -1144,7 +1127,6 @@ router.get("/countcabling", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({
@@ -1176,7 +1158,7 @@ router.get("/countcandidate", (req, res) => {
     COUNT(*) AS Candidate
     FROM master_employee
     WHERE me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 5`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1695,8 +1677,6 @@ router.post("/viewnotif", (req, res) => {
     from admin_notification
     where an_notificationid = '${notificationIdClicked}'`;
 
-    console.log("notif_id", notificationIdClicked);
-
     mysql.Select(sql, "Admin_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
 
@@ -1914,56 +1894,6 @@ router.post("/searchemployee", (req, res) => {
     });
   }
 });
-
-// router.post("/searchemployee", (req, res) => {
-//   try {
-//     const { search } = req.body;
-
-//     let sql = `
-//     SELECT me_id AS employeeid, me_firstname, me_lastname, me_profile_pic
-//     FROM master_employee
-//     WHERE 1`;
-
-//     if (search) {
-//       sql += ` AND me_id = '${search}'`;
-//     } else if (search) {
-//       sql += ` AND (CONCAT(me_firstname, ' ', me_lastname) LIKE '%${search}%'
-//                 OR me_firstname LIKE '%${search}%'
-//                 OR me_lastname LIKE '%${search}%')`;
-//     } else {
-//       res.json({
-//         msg: "error",
-//         data: "Invalid search criteria",
-//       });
-//       return;
-//     }
-
-//     mysql
-//       .mysqlQueryPromise(sql)
-//       .then((result) => {
-//         const employees = result.map((employee) => ({
-//           employeeid: employee.employeeid,
-//           name: `${employee.me_firstname} ${employee.me_lastname}`,
-//           profilePic: employee.me_profile_pic,
-//         }));
-//         res.json({
-//           msg: "success",
-//           data: employees,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: "error",
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error.message,
-//     });
-//   }
-// });
 
 //#endregion
 

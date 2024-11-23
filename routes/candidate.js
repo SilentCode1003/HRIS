@@ -31,7 +31,7 @@ router.get("/load", (req, res) => {
     FROM master_employee
     LEFT JOIN master_department md ON master_employee.me_department = md_departmentid
     WHERE me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 5`;
 
     mysql
       .mysqlQueryPromise(sql)

@@ -81,8 +81,8 @@ router.post("/generateandaoadaayroll", async (req, res) => {
     let startdate = req.body.startdate;
     let enddate = req.body.enddate;
     let checkExistingSql = `SELECT gp_startdate, gp_enddate FROM generate_payroll 
-                            WHERE gp_startdate >= '${startdate}' 
-                            AND gp_enddate <= '${enddate}'`;
+    WHERE gp_startdate >= '${startdate}' 
+    AND gp_enddate <= '${enddate}'`;
 
     let existingEntries = await mysql.mysqlQueryPromise(checkExistingSql);
 
@@ -106,12 +106,6 @@ router.post("/generateandaoadaayroll", async (req, res) => {
       console.log("Payroll generated:", generateResult);
 
       let loadResult = await mysql.mysqlQueryPromise(loadSql);
-      console.log("Payroll loaded:", loadResult);
-      console.log(
-        "Load Result Structure:",
-        JSON.stringify(loadResult, null, 2)
-      );
-
       let payrollDate;
       if (
         loadResult &&
@@ -120,14 +114,11 @@ router.post("/generateandaoadaayroll", async (req, res) => {
         loadResult[0][0]
       ) {
         payrollDate = loadResult[0][0].PayrollDate;
-        console.log("Payroll Date Extracted:", payrollDate);
       } else {
         throw new Error("Payroll date not found in LoadPayroll result");
       }
       let contributionSql = `call hrmis.GenerateEmployersContribution('${payrollDate}')`;
       let contributionResult = await mysql.mysqlQueryPromise(contributionSql);
-      console.log("Employers contribution generated:", contributionResult);
-
       res.json({
         msg: "success",
         data: contributionResult,
@@ -237,9 +228,6 @@ router.post("/loadpayslipdetailed", (req, res) => {
     let payrolldate = req.body.payrolldate;
     let employeeid = req.body.employeeid;
     let sql = `call hrmis.LoadPayslipDetailed('${payrolldate}', '${employeeid}')`;
-
-    console.log(payrolldate);
-    console.log(employeeid);
 
     mysql
       .mysqlQueryPromise(sql)
@@ -388,8 +376,6 @@ router.get("/payrolldateload", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gp_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -400,57 +386,6 @@ router.get("/payrolldateload", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-// router.post("/exportbank", async (req, res) => {
-//   try {
-//     let payrolldate = req.body.payrolldate;
-//     let bankname = req.body.bankname;
-//     let sql = `call hrmis.ExportBankStatement('${payrolldate}', '${bankname}')`;
-
-//     const result = await mysql.mysqlQueryPromise(sql);
-
-//     const jsonData = JSON.parse(JSON.stringify(result[0]));
-
-//     if (jsonData.length === 0) {
-//       return res.status(404).json({ msg: "No data found" });
-//     }
-
-//     const headers = Object.keys(jsonData[0]);
-
-//     const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
-//     const workbook = XLSX.utils.book_new();
-//     const worksheetName = `${payrolldate}_${bankname}`;
-//     XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
-
-//     const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
-//     worksheet["!cols"] = [];
-//     for (let i = 0; i < columnCount; i++) {
-//       if (i === 0) {
-//         worksheet["!cols"].push({ wch: 30 });
-//       } else {
-//         worksheet["!cols"].push({ wch: 20 });
-//       }
-//     }
-//     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
-
-//     res.setHeader(
-//       "Content-Disposition",
-//       `attachment; filename="bank_statement_${payrolldate}_${bankname}.xlsx"`
-//     );
-//     res.setHeader(
-//       "Content-Type",
-//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );
-//     res.send(excelBuffer);
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error,
-//     });
-//   }
-// });
-
 
 router.post("/exportbank", async (req, res) => {
   try {
@@ -509,7 +444,6 @@ router.post("/exportbank", async (req, res) => {
 
 
 router.post("/sudden_deduc_load", (req, res) => {
-  console.log("hit");
   try {
     let payrolldate = req.body.payrolldate;
     let sql = `SELECT
@@ -526,8 +460,6 @@ router.post("/sudden_deduc_load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "sd_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

@@ -85,7 +85,7 @@ router.get("/load", (req, res) => {
 router.post("/save", async (req, res) => {
   try {
     let actioncode = req.body.actioncode;
-    let offenseid = req.body.offenseid; // Get the offense name from the request
+    let offenseid = req.body.offenseid;
     let description = req.body.description;
     let createdate = currentDate.format("YYYY-MM-DD");
     let createby = req.session.fullname;
@@ -99,7 +99,7 @@ router.post("/save", async (req, res) => {
     ]);
 
     if (offenseIdResult.length > 0) {
-      const offenseID = offenseIdResult[0].mo_offenseid; // Retrieve the offense ID
+      const offenseID = offenseIdResult[0].mo_offenseid;
 
       const data = [
         [actioncode, offenseID, description, createdate, createby, status],
