@@ -144,10 +144,6 @@ router.post("/login", (req, res) => {
                   );
                 });
 
-                // console.log("accesstype", req.session.accesstype);
-                // console.log(req.session.jwt, "JWT");
-                // console.log(req.session.isgeofence, "data");
-
                 return res.json({
                   msg: "success",
                   data: data,

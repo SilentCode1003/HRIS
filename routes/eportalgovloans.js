@@ -25,7 +25,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('pendingleavelayout', { title: 'Express' });
   Validator(req, res, "eportalgovloanslayout", "eportalgovloans");
 });
 
@@ -55,8 +54,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gl_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -89,8 +86,6 @@ router.get("/loadreq", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "pd_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -181,9 +176,6 @@ router.post("/save", (req, res) => {
               loanstatus,
               payment_type,
             ]);
-
-            console.log(detailsData, "Dates");
-
             let detailsSql = InsertStatement("gov_loan_details", "gld", [
               "employeeid",
               "loanid",
@@ -238,8 +230,6 @@ router.post("/getgovloans", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

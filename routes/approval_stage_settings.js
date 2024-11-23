@@ -55,8 +55,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ats_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -143,8 +141,6 @@ router.post("/getstagesettings", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ats_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -162,11 +158,6 @@ router.put("/edit", (req, res) => {
   try {
     const { approvalstage, accessid, approvalcount, departmentid, subgroupid } =
       req.body;
-
-    console.log(accessid);
-    console.log(approvalstage);
-    console.log(approvalcount);
-    console.log(departmentid);
 
     let data = [];
     let columns = [];
@@ -203,8 +194,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
 
     let checkStatement = SelectStatement(
       "select * from aprroval_stage_settings where ats_accessid = ? and ats_departmentid = ? and ats_count = ? and ats_subgroupid = ?",

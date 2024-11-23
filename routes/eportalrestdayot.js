@@ -54,8 +54,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -93,8 +91,6 @@ router.get("/loadapproved", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -132,8 +128,6 @@ router.get("/loadapplied", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -171,8 +165,6 @@ router.get("/loadrejected", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -210,8 +202,6 @@ router.get("/loadcancelled", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -256,8 +246,6 @@ router.post("/getrestdayot", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -285,7 +273,6 @@ router.put("/edit", (req, res) => {
       employeeid,
     } = req.body;
 
-    console.log(req.body);
 
     let data = [];
     let columns = [];
@@ -353,8 +340,6 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from restday_ot_approval where roa_employeeid = ? and roa_attendancedate = ? and roa_status = ?",
       [employeeid, attendancedate, status]
@@ -367,9 +352,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }

@@ -162,34 +162,44 @@
           url: "/eportalrequestovertime/getattendancedate",
           data: {
             attendancedate: formattedDate,
-            employeeid: employeeid,
+            employeeid: employeeid, // Ensure `employeeid` is defined and available in scope.
           },
           success: function (result) {
             if (result.msg === "success") {
               const existingData = result.data;
               const currentDate = new Date();
-              const DateSubmmitted = currentDate.toISOString().split("T")[0];
+              const DateSubmitted = currentDate.toISOString().split("T")[0];
 
               $.each(existingData, (key, item) => {
+                // Format clockin and clockout to 'YYYY-MM-DDTHH:mm' for datetime-local inputs
+                let clockInFormatted = item.clockin
+                  .replace(" ", "T")
+                  .slice(0, 16);
+                let clockOutFormatted = item.clockout
+                  .replace(" ", "T")
+                  .slice(0, 16);
+
                 let combinedTime;
                 if (item.starttime === item.endtime) {
                   combinedTime = item.pao_starttime;
                 } else {
                   combinedTime = `${item.starttime} - ${item.endtime}`;
                 }
-                $("#addappliedotstart").text(item.clockin);
-                $("#addappliedotend").text(item.clockout);
+
+                // Update the input fields and display elements
+                $("#addappliedotstart").val(clockInFormatted); // Set 'Shift from:' value
+                $("#addappliedotend").val(clockOutFormatted); // Set 'To:' value
                 $("#addotshiftscheduled").text(combinedTime);
                 $("#otpositionname").text(item.schedtimein);
                 $("#otdepartmentname").text(item.schedtimeout);
                 $("#addotpositionname").text(item.positioname);
                 $("#addotdepartmentname").text(item.departmentname);
                 $("#addotfullname").text(item.fullname);
-                $("#adddatesubmittedot").text(DateSubmmitted);
+                $("#adddatesubmittedot").text(DateSubmitted);
               });
             } else if (result.msg === "notexist") {
               swal("Warning", "You have No Logs On that Date", "warning").then(
-                (results) => {
+                () => {
                   window.location.reload();
                 }
               );
@@ -448,7 +458,6 @@
             var PAYROLL_DATE = row.insertCell(8);
             var STATUS = row.insertCell(9);
 
-
             REQUEST_ID.innerHTML = item.id;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
             TIME_IN.innerHTML = item.clockin;
@@ -487,7 +496,7 @@
     document
       .getElementById("addappliedday")
       .addEventListener("change", function () {
-        const selectedDate = this.value; 
+        const selectedDate = this.value;
         const datetimeInput = document.getElementById("addappliedotstart");
 
         if (selectedDate) {
@@ -495,7 +504,7 @@
           const formattedDateString = `${
             formattedDate.toISOString().split("T")[0]
           }T00:00`;
-          datetimeInput.value = formattedDateString; 
+          datetimeInput.value = formattedDateString;
         } else {
           datetimeInput.value = "";
         }
@@ -732,8 +741,7 @@
       let subgroup = $("#appliedsubgroup").val();
       let overtimeimage = base64String;
 
-      console.log(overtimestatus,'overtimestatus');
-      
+      console.log(overtimestatus, "overtimestatus");
 
       var message = "";
 

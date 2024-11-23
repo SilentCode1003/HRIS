@@ -36,7 +36,6 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
-  console.log("HIT");
   try {
     let shiftname = req.body.shiftname;
     let startshift = req.body.startshift;
@@ -48,7 +47,6 @@ router.post("/save", (req, res) => {
     let shiftstatus = "Active";
     let data = [];
 
-    console.log(data, "data");
 
     data.push([
       shiftname,

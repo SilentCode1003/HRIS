@@ -141,9 +141,6 @@ router.post("/update", (req, res) => {
       od_period = '${period}',
       od_cutoff = '${cutoff}'
       where od_id = '${otherdeduct}'`;
-
-    console.log(sqlupdate);
-
     mysql
       .Update(sqlupdate)
       .then((result) => {

@@ -67,8 +67,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -123,7 +121,6 @@ router.post("/save", (req, res) => {
         if (result.length > 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
         } else {
-          // If no active suspension exists, insert the new record
           InsertTable(sql, data, (err, result) => {
             if (err) {
               console.log(err);
@@ -167,8 +164,6 @@ router.post("/getadjournemployee", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -245,10 +240,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
-    // Check if this employee already has an active suspension that hasn't ended
     let checkStatement = SelectStatement(
       `SELECT * FROM hold_suspension 
       WHERE hs_employeeid = ? 
@@ -319,8 +310,6 @@ router.post("/addlift", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -339,7 +328,6 @@ router.post("/saveliftdate", (req, res) => {
     let createdate = GetCurrentDatetime();
     let status = "Lifted";
 
-    // Step 1: Retrieve data from hold_suspension table using adjournid
     let selectHoldSuspension = `SELECT hs_employeeid, hs_startdate, hs_lift_date FROM hold_suspension WHERE hs_id = ${adjournid}`;
 
     Select(selectHoldSuspension, (err, holdSuspensionData) => {
@@ -355,14 +343,11 @@ router.post("/saveliftdate", (req, res) => {
 
       let { hs_employeeid, hs_startdate, hs_lift_date } = holdSuspensionData[0];
 
-      // Step 2: Calculate total duration in days (from hs_startdate to hs_liftdate)
       let startDate = new Date(hs_startdate);
-      let liftDate = new Date(liftdate); // Using the provided liftdate
+      let liftDate = new Date(liftdate);
       let durationDays = Math.ceil(
         (liftDate - startDate) / (1000 * 60 * 60 * 24)
       );
-
-      // Step 3: Retrieve employee's work schedule to determine rest days
       let selectShift = `SELECT ms_employeeid, ms_monday, ms_tuesday, ms_wednesday, ms_thursday, ms_friday, ms_saturday, ms_sunday FROM master_shift WHERE ms_employeeid = ${employeeid}`;
 
       Select(selectShift, (err, shiftData) => {
@@ -378,8 +363,6 @@ router.post("/saveliftdate", (req, res) => {
 
         let restDaysCount = 0;
         let currentDate = new Date(hs_startdate);
-
-        // Step 4: Loop through each date in the range and check if it's a rest day
         while (currentDate <= liftDate) {
           let dayOfWeek = currentDate.toLocaleString("en-US", {
             weekday: "long",
@@ -420,15 +403,9 @@ router.post("/saveliftdate", (req, res) => {
           if (isRestDay) {
             restDaysCount++;
           }
-
-          // Move to the next day
           currentDate.setDate(currentDate.getDate() + 1);
         }
-
-        // Step 5: Adjust the total suspension days by subtracting rest days
         let adjustedDurationDays = durationDays - restDaysCount;
-
-        // Step 6: Get the monthly salary and payroll type of the employee from master_salary table
         let selectSalary = `SELECT ms_monthly, ms_payrolltype FROM master_salary WHERE ms_employeeid = ${employeeid}`;
 
         Select(selectSalary, (err, salaryData) => {
@@ -446,10 +423,8 @@ router.post("/saveliftdate", (req, res) => {
 
           let { ms_monthly, ms_payrolltype } = salaryData[0];
           let salaryPerDay;
-
-          // Step 7: Validate payroll type and calculate salary per day
           if (ms_payrolltype === "Monthly") {
-            salaryPerDay = (ms_monthly * 12) / 313; // Assuming 313 working days per year
+            salaryPerDay = (ms_monthly * 12) / 313;
           } else if (ms_payrolltype === "Daily") {
             salaryPerDay = ms_monthly;
           } else {
@@ -459,11 +434,7 @@ router.post("/saveliftdate", (req, res) => {
               )
             );
           }
-
-          // Step 8: Calculate the total suspension pay
           let totalSuspensionPay = salaryPerDay * adjustedDurationDays;
-
-          // Step 9: Check if the record exists in hold_suspension_pay
           let checkExistingPayStatement = `SELECT hsp_id FROM hold_suspension_pay WHERE hsp_hold_suspensionid=${adjournid} AND hsp_employeeid='${employeeid}'`;
 
           Select(checkExistingPayStatement, (err, payCheckResult) => {
@@ -472,7 +443,6 @@ router.post("/saveliftdate", (req, res) => {
             }
 
             if (payCheckResult.length > 0) {
-              // Update existing record
               let hsp_id = payCheckResult[0].hsp_id;
 
               let updateSuspensionPayStatement = UpdateStatement(
@@ -503,8 +473,6 @@ router.post("/saveliftdate", (req, res) => {
                     console.error("Error updating suspension pay: ", err);
                     return res.json(JsonErrorResponse(err));
                   }
-
-                  // Also update the liftdate in the hold_suspension table
                   let updateHoldSuspension = `UPDATE hold_suspension SET hs_lift_date = '${liftdate}', hs_status = '${status}' WHERE hs_id = ${adjournid}`;
 
                   Update(updateHoldSuspension, [], (err, result) => {
@@ -522,7 +490,6 @@ router.post("/saveliftdate", (req, res) => {
                 }
               );
             } else {
-              // Insert a new record
               let insertSuspensionPayStatement = InsertStatement(
                 "hold_suspension_pay",
                 "hsp",
@@ -555,13 +522,7 @@ router.post("/saveliftdate", (req, res) => {
                     console.error("Error inserting suspension pay: ", err);
                     return res.json(JsonErrorResponse(err));
                   }
-
-                  // Also update the liftdate in the hold_suspension table
                   let updateHoldSuspension = `UPDATE hold_suspension SET hs_lift_date = '${liftdate}', hs_status = '${status}' WHERE hs_id = ${adjournid}`;
-
-                  console.log(updateHoldSuspension,'UPDATE');
-                  
-
                   Update(updateHoldSuspension, [], (err, result) => {
                     if (err) {
                       console.error("Error updating hold suspension: ", err);
@@ -651,8 +612,6 @@ router.post("/viewdatesdetails", (req, res) => {
       }
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

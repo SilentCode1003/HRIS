@@ -36,8 +36,6 @@ router.get("/load", (req, res) => {
 	master_employee ON restday_ot_approval.roa_employeeid = me_id
     WHERE roa_subgroupid IN ('${subgroupid}')  AND roa_status = 'Approved'`;
 
-    console.log(sql);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -47,7 +45,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

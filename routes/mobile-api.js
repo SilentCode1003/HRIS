@@ -54,8 +54,6 @@ router.post("/viewnotif", verifyJWT, (req, res) => {
     from master_notification
     where mn_notificationid = '${notificationIdClicked}'`;
 
-    console.log("notif_id", notificationIdClicked);
-
     mysql.Select(sql, "Master_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
 
@@ -100,8 +98,6 @@ router.post("/loadnotif", verifyJWT, (req, res) => {
     WHERE mn_employeeid = '${employeeid}'
     AND mn_isDeleate = 'NO'
     ORDER BY mn_date DESC`;
-
-    console.log();
 
     mysql.Select(sql, "Master_Notification", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -377,9 +373,6 @@ router.get("/loadservertime", verifyJWT, (req, res) => {
 
 router.post("/latestlog", verifyJWT, (req, res) => {
   const employeeid = req.body.employeeid;
-
-  console.log(employeeid);
-
   getLatestLog(employeeid)
     .then((latestLog) => {
       res.json({
@@ -632,177 +625,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
     });
 });
 
-// router.post("/clockin", verifyJWT, (req, res) => {
-//   const employee_id = req.body.employeeid;
-//   const geofenceid = req.body.geofenceid;
-//   let locationin = req.body.locationin;
-
-//   locationin = RemoveApostrophe(locationin);
-
-//   console.log(locationin, "locationin");
-
-//   if (!employee_id) {
-//     return res.status(401).json({
-//       status: "error",
-//       message: "Unauthorized. Employee not logged in.",
-//     });
-//   }
-
-//   const { latitude, longitude } = req.body;
-//   const attendancedate = moment().format("YYYY-MM-DD");
-//   const devicein = getDeviceInformation(req.body.devicein);
-
-//   console.log(employee_id);
-
-//   const checkExistingClockInQuery = `
-//     SELECT ma_employeeid
-//     FROM master_attendance
-//     WHERE ma_employeeid = '${employee_id}'
-//       AND ma_attendancedate = '${attendancedate}'
-//       AND ma_clockin IS NOT NULL
-//   `;
-
-//   const checkMissingClockOutQuery = `
-//     SELECT ma_employeeid
-//     FROM master_attendance
-//     WHERE ma_employeeid = '${employee_id}'
-//       AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
-//       AND ma_clockout IS NULL
-//   `;
-
-//   const executeSequentialQueries = (queries) =>
-//     queries.reduce(
-//       (promise, query) =>
-//         promise.then((result) =>
-//           mysql
-//             .mysqlQueryPromise(query)
-//             .then((queryResult) => [...result, queryResult])
-//         ),
-//       Promise.resolve([])
-//     );
-
-//   executeSequentialQueries([
-//     checkExistingClockInQuery,
-//     checkMissingClockOutQuery,
-//   ])
-//     .then(([resultClockIn, resultMissingClockOut]) => {
-//       if (resultClockIn.length > 0) {
-//         res.json({
-//           status: "exist",
-//           message:
-//             "Clock-in not allowed. Employee already clocked in on the same day.",
-//         });
-//       } else if (resultMissingClockOut.length > 0) {
-//         res.json({
-//           status: "disabled",
-//           message:
-//             "Clock-in not allowed. Missing clock-out on the previous day.",
-//         });
-//       } else {
-//         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
-
-//         let sql = InsertStatement("master_attendance", "ma", [
-//           "employeeid",
-//           "attendancedate",
-//           "clockin",
-//           "latitudeIn",
-//           "longitudein",
-//           "devicein",
-//           "gefenceidIn",
-//           "locationIn",
-//         ]);
-
-//         console.log(sql);
-
-//         let data = [
-//           [
-//             employee_id,
-//             attendancedate,
-//             clockinDateTime,
-//             latitude,
-//             longitude,
-//             devicein,
-//             geofenceid,
-//             locationin,
-//           ],
-//         ];
-
-//         let checkStatement = SelectStatement(
-//           "select * from master_attendance where ma_attendancedate=? and ma_employeeid=?",
-//           [attendancedate, employee_id]
-//         );
-
-//         Check(checkStatement)
-//           .then((result) => {
-//             if (result != 0) {
-//               return res.json(JsonWarningResponse(MessageStatus.EXIST));
-//             } else {
-//               InsertTable(sql, data, (err, result) => {
-//                 if (err) {
-//                   console.log(err);
-//                   res.status(500).json({
-//                     status: "error",
-//                     message: "Failed to insert attendance. Please try again.",
-//                   });
-//                 }
-//                 res.json({
-//                   status: "success",
-//                   message: "Clock-in successful.",
-//                 });
-//               });
-//             }
-//           })
-//           .catch((error) => {
-//             res.json({
-//               status: "error",
-//               message: "Internal server error. Please try again.",
-//               data: error,
-//             })
-//           });
-//         // const attendanceData = [
-//         //   [
-//         //     employee_id,
-//         //     attendancedate,
-//         //     clockinDateTime,
-//         //     latitude,
-//         //     longitude,
-//         //     devicein,
-//         //     geofenceid,
-//         //     locationin,
-//         //   ],
-//         // ];
-
-//         // mysql.InsertTable(
-//         //   "master_attendance",
-//         //   attendanceData,
-//         //   (err, result) => {
-//         //     if (err) {
-//         //       console.error("Error inserting record:", err);
-//         //       return res.status(500).json({
-//         //         status: "error",
-//         //         message: "Failed to insert attendance. Please try again.",
-//         //       });
-//         //     }
-
-//         //     console.log("Insert result:", result);
-//         //     res.json({
-//         //       status: "success",
-//         //       message: "Clock-in successful.",
-//         //     });
-//         //   }
-//         // );
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Error during clock-in process:", error);
-//       res.status(500).json({
-//         status: "error",
-//         message: "Internal server error. Please try again.",
-//         data: error,
-//       });
-//     });
-// });
-
 router.post("/clockout", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
@@ -881,9 +703,6 @@ router.post("/selectgeofence", verifyJWT, (req, res) => {
     let departmentid = req.body.departmentid;
     let sql = `select * from master_geofence_settings
     where mgs_departmentid ='${departmentid}' and mgs_status = 'Active'`;
-
-    console.log(departmentid);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -910,7 +729,8 @@ router.post("/offlineclockin", async (req, res) => {
   try {
     const records = req.body;
 
-    console.log(records, "records");
+    console.log(records,'records');
+    
 
     for (const record of records) {
       const { employeeid, attendancedate, datetime, type } = record;
@@ -950,7 +770,9 @@ router.post("/offlineclockin", async (req, res) => {
                   console.log(err);
                   return reject(JsonErrorResponse(err));
                 }
-                console.log(`Inserted Clock IN for ${employeeid} on ${attendancedate}`);
+                console.log(
+                  `Inserted Clock IN for ${employeeid} on ${attendancedate}`
+                );
                 resolve();
               });
             });
@@ -1004,20 +826,16 @@ router.post("/offlineclockin", async (req, res) => {
             columns,
             ["employeeid", "attendancedate"]
           );
-
-          // Combine the data for update
           const updateData = [...data, employeeid, attendancedate];
-
-          console.log(updateData, "updateData");
-          console.log(updateStatement, "updateStatement");
-
           await new Promise((resolve, reject) => {
             Update(updateStatement, updateData, (err, result) => {
               if (err) {
                 console.error("Error updating clock-out:", err);
                 return reject(JsonErrorResponse(err));
               } else {
-                console.log(`Updated Clock Out for ${employeeid} on ${attendancedate}, Rows affected: ${result}`);
+                console.log(
+                  `Updated Clock Out for ${employeeid} on ${attendancedate}, Rows affected: ${result}`
+                );
                 resolve();
               }
             });
@@ -1034,9 +852,6 @@ router.post("/offlineclockin", async (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-
-
 
 //#endregion
 
@@ -1116,10 +931,7 @@ router.post("/eportaldisciplinaryactionloadforapp", verifyJWT, (req, res) => {
   }
 });
 
-router.post(
-  "/getemployeeprofileforappbasicinformation",
-  verifyJWT,
-  (req, res) => {
+router.post("/getemployeeprofileforappbasicinformation",verifyJWT, (req, res) => {
     try {
       let employeeid = req.body.employeeid;
       let sql = `SELECT 
@@ -1227,7 +1039,6 @@ router.post("/gettrainingforapp", verifyJWT, (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        // console.log("SQL query:", sql);
 
         res.json({
           msg: "success",
@@ -1281,8 +1092,6 @@ router.post("/updatepassword", verifyJWT, async (req, res) => {
     let newPass = req.body.newPass;
     let confirmPass = req.body.confirmPass;
     let accesstypeid = req.body.accesstypeid;
-
-    console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
 
     if (newPass !== confirmPass) {
       return res.json({
@@ -1379,8 +1188,6 @@ router.post("/getpayrolldate", verifyJWT, (req, res) => {
       ORDER BY 
       p_payrolldate DESC
       LIMIT 2`;
-
-    console.log(employeeid);
 
     Select(sql, (err, result) => {
       if (err) {
@@ -1489,8 +1296,6 @@ router.post("/loadpayslip", verifyJWT, (req, res) => {
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
 
-    console.log(employeeid);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -1499,8 +1304,6 @@ router.post("/loadpayslip", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -1577,8 +1380,6 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
 
-      console.log(encrypted);
-
       let sql = `select 
       me_id
       from master_employee
@@ -1631,12 +1432,8 @@ router.post("/loadreqbeforepayout", verifyJWT, (req, res) => {
     pd_payrolldate
     LIMIT 5`;
 
-    //console.log(req.body,'body');
-
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
-
-      //
       res.json({
         msg: "success",
         data: result,
@@ -1698,9 +1495,6 @@ router.post("/getloadforapp", (req, res) => {
     where ma_employeeid='${employeeid}'
     ORDER BY ma_attendancedate DESC
     limit 2`;
-
-    // console.log(sql);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -1723,8 +1517,6 @@ router.post("/getloadforapp", (req, res) => {
 router.post("/login", (req, res) => {
   try {
     const { username, password } = req.body;
-
-    console.log(req.body, "CREDENTIALS");
 
     Encrypter(password, (err, encrypted) => {
       if (err) {
@@ -1807,9 +1599,6 @@ router.post("/login", (req, res) => {
                     ),
                   });
                 }
-                // console.log(data, "data");
-
-                //console.log("accesstype", req.session.accesstype);
                 return res.json({
                   msg: "success",
                   data: data,
@@ -1861,9 +1650,6 @@ router.post("/request", (req, res) => {
 
       if (result.length > 0) {
         let data = DataModeling(result, "me_");
-
-        console.log(data);
-
         SendRequestPassword(employeeid, "Forgot Password", data);
 
         res.status(200).json(JsonSuccess());
@@ -1963,8 +1749,6 @@ router.post("/getgovloans", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -2074,7 +1858,6 @@ router.post("/submit", verifyJWT, async (req, res) => {
         console.error("Error inserting leave record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         let emailbody = [
           {
             employeename: employeeid,
@@ -2094,6 +1877,136 @@ router.post("/submit", verifyJWT, async (req, res) => {
   } catch (error) {
     console.error("Error in /submit route: ", error);
     res.json({ msg: "error" });
+  }
+});
+
+router.post("/updatecoa", verifyJWT, (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let attendancedate = req.body.attendancedate;
+    let timein = req.body.timein;
+    let timeout = req.body.timeout;
+    let reason = req.body.reason;
+    let file = req.body.file;
+    let requeststatus = "Pending";
+    let total = calculateTotalHours(timein, timeout);
+    let createdate = moment().format("YYYY-MM-DD");
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (createdate) {
+      data.push(createdate);
+      columns.push("createdate");
+    }
+
+    if (timein) {
+      data.push(timein);
+      columns.push("timein");
+    }
+
+    if (timeout) {
+      data.push(timeout);
+      columns.push("timeout");
+    }
+
+    if (attendancedate) {
+      data.push(attendancedate);
+      columns.push("attendace_date");
+    }
+
+    if (reason) {
+      data.push(reason);
+      columns.push("reason");
+    }
+
+    if (file) {
+      data.push(file);
+      columns.push("file");
+    }
+
+    if (total) {
+      data.push(total);
+      columns.push("total");
+    }
+
+    if (subgroup) {
+      data.push(subgroup);
+      columns.push("subgroupid");
+    }
+
+    if (requestid) {
+      data.push(requestid);
+      arguments.push("requestid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "attendance_request",
+      "ar",
+      columns,
+      arguments
+    );
+
+    let checkStatement = SelectStatement(
+      "select * from attendance_request where ar_employeeid = ? and ar_attendace_date = ? and ar_status = ? and ar_timein = ? and ar_timeout = ? and ar_subgroupid = ?",
+      [employeeid, attendancedate, requeststatus, timein, timeout, subgroup]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    res.json({
+      msg: "error",
+    });
+  }
+});
+
+router.post("/cancelcoa", verifyJWT, (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let requeststatus = "Cancel";
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (requeststatus) {
+      data.push(requeststatus);
+      columns.push("status");
+    }
+
+    if (requestid) {
+      data.push(requestid);
+      arguments.push("requestid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "attendance_request",
+      "ar",
+      columns,
+      arguments
+    );
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -2204,8 +2117,6 @@ router.post("/loadrdot", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -2250,8 +2161,6 @@ router.post("/getrestdayot", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -2278,8 +2187,6 @@ router.put("/editrdot", verifyJWT, (req, res) => {
       file,
       employeeid,
     } = req.body;
-
-    console.log(req.body);
 
     let data = [];
     let columns = [];
@@ -2347,8 +2254,6 @@ router.put("/editrdot", verifyJWT, (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from restday_ot_approval where roa_employeeid = ? and roa_attendancedate = ? and roa_status = ?",
       [employeeid, attendancedate, status]
@@ -2361,9 +2266,6 @@ router.put("/editrdot", verifyJWT, (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }
@@ -2521,8 +2423,6 @@ router.post("/loadholiday", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        ////console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -2549,8 +2449,6 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       holidayimage,
       employeeid,
     } = req.body;
-
-    console.log(req.body);
 
     let data = [];
     let columns = [];
@@ -2613,8 +2511,6 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from payroll_holiday where ph_employeeid = ? and ph_attendancedate = ? and ph_status = ?",
       [employeeid, attendancedate, status]
@@ -2627,9 +2523,6 @@ router.put("/editholiday", verifyJWT, (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }
@@ -2741,76 +2634,11 @@ router.post("/loadotcurrentmonth", verifyJWT, (req, res) => {
   }
 });
 
-// router.post("/getovertime", verifyJWT,(req, res) => {
-//   try {
-//     let approveot_id = req.body.approveot_id;
-//     let sql = `SELECT
-//         pao_id AS approvalid,
-//         JSON_UNQUOTE(JSON_EXTRACT(
-//             CASE DAYNAME(pao_attendancedate)
-//                 WHEN 'Monday' THEN ms_monday
-//                 WHEN 'Tuesday' THEN ms_tuesday
-//                 WHEN 'Wednesday' THEN ms_wednesday
-//                 WHEN 'Thursday' THEN ms_thursday
-//                 WHEN 'Friday' THEN ms_friday
-//                 WHEN 'Saturday' THEN ms_saturday
-//                 WHEN 'Sunday' THEN ms_sunday
-//             END,
-//             '$.time_in'
-//         )) AS scheduledtimein,
-//         JSON_UNQUOTE(JSON_EXTRACT(
-//             CASE DAYNAME(pao_attendancedate)
-//                 WHEN 'Monday' THEN ms_monday
-//                 WHEN 'Tuesday' THEN ms_tuesday
-//                 WHEN 'Wednesday' THEN ms_wednesday
-//                 WHEN 'Thursday' THEN ms_thursday
-//                 WHEN 'Friday' THEN ms_friday
-//                 WHEN 'Saturday' THEN ms_saturday
-//                 WHEN 'Sunday' THEN ms_sunday
-//             END,
-//             '$.time_out'
-//         )) AS scheduledtimeout,
-//         DATE_FORMAT(pao_attendancedate,  '%Y-%m-%d') AS attendancedate,
-//         date_format(pao_clockin, '%Y-%m-%d %H:%i:%s') AS clockin,
-//         date_format(pao_clockout, '%Y-%m-%d %H:%i:%s') AS clockout,
-//         pao_status
-//     FROM payroll_approval_ot
-//     INNER JOIN master_shift ON payroll_approval_ot.pao_employeeid = ms_employeeid
-//     INNER JOIN master_employee ON master_shift.ms_employeeid = me_id
-//     LEFT JOIN master_holiday ON pao_attendancedate = mh_date
-//     INNER JOIN master_department ON master_employee.me_department = md_departmentid
-//     INNER JOIN master_position ON master_employee.me_position = mp_positionid
-//     WHERE pao_id = '${approveot_id}'`;
-
-//     mysql
-//       .mysqlQueryPromise(sql)
-//       .then((result) => {
-//         res.json({
-//           msg: "success",
-//           data: result,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: "error",
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error,
-//     });
-//   }
-// });
 
 router.post("/getattendancedate", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
-
-    console.log(employeeid);
-    console.log(attendancedate);
     let sql = `SELECT
     ma_attendanceid as pao_attendanceid,
     DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
@@ -2963,8 +2791,6 @@ LIMIT 1;
 
             if (result != 0) {
               let data = DataModeling(result, "pao_");
-
-              //console.log(data);
               res.json(JsonDataResponse(data));
             } else {
               res.json(JsonDataResponse(result));
@@ -3179,23 +3005,10 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "Web Manual";
 
-    console.log(clockin, "clockin");
-    console.log(clockout, "clockout");
-    console.log(attendancedate, "attendancedate");
-    console.log(payrolldate, "payrolldate");
-    console.log(reason, "reason");
-    console.log(overtimestatus, "overtimestatus");
-    console.log(subgroup, "subgroup");
-    console.log(approvecount, "approvecount");
-    console.log(employeeid, "employeeid");
-    console.log(deviceaction, "deviceaction");
-
     let checkStatement = SelectStatement(
-    "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
-        [employeeid, attendancedate, overtimestatus]
+      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
+      [employeeid, attendancedate, overtimestatus]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
@@ -4019,7 +3832,6 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
 
 router.post("/update", verifyJWT, (req, res) => {
   try {
-    console.log("hit");
 
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
@@ -4848,22 +4660,10 @@ router.post("/update", verifyJWT, (req, res) => {
             pao_overtimeimage = '${overtimeimage}'
             WHERE pao_id = '${approveot_id}'`;
 
-          console.log(clockin);
-          console.log(clockout);
-          console.log(attendancedate);
-          console.log(payrolldate);
-          console.log(reason);
-          console.log(overtimestatus);
-          console.log(approveot_id);
-          console.log(subgroup);
-
-          console.log(sql, "sql");
-
           mysql
             .Update(sql)
             .then((result) => {
               res.json(JsonSuccess());
-              console.log(result, "result");
             })
             .catch((error) => {
               res.json(JsonErrorResponse(error));
@@ -4880,7 +4680,6 @@ router.post("/update", verifyJWT, (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 //#endregion
 
@@ -5018,14 +4817,10 @@ router.put("/edit", verifyJWT, (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
-
     let checkStatement = SelectStatement(
       "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
       [employeeid, attendancedate, status]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
@@ -5075,8 +4870,6 @@ router.post("/getotmeal", verifyJWT, (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -5257,7 +5050,7 @@ router.post("/loadheaderforapp", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/submitleave", async (req, res) => {
+router.post("/submitleave", verifyJWT, async (req, res) => {
   try {
     const {
       employeeid,
@@ -5275,15 +5068,9 @@ router.post("/submitleave", async (req, res) => {
     const status = "Pending";
     const approvedcount = "0";
 
-    console.log("Received request with data:", req.body);
-
-    // Calculate the date 3 days from now
     const allowedStartDate = moment().add(3, "days").startOf("day");
-
-    // Convert startdate to a moment object
     const startDateMoment = moment(startdate);
 
-    // Check if the startdate is within the allowed 3-day rule
     if (startDateMoment.isBefore(allowedStartDate)) {
       console.log("Start date is within the 3-day rule");
       return res.json({ msg: "not allowed" });
@@ -5295,6 +5082,35 @@ router.post("/submitleave", async (req, res) => {
     if (employeeResult.length === 0) {
       console.log("Invalid employee ID");
       return res.json({ msg: "Invalid employee ID" });
+    }
+
+    const dateRange = [];
+    let currentDate = moment(startdate);
+    const endDateMoment = moment(enddate);
+
+    while (currentDate.isSameOrBefore(endDateMoment)) {
+      dateRange.push(currentDate.format("YYYY-MM-DD"));
+      currentDate = currentDate.add(1, "day");
+    }
+
+    const checkDatesQuery = `
+      SELECT ld_leavedates
+      FROM leave_dates
+      WHERE ld_employeeid = '${employeeid}' AND ld_leavedates IN (${dateRange
+      .map((date) => `'${date}'`)
+      .join(",")})
+    `;
+    const existingDatesResult = await mysql.mysqlQueryPromise(checkDatesQuery);
+
+    if (existingDatesResult.length > 0) {
+      console.log(
+        "Leave dates conflict with existing records:",
+        existingDatesResult
+      );
+      return res.json({
+        msg: "dates_conflict",
+        existingDates: existingDatesResult,
+      });
     }
 
     const data = [
@@ -5320,8 +5136,6 @@ router.post("/submitleave", async (req, res) => {
         console.error("Error inserting leave record:", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log("Insert result:", insertResult);
-
         let emailbody = [
           {
             employeename: employeeid,
@@ -5338,7 +5152,26 @@ router.post("/submitleave", async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("Error in /submit route:", error);
+    console.error("Error in /submitleave route:", error);
+    res.json({ msg: "error" });
+  }
+});
+
+router.post("/cancelLeave", verifyJWT, async (req, res) => {
+  try {
+    const leaveid = req.body.leaveid;
+
+    const updateLeaveStatusQuery = `UPDATE leaves SET l_leavestatus = 'Cancelled' WHERE l_leaveid = ${leaveid}`;
+
+    try {
+      await mysql.mysqlQueryPromise(updateLeaveStatusQuery, [leaveid]);
+      res.json({ msg: "success", leaveid: leaveid, status: "cancelled" });
+    } catch (updateError) {
+      console.error("Error updating leave status: ", updateError);
+      res.json({ msg: "error" });
+    }
+  } catch (error) {
+    console.error("Error in /cancelLeave route: ", error);
     res.json({ msg: "error" });
   }
 });
@@ -5420,7 +5253,6 @@ router.post("/submitforapp", verifyJWT, async (req, res) => {
         console.error("Error inserting leave record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         res.json({ msg: "success" });
       }
     });
@@ -5463,8 +5295,6 @@ function getLatestLog(employeeId) {
 }
 
 function getDeviceInformation(device) {
-  console.log(device);
-
   if (typeof device === "undefined" || " ") {
     return "app";
   } else {

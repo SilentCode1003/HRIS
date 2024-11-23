@@ -102,9 +102,6 @@ router.post("/updateMasterAttendance", (req, res) => {
     let locationIn = "COA";
     let locationOut = "COA";
     let data = [];
-
-    console.log(data);
-
     let selectQuery = `SELECT * FROM master_attendance WHERE ma_employeeid = '${emp_id}' AND ma_attendancedate = '${attendancedate}'`;
     mysql.Select(
       selectQuery,

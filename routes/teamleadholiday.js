@@ -60,7 +60,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -103,24 +102,11 @@ router.post("/getholidayapproval", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
       }
     });
-
-    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-    //   if (err) console.error("Error: ", err);
-
-    //
-
-    //   res.json({
-    //     msg: "success",
-    //     data: result,
-    //   });
-    // });
   } catch (error) {
     res.json({
       msg: "error",
@@ -161,8 +147,6 @@ router.post("/holidayaction", (req, res) => {
       "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=? and hra_status=? ",
       [employeeid, holiday_id, status]
     );
-
-    console.log(checkStatement, "result");
 
     Check(checkStatement)
       .then((result) => {

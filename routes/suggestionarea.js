@@ -57,9 +57,6 @@ router.post("/save", function (req, res) {
       "select * from suggestion_area where sa_name = ?",
       [areaname]
     );
-
-    console.log(sql_check);
-    console.log(cmd);
     
     
     Select(sql_check, (err, result) => {
@@ -67,8 +64,6 @@ router.post("/save", function (req, res) {
         console.log(err);
         return res.status(500).json({ msg: "error" });
       }
-
-      console.log(result);
       
 
       if (result.length != 0) {
@@ -100,8 +95,6 @@ router.patch("/status", function (req, res) {
             if (err) {
                 console.log(err);
             }
-            
-            console.log(result);
         });
         
         res.status(200).json({ msg: "success" });
@@ -123,7 +116,6 @@ router.patch("/update", function (req, res) {
                 console.log(err);
             }
             
-            console.log(result);
         });
         
         res.status(200).json({ msg: "success" });

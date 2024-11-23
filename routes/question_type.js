@@ -45,8 +45,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "qt_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -121,8 +119,6 @@ router.post("/getquestiontype", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "qt_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -175,8 +171,6 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from question_type where qt_typename = ? and qt_type_points = ?",
       [typename, type_points]
@@ -189,8 +183,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
 
             res.json(JsonSuccess());
           });

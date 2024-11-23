@@ -49,8 +49,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ora_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -97,8 +95,6 @@ router.post("/getovertimeactivity", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ora_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

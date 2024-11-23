@@ -111,7 +111,6 @@ router.post("/save", async (req, res) => {
         console.error("Error inserting record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         res.json({ msg: "success" });
       }
     });

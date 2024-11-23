@@ -93,7 +93,6 @@ router.post("/save", (req, res) => {
             console.log(err);
           }
 
-          console.log(result);
           let occupantid = result[0].id;
           let history = [[occupantid, `Registered ${GetCurrentDatetime()}`]];
 
@@ -101,7 +100,6 @@ router.post("/save", (req, res) => {
             if (err) {
               console.log(err);
             }
-            console.log(result);
           });
 
           res.status(200).json({
@@ -141,15 +139,12 @@ router.post("/status", function (req, res, next) {
         console.log(err);
       }
 
-      console.log(result);
     });
 
     InsertTable(sql_history, history_data, (err, result) => {
       if (err) {
         console.log(err);
       }
-
-      console.log(result);
     });
 
     res.status(200).json({
@@ -180,8 +175,6 @@ router.post("/transfer", function (req, res, next) {
         console.log(err);
       }
 
-      console.log(result);
-
       let sql_history = InsertStatement("staffhouse_history", "sh", [
         "occupantid",
         "activity",
@@ -195,7 +188,6 @@ router.post("/transfer", function (req, res, next) {
           console.log(err);
         }
 
-        console.log(result);
       });
 
       res.status(200).json({
@@ -226,7 +218,6 @@ router.post("/datechange", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-      console.log(result);
 
       let sql_history = InsertStatement("staffhouse_history", "sh", [
         "occupantid",
@@ -244,7 +235,6 @@ router.post("/datechange", function (req, res, next) {
           console.log(err);
         }
 
-        console.log(result);
       });
       res.status(200).json({
         status: "Success",

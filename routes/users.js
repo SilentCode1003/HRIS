@@ -95,7 +95,6 @@ router.post("/save", async (req, res) => {
                   console.error("Error inserting record: ", inserterr);
                   res.json({ msg: "insert failed" });
                 } else {
-                  console.log(insertresult);
                   res.json({ msg: "success" });
                 }
               }
@@ -149,49 +148,6 @@ router.get("/load", (req, res) => {
   }
 });
 
-// router.post("/update", async (req, res) => {
-//   try {
-//     let userid = req.body.userid;
-//     let username = req.body.username;
-//     let subgroupid = req.body.subgroupid;
-//     //let password = req.body.password;
-//     let accesstype = req.body.accesstype;
-//     let status = req.body.status;
-
-//     // Wrap the Encrypter function in a promise
-//     // const encrypted = await new Promise((resolve, reject) => {
-//     //   Encrypter(password, (err, result) => {
-//     //     if (err) {
-//     //       console.error("Error in Encrypter: ", err);
-//     //       reject(err);
-//     //     } else {
-//     //       resolve(result);
-//     //     }
-//     //   });
-//     // });
-
-//     let sqlupdate = `UPDATE master_user SET
-//       mu_username = '${username}',
-//       mu_accesstype = '${accesstype}',
-//       mu_subgroupid = '${subgroupid}',
-//       mu_status ='${status}'
-//       WHERE mu_userid ='${userid}'`;
-
-//     const updateResult = await mysql.Update(sqlupdate);
-
-//     console.log(updateResult);
-
-//     res.json({
-//       msg: "success",
-//     });
-//   } catch (error) {
-//     console.error("Error: ", error);
-//     res.json({
-//       msg: "error",
-//     });
-//   }
-// });
-
 router.post("/getisgeofencetrue", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -214,8 +170,6 @@ router.post("/getisgeofencetrue", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mu_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -251,8 +205,6 @@ router.post("/getusers", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mu_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -284,11 +236,6 @@ router.put("/edit", (req, res) => {
       columns.push("accesstype");
     }
 
-    // if (subgroupid) {
-    //   data.push(subgroupid);
-    //   columns.push("subgroupid");
-    // }
-
     if (createby) {
       data.push(createby);
       columns.push("createby");
@@ -304,7 +251,6 @@ router.put("/edit", (req, res) => {
       columns.push("status");
     }
 
-    // Check and convert the value of isgeofence
     if (isgeofence) {
       geofenceValue = isgeofence.toLowerCase() === "true" ? 1 : 0;
       data.push(geofenceValue);
@@ -322,8 +268,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
 
     let checkStatement = SelectStatement(
       "select * from master_user where mu_username = ? and mu_accesstype = ? and mu_status = ? and mu_isgeofence = ?",

@@ -168,29 +168,6 @@ router.post("/getotapproval", (req, res) => {
   }
 });
 
-// router.post('/loadforapp', (req, res) =>{
-//   try {
-//     let employeeid = req.body.employeeid;
-//     let sql = `select *
-//     from payroll_approval_ot
-//     where pao_employeeid = '${employeeid}'`;
-
-//     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-//       if (err) console.error("Error: ", err);
-
-//       res.json({
-//         msg:'success',
-//         data: result,
-//       });
-//     });
-//   } catch (error) {
-//     res.json({
-//       msg:'error',
-//       data: error,
-//     });
-//   }
-// });
-
 router.post("/forapp", (req, res) => {
   try {
     let employeeid = req.body.employeeid;

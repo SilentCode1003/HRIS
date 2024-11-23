@@ -44,7 +44,6 @@ router.post("/update", async (req, res) => {
 
     const updateResult = await mysql.Update(sqlupdate);
 
-    console.log(updateResult);
 
     res.json({
       msg: "success",
@@ -65,7 +64,6 @@ router.post("/updatepassword", async (req, res) => {
     let confirmPass = req.body.confirmPass;
     let accesstypeid = req.session.accesstypeid;
 
-    console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
 
     if (newPass !== confirmPass) {
       return res.json({

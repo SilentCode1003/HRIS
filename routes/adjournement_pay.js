@@ -68,8 +68,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hsp_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -108,8 +106,6 @@ router.post("/getadjournemployee", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -189,8 +185,6 @@ router.post("/viewdatesdetails", (req, res) => {
       }
       if (result != 0) {
         let data = DataModeling(result, "hs_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -226,17 +220,10 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from hold_suspension_pay where hsp_employeeid=? and hsp_hold_suspensionid=? and hsp_payrolldate=?",
       [employeeid, adjournid, payrolldate]
     );
-
-    console.log(checkStatement);
-    
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -244,9 +231,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            console.log(result);
-
             res.json(JsonSuccess());
           });
         }

@@ -95,73 +95,6 @@
       });
     }
 
-    // $(document).on("click", "#approvedtable", function () {
-    //   console.log("Hit");
-    //   $("#dataTableleaveApproved").find("tr:gt(0)").remove();
-
-    //   $.ajax({
-    //     type: "GET",
-    //     url: "/eportalrequestleave/loadapproved",
-    //     success: function (json) {
-    //       var finalData = [];
-    //       var data = json.data;
-    //       console.log(finalData);
-
-    //       material_list_tbl = document.getElementById("dataTableleaveApproved");
-
-    //       $.each(data, function (key, item) {
-    //         var row = material_list_tbl.insertRow(1);
-    //         var LEAVE_ID = row.insertCell(0);
-    //         var LEAVE_TYPEID = row.insertCell(1);
-    //         var LEAVE_STARTDADTE = row.insertCell(2);
-    //         var LEAVE_ENDATE = row.insertCell(3);
-    //         var LEAVE_TYPE = row.insertCell(4);
-    //         var REASON = row.insertCell(5);
-    //         var APPLIEDDATE = row.insertCell(6);
-    //         var ACTION = row.insertCell(7);
-
-    //         var action = document.createElement("button");
-    //         LEAVE_ID.innerHTML = item.leaveid;
-    //         LEAVE_TYPEID.innerHTML = item.leavetypeid;
-    //         LEAVE_STARTDADTE.innerHTML = item.leavestartdate;
-    //         LEAVE_ENDATE.innerHTML = item.leaveenddate;
-    //         LEAVE_TYPE.innerHTML = item.leavetype;
-    //         REASON.innerHTML = item.leavereason;
-    //         APPLIEDDATE.innerHTML = item.leaveapplieddate;
-    //         ACTION.innerHTML = '<button id="viewBtn" class="btn text-primary view-btn" data-bs-toggle="modal" data-bs-target="#viewleave"><i class="fas fa-fw fa-eye"></i></button>';
-    //         $("#dataTableleaveApproved tbody").on("click", "tr", function () {
-    //           var dataRow = [];
-    //           $(this)
-    //             .closest("tr")
-    //             .find("td")
-    //             .each(function () {
-    //               dataRow.push($(this).text());
-    //             });
-    //            masterleaveid = dataRow[1];
-    //           console.log(dataRow);
-    //         });
-    //         $.each(
-    //           [
-    //             LEAVE_ID,
-    //             LEAVE_TYPEID,
-    //             LEAVE_STARTDADTE,
-    //             LEAVE_ENDATE,
-    //             LEAVE_TYPE,
-    //             REASON,
-    //             APPLIEDDATE,
-    //             ACTION,
-    //           ],
-    //           function (_, cell) {
-    //             cell.style.textAlign = "center";
-    //             cell.style.verticalAlign = "middle";
-    //           }
-    //         );
-    //       });
-    //     },
-    //     error: function (xhr, status, error) {},
-    //   });
-    // });
-
     $(document).on("click", "#approvedtable", function () {
       console.log("Hit");
       $("#dataTableleaveApproved").find("tr:gt(0)").remove();
@@ -226,7 +159,7 @@
               .each(function () {
                 dataRow.push($(this).text());
               });
-            masterleaveid = dataRow[1]; // Update global variable
+            masterleaveid = dataRow[1];
             console.log("Selected Leave ID:", masterleaveid);
           });
         },
@@ -607,16 +540,28 @@
                 "Update Successfully",
                 "You clicked the button!",
                 "success"
-              ).then((result) => {
+              ).then(() => {
                 window.location.reload();
               });
               LoadTable();
             } else if (result.msg === "exist") {
               swal("Exist", "Data already exists!", "warning");
             } else if (result.msg === "not allowed") {
-              swal("Warning", "Need 3 before the start date", "warning");
+              swal("Warning", "Need 3 days before the start date", "warning");
             } else if (result.msg === "Invalid employee ID") {
               swal("Error", "Invalid employee ID", "error");
+            } else if (result.msg === "dates_conflict") {
+              const conflictingDates = result.existingDates
+                .map((date) => {
+                  const jsDate = new Date(date.ld_leavedates);
+                  return jsDate.toISOString().split("T")[0];
+                })
+                .join(", ");
+              swal(
+                "Conflict",
+                `The following dates already exist: ${conflictingDates}`,
+                "warning"
+              );
             } else {
               swal("Error", "An unexpected error occurred.", "error");
             }
@@ -721,7 +666,7 @@
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -800,6 +745,7 @@
       let leavepaidays = $("#editpaiddays").val();
       let leaveunpaiddays = $("#editunpaiddays").val();
       let comment = $("#editleavecomment").val();
+      let leavereason = $("#editleavereason").val();
       let leaveimage = base64String;
 
       var message = "";
@@ -849,8 +795,9 @@
           if (willApprove) {
             $.ajax({
               type: "POST",
-              url: "/allleave/update",
+              url: "/eportalrequestleave/update",
               data: {
+                employeeid: employeeid,
                 leaveid: id,
                 status: status,
                 leavestartdate: leavestartdate,
@@ -858,19 +805,42 @@
                 leaveduration: leaveduration,
                 leavepaidays: leavepaidays,
                 leaveunpaiddays: leaveunpaiddays,
+                leavereason: leavereason,
                 comment: comment,
                 leaveimage: leaveimage,
               },
               success: function (result) {
-                if (result.msg == "success") {
+                if (result.msg === "success") {
                   swal(
                     "Save Successfully",
                     "You clicked the button!",
                     "success"
-                  ).then((results) => {
+                  ).then(() => {
                     window.location.reload();
                   });
                   LoadTable();
+                } else if (result.msg === "conflict") {
+                  const conflictingDates = result.conflictingDates.join(", ");
+                  swal({
+                    title: "Date Conflict",
+                    text: `The following dates are already taken: ${conflictingDates}`,
+                    icon: "warning",
+                    button: "OK",
+                  });
+                } else if (result.msg === "error") {
+                  swal({
+                    title: "Error",
+                    text: "An unexpected error occurred while saving data.",
+                    icon: "error",
+                    button: "OK",
+                  });
+                } else {
+                  swal({
+                    title: "Unknown Response",
+                    text: "The server returned an unknown response.",
+                    icon: "warning",
+                    button: "OK",
+                  });
                 }
               },
               error: function (err) {

@@ -14,8 +14,6 @@ const { DataModeling } = require("./model/hrmisdb");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('employer_contributionlayout', { title: 'Express' });
-
   Validator(req, res, "employer_contributionlayout", "employer_contribution");
 });
 
@@ -42,20 +40,15 @@ router.post("/load", (req, res) => {
             ec_payrolldate = '${payrolldate}'
         `;
 
-    console.log(sql);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ec_");
 
-        // console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -181,13 +174,8 @@ router.post("/getcontribution", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ec_");
-
-        // console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

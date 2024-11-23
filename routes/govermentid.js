@@ -68,7 +68,6 @@ router.post("/save", async (req, res) => {
     let status = "Active";
     let data = [];
 
-    // Check if a record with the same employeeid and idtype exists
     const checkQuery = `SELECT * FROM master_govid WHERE mg_employeeid = '${employeeid}' AND mg_idtype = '${idtype}'`;
     const checkParams = [employeeid, idtype];
 
@@ -78,7 +77,6 @@ router.post("/save", async (req, res) => {
     );
 
     if (existingRecord.length > 0) {
-      // A record with the same employeeid and idtype already exists
       res.json({ msg: "exist" });
       return;
     }
@@ -98,7 +96,6 @@ router.post("/save", async (req, res) => {
         console.error("Error inserting record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         res.json({ msg: "success" });
       }
     });
@@ -132,8 +129,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mg_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

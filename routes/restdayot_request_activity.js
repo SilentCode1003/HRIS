@@ -50,7 +50,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "rra_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -97,7 +96,6 @@ router.post("/getrestdayotactivity", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "rra_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

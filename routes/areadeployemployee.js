@@ -70,7 +70,6 @@ router.post("/save", (req, res) => {
       if (err) {
         console.error("Error: ", err);
       }
-      console.log(results);
 
       let history = InsertStatement("deploy_history_employee", "dhe", [
         "areadeployid",
@@ -84,8 +83,6 @@ router.post("/save", (req, res) => {
           console.error("Error: ", err);
         }
       });
-
-      console.log(results);
 
       res.status(200).json({ status: "Success", message: "Data Saved" });
     });
@@ -112,8 +109,6 @@ router.post("/status", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-
-      console.log(result);
     });
 
     res.status(200).json({

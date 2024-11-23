@@ -22,7 +22,6 @@ const {
 } = require("./repository/customhelper");
 const { generateUsernamefoApplicant } = require("./repository/helper");
 const { DataModeling, RawData } = require("./model/hrmisdb");
-const { log } = require("winston");
 const applicantcurrentYear = moment().format("YYYY");
 const currentMonth = moment().format("MM");
 
@@ -37,7 +36,6 @@ module.exports = router;
 //#region SAVING DATA
 
 router.post("/register_personal", async (req, res) => {
-  console.log("hit");
   try {
     const {
       firstName,
@@ -87,11 +85,6 @@ router.post("/register_personal", async (req, res) => {
       emergencyAddress,
       emergencyPhoneNumber,
     } = req.body;
-
-    console.log(req.body);
-    console.log(firstName, "firstname");
-    console.log(lastName, "lastname");
-
     const applicantExists = await checkApplicantExists(
       firstName,
       lastName,
@@ -215,9 +208,6 @@ router.post("/register_personal", async (req, res) => {
         emergencyPhoneNumber,
       ],
     ];
-
-    console.log(data, "data");
-
     const checkStatement = SelectStatement(
       "SELECT * FROM master_applicant_personal WHERE map_firstname=? AND map_lastname=? AND map_middlename=?",
       [firstName, lastName, middleName]
@@ -254,7 +244,6 @@ router.post("/register_personal", async (req, res) => {
       });
     });
     res.json({ success: true, applicantId });
-    //res.json(JsonSuccess(applicantId));
   } catch (error) {
     console.error(error);
     res.json(JsonErrorResponse(error));
@@ -273,9 +262,6 @@ router.post("/register_education", (req, res) => {
       fifthList,
       ...educationLevels
     } = req.body;
-
-    console.log(req.body, "req.body");
-
     const educationPromises = [];
     const seminarPromises = [];
     const examPromises = [];
@@ -328,8 +314,6 @@ router.post("/register_education", (req, res) => {
                 if (err) {
                   return reject(JsonErrorResponse(err));
                 }
-                console.log(result,'result'); 
-                
                 resolve(JsonSuccess());
               });
             });
@@ -418,8 +402,6 @@ router.post("/register_career", (req, res) => {
       ...careerData
     } = req.body;
 
-    console.log("Request Body:", req.body);
-
     const careerPromises = [];
     const seminarPromises = [];
 
@@ -443,9 +425,6 @@ router.post("/register_career", (req, res) => {
         reason: carrer_reason,
         natureEmployer: career_supervisor,
       } = careerData[level];
-
-      console.log(`Processing ${level} - Employer: ${carrer_employer}`);
-
       let sql = InsertStatement("applicant_career", "ac", [
         "applicantid",
         "attainment",
@@ -456,9 +435,6 @@ router.post("/register_career", (req, res) => {
         "supervisor",
         "reason",
       ]);
-
-      console.log(`SQL Statement for ${level}:`, sql);
-
       let data = [
         [
           applicantId,
@@ -471,31 +447,20 @@ router.post("/register_career", (req, res) => {
           carrer_reason,
         ],
       ];
-
-      console.log(`Data for ${level}:`, data);
-
       let checkStatement = SelectStatement(
         "select * from applicant_career where ac_applicantid=? and ac_employer=? and ac_position=?",
         [applicantId, carrer_employer, carrer_position]
       );
-
-      console.log(`Check Statement for ${level}:`, checkStatement);
-
       const promise = Check(checkStatement)
         .then((result) => {
-          console.log(`Check Result for ${level}:`, result);
-
           if (result.length !== 0) {
-            console.log(`Entry already exists for ${level}`);
             return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
           } else {
             return new Promise((resolve, reject) => {
               InsertTable(sql, data, (err, result) => {
                 if (err) {
-                  console.log(`Error inserting ${level}:`, err);
                   return reject(JsonErrorResponse(err));
                 }
-                console.log(`Successfully inserted ${level}`);
                 resolve(JsonSuccess());
               });
             });
@@ -530,8 +495,6 @@ router.post("/register_career", (req, res) => {
         "seminar_date",
       ]);
 
-      console.log(`SQL Statement for ${attainment}:`, sql);
-
       let data = [
         [
           applicantId,
@@ -540,17 +503,12 @@ router.post("/register_career", (req, res) => {
           as_seminar_date,
         ],
       ];
-
-      console.log(`Data for ${attainment}:`, data);
-
       seminarPromises.push(
         new Promise((resolve, reject) => {
           InsertTable(sql, data, (err, result) => {
             if (err) {
-              console.log(`Error inserting ${attainment}:`, err);
               return reject(JsonErrorResponse(err));
             }
-            console.log(`Successfully inserted ${attainment}`);
             resolve(JsonSuccess());
           });
         })
@@ -634,10 +592,6 @@ router.post("/register_family", (req, res) => {
       children7, 
       children8
     } = req.body;
-
-    console.log(req.body,'body');
-    
-
     const familyMembers = [
       { ...father, relation: "father" },
       { ...mother, relation: "mother" },
@@ -659,9 +613,6 @@ router.post("/register_family", (req, res) => {
       { ...children7, relation: "children7" },
       { ...children8, relation: "children8" },
     ];
-    console.log(familyMembers,'familyMembers');
-    
-
     let sql = InsertStatement("applicant_family", "af", [
       "applicantid",
       "name",
@@ -693,10 +644,6 @@ router.post("/register_family", (req, res) => {
           birthday,
         ],
       ];
-
-      console.log(data,'data');
-      
-
       let checkStatement = SelectStatement(
         "select * from applicant_family where af_applicantid=? and af_name=? and af_relation=?",
         [applicantId, name, relation]
@@ -738,9 +685,6 @@ router.post("/register_family", (req, res) => {
 router.post("/register_reference", (req, res) => {
   try {
     const { applicantId, ...references } = req.body;
-
-    console.log(req.body,'req.body');
-
     const referencesPromises = [];
 
     const referencesLevels = [
@@ -778,10 +722,6 @@ router.post("/register_reference", (req, res) => {
           reference_contact_no,
         ],
       ];
-
-      console.log(data,'data');
-      
-  
       let checkStatement = SelectStatement(
         "select * from applicant_references where ar_applicantid=? and ar_references_name=? and ar_occupation=?",
         [applicantId, reference_name, reference_occupation]
@@ -789,10 +729,7 @@ router.post("/register_reference", (req, res) => {
 
       const promise = Check(checkStatement)
         .then((result) => {
-          console.log(`Check Result for ${level}:`, result);
-
           if (result.length !== 0) {
-            console.log(`Entry already exists for ${level}`);
             return Promise.resolve(JsonWarningResponse(MessageStatus.EXIST));
           } else {
             return new Promise((resolve, reject) => {
@@ -801,7 +738,6 @@ router.post("/register_reference", (req, res) => {
                   console.log(`Error inserting ${level}:`, err);
                   return reject(JsonErrorResponse(err));
                 }
-                console.log(`Successfully inserted ${level}`);
                 resolve(JsonSuccess());
               });
             });
@@ -836,7 +772,6 @@ router.post("/register_reference", (req, res) => {
 router.post("/viewdata", (req, res) => {
   try {
     let applicant_id = req.body.applicantId;
-    console.log(req.body.applicantId);
     let resultsList = [];
     let sqlPersonal = `
       SELECT 
@@ -1061,7 +996,6 @@ router.post("/viewdata", (req, res) => {
                       resultsList.push({ applicant_user: userData });
                     }
                     res.json(JsonDataResponse(resultsList));
-                    console.log(resultsList);
                   });
                 });
               });
@@ -1373,9 +1307,6 @@ router.put("/update_personal", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from master_applicant_personal where map_firstname = ? and map_lastname = ? and map_middlename = ?",
       [firstName, lastName, middleName]
@@ -1415,9 +1346,6 @@ router.put("/update_education", (req, res) => {
 
     educationLevels.forEach((level) => {
       const section = req.body[level];
-
-      console.log(section, "body");
-
       if (section && section.ae_education_id) {
         let data = [];
         let columns = [];
@@ -1498,10 +1426,6 @@ router.put("/update_career", (req, res) => {
       fourthSeminars,
       fifthSeminars,
     } = req.body;
-
-    console.log(req.body,'body');
-    
-
     const careerEntries = [present, second, third, fourth, fifth, sixth];
     const seminarEntries = [seminars, secondSeminars, thirdSeminars, fourthSeminars, fifthSeminars];
 
@@ -1643,8 +1567,6 @@ router.put("/update_family", (req, res) => {
       children8,
     } = req.body;
 
-    console.log(req.body,'req.body');
-    
     const familyEntries = [
       father,
       mother,
@@ -1702,10 +1624,6 @@ router.put("/update_family", (req, res) => {
         }
 
         let updateStatement = UpdateStatement("applicant_family", "af", columns, arguments);
-
-        console.log(updateStatement,'updateStatement');
-        
-
         familyPromises.push(
           new Promise((resolve, reject) => {
             Update(updateStatement, data, (err, result) => {
@@ -1814,10 +1732,8 @@ function Check(sql) {
 }
 
 function generateApplicantId(year, month) {
-  console.log(year, month);
   return new Promise((resolve, reject) => {
     const maxIdQuery = `SELECT count(*) as count FROM master_applicant_personal WHERE map_applicantid LIKE '${year}${month}%'`;
-    console.log(maxIdQuery);
     mysql
       .mysqlQueryPromise(maxIdQuery)
       .then((result) => {
@@ -1825,9 +1741,6 @@ function generateApplicantId(year, month) {
         const paddedNumericPart = String(currentCount).padStart(2, "0");
 
         let newApprenticeID = `${year}${month}${paddedNumericPart}`;
-
-        console.log(newApprenticeID);
-
         resolve(newApprenticeID);
       })
       .catch((error) => {
@@ -1899,210 +1812,4 @@ async function saveUserRecord(req, res, applicantid, username) {
     return JsonErrorResponse(error);
   }
 }
-
-// function DataReturn(result) {
-//   let data = {};
-
-//   // Structure the personal info
-//   data.personal_info = {
-//     applicantid: result[0].map_applicantid,
-//     firstName: result[0].map_firstname,
-//     lastName: result[0].map_lastname,
-//     middleName: result[0].map_middlename,
-//     nickName: result[0].map_nickname,
-//     presentPhoneNumber: result[0].map_phone_no,
-//     provincialPhoneNumber: result[0].map_provincial_phone_address,
-//     presentAddress: result[0].map_address,
-//     provincialAddress: result[0].map_provincial_address,
-//     gender: result[0].map_gender,
-//     civil_status: result[0].map_civil_status,
-//     age: result[0].map_age,
-//     language: result[0].map_language,
-//     dateOfBirth: result[0].map_birthday,
-//     placeOfBirth: result[0].map_birthplace,
-//     citizenship: result[0].map_citizenship,
-//     height: result[0].map_height,
-//     weight: result[0].map_weight,
-//     physicalLimitations: result[0].map_physical_limit,
-//     sss: result[0].map_sss_no,
-//     tin: result[0].map_tin_no,
-//     isRelated: result[0].map_isrelated,
-//     relatedEmployee: result[0].map_related_emp,
-//     isApplied: result[0].map_isApplied,
-//     isAppliedYes: result[0].map_isAppliedYes,
-//     isCharged: result[0].map_isCharged,
-//     isChargedYes: result[0].map_isChargedYes,
-//     isIllness: result[0].map_isIllness,
-//     isDrive: result[0].map_isDrive,
-//     isDriveYes: result[0].map_isDriveYes,
-//     isLicense: result[0].map_isLicense,
-//     specialSkills: result[0].map_specialSkills,
-//     hobbies: result[0].map_hobbies,
-//     positionPreferred: result[0].map_positionPreferred,
-//     salary: result[0].map_salary,
-//     dateAvailable: result[0].map_dateAvailable,
-//     isAccept: result[0].map_isAccept,
-//     isAcceptNo: result[0].map_isAcceptNo,
-//     isDischarged: result[0].map_isDischarged,
-//     relative: result[0].map_relative,
-//     deptReferences: result[0].map_deptReferences,
-//     recommendedBy: result[0].map_recommendedBy,
-//     referredTo: result[0].map_referredTo,
-//     personEmergency: result[0].map_personEmergency,
-//     relationship: result[0].map_relationship,
-//     emergencyAddress: result[0].map_emergencyAddress,
-//     emergencyPhoneNumber: result[0].map_emergencyPhoneNumber,
-//   };
-
-//   // Group applicant career data
-//   data.applicant_career = result.map(row => ({
-//     career_id: row.map_ac_career_id,
-//     employer: row.map_ac_employer,
-//     start: row.map_ac_start,
-//     end: row.map_ac_end,
-//     position: row.map_ac_position,
-//     supervisor: row.map_ac_supervisor,
-//     reason: row.map_ac_reason
-//   })).filter(career => career.career_id); // Filter out null career entries
-
-//   // Group applicant education data
-//   data.applicant_education = result.map(row => ({
-//     education_id: row.map_ae_education_id,
-//     attainment: row.map_ae_attainment,
-//     schoolname: row.map_ae_schoolname,
-//     start: row.map_ae_start,
-//     end: row.map_ae_end,
-//     isgraduate: row.map_ae_isgraduate,
-//     highest_level: row.map_ae_highest_level
-//   })).filter(edu => edu.education_id); // Filter out null education entries
-
-//   // Group applicant family data
-//   data.applicant_family = result.map(row => ({
-//     familyid: row.map_af_familyid,
-//     name: row.map_af_name,
-//     relation: row.map_af_relation,
-//     age: row.map_af_age,
-//     occupation: row.map_af_occupation,
-//     company_position: row.map_af_company_position,
-//     birthday: row.map_af_birthday
-//   })).filter(family => family.familyid); // Filter out null family entries
-
-//   // Group applicant other exam data
-//   data.applicant_other_exam = result.map(row => ({
-//     examid: row.map_aoe_examid,
-//     examname: row.map_aoe_examname,
-//     exam_date: row.map_aoe_exam_date,
-//     placetaken: row.map_aoe_placetaken
-//   })).filter(exam => exam.examid); // Filter out null exam entries
-
-//   // Group applicant references data
-//   data.applicant_references = result.map(row => ({
-//     referencesid: row.map_ar_referencesid,
-//     references_name: row.map_ar_references_name,
-//     occupation: row.map_ar_occupation,
-//     complete_address: row.map_ar_complete_address,
-//     contact_no: row.map_ar_contact_no
-//   })).filter(ref => ref.referencesid); // Filter out null references entries
-
-//   // Group applicant seminar data
-//   data.applicant_seminar = result.map(row => ({
-//     seminarid: row.map_as_seminarid,
-//     seminar_name: row.map_as_seminar_name,
-//     seminar_date: row.map_as_seminar_date
-//   })).filter(seminar => seminar.seminarid); // Filter out null seminar entries
-
-//   // Add more sections as necessary...
-
-//   return data;
-// }
-
-// function DataReturn(result, key) {
-//   let data = {};
-
-//   // Structure the personal info
-//   data.personal_info = {
-//     applicantid: result[0].map_applicantid,
-//     firstname: result[0].map_firstname,
-//     lastname: result[0].map_lastname,
-//     middlename: result[0].map_middlename,
-//     nickname: result[0].map_nickname,
-//     phone_no: result[0].map_phone_no,
-//     address: result[0].map_address,
-//     provincial_address: result[0].map_provincial_address,
-//     gender: result[0].map_gender,
-//     civil_status: result[0].map_civil_status,
-//     age: result[0].map_age,
-//     birthday: result[0].map_birthday,
-//     birthplace: result[0].map_birthplace,
-//     citizenship: result[0].map_citizenship,
-//     height: result[0].map_height,
-//     weight: result[0].map_weight,
-//     physical_limit: result[0].map_physical_limit,
-//     sss_no: result[0].map_sss_no,
-//     tin_no: result[0].map_tin_no,
-//     // add more fields if necessary
-//   };
-
-//   // Group applicant career data
-//   data.applicant_career = result.map(row => ({
-//     career_id: row.map_ac_career_id,
-//     employer: row.map_ac_employer,
-//     start: row.map_ac_start,
-//     end: row.map_ac_end,
-//     position: row.map_ac_position,
-//     supervisor: row.map_ac_supervisor,
-//     reason: row.map_ac_reason
-//   })).filter(career => career.career_id); // Filter out null career entries
-
-//   // Group applicant education data
-//   data.applicant_education = result.map(row => ({
-//     education_id: row.map_ae_education_id,
-//     attainment: row.map_ae_attainment,
-//     schoolname: row.map_ae_schoolname,
-//     start: row.map_ae_start,
-//     end: row.map_ae_end,
-//     isgraduate: row.map_ae_isgraduate,
-//     highest_level: row.map_ae_highest_level
-//   })).filter(edu => edu.education_id); // Filter out null education entries
-
-//   // Group applicant family data
-//   data.applicant_family = result.map(row => ({
-//     familyid: row.map_af_familyid,
-//     name: row.map_af_name,
-//     relation: row.map_af_relation,
-//     age: row.map_af_age,
-//     occupation: row.map_af_occupation,
-//     company_position: row.map_af_company_position,
-//     birthday: row.map_af_birthday
-//   })).filter(family => family.familyid); // Filter out null family entries
-
-//   // Group applicant other exam data
-//   data.applicant_other_exam = result.map(row => ({
-//     examid: row.map_aoe_examid,
-//     examname: row.map_aoe_examname,
-//     exam_date: row.map_aoe_exam_date,
-//     placetaken: row.map_aoe_placetaken
-//   })).filter(exam => exam.examid); // Filter out null exam entries
-
-//   // Group applicant references data
-//   data.applicant_references = result.map(row => ({
-//     referencesid: row.map_ar_referencesid,
-//     references_name: row.map_ar_references_name,
-//     occupation: row.map_ar_occupation,
-//     complete_address: row.map_ar_complete_address,
-//     contact_no: row.map_ar_contact_no
-//   })).filter(ref => ref.referencesid); // Filter out null references entries
-
-//   // Group applicant seminar data
-//   data.applicant_seminar = result.map(row => ({
-//     seminarid: row.map_as_seminarid,
-//     seminar_name: row.map_as_seminar_name,
-//     seminar_date: row.map_as_seminar_date
-//   })).filter(seminar => seminar.seminarid); // Filter out null seminar entries
-
-//   // Add more sections as necessary...
-
-//   return data;
-// }
-
 //#endregion

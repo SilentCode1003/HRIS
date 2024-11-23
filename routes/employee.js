@@ -37,8 +37,6 @@ const currentMonth = moment().format("MM");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  // res.render('employeelayout', { title: 'Express' });
-
   Validator(req, res, "employeelayout", "employee");
 });
 
@@ -161,9 +159,6 @@ router.post("/saveold", async (req, res) => {
           console.error("Error inserting employee record: ", insertErr);
           return res.json({ msg: "insert_failed" });
         }
-
-        console.log("Employee record inserted: ", insertResult);
-
         Encrypter(password, async (encryptErr, encryptedPassword) => {
           if (encryptErr) {
             console.error("Error encrypting password: ", encryptErr);
@@ -210,8 +205,6 @@ router.get("/selectdistinctshift", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -266,8 +259,6 @@ router.post("/upload", (req, res) => {
 
   console.log(dataJson);
   dataJson.forEach((key, item) => {
-    // console.log("Department: ", key.department);
-    // console.log("Employee Id: ", key.position);
     GetDepartment(key.department, (err, result) => {
       if (err) console.log("Error: ", err);
       let departmentid = result[0].departmentid;
@@ -275,15 +266,8 @@ router.post("/upload", (req, res) => {
         if (err) console.log("Error: ", err);
         let positionid = result[0].positionid;
         counter += 1;
-
-        // let dateofbirth = moment(key.dateofbirth, "MM/DD/YYYY").format(
-        //   "YYYY-MM-DD"
-        // );
-
         let dateofbirth = convertExcelDate(key.dateofbirth);
         let datehired = convertExcelDate(key.hiredate);
-        // let datehired = moment(key.hiredate, "MM/DD/YYYY").format("YYYY-MM-DD");
-        console.log("Birth Date", dateofbirth, "Date Hired", datehired);
 
         let employeeId, username, password;
         employeeId = key.id;
@@ -316,8 +300,6 @@ router.post("/upload", (req, res) => {
           ],
         ];
 
-        console.log("id", key.id);
-
         mysql.InsertTable(
           "master_employee",
           master_employee,
@@ -326,8 +308,6 @@ router.post("/upload", (req, res) => {
               console.error("Error inserting employee record: ", insertErr);
               return res.json({ msg: "insert_failed" });
             }
-
-            console.log("Employee record inserted: ", insertResult);
 
             Encrypter(password, async (encryptErr, encryptedPassword) => {
               if (encryptErr) {
@@ -515,8 +495,6 @@ router.get("/loadedit", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -556,8 +534,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -594,8 +570,6 @@ router.get("/loadwithshift", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "me_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -688,8 +662,6 @@ router.post("/save", async (req, res) => {
           return res.json({ msg: "insert_failed" });
         }
 
-        console.log("Employee record inserted: ", insertResult);
-
         Encrypter(password, async (encryptErr, encryptedPassword) => {
           if (encryptErr) {
             console.error("Error encrypting password: ", encryptErr);
@@ -737,8 +709,6 @@ router.post("/update", async (req, res) => {
     let position = req.body.position;
     let address = req.body.address;
     let profilePicturePath = req.body.profilePicturePath;
-
-    console.log(newEmployeeId);
 
     let sql = `UPDATE master_employee SET
       me_firstname = '${firstname}',
@@ -793,8 +763,6 @@ router.post("/getdeductother", (req, res) => {
     inner join master_employee on md_employeeid = me_id
     where md_employeeid = '${employeeid}'`;
 
-    console.log(sql);
-
     mysql.Select(sql, "Master_Deductions", (err, result) => {
       if (err) console.error("Error: ", err);
 
@@ -825,9 +793,6 @@ router.post("/getleave", (req, res) => {
     inner join master_employee on l_employeeid = me_id
     inner join master_leaves on leaves.l_leavetype = ml_id
     where l_employeeid = '${employeeid}'`;
-
-    console.log(sql);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -900,7 +865,6 @@ router.post("/gethealth", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log("SQL query:", sql);
 
         res.json({
           msg: "success",
@@ -932,9 +896,6 @@ router.post("/gettraining", (req, res) => {
     from master_training 
     inner join master_employee on mt_employeeid = me_id
     where mt_employeeid = '${employeeid}'`;
-
-    console.log(sql);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -978,7 +939,6 @@ router.post("/getdisciplinary", (req, res) => {
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
-        console.log("SQL query:", sql);
 
         res.json({
           msg: "success",
@@ -1230,7 +1190,6 @@ function GetDepartment(name, callback) {
   let sql = `select * from master_department where md_departmentname='${name}'`;
   mysql.Select(sql, "Master_Department", (err, result) => {
     if (err) callback(err, null);
-    //
     callback(null, result);
   });
 }
@@ -1239,7 +1198,6 @@ function GetPosition(name, callback) {
   let sql = `select * from master_position where mp_positionname='${name}'`;
   mysql.Select(sql, "Master_Position", (err, result) => {
     if (err) callback(err, null);
-    //
     callback(null, result);
   });
 }

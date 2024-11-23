@@ -14,8 +14,6 @@ const { DataModeling } = require("./model/hrmisdb");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('enrolled_bank_acclayout', { title: 'Express' });
-
   Validator(req, res, "enrolled_bank_acclayout", "enrolled_bank_acc");
 });
 

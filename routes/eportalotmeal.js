@@ -51,8 +51,6 @@ router.get("/loadPending", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -88,8 +86,6 @@ router.get("/loadApplied", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -125,8 +121,6 @@ router.get("/loadApproved", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -162,8 +156,6 @@ router.get("/loadRejected", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -200,8 +192,6 @@ router.post("/getotmeal", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -306,14 +296,10 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
-
     let checkStatement = SelectStatement(
       "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
       [employeeid, attendancedate, status]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {

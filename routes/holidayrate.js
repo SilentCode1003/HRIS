@@ -109,7 +109,6 @@ router.post("/save", async (req, res) => {
             console.error("Error inserting record: ", insertErr);
             res.json({ msg: "insert_failed" });
           } else {
-            console.log(insertResult);
             res.json({ msg: "success" });
           }
         }
@@ -130,8 +129,6 @@ router.post("/update", (req, res) => {
     let holidayrate = req.body.holidayrate;
     let holidaystatus = req.body.holidaystatus;
     let createby = req.session.fullname;
-
-    console.log(`${holidaydate}`, `${holidayrate}`);
 
     let sqlupdate = `UPDATE master_holidayrate SET   
     mhr_holidaydate ='${holidaydate}', 

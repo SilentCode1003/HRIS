@@ -92,7 +92,6 @@ router.post("/save", async (req, res) => {
           console.error("Error inserting record: ", insertErr);
           res.json({ msg: "insert_failed" });
         } else {
-          console.log(insertResult);
           res.json({ msg: "success" });
         }
       }
@@ -123,8 +122,6 @@ router.post("/update", (req, res) => {
     mgs_location ='${location}', 
     mgs_status ='${status}'
     WHERE mgs_id ='${geofenceid}'`;
-
-    console.log(sqlupdate);
 
     mysql
       .Update(sqlupdate)

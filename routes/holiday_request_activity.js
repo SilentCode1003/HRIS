@@ -17,10 +17,6 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 var router = express.Router();
-//const currentDate = moment();
-
-/* GET home page. */
-
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
@@ -59,8 +55,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -112,8 +106,6 @@ router.post("/getholidayactivity", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

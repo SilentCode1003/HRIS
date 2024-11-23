@@ -205,9 +205,6 @@ router.post("/save", async (req, res) => {
     let createdate = currentDate.format("YYYY-MM-DD");
     let status = "Active";
     let data = [];
-    console.log("Received department name:", offenseid);
-    console.log("Received department name:", actionid);
-    console.log("Received department name:", violation);
 
     const offenseIDquery = `select mo_offenseid from master_offense where mo_offensename ='${offenseid}'`;
 
@@ -306,9 +303,6 @@ router.post("/getdisciplinary", (req, res) => {
     inner join master_violation on offense_disciplinary_actions.oda_violation = oda_violation
     where oda_disciplinaryid = '${disciplinaryid}'
     limit 1`;
-
-    console.log(sql);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {

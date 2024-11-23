@@ -7,9 +7,6 @@ const { InsertTable } = require("./dbconnect");
 // exports.insertDailyAttendanceStatus = () => {
 //   const todayDate = moment().format("YYYY-MM-DD");
 //   const todayDayOfWeek = moment().format("dddd").toLowerCase(); 
-
-//   console.log(`[${todayDate}] - Starting attendance status insertion.`);
-
 //   const fetchEmployeesQuery = `
 //     SELECT ms.ms_employeeid, ms.ms_monday, ms.ms_tuesday, ms.ms_wednesday, 
 //            ms.ms_thursday, ms.ms_friday, ms.ms_saturday, ms.ms_sunday
@@ -30,9 +27,7 @@ const { InsertTable } = require("./dbconnect");
 //   mysql
 //     .mysqlQueryPromise(fetchEmployeesQuery)
 //     .then((employees) => {
-//       console.log("Employees and shift data fetched:", employees);
 //       if (employees.length === 0) {
-//         console.log("No employees found with the specified job statuses.");
 //         return;
 //       }
 
@@ -76,9 +71,6 @@ const { InsertTable } = require("./dbconnect");
 //                   scheduledTimeIn 
 //                 ];
 //               });
-
-//               console.log("Insert query:", insertAttendanceStatusQuery);
-//               console.log("Data to be inserted:", data);
 
 //               InsertTable(insertAttendanceStatusQuery, data, (err, result) => {
 //                 if (err) {
@@ -166,10 +158,10 @@ exports.insertDailyAttendanceStatus = () => {
 
                 if (isExempted) {
                   status = "Exempted";
-                  scheduledTimeIn = "00:00:00"; // Insert "00:00:00" for exempted shifts
+                  scheduledTimeIn = "00:00:00";
                 } else if (isRestDay) {
                   status = "Rest Day";
-                  scheduledTimeIn = "00:00:00"; // Insert "00:00:00" for rest days as well
+                  scheduledTimeIn = "00:00:00";
                 } else if (onLeaveEmployees.includes(employee.ms_employeeid)) {
                   status = "On Leave";
                 } else if (isHoliday) {
@@ -185,18 +177,10 @@ exports.insertDailyAttendanceStatus = () => {
                   scheduledTimeIn 
                 ];
               });
-
-              console.log("Insert query:", insertAttendanceStatusQuery);
-              console.log("Data to be inserted:", data);
-
               InsertTable(insertAttendanceStatusQuery, data, (err, result) => {
                 if (err) {
                   console.error("Error inserting attendance status:", err);
                 } else {
-                  console.log(
-                    "Successfully inserted daily attendance status for employees.",
-                    result
-                  );
                 }
               });
             })

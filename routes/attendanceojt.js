@@ -106,8 +106,6 @@ router.post("/upload", (req, res) => {
     dataJson.forEach((key, item) => {
       let date = convertExcelDate(key.date);
 
-      console.log(key.type);
-
       if (key.type == "IN") {
         ojt_attendance.push([
           key.id,

@@ -23,8 +23,6 @@ router.get("/load", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
 
-    console.log(departmentid);
-
     let sql = `call hrmis.TeamLeadLoadShift('${departmentid}')`;
 
     mysql.StoredProcedure(sql, (err, result) => {
@@ -46,7 +44,6 @@ router.get("/load", (req, res) => {
 router.get("/selectdistinct", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
-    console.log(departmentid);
     let sql = `SELECT DISTINCT
       me_id,
       concat(me_lastname,' ',me_firstname) as me_fullname
@@ -65,7 +62,6 @@ router.get("/selectdistinct", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -79,7 +75,6 @@ router.get("/selectdistinct", (req, res) => {
 router.get("/selectshift", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
-    console.log(departmentid);
     let sql = `SELECT 
       me_id,
       concat(me_lastname,' ',me_firstname) as me_fullname
@@ -97,7 +92,6 @@ router.get("/selectshift", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "me_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -114,7 +108,6 @@ router.post("/save", async (req, res) => {
     let departmentid = req.session.departmentid;
     let shiftsettingsid = req.body.shiftsettingsid;
 
-    console.log(employeeName, departmentid, shiftsettingsid);
 
     let checkSql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
 

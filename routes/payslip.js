@@ -47,8 +47,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result,'result');
-
       if (result != 0) {
         let data = DataModeling(result, "gp_");
 

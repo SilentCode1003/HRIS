@@ -21,8 +21,6 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('candidatelayout', { title: 'Express' });
-
   Validator(req, res, "change_shiftlayout", "change_shift");
 });
 
@@ -82,9 +80,6 @@ router.post("/save", (req, res) => {
       "select * from change_shift where cs_employeeid =? and cs_actualrd= ?",
       [employeeid, actualrddate]
     );
-
-    console.log(checkStatement);
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -196,14 +191,10 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
-
     let checkStatement = SelectStatement(
       "select * from change_shift where cs_employeeid = ? and cs_actualrd = ? and cs_changerd = ? and cs_shiftstatus = ? and cs_createby = ? and cs_createdate = ?",
       [employeeid, actualrd, changerd, shiftstatus, createby, createdate]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {
@@ -226,46 +217,6 @@ router.put("/edit", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
-// router.post("/update", (req, res) => {
-//   try {
-//     let changeshift = req.body.changeshift;
-//     let employeeid = req.body.employeeid;
-//     let actualrd = req.body.actualrd;
-//     let changerd = req.body.changerd;
-//     let createby = req.session.fullname;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-//     let shiftstatus = req.body.shiftstatus;
-
-//     let sql = `  UPDATE subgroup SET
-//     s_departmentid = '${departmentid}',
-//     s_name = '${subgroupname}',
-//     s_createby = '${createby}',
-//     s_createdate = '${createdate}',
-//     s_status = '${status}'
-//     WHERE s_id = '${subgroupid}'`;
-//     mysql
-//       .Update(sql)
-//       .then((result) => {
-//         res.json({
-//           msg: "success",
-//           data: result,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: "error",
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error,
-//     });
-//     console.log(error);
-//   }
-// });
 
 //#region FUNCTION
 function Check(sql) {

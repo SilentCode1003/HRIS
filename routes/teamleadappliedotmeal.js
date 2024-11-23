@@ -27,57 +27,6 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-// router.get("/load", (req, res) => {
-//   try {
-//     const departmentid = req.session.departmentid;
-//     const subgroupid = req.session.subgroupid;
-//     const accesstypeid = req.session.accesstypeid;
-//     const sql = `SELECT
-//     oma_mealid,
-//     concat(me_lastname,' ',me_firstname) oma_fullname,
-//     DATE_FORMAT(oma_attendancedate, '%Y-%m-%d') as oma_attendancedate,
-//     DATE_FORMAT(oma_clockin, '%Y-%m-%d %H:%i:%s') AS oma_clockin,
-//     DATE_FORMAT(oma_clockout, '%Y-%m-%d %H:%i:%s') AS oma_clockout,
-// 	  oma_totalovertime,
-//     DATE_FORMAT(oma_payroll_date, '%Y-%m-%d') AS oma_payroll_date,
-//     oma_status
-// FROM ot_meal_allowances
-// INNER JOIN
-// master_employee ON ot_meal_allowances.oma_employeeid = me_id
-// WHERE oma_status = 'Applied'
-// AND oma_subgroupid IN (${subgroupid})
-// AND me_department = '${departmentid}'
-// AND oma_employeeid NOT IN (
-//     SELECT tu_employeeid FROM teamlead_user)
-//   AND oma_approvalcount = (
-//     SELECT ats_count
-//     FROM aprroval_stage_settings
-//     WHERE ats_accessid = '${accesstypeid}'
-//     AND ats_departmentid = '${departmentid}')`;
-
-//     Select(sql, (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         res.json(JsonErrorResponse(err));
-//       }
-
-//
-
-//       if (result != 0) {
-//         let data = DataModeling(result, "oma_");
-
-//         console.log(data);
-//         res.json(JsonDataResponse(data));
-//       } else {
-//         res.json(JsonDataResponse(result));
-//       }
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
 router.get("/load", (req, res) => {
   try {
     const subgroupid = req.session.subgroupid;
@@ -110,8 +59,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -153,8 +100,6 @@ router.post("/getotmeal", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -197,13 +142,6 @@ router.post("/otmealaction", (req, res) => {
         comment,
       ],
     ];
-
-    // let checkStatement = SelectStatement(
-    //   "select * from meal_request_activity where mra_employeeid=? and mra_mealid=?",
-    //   [employeeid, otmealid]
-    // );
-
-    // console.log(checkStatement, "result");
 
     InsertTable(sql, data, (err, result) => {
       if (err) {

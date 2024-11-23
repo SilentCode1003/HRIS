@@ -18,7 +18,6 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('eportalrequestovertimelayout', { title: 'Express' });
   Validator(req, res, "eportalrequestovertimelayout", "eportalrequestovertime");
 });
 
@@ -132,8 +131,6 @@ router.get("/loadapplied", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -173,8 +170,6 @@ router.get("/loadrejected", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -214,8 +209,6 @@ router.get("/loadcancelled", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -426,24 +419,11 @@ router.post("/addrequstot", (req, res) => {
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "Web Manual";
 
-    console.log(clockin, "clockin");
-    console.log(clockout, "clockout");
-    console.log(attendancedate, "attendancedate");
-    console.log(payrolldate, "payrolldate");
-    console.log(reason, "reason");
-    console.log(overtimestatus, "overtimestatus");
-    console.log(subgroup, "subgroup");
-    console.log(approvecount, "approvecount");
-    console.log(employeeid, "employeeid");
-    console.log(deviceaction, "deviceaction");
 
     let checkStatement = SelectStatement(
     "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
         [employeeid, attendancedate, overtimestatus]
     );
-
-    console.log(checkStatement, "check");
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -1266,7 +1246,6 @@ router.post("/addrequstot", (req, res) => {
 
 router.post("/update", (req, res) => {
   try {
-    console.log("hit");
 
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
@@ -2094,27 +2073,13 @@ router.post("/update", (req, res) => {
             pao_subgroupid = '${subgroup}',
             pao_overtimeimage = '${overtimeimage}'
             WHERE pao_id = '${approveot_id}'`;
-
-          console.log(clockin);
-          console.log(clockout);
-          console.log(attendancedate);
-          console.log(payrolldate);
-          console.log(reason);
-          console.log(overtimestatus);
-          console.log(approveot_id);
-          console.log(subgroup);
-
-          console.log(sql, "sql");
-
           mysql
             .Update(sql)
             .then((result) => {
               res.json(JsonSuccess());
-              console.log(result, "result");
             })
             .catch((error) => {
               res.json(JsonErrorResponse(error));
-              console.log(error, "error");
             });
         }
       })
@@ -2132,9 +2097,6 @@ router.post("/getattendancedate", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
-
-    console.log(employeeid);
-    console.log(attendancedate);
     let sql = `SELECT
     ma_attendanceid as pao_attendanceid,
     DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
@@ -2287,8 +2249,6 @@ LIMIT 1;
 
             if (result != 0) {
               let data = DataModeling(result, "pao_");
-
-              console.log(data);
               res.json(JsonDataResponse(data));
             } else {
               res.json(JsonDataResponse(result));

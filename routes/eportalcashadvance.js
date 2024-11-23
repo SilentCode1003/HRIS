@@ -12,7 +12,6 @@ var router = express.Router();
 const currentDate = moment();
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('eportalcashadvancelayout', { title: 'Express' });
   Validator(req, res, "eportalcashadvancelayout", "eportalcashadvance");
 });
 
@@ -67,9 +66,6 @@ router.get("/load", (req, res) => {
     AND ca_status = 'Pending'
     order by ca_cashadvanceid desc`;
 
-    console.log(employeeid, "id");
-    console.log(sql);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -78,8 +74,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -112,8 +106,6 @@ router.get("/approved", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -172,8 +164,6 @@ router.post("/getpending", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -196,7 +186,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-        console.log(sqlupdate);
 
         res.json({
           msg: "success",
@@ -242,8 +231,6 @@ router.post("/getca", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ca_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

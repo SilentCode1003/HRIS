@@ -127,6 +127,7 @@ router.post("/getotapproval", (req, res) => {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
     pao_fullname,
+    pao_overtimeimage,
     DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
     TIME_FORMAT(pao_clockin, '%H:%i:%s')  as pao_clockin,
     TIME_FORMAT(pao_clockout, '%H:%i:%s')  as pao_clockout,

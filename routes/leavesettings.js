@@ -6,9 +6,13 @@ const e = require("express");
 const {
   JsonErrorResponse,
   JsonDataResponse,
+  JsonSuccess,
+  JsonWarningResponse,
+  MessageStatus,
 } = require("./repository/response");
-const { Select } = require("./repository/dbconnect");
+const { Select, InsertTable, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
+const { InsertStatement, SelectStatement, UpdateStatement } = require("./repository/customhelper");
 var router = express.Router();
 
 /* GET home page. */
@@ -19,11 +23,13 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
+//#region With Paid Leaves
+
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT
     ml_id, 
-    concat(me_lastname,' ',me_firstname) as ml_employeeid,
+    concat(me_lastname,' ',me_firstname) AS ml_employeeid,
     ml_tenure,
     ml_leavetype,
     ml_year,
@@ -32,7 +38,8 @@ router.get("/load", (req, res) => {
     ml_usedleavedays,
     ml_status
     FROM master_leaves
-    inner join master_employee on master_leaves.ml_employeeid = me_id`;
+    INNER JOIN master_employee ON master_leaves.ml_employeeid = me_id
+    WHERE ml_leave_pay = TRUE`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
@@ -55,10 +62,6 @@ router.post("/setleave", async (req, res) => {
     let totalleave = req.body.totalleave;
     let yearleave = req.body.yearleave;
     let leavetype = req.body.leavetype;
-
-    console.log(yearleave);
-    console.log(leavetype);
-
     const checkQuery = `SELECT COUNT(*) AS count FROM master_leaves WHERE ml_year = '${yearleave}' AND ml_leavetype = '${leavetype}'`;
 
     const existingRecord = await mysql.mysqlQueryPromise(checkQuery);
@@ -98,9 +101,6 @@ router.post("/setleaveperemployee", async (req, res) => {
     let yearleave = req.body.yearleave;
     let leavetype = req.body.leavetype;
     let employeeid = req.body.employeeid;
-
-    console.log(yearleave);
-    console.log(leavetype);
 
     const checkQuery = `SELECT COUNT(*) AS count FROM master_leaves 
     WHERE ml_year = '${yearleave}' 
@@ -165,8 +165,6 @@ router.post("/getleavedates", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ld_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -239,3 +237,279 @@ router.post("/update", (req, res) => {
     });
   }
 });
+
+//#endregion 
+
+
+//#region With Out Paid Leaves
+
+router.get("/loadnopaid", (req, res) => {
+  try {
+    let sql = `SELECT
+    ml_id, 
+    concat(me_lastname,' ',me_firstname) AS ml_employeeid,
+    ml_tenure,
+    ml_leavetype,
+    ml_year,
+    ml_totalleavedays,
+    ml_unusedleavedays,
+    ml_usedleavedays,
+    ml_status
+    FROM master_leaves
+    INNER JOIN master_employee ON master_leaves.ml_employeeid = me_id
+    WHERE ml_leave_pay = FALSE`;
+
+    mysql.Select(sql, "Master_Leaves", (err, result) => {
+      if (err) console.error("Error :", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      data: error,
+    });
+  }
+});
+
+router.post("/addleavenopaid", async (req, res) => {
+  try {
+    const { yearleave, leavetype } = req.body;
+    let GetAllEmpId = `SELECT me_id FROM master_employee WHERE me_jobstatus = 'regular'`;
+
+    const employeeIds = await mysql.mysqlQueryPromise(GetAllEmpId);
+
+    for (const employee of employeeIds) {
+      let employeeId = employee.me_id;
+
+      let sql = InsertStatement("master_leaves", "ml", [
+        "employeeid",
+        "tenure",
+        "leavetype",
+        "year",
+        "totalleavedays",
+        "unusedleavedays",
+        "usedleavedays",
+        "status",
+        "leave_pay",
+      ]);
+
+      let data = [
+        [
+          employeeId,
+          yearleave,
+          leavetype,
+          yearleave,
+          0,
+          0,
+          0,
+          "Without Paid Leaves",
+          false,
+        ],
+      ];
+
+      let checkStatement = SelectStatement(
+        "select * from master_leaves where ml_employeeid=? and ml_year=? and ml_leavetype=?",
+        [employeeId, yearleave, leavetype]
+      );
+
+      const result = await Check(checkStatement);
+
+      if (result != 0) {
+        return res.json(JsonWarningResponse(MessageStatus.EXIST));
+      } else {
+        await new Promise((resolve, reject) => {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      }
+    }
+
+    res.json(JsonSuccess());
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/setleaveperemployeenopaid", async (req, res) => {
+  try {
+   const { yearleave, leavetype, employeeid } = req.body;
+
+    let sql = InsertStatement("master_leaves", "ml", [
+      "employeeid",
+      "tenure",
+      "leavetype",
+      "year",
+      "totalleavedays",
+      "unusedleavedays",
+      "usedleavedays",
+      "status",
+      "leave_pay",
+    ]);
+
+    let data = [
+      [
+        employeeid,
+        yearleave,
+        leavetype,
+        yearleave,
+        0,
+        0,
+        0,
+        "Without Paid Leaves",
+        false,
+      ],
+    ];
+
+    let checkStatement = SelectStatement(
+      "select * from master_leaves where ml_employeeid=? and ml_year=? and ml_leavetype=?",
+      [employeeid, yearleave, leavetype]
+    );
+
+    Check(checkStatement)
+    .then((result) => {
+      if (result != 0) {
+        return res.json(JsonWarningResponse(MessageStatus.EXIST));
+      } else {
+        Insert(sql, data, (err, result) => {
+          if (err) console.error("Error: ", err);
+
+          res.json(JsonSuccess());
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.json(JsonErrorResponse(error));
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/updatenopaid", (req, res) => {
+  try {
+    const { leavesettingsid, employeeid, leavetype, yearleave} = req.body;
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+
+    if (yearleave) {
+      data.push(yearleave);
+      columns.push("year");
+    }
+
+    if (leavetype) {
+      data.push(leavetype);
+      columns.push("leavetype");
+    }
+
+    if (leavesettingsid) {
+      data.push(leavesettingsid);
+      arguments.push("id");
+    }
+
+    let checkStatement = SelectStatement(
+      "select * from master_leaves where ml_employeeid = ? and ml_leavetype = ? and ml_year = ?",
+      [employeeid, leavetype, yearleave]
+    );
+
+
+    let updateStatement = UpdateStatement(
+      "master_leaves",
+      "ml",
+      columns,
+      arguments
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+   console.log(error);
+   res.json(JsonErrorResponse(error))
+  }
+});
+
+
+
+router.post("/getleavedatesnopaid", (req, res) => {
+  try {
+    let leavesettingsid = req.body.leavesettingsid;
+    let sql = `
+    SELECT
+    ld_dateid as ld_datenopaid, 
+    CONCAT(me_lastname,' ',me_firstname) AS ld_fullnamenopaid,
+    DATE_FORMAT(ld_leavedates, '%Y-%m-%d') AS ld_leavedatesnopaid,
+    DATE_FORMAT(ld_leavedates, '%W') AS ld_day_namenopaid,
+    ml_leavetype AS ld_leavetypenopaid,
+    ml_year AS ld_yearnopaid,
+    DATE_FORMAT(ld_payrolldate, '%Y-%m-%d') AS ld_payrolldatenopaid
+    FROM leave_dates
+    INNER JOIN master_leaves ON leave_dates.ld_leavetype = ml_id
+    INNER JOIN master_employee ON leave_dates.ld_employeeid = me_id
+    WHERE ml_id = '${leavesettingsid}'
+    `;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ld_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+//#endregion
+
+
+//#region Functions
+
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+
+//#endregion
+

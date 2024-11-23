@@ -43,8 +43,6 @@ router.get("/getpayrolldate", (req, res) => {
     ORDER BY 
     p_payrolldate DESC`;
 
-    console.log(employeeid);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -53,8 +51,6 @@ router.get("/getpayrolldate", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -74,53 +70,6 @@ router.post("/loginsalary", (req, res) => {
     });
   }
 });
-
-// router.get("/getpayrolldate", (req, res) => {
-//   try {
-//     let employeeid = req.session.employeeid;
-//     let sql = `SELECT
-//     CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
-//     DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
-//     p_cutoff as p_cutoff,
-//     ROUND(p_salary + p_allowances + p_basic_adjustments, 2) as p_totalsalary,
-//     SUM(p_totalhours) as p_totalhours,
-//     SUM(p_nightothours) as p_nightdiff,
-//     SUM(p_normalothours) as p_normalot,
-//     SUM(p_earlyothours) as p_earlyot,
-//     SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
-//     round(p_total_netpay, 2) as p_totalnetpay
-//     FROM
-//     payslip
-//     WHERE
-//     p_employeeid = '${employeeid}'
-//     GROUP BY
-//     p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
-//     ORDER BY
-//     p_payrolldate DESC`;
-
-//     console.log(employeeid);
-
-//     Select(sql, (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         res.json(JsonErrorResponse(err));
-//       }
-
-//
-
-//       if (result != 0) {
-//         let data = DataModeling(result, "p_");
-
-//         console.log(data);
-//         res.json(JsonDataResponse(data));
-//       } else {
-//         res.json(JsonDataResponse(result));
-//       }
-//     });
-//   } catch (error) {
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
 
 router.post("/loadprofileslip", (req, res) => {
   try {
@@ -157,8 +106,6 @@ router.post("/loadprofileslip", (req, res) => {
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
 
-    console.log(employeeid);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -168,7 +115,6 @@ router.post("/loadprofileslip", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -267,8 +213,6 @@ router.post("/loadpayslip", (req, res) => {
     WHERE p_employeeid = '${employeeid}'
     And p_payrolldate = '${payrolldate}'`;
 
-    console.log(employeeid);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -277,8 +221,6 @@ router.post("/loadpayslip", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -354,8 +296,6 @@ router.post("/loaddinamicamount", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result, "result");
-
       if (result != 0) {
         let data = DataModeling(result, "p_");
 
@@ -370,247 +310,6 @@ router.post("/loaddinamicamount", (req, res) => {
 });
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-// router.post("/generatepdf", async (req, res) => {
-//   try {
-//     const {
-//       employeeid,
-//       payrolldate,
-//       globalsssid,
-//       globaltinid,
-//       globalphilhealthid,
-//       globalpagibigid,
-//       globalfullname,
-//       globalposition,
-//       globaldepartment,
-//       globalremainingleave,
-//       globalstartdate,
-//       globalenddate,
-//       globalsalary,
-//       globalperday,
-//       globalallowances,
-//       globalapproveot,
-//       globalbasicadjustments,
-//       globalpayrolladjustments,
-//       globalapprovednightot,
-//       globalapprovenormalot,
-//       globalapprovedearlyot,
-//       globalovertimemeal,
-//       globalleavepay,
-//       globalregularholidaycomp,
-//       globalspecialholidaycomp,
-//       globalregularholidayot,
-//       globalspecialholidayot,
-//       globaloverallnetpay,
-//       globalsssdeductions,
-//       globalpagibigdeductions,
-//       globalphilhealthdeductions,
-//       globaltindeductions,
-//       globalabsentdeductions,
-//       globalhealthcard,
-//       globallatedeductions,
-//       globaltotaldeductions,
-//       globaltotalnetpay,
-//       //globaltotalnetpaywords,
-//       globalloans,
-//       globalsuddendeductionsName,
-//       globalsuddendeductionsAmount,
-//       globalRestDay_OTpay,
-//     } = req.body;
-
-//     const docDefinition = {
-//       content: [
-//         {
-//           columns: [
-//             {
-//               text: "5L Solutions and Allied Services & Corporation",
-//               fontSize: 20,
-//               bold: true,
-//               alignment: "center",
-//             },
-//           ],
-//         },
-//         { text: "Payslip", style: "header" },
-//         {
-//           text: "From: " + globalstartdate + " To: " + globalenddate,
-//           style: "header",
-//         },
-//         {
-//           text: "Payroll Date: " + payrolldate,
-//           style: "subheader",
-//           alignment: "right",
-//         },
-//         {
-//           columns: [
-//             {
-//               width: "50%",
-//               stack: [
-//                 { text: "EMP Code: " + employeeid, bold: true },
-//                 { text: "SSS ID: " + globalsssid, bold: true },
-//                 { text: "TIN ID: " + globaltinid, bold: true },
-//                 { text: "Philhealth ID: " + globalphilhealthid, bold: true },
-//                 { text: "PAG IBIG ID: " + globalpagibigid, bold: true },
-//                 { text: "Remaining Paid Leaves: " + globalremainingleave, bold: true },
-//               ],
-//             },
-//             {
-//               width: "50%",
-//               stack: [
-//                 { text: "EMP Name: " + globalfullname, bold: true },
-//                 { text: "Position: " + globalposition, bold: true },
-//                 { text: "Department: " + globaldepartment, bold: true },
-//                 { text: "Health Card: " + globalhealthcard, bold: true },
-//                 { text: "Total Net Pay:  ₱" + globaltotalnetpay, bold: true },
-//                 { text: "Authorised Signatory: ", bold: true },
-//               ],
-//             },
-//           ],
-//         },
-//         {
-//           table: {
-//             headerRows: 1,
-//             widths: ["*", "*", "*", "*"],
-//             body: [
-//               [
-//                 { text: "Earnings", style: "tableHeader", bold: true },
-//                 { text: "Amount", style: "tableHeader", bold: true },
-//                 { text: "Deductions", style: "tableHeader", bold: true },
-//                 { text: "Amount", style: "tableHeader", bold: true },
-//               ],
-//               ["Basic", "₱" + globalsalary, "SSS", "₱" + globalsssdeductions],
-//               [
-//                 "Daily Rate",
-//                 "₱" + globalperday,
-//                 "Philhealth",
-//                 "₱" + globalphilhealthdeductions,
-//               ],
-//               [
-//                 "Allowances",
-//                 "₱" + globalallowances,
-//                 "HDMF",
-//                 "₱" + globalpagibigdeductions,
-//               ],
-//               [
-//                 "Basic Adjustments",
-//                 "₱" + globalbasicadjustments,
-//                 "Cash Advanced",
-//                 "",
-//               ],
-//               [
-//                 "Payroll Adjustments",
-//                 "₱" + globalpayrolladjustments,
-//                 "Tax",
-//                 "₱" + globaltindeductions,
-//               ],
-//               [
-//                 "Total Approve Overtime",
-//                 "₱" + globalapproveot,
-//                 "Absent",
-//                 "₱" + globalabsentdeductions,
-//               ],
-//               [
-//                 "Night Differrentials",
-//                 "₱" + globalapprovednightot,
-//                 "Health Card",
-//                 "₱" + globalhealthcard,
-//               ],
-//               [
-//                 "Normal Overtime",
-//                 "₱" + globalapprovenormalot,
-//                 "Late",
-//                 "₱" + globallatedeductions,
-//               ],
-//               [
-//                 "Early Overtime",
-//                 "₱" + globalapprovedearlyot,
-//                 "Loans",
-//                 "₱" + globalloans,
-//               ],
-//               [
-//                 "Rest Day OT",
-//                 "₱" + globalRestDay_OTpay,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Overtime Meal",
-//                 "₱" + globalovertimemeal,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Leave With Pay",
-//                 "₱" + globalleavepay,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Special Holiday Overtime",
-//                 "₱" + globalspecialholidayot,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Regular Holiday Overtime",
-//                 "₱" + globalregularholidayot,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Special Holiday",
-//                 "₱" + globalspecialholidaycomp,
-//                 globalsuddendeductionsName,
-//                 globalsuddendeductionsAmount
-//               ],
-//               [
-//                 "Regular Holiday",
-//                 "₱" + globalregularholidaycomp,
-//                 "",
-//                 "",
-//               ],
-//               [
-//                 "Total Compensation",
-//                 "₱" + globaloverallnetpay,
-//                 "Total Deductions",
-//                 "₱" + globaltotaldeductions,
-//               ],
-//             ],
-//           },
-//         },
-//         {
-//           text: "Total Net Pay: ₱" + globaltotalnetpay,
-//           margin: [0, 30, 0, 0],
-//           border: [false, true, true, true],
-//         },
-//         {
-//           text:
-//             "Employee Name: " +
-//             globalfullname +
-//             "\n\n Signature ____________________________",
-//           margin: [0, 40, 0, 0],
-//           border: [false, true, true, true],
-//         },
-//       ],
-//       styles: {
-//         header: {
-//           fontSize: 18,
-//           bold: true,
-//           alignment: "center",
-//           margin: [0, 0, 0, 10],
-//         },
-//         subheader: { fontSize: 14, bold: true, margin: [0, 0, 0, 10] },
-//       },
-//     };
-
-//     const pdfDoc = pdfMake.createPdf(docDefinition);
-//     pdfDoc.getBase64((base64String) => {
-//       res.send(base64String);
-//     });
-//   } catch (error) {
-//     console.error("Error generating PDF:", error);
-//     res.status(500).send("Error generating PDF");
-//   }
-// });
 
 router.post("/generatepdf", async (req, res) => {
   try {
@@ -666,16 +365,6 @@ router.post("/generatepdf", async (req, res) => {
       globalnumabsent,
       globalaccrued13thmonth,
     } = req.body;
-
-    console.log(
-      "GlobalsuddendedductionsName on server:",
-      globalsuddendeductionsName
-    );
-    console.log(
-      "GlobalsuddendedductionsAmount on server:",
-      globalsuddendeductionsAmount
-    );
-
     const deductions = (globalsuddendeductionsName || []).map(
       (name, index) => ({
         name,
@@ -699,7 +388,7 @@ router.post("/generatepdf", async (req, res) => {
 
     const finalDeductionRows = [specialHolidayRow, ...deductionRows];
 
-    console.log(deductionRows, "deductionRows");
+
 
     const docDefinition = {
       content: [

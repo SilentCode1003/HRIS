@@ -57,7 +57,6 @@ router.post('/update', (req, res) => {
 
     mysql.Update(sqlupdate)
       .then((result) => {
-        console.log(sqlupdate);
         res.json({
           msg: 'success',
           data: result
@@ -102,7 +101,6 @@ router.post('/getreqca', (req, res) => {
 
     mysql.mysqlQueryPromise(sql)
     .then((result) => {
-      console.log(cashadvanceid);
       res.json({
         msg: 'success',
         data: result,
