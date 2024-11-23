@@ -172,6 +172,40 @@ router.put("/edit-dtr", (req, res) => {
   }
 });
 
+router.get("/getdtr/:attendancedate/:employeeid", (req, res) => {
+  try {
+    const { attendancedate, employeeid } = req.params;
+    let sql = SelectStatement(
+      "select * from daily_time_record where dtr_attendance_date = ? and dtr_employeeid = ?",
+      [attendancedate, employeeid]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "dtr_");
+
+        console.log(data);
+        
+
+        return res.status(200).json({
+          msg: "success",
+          data: data,
+        });
+      }
+      res.status(200).json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 async function CheckExist(data) {
   return new Promise((resolve, reject) => {
     let sql = SelectStatement(

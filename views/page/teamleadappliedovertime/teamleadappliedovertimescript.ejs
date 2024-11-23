@@ -207,6 +207,10 @@
           );
         },
       });
+
+      Fetch(`/eportaldtr/getdtr/${attendancedate}/${"210206"}`, (data) => {
+        populateTable(data.data);
+      });
     });
 
     $(document).on("click", "#otsavebutton", function () {
@@ -466,6 +470,67 @@
         } else {
           tr[i].style.display = "none";
         }
+      }
+    }
+
+    function populateTable(data) {
+      const tableBody = $("#dtr-datatable tbody");
+      tableBody.empty();
+
+      console.log(data);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 5,
+            class: "text-center",
+            text: "Not Yet Filled",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          // if (item.status === "ACTIVE") {
+          //   action = `
+          //               <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //               <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+          // } else if (item.status === "INACTIVE") {
+          //   action = `
+          //               <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //               <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+          // }
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.attendance_date,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "Access",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.ticket_number == null ? "NOT YET FILLED" : item.ticket_number,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.service == null ? "NOT YET FILLED" : item.service,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.remarks == null ? "NOT YET FILLED" : item.remarks,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            })
+          );
+          tableBody.append(tr);
+        });
       }
     }
   });
