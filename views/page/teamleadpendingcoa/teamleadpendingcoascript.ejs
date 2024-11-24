@@ -75,17 +75,30 @@
               "src",
               "data:image/jpg;base64," + attendanceRequest.file
             );
+
             if (masterAttendance) {
-              const formattedClockin = masterAttendance.clockin;
-              const formattedClockout = masterAttendance.clockout;
-
-              $("#origclockin").val(formattedClockin).removeClass("d-none");
-              $("#labelClockin").removeClass("d-none");
-              $("#clockinNoLogs").addClass("d-none");
-
-              $("#origclockout").val(formattedClockout).removeClass("d-none");
-              $("#labelClockout").removeClass("d-none");
-              $("#clockoutNoLogs").addClass("d-none");
+              if (masterAttendance.clockin) {
+                $("#origclockin")
+                  .val(masterAttendance.clockin)
+                  .removeClass("d-none");
+                $("#labelClockin").removeClass("d-none");
+                $("#clockinNoLogs").addClass("d-none");
+              } else {
+                $("#origclockin").addClass("d-none");
+                $("#labelClockin").addClass("d-none");
+                $("#clockinNoLogs").removeClass("d-none");
+              }
+              if (masterAttendance.clockout) {
+                $("#origclockout")
+                  .val(masterAttendance.clockout)
+                  .removeClass("d-none");
+                $("#labelClockout").removeClass("d-none");
+                $("#clockoutNoLogs").addClass("d-none");
+              } else {
+                $("#origclockout").addClass("d-none");
+                $("#labelClockout").addClass("d-none");
+                $("#clockoutNoLogs").removeClass("d-none");
+              }
             } else {
               $("#origclockin").addClass("d-none");
               $("#labelClockin").addClass("d-none");

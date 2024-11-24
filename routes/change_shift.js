@@ -16,6 +16,7 @@ const {
   SelectStatement,
   UpdateStatement,
 } = require("./repository/customhelper");
+const { log } = require("winston");
 var router = express.Router();
 const currentDate = moment();
 
@@ -25,6 +26,7 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
+//#region change Rest Day
 
 router.get("/load", (req, res) => {
   try {
@@ -218,6 +220,85 @@ router.put("/edit", (req, res) => {
   }
 });
 
+//#endregion
+
+//#region change Shift Time
+
+router.get("/loadshifttime", (req, res) => {
+  try {
+    let sql = `SELECT 
+    cst_id,
+    concat(me_lastname,' ',me_firstname) as cst_fullname,
+    cst_target_date,
+    cst_original_shift,
+    cst_changed_shift,
+    cst_status,
+    cst_createby,
+    cst_createdate
+    FROM change_shift_time
+    INNER JOIN master_employee on change_shift_time.cst_employeeid = me_id`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "cst_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getshift", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let dayname = req.body.dayname;
+
+    console.log(employeeid, dayname);
+    
+    let sql = `
+      SELECT 
+          CASE 
+              WHEN '${dayname}' = 'Monday' THEN ms_monday
+              WHEN '${dayname}' = 'Tuesday' THEN ms_tuesday
+              WHEN '${dayname}' = 'Wednesday' THEN ms_wednesday
+              WHEN '${dayname}' = 'Thursday' THEN ms_thursday
+              WHEN '${dayname}' = 'Friday' THEN ms_friday
+              WHEN '${dayname}' = 'Saturday' THEN ms_saturday
+              WHEN '${dayname}' = 'Sunday' THEN ms_sunday
+          END AS ms_shift
+      FROM master_shift
+      WHERE ms_employeeid = '${employeeid}'`;
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      if (result.length > 0) {
+        const transformedData = result.map((row) => transformShiftData(row));
+        res.json(JsonDataResponse(transformedData));
+      } else {
+        res.json(JsonDataResponse([]));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+//#endregion
+
 //#region FUNCTION
 function Check(sql) {
   return new Promise((resolve, reject) => {
@@ -228,4 +309,18 @@ function Check(sql) {
     });
   });
 }
+
+const transformShiftData = (data) => {
+  try {
+    const shiftData = JSON.parse(data.ms_shift);
+    return {
+      time_in: shiftData.time_in,
+      time_out: shiftData.time_out,
+    };
+  } catch (error) {
+    console.error("Error parsing shift data:", error);
+    return null;
+  }
+};
+
 //#endregion

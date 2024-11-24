@@ -1,40 +1,93 @@
 <br>
-
 <!-- Table -->
 <div class="card" id="tablecard">
-    <div class="card-header ch-coop">
-      <h3 class="title-card-table m-4">Shift Adjustments</h3>
-      <div class="row gap-4 m-2 mb-4">
-        <div class="col">
-          <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table m-4" id="titleCard">Shift Adjustments</h3>
+    <div class="d-flex gap-4 m-2 mb-4 attendance-field">
+      <div class="col">
+        <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
+      </div>
+      <div class="d-flex gap-4 attendance-field">
+        <div class="col" id="dynamicButtonContainer">
+          <div id="dynamicButton" class="d-flex justify-content-between">
+          </div>
         </div>
-        <div class="col-sm-1 col-add">
-          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#subgroupmodal">
-            <b>+ Add</b>
-          </button>
+      </div>
+    </div> 
+  </div>
+  <br>
+  <div class="col">
+    <div class="card">
+      <div class="card-header ch-generate">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
+              data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+              aria-selected="true"><b>Rest Day Adjustments</b>
+            </button>
+            <button class="nav-link eportal-leave" id="automationTab" data-bs-toggle="tab"
+              data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+              aria-selected="false"><b>Shift Time Adjustments</b>
+            </button>
+            </div>
+        </nav>
+      </div>
+      <!-- Tables  -->
+      <div class="card-body db-custom-cards">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                          <div class="card-body cbody-requestleave">
+                            <table class="table table-light table-bordered" id="dataTableChangeShiftSettings">
+                              <thead>
+                                  <tr>
+                                    <th class="col-sm-1">ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Actual Rest Day</th>
+                                    <th>Target Rest Day</th>
+                                    <th>Create By</th>
+                                    <th>Status</th>
+                                    <th class="col-sm-1">Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>            
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+            aria-labelledby="nav-profile-tab">
+            <div class="card-body">
+                <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-light table-bordered" id="dataTableShiftTimeAdjustments">
+                      <thead>
+                        <tr>
+                          <th class="col-sm-1">ID</th>
+                          <th>Employee Name</th>
+                          <th>Actual Rest Day</th>
+                          <th>Target Rest Day</th>
+                          <th>Create By</th>
+                          <th>Status</th>
+                          <th class="col-sm-1">Action</th>
+                        </tr>
+                      </thead>
+                    </table>
+                </div>
+            </div>
+            </div>
         </div>
-      </div> 
+      </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTableChangeShiftSettings">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee Name</th>
-                        <th>Actual Rest Day</th>
-                        <th>Target Rest Day</th>
-                        <th>Create By</th>
-                        <th>Status</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
+
+<!-- #region Rest Day -->
+
 <!-- Modal -->
 <div class="modal fade" id="subgroupmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -42,7 +95,7 @@
         <div class="modal-header" id="modal-header">
           <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
         colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-          <h3 class="modal-title" id="exampleModalLabel">Add Adjustments</h3>
+          <h3 class="modal-title" id="exampleModalLabel">Add Rest Day Adjustments</h3>
           <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body" id="modal-body">
@@ -103,7 +156,7 @@
       <div class="modal-header" id="modal-header">
         <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
       colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
-        <h3 class="modal-title" id="exampleModalLabel">Add Adjustments</h3>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Rest Day Adjustments</h3>
         <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
       </div>
       <div class="modal-body" id="modal-body">
@@ -157,3 +210,163 @@
   </div>
 </div>
 
+<!-- #endregion Header -->
+
+
+<!-- #region Shift Time -->
+
+<!-- Modal -->
+<div class="modal fade" id="subgroupmodaltime" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Shift Time Adjustments ?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="timeemployeename" name="timeemployeename" aria-label="Floating label select example">
+                                <option selected disabled>Choose Employee</option>
+                              </select>
+                              <label for="floatingSelectGrid">Employee Name</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="date" class="form-control border-form-modal" id="timetargertdate" name="timetargertdate" aria-label="Floating label select example">
+                              <label for="floatingSelectGrid">Targert Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="time" class="form-control border-form-modal" id="timefromorigin" name="timefromorigin"
+                            placeholder="Reason" disabled>
+                          <label for="floatingInput">Shift From</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="time" class="form-control border-form-modal" id="timetoorigin" name="timetoorigin"
+                            placeholder="Reason" disabled>
+                          <label for="floatingInput">Shift To</label>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                        <h3>Select Shift Adjustment</h3>
+                      </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="time" class="form-control border-form-modal" id="timefrom" name="timefrom"
+                              placeholder="Reason">
+                            <label for="floatingInput">Shift From</label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-floating">
+                            <input type="time" class="form-control border-form-modal" id="timeto" name="timeto"
+                              placeholder="Reason">
+                            <label for="floatingInput">Shift To</label>
+                          </div>
+                        </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="adjustmentsavebtn">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editchangeshifttime" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+      colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h3 class="modal-title" id="exampleModalLabel">Edit Shift Time Adjustments</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="editcsemployeename" name="editcsemployeename" aria-label="Floating label select example">
+                </select>
+                <label for="floatingSelectGrid">Employee Name</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating position-relative">
+                  <input type="date" class="form-control border-form-modal" id="timetargertdate" name="timetargertdate" aria-label="Floating label select example">
+                  <label for="floatingSelectGrid">Target Date</label>
+              </div>
+            </div>              
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="date" class="form-select border-form-modal" id="editactualdate" name="editactualdate" aria-label="Floating label select example">
+                <label for="actualdate">Actual Rest Date</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="editshiftstatus" name="editshiftstatus" aria-label="Floating label select example">
+                  <option>Active</option>
+                  <option>Inactive</option>
+                </select>
+                <label for="actualdate">Shift Status</label>
+              </div>
+            </div>
+          </div>
+        </form>                             
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editchangeshiftsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- #endregion Header -->
