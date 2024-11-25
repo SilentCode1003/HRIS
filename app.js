@@ -173,6 +173,7 @@ var sessionRouter = require("./routes/session");
 var adjournementRouter = require("./routes/adjournement");
 var adjournement_payRouter = require("./routes/adjournement_pay");
 var eportaldtr = require("./routes/eportaldtr");
+var teamleadapprovedotmealRouter = require("./routes/teamleadapprovedotmeal");
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -357,6 +358,8 @@ app.use("/suggestionquestion", suggestionquestionRouter);
 app.use("/adjournement", adjournementRouter);
 app.use("/adjournement_pay", adjournement_payRouter);
 app.use("/eportaldtr", eportaldtr);
+app.use("/teamleadapprovedotmeal", teamleadapprovedotmealRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -175,3 +175,52 @@ router.post("/otmealaction", (req, res) => {
     });
   }
 });
+
+router.get("/aprrovedotmeal", (req, res) => {
+  try {
+    const subgroupid = req.session.subgroupid;
+    const accesstypeid = req.session.accesstypeid;
+    let sql = SelectStatement(
+      `SELECT 
+    oma_mealid,
+    concat(me_lastname,' ',me_firstname) oma_fullname,
+    DATE_FORMAT(oma_attendancedate, '%Y-%m-%d') as oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%Y-%m-%d %H:%i:%s') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%Y-%m-%d %H:%i:%s') AS oma_clockout,
+	  oma_totalovertime,
+    DATE_FORMAT(oma_payroll_date, '%Y-%m-%d') AS oma_payroll_date,
+    oma_status
+    FROM ot_meal_allowances
+    INNER JOIN
+    master_employee ON ot_meal_allowances.oma_employeeid = me_id
+    INNER JOIN 
+            aprroval_stage_settings ON 
+                aprroval_stage_settings.ats_accessid = ? AND
+                aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
+                aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
+    WHERE 
+        oma_status = ? 
+        AND oma_subgroupid IN (?)`,
+      [accesstypeid, "Approved", subgroupid]
+    );
+    
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "error",
+    });
+  }
+});
