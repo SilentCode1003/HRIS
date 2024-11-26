@@ -4,6 +4,7 @@
     let attendancedate = "";
     let clockin = "";
     let clockout = "";
+    let employeeid = "";
 
     LoadTable();
     searchTable();
@@ -50,6 +51,7 @@
               finalData.push({
                 // image: imgElement.outerHTML,
                 approveot_id: item.id,
+                employeeid: item.employeeid,
                 fullname: item.fullname,
                 attendancedate: item.attendancedate,
                 clockin: item.clockin,
@@ -73,6 +75,7 @@
         columns: [
           // { data: "image" },
           { data: "approveot_id" },
+          { data: "employeeid" },
           { data: "fullname" },
           { data: "attendancedate" },
           { data: "clockin" },
@@ -159,7 +162,8 @@
         });
       console.log(dataRow);
       approveot_id = dataRow[0];
-      attendancedate = dataRow[2];
+      employeeid = dataRow[1];
+      attendancedate = dataRow[3];
       clockin = dataRow[3];
       clockout = dataRow[4];
     });
@@ -186,6 +190,8 @@
               $("#appliedattendancedate").val(item.attendancedate);
               $("#appliedclockin").val(item.clockin);
               $("#appliedclockout").val(item.clockout);
+              $("#appliedclockinlocation").val(item.locationIn);
+              $("#appliedclockoutlocation").val(item.locationOut);
               $("#totalothours").val(item.total_hours);
               $("#totalnightdiff").val(item.night_differentials);
               $("#totalearlytot").val(item.early_ot);
@@ -208,7 +214,7 @@
         },
       });
 
-      Fetch(`/eportaldtr/getdtr/${attendancedate}/${"210206"}`, (data) => {
+      Fetch(`/eportaldtr/getdtr/${attendancedate}/${employeeid}`, (data) => {
         populateTable(data.data);
       });
     });
