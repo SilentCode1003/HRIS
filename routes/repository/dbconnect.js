@@ -11,10 +11,10 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-// Decrypter("c7bba9244ada2267e7d915233c2928af", (err, encrypted) => {
-//   if (err) console.error("Error: ", err);
-//   console.log(encrypted);
-// });
+Decrypter("d4baebbaa10ee721c442b0620a238c71", (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+});
 
 const connection = mysql.createConnection({
   host: process.env._HOST_ADMIN,

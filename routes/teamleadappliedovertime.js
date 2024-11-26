@@ -37,6 +37,7 @@ router.get("/load", (req, res) => {
     let accesstypeid = req.session.accesstypeid;
     let sql = `SELECT 
         pao_id,
+        me_id as pao_employeeid,
         pao_fullname,
         DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
         DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
