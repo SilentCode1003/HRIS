@@ -79,8 +79,8 @@ router.get("/load", (req, res) => {
 router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
-    let sql = `select 
-	  pao_id,
+        let sql = `select 
+    pao_id,
     pao_fullname,
     DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
     DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
@@ -93,10 +93,13 @@ router.post("/getotapproval", (req, res) => {
     pao_reason,
     pao_status,
     pao_overtimeimage,
-    pao_subgroupid
+    pao_subgroupid,
+    ma_locationIn as pao_locationIn,
+    ma_locationOut as pao_locationOut
     FROM payroll_approval_ot
     INNER JOIN
     master_employee ON payroll_approval_ot.pao_employeeid = me_id
+    INNER JOIN master_attendance on ma_employeeid = pao_employeeid AND ma_attendancedate = pao_attendancedate
     where pao_id = '${approveot_id}'`;
 
     Select(sql, (err, result) => {
