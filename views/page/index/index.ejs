@@ -29,7 +29,6 @@
             />
           </span>
       </div>
-
     <br>
 
     <!-- First Card Row -->
@@ -199,8 +198,8 @@
         <div id="departmentCardsContainer" class="row"></div>
 
     </div>
-    <!---- MODAL-->
 
+    <!---- MODAL-->
     <!-- Total Employee Modal -->
     <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog"
         aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
@@ -249,8 +248,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- Regular Employee Modal -->
     <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog"
@@ -341,7 +338,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Resigned Employee Modal -->
     <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
@@ -520,7 +516,6 @@
         </div>
     </div>
 
-
     <!-- Total Candidate for Regular Modal -->
     <div class="modal fade" id="totalCandidateModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
         aria-hidden="true">
@@ -652,7 +647,6 @@
         </div>
     </div>
 
-
     <!-- Content Row -->
     <div class="row">
         <div class="col-xl-8 col-lg-5 db-wholecard">
@@ -724,6 +718,14 @@
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
                             </button>
+                            <button class="nav-link employee-db" id="nav-misslog-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-misslogs" type="button" role="tab" aria-controls="nav-profile"
+                            aria-selected="false">
+                            <b>MISS LOGS</b>
+                            <span id="loadamisslogBadge"
+                            class="position-sticky translate-middle badge rounded-pill bg-danger">
+                        </span>
+                        </button>
                         </div>
                     </nav>
                 </div>
@@ -949,6 +951,31 @@
                                             <h3 class="fw-normal">Department</h3>
                                         </center>
                                         <canvas id="departmentChart" style="width: 600px; height: 600px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-misslogs" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="row">
+                                <div class="card-body">
+                                    <div class="tableresposive">
+                                        <table class="table table-light table-bordered" id="datatable-misslogs">
+                                         <thead>
+                                            <tr>
+                                                <th>Attendance ID</th>
+                                                <th>Employee ID</th>
+                                                <th>Employee Name</th>
+                                                <th>Attendance Date</th>
+                                                <th>Clock In</th>
+                                                <th>Location In</th>
+                                                <th>Device In</th>
+                                                <th>Clock Out</th>
+                                                <th>Location Out</th>
+                                                <th>Device Out</th>
+                                            </tr>
+                                         </thead>
+                                         <tbody></tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -1288,6 +1315,7 @@
             </div>
         </div>
     </div>
+
     <!--Overtime Modal-->
     <div class="modal fade" id="otapprovalmodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1476,6 +1504,7 @@
             </div>
         </div>
     </div>
+
     <!--COA MODAL-->
     <div class="modal fade" id="editrequestcoamodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1748,7 +1777,6 @@
             </div>
         </div>
     </div>
-
 
     <!--RDOT MODAL-->
     <div class="modal fade" id="rdotreqmodal" data-bs-backdrop="static" tabindex="-1"

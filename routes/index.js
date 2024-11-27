@@ -1,10 +1,21 @@
 const mysql = require("./repository/hrmisdb");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { JsonErrorResponse, JsonDataResponse, JsonSuccess } = require("./repository/response");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { Select, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
-const { UpdateStatement, SelectStatement } = require("./repository/customhelper");
+const {
+  UpdateStatement,
+  SelectStatement,
+  GetCurrentDate,
+  GetCurrentMonthFirstDay,
+  GetCurrentMonthLastDay,
+  ConvertToDate,
+} = require("./repository/customhelper");
 var router = express.Router();
 
 /* GET home page. */
@@ -205,7 +216,6 @@ router.get("/loadreqattendance", (req, res) => {
   }
 });
 
-
 router.get("/loadHoliday", (req, res) => {
   try {
     let sql = `SELECT
@@ -239,7 +249,6 @@ router.get("/loadHoliday", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.post("/getholidayapproval", (req, res) => {
   try {
@@ -285,8 +294,7 @@ router.post("/getholidayapproval", (req, res) => {
 
 router.put("/holidayaction", (req, res) => {
   try {
-    const { holidayid, payrolldate, status, comment } =
-      req.body;
+    const { holidayid, payrolldate, status, comment } = req.body;
 
     let data = [];
     let columns = [];
@@ -345,7 +353,6 @@ router.put("/holidayaction", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 router.get("/loadrdot", (req, res) => {
   try {
@@ -417,11 +424,9 @@ router.post("/getrdotapproval", (req, res) => {
   }
 });
 
-
 router.put("/rdotaction", (req, res) => {
   try {
-    const { rdotid, payrolldate, status, comment } =
-      req.body;
+    const { rdotid, payrolldate, status, comment } = req.body;
 
     let data = [];
     let columns = [];
@@ -673,7 +678,6 @@ WHERE
     console.log(error);
   }
 });
-
 
 //#endregion
 
@@ -1866,7 +1870,7 @@ router.post("/searchemployee", (req, res) => {
     SELECT me_id, me_firstname, me_lastname, me_profile_pic
     FROM master_employee
     WHERE CONCAT(me_id, ' ', me_firstname, ' ', me_lastname) LIKE '%${search}%'
-    LIMIT 10`; 
+    LIMIT 10`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1897,7 +1901,124 @@ router.post("/searchemployee", (req, res) => {
 
 //#endregion
 
+//#region MISSLOGS
+router.get("/loadmisslogs", (req, res) => {
+  try {
+    const first_day_of_month = GetCurrentMonthFirstDay();
+    const last_day_of_month = GetCurrentMonthLastDay();
+    const duration = 24;
+    let sql = SelectStatement(
+      `select 
+      ma_attendanceid,
+      ma_employeeid,
+      concat(me_lastname,' ',me_firstname) as ma_fullname,
+      ma_attendancedate,
+      REPLACE(REPLACE(ma_clockin, 'T', ' '), 'Z', '') as ma_clockin,
+      ma_locationIn,
+      ma_devicein,
+      REPLACE(REPLACE(ma_clockout, 'T', ' '), 'Z', '') as ma_clockout,
+      ma_locationOut,
+      ma_deviceout
+      from master_attendance
+      inner join master_employee on ma_employeeid = me_id
+      where timestampdiff(HOUR, ma_clockin, ma_clockout) > ? 
+      and ma_attendancedate between ? and ?`,
+      [duration, `${first_day_of_month} 00:00:00`, `${last_day_of_month}23:59:59`]
+    );
 
+    console.log(sql);
+    
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({
+          msg: err,
+        });
+        return;
+      }
+
+      console.log(result);
+      
+
+      if (result != 0) {
+        let data = DataModeling(result, "ma_");
+        res.status(200).json({
+          msg: "success",
+          data: data,
+        });
+      } else {
+        res.status(200).json({
+          msg: "success",
+          data: result,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: error,
+    });
+  }
+});
+
+router.post("/getmislog", (req, res) => {
+  try {
+    const {startdate, enddate} = req.body;
+    console.log(startdate, enddate);
+    
+    const duration = 24;
+    let sql = SelectStatement(
+      `select 
+      ma_attendanceid,
+      ma_employeeid,
+      concat(me_lastname,' ',me_firstname) as ma_fullname,
+      ma_attendancedate,
+      REPLACE(REPLACE(ma_clockin, 'T', ' '), 'Z', '') as ma_clockin,
+      ma_locationIn,
+      ma_devicein,
+      REPLACE(REPLACE(ma_clockout, 'T', ' '), 'Z', '') as ma_clockout,
+      ma_locationOut,
+      ma_deviceout
+      from master_attendance
+      inner join master_employee on ma_employeeid = me_id
+      where timestampdiff(HOUR, ma_clockin, ma_clockout) > ? 
+      and ma_attendancedate between ? and ?
+      order by ma_attendancedate desc`,
+      [duration, `${ConvertToDate(startdate)}`, `${ConvertToDate(enddate)}`]
+    );
+
+    console.log(sql);
+    
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({
+          msg: err,
+        });
+        return;
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ma_");
+        res.status(200).json({
+          msg: "success",
+          data: data,
+        });
+      } else {
+        res.status(200).json({
+          msg: "success",
+          data: result,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: error,
+    });
+  }
+});
+//#endregion
 
 //#region FUNCTION
 
