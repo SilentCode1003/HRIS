@@ -1923,7 +1923,7 @@ router.get("/loadmisslogs", (req, res) => {
       inner join master_employee on ma_employeeid = me_id
       where timestampdiff(HOUR, ma_clockin, ma_clockout) > ? 
       and ma_attendancedate between ? and ?`,
-      [duration, `${first_day_of_month} 00:00:00`, `${last_day_of_month}23:59:59`]
+      [duration, `${first_day_of_month}`, `${last_day_of_month}`]
     );
 
     console.log(sql);
@@ -1964,6 +1964,7 @@ router.get("/loadmisslogs", (req, res) => {
 router.post("/getmislog", (req, res) => {
   try {
     const {startdate, enddate} = req.body;
+    let departmentid  = req.session.departmentid
     console.log(startdate, enddate);
     
     const duration = 24;
@@ -1983,8 +1984,9 @@ router.post("/getmislog", (req, res) => {
       inner join master_employee on ma_employeeid = me_id
       where timestampdiff(HOUR, ma_clockin, ma_clockout) > ? 
       and ma_attendancedate between ? and ?
+      and me_department = ?
       order by ma_attendancedate desc`,
-      [duration, `${ConvertToDate(startdate)}`, `${ConvertToDate(enddate)}`]
+      [duration, `${ConvertToDate(startdate)}`, `${ConvertToDate(enddate)}`, departmentid]
     );
 
     console.log(sql);

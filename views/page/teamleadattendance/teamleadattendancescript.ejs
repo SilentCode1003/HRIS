@@ -787,9 +787,18 @@
 
     //miss logs
     $(document).on("click", "#nav-missed-logs-tab", function () {
+      let daterange = $("#miss-log-datepicker").val();
+      let startdate = daterange.split('-')[0]
+      let enddate = daterange.split('-')[1]
+      console.log(startdate, enddate);
+
       $.ajax({
-        type: "GET",
-        url: "/index/loadmisslogs",
+        type: "POST",
+        url: "/index/getmislog",
+        data: {
+          startdate: startdate,
+          enddate: enddate,
+        },
         success: function (result) {
           var finalData = [];
           var data = result.data;
