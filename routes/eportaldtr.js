@@ -23,8 +23,8 @@ router.get("/load/:cutoffdate", async (req, res, next) => {
   try {
     const { cutoffdate } = req.params;
     let sql = SelectStatement(
-      "select * from daily_time_record where dtr_cut_off = ?",
-      [cutoffdate]
+      "select * from daily_time_record where dtr_cut_off = ? and dtr_employeeid = ?",
+      [cutoffdate, req.session.employeeid]
     );
 
     Select(sql, (err, result) => {
@@ -69,7 +69,7 @@ router.post("/payrolla-ttendance-date", (req, res) => {
 
         const dates = GenerateDates(data[0].startdate, data[0].enddate);
         const payrolldate = data[0].payrolldate.toISOString().split("T")[0];
-        const exist = await CheckExist([payrolldate]);
+        const exist = await CheckExist([payrolldate, req.session.employeeid]);
 
         if (exist) {
           return res.status(200).json({
@@ -209,7 +209,7 @@ router.get("/getdtr/:attendancedate/:employeeid", (req, res) => {
 async function CheckExist(data) {
   return new Promise((resolve, reject) => {
     let sql = SelectStatement(
-      "select * from daily_time_record where dtr_cut_off = ?",
+      "select * from daily_time_record where dtr_cut_off = ? and dtr_employeeid = ?",
       data
     );
 
