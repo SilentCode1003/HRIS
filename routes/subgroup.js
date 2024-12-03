@@ -113,7 +113,7 @@ router.post("/getsubgroup", (req, res) => {
 
 router.post("/getsubgroupbydepartment", (req, res) => {
   try {
-    let departmentid = req.body.departmentid;
+    let departmentid = req.body.departmentid == "undefined" ? "" : req.session.departmentid;
     let sql = ` SELECT
     s_id,
     s_departmentid,
