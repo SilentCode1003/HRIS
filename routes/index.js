@@ -1519,7 +1519,7 @@ LEFT JOIN
     master_position ON master_employee.me_position = mp_positionid
 WHERE
     me_jobstatus = 'probitionary'
-    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 6`;
+    AND TIMESTAMPDIFF(MONTH, me_hiredate, CURDATE()) >= 5`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1906,7 +1906,7 @@ router.get("/loadmisslogs", (req, res) => {
   try {
     const first_day_of_month = GetCurrentMonthFirstDay();
     const last_day_of_month = GetCurrentMonthLastDay();
-    const duration = 24;
+    const duration = 22;
     let sql = SelectStatement(
       `select 
       ma_attendanceid,

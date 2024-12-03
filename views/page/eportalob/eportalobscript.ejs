@@ -1,0 +1,187 @@
+<script>
+  LoadTable();
+  LoadList();
+
+  function LoadList() {
+    $.ajax({
+      type: "POST",
+      url: "/subgroup/getsubgroupbydepartment",
+      success: function (result) {
+        let activeData = [];
+        let dropdownID = "subgroupDropdown";
+        let inputID = "subgroup";
+        let hiddenID = "subgroupID";
+        let container = result.data;
+        console.log(container);
+        $.each(container, (key, item) => {
+          if (item.status != "resigned") {
+            let name = item.subgroupname;
+            let id = item.subgroupid;
+            activeData.push({
+              display: name,
+              value: id,
+            });
+          }
+        });
+        AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+      },
+      error: function (err) {
+        warning("Warning", err);
+      },
+    });
+  }
+
+  function LoadTable() {
+    Fetch("/eportalob/getob/pending", function (result) {
+      PopulateTable($("#datatable-pending-request tbody"), result.data);
+    });
+  }
+
+  $(document).on("click", "#nav-pending-request", function () {
+    Fetch("/eportalob/getob/pending", function (result) {
+      PopulateTable($("#datatable-pending-request tbody"), result.data);
+    });
+  });
+  
+  $(document).on("click", "#nav-applied-request", function () {
+    Fetch("/eportalob/getob/applied", function (result) {
+      PopulateTable($("#datatable-applied-request tbody"), result.data);
+    });
+  });
+
+  $(document).on("click", "#nav-approved-request", function () {
+    Fetch("/eportalob/getob/approved", function (result) {
+      PopulateTable($("#datatable-approved-request tbody"), result.data);
+    });
+  });
+
+  $(document).on("click", "#nav-rejected-request", function () {
+    Fetch("/eportalob/getob/rejected", function (result) {
+      PopulateTable($("#datatable-rejected-request tbody"), result.data);
+    });
+  });
+
+  $(document).on("click", "#nav-cancelled-request", function () {
+    Fetch("/eportalob/getob/cancelled", function (result) {
+      PopulateTable($("#datatable-cancelled-request tbody"), result.data);
+    });
+  });
+
+  $(document).on("click", "#submitBtn", function () {
+    let attendancedate = $("#attendancedate").val();
+    let subgroupid = $("#subgroupID").val();
+    let clockin = $("#clockin").val();
+    let clockout = $("#clockout").val();
+    let reason = $("#reason").val();
+    let status = $("#status").val();
+
+    var message = "";
+
+    if (attendancedate == "") {
+      message += "attendancedate is required ";
+    }
+
+    if (subgroupid == "") {
+      message += "subgroupid is required ";
+    }
+
+    if (clockin == "") {
+      message += "clockin is required ";
+    }
+
+    if (clockout == "") {
+      message += "clockout is required ";
+    }
+
+    if (reason == "") {
+      message += "reason is required ";
+    }
+
+    if (message !== "") {
+      warning("Required Fields", message);
+    } else {
+      Upsert(
+        "POST",
+        "/eportalob/save",
+        {
+          attendancedate: attendancedate,
+          subgroupid: subgroupid,
+          clockin: clockin,
+          clockout: clockout,
+          reason: reason,
+        },
+        function (result) {
+          if (result.msg === "success") {
+            success("Success", "Data Saved Successfully");
+            LoadTable();
+          } else {
+            warning("Error", result.msg);
+          }
+        }
+      );
+    }
+  });
+
+  function PopulateTable(tableBody, data) {
+    tableBody.empty();
+
+    if (data.length === 0) {
+      const tr = $("<tr>").append(
+        $("<td>", {
+          colspan: 7,
+          class: "text-center",
+          text: "No Data Matched",
+        })
+      );
+      tableBody.append(tr);
+    } else {
+      data.forEach((item) => {
+        const statusBackground = getStatusBackground(item.status);
+        const containerBackground = getStatusContainerBackground(item.status);
+
+        const tr = $("<tr>").append(
+          $("<td>", {
+            text: item.id,
+            "data-label": "Production ID",
+            class: "custom-mobile-align",
+          }),
+          $("<td>", {
+            text: item.attendance_date,
+            "data-label": "Name",
+            class: "custom-mobile-align",
+          }),
+          $("<td>", {
+            text: item.subgroup_id,
+            "data-label": "Quantity",
+            class: "custom-mobile-align",
+          }),
+          $("<td>", {
+            text: item.clockin,
+            "data-label": "Start Date",
+            class: "custom-mobile-align responsive-wrap",
+          }),
+          $("<td>", {
+            text: item.clockout,
+            "data-label": "End Date",
+            class: "custom-mobile-align responsive-wrap",
+          }),
+          $("<td>", {
+            text: item.reason,
+            "data-label": "Production Line",
+            class: "custom-mobile-align",
+          }),
+          $("<td>", {
+            class: "custom-mobile-align",
+            "data-label": "Status",
+          }).append(
+            $("<div>", { class: containerBackground }).append(
+              $("<span>", { text: item.status, class: statusBackground })
+            )
+          )
+        );
+
+        tableBody.append(tr);
+      });
+    }
+  }
+</script>
