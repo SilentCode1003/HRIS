@@ -4792,7 +4792,7 @@ router.post("/loadotmeal", verifyJWT, (req, res) => {
     FROM  ot_meal_allowances
     INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
     WHERE oma_employeeid = '${employeeid}'
-    AND oma_status in ('Pending', 'Applied', 'Approved','Rejected')`;
+    AND oma_status in ('Pending', 'Applied', 'Approved','Rejected', 'Cancel')`;
 
     Select(sql, (err, result) => {
       if (err) {
