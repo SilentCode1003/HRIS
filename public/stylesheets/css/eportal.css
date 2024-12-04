@@ -82,7 +82,8 @@
 }
 
 /*wendell*/
-#previewleave {
+#previewleave,
+#previewold {
   margin-top: 100px;
   width: 250px;
   height: 250px;

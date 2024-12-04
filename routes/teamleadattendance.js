@@ -156,11 +156,15 @@ router.post("/daterange", (req, res) => {
 
 router.post("/exportreports", async (req, res) => {
   try {
+    let departmentid = req.session.departmentid;
     const { startdate, enddate } = req.body;
+
+    console.log(departmentid,'departmentid');
+    
+
     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
-    const resultExportAttendance = await mysql.mysqlQueryPromise(
-      sqlExportAttendance
-    );
+    const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
+
     if (
       !Array.isArray(resultExportAttendance) ||
       resultExportAttendance.length < 2
@@ -180,13 +184,21 @@ router.post("/exportreports", async (req, res) => {
     }
     const attendanceData = JSON.parse(JSON.stringify(attendanceResults));
 
+    const filteredAttendanceData = attendanceData.filter(
+      (record) => record.departmentId === departmentid
+    );
+
+    const filteredSummaryData = summaryData.filter(
+      (record) => record.departmentId === departmentid
+    );
+
     const workbook = XLSX.utils.book_new();
 
-    if (summaryData.length > 0) {
-      const worksheetSummary = XLSX.utils.json_to_sheet(summaryData, {
-        header: Object.keys(summaryData[0]),
+    if (filteredSummaryData.length > 0) {
+      const worksheetSummary = XLSX.utils.json_to_sheet(filteredSummaryData, {
+        header: Object.keys(filteredSummaryData[0]),
       });
-      adjustColumnWidths(worksheetSummary, summaryData);
+      adjustColumnWidths(worksheetSummary, filteredSummaryData);
       formatHeaders(worksheetSummary);
       XLSX.utils.book_append_sheet(
         workbook,
@@ -194,14 +206,15 @@ router.post("/exportreports", async (req, res) => {
         "Attendance Summary"
       );
     }
-
     const groupedData = {};
-    attendanceData.forEach((record) => {
-      const { employeeid, fullname } = record; 
+    filteredAttendanceData.forEach((record) => {
+      const { employeeid, fullname } = record;
+
       if (!employeeid || !fullname) {
         console.warn("Missing employeeid or fullname in record:", record);
         return;
       }
+
       if (!groupedData[employeeid]) {
         groupedData[employeeid] = { data: [], name: fullname };
       }
@@ -227,8 +240,8 @@ router.post("/exportreports", async (req, res) => {
           const cell = worksheetEmployee[cellAddress];
           if (cell && cell.t === "s") {
             const date = new Date(cell.v);
-            cell.v = date.toISOString().split("T")[0]; 
-            cell.t = "s"; 
+            cell.v = date.toISOString().split("T")[0];
+            cell.t = "s";
           }
         }
 
@@ -252,6 +265,7 @@ router.post("/exportreports", async (req, res) => {
     res.status(500).json({ msg: "error", data: error.message });
   }
 });
+
 
 function adjustColumnWidths(worksheet, data) {
   const cols = [];

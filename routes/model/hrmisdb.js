@@ -756,6 +756,7 @@ exports.Payroll_Approval_Ot = (data) => {
       overtimestatus: key.pao_status,
       subgroupid: key.pao_subgroupid,
       overtimeimage: key.pao_overtimeimage,
+      total_min_ot: key.pao_total_min_ot,
     });
   });
 

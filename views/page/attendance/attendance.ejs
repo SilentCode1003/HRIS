@@ -30,9 +30,9 @@
                     <i class="bi bi-person-check mr-2"></i><b>Export Per Employee</b>
                 </button>
             </div>
-            <div class="flex">
+            <!-- <div class="flex">
                 <button id="exportBtn" class="btn btn-export-color"><i class="bi bi-database-fill-gear mr-2"></i><b>Export</b></button>
-            </div>
+            </div> -->
             <div class="flex">
                 <button id="importExcelBtn" class="btn btn-import-color"><i class="bi bi-box-arrow-in-down mr-2"></i><b>Import</b></button>
             </div>
@@ -59,8 +59,6 @@
             </table>
         </div>
     </div>
-</div>
-</div>
 </div>
 
 <!--Export Employee Modal-->
@@ -144,30 +142,57 @@
 
 <!-- Import Modal -->
 <div class="modal fade" id="importsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
-          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
-        </lord-icon>
-          <h1 class="modal-title" id="exampleModalLabel">Import Migrated Logs of Employee </h1>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <form>
-            <div class="form-control">
-              <div class="row">
-                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <input type="file" name="importexcelfile" id="importexcelfile">
-                  </div>
-              </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Import Migrated Logs of Employee </h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <input type="file" name="importexcelfile" id="importexcelfile">
+                </div>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-save" id="importexcelsavebtn">Save</button>
-        </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="importexcelsavebtn">Save</button>
       </div>
     </div>
   </div>
+</div>
+
+
+
+<!-- Department Selection Modal -->
+<div class="modal fade" id="departmentModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Select Department</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form id="departmentForm">
+          <div id="departmentOptions"></div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="confirmDepartmentBtn">Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+

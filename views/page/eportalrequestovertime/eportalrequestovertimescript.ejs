@@ -113,6 +113,32 @@
       });
     }
 
+    $("#addappliedsubgroup").on("change", function () {
+      let subgroup = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getapprover",
+        data: {
+          subgroup: subgroup,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const approverList = $("#approverList");
+            approverList.empty();
+            $.each(existingData, (key, item) => {
+              approverList.append(
+                `<li class="list-group-item"><b>${item.fullname}</b></li>`
+              );
+            });
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
     function LoadSubgroup() {
       $.ajax({
         type: "GET",
@@ -162,7 +188,7 @@
           url: "/eportalrequestovertime/getattendancedate",
           data: {
             attendancedate: formattedDate,
-            employeeid: employeeid, // Ensure `employeeid` is defined and available in scope.
+            employeeid: employeeid, 
           },
           success: function (result) {
             if (result.msg === "success") {
@@ -171,7 +197,6 @@
               const DateSubmitted = currentDate.toISOString().split("T")[0];
 
               $.each(existingData, (key, item) => {
-                // Format clockin and clockout to 'YYYY-MM-DDTHH:mm' for datetime-local inputs
                 let clockInFormatted = item.clockin
                   .replace(" ", "T")
                   .slice(0, 16);
@@ -683,6 +708,32 @@
             });
           } else {
             swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $("#appliedsubgroup").on("change", function () {
+      let subgroup = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getapprover",
+        data: {
+          subgroup: subgroup,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const approverList = $("#approverListAutomated");
+            approverList.empty();
+            $.each(existingData, (key, item) => {
+              approverList.append(
+                `<li class="list-group-item"><b>${item.fullname}</b></li>`
+              );
+            });
           }
         },
         error: function (err) {

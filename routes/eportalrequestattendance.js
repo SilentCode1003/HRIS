@@ -6,12 +6,16 @@ const { Select } = require("./repository/dbconnect");
 const {
   JsonErrorResponse,
   JsonDataResponse,
+  JsonWarningResponse,
+  MessageStatus,
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 const { REQUEST } = require("./repository/enums");
+const e = require("express");
+const { SelectStatement } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -109,30 +113,50 @@ router.post("/submit", async (req, res) => {
       ],
     ];
 
-    mysql.InsertTable("attendance_request", data, (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error("Error inserting leave record: ", insertErr);
-        res.json({ msg: "insert_failed" });
-      } else {
-        let emailbody = [
-          {
-            employeename: employeeid,
-            date: attendancedate,
-            timein: timein,
-            timeout: timeout,
-            reason: reason,
-            status: status,
-            requesttype: REQUEST.COA,
-          },
-        ];
-        SendEmailNotification(employeeid,subgroupid, REQUEST.COA, emailbody);
+    let checkStatement = SelectStatement(
+      "SELECT * FROM attendance_request WHERE ar_employeeid =? and ar_attendace_date= ? and ar_status =?",
+      [employeeid, attendancedate, "Pending"]
+    );
 
-        res.json({ msg: "success" });
+    Check(checkStatement).then((result) => {
+      if (result != 0) {
+        return res.json(JsonWarningResponse(MessageStatus.EXIST));
+      } else {
+        mysql
+          .InsertTable(
+            "attendance_request",
+            data,
+            (insertErr, insertResult) => {
+              if (insertErr) {
+                console.error("Error inserting leave record: ", insertErr);
+                res.json({ msg: "insert_failed" });
+              } else {
+                let emailbody = [
+                  {
+                    employeename: employeeid,
+                    date: attendancedate,
+                    timein: timein,
+                    timeout: timeout,
+                    reason: reason,
+                    status: status,
+                    requesttype: REQUEST.COA,
+                  },
+                ];
+                SendEmailNotification(employeeid, subgroupid, REQUEST.COA, emailbody);
+
+                res.json({ msg: "success" });
+              }
+            }
+          )
+          .catch((error) => {
+            console.error(error);
+            res.json(JsonErrorResponse(error));
+          });
       }
     });
   } catch (error) {
-    console.error("Error in /submit route: ", error);
-    res.json({ msg: "error" });
+    console.error(error);
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -192,7 +216,6 @@ router.post("/update", (req, res) => {
     mysql
       .Update(sqlupdate)
       .then((result) => {
-
         res.json({
           msg: "success",
           data: result,
@@ -318,6 +341,17 @@ router.get("/loadcancelled", (req, res) => {
   }
 });
 
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+
 function calculateTotalHours(timein, timeout) {
   const datetimeIn = new Date(timein);
   const datetimeOut = new Date(timeout);
@@ -325,3 +359,4 @@ function calculateTotalHours(timein, timeout) {
   const totalHoursDecimal = timeDifferenceMs / (1000 * 60 * 60);
   return totalHoursDecimal.toFixed(2);
 }
+//#endregion

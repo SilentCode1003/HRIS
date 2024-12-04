@@ -13,7 +13,7 @@
     LoadPayrollDateTl();
 
     function LoadTable() {
-      $("#dataTablePendingOtmeal").DataTable({
+      $("#dataTableAppliedOtmeal").DataTable({
         destroy: true,
         processing: true,
         serverSide: true,
@@ -24,7 +24,7 @@
         scrollCollapse: true,
         type: "GET",
         ajax: {
-          url: "/eportalotmeal/loadPending",
+          url: "/eportalotmeal/loadApplied",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -35,15 +35,14 @@
               var status = item.status;
 
               action = `
-                        <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#overtimemodal"><i class="fas fa-fw fa-pen"></i></button>
-                      `;
+                          <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#overtimemodal"><i class="fas fa-fw fa-pen"></i></button>
+                        `;
 
               finalData.push({
                 mealid: item.mealid,
                 attendancedate: item.attendancedate,
                 clockin: item.clockin,
                 clockout: item.clockout,
-                totalovertime: item.totalovertime,
                 subgroupid: item.subgroupid,
                 otmeal_amount: item.otmeal_amount,
                 status: item.status,
@@ -67,7 +66,6 @@
           { data: "attendancedate" },
           { data: "clockin" },
           { data: "clockout" },
-          { data: "totalovertime" },
           { data: "subgroupid" },
           {
             data: "otmeal_amount",
@@ -86,7 +84,7 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var overtimestatusCell = $(row).find("td:eq(7)");
+          var overtimestatusCell = $(row).find("td:eq(6)");
 
           var overtimestatusText = data.status;
 
@@ -124,84 +122,83 @@
       });
     }
 
+    //   $(document).on("click", "#appliedtable", function () {
+    //     console.log("Hit");
+    //     $("#dataTableAppliedOtmeal").find("tr:gt(0)").remove();
 
-    $(document).on("click", "#appliedtable", function () {
-      console.log("Hit");
-      $("#dataTableAppliedOtmeal").find("tr:gt(0)").remove();
+    //     $.ajax({
+    //       type: "GET",
+    //       url: "/eportalotmeal/loadApplied",
+    //       success: function (json) {
+    //         var finalData = [];
+    //         var data = json.data;
+    //         console.log(finalData);
 
-      $.ajax({
-        type: "GET",
-        url: "/eportalotmeal/loadApplied",
-        success: function (json) {
-          var finalData = [];
-          var data = json.data;
-          console.log(finalData);
+    //         var material_list_tbl = document.getElementById(
+    //           "dataTableAppliedOtmeal"
+    //         );
 
-          var material_list_tbl = document.getElementById(
-            "dataTableAppliedOtmeal"
-          );
+    //         $.each(data, function (key, item) {
+    //           var row = material_list_tbl.insertRow(1);
+    //           var MEAL_ID = row.insertCell(0);
+    //           var ATTENDANCE_DATE = row.insertCell(1);
+    //           var TIME_IN = row.insertCell(2);
+    //           var TIME_OUT = row.insertCell(3);
+    //           var TOTAL = row.insertCell(4);
+    //           var SUBGROUP = row.insertCell(5);
+    //           var AMOUNT = row.insertCell(6);
+    //           var STATUS = row.insertCell(7);
+    //           var ACTION = row.insertCell(8);
 
-          $.each(data, function (key, item) {
-            var row = material_list_tbl.insertRow(1);
-            var MEAL_ID = row.insertCell(0);
-            var ATTENDANCE_DATE = row.insertCell(1);
-            var TIME_IN = row.insertCell(2);
-            var TIME_OUT = row.insertCell(3);
-            var TOTAL = row.insertCell(4);
-            var SUBGROUP = row.insertCell(5);
-            var AMOUNT = row.insertCell(6);
-            var STATUS = row.insertCell(7);
-            var ACTION = row.insertCell(8);
+    //           var action = document.createElement("button");
+    //           action.id = "editBtn";
+    //           action.className = "btn text-primary view-btn";
+    //           action.setAttribute("data-bs-toggle", "modal");
+    //           action.setAttribute("data-bs-target", "#appliedot");
+    //           action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+    //           action.onclick = function () {
+    //             var dataRow = [];
+    //             $(this)
+    //               .closest("tr")
+    //               .find("td")
+    //               .each(function () {
+    //                 dataRow.push($(this).text());
+    //               });
+    //               mealotid = dataRow[0];
+    //           };
 
-            var action = document.createElement("button");
-            action.id = "editBtn";
-            action.className = "btn text-primary view-btn";
-            action.setAttribute("data-bs-toggle", "modal");
-            action.setAttribute("data-bs-target", "#overtimemodal");
-            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
-            action.onclick = function () {
-              var dataRow = [];
-              $(this)
-                .closest("tr")
-                .find("td")
-                .each(function () {
-                  dataRow.push($(this).text());
-                });
-                mealotid = dataRow[0];
-            };
+    //           MEAL_ID.innerHTML = item.mealid;
+    //           ATTENDANCE_DATE.innerHTML = item.attendancedate;
+    //           TIME_IN.innerHTML = item.clockin;
+    //           TIME_OUT.innerHTML = item.clockout;
+    //           TOTAL.innerHTML = item.totalovertime;
+    //           SUBGROUP.innerHTML = item.subgroupid;
+    //           AMOUNT.innerHTML = item.otmeal_amount;
+    //           STATUS.innerHTML = item.status;
+    //           ACTION.appendChild(action);
 
-            MEAL_ID.innerHTML = item.mealid;
-            ATTENDANCE_DATE.innerHTML = item.attendancedate;
-            TIME_IN.innerHTML = item.clockin;
-            TIME_OUT.innerHTML = item.clockout;
-            TOTAL.innerHTML = item.totalovertime;
-            SUBGROUP.innerHTML = item.subgroupid;
-            AMOUNT.innerHTML = item.otmeal_amount;
-            STATUS.innerHTML = item.status;
-            ACTION.appendChild(action);
-
-            $.each(
-              [
-                MEAL_ID,
-                ATTENDANCE_DATE,
-                TIME_IN,
-                TIME_OUT,
-                TOTAL,
-                SUBGROUP,
-                AMOUNT,
-                STATUS,
-                ACTION
-              ],
-              function (_, cell) {
-                cell.style.textAlign = "center";
-                cell.style.verticalAlign = "middle";
-              }
-            );
-          });
-        },
-        error: function (xhr, status, error) {},
-      });
-    });
+    //           $.each(
+    //             [
+    //               MEAL_ID,
+    //               ATTENDANCE_DATE,
+    //               TIME_IN,
+    //               TIME_OUT,
+    //               TOTAL,
+    //               SUBGROUP,
+    //               AMOUNT,
+    //               STATUS,
+    //               ACTION
+    //             ],
+    //             function (_, cell) {
+    //               cell.style.textAlign = "center";
+    //               cell.style.verticalAlign = "middle";
+    //             }
+    //           );
+    //         });
+    //       },
+    //       error: function (xhr, status, error) {},
+    //     });
+    //   });
 
     $(document).on("click", "#approvedtable", function () {
       console.log("Hit");
@@ -245,7 +242,7 @@
             //     .each(function () {
             //       dataRow.push($(this).text());
             //     });
-            //     mealotid = dataRow[0];
+            //   mealotid = dataRow[0];
             // };
 
             MEAL_ID.innerHTML = item.mealid;
@@ -268,7 +265,7 @@
                 SUBGROUP,
                 AMOUNT,
                 STATUS,
-                // ACTION
+                // ACTION,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -293,7 +290,9 @@
           var data = json.data;
           console.log(finalData);
 
-          material_list_tbl = document.getElementById("dataTableRejectedOtmeal");
+          material_list_tbl = document.getElementById(
+            "dataTableRejectedOtmeal"
+          );
 
           $.each(data, function (key, item) {
             var row = material_list_tbl.insertRow(1);
@@ -305,7 +304,6 @@
             var SUBGROUP = row.insertCell(5);
             var AMOUNT = row.insertCell(6);
             var STATUS = row.insertCell(7);
-            // var ACTION = row.insertCell(8); // Adding action column
 
             // var action = document.createElement("button");
             // action.id = "editBtn";
@@ -321,7 +319,7 @@
             //     .each(function () {
             //       dataRow.push($(this).text());
             //     });
-            //     mealotid = dataRow[0];
+            //   mealotid = dataRow[0];
             // };
 
             MEAL_ID.innerHTML = item.mealid;
@@ -332,7 +330,6 @@
             SUBGROUP.innerHTML = item.subgroupid;
             AMOUNT.innerHTML = item.otmeal_amount;
             STATUS.innerHTML = item.status;
-            // ACTION.appendChild(action);
 
             $.each(
               [
@@ -344,7 +341,6 @@
                 SUBGROUP,
                 AMOUNT,
                 STATUS,
-                // ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -363,7 +359,7 @@
 
       $.ajax({
         type: "GET",
-        url: "/eportalotmeal/loadCancelled",
+        url: "/eportalotmeal/loadcancelled",
         success: function (json) {
           var finalData = [];
           var data = json.data;
@@ -379,11 +375,10 @@
             var ATTENDANCE_DATE = row.insertCell(1);
             var TIME_IN = row.insertCell(2);
             var TIME_OUT = row.insertCell(3);
-            var TOTAL = row.insertCell(4);
-            var SUBGROUP = row.insertCell(5);
-            var AMOUNT = row.insertCell(6);
-            var STATUS = row.insertCell(7);
-            var ACTION = row.insertCell(8); // Adding action column
+            var SUBGROUP = row.insertCell(4);
+            var AMOUNT = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
 
             var action = document.createElement("button");
             action.id = "editBtn";
@@ -406,7 +401,6 @@
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
             TIME_IN.innerHTML = item.clockin;
             TIME_OUT.innerHTML = item.clockout;
-            TOTAL.innerHTML = item.totalovertime;
             SUBGROUP.innerHTML = item.subgroupid;
             AMOUNT.innerHTML = item.otmeal_amount;
             STATUS.innerHTML = item.status;
@@ -418,7 +412,6 @@
                 ATTENDANCE_DATE,
                 TIME_IN,
                 TIME_OUT,
-                TOTAL,
                 SUBGROUP,
                 AMOUNT,
                 STATUS,
@@ -434,7 +427,6 @@
         error: function (xhr, status, error) {},
       });
     });
-
 
     function LoadSubgroup() {
       $.ajax({
@@ -577,7 +569,7 @@
       }
     });
 
-    $("#dataTablePendingOtmeal tbody").on("click", "tr", function () {
+    $("#dataTableAppliedOtmeal tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
         .closest("tr")
@@ -679,8 +671,7 @@
       let status = $("#mealstatus").val();
       let image = base64String;
 
-
-      console.log(base64String,'Image');
+      console.log(base64String, "Image");
 
       var message = "";
 
@@ -700,8 +691,8 @@
         message += "payroll_date is required. ";
       }
 
-      if (subgroupid === "") {
-        message += "subgroupid is required. ";
+      if (subgroupid === "Choose Sub Group") {
+        message += "Sub Group is required. ";
       }
 
       if (totalovertime === "") {
@@ -740,8 +731,6 @@
         let formattedClockin = formatDateTime(clockin);
         let formattedClockout = formatDateTime(clockout);
 
-        console.log(formattedClockin, "format");
-        console.log(formattedClockout, "format");
         $.ajax({
           type: "PUT",
           url: "/eportalotmeal/edit",
@@ -867,8 +856,6 @@
       });
     });
 
-  
-
     $(document).on("click", "#addmealsavebtn", function () {
       let clockin = $("#addmealclockin").val();
       let clockout = $("#addmealclockout").val();
@@ -964,21 +951,21 @@
     return formattedDateTime;
   }
 
-  $(document).on("change", "#edituploadimage", function (e) {
-    const input = document.getElementById("edituploadimage");
+  $(document).on("change", "#uploadtlmeal", function (e) {
+    const input = document.getElementById("uploadtlmeal");
     const file = input.files[0];
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = function () {
-      const preview = document.getElementById("previewleave");
+      const preview = document.getElementById("previewold");
       preview.src = reader.result;
     };
     imageUploadedleave();
   });
 
   function imageUploadedleave() {
-    const input = document.getElementById("edituploadimage");
+    const input = document.getElementById("uploadtlmeal");
     const file = input.files[0];
 
     var reader = new FileReader();
@@ -1045,33 +1032,5 @@
     } else {
       input.value = defaultValue;
     }
-  }
-
-
-  $(document).on("change", "#uploadtlmeal", function (e) {
-    const input = document.getElementById("uploadtlmeal");
-    const file = input.files[0];
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = function () {
-      const preview = document.getElementById("previewold");
-      preview.src = reader.result;
-    };
-    imageUploadedleave();
-  });
-
-  function imageUploadedleave() {
-    const input = document.getElementById("uploadtlmeal");
-    const file = input.files[0];
-
-    var reader = new FileReader();
-
-    reader.onload = function () {
-      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-
-      imageBase64Stringsep = base64String;
-    };
-    reader.readAsDataURL(file);
   }
 </script>

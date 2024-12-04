@@ -1804,7 +1804,7 @@ router.post("/loadcoa", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/submit", verifyJWT, async (req, res) => {
+router.post("/submit", async (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let attendancedate = req.body.attendancedate;
@@ -1853,30 +1853,50 @@ router.post("/submit", verifyJWT, async (req, res) => {
       ],
     ];
 
-    mysql.InsertTable("attendance_request", data, (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error("Error inserting leave record: ", insertErr);
-        res.json({ msg: "insert_failed" });
-      } else {
-        let emailbody = [
-          {
-            employeename: employeeid,
-            date: attendancedate,
-            timein: timein,
-            timeout: timeout,
-            reason: reason,
-            status: status,
-            requesttype: REQUEST.COA,
-          },
-        ];
-        SendEmailNotification(employeeid, subgroupid, REQUEST.COA, emailbody);
+    let checkStatement = SelectStatement(
+      "SELECT * FROM attendance_request WHERE ar_employeeid =? and ar_attendace_date= ? and ar_status =?",
+      [employeeid, attendancedate, "Pending"]
+    );
 
-        res.json({ msg: "success" });
+    Check(checkStatement).then((result) => {
+      if (result != 0) {
+        return res.json(JsonWarningResponse(MessageStatus.EXIST));
+      } else {
+        mysql
+          .InsertTable(
+            "attendance_request",
+            data,
+            (insertErr, insertResult) => {
+              if (insertErr) {
+                console.error("Error inserting leave record: ", insertErr);
+                res.json({ msg: "insert_failed" });
+              } else {
+                let emailbody = [
+                  {
+                    employeename: employeeid,
+                    date: attendancedate,
+                    timein: timein,
+                    timeout: timeout,
+                    reason: reason,
+                    status: status,
+                    requesttype: REQUEST.COA,
+                  },
+                ];
+                SendEmailNotification(employeeid, subgroupid, REQUEST.COA, emailbody);
+
+                res.json({ msg: "success" });
+              }
+            }
+          )
+          .catch((error) => {
+            console.error(error);
+            res.json(JsonErrorResponse(error));
+          });
       }
     });
   } catch (error) {
-    console.error("Error in /submit route: ", error);
-    res.json({ msg: "error" });
+    console.error(error);
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -2392,6 +2412,42 @@ router.post("/saverdot", verifyJWT, async (req, res) => {
   }
 });
 
+
+router.post("/cancelrdot", verifyJWT, (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let requeststatus = "Cancel";
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (requeststatus) {
+      data.push(requeststatus);
+      columns.push("status");
+    }
+
+    if (requestid) {
+      data.push(requestid);
+      arguments.push("rdotid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "restday_ot_approval",
+      "roa",
+      columns,
+      arguments
+    );
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -2634,7 +2690,6 @@ router.post("/loadotcurrentmonth", verifyJWT, (req, res) => {
   }
 });
 
-
 router.post("/getattendancedate", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -2810,7 +2865,7 @@ LIMIT 1;
   }
 });
 
-router.post("/getovertime", verifyJWT, (req, res) => {
+router.post("/getovertime",(req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `SELECT
@@ -3003,7 +3058,7 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     let subgroup = req.body.subgroup;
     let approvecount = 0;
     let overtimeimage = req.body.overtimeimage;
-    let deviceaction = "Web Manual";
+    let deviceaction = "App Manual";
 
     let checkStatement = SelectStatement(
       "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
@@ -3843,7 +3898,7 @@ router.post("/update", verifyJWT, (req, res) => {
     let reason = req.body.reason;
     let subgroup = req.body.subgroup;
     let overtimeimage = req.body.overtimeimage;
-    let deviceaction = "Web Automated";
+    let deviceaction = "App Automated";
 
     let checkStatement = SelectStatement(
       "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
@@ -4681,6 +4736,41 @@ router.post("/update", verifyJWT, (req, res) => {
   }
 });
 
+router.post("/cancelot", verifyJWT, (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let requeststatus = "Cancel";
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (requeststatus) {
+      data.push(requeststatus);
+      columns.push("status");
+    }
+
+    if (requestid) {
+      data.push(requestid);
+      arguments.push("id");
+    }
+
+    let updateStatement = UpdateStatement(
+      "payroll_approval_ot",
+      "pao",
+      columns,
+      arguments
+    );
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -4879,6 +4969,180 @@ router.post("/getotmeal", verifyJWT, (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
+router.post("/submit", verifyJWT,(req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let applieddate =  currentDate.format("YYYY-MM-DD HH:mm:ss");
+    const {
+      clockin,
+      clockout,
+      attendancedate,
+      payroll_date,
+      subgroupid,
+      status,
+      image,
+      otmeal_amount,
+    } = req.body;
+    let totalovertime = '0';
+    let approvalcount = '0';
+
+    let sql = InsertStatement("ot_meal_allowances", "oma", [
+      "employeeid",
+      "attendancedate",
+      "clockin",
+      "clockout",
+      "totalovertime",
+      "otmeal_amount",
+      "payroll_date",
+      "status",
+      "subgroupid",
+      "image",
+      "approvalcount",
+      "applieddate",
+    ]);
+
+    let data = [
+      [
+        employeeid,
+        attendancedate,
+        clockin,
+        clockout,
+        totalovertime,
+        otmeal_amount,
+        payroll_date,
+        status,
+        subgroupid,
+        image,
+        approvalcount,
+        applieddate,
+      ],
+    ];
+
+    let checkStatement = SelectStatement(
+      "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
+      [employeeid, attendancedate, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            res.json(JsonSuccess());
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error))
+  }
+});
+
+router.post("/getattendance", verifyJWT,(req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let attendancedate = req.body.attendancedate;
+    
+    let sql = `
+    SELECT
+    DATE_FORMAT(ma_clockin, '%Y-%m-%dT%H:%i') AS ma_clockin,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%dT%H:%i') AS ma_clockout
+    FROM master_attendance
+    WHERE ma_employeeid = '${employeeid}'
+    AND ma_attendancedate = '${attendancedate}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getapprover", verifyJWT,(req, res) => {
+  try {
+    let subgroup = req.body.subgroup;
+    let sql = `SELECT
+    CONCAT(me_lastname,' ',me_firstname) as us_fullname
+    FROM user_subgroup
+    INNER JOIN master_user ON user_subgroup.us_userid = mu_userid
+    INNER JOIN master_employee ON master_user.mu_employeeid = me_id
+    WHERE us_subgroupid = '${subgroup}'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "us_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error))
+  }
+});
+
+
+router.post("/cancelotmeal", verifyJWT, (req, res) => {
+  try {
+    let requestid = req.body.requestid;
+    let requeststatus = "Cancel";
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (requeststatus) {
+      data.push(requeststatus);
+      columns.push("status");
+    }
+
+    if (requestid) {
+      data.push(requestid);
+      arguments.push("mealid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "ot_meal_allowances",
+      "oma",
+      columns,
+      arguments
+    );
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+      res.json(JsonSuccess());
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 
 //#endregion
 

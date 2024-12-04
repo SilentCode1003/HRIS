@@ -369,6 +369,14 @@
                 button: "OK!",
               });
               LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "You Already Have a CoA Request",
+                icon: "warning",
+                button: "OK!",
+              });
+              LoadTable();
             }
           },
           error: function (err) {
