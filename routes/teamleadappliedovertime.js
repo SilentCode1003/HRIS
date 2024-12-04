@@ -95,7 +95,7 @@ router.post("/getotapproval", (req, res) => {
     pao_overtimeimage,
     pao_subgroupid,
     ma_locationIn as pao_locationIn,
-    ma_locationOut as pao_locationOut
+    ma_locationOut as pao_locationOut,
     (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
     FROM payroll_approval_ot
     INNER JOIN
