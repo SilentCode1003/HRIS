@@ -142,7 +142,8 @@ router.post("/getotapproval", (req, res) => {
     DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_reason,
     pao_status,
-    s_name as pao_subgroupid
+    s_name as pao_subgroupid,
+    (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
     from payroll_approval_ot
     INNER JOIN subgroup on payroll_approval_ot.pao_subgroupid = s_id
     where pao_id = '${approveot_id}'`;

@@ -13,7 +13,6 @@
     </div>
   </div>
 
-
       <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -242,11 +241,18 @@
                                 <div class="col">
                                     <label for="editstatus" class="form-label">Subgroup</label>
                                     <select class="form-control border-form-modal" id="addappliedsubgroup" name="addappliedsubgroup">
+                                        <option selected disabled>Choose Sub Group</option>
                                     </select>
                                 </div>
                             </div>
                             <br>
                             <div class="row g-3">
+                                <div class="col">
+                                    <label for="approverList">Authorized Approvers</label>
+                                    <div class="form-floating">
+                                      <ul id="approverList"></ul>
+                                    </div>
+                                </div> 
                                 <div class="col">
                                     <label for="editreason" class="form-label">Reason :</label>
                                     <textarea class="form-control border-form-modal" id="addappliedotreason" name="addappliedotreason"></textarea>
@@ -365,10 +371,18 @@
                                 <div class="col">
                                     <label for="editstatus" class="form-label">Subgroup</label>
                                     <select class="form-control border-form-modal" id="appliedsubgroup" name="appliedsubgroup">
+                                        <option selected disabled>Choose Sub Group</option>
                                     </select>
                                 </div>
                             </div>
+                            <br>
                             <div class="row g-3">
+                                <div class="col">
+                                    <label for="approverList">Authorized Approvers</label>
+                                    <div class="form-floating">
+                                      <ul id="approverListAutomated"></ul>
+                                    </div>
+                                </div> 
                                 <div class="col">
                                     <label for="editreason" class="form-label">Reason :</label>
                                     <textarea class="form-control border-form-modal" id="appliedotreason" name="appliedotreason"></textarea>

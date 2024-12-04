@@ -11,7 +11,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("a5dc1b6acceb639505e0094d58655d29", (err, encrypted) => {
+Decrypter("7e00a445c57b4559347fc7f92558c807", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });

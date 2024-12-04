@@ -299,53 +299,6 @@ router.post("/gethomestatus2", (req, res) => {
   }
 });
 
-// router.post("/exportfile", async (req, res) => {
-//   try {
-//     let startdate = req.body.startdate;
-//     let enddate = req.body.enddate;
-//     let sql = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
-
-//     const result = await mysql.mysqlQueryPromise(sql);
-
-//     const jsonData = JSON.parse(JSON.stringify(result[0]));
-
-//     if (jsonData.length === 0) {
-//       return res.status(404).json({ msg: "No data found" });
-//     }
-
-//     const headers = Object.keys(jsonData[0]);
-
-//     const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
-//     const workbook = XLSX.utils.book_new();
-//     const worksheetName = `${startdate}_${enddate}`;
-//     XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
-
-//     const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
-//     worksheet["!cols"] = [];
-//     for (let i = 0; i < columnCount; i++) {
-//       if (i === 0) {
-//         worksheet["!cols"].push({ wch: 30 });
-//       } else {
-//         worksheet["!cols"].push({ wch: 20 });
-//       }
-//     }
-//     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
-
-//     res.setHeader(
-//       "Content-Disposition",
-//       `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`
-//     );
-//     res.setHeader(
-//       "Content-Type",
-//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );
-//     res.send(excelBuffer);
-//   } catch (error) {
-//     console.error("Error:", error);
-//     res.status(500).json({ msg: "error", data: error });
-//   }
-// });
-
 router.post("/exportfile", async (req, res) => {
   try {
     let startdate = req.body.startdate;
@@ -447,7 +400,7 @@ router.post("/exportfile", async (req, res) => {
 
 router.post("/exportreports", async (req, res) => {
   try {
-    const { startdate, enddate } = req.body;
+    const { startdate, enddate, departmentids } = req.body;
 
     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
 
@@ -473,14 +426,21 @@ router.post("/exportreports", async (req, res) => {
       throw new Error("No attendance results found");
     }
     const attendanceData = JSON.parse(JSON.stringify(attendanceResults));
+    const filteredSummaryData = departmentids.includes("all")
+      ? summaryData
+      : summaryData.filter((record) => departmentids.includes(record.departmentId.toString()));
+
+    const filteredAttendanceData = departmentids.includes("all")
+      ? attendanceData
+      : attendanceData.filter((record) => departmentids.includes(record.departmentId.toString()));
 
     const workbook = XLSX.utils.book_new();
 
-    if (summaryData.length > 0) {
-      const worksheetSummary = XLSX.utils.json_to_sheet(summaryData, {
-        header: Object.keys(summaryData[0]),
+    if (filteredSummaryData.length > 0) {
+      const worksheetSummary = XLSX.utils.json_to_sheet(filteredSummaryData, {
+        header: Object.keys(filteredSummaryData[0]),
       });
-      adjustColumnWidths(worksheetSummary, summaryData);
+      adjustColumnWidths(worksheetSummary, filteredSummaryData);
       formatHeaders(worksheetSummary);
       XLSX.utils.book_append_sheet(
         workbook,
@@ -490,8 +450,8 @@ router.post("/exportreports", async (req, res) => {
     }
 
     const groupedData = {};
-    attendanceData.forEach((record) => {
-      const { employeeid, fullname } = record; 
+    filteredAttendanceData.forEach((record) => {
+      const { employeeid, fullname } = record;
       if (!employeeid || !fullname) {
         console.warn("Missing employeeid or fullname in record:", record);
         return;
@@ -521,7 +481,7 @@ router.post("/exportreports", async (req, res) => {
           const cell = worksheetEmployee[cellAddress];
           if (cell && cell.t === "s") {
             const date = new Date(cell.v);
-            cell.v = date.toISOString().split("T")[0]; 
+            cell.v = date.toISOString().split("T")[0];
             cell.t = "s";
           }
         }
@@ -546,6 +506,7 @@ router.post("/exportreports", async (req, res) => {
     res.status(500).json({ msg: "error", data: error.message });
   }
 });
+
 
 function adjustColumnWidths(worksheet, data) {
   const cols = [];

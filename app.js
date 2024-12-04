@@ -176,6 +176,7 @@ var eportaldtr = require("./routes/eportaldtr");
 var teamleadapprovedotmealRouter = require("./routes/teamleadapprovedotmeal");
 var eportalobRouter = require("./routes/eportalob");
 var eportalundertime = require("./routes/eportalundertime");
+var teamleadmanualotmealRouter = require("./routes/teamleadmanualotmeal");
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -363,6 +364,8 @@ app.use("/eportaldtr", eportaldtr);
 app.use("/teamleadapprovedotmeal", teamleadapprovedotmealRouter);
 app.use("/eportalob", eportalobRouter);
 app.use("/eportalundertime", eportalundertime);
+app.use("/teamleadmanualotmeal", teamleadmanualotmealRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
