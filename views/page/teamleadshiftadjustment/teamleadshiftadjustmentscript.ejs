@@ -137,128 +137,6 @@
       });
     }
 
-    // $("#csemployeename").on("change", function () {
-    //   let employeeid = $(this).val();
-    //   $("#actualdate").val("");
-    //   $("#targetdate").val("");
-
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/teamleadshiftadjustment/viewactualrd",
-    //     data: {
-    //       employeeid: employeeid,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         let dates = result.data.map((item) => item.forecast_date);
-    //         console.log("Blocked Dates:", dates);
-    //         $("#actualdate").flatpickr({
-    //           enable: dates,
-    //           onChange: function (selectedDates, dateStr) {
-    //             if (selectedDates.length > 0) {
-    //               let selectedDate = new Date(selectedDates[0]);
-    //               let startOfWeek = new Date(selectedDate);
-    //               startOfWeek.setDate(
-    //                 selectedDate.getDate() - selectedDate.getDay()
-    //               );
-    //               let endOfWeek = new Date(startOfWeek);
-    //               endOfWeek.setDate(startOfWeek.getDate() + 6);
-    //               let formatDate = (date) => date.toISOString().split("T")[0];
-    //               let weekDates = [];
-    //               for (
-    //                 let d = new Date(startOfWeek);
-    //                 d <= endOfWeek;
-    //                 d.setDate(d.getDate() + 1)
-    //               ) {
-    //                 weekDates.push(formatDate(new Date(d)));
-    //               }
-    //               let validWeekDates = weekDates.filter(
-    //                 (date) => !dates.includes(date)
-    //               );
-
-    //               console.log(
-    //                 "Valid Week Dates (excluding API dates):",
-    //                 validWeekDates
-    //               );
-    //               $("#targetdate").flatpickr({
-    //                 enable: validWeekDates,
-    //               });
-    //             }
-    //           },
-    //         });
-    //       }
-    //     },
-    //     error: function (err) {
-    //       console.error("An error occurred while fetching employee data", err);
-    //       swal("An error occurred while fetching employee data", "", "error");
-    //     },
-    //   });
-    // });
-    // $("#csemployeename").on("change", function () {
-    //   let employeeid = $(this).val();
-    //   $("#actualdate").val("");
-    //   $("#targetdate").val("");
-
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/teamleadshiftadjustment/viewactualrd",
-    //     data: {
-    //       employeeid: employeeid,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         let dates = result.data.map((item) => item.forecast_date);
-    //         console.log("Blocked Dates:", dates);
-    //         $("#actualdate").flatpickr({
-    //           enable: dates,
-    //           onChange: function (selectedDates, dateStr) {
-    //             if (selectedDates.length > 0) {
-    //               let selectedDate = new Date(selectedDates[0]);
-    //               let startOfWeek = new Date(selectedDate);
-    //               if (selectedDate.getDay() === 6) {
-    //                 startOfWeek.setDate(selectedDate.getDate() - 1);
-    //               } else {
-    //                 startOfWeek.setDate(
-    //                   selectedDate.getDate() + selectedDate.getDay()
-    //                 );
-    //               }
-    //               let endOfWeek = new Date(startOfWeek);
-    //               endOfWeek.setDate(startOfWeek.getDate() + 6);
-    //               let formatDate = (date) => date.toISOString().split("T")[0];
-
-    //               let weekDates = [];
-    //               for (
-    //                 let d = new Date(startOfWeek);
-    //                 d <= endOfWeek;
-    //                 d.setDate(d.getDate() + 1)
-    //               ) {
-    //                 weekDates.push(formatDate(new Date(d)));
-    //               }
-    //               let validWeekDates = weekDates.filter(
-    //                 (date) => !dates.includes(date)
-    //               );
-
-    //               console.log(
-    //                 "Valid Week Dates (excluding API dates):",
-    //                 validWeekDates
-    //               );
-    //               $("#targetdate").val("");
-
-    //               $("#targetdate").flatpickr({
-    //                 enable: validWeekDates,
-    //               });
-    //             }
-    //           },
-    //         });
-    //       }
-    //     },
-    //     error: function (err) {
-    //       console.error("An error occurred while fetching employee data", err);
-    //       swal("An error occurred while fetching employee data", "", "error");
-    //     },
-    //   });
-    // });
-
     $("#csemployeename").on("change", function () {
       let employeeid = $(this).val();
       $("#actualdate").val("");
@@ -281,7 +159,6 @@
                 if (selectedDates.length > 0) {
                   let selectedDate = new Date(selectedDates[0]);
 
-                  // Calculate the start of the selected week (Sunday)
                   let startOfWeek = new Date(selectedDate);
                   if (selectedDate.getDay() === 6) {
                     startOfWeek.setDate(selectedDate.getDate() - 1);
@@ -291,11 +168,9 @@
                     );
                   }
 
-                  // Calculate the start of the previous week
                   let startOfPrevWeek = new Date(startOfWeek);
                   startOfPrevWeek.setDate(startOfPrevWeek.getDate() - 14);
 
-                  // Combine dates for the current and previous week
                   let formatDate = (date) => date.toISOString().split("T")[0];
                   let combinedWeekDates = [];
 
@@ -317,7 +192,6 @@
                     combinedWeekDates.push(formatDate(new Date(d)));
                   }
 
-                  // Exclude blocked dates (from API)
                   let validDates = combinedWeekDates.filter(
                     (date) => !dates.includes(date)
                   );
@@ -328,7 +202,6 @@
                   );
                   $("#targetdate").val("");
 
-                  // Initialize flatpickr for the target date
                   $("#targetdate").flatpickr({
                     enable: validDates,
                   });
@@ -375,17 +248,36 @@
             actualrddate: actualrddate,
           },
           success: function (result) {
-            if (result.msg == "success") {
+            if (result.msg === "success") {
               swal(
                 "Save Successfully",
-                "You clicked the button!",
+                "The shift change has been saved.",
                 "success"
               ).then((result) => {
                 window.location.reload();
               });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Error", "This combination already exists.", "error");
+            } else if (result.msg === "exist") {
+              swal(
+                "Error",
+                "This combination of Actual RD Date and Target RD Date already exists.",
+                "error"
+              );
+            } else if (result === "Actual Date Exist") {
+              swal("Error", "The actual RD date already exists.", "error");
+            } else if (result === "Target Date Exist") {
+              swal("Error", "The target RD date already exists.", "error");
+            } else if (result.msg === "validation_error") {
+              swal(
+                "Validation Error",
+                result.message || "Please check the input data.",
+                "error"
+              );
+            } else {
+              swal(
+                "Error",
+                "An unexpected error occurred. Please try again.",
+                "error"
+              );
             }
           },
           error: function (err) {
@@ -444,334 +336,143 @@
       changeshift = dataRow[0];
     });
 
-    // $(document).on("click", "#editBtn", function () {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/change_shift/getchange_shift",
-    //     data: {
-    //       changeshift: changeshift,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         const existingData = result.data;
-
-    //         $.each(existingData, (key, item) => {
-    //           $("#editcsemployeename").val(item.employeeid);
-    //           $("#editactualdate").val(item.actualrd);
-    //           $("#edittargetdate").val(item.changerd);
-    //           $("#editshiftstatus").val(item.shiftstatus);
-    //         });
-    //       } else {
-    //         swal("Error fetching employee data", msg, "error");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       console.error("An error occurred while fetching employee data", err);
-    //       swal("An error occurred while fetching employee data", msg, "error");
-    //     },
-    //   });
-    // });
-
-    // $(document).on("click", "#editBtn", function () {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/change_shift/getchange_shift",
-    //     data: {
-    //       changeshift: changeshift,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         const existingData = result.data;
-
-    //         $.each(existingData, (key, item) => {
-    //           $("#editcsemployeename").val(item.employeeid);
-    //           $("#editactualdate").val(item.actualrd);
-    //           $("#edittargetdate").val(item.changerd);
-    //           $("#editshiftstatus").val(item.shiftstatus);
-    //           $.ajax({
-    //             type: "POST",
-    //             url: "/teamleadshiftadjustment/viewactualrd",
-    //             data: {
-    //               employeeid: item.employeeid,
-    //             },
-    //             success: function (datesResult) {
-    //               if (datesResult.msg === "success") {
-    //                 const validDates = datesResult.data.map(
-    //                   (date) => date.forecast_date
-    //                 );
-
-    //                 const formattedValidDates = validDates.map((date) => {
-    //                   return new Date(date).toISOString().split("T")[0];
-    //                 });
-
-    //                 if (!$("#editactualdate").data("flatpickr")) {
-    //                   $("#editactualdate").flatpickr({
-    //                     enable: formattedValidDates,
-    //                     onChange: function (selectedDates, dateStr) {
-    //                       $("#edittargetdate").val("");
-    //                       if (selectedDates.length > 0) {
-    //                         let selectedDate = new Date(selectedDates[0]);
-    //                         let startOfWeek = new Date(selectedDate);
-
-    //                         if (selectedDate.getDay() === 0) {
-    //                           startOfWeek.setDate(selectedDate.getDate());
-    //                         } else {
-    //                           startOfWeek.setDate(
-    //                             selectedDate.getDate() - selectedDate.getDay()
-    //                           );
-    //                         }
-
-    //                         let endOfWeek = new Date(startOfWeek);
-    //                         endOfWeek.setDate(startOfWeek.getDate() + 14);
-    //                         let formatDate = (date) =>
-    //                           date.toISOString().split("T")[0];
-    //                         let weekDates = [];
-    //                         for (
-    //                           let d = new Date(startOfWeek);
-    //                           d <= endOfWeek;
-    //                           d.setDate(d.getDate() + 1)
-    //                         ) {
-    //                           weekDates.push(formatDate(new Date(d)));
-    //                         }
-
-    //                         if ($("#edittargetdate").data("flatpickr")) {
-    //                           $("#edittargetdate").flatpickr().destroy();
-    //                         }
-
-    //                         $("#edittargetdate").flatpickr({
-    //                           enable: weekDates,
-    //                           disable: [
-    //                             ...formattedValidDates,
-    //                             $("#editactualdate").val(),
-    //                           ].filter(
-    //                             (date) => date !== $("#editactualdate").val()
-    //                           ),
-    //                         });
-    //                       }
-    //                     },
-    //                   });
-    //                 }
-    //                 if (!$("#edittargetdate").data("flatpickr")) {
-    //                   let selectedDate = new Date($("#edittargetdate").val());
-
-    //                   let startOfWeek = new Date(selectedDate);
-    //                   if (selectedDate.getDay() !== 0) {
-    //                     startOfWeek.setDate(
-    //                       selectedDate.getDate() - selectedDate.getDay()
-    //                     );
-    //                   }
-
-    //                   let startOfRange = new Date(startOfWeek);
-    //                   startOfRange.setDate(startOfRange.getDate() - 14);
-
-    //                   let endOfRange = new Date(startOfWeek);
-    //                   endOfRange.setDate(endOfRange.getDate() + 20);
-
-    //                   let rangeDates = [];
-    //                   let formatDate = (date) =>
-    //                     date.toISOString().split("T")[0];
-    //                   for (
-    //                     let d = new Date(startOfRange);
-    //                     d <= endOfRange;
-    //                     d.setDate(d.getDate() + 1)
-    //                   ) {
-    //                     rangeDates.push(formatDate(new Date(d)));
-    //                   }
-
-    //                   let currentWeekDates = [];
-    //                   let endOfWeek = new Date(startOfWeek);
-    //                   endOfWeek.setDate(startOfWeek.getDate() + 6);
-    //                   for (
-    //                     let d = new Date(startOfWeek);
-    //                     d <= endOfWeek;
-    //                     d.setDate(d.getDate() + 1)
-    //                   ) {
-    //                     currentWeekDates.push(formatDate(new Date(d)));
-    //                   }
-
-    //                   let actualDate = $("#editactualdate").val();
-    //                   let formattedActualDate = new Date(actualDate)
-    //                     .toISOString()
-    //                     .split("T")[0];
-
-    //                   $("#edittargetdate").flatpickr({
-    //                     enable: rangeDates,
-    //                     disable: [...formattedValidDates, formattedActualDate],
-    //                     onDayCreate: function (dObj, dStr, fp, dayElem) {
-    //                       if (dStr === formattedActualDate) {
-    //                         dayElem.classList.add("disabled");
-    //                       }
-    //                     },
-    //                   });
-    //                 }
-    //               } else {
-    //                 swal(
-    //                   "Error fetching allowed dates",
-    //                   datesResult.msg,
-    //                   "error"
-    //                 );
-    //               }
-    //             },
-    //             error: function (err) {
-    //               console.error(
-    //                 "An error occurred while fetching allowed dates",
-    //                 err
-    //               );
-    //               swal(
-    //                 "An error occurred while fetching allowed dates",
-    //                 "",
-    //                 "error"
-    //               );
-    //             },
-    //           });
-    //         });
-    //       } else {
-    //         swal("Error fetching employee data", result.msg, "error");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       console.error("An error occurred while fetching employee data", err);
-    //       swal("An error occurred while fetching employee data", "", "error");
-    //     },
-    //   });
-    // });
-
     $(document).on("click", "#editBtn", function () {
-  $.ajax({
-    type: "POST",
-    url: "/change_shift/getchange_shift",
-    data: {
-      changeshift: changeshift,
-    },
-    success: function (result) {
-      if (result.msg === "success") {
-        const existingData = result.data;
+      $.ajax({
+        type: "POST",
+        url: "/change_shift/getchange_shift",
+        data: {
+          changeshift: changeshift,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
 
-        $.each(existingData, (key, item) => {
-          $("#editcsemployeename").val(item.employeeid);
-          $("#editactualdate").val(item.actualrd);
-          $("#edittargetdate").val(item.changerd);
-          $("#editshiftstatus").val(item.shiftstatus);
+            $.each(existingData, (key, item) => {
+              $("#editcsemployeename").val(item.employeeid);
+              $("#editactualdate").val(item.actualrd);
+              $("#edittargetdate").val(item.changerd);
+              $("#editshiftstatus").val(item.shiftstatus);
 
-          $.ajax({
-            type: "POST",
-            url: "/teamleadshiftadjustment/viewactualrd",
-            data: {
-              employeeid: item.employeeid,
-            },
-            success: function (datesResult) {
-              if (datesResult.msg === "success") {
-                const validDates = datesResult.data.map(
-                  (date) => date.forecast_date
-                );
+              $.ajax({
+                type: "POST",
+                url: "/teamleadshiftadjustment/viewactualrd",
+                data: {
+                  employeeid: item.employeeid,
+                },
+                success: function (datesResult) {
+                  if (datesResult.msg === "success") {
+                    const validDates = datesResult.data.map(
+                      (date) => date.forecast_date
+                    );
 
-                const formattedValidDates = validDates.map((date) =>
-                  new Date(date).toISOString().split("T")[0]
-                );
+                    const formattedValidDates = validDates.map(
+                      (date) => new Date(date).toISOString().split("T")[0]
+                    );
 
-                // Initialize flatpickr for editactualdate
-                if (!$("#editactualdate").data("flatpickr")) {
-                  $("#editactualdate").flatpickr({
-                    enable: formattedValidDates, // Allow only the valid dates
-                    onChange: function (selectedDates, dateStr) {
-                      $("#edittargetdate").val(""); // Reset target date
-                      if (selectedDates.length > 0) {
-                        const selectedDate = new Date(selectedDates[0]);
+                    if (!$("#editactualdate").data("flatpickr")) {
+                      $("#editactualdate").flatpickr({
+                        enable: formattedValidDates,
+                        onChange: function (selectedDates) {
+                          //$("#edittargetdate").val("");
+                          if (selectedDates.length > 0) {
+                            const selectedDate = new Date(selectedDates[0]);
 
-                        let startOfWeek = new Date(selectedDate);
-                        if (selectedDate.getDay() === 0) {
-                          startOfWeek.setDate(selectedDate.getDate());
-                        } else {
-                          startOfWeek.setDate(
-                            selectedDate.getDate() - selectedDate.getDay()
-                          );
-                        }
+                            let startOfRange = new Date(selectedDate);
+                            startOfRange.setDate(selectedDate.getDate() - 14);
 
-                        let endOfWeek = new Date(startOfWeek);
-                        endOfWeek.setDate(startOfWeek.getDate() + 14);
+                            let endOfRange = new Date(selectedDate);
+                            endOfRange.setDate(selectedDate.getDate() + 14);
 
-                        let weekDates = [];
-                        const formatDate = (date) =>
-                          date.toISOString().split("T")[0];
-                        for (
-                          let d = new Date(startOfWeek);
-                          d <= endOfWeek;
-                          d.setDate(d.getDate() + 1)
-                        ) {
-                          weekDates.push(formatDate(new Date(d)));
-                        }
+                            let rangeDates = [];
+                            const formatDate = (date) =>
+                              date.toISOString().split("T")[0];
+                            for (
+                              let d = new Date(startOfRange);
+                              d <= endOfRange;
+                              d.setDate(d.getDate() + 1)
+                            ) {
+                              rangeDates.push(formatDate(new Date(d)));
+                            }
 
-                        // Destroy and reinitialize edittargetdate flatpickr
-                        if ($("#edittargetdate").data("flatpickr")) {
-                          $("#edittargetdate").flatpickr().destroy();
-                        }
+                            if ($("#edittargetdate").data("flatpickr")) {
+                              $("#edittargetdate").flatpickr().destroy();
+                            }
 
-                        $("#edittargetdate").flatpickr({
-                          enable: weekDates,
-                          disable: [
-                            ...formattedValidDates,
-                            $("#editactualdate").val(),
-                          ].filter(
-                            (date) => date !== $("#editactualdate").val()
-                          ),
-                        });
-                      }
-                    },
-                  });
-                }
+                            // $("#edittargetdate").flatpickr({
+                            //   enable: rangeDates,
+                            //   disable: formattedValidDates,
+                            // });
 
-                // Initialize flatpickr for edittargetdate
-                if (!$("#edittargetdate").data("flatpickr")) {
-                  const actualDate = $("#editactualdate").val();
-                  const formattedActualDate = new Date(actualDate)
-                    .toISOString()
-                    .split("T")[0];
+                            $("#edittargetdate").flatpickr({
+                              disable: [
+                                ...formattedValidDates,
+                                formattedActualDate,
+                              ],
+                              onDayCreate: function (dObj, dStr, fp, dayElem) {
+                                if (
+                                  formattedValidDates.includes(
+                                    dayElem.dateObj.toISOString().split("T")[0]
+                                  )
+                                ) {
+                                  dayElem.classList.add("disabled");
+                                }
+                              },
+                            });
+                          }
+                        },
+                      });
+                    }
 
-                  $("#edittargetdate").flatpickr({
-                    disable: [...formattedValidDates, formattedActualDate], // Disable all returned dates and actual date
-                    onDayCreate: function (dObj, dStr, fp, dayElem) {
-                      if (
-                        formattedValidDates.includes(
-                          dayElem.dateObj.toISOString().split("T")[0]
-                        )
-                      ) {
-                        dayElem.classList.add("disabled");
-                      }
-                    },
-                  });
-                }
-              } else {
-                swal(
-                  "Error fetching allowed dates",
-                  datesResult.msg,
-                  "error"
-                );
-              }
-            },
-            error: function (err) {
-              console.error(
-                "An error occurred while fetching allowed dates",
-                err
-              );
-              swal(
-                "An error occurred while fetching allowed dates",
-                "",
-                "error"
-              );
-            },
-          });
-        });
-      } else {
-        swal("Error fetching employee data", result.msg, "error");
-      }
-    },
-    error: function (err) {
-      console.error("An error occurred while fetching employee data", err);
-      swal("An error occurred while fetching employee data", "", "error");
-    },
-  });
-});
+                    if (!$("#edittargetdate").data("flatpickr")) {
+                      const actualDate = $("#editactualdate").val();
+                      const formattedActualDate = new Date(actualDate)
+                        .toISOString()
+                        .split("T")[0];
 
+                      $("#edittargetdate").flatpickr({
+                        disable: [...formattedValidDates, formattedActualDate],
+                        onDayCreate: function (dObj, dStr, fp, dayElem) {
+                          if (
+                            formattedValidDates.includes(
+                              dayElem.dateObj.toISOString().split("T")[0]
+                            )
+                          ) {
+                            dayElem.classList.add("disabled");
+                          }
+                        },
+                      });
+                    }
+                  } else {
+                    swal(
+                      "Error fetching allowed dates",
+                      datesResult.msg,
+                      "error"
+                    );
+                  }
+                },
+                error: function (err) {
+                  console.error(
+                    "An error occurred while fetching allowed dates",
+                    err
+                  );
+                  swal(
+                    "An error occurred while fetching allowed dates",
+                    "",
+                    "error"
+                  );
+                },
+              });
+            });
+          } else {
+            swal("Error fetching employee data", result.msg, "error");
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", "", "error");
+        },
+      });
+    });
 
     $(function () {
       var dtToday = new Date();
@@ -847,22 +548,29 @@
           },
           success: function (result) {
             if (result.msg === "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then(() => {
+              swal(
+                "Save Successfully",
+                "The shift change has been saved.",
+                "success"
+              ).then((result) => {
                 window.location.reload();
               });
-            } else if (result.msg === "exist") {
+            } else if (result === "Actual Date Exist") {
+              swal("Error", "The actual RD date already exists.", "error");
+            } else if (result === "Target Date Exist") {
+              swal("Error", "The target RD date already exists.", "error");
+            } else if (result.msg === "validation_error") {
               swal(
-                "Exist",
-                "Maybe The Department and Approver Count combination already exists.",
-                "warning"
+                "Validation Error",
+                result.message || "Please check the input data.",
+                "error"
               );
             } else {
-              swal("Error", "An error occurred while updating.", "error");
+              swal(
+                "Error",
+                "An unexpected error occurred. Please try again.",
+                "error"
+              );
             }
           },
           error: function (err) {

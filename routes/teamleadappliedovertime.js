@@ -86,9 +86,9 @@ router.post("/getotapproval", (req, res) => {
         DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
         DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
         TIME_FORMAT(SEC_TO_TIME((pao_night_differentials * 3600) + (pao_night_minutes_ot * 60)), '%H:%i') AS pao_night_differentials,
-        TIME_FORMAT(SEC_TO_TIME((pao_early_ot * 3600) + (0 * 60)), '%H:%i') AS pao_early_ot,
+        TIME_FORMAT(SEC_TO_TIME((pao_early_ot * 3600) + (pao_early_minutes_ot * 60)), '%H:%i') AS pao_early_ot,
         TIME_FORMAT(SEC_TO_TIME((pao_normal_ot * 3600) + (pao_minutes_ot * 60)), '%H:%i') AS pao_normal_ot,
-        TIME_FORMAT(SEC_TO_TIME(((pao_night_differentials + pao_normal_ot + pao_early_ot) * 3600) + ((pao_minutes_ot + pao_night_minutes_ot) * 60)), '%H:%i') AS pao_total_hours,
+        TIME_FORMAT(SEC_TO_TIME(((pao_night_differentials + pao_normal_ot + pao_early_ot) * 3600) + ((pao_minutes_ot + pao_night_minutes_ot + pao_early_minutes_ot) * 60)), '%H:%i') AS pao_total_hours,
         DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
         pao_reason,
         pao_status,
@@ -96,6 +96,7 @@ router.post("/getotapproval", (req, res) => {
         pao_subgroupid,
         ma_locationIn AS pao_locationIn,
         ma_locationOut AS pao_locationOut,
+        pao_applied_date as pao_applied_date,
         (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
     FROM 
         payroll_approval_ot

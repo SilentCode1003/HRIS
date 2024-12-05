@@ -190,6 +190,7 @@
               base64String = item.overtimeimage;
               $("#appliedotfullname").val(item.fullname);
               $("#appliedattendancedate").val(item.attendancedate);
+              $("#applieddateemployee").val(item.applied_date)
               $("#appliedclockin").val(item.clockin);
               $("#appliedclockout").val(item.clockout);
               $("#appliedclockinlocation").val(item.locationIn);
@@ -261,7 +262,7 @@
                 "You clicked the button!",
                 "success"
               ).then((results) => {
-                $("#otapprovalmodal").modal("show");
+                $("#otapprovalmodal").modal("hide");
                 LoadTable();
               });
             } else {

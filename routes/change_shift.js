@@ -59,7 +59,7 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/save", (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
@@ -79,8 +79,8 @@ router.post("/save", (req, res) => {
     ];
 
     let checkStatement = SelectStatement(
-      "select * from change_shift where cs_employeeid =? and cs_actualrd= ?",
-      [employeeid, actualrddate]
+      "select * from change_shift where cs_employeeid =? and cs_actualrd=? or cs_employeeid =? and  cs_changerd =?",
+      [employeeid, actualrddate, employeeid, targetrddate]
     );
     Check(checkStatement)
       .then((result) => {
@@ -103,6 +103,112 @@ router.post("/save", (req, res) => {
       });
   } catch (error) {
     console.log(err);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+// router.post("/save", async (req, res) => {
+//   try {
+//     let createby = req.session.fullname;
+//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+//     let status = "Active";
+//     const { employeeid, targetrddate, actualrddate } = req.body;
+
+//     if (!employeeid || !targetrddate || !actualrddate) {
+//       return res.json(JsonWarningResponse("Employee ID, Actual RD Date, and Target RD Date are required"));
+//     }
+
+//     let sql = InsertStatement("change_shift", "cs", [
+//       "employeeid",
+//       "actualrd",
+//       "changerd",
+//       "shiftstatus",
+//       "createby",
+//       "createdate",
+//     ]);
+//     let data = [
+//       [employeeid, actualrddate, targetrddate, status, createby, createdate],
+//     ];
+
+//     let checkStatement = SelectStatement(
+//       "SELECT * FROM change_shift WHERE (cs_employeeid = ? AND cs_actualrd = ?) OR (cs_employeeid = ? AND cs_changerd = ?)",
+//       [employeeid, actualrddate, employeeid, targetrddate]
+//     );
+
+//     const result = await Check(checkStatement);
+
+//     if (result.length > 0) {
+//       return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//     }
+
+//     InsertTable(sql, data, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(JsonErrorResponse(err));
+//       }
+
+//       return res.json(JsonSuccess());
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
+
+router.post("/save", async (req, res) => {
+  try {
+    let createby = req.session.fullname;
+    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    let status = "Active";
+    const { employeeid, targetrddate, actualrddate } = req.body;
+
+    let sql = InsertStatement("change_shift", "cs", [
+      "employeeid",
+      "actualrd",
+      "changerd",
+      "shiftstatus",
+      "createby",
+      "createdate",
+    ]);
+    let data = [
+      [employeeid, actualrddate, targetrddate, status, createby, createdate],
+    ];
+
+    let checkActual = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
+      [employeeid, actualrddate]
+    );
+
+    let checkTarget = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
+      [employeeid, targetrddate]
+    );
+
+    const actualResult = await Check(checkActual);
+    const targetResult = await Check(checkTarget);
+
+    if (actualResult.length > 0) {
+      return res.json("Actual Date Exist");
+    }
+
+    if (targetResult.length > 0) {
+      return res.json("Target Date Exist");
+    }
+
+    InsertTable(sql, data, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      return res.json(JsonSuccess());
+    });
+
+  } catch (error) {
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
@@ -140,7 +246,7 @@ router.post("/getchange_shift", (req, res) => {
   }
 });
 
-router.put("/edit", (req, res) => {
+router.put("/edit", async (req, res) => {
   try {
     const { changeshift, employeeid, actualrd, changerd, shiftstatus } =
       req.body;
@@ -193,27 +299,33 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    let checkStatement = SelectStatement(
-      "select * from change_shift where cs_employeeid = ? and cs_actualrd = ? and cs_changerd = ? and cs_shiftstatus = ? and cs_createby = ? and cs_createdate = ?",
-      [employeeid, actualrd, changerd, shiftstatus, createby, createdate]
+    let checkActual = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
+      [employeeid, actualrd]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
+    let checkTarget = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
+      [employeeid, changerd]
+    );
 
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
+
+    const actualResult = await Check(checkActual);
+    const targetResult = await Check(checkTarget);
+
+    if (actualResult.length > 0) {
+      return res.json("Actual Date Exist");
+    }
+
+    if (targetResult.length > 0) {
+      return res.json("Target Date Exist");
+    }
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json(JsonSuccess());
+    });
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
