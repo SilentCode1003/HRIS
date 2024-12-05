@@ -96,6 +96,7 @@ router.post("/getotapproval", (req, res) => {
         pao_subgroupid,
         ma_locationIn AS pao_locationIn,
         ma_locationOut AS pao_locationOut,
+        pao_applied_date as pao_applied_date,
         (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
     FROM 
         payroll_approval_ot
