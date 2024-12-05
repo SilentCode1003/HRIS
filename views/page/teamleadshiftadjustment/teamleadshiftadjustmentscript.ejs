@@ -1,3 +1,9 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
   let changeshift = "";
 
@@ -131,6 +137,128 @@
       });
     }
 
+    // $("#csemployeename").on("change", function () {
+    //   let employeeid = $(this).val();
+    //   $("#actualdate").val("");
+    //   $("#targetdate").val("");
+
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/teamleadshiftadjustment/viewactualrd",
+    //     data: {
+    //       employeeid: employeeid,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         let dates = result.data.map((item) => item.forecast_date);
+    //         console.log("Blocked Dates:", dates);
+    //         $("#actualdate").flatpickr({
+    //           enable: dates,
+    //           onChange: function (selectedDates, dateStr) {
+    //             if (selectedDates.length > 0) {
+    //               let selectedDate = new Date(selectedDates[0]);
+    //               let startOfWeek = new Date(selectedDate);
+    //               startOfWeek.setDate(
+    //                 selectedDate.getDate() - selectedDate.getDay()
+    //               );
+    //               let endOfWeek = new Date(startOfWeek);
+    //               endOfWeek.setDate(startOfWeek.getDate() + 6);
+    //               let formatDate = (date) => date.toISOString().split("T")[0];
+    //               let weekDates = [];
+    //               for (
+    //                 let d = new Date(startOfWeek);
+    //                 d <= endOfWeek;
+    //                 d.setDate(d.getDate() + 1)
+    //               ) {
+    //                 weekDates.push(formatDate(new Date(d)));
+    //               }
+    //               let validWeekDates = weekDates.filter(
+    //                 (date) => !dates.includes(date)
+    //               );
+
+    //               console.log(
+    //                 "Valid Week Dates (excluding API dates):",
+    //                 validWeekDates
+    //               );
+    //               $("#targetdate").flatpickr({
+    //                 enable: validWeekDates,
+    //               });
+    //             }
+    //           },
+    //         });
+    //       }
+    //     },
+    //     error: function (err) {
+    //       console.error("An error occurred while fetching employee data", err);
+    //       swal("An error occurred while fetching employee data", "", "error");
+    //     },
+    //   });
+    // });
+    $("#csemployeename").on("change", function () {
+      let employeeid = $(this).val();
+      $("#actualdate").val("");
+      $("#targetdate").val("");
+
+      $.ajax({
+        type: "POST",
+        url: "/teamleadshiftadjustment/viewactualrd",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            let dates = result.data.map((item) => item.forecast_date);
+            console.log("Blocked Dates:", dates);
+            $("#actualdate").flatpickr({
+              enable: dates,
+              onChange: function (selectedDates, dateStr) {
+                if (selectedDates.length > 0) {
+                  let selectedDate = new Date(selectedDates[0]);
+                  let startOfWeek = new Date(selectedDate);
+                  if (selectedDate.getDay() === 6) {
+                    startOfWeek.setDate(selectedDate.getDate() - 1);
+                  } else {
+                    startOfWeek.setDate(
+                      selectedDate.getDate() + selectedDate.getDay()
+                    );
+                  }
+                  let endOfWeek = new Date(startOfWeek);
+                  endOfWeek.setDate(startOfWeek.getDate() + 6);
+                  let formatDate = (date) => date.toISOString().split("T")[0];
+
+                  let weekDates = [];
+                  for (
+                    let d = new Date(startOfWeek);
+                    d <= endOfWeek;
+                    d.setDate(d.getDate() + 1)
+                  ) {
+                    weekDates.push(formatDate(new Date(d)));
+                  }
+                  let validWeekDates = weekDates.filter(
+                    (date) => !dates.includes(date)
+                  );
+
+                  console.log(
+                    "Valid Week Dates (excluding API dates):",
+                    validWeekDates
+                  );
+                  $("#targetdate").val("");
+
+                  $("#targetdate").flatpickr({
+                    enable: validWeekDates,
+                  });
+                }
+              },
+            });
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", "", "error");
+        },
+      });
+    });
+
     $(document).on("click", "#changeshiftsavebtn", function () {
       let employeeid = $("#csemployeename").val();
       let targetrddate = $("#targetdate").val();
@@ -231,6 +359,34 @@
       changeshift = dataRow[0];
     });
 
+    // $(document).on("click", "#editBtn", function () {
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/change_shift/getchange_shift",
+    //     data: {
+    //       changeshift: changeshift,
+    //     },
+    //     success: function (result) {
+    //       if (result.msg === "success") {
+    //         const existingData = result.data;
+
+    //         $.each(existingData, (key, item) => {
+    //           $("#editcsemployeename").val(item.employeeid);
+    //           $("#editactualdate").val(item.actualrd);
+    //           $("#edittargetdate").val(item.changerd);
+    //           $("#editshiftstatus").val(item.shiftstatus);
+    //         });
+    //       } else {
+    //         swal("Error fetching employee data", msg, "error");
+    //       }
+    //     },
+    //     error: function (err) {
+    //       console.error("An error occurred while fetching employee data", err);
+    //       swal("An error occurred while fetching employee data", msg, "error");
+    //     },
+    //   });
+    // });
+
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
@@ -247,14 +403,138 @@
               $("#editactualdate").val(item.actualrd);
               $("#edittargetdate").val(item.changerd);
               $("#editshiftstatus").val(item.shiftstatus);
+              $.ajax({
+                type: "POST",
+                url: "/teamleadshiftadjustment/viewactualrd",
+                data: {
+                  employeeid: item.employeeid,
+                },
+                success: function (datesResult) {
+                  if (datesResult.msg === "success") {
+                    const validDates = datesResult.data.map(
+                      (date) => date.forecast_date
+                    );
+
+                    const formattedValidDates = validDates.map((date) => {
+                      return new Date(date).toISOString().split("T")[0];
+                    });
+
+                    if (!$("#editactualdate").data("flatpickr")) {
+                      $("#editactualdate").flatpickr({
+                        enable: formattedValidDates,
+                        onChange: function (selectedDates, dateStr) {
+                          $("#edittargetdate").val("");
+                          if (selectedDates.length > 0) {
+                            let selectedDate = new Date(selectedDates[0]);
+                            let startOfWeek = new Date(selectedDate);
+
+                            if (selectedDate.getDay() === 0) {
+                              startOfWeek.setDate(selectedDate.getDate());
+                            } else {
+                              startOfWeek.setDate(
+                                selectedDate.getDate() - selectedDate.getDay()
+                              );
+                            }
+
+                            let endOfWeek = new Date(startOfWeek);
+                            endOfWeek.setDate(startOfWeek.getDate() + 6);
+                            let formatDate = (date) =>
+                              date.toISOString().split("T")[0];
+                            let weekDates = [];
+                            for (
+                              let d = new Date(startOfWeek);
+                              d <= endOfWeek;
+                              d.setDate(d.getDate() + 1)
+                            ) {
+                              weekDates.push(formatDate(new Date(d)));
+                            }
+
+                            if ($("#edittargetdate").data("flatpickr")) {
+                              $("#edittargetdate").flatpickr().destroy();
+                            }
+
+                            $("#edittargetdate").flatpickr({
+                              enable: weekDates,
+                              disable: [
+                                ...formattedValidDates,
+                                $("#editactualdate").val(),
+                              ].filter(
+                                (date) => date !== $("#editactualdate").val()
+                              ),
+                            });
+                          }
+                        },
+                      });
+                    }
+                    if (!$("#edittargetdate").data("flatpickr")) {
+                      let selectedDate = new Date($("#edittargetdate").val());
+                      let startOfWeek = new Date(selectedDate);
+                      if (selectedDate.getDay() !== 0) {
+                        startOfWeek.setDate(
+                          selectedDate.getDate() - selectedDate.getDay()
+                        );
+                      }
+
+                      let endOfWeek = new Date(startOfWeek);
+                      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+                      let weekDates = [];
+                      let formatDate = (date) =>
+                        date.toISOString().split("T")[0];
+                      for (
+                        let d = new Date(startOfWeek);
+                        d <= endOfWeek;
+                        d.setDate(d.getDate() + 1)
+                      ) {
+                        weekDates.push(formatDate(new Date(d))); 
+                      }
+
+                      let actualDate = $("#editactualdate").val();
+                      let formattedActualDate = new Date(actualDate)
+                        .toISOString()
+                        .split("T")[0];
+
+                      $("#edittargetdate").flatpickr({
+                        enable: weekDates, 
+                        disable: [
+                          ...formattedValidDates, 
+                          formattedActualDate,
+                        ],
+                        onDayCreate: function (dObj, dStr, fp, dayElem) {
+                          if (dStr === formattedActualDate) {
+                            dayElem.classList.add("disabled"); 
+                          }
+                        },
+                      });
+                    }
+                  } else {
+                    swal(
+                      "Error fetching allowed dates",
+                      datesResult.msg,
+                      "error"
+                    );
+                  }
+                },
+                error: function (err) {
+                  console.error(
+                    "An error occurred while fetching allowed dates",
+                    err
+                  );
+                  swal(
+                    "An error occurred while fetching allowed dates",
+                    "",
+                    "error"
+                  );
+                },
+              });
             });
           } else {
-            swal("Error fetching employee data", msg, "error");
+            swal("Error fetching employee data", result.msg, "error");
           }
         },
         error: function (err) {
           console.error("An error occurred while fetching employee data", err);
-          swal("An error occurred while fetching employee data", msg, "error");
+          swal("An error occurred while fetching employee data", "", "error");
         },
       });
     });
@@ -262,36 +542,29 @@
     $(function () {
       var dtToday = new Date();
 
-      // Get current date details
       var month = dtToday.getMonth() + 1;
       var day = dtToday.getDate();
       var year = dtToday.getFullYear();
 
-      // Pad the month and day with leading zeros if necessary
       if (month < 10) month = "0" + month.toString();
       if (day < 10) day = "0" + day.toString();
 
-      // Format the minimum date as YYYY-MM-DD
       var minDate = year + "-" + month + "-" + day;
 
-      // Set the minimum date for the edit fields
       $("#edittargetdate").attr("min", minDate);
       $("#editactualdate").attr("min", minDate);
 
-      // Event listener for date inputs to update the corresponding day name
       $('input[type="date"]').on("change", function () {
         var dateInput = this.value;
         var date = new Date(dateInput);
 
-        // Format the day name using Intl.DateTimeFormat
         var options = { weekday: "long" };
         var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
 
-        // Update the day name based on which edit date input was changed
         if (this.id === "edittargetdate") {
-          $("#edittargetdayName").val(dayName); // Target the corresponding day name field for target date
+          $("#edittargetdayName").val(dayName);
         } else if (this.id === "editactualdate") {
-          $("#editactualdayName").val(dayName); // Target the corresponding day name field for actual date
+          $("#editactualdayName").val(dayName);
         }
       });
     });
@@ -304,6 +577,10 @@
       let shiftstatus = $("#editshiftstatus").val();
 
       let message = "";
+
+      if (actualrd === changerd) {
+        message += "The Actual Rest Day must not be the Target Rest Day.";
+      }
 
       if (employeeid === "") {
         message += "employeeid ID is required. ";
