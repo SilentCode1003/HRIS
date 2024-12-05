@@ -179,6 +179,8 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
+            console.log(existingData,'data');
+            
 
             $.each(existingData, (key, item) => {
               $("#previewleave").attr(
@@ -218,69 +220,6 @@
       Fetch(`/eportaldtr/getdtr/${attendancedate}/${employeeid}`, (data) => {
         populateTable(data.data);
       });
-    });
-
-    $(document).on("click", "#otsavebutton", function () {
-      console.log("hit");
-      let id = approveot_id;
-      let requeststatus = $("#appliedstatus").val();
-      let comment = $("#otcomment").val();
-      let subgroupid = $("#subgroupid").val();
-
-      console.log(approveot_id, "LEAVE");
-      console.log(requeststatus, "LEAVE");
-      console.log(comment, "LEAVE");
-
-      var message = "";
-
-      if (requeststatus === null) {
-        message += "Status is required. ";
-      }
-
-      if (comment === "") {
-        message += "comment is required. ";
-      }
-
-      if (message !== "") {
-        swal("Oops!!!", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "/teamleadappliedovertime/ovetimeaction",
-          data: {
-            approveot_id: approveot_id,
-            status: requeststatus,
-            comment: comment,
-            subgroupid: subgroupid,
-            attendancedate: attendancedate,
-            clockin: clockin,
-            clockout: clockout,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else {
-              swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
-                button: "OK!",
-              });
-            }
-          },
-          error: function (err) {
-            swal("Data already exist!", "You clicked the button!", "warning");
-          },
-        });
-      }
     });
 
     $(document).on("click", "#otsavebutton", function () {
