@@ -222,49 +222,37 @@
       });
     });
 
+
     $(document).on("click", "#otsavebutton", function () {
-      console.log("HIT");
+      console.log("hit");
       let id = approveot_id;
-      let night_ot = $("#otnight").val();
-      let earlyot = $("#otearly").val();
-      let normal_ot = $("#otnormal").val();
-      let payrolldate = $("#otpayrolldate").val();
-      let overtimestatus = $("#otstatus").val();
-
+      let requeststatus = $("#appliedstatus").val();
+      let comment = $("#otcomment").val();
+      let subgroupid = $("#subgroupid").val();
+      console.log(approveot_id, "LEAVE");
+      console.log(requeststatus, "LEAVE");
+      console.log(comment, "LEAVE");
       var message = "";
-
-      if (night_ot === "") {
-        message += "departmentname is required. ";
+      if (requeststatus === null) {
+        message += "Status is required. ";
       }
-
-      if (earlyot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (normal_ot === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (payrolldate === "") {
-        message += "status is required. ";
-      }
-
-      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
-        message += "You Need to Approve or Disregard. ";
+      if (comment === "") {
+        message += "comment is required. ";
       }
       if (message !== "") {
-        swal("Validation Error", message, "error");
+        swal("Oops!!!", message, "error");
       } else {
         $.ajax({
           type: "POST",
-          url: "otapproval/update",
+          url: "/teamleadappliedovertime/ovetimeaction",
           data: {
-            approveot_id: id,
-            night_ot: night_ot,
-            earlyot: earlyot,
-            normal_ot: normal_ot,
-            payrolldate: payrolldate,
-            overtimestatus: overtimestatus,
+            approveot_id: approveot_id,
+            status: requeststatus,
+            comment: comment,
+            subgroupid: subgroupid,
+            attendancedate: attendancedate,
+            clockin: clockin,
+            clockout: clockout,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -276,12 +264,17 @@
                 $("#otapprovalmodal").modal("show");
                 LoadTable();
               });
-            } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning");
+            } else {
+              swal({
+                title: "Exist",
+                text: "Data already exists!",
+                icon: "warning",
+                button: "OK!",
+              });
             }
           },
           error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
+            swal("Data already exist!", "You clicked the button!", "warning");
           },
         });
       }
