@@ -103,11 +103,17 @@ router.post("/getotapproval", (req, res) => {
     INNER JOIN master_attendance on ma_employeeid = pao_employeeid AND ma_attendancedate = pao_attendancedate
     where pao_id = '${approveot_id}'`;
 
+
+    
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
+
+      console.log(result,'result');
+      
 
       if (result != 0) {
         let data = DataModeling(result, "pao_");
