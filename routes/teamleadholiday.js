@@ -87,7 +87,8 @@ router.post("/getholidayapproval", (req, res) => {
       DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,
       mh_name as ph_holidayname,
       ph_subgroupid,
-      ph_status
+      ph_status,
+      ph_createdate
       FROM payroll_holiday
       INNER JOIN master_holiday ON payroll_holiday.ph_holidaydate = mh_date
       INNER JOIN
