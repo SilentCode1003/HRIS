@@ -48,9 +48,6 @@ router.get("/getob/:status", (req, res) => {
           msg: err,
         });
       }
-
-      console.log(result);
-
       if (result.length != 0) {
         let data = DataModeling(result, "obr_");
 
@@ -115,7 +112,7 @@ router.post("/save", (req, res) => {
       Insert(official_business_request_sql, obr_data, (err, result) => {
         if (err) {
           console.log(err);
-          
+
           res.status(500).json({
             msg: err,
           });
@@ -135,4 +132,6 @@ router.post("/save", (req, res) => {
     });
   }
 });
+
+
 //#endregion
