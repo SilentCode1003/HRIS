@@ -27,7 +27,7 @@ const connection = mysql.createConnection({
 exports.CheckConnection = () => {
   connection.connect((error) => {
     if (error) {
-      console.erroror("Error connection to MYSQL database: ", err);
+      console.error("Error connection to MYSQL database: ", error);
       logEvents(error,'sqlError.log');
       return;
     }
