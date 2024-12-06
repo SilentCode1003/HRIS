@@ -31,8 +31,8 @@ router.get("/load", (req, res) => {
       CONCAT(me_firstname, '', me_lastname) as obr_fullname,
       obr_attendance_date,
       s_name as obr_subgroup_id,
-      obr_clockin,
-      obr_clockout,
+      REPLACE(REPLACE(obr_clockin, 'T', ' '), 'Z', '') as obr_clockin,
+      REPLACE(REPLACE(obr_clockout, 'T', ' '), 'Z', '') as obr_clockout,
       obr_applied_date,
       obr_status
       FROM official_business_request 

@@ -11,6 +11,7 @@ const {
 const { Select, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { GetValue, PND } = require("./repository/dictionary");
+const { REQUEST_STATUS } = require("./repository/enums");
 var router = express.Router();
 
 /* GET home page. */
@@ -74,7 +75,7 @@ router.get("/getob/:status", (req, res) => {
 router.post("/save", (req, res) => {
   try {
     const { attendancedate, subgroupid, clockin, clockout, reason } = req.body;
-    let status = GetValue(PND());
+    let status = REQUEST_STATUS.applied;
     let employeeid = req.session.employeeid;
     let applied_date = GetCurrentDatetime();
 
@@ -132,6 +133,3 @@ router.post("/save", (req, res) => {
     });
   }
 });
-
-
-//#endregion
