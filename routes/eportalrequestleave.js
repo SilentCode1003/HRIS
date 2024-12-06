@@ -447,13 +447,13 @@ router.post("/submit", async (req, res) => {
     const approvedcount = "0";
     console.log("Received request with data:", req.body);
 
-    const allowedStartDate = moment().add(3, "days").startOf("day");
-    const startDateMoment = moment(startdate);
+    // const allowedStartDate = moment().add(3, "days").startOf("day");
+    // const startDateMoment = moment(startdate);
 
-    if (startDateMoment.isBefore(allowedStartDate)) {
-      console.log("Start date is within the 3-day rule");
-      return res.json({ msg: "not allowed" });
-    }
+    // if (startDateMoment.isBefore(allowedStartDate)) {
+    //   console.log("Start date is within the 3-day rule");
+    //   return res.json({ msg: "not allowed" });
+    // }
 
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
