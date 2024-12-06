@@ -16,14 +16,26 @@
       }
     });
 
-    $("#searchInput").keyup(function () {
-      let searchValue = $(this).val().trim();
-      if (searchValue !== "") {
-        searchValue = adjustSearchTerm(searchValue);
-        searchEmployees(searchValue);
-      } else {
-        hideAutocompleteDropdown();
-      }
+    // $("#searchInput").keyup(function () {
+    //   let searchValue = $(this).val().trim();
+    //   if (searchValue !== "") {
+    //     searchValue = adjustSearchTerm(searchValue);
+    //     searchEmployees(searchValue);
+    //   } else {
+    //     hideAutocompleteDropdown();
+    //   }
+    // });
+
+    $(document).on("input", "#searchInput", function () {
+      setTimeout(() => {
+        let searchValue = $(this).val().trim();
+        if (searchValue !== "") {
+          searchValue = adjustSearchTerm(searchValue);
+          searchEmployees(searchValue);
+        } else {
+          hideAutocompleteDropdown();
+        }
+      }, 500);
     });
 
     function adjustSearchTerm(searchTerm) {

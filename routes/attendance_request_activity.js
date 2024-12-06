@@ -21,7 +21,7 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
-    ara.ara_id as requsetid,
+    ara.ara_id as requestid,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS employeeid,
     ar.ar_attendace_date as attendancedate,
     DATE_FORMAT(ar.ar_timein, '%W, %M %e, %Y') AS timein,
@@ -33,7 +33,8 @@ router.get("/load", (req, res) => {
     FROM attendance_request_activity ara
     INNER JOIN attendance_request ar ON ara.ara_requestid = ar.ar_requestid
     INNER JOIN master_employee me_request ON ar.ar_employeeid = me_request.me_id
-    INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id`;
+    INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id
+    WHERE LEFT(ara.ara_date, 10) = DATE_FORMAT(current_date(), '%Y-%m-%d')`;
 
     mysql
       .mysqlQueryPromise(sql)

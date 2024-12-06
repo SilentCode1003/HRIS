@@ -18,6 +18,7 @@ const {
 } = require("./repository/response");
 const { Update, Select, InsertTable } = require("./repository/dbconnect");
 const holidaysPH = new Holidays("PH");
+const axios = require("axios");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -26,7 +27,6 @@ router.get("/", function (req, res, next) {
 });
 
 module.exports = router;
-
 const removeTimeFromDate = (dateStr) => dateStr.split(" ")[0];
 
 const getDayOfWeek = (dateString) =>
@@ -56,12 +56,9 @@ const getDOLEType = (holiday) => {
 };
 
 router.post("/add", (req, res) => {
-  console.log("HIT");
   try {
     const { date, name, day, type } = req.body;
     let status = 'Incoming';
-
-    console.log(req.body);
 
     let sql = InsertStatement("master_holiday", "mh", [
       "date",
@@ -70,9 +67,6 @@ router.post("/add", (req, res) => {
       "type",
       "status",
     ]);
-
-    console.log(sql);
-
     let data = [[date, name, day, type, status]];
     let checkStatement = SelectStatement(
       "select * from master_holiday where mh_date=?",
@@ -104,83 +98,11 @@ router.post("/add", (req, res) => {
   }
 });
 
-// router.post("/generateholiday", async (req, res) => {
-//   try {
-//     const year = req.query.year
-//       ? parseInt(req.query.year, 10)
-//       : new Date().getFullYear();
-//     console.log(`Requested Year: ${year}`);
-
-//     const existingHolidaysQuery = `SELECT mh_date FROM master_holiday WHERE mh_date LIKE '%${year}%'`;
-//     const existingHolidays = await mysql.mysqlQueryPromise(
-//       existingHolidaysQuery
-//     );
-
-//     if (existingHolidays && existingHolidays.length > 0) {
-//       console.log(
-//         `Holidays for the year ${year} already exist in the database.`
-//       );
-//       return res.json({
-//         msg: "exist",
-//         data: existingHolidays,
-//         info: `Holidays for the year ${year} already exist in the database.`,
-//       });
-//     }
-
-//     const allHolidays = await holidaysPH.getHolidays(year);
-//     console.log("All Holidays:");
-
-//     const simplifiedHolidays = allHolidays.map((holiday) => ({
-//       day: getDayOfWeek(holiday.date),
-//       date: removeTimeFromDate(holiday.date),
-//       name: holiday.name,
-//       type: getDOLEType(holiday),
-//     }));
-
-//     simplifiedHolidays.forEach((holiday) =>
-//       console.log(
-//         `${holiday.day} - ${holiday.date} - ${holiday.name} (${holiday.type})`
-//       )
-//     );
-
-//     const insertionValues = simplifiedHolidays.map((holiday) => [
-//       holiday.date,
-//       holiday.name,
-//       holiday.day,
-//       holiday.type,
-//       new Date(holiday.date) < new Date() ? "Finished" : "Incoming",
-//     ]);
-
-//     mysql.InsertTable("master_holiday", insertionValues, (err, result) => {
-//       if (err) {
-//         console.error("Insertion Error:", err);
-//         return res.status(500).json({
-//           msg: "Error during insertion",
-//           error: err.message,
-//         });
-//       }
-
-//       console.log("Insertion Result:", result);
-//       res.json({
-//         msg: "success",
-//         data: simplifiedHolidays,
-//       });
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       msg: "Internal server error",
-//       error: error.message,
-//     });
-//   }
-// });
-
 router.post("/generateholiday", async (req, res) => {
   try {
     const year = req.query.year
       ? parseInt(req.query.year, 10)
       : new Date().getFullYear();
-    console.log(`Requested Year: ${year}`);
 
     const existingHolidaysQuery = `SELECT mh_date FROM master_holiday WHERE mh_date LIKE '%${year}%'`;
     const existingHolidays = await mysql.mysqlQueryPromise(
@@ -188,9 +110,6 @@ router.post("/generateholiday", async (req, res) => {
     );
 
     if (existingHolidays && existingHolidays.length > 0) {
-      console.log(
-        `Holidays for the year ${year} already exist in the database.`
-      );
       return res.json({
         msg: "exist",
         data: existingHolidays,
@@ -199,7 +118,6 @@ router.post("/generateholiday", async (req, res) => {
     }
 
     const allHolidays = await holidaysPH.getHolidays(year);
-    console.log("All Holidays:");
 
     const simplifiedHolidays = allHolidays.map((holiday) => ({
       day: getDayOfWeek(holiday.date),
@@ -259,8 +177,6 @@ router.post("/confirmholidays", async (req, res) => {
           error: err.message,
         });
       }
-
-      console.log("Insertion Result:", result);
       res.json({
         msg: "success",
         data: simplifiedHolidays,
@@ -355,9 +271,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from master_holiday where mh_date = ? and mh_name = ? and mh_day = ? and mh_type = ?",
       [date, name, day, type]
@@ -370,9 +283,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess(result));
           });
         }

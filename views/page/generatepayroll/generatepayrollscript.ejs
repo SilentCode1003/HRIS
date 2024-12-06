@@ -633,17 +633,58 @@
               $("#payslipspecialovertime").text(
                 formatToCurrency(item.SpecialHolidayOT)
               );
-              // Get the suspension pay value
+              // let suspensionPay = item.Suspension_Pay;
+              // if (suspensionPay === 0) {
+              //   $("#payslipsuspensionpay").closest("tr").hide();
+              // } else {
+              //   $("#payslipsuspensionpay").closest("tr").show();
+              //   $("#payslipsuspensionpay").text(
+              //     formatToCurrency(suspensionPay)
+              //   );
+              // }
+              // let leaveNoPay = item.Leave_with_out_pay;
+              // if (leaveNoPay === 0) {
+              //   $("#payslipnopay").closest("tr").hide();
+              // } else {
+              //   $("#payslipnopay").closest("tr").show();
+              //   $("#payslipnopay").html(
+              //     "<strong> ( " + leaveNoPay + " )</strong>");
+              // }
+              // let leaveNoPayDeductions = item.Leave_With_Out_Pay_Deductions;
+              // if (leaveNoPayDeductions === 0) {
+              //   $("#payslipnopaydeductions").closest("tr").hide();
+              // } else {
+              //   $("#payslipnopaydeductions").closest("tr").show();
+              //   $("#payslipnopaydeductions").text(
+              //     formatToCurrency(leaveNoPayDeductions)
+              //   );
+              // }
               let suspensionPay = item.Suspension_Pay;
-
-              // Check if the value is 0
-              if (suspensionPay === 0) {
-                $("#payslipsuspensionpay").closest("tr").hide();
+              let leaveNoPay = item.Leave_with_out_pay;
+              let leaveNoPayDeductions = item.Leave_With_Out_Pay_Deductions;
+              if (suspensionPay === 0 && leaveNoPay === 0 && leaveNoPayDeductions === 0) {
+                  $("#payslipsuspensionpay").closest("tr").hide();
               } else {
-                $("#payslipsuspensionpay").closest("tr").show();
-                $("#payslipsuspensionpay").text(
-                  formatToCurrency(suspensionPay)
-                );
+                  $("#payslipsuspensionpay").closest("tr").show();
+                  if (suspensionPay > 0) {
+                      $("#payslipsuspensionpay").text(formatToCurrency(suspensionPay));
+                  } else {
+                      $("#payslipsuspensionpay").text("");
+                  }
+                  if (leaveNoPay > 0) {
+                      $("#payslipnopay").html(
+                          "<strong> ( " + leaveNoPay + " )</strong>"
+                      );
+                  } else {
+                      $("#payslipnopay").html("");
+                  }
+                  if (leaveNoPayDeductions > 0) {
+                      $("#payslipnopaydeductions").text(
+                          formatToCurrency(leaveNoPayDeductions)
+                      );
+                  } else {
+                      $("#payslipnopaydeductions").text("");
+                  }
               }
               $("#paysliptotal").text(formatToCurrency(item.Overall_Net_Pay));
               $("#payslipsss").text(formatToCurrency(item.SSS));
@@ -667,121 +708,6 @@
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
               $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#payslipcalamity").text(formatToCurrency(item.Calamity_Loan));
-              // Get the suspension pay value
-              // let calamityLoan = item.Calamity_Loan;
-
-              // // Find the corresponding <td> with the text "Calamity Loan" and the <td> containing the value
-              // let calamityLoanTextTd = $("#payslipcalamity")
-              //   .closest("tr")
-              //   .find("td:contains('Calamity Loan')");
-              // let calamityLoanValueTd = $("#payslipcalamity");
-
-              // // Check if the value is 0
-              // if (calamityLoan === 0) {
-              //   calamityLoanTextTd.hide(); // Hide the "Calamity Loan" text <td>
-              //   calamityLoanValueTd.hide(); // Hide the corresponding value <td>
-              // } else {
-              //   calamityLoanTextTd.show(); // Show the "Calamity Loan" text <td>
-              //   calamityLoanValueTd.show(); // Show the corresponding value <td>
-              //   calamityLoanValueTd.text(formatToCurrency(calamityLoan)); // Set the formatted value
-              // }
-
-              // // Short Term Loan
-              // let shortTermLoan = item.Short_Term_Loan;
-              // let shortTermLoanTextTd = $("#payslipshortterm")
-              //   .closest("tr")
-              //   .find("td:contains('Short Term Loan')");
-              // let shortTermLoanValueTd = $("#payslipshortterm");
-
-              // if (shortTermLoan === 0) {
-              //   shortTermLoanTextTd.hide();
-              //   shortTermLoanValueTd.hide();
-              // } else {
-              //   shortTermLoanTextTd.show();
-              //   shortTermLoanValueTd.show();
-              //   shortTermLoanValueTd.text(formatToCurrency(shortTermLoan));
-              // }
-
-              // // Housing Loan
-              // let housingLoan = item.Housing_Loan;
-              // let housingLoanTextTd = $("#paysliphousing")
-              //   .closest("tr")
-              //   .find("td:contains('Housing Loan')");
-              // let housingLoanValueTd = $("#paysliphousing");
-
-              // if (housingLoan === 0) {
-              //   housingLoanTextTd.hide();
-              //   housingLoanValueTd.hide();
-              // } else {
-              //   housingLoanTextTd.show();
-              //   housingLoanValueTd.show();
-              //   housingLoanValueTd.text(formatToCurrency(housingLoan));
-              // }
-
-              // // Education Loan
-              // let educationLoan = item.Study_Now_Pay_Later;
-              // let educationLoanTextTd = $("#payslipeducationloan")
-              //   .closest("tr")
-              //   .find("td:contains('Study Now Pay Later')");
-              // let educationLoanValueTd = $("#payslipeducationloan");
-
-              // if (educationLoan === 0) {
-              //   educationLoanTextTd.hide();
-              //   educationLoanValueTd.hide();
-              // } else {
-              //   educationLoanTextTd.show();
-              //   educationLoanValueTd.show();
-              //   educationLoanValueTd.text(formatToCurrency(educationLoan));
-              // }
-
-              // // Sterling Loan
-              // let sterlingLoan = item.Sterling_Loan;
-              // let sterlingLoanTextTd = $("#payslipsterlingloan")
-              //   .closest("tr")
-              //   .find("td:contains('Sterling Loan')");
-              // let sterlingLoanValueTd = $("#payslipsterlingloan");
-
-              // if (sterlingLoan === 0) {
-              //   sterlingLoanTextTd.hide();
-              //   sterlingLoanValueTd.hide();
-              // } else {
-              //   sterlingLoanTextTd.show();
-              //   sterlingLoanValueTd.show();
-              //   sterlingLoanValueTd.text(formatToCurrency(sterlingLoan));
-              // }
-
-              // // Salary Loan
-              // let salaryLoan = item.Salary_Loan;
-              // let salaryLoanTextTd = $("#payslipsalaryloan")
-              //   .closest("tr")
-              //   .find("td:contains('Salary Loan')");
-              // let salaryLoanValueTd = $("#payslipsalaryloan");
-
-              // if (salaryLoan === 0) {
-              //   salaryLoanTextTd.hide();
-              //   salaryLoanValueTd.hide();
-              // } else {
-              //   salaryLoanTextTd.show();
-              //   salaryLoanValueTd.show();
-              //   salaryLoanValueTd.text(formatToCurrency(salaryLoan));
-              // }
-
-              // // Late Deductions
-              // let lateDeductions = item.Late_Deductions;
-              // let lateDeductionsTextTd = $("#paysliplate")
-              //   .closest("tr")
-              //   .find("td:contains('Late Deductions')");
-              // let lateDeductionsValueTd = $("#paysliplate");
-
-              // if (lateDeductions === 0) {
-              //   lateDeductionsTextTd.hide();
-              //   lateDeductionsValueTd.hide();
-              // } else {
-              //   lateDeductionsTextTd.show();
-              //   lateDeductionsValueTd.show();
-              //   lateDeductionsValueTd.html(formatToCurrency(lateDeductions));
-              // }
-
               $("#payslipshortterm").text(
                 formatToCurrency(item.Short_Term_Loan)
               );

@@ -2,6 +2,7 @@
   $(document).ready(function () {
     //#region declaration
     let leaveid = "";
+    let globalemployeeid = "";
     let cashadvanceid = "";
     let anouncementdiv = "";
     let bdaydiv = "";
@@ -23,6 +24,7 @@
     loadCOABadge();
     loadattendanceBadge();
     loadHolidayBadge();
+    LoadSubgroup();
     loadRDOTbadge();
     loadregularCard();
     loadprobitionaryCard();
@@ -1273,7 +1275,6 @@
       });
     }
 
-
     function loadRDOTbadge() {
       $.ajax({
         type: "GET",
@@ -1530,6 +1531,25 @@
       });
     });
 
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/subgroup/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#leavesubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
     $(document).on("click", "#editBtn", function () {
       $.ajax({
         type: "POST",
@@ -1544,6 +1564,7 @@
             $.each(existingData, (key, item) => {
               $("#pendingleaveid").val(item.leaveid);
               $("#leaveemployeename").val(item.fullname);
+              globalemployeeid = item.employee;
               $("#reqleavetype").val(item.leavetype);
               $("#leavestartdate").val(item.leavestartdate);
               $("#leaveenddate").val(item.leaveenddate);
@@ -1562,6 +1583,8 @@
               $("#paiddays").val(item.leavepaiddays);
               $("#unpaiddays").val(item.leaveunpaiddays);
               $("#leavesubgroup").val(item.leavesubgroupid);
+
+              console.log(item.fullname, "fullname");
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -1606,12 +1629,15 @@
     $(document).on("click", "#leavesavebutton", function () {
       let id = leaveid;
       let status = $("#reqleavestatus").val();
+      let employeeid = globalemployeeid;
       let leavestartdate = $("#leavestartdate").val();
       let leaveenddate = $("#leaveenddate").val();
       let leaveduration = $("#leaveduration").val();
       let leavepaidays = $("#paiddays").val();
       let leaveunpaiddays = $("#unpaiddays").val();
       let comment = $("#leavecomment").val();
+
+      console.log(employeeid, "employeeid");
 
       var message = "";
 
@@ -1660,6 +1686,7 @@
               data: {
                 leaveid: id,
                 status: status,
+                employeeid: employeeid,
                 leavestartdate: leavestartdate,
                 leaveenddate: leaveenddate,
                 leaveduration: leaveduration,
@@ -1668,15 +1695,36 @@
                 comment: comment,
               },
               success: function (result) {
-                if (result.msg == "success") {
+                if (result.msg === "success") {
                   swal(
                     "Save Successfully",
                     "You clicked the button!",
                     "success"
-                  ).then((results) => {
+                  ).then(() => {
                     window.location.reload();
                   });
-                  LoadTable();
+                } else if (result.msg === "conflict") {
+                  const conflictingDates = result.conflictingDates.join(", ");
+                  swal({
+                    title: "You Need to Reject this Request",
+                    text: `The following dates are already taken: ${conflictingDates}`,
+                    icon: "warning",
+                    button: "OK",
+                  });
+                } else if (result.msg === "error") {
+                  swal({
+                    title: "Error",
+                    text: "An unexpected error occurred while saving data.",
+                    icon: "error",
+                    button: "OK",
+                  });
+                } else {
+                  swal({
+                    title: "Unknown Response",
+                    text: "The server returned an unknown response.",
+                    icon: "warning",
+                    button: "OK",
+                  });
                 }
               },
               error: function (err) {
@@ -2002,8 +2050,11 @@
             const existingData = result.data;
 
             $.each(existingData, (key, item) => {
-              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
-              base64String = item.image;
+              $("#preview").attr(
+                "src",
+                "data:image/jpg;base64," + item.overtimeimage
+              );
+              base64String = item.overtimeimage;
               $("#otfullname").val(item.fullname);
               $("#otdate").val(item.attendancedate);
               $("#otclockin").val(item.clockin);
@@ -2020,6 +2071,7 @@
               $("#otstatus").val(item.overtimestatus);
               $("#otreason").val(item.reason);
               $("#otsubgroup").val(item.subgroupid);
+              $("#ottotalotminutes").val(item.total_min_ot);
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -2362,7 +2414,7 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-                holidayid = dataRow[0];
+              holidayid = dataRow[0];
             };
 
             HOLIDAY_ID.innerHTML = item.holidayid;
@@ -2438,7 +2490,7 @@
     $(document).on("click", "#editHolidayBTN", function () {
       $.ajax({
         type: "POST",
-        url: "/getholidayapproval",
+        url: "/index/getholidayapproval",
         data: {
           holidayid: holidayid,
         },
@@ -2446,11 +2498,13 @@
           if (result.msg === "success") {
             const existingData = result.data;
 
-            console.log(existingData,'data');
-            
+            console.log(existingData, "data");
 
             $.each(existingData, (key, item) => {
-              $("#previewholiday").attr("src", "data:image/jpg;base64," + item.file);
+              $("#previewholiday").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
               base64String = item.file;
               $("#hdayfname").val(item.fullname);
               $("#hdayatday").val(item.attendancedate);
@@ -2522,7 +2576,6 @@
       }
     });
 
-
     //req rdot section-->
     $(document).on("click", "#nav-reqrestdayot-tab", function () {
       $("#dataTablerestdayotrequest").find("tr:gt(0)").remove();
@@ -2564,7 +2617,7 @@
                 .each(function () {
                   dataRow.push($(this).text());
                 });
-                rdotid = dataRow[0];
+              rdotid = dataRow[0];
             };
 
             RDOT_ID.innerHTML = item.rdotid;
@@ -2627,9 +2680,12 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
-            console.log(existingData,'data');
+            console.log(existingData, "data");
             $.each(existingData, (key, item) => {
-              $("#previewrdot").attr("src", "data:image/jpg;base64," + item.file);
+              $("#previewrdot").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
               base64String = item.file;
               $("#rdotfullname").val(item.fullname);
               $("#rdotatdate").val(item.attendancedate);
@@ -2695,7 +2751,6 @@
       }
     });
 
-
     //status attendance section-->>>>
     $(document).on("click", "#nav-status-tab", function () {
       $.ajax({
@@ -2737,6 +2792,55 @@
       });
     });
 
+    //miss logs
+    $(document).on("click", "#nav-misslog-tab", function () {
+      $("#datatable-misslogs").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "GET",
+        url: "/index/loadmisslogs",
+        success: function (result) {
+          var finalData = [];
+          var data = result.data;
+
+          if (result.msg === "success") {
+            let datatable = document.getElementById("datatable-misslogs");
+            var totalLATE = data.length;
+
+            $.each(data, function (key, item) {
+              console.log(item);
+              
+              var row = datatable.insertRow(1);
+              var id = row.insertCell(0);
+              var employeeid = row.insertCell(1);
+              var fullname = row.insertCell(2);
+              var attendancedate = row.insertCell(3);
+              var clockin = row.insertCell(4);
+              var locationin = row.insertCell(5);
+              var devicein = row.insertCell(6);
+              var clockout = row.insertCell(7);
+              var locationout = row.insertCell(8);
+              var deviceout = row.insertCell(9);
+
+              id.innerHTML = item.attendanceid;
+              employeeid.innerHTML = item.employeeid;
+              fullname.innerHTML = item.fullname;
+              attendancedate.innerHTML = item.attendancedate;
+              clockin.innerHTML = item.clockin;
+              locationin.innerHTML = item.locationIn;
+              devicein.innerHTML = item.devicein;
+              clockout.innerHTML = item.clockout;
+              locationout.innerHTML = item.locationOut;
+              deviceout.innerHTML = item.deviceout;
+            });
+
+            $("#loadamisslogBadge").text(totalLATE);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    });
     //#endregion
 
     //#region Graph Functions
@@ -2870,7 +2974,6 @@
         },
       };
 
-      // Create employee chart
       const employeeChart = new Chart(employeeCtx, {
         type: "pie",
         data: employeeDataConfig,

@@ -58,7 +58,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -73,7 +72,6 @@ router.get("/load", (req, res) => {
 router.post("/getholidayapproval", (req, res) => {
   try {
     let holiday_id = req.body.holiday_id;
-    console.log(holiday_id);
     
     let sql = `SELECT 
         ph.ph_holidayid,
@@ -111,13 +109,11 @@ router.post("/getholidayapproval", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result,'result');
       
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

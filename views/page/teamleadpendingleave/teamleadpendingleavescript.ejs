@@ -109,7 +109,7 @@
       $("#pendingmodal").modal("show");
       $.ajax({
         type: "POST",
-        url: "/getleave",
+        url: "/index/getleave",
         data: {
           leaveid: leaveid,
         },
@@ -204,21 +204,30 @@
             enddate: enddate,
           },
           success: function (result) {
-            if (result.msg == "success") {
+            if (result.msg === "success") {
               swal({
                 title: "Saved Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
-              }).then((results) => {});
-              $("#reqleavestatus").val("");
-              $("#pendingmodal").modal("hide");
-              LoadTable();
+              }).then(() => {
+                $("#reqleavestatus").val("");
+                $("#pendingmodal").modal("hide");
+                LoadTable();
+              });
+            } else if (result.msg === "conflict") {
+              const conflictingDates = result.conflictingDates.join(", ");
+              swal({
+                title: "Conflict Detected",
+                text: `The following dates are already in use: ${conflictingDates}`,
+                icon: "warning",
+                button: "OK!",
+              });
             } else {
               swal({
-                title: "Exist",
-                text: "Data already exists!",
-                icon: "warning",
+                title: "Error",
+                text: "An unexpected error occurred.",
+                icon: "error",
                 button: "OK!",
               });
             }
@@ -261,94 +270,6 @@
         },
       });
     }
-    // $("#dataTablependingleave tbody").on("click", "tr", function () {
-    //   var dataRow = [];
-    //   $(this)
-    //     .closest("tr")
-    //     .find("td")
-    //     .each(function () {
-    //       dataRow.push($(this).text());
-    //     });
-    //   leaveid = dataRow[0];
-    // });
-
-    // $(document).on("click", "#editBtn", function () {
-    //   $.ajax({
-    //     type: "POST",
-    //     url: "/pendingleave/getleavedashboard",
-    //     data: {
-    //       leaveid: leaveid,
-    //     },
-    //     success: function (result) {
-    //       if (result.msg === "success") {
-    //         const existingData = result.data;
-
-    //         $.each(existingData, (key, item) => {
-    //           $("#id").val(item.leaveid);
-    //           $("#pendingleavename").val(item.employeeid);
-    //           $("#pendingleaveemail").val(item.email);
-    //           $("#pendingleavegender").val(item.gender);
-    //           $("#pendingleavephone").val(item.phone);
-    //           $("#pendingleavetype").val(item.leavetype);
-    //           $("#pendingleaveapplydate").val(item.applieddate);
-    //           $("#pendingleavestart").val(item.leavestartdate);
-    //           $("#pendingleaveend").val(item.leaveenddate);
-    //           $("#pendingleavereason").val(item.reason);
-    //           $("#pendingleaveaction").val(item.status);
-    //         });
-    //       } else {
-    //         swal("Error fetching employee data", "success");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       swal("An error occurred while fetching employee data", err, "error");
-    //     },
-    //   });
-    // });
-    // $(document).on("click", "#pendingleavesavebtn", function () {
-    //   let id = leaveid
-    //   let status = $("#pendingleaveaction").val();
-    //   let comment = $("#pendingleaveremarks").val();
-
-    //   var message = "";
-
-    //   if (status === "") {
-    //     message += "status is required. ";
-    //   }
-
-    //   if (comment === "") {
-    //     message += "status is required. ";
-    //   }
-
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/allleave/update",
-    //       data: {
-    //         leaveid: id,
-    //         status: status,
-    //         comment: comment,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success") {
-    //           swal("Save Successfully", "You clicked the button!", "success",)
-    //             .then(results => {
-    //               window.location.reload();
-    //             });
-    //           LoadTable();
-    //         }
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //     });
-    //   }
-    // });
 
     function searchTable() {
       var input, filter, found, table, tr, td, i, j;

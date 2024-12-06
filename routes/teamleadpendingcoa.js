@@ -4,6 +4,8 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 const { REQUEST } = require("./repository/enums");
 const { SendEmailNotificationEmployee } = require("./repository/emailsender");
+const { DataModeling } = require("./model/hrmisdb");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
 var router = express.Router();
 const currentDate = moment();
 
@@ -40,8 +42,6 @@ router.get("/load", (req, res) => {
     WHERE 
         ar_status = 'Pending' 
         AND ar_subgroupid IN (${subgroupid})`;
-
-    // console.log(sql);
 
     mysql.Select(sql, "Attendance_Request", (err, result) => {
       if (err) console.error("Error Fetching Data: ", err);
@@ -93,8 +93,6 @@ router.get("/load", (req, res) => {
 //             AND ats_departmentid = '${departmentid}'
 //         )`;
 
-//     console.log(sql);
-
 //     mysql.Select(sql, "Attendance_Request", (err, result) => {
 //       if (err) console.error("Error Fetching Data: ", err);
 
@@ -112,14 +110,53 @@ router.get("/load", (req, res) => {
 // });
 
 
-router.post("/getreqinteamlead", (req, res) => {
+// router.post("/getreqinteamlead", (req, res) => {
+//   try {
+//     let requestid = req.body.requestid;
+//     let sql = `    
+//       SELECT 
+//         me_id,
+//         me_profile_pic,
+//         concat(me_lastname,' ',me_firstname) as ar_employeeid,
+//         ar_attendace_date,
+//         DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
+//         DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
+//         ar_total,
+//         ar_createdate,
+//         ar_status,
+//         ar_reason,
+//         ar_file,
+//         ar_subgroupid
+//       FROM attendance_request
+//       INNER JOIN
+//       master_employee ON attendance_request.ar_employeeid = me_id
+//       WHERE ar_requestid = '${requestid}'
+//       ORDER BY ar_requestid`;
+
+//     mysql.Select(sql, "Attendance_Request", (err, result) => {
+//       if (err) console.error("Error: ", err);
+
+//       res.json({
+//         msg: "success",
+//         data: result,
+//       });
+//     });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       error,
+//     });
+//   }
+// });
+
+router.post("/getreqinteamlead", async (req, res) => {
   try {
-    let requestid = req.body.requestid;
-    let sql = `    
+    const { requestid } = req.body;
+    const sql1 = `
       SELECT 
         me_id,
         me_profile_pic,
-        concat(me_lastname,' ',me_firstname) as ar_employeeid,
+        CONCAT(me_lastname, ' ', me_firstname) AS ar_employeeid,
         ar_attendace_date,
         DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
         DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
@@ -130,26 +167,57 @@ router.post("/getreqinteamlead", (req, res) => {
         ar_file,
         ar_subgroupid
       FROM attendance_request
-      INNER JOIN
-      master_employee ON attendance_request.ar_employeeid = me_id
+      INNER JOIN master_employee ON attendance_request.ar_employeeid = me_id
       WHERE ar_requestid = '${requestid}'
-      ORDER BY ar_requestid`;
+      ORDER BY ar_requestid;
+    `;
 
-    mysql.Select(sql, "Attendance_Request", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
+    const attendanceRequestData = await new Promise((resolve, reject) => {
+      mysql.Select(sql1, "Attendance_Request", (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
       });
     });
+    if (!attendanceRequestData || attendanceRequestData.length === 0) {
+      return res.json({
+        msg: "No attendance request found",
+        data: [],
+      });
+    }
+
+    const { emp_id, attendancedate } = attendanceRequestData[0];
+    const sql2 = `
+      SELECT
+        DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') as ma_clockin,
+        DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') as ma_clockout
+      FROM master_attendance
+      WHERE ma_attendancedate = '${attendancedate}'
+      AND ma_employeeid = '${emp_id}';
+    `;
+
+
+    const masterAttendanceData = await new Promise((resolve, reject) => {
+      mysql.Select(sql2, "Master_Attendance", (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });  
+
+    res.json({
+      msg: "success",
+      attendanceRequest: attendanceRequestData[0],
+      masterAttendance: masterAttendanceData.length > 0 ? masterAttendanceData[0] : null,
+    });
   } catch (error) {
+    console.error("Error: ", error);
     res.json({
       msg: "error",
       error,
     });
   }
 });
+
+
 
 router.get("/loadactionname", (req, res) => {
   try {
@@ -159,8 +227,6 @@ router.get("/loadactionname", (req, res) => {
     ats_rejectname
     from aprroval_stage_settings
     where ats_accessid = '${accesstypeid}'`;
-
-    console.log(accesstypeid, "id");
 
     mysql.Select(sql, "Approval_Stage_Settings", (err, result) => {
       if (err) console.error("Error Fetching Data: ", err);
@@ -177,108 +243,6 @@ router.get("/loadactionname", (req, res) => {
     });
   }
 });
-
-// router.post("/attendanceaction", (req, res) => {
-//   try {
-//     let employeeid = req.session.employeeid;
-//     let departmentid = req.session.departmentid;
-//     let subgroupid = req.session.subgroupid;
-//     let requestid = req.body.requestid;
-//     let status = req.body.status;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-
-//     let data = [];
-
-//     data.push([
-//       employeeid,
-//       departmentid,
-//       requestid,
-//       subgroupid,
-//       status,
-//       createdate,
-//     ]);
-
-//     console.log(data);
-
-//     mysql.InsertTable("attendance_request_activity", data, (err, result) => {
-//       if (err) {
-//         console.error("Error: ", err);
-//         res.json({ msg: "error" });
-//         return;
-//       }
-
-//
-
-//       let selectQuery = `
-//       SELECT
-//       ar_timein,
-//       ar_timeout,
-//       ar_attendace_date,
-//       ar_employeeid,
-//       ar_status
-//       FROM attendance_request
-//       WHERE ar_requestid = '${requestid}'`;
-
-//       mysql.Select(selectQuery, "Attendance_Request", (selectErr, selectResult) => {
-//         if (selectErr) {
-//           console.error("Select Error: ", selectErr);
-//           res.json({ msg: "error" });
-//           return;
-//         }
-
-//         let { ar_timein, ar_timeout, ar_attendace_date, ar_employeeid, ar_status } = selectResult[0];
-
-//         console.log(selectResult,'result');
-
-//         if (ar_status === "Approved") {
-//           let latitudein = "14.337957";
-//           let latitudeout = "14.337957";
-//           let longitudein = "121.060336";
-//           let longitudeout = "121.060336";
-//           let geofencein = "1";
-//           let geofenceout = "1";
-//           let devicein = "app";
-//           let deviceout = "app";
-
-//           let data = [];
-
-//           data.push([
-//             ar_employeeid,
-//             ar_attendace_date,
-//             ar_timein,
-//             ar_timeout,
-//             latitudein,
-//             latitudeout,
-//             longitudein,
-//             longitudeout,
-//             geofencein,
-//             geofenceout,
-//             devicein,
-//             deviceout,
-//           ]);
-
-//           mysql.InsertTable("master_attendance_request", data, (err, result) => {
-//             if (err) {
-//               console.error("Error: ", err);
-//               res.json({ msg: "error" });
-//               return;
-//             }
-//             console.log(insertResult);
-
-//             res.json({ msg: "success" });
-//           });
-//         } else {
-//           console.log("Approval status is not 'approved'. Skipping attendance insertion.");
-//           res.json({ msg: "success" });
-//         }
-//       });
-//     });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//     });
-//   }
-// });
 
 router.post("/attendanceaction", (req, res) => {
   try {
@@ -300,8 +264,6 @@ router.post("/attendanceaction", (req, res) => {
       createdate,
     ]);
 
-    console.log("Activity Data:", activityData);
-
     mysql.InsertTable(
       "attendance_request_activity",
       activityData,
@@ -311,8 +273,6 @@ router.post("/attendanceaction", (req, res) => {
           res.json({ msg: "error" });
           return;
         }
-
-        console.log("Activity Insert Result:", activityResult);
 
         let selectQuery = `
       SELECT
@@ -324,7 +284,6 @@ router.post("/attendanceaction", (req, res) => {
       FROM attendance_request
       WHERE ar_requestid = '${requestid}'`;
 
-        console.log("Select Query:", selectQuery);
 
         mysql.Select(
           selectQuery,
@@ -335,16 +294,9 @@ router.post("/attendanceaction", (req, res) => {
               res.json({ msg: "error" });
               return;
             }
-
             let { timein, timeout, attendancedate, employeeid, requeststatus } =
               selectResult[0];
-            console.log("Select Result:", selectResult);
-
             if (requeststatus === "Approved") {
-              console.log(
-                "Approval status is 'approved'. Proceeding with attendance insertion."
-              );
-
               let checkQuery = `
           SELECT 1 FROM master_attendance
           WHERE ma_employeeid = '${employeeid}' AND ma_attendancedate = '${attendancedate}'`;
@@ -367,6 +319,8 @@ router.post("/attendanceaction", (req, res) => {
                   let geofenceout = "1";
                   let devicein = "app";
                   let deviceout = "app";
+                  let locationin = "COA";
+                  let locationout = "COA";
 
                   if (checkResult.length > 0) {
                     let updateQuery = `
@@ -380,7 +334,9 @@ router.post("/attendanceaction", (req, res) => {
                   ma_gefenceidIn = '${geofencein}',
                   ma_geofenceidOut = '${geofenceout}',
                   ma_devicein = '${devicein}',
-                  ma_deviceout = '${deviceout}'
+                  ma_deviceout = '${deviceout}',
+                  ma_locationIn = '${locationin}',
+                  ma_locationOut = '${locationout}'
               WHERE ma_employeeid = '${employeeid}' AND ma_attendancedate = '${attendancedate}'`;
 
                     mysql
@@ -413,6 +369,8 @@ router.post("/attendanceaction", (req, res) => {
                       geofenceout,
                       devicein,
                       deviceout,
+                      locationin,
+                      locationout,
                     ]);
 
                     mysql.InsertTable(
@@ -424,8 +382,6 @@ router.post("/attendanceaction", (req, res) => {
                           res.json({ msg: "error" });
                           return;
                         }
-
-                        console.log("Insert Result:", insertResult);
                         res.json({ msg: "success" });
                       }
                     );
@@ -433,9 +389,6 @@ router.post("/attendanceaction", (req, res) => {
                 }
               );
             } else {
-              console.log(
-                "Approval status is not 'approved' or request not found. Skipping attendance insertion."
-              );
               res.json({ msg: "success" });
             }
 
@@ -464,107 +417,3 @@ router.post("/attendanceaction", (req, res) => {
     res.json({ msg: "error" });
   }
 });
-
-// router.post("/attendanceaction", (req, res) => {
-//   try {
-//     let employeeid = req.session.employeeid;
-//     let departmentid = req.session.departmentid;
-//     let subgroupid = req.session.subgroupid;
-//     let requestid = req.body.requestid;
-//     let status = req.body.status;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-
-//     let activityData = [
-//       employeeid,
-//       departmentid,
-//       requestid,
-//       subgroupid,
-//       status,
-//       createdate,
-//     ];
-
-//     console.log("Activity Data:", activityData);
-
-//     mysql.InsertTable("attendance_request_activity", [activityData], (activityErr, activityResult) => {
-//       if (activityErr) {
-//         console.error("Activity Insert Error: ", activityErr);
-//         res.json({ msg: "error" });
-//         return;
-//       }
-
-//       console.log("Activity Insert Result:", activityResult);
-
-//       let selectQuery = `
-//       SELECT
-//       ar_status,
-//       DATE_FORMAT(ar_timein, '%Y-%m-%d %H:%i:%s') AS ar_timein,
-//       DATE_FORMAT(ar_timeout, '%Y-%m-%d %H:%i:%s') AS ar_timeout,
-//       ar_attendace_date,
-//       ar_employeeid
-//       FROM attendance_request
-//       WHERE ar_requestid = '${requestid}'`;
-
-//       console.log("Select Query:", selectQuery);
-
-//       mysql.Select(selectQuery, "Attendance_Request", (selectErr, selectResult) => {
-//         if (selectErr) {
-//           console.error("Select Error: ", selectErr);
-//           res.json({ msg: "error" });
-//           return;
-//         }
-//         let { timein, timeout, attendancedate, employeeid, requeststatus } = selectResult[0];
-//         console.log("Select Result:", selectResult);
-
-//         if (requeststatus === "Approved") {
-//           console.log("Approval status is 'approved'. Proceeding with attendance insertion.");
-//           let latitudein = "14.337957";
-//           let latitudeout = "14.337957";
-//           let longitudein = "121.060336";
-//           let longitudeout = "121.060336";
-//           let geofencein = "1";
-//           let geofenceout = "1";
-//           let devicein = "app";
-//           let deviceout = "app";
-
-//           let attendanceData = [];
-
-//           attendanceData.push([
-//             employeeid,
-//             attendancedate,
-//             timein,
-//             timeout,
-//             latitudein,
-//             latitudeout,
-//             longitudein,
-//             longitudeout,
-//             geofencein,
-//             geofenceout,
-//             devicein,
-//             deviceout
-//           ]),
-
-//           console.log(requeststatus,'status');
-
-//           console.log("Attendance Data:", attendanceData);
-
-//           mysql.InsertTable("master_attendance_request", attendanceData, (attendanceErr, attendanceResult) => {
-//             if (attendanceErr) {
-//               console.error("Attendance Insert Error: ", attendanceErr);
-//               res.json({ msg: "error" });
-//               return;
-//             }
-
-//             console.log("Attendance Insert Result:", attendanceResult);
-//             res.json({ msg: "success" });
-//           });
-//         } else {
-//           console.log("Approval status is not 'approved' or request not found. Skipping attendance insertion.");
-//           res.json({ msg: "success" });
-//         }
-//       });
-//     });
-//   } catch (error) {
-//     console.error("Catch Error: ", error);
-//     res.json({ msg: "error" });
-//   }
-// });

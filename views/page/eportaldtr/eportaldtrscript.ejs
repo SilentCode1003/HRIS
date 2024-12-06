@@ -1,0 +1,171 @@
+<script>
+  $(document).ready(function () {
+    let attendace_date = "";
+    let employeeid = "";
+    let payrolldate = "";
+    LoadList();
+
+    $("#datatable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      attendace_date = dataRow[0];
+      employeeid = dataRow[1];
+
+      $("#attendancedate").val(attendace_date);
+      $("#employeeid").val(employeeid);
+    });
+
+    $(document).on("click", "#payrolldateDropdown", function () {
+      let payrollDateID = $("#payrolldateID").val();
+
+      Upsert(
+        "POST",
+        "/eportaldtr/payrolla-ttendance-date",
+        { payrollid: payrollDateID },
+        function (result) {
+          console.log(result);
+          if (result.msg == "success") {
+            payrolldate = result.data;
+            LoadTable(result.data);
+          }
+        }
+      );
+    });
+
+    $(document).on("click", "#submitBtn", function () {
+      let employeeid = $("#employeeid").val();
+      let attendancedate = $("#attendancedate").val();
+      let ticket = $("#ticket").val();
+      let service = $("#service").val();
+      let remark = $("#remark").val();
+
+      Upsert(
+        "PUT",
+        "/eportaldtr/edit-dtr",
+        {
+          employeeid: employeeid,
+          attendancedate: attendancedate,
+          ticket: ticket,
+          service: service,
+          remark: remark,
+        },
+        function (result) {
+          if (result.msg == "success") {
+            success("Success", "DTR Updated Successfully");
+            $("#ticket").val('');
+            $("#service").val('');
+            $("#remark").val('');
+            LoadTable(payrolldate);
+          }
+        }
+      );
+    });
+
+    async function LoadList() {
+      const payrolldates = await queryUtility.Load(
+        "/eportaldtr/getpayrolldate"
+      );
+
+      let activePayrollDates = [];
+      $.each(payrolldates.data, (key, item) => {
+        let name = item.name;
+        let id = item.payrollid;
+        activePayrollDates.push({
+          display: name,
+          value: id,
+        });
+      });
+      AddDropdownData(
+        "payrolldateDropdown",
+        activePayrollDates,
+        "payrolldate",
+        "payrolldateID"
+      );
+    }
+
+    function LoadTable(payrolldate) {
+      FetchTableData(`/eportaldtr/load/${payrolldate}`, (result) => {
+        populateTable(result);
+      });
+    }
+
+    function populateTable(data) {
+      const tableBody = $("#datatable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          if (item.status === "ACTIVE") {
+            action = `
+                        <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                        <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+          } else if (item.status === "INACTIVE") {
+            action = `
+                        <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+                        <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+          }
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.attendance_date,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "Access",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.ticket_number,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.service,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.remarks,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            })
+            // $("<td>", {
+            //   text: ConvertDate(item.createddate),
+            //   "data-label": "Created Date",
+            //   class: "custom-mobile-align",
+            // }),
+            // $("<td>", {
+            //   class: "custom-mobile-align",
+            //   "data-label": "Status",
+            // }).append(
+            //   $("<div>", { class: containerBackground }).append(
+            //     $("<span>", { text: item.status, class: statusBackground })
+            //   )
+            // ),
+            // $("<td>", { html: action, "data-label": "Action", class: "" })
+          );
+          tableBody.append(tr);
+        });
+      }
+    }
+  });
+</script>

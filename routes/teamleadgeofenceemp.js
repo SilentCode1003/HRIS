@@ -15,7 +15,6 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 var router = express.Router();
-//const currentDate = moment();
 
 /* GET home page. */
 
@@ -47,10 +46,7 @@ router.get("/load", (req, res) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
-      }
-
-      console.log(result);
-      
+      }      
       if (result != 0) {
         let data = DataModeling(result, "mu_");
         res.json(JsonDataResponse(data));
@@ -76,9 +72,9 @@ router.put("/status", (req, res) => {
   
       const newIsgeofenceValue = isgeofence === "Active" ? 0 : 1;
   
-      if (newIsgeofenceValue !== undefined) { // Explicitly check for undefined
+      if (newIsgeofenceValue !== undefined) { 
         data.push(newIsgeofenceValue);
-        columns.push("isgeofence"); // Assuming the correct column name is mu_isgeofence
+        columns.push("isgeofence");
       }
   
       if (createby) {
@@ -103,7 +99,6 @@ router.put("/status", (req, res) => {
         whereClause
       );
   
-      console.log(updateStatement);
   
       Update(updateStatement, data, (err, result) => {
         if (err) {

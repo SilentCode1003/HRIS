@@ -41,9 +41,6 @@ router.post("/request", (req, res) => {
 
       if (result.length > 0) {
         let data = DataModeling(result, "me_");
-
-        console.log(data);
-
         SendRequestPassword(employeeid, "Forgot Password", data);
 
         res.status(200).json(JsonSuccess());

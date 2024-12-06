@@ -7,6 +7,7 @@
     searchTable();
     LoadTable();
     LoadListEmp();
+    LoadDepartment();
 
     $(document).on("keyup", "#myInput", function () {
       searchTable();
@@ -501,16 +502,117 @@
       });
     }
 
-    $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
-      $("#reportsBtn").click(function () {
-        let startDate = picker.startDate.format("YYYY-MM-DD");
-        let endDate = picker.endDate.format("YYYY-MM-DD");
-        exportReports(startDate, endDate);
+    function LoadDepartment() {
+      $.ajax({
+        type: "GET",
+        url: "/department/load",
+        success: function (result) {
+          const data = result.data;
+          console.log(data, "data");
+          $("#departmentOptions").empty();
+          const allDepartmentsCheckbox = `
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="departmentCheckbox"
+            id="department_all"
+            value="all"
+          />
+          <label class="form-check-label" for="department_all">
+            All Departments
+          </label>
+        </div>
+      `;
+          $("#departmentOptions").append(allDepartmentsCheckbox);
+          $.each(data, function (key, item) {
+            const checkbox = `
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="departmentCheckbox"
+              id="department_${item.departmentid}"
+              value="${item.departmentid}"
+            />
+            <label class="form-check-label" for="department_${item.departmentid}">
+              ${item.departmentname}
+            </label>
+          </div>
+        `;
+            $("#departmentOptions").append(checkbox);
+          });
+          $("#department_all").on("change", function () {
+            const isChecked = $(this).is(":checked");
+            $("input[name='departmentCheckbox']")
+              .not(this)
+              .prop("checked", isChecked);
+          });
+
+          $("input[name='departmentCheckbox']")
+            .not("#department_all")
+            .on("change", function () {
+              if (!$(this).is(":checked")) {
+                $("#department_all").prop("checked", false);
+              } else {
+                const allChecked =
+                  $("input[name='departmentCheckbox']:not(#department_all)")
+                    .length ===
+                  $(
+                    "input[name='departmentCheckbox']:not(#department_all):checked"
+                  ).length;
+                $("#department_all").prop("checked", allChecked);
+              }
+            });
+        },
+        error: function (result) {
+          alert("Error: " + result.responseText);
+        },
       });
+    }
+
+    $("#departmentModal").on("show.bs.modal", function () {
+      LoadDepartment();
     });
 
-    function exportReports(startDate, endDate) {
-      // Show SweetAlert loading modal
+    $("#confirmDepartmentBtn")
+      .off("click")
+      .on("click", function () {
+        const selectedDepartments = $(
+          "input[name='departmentCheckbox']:checked"
+        )
+          .map(function () {
+            return this.value;
+          })
+          .get();
+
+        if (selectedDepartments.length === 0) {
+          swal(
+            "Error",
+            "Please select at least one department before proceeding.",
+            "error"
+          );
+          return;
+        }
+
+        $("#departmentModal").modal("hide");
+
+        exportReports(startDate, endDate, selectedDepartments);
+      });
+
+    $("#datepicker").on("apply.daterangepicker", function (ev, picker) {
+      startDate = picker.startDate.format("YYYY-MM-DD");
+      endDate = picker.endDate.format("YYYY-MM-DD");
+      $("#reportsBtn")
+        .off("click")
+        .on("click", function () {
+          $("#departmentModal").modal("show");
+        });
+    });
+
+    function exportReports(startDate, endDate, departmentIds) {
+      console.log(departmentIds,'departmentIds');
+      
       swal({
         title: "Exporting Data",
         text: "Please wait while we prepare your data...",
@@ -518,28 +620,22 @@
         closeOnClickOutside: false,
         closeOnEsc: false,
         icon: "info",
-        content: {
-          element: "div",
-          attributes: {
-            innerHTML: `<div class="swal-loading-spinner"></div>`, // Optional: Add custom spinner here
-          },
-        },
       });
 
       $.ajax({
         url: "/attendance/exportreports",
         type: "POST",
-        data: {
+        data: JSON.stringify({
           startdate: startDate,
           enddate: endDate,
-        },
+          departmentids: departmentIds,
+        }),
+        contentType: "application/json",
         xhrFields: {
           responseType: "blob",
         },
         success: function (response) {
-          // Close SweetAlert loading modal
           swal.close();
-
           if (response) {
             swal({
               title: "Your Data is Ready",
@@ -549,13 +645,10 @@
                 confirm: "Yes, download it!",
                 cancel: "No, cancel",
               },
-              dangerMode: true,
             }).then((result) => {
               if (result) {
                 var blob = response;
-
                 var url = URL.createObjectURL(blob);
-
                 var link = document.createElement("a");
                 link.href = url;
                 link.download = `Attendance_data_${startDate}_${endDate}.xlsx`;
@@ -571,7 +664,6 @@
               }
             });
           } else {
-            console.error("Error: Empty response");
             swal(
               "Error",
               "Failed to export payroll data. Please try again later.",
@@ -580,10 +672,7 @@
           }
         },
         error: function (xhr, status, error) {
-          // Close SweetAlert loading modal
           swal.close();
-
-          console.error("Error:", error);
           swal(
             "Error",
             "Failed to export payroll data. Please try again later.",
@@ -598,14 +687,12 @@
         type: "GET",
         url: "/employee/load",
         success: function (result) {
-          // console.log(result.data);
           var data = result.data;
 
           $.each(data, function (key, item) {
             var options = new Option(item.id, item.id);
             $(options).html(item.fullname);
             $("#employeename").append(options);
-            //console.log(item.firstname);
           });
         },
         error: function (result) {
@@ -613,100 +700,6 @@
         },
       });
     }
-
-    // Click event handler for the "editBtn" button
-    // $(document).on("click", "#editBtn", function () {
-    //     $("#dataTableattendancelogs").DataTable({
-    //         destroy: true,
-    //         processing: true,
-    //         serverSide: true,
-    //         paging: false,
-    //         searching: false,
-    //         info: false,
-    //         scrollY: 600,
-    //         scrollCollapse: true,
-    //         serverMethod: "POST",
-    //         ajax: {
-    //             url: "/attendance/logs",
-    //             data: {
-    //                 attendanceid: attendanceid,
-    //             },
-    //             dataSrc: (json) => {
-    //                 var finalData = [];
-    //                 var data = json.data;
-
-    //                 $.each(data, (key, item) => {
-    //             //         var action = `
-    //             //     <button class="btn text-primary editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"
-    //             //             data-attendanceid="${item.attendanceid}" data-employeeid="${item.employeeid}">
-    //             //         <i class="fas fa-fw fa-pen"></i>
-    //             //     </button>
-    //             // `;
-
-    //                     finalData.push({
-    //                         fullname: item.fullname,
-    //                         logdatetime: item.logdatetime,
-    //                         logtype: item.logtype,
-    //                         latitude: item.latitude,
-    //                         longitude: item.longitude,
-    //                         device: item.device,
-    //                         location: item.location,
-    //                     });
-    //                 });
-
-    //                 return finalData;
-    //             },
-    //         },
-    //         columnDefs: [
-    //             {
-    //                 targets: 1,
-    //                 className: "td-indent",
-    //             },
-    //         ],
-    //         columns: [
-    //             { data: "fullname" },
-    //             { data: "logdatetime" },
-    //             { data: "logtype" },
-    //             { data: "latitude" },
-    //             { data: "longitude" },
-    //             { data: "device" },
-    //             { data: "location" },
-    //         ],
-    //         initComplete: function () {
-    //         },
-    //     });
-    // });
-
-    // $(document).on("click", "#editBtn", function () {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/attendance/logs",
-    //         data: {
-    //             logid: logid,
-    //         },
-    //         success: function (result) {
-    //             if (result.msg === "success") {
-    //                 const existingData = result.data;
-
-    //                 $.each(existingData, (key, item) => {
-    //                     $("#editdepartmentid").val(item.fullname);
-    //                     $("#editdepartmentname").val(item.logdatetime);
-    //                     $("#editdepartmenthead").val(item.logtype);
-    //                     $("#editdepartmentstatus").val(item.latitude);
-    //                     $("#editdepartmentid").val(item.longitude);
-    //                     $("#editdepartmentname").val(item.device);
-    //                     $("#editdepartmenthead").val(item.location);
-    //                 });
-    //             } else {
-    //                 swal("Error fetching employee data", message, "error");
-    //             }
-    //         },
-    //         error: function (err) {
-    //             swal("An error occurred while fetching employee data", message, "error");
-    //         },
-    //     });
-    // });
-
     // Initialize the map
     function initMap() {
       map = L.map("map").setView([0, 0], 2);
@@ -801,7 +794,6 @@
       }
     }
 
-    
     //#region Import Salary
     $(document).on("click", "#importExcelBtn", function () {
       $("#importsalarymodal").modal("show");
@@ -854,31 +846,21 @@
     }
 
     function GetTableFromExcel(data) {
-      //Read the Excel File data in binary
       var workbook = XLSX.read(data, {
         type: "binary",
       });
 
-      //get the name of First Sheet.
       var Sheet = workbook.SheetNames[0];
-
-      //Read all rows from First Sheet into an JSON array.
       var excelRows = XLSX.utils.sheet_to_row_object_array(
         workbook.Sheets[Sheet]
       );
       var columns = Object.keys(excelRows[0]);
-
-      //Create a HTML Table element.
       var myTable = document.createElement("table");
       myTable.border = "1";
-
-      //Add the header row.
       var row = myTable.insertRow(-1);
 
       var dataExcelArr = [];
-      //Add the data rows from Excel file.
       for (var i = 0; i < excelRows.length; i++) {
-        //Add the data row.
         var data = [];
         var row = myTable.insertRow(-1);
         for (var j = 0; j < columns.length; j++) {

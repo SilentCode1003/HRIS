@@ -320,11 +320,11 @@
       }
 
       if (reason == "") {
-        message += "createby is required ";
+        message += "reason is required ";
       }
 
       if (file == "") {
-        message += "createby is required ";
+        message += "file is required ";
       }
 
       if (message !== "") {
@@ -366,6 +366,14 @@
                 title: "Error",
                 text: "Something Wrong",
                 icon: "Error",
+                button: "OK!",
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "You Already Have a CoA Request",
+                icon: "warning",
                 button: "OK!",
               });
               LoadTable();

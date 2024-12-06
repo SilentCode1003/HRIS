@@ -65,7 +65,6 @@ router.post("/updatepassword", async (req, res) => {
     let confirmPass = req.body.confirmPass;
     let accesstypeid = req.session.accesstypeid;
 
-    console.log(employeeid, currentPass, newPass, confirmPass, accesstypeid);
 
     if (newPass !== confirmPass) {
       return res.json({

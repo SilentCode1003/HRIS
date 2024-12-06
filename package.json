@@ -1,9 +1,8 @@
 {
   "name": "hrmis",
-  "version": "0.0.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
-    "prestart": "npm install",
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www"
   },
@@ -46,6 +45,8 @@
     "pdfmake": "^0.2.10",
     "popper.js": "^1.16.1",
     "stream": "^0.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "toastr": "^2.1.4",
     "web-streams-polyfill": "^4.0.0",
     "winston": "^3.14.2",

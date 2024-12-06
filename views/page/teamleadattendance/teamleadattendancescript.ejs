@@ -106,7 +106,6 @@
     });
 
     function exportReports(startDate, endDate) {
-      // Show SweetAlert loading modal
       swal({
         title: "Exporting Data",
         text: "Please wait while we prepare your data...",
@@ -741,6 +740,106 @@
         error: function (error) {
           console.error("Error:", error);
         },
+      });
+    }
+
+    $('input[name="miss-log-datepicker"]').daterangepicker(
+      {
+        opens: "middle",
+      },
+      function (start, end, label) {
+        console.log(
+          "A new date selection was made: " +
+            start.format("YYYY-MM-DD") +
+            " to " +
+            end.format("YYYY-MM-DD")
+        );
+      }
+    );
+
+    $(document).on("click", "#load-date-miss-log", function () {
+      let daterange = $("#miss-log-datepicker").val();
+      let startdate = daterange.split('-')[0]
+      let enddate = daterange.split('-')[1]
+      console.log(startdate, enddate);
+
+      $.ajax({
+        type: "POST",
+        url: "/index/getmislog",
+        data: {
+          startdate: startdate,
+          enddate: enddate,
+        },
+        success: function (result) {
+          var finalData = [];
+          var data = result.data;
+
+          if (result.msg === "success") {
+            LoadMissLog(data);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    });
+
+    //miss logs
+    $(document).on("click", "#nav-missed-logs-tab", function () {
+      let daterange = $("#miss-log-datepicker").val();
+      let startdate = daterange.split('-')[0]
+      let enddate = daterange.split('-')[1]
+      console.log(startdate, enddate);
+
+      $.ajax({
+        type: "POST",
+        url: "/index/getmislog",
+        data: {
+          startdate: startdate,
+          enddate: enddate,
+        },
+        success: function (result) {
+          var finalData = [];
+          var data = result.data;
+
+          if (result.msg === "success") {
+            LoadMissLog(data);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    });
+
+    function LoadMissLog(data) {
+      $("#datatable-misslogs").find("tr:gt(0)").remove();
+
+      let datatable = document.getElementById("datatable-misslogs");
+
+      $.each(data, function (key, item) {
+        var row = datatable.insertRow(1);
+        var id = row.insertCell(0);
+        var employeeid = row.insertCell(1);
+        var fullname = row.insertCell(2);
+        var attendancedate = row.insertCell(3);
+        var clockin = row.insertCell(4);
+        var locationin = row.insertCell(5);
+        var devicein = row.insertCell(6);
+        var clockout = row.insertCell(7);
+        var locationout = row.insertCell(8);
+        var deviceout = row.insertCell(9);
+
+        id.innerHTML = item.attendanceid;
+        employeeid.innerHTML = item.employeeid;
+        fullname.innerHTML = item.fullname;
+        attendancedate.innerHTML = item.attendancedate;
+        clockin.innerHTML = item.clockin;
+        locationin.innerHTML = item.locationIn;
+        devicein.innerHTML = item.devicein;
+        clockout.innerHTML = item.clockout;
+        locationout.innerHTML = item.locationOut;
+        deviceout.innerHTML = item.deviceout;
       });
     }
   });

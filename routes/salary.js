@@ -11,7 +11,7 @@ const {
 const { Select, Update, Insert, InsertTable } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { ro } = require("date-fns/locale");
-const { JsonErrorResponse, JsonWarningResponse, MessageStatus, JsonSuccess } = require("./repository/response");
+const { JsonErrorResponse, JsonWarningResponse, MessageStatus, JsonSuccess, JsonDataResponse } = require("./repository/response");
 var router = express.Router();
 const currentDate = moment();
 
@@ -26,24 +26,32 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `    
-    SELECT 
+  SELECT 
    ms_id,
+   me_id as ms_number,
    concat(me_lastname,' ',me_firstname) as ms_employeeid,
    ms_monthly,
    ms_allowances,
    ms_basic_adjustments,
    ms_payrolltype
    FROM master_salary
-    LEFT JOIN master_employee ON master_salary.ms_employeeid = me_id`;
+  LEFT JOIN master_employee ON master_salary.ms_employeeid = me_id
+  WHERE me_jobstatus IN ('probitionary','regular')`;
 
-    mysql.Select(sql, "Master_Salary", (err, result) => {
-      if (err) console.error("Error: ", err);
+  Select(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.json(JsonErrorResponse(err));
+    }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
+    if (result != 0) {
+      let data = DataModeling(result, "ms_");
+
+      res.json(JsonDataResponse(data));
+    } else {
+      res.json(JsonDataResponse(result));
+    }
+  });
   } catch (error) {
     res.json({
       msg: error,
@@ -137,7 +145,6 @@ router.put("/edit", async (req, res) => {
     let oldSalaryResult = await mysql.mysqlQueryPromise(Oldquery);
 
     const oldSalary = oldSalaryResult[0]?.ms_monthly || 0;
-    console.log(oldSalary, 'oldSalary');
 
     let data = [];
     let columns = [];
@@ -180,7 +187,6 @@ router.put("/edit", async (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
     await Update(updateStatement, data, async (err, result) => {
       if (err) {
         console.error("Error: ", err);
@@ -190,7 +196,6 @@ router.put("/edit", async (req, res) => {
       if (effectivedate) {
         const mes_perday_old_salary = (oldSalary / 313) * 12;
 
-        console.log(mes_perday_old_salary, 'mes_perday_old_salary');
 
         let mes_perday_new_salary;
         if (payrolltype === "Monthly") {
@@ -282,7 +287,6 @@ router.post("/upload", (req, res) => {
           for (const content of data) {
             const { id, employeeid } = content;
 
-            console.log(employeeid);
 
             let sqlupdate = UpdateStatement(
               "master_salary",

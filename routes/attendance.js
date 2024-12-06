@@ -299,53 +299,6 @@ router.post("/gethomestatus2", (req, res) => {
   }
 });
 
-// router.post("/exportfile", async (req, res) => {
-//   try {
-//     let startdate = req.body.startdate;
-//     let enddate = req.body.enddate;
-//     let sql = `call hrmis.ExportAttendance('${startdate}', '${enddate}');`;
-
-//     const result = await mysql.mysqlQueryPromise(sql);
-
-//     const jsonData = JSON.parse(JSON.stringify(result[0]));
-
-//     if (jsonData.length === 0) {
-//       return res.status(404).json({ msg: "No data found" });
-//     }
-
-//     const headers = Object.keys(jsonData[0]);
-
-//     const worksheet = XLSX.utils.json_to_sheet(jsonData, { header: headers });
-//     const workbook = XLSX.utils.book_new();
-//     const worksheetName = `${startdate}_${enddate}`;
-//     XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
-
-//     const columnCount = XLSX.utils.decode_range(worksheet["!ref"]).e.c + 1;
-//     worksheet["!cols"] = [];
-//     for (let i = 0; i < columnCount; i++) {
-//       if (i === 0) {
-//         worksheet["!cols"].push({ wch: 30 });
-//       } else {
-//         worksheet["!cols"].push({ wch: 20 });
-//       }
-//     }
-//     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
-
-//     res.setHeader(
-//       "Content-Disposition",
-//       `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`
-//     );
-//     res.setHeader(
-//       "Content-Type",
-//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );
-//     res.send(excelBuffer);
-//   } catch (error) {
-//     console.error("Error:", error);
-//     res.status(500).json({ msg: "error", data: error });
-//   }
-// });
-
 router.post("/exportfile", async (req, res) => {
   try {
     let startdate = req.body.startdate;
@@ -445,105 +398,16 @@ router.post("/exportfile", async (req, res) => {
   }
 });
 
-// router.post('/exportreports', async (req, res) => {
-//   try {
-//     const { startdate, enddate } = req.body;
-
-//     // Define the SQL command to call the stored procedure
-//     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
-
-//     // Execute the stored procedure and get the results
-//     const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
-
-//     // Ensure that resultExportAttendance is an array and has at least two elements
-//     if (!Array.isArray(resultExportAttendance) || resultExportAttendance.length < 2) {
-//       throw new Error('Invalid result structure from stored procedure');
-//     }
-
-//     // Fetch TempAttendanceSummary (first result set)
-//     const summaryResults = resultExportAttendance[0];
-//     if (!summaryResults) {
-//       throw new Error('No summary results found');
-//     }
-//     const summaryData = JSON.parse(JSON.stringify(summaryResults));
-
-//     // Fetch TempAttendance (second result set)
-//     const attendanceResults = resultExportAttendance[1];
-//     if (!attendanceResults) {
-//       throw new Error('No attendance results found');
-//     }
-//     const attendanceData = JSON.parse(JSON.stringify(attendanceResults));
-
-//     // Create a new workbook
-//     const workbook = XLSX.utils.book_new();
-
-//     // Create and append a sheet for TempAttendanceSummary
-//     if (summaryData.length > 0) {
-//       const worksheetSummary = XLSX.utils.json_to_sheet(summaryData, { header: Object.keys(summaryData[0]) });
-//       adjustColumnWidths(worksheetSummary, summaryData);
-//       formatHeaders(worksheetSummary);
-//       XLSX.utils.book_append_sheet(workbook, worksheetSummary, 'Attendance Summary');
-//     }
-
-//     // Group TempAttendance by employeeid
-//     const groupedData = {};
-//     attendanceData.forEach((record) => {
-//       const { employeeid, fullname } = record; // Ensure these fields exist in your data
-//       if (!employeeid || !fullname) {
-//         console.warn('Missing employeeid or fullname in record:', record);
-//         return;
-//       }
-//       if (!groupedData[employeeid]) {
-//         groupedData[employeeid] = { data: [], name: fullname };
-//       }
-//       groupedData[employeeid].data.push(record);
-//     });
-
-//     // Convert groupedData to an array and sort by fullname
-//     const sortedEmployeeData = Object.keys(groupedData)
-//       .map(employeeId => ({ id: employeeId, ...groupedData[employeeId] }))
-//       .sort((a, b) => a.name.localeCompare(b.name));
-
-//     // Create and append sheets for each employee with their full name
-//     sortedEmployeeData.forEach(({ id, data, name }) => {
-//       if (data.length > 0) {
-//         const worksheetEmployee = XLSX.utils.json_to_sheet(data, { header: Object.keys(data[0]) });
-//         adjustColumnWidths(worksheetEmployee, data);
-//         formatHeaders(worksheetEmployee);
-//         XLSX.utils.book_append_sheet(workbook, worksheetEmployee, `${name}`);
-//       }
-//     });
-
-//     // Write to buffer
-//     const excelBuffer = XLSX.write(workbook, { type: 'buffer' });
-
-//     // Send the file to client
-//     res.setHeader('Content-Disposition', `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`);
-//     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-//     res.send(excelBuffer);
-
-//   } catch (error) {
-//     console.error('Error:', error);
-//     res.status(500).json({ msg: 'error', data: error.message });
-//   }
-// });
-
 router.post("/exportreports", async (req, res) => {
   try {
-    const { startdate, enddate } = req.body;
+    const { startdate, enddate, departmentids } = req.body;
 
-    console.log(req.body);
-    
-
-    // Define the SQL command to call the stored procedure
     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
 
-    // Execute the stored procedure and get the results
     const resultExportAttendance = await mysql.mysqlQueryPromise(
       sqlExportAttendance
     );
 
-    // Ensure that resultExportAttendance is an array and has at least two elements
     if (
       !Array.isArray(resultExportAttendance) ||
       resultExportAttendance.length < 2
@@ -551,29 +415,32 @@ router.post("/exportreports", async (req, res) => {
       throw new Error("Invalid result structure from stored procedure");
     }
 
-    // Fetch TempAttendanceSummary (first result set)
     const summaryResults = resultExportAttendance[0];
     if (!summaryResults) {
       throw new Error("No summary results found");
     }
     const summaryData = JSON.parse(JSON.stringify(summaryResults));
 
-    // Fetch TempAttendance (second result set)
     const attendanceResults = resultExportAttendance[1];
     if (!attendanceResults) {
       throw new Error("No attendance results found");
     }
     const attendanceData = JSON.parse(JSON.stringify(attendanceResults));
+    const filteredSummaryData = departmentids.includes("all")
+      ? summaryData
+      : summaryData.filter((record) => departmentids.includes(record.departmentId.toString()));
 
-    // Create a new workbook
+    const filteredAttendanceData = departmentids.includes("all")
+      ? attendanceData
+      : attendanceData.filter((record) => departmentids.includes(record.departmentId.toString()));
+
     const workbook = XLSX.utils.book_new();
 
-    // Create and append a sheet for TempAttendanceSummary
-    if (summaryData.length > 0) {
-      const worksheetSummary = XLSX.utils.json_to_sheet(summaryData, {
-        header: Object.keys(summaryData[0]),
+    if (filteredSummaryData.length > 0) {
+      const worksheetSummary = XLSX.utils.json_to_sheet(filteredSummaryData, {
+        header: Object.keys(filteredSummaryData[0]),
       });
-      adjustColumnWidths(worksheetSummary, summaryData);
+      adjustColumnWidths(worksheetSummary, filteredSummaryData);
       formatHeaders(worksheetSummary);
       XLSX.utils.book_append_sheet(
         workbook,
@@ -582,10 +449,9 @@ router.post("/exportreports", async (req, res) => {
       );
     }
 
-    // Group TempAttendance by employeeid
     const groupedData = {};
-    attendanceData.forEach((record) => {
-      const { employeeid, fullname } = record; // Ensure these fields exist in your data
+    filteredAttendanceData.forEach((record) => {
+      const { employeeid, fullname } = record;
       if (!employeeid || !fullname) {
         console.warn("Missing employeeid or fullname in record:", record);
         return;
@@ -596,33 +462,27 @@ router.post("/exportreports", async (req, res) => {
       groupedData[employeeid].data.push(record);
     });
 
-    // Convert groupedData to an array and sort by fullname
     const sortedEmployeeData = Object.keys(groupedData)
       .map((employeeId) => ({ id: employeeId, ...groupedData[employeeId] }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    // Create and append sheets for each employee with their full name
     sortedEmployeeData.forEach(({ id, data, name }) => {
       if (data.length > 0) {
         const worksheetEmployee = XLSX.utils.json_to_sheet(data, {
           header: Object.keys(data[0]),
         });
 
-        // Adjust the column widths and format the headers
         adjustColumnWidths(worksheetEmployee, data);
         formatHeaders(worksheetEmployee);
 
-        // Apply date format to the 'attendancedate' column (index 2 which is 'C' in Excel)
         const range = XLSX.utils.decode_range(worksheetEmployee["!ref"]);
         for (let rowNum = range.s.r + 1; rowNum <= range.e.r; rowNum++) {
-          const cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: 2 }); // Column 'C' is index 2
+          const cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: 2 });
           const cell = worksheetEmployee[cellAddress];
           if (cell && cell.t === "s") {
-            // Check if the cell is a string
-            // Parse the date string and reformat it to 'yyyy-mm-dd'
             const date = new Date(cell.v);
-            cell.v = date.toISOString().split("T")[0]; // Convert to 'YYYY-MM-DD'
-            cell.t = "s"; // Ensure the cell is treated as a string
+            cell.v = date.toISOString().split("T")[0];
+            cell.t = "s";
           }
         }
 
@@ -630,10 +490,8 @@ router.post("/exportreports", async (req, res) => {
       }
     });
 
-    // Write to buffer
     const excelBuffer = XLSX.write(workbook, { type: "buffer" });
 
-    // Send the file to client
     res.setHeader(
       "Content-Disposition",
       `attachment; filename="Attendance_data_${startdate}_${enddate}.xlsx"`
@@ -649,30 +507,29 @@ router.post("/exportreports", async (req, res) => {
   }
 });
 
+
 function adjustColumnWidths(worksheet, data) {
   const cols = [];
 
-  // Determine the maximum length of each column
   data.forEach((row) => {
     Object.keys(row).forEach((key, index) => {
-      const length = (row[key] ? row[key].toString().length : 10) + 2; // Adding some padding
+      const length = (row[key] ? row[key].toString().length : 10) + 2; 
       if (!cols[index] || cols[index] < length) {
         cols[index] = length;
       }
     });
   });
 
-  // Adjust column width considering headers
+
   const headerKeys = Object.keys(data[0]);
   headerKeys.forEach((key, index) => {
-    const headerLength = key.length + 2; // Adding some padding for headers
+    const headerLength = key.length + 2;
     if (!cols[index] || cols[index] < headerLength) {
       cols[index] = headerLength;
     }
   });
 
-  // Apply the width to each column
-  worksheet["!cols"] = cols.map((width) => ({ wpx: width * 10 })); // Adjust wpx for better readability
+  worksheet["!cols"] = cols.map((width) => ({ wpx: width * 10 })); 
 }
 function formatHeaders(worksheet) {
   const headerRow = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
@@ -699,7 +556,6 @@ function formatHeaders(worksheet) {
       },
     };
 
-    // Convert text to uppercase
     cell.v = cell.v.toString().toUpperCase();
   });
 }
@@ -756,22 +612,6 @@ router.post("/migrateattendance", (req, res) => {
   try {
     const { data } = req.body;
     const json = JSON.parse(data);
-
-    // for (const row of json) {
-    //   if(row.logs.includes("NO LOGS")) continue;
-    //   const { id, attendancedate, logs } = row;
-    //   let date = ConvertToDate(attendancedate);
-    //   let log = logs.split(" TO ");
-    //   let logouttype = log[1].slice(6, 8);
-    //   let timein = `${date} ${ConvertTo24Formart(log[0])}`;
-    //   let timeout =
-    //     logouttype == "AM"
-    //       ? `${AddDay(date, 1)} ${ConvertTo24Formart(log[1])}`
-    //       : `${date} ${ConvertTo24Formart(log[1])}`;
-
-    //   console.log('Timein: ', timein, 'Timeout:', timeout);
-    // }
-
     for (const row of json) {
       if (row.logs.includes("NO LOGS")) continue;
       const { id, attendancedate, logs } = row;

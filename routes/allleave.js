@@ -33,58 +33,75 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {
+router.post("/update", async (req, res) => {
   console.log("HIT");
   try {
-    let leaveid = req.body.leaveid;
-    let status = req.body.status;
-    let leavestartdate = req.body.leavestartdate;
-    let leaveenddate = req.body.leaveenddate;
-    let leaveduration = req.body.leaveduration;
-    let leavepaidays = req.body.leavepaidays;
-    let leaveunpaiddays = req.body.leaveunpaiddays;
-    let comment = req.body.comment;
+    const {
+      leaveid,
+      status,
+      leavestartdate,
+      leaveenddate,
+      leaveduration,
+      leavepaidays,
+      leaveunpaiddays,
+      comment,
+      employeeid,
+    } = req.body;
 
-    console.log("Received Parameters:");
-    console.log("leaveid:", leaveid);
-    console.log("status:", status);
-    console.log("leavestartdate:", leavestartdate);
-    console.log("leaveenddate:", leaveenddate);
-    console.log("leaveduration:", leaveduration);
-    console.log("leavepaidays:", leavepaidays);
-    console.log("leaveunpaiddays:", leaveunpaiddays);
-    console.log("comment:", comment);
+    console.log("Received Parameters:", req.body);
 
-    let sqlupdate = `UPDATE 
-    leaves SET l_leavestatus = '${status}',
-    l_leavestartdate = '${leavestartdate}',
-    l_leaveenddate = '${leaveenddate}',
-    l_leaveduration = '${leaveduration}',
-    l_leavepaiddays = '${leavepaidays}',
-    l_leaveunpaiddays = '${leaveunpaiddays}',
-    l_comment = '${comment}' 
-    WHERE l_leaveid = '${leaveid}'`;
+    if (status === "Approved") {
+      const conflictQuery = `
+        SELECT ld_leavedates 
+        FROM leave_dates 
+        WHERE ld_employeeid = '${employeeid}'
+        AND ld_leavedates BETWEEN '${leavestartdate}' AND '${leaveenddate}'
+      `;
 
-    console.log(sqlupdate);
+      console.log("Checking for date conflicts:", conflictQuery);
 
-    mysql
-      .Update(sqlupdate)
-      .then((result) => {
-        console.log(sqlupdate);
-        res.json({
-          msg: "success",
-          data: result,
+      const conflicts = await mysql.mysqlQueryPromise(conflictQuery);
+
+      if (conflicts.length > 0) {
+        const conflictingDates = conflicts.map((row) =>
+          new Date(row.ld_leavedates).toISOString().split("T")[0]
+        );
+
+        console.log("Conflict detected on dates:", conflictingDates);
+
+        return res.json({
+          msg: "conflict",
+          conflictingDates: conflictingDates,
         });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
+      }
+    }
+
+    const sqlupdate = `
+      UPDATE leaves 
+      SET 
+        l_leavestatus = '${status}',
+        l_leavestartdate = '${leavestartdate}',
+        l_leaveenddate = '${leaveenddate}',
+        l_leaveduration = '${leaveduration}',
+        l_leavepaiddays = '${leavepaidays}',
+        l_leaveunpaiddays = '${leaveunpaiddays}',
+        l_comment = '${comment}' 
+      WHERE l_leaveid = '${leaveid}'
+    `;
+
+    console.log("Executing update:", sqlupdate);
+
+    const updateResult = await mysql.Update(sqlupdate);
+
+    res.json({
+      msg: "success",
+      data: updateResult,
+    });
   } catch (error) {
+    console.error("Error in /update route:", error);
     res.json({
       msg: "error",
+      data: error,
     });
   }
 });

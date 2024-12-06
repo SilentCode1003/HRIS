@@ -25,7 +25,6 @@ const {
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  // res.render('eportalindexlayout', { title: 'Express' });
   Validator(req, res, "eportalindexlayout", "eportalindex");
 });
 
@@ -48,23 +47,10 @@ function getLatestLog(employeeId) {
   });
 }
 
-// function getDeviceInformation(device) {
-//   console.log(device);
-
-//   if (typeof device === "undefined" || " ") {
-//     return "app";
-//   } else {
-//     return "web";
-//   }
-// }
-
 router.get("/getisgefence", (req, res) => {
-  console.log("hit");
   try {
     let employeeId = req.session.employeeid;
     let accesstype = req.session.accesstypeid;
-
-    console.log(employeeId);
     let sql = `SELECT 
     mu_isgeofence
     FROM master_user
@@ -90,8 +76,6 @@ router.get("/getisgefence", (req, res) => {
 
 router.post("/latestlog", (req, res) => {
   const employeeid = req.body.employeeid;
-
-  console.log(employeeid);
 
   getLatestLog(employeeid)
     .then((latestLog) => {
@@ -119,183 +103,6 @@ router.post("/latestlogforapp", (req, res) => {
     );
 });
 
-// router.post("/clockin", (req, res) => {
-//   const employee_id = req.body.employeeid;
-//   const geofenceid = req.body.geofenceid;
-//   let locationin = req.body.locationin;
-//   const latitude = req.body.latitude;
-//   const longitude = req.body.longitude;
-//   const devicein = req.body.devicein;
-
-//   locationin = RemoveApostrophe(locationin);
-
-//   // Validate all required fields
-//   if (!employee_id) {
-//     return res.status(401).json({
-//       status: "error",
-//       message: "Unauthorized. Employee not logged in.",
-//     });
-//   }
-
-//   if (!geofenceid) {
-//     return res.status(400).json({
-//       status: "error",
-//       message: "Geofence ID cannot be null.",
-//     });
-//   }
-
-//   if (!locationin) {
-//     return res.status(400).json({
-//       status: "error",
-//       message: "We Cant Find Your Location",
-//     });
-//   }
-
-//   if (latitude === null || latitude === undefined) {
-//     return res.status(400).json({
-//       status: "error",
-//       message: "Latitude cannot be null.",
-//     });
-//   }
-
-//   if (longitude === null || longitude === undefined) {
-//     return res.status(400).json({
-//       status: "error",
-//       message: "Longitude cannot be null.",
-//     });
-//   }
-
-//   if (!devicein) {
-//     return res.status(400).json({
-//       status: "error",
-//       message: "Device information cannot be null.",
-//     });
-//   }
-
-//   // Get the current attendance date
-//   const attendancedate = moment().format("YYYY-MM-DD");
-
-//   const checkExistingClockInQuery = `
-//     SELECT ma_employeeid
-//     FROM master_attendance
-//     WHERE ma_employeeid = '${employee_id}'
-//       AND ma_attendancedate = '${attendancedate}'
-//       AND ma_clockin IS NOT NULL
-//   `;
-
-//   const checkMissingClockOutQuery = `
-//     SELECT ma_employeeid
-//     FROM master_attendance
-//     WHERE ma_employeeid = '${employee_id}'
-//       AND ma_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
-//       AND ma_clockout IS NULL
-//   `;
-
-//   // Function to execute sequential queries
-//   const executeSequentialQueries = (queries) =>
-//     queries.reduce(
-//       (promise, query) =>
-//         promise.then((result) =>
-//           mysql
-//             .mysqlQueryPromise(query)
-//             .then((queryResult) => [...result, queryResult])
-//         ),
-//       Promise.resolve([])
-//     );
-
-//   executeSequentialQueries([checkExistingClockInQuery, checkMissingClockOutQuery])
-//     .then(([resultClockIn, resultMissingClockOut]) => {
-//       if (resultClockIn.length > 0) {
-//         return res.json({
-//           status: "exist",
-//           message: "Clock-in not allowed. Employee already clocked in on the same day.",
-//         });
-//       } else if (resultMissingClockOut.length > 0) {
-//         return res.json({
-//           status: "disabled",
-//           message: "Clock-in not allowed. Missing clock-out on the previous day.",
-//         });
-//       } else {
-//         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
-
-//         // Insert attendance record into the database
-//         let sql = InsertStatement("master_attendance", "ma", [
-//           "employeeid",
-//           "attendancedate",
-//           "clockin",
-//           "latitudeIn",
-//           "longitudein",
-//           "devicein",
-//           "gefenceidIn",
-//           "locationIn",
-//         ]);
-
-//         // Prepare data for insertion
-//         let data = [
-//           [
-//             employee_id,
-//             attendancedate,
-//             clockinDateTime,
-//             latitude, // This should not be null
-//             longitude, // This should not be null
-//             devicein,
-//             geofenceid,
-//             locationin,
-//           ],
-//         ];
-
-//         let checkStatement = SelectStatement(
-//           "SELECT * FROM master_attendance WHERE ma_attendancedate=? AND ma_employeeid=?",
-//           [attendancedate, employee_id]
-//         );
-
-//         Check(checkStatement)
-//           .then((result) => {
-//             if (result.length !== 0) {
-//               return res.json(JsonWarningResponse(MessageStatus.EXIST));
-//             } else {
-//               if (latitude === null || longitude === null) {
-//                 return res.status(400).json({
-//                   status: "error",
-//                   message: "Latitude and Longitude cannot be null.",
-//                 });
-//               }
-//               InsertTable(sql, data, (err, result) => {
-//                 if (err) {
-//                   console.log(err);
-//                   return res.status(500).json({
-//                     status: "error",
-//                     message: "Failed to insert attendance. Please try again.",
-//                   });
-//                 }
-//                 return res.json({
-//                   status: "success",
-//                   message: "Clock-in successful.",
-//                 });
-//               });
-//             }
-//           })
-//           .catch((error) => {
-//             console.error("Error during check statement:", error);
-//             return res.json({
-//               status: "error",
-//               message: "Internal server error. Please try again.",
-//               data: error,
-//             });
-//           });
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Error during clock-in process:", error);
-//       return res.status(500).json({
-//         status: "error",
-//         message: "Internal server error. Please try again.",
-//         data: error,
-//       });
-//     });
-// });
-
-
 router.post("/clockout", (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude, geofenceid } = req.body;
@@ -319,13 +126,6 @@ router.post("/clockout", (req, res) => {
     return res.status(400).json({
       status: "error",
       message: "Longitude cannot be null.",
-    });
-  }
-
-  if (!geofenceid) {
-    return res.status(400).json({
-      status: "error",
-      message: "Geofence ID cannot be null.",
     });
   }
 
@@ -417,12 +217,6 @@ router.post("/clockin", (req, res) => {
     return res.status(401).json({
       status: "error",
       message: "Unauthorized. Employee not logged in.",
-    });
-  }
-  if (!geofenceid) {
-    return res.status(400).json({
-      status: "error",
-      message: "Geofence ID cannot be null.",
     });
   }
   if (!locationin) {
@@ -674,8 +468,6 @@ router.post("/viewnotif", (req, res) => {
     from master_notification
     where mn_notificationid = '${notificationIdClicked}'`;
 
-    console.log("notif_id", notificationIdClicked);
-
     mysql.Select(sql, "Master_Notification", (err, result) => {
       if (err) console.error("Error : ", err);
 
@@ -720,9 +512,6 @@ router.post("/loadnotif", (req, res) => {
     WHERE mn_employeeid = '${employeeid}'
     AND mn_isDeleate = 'NO'
     ORDER BY mn_date DESC`;
-
-    console.log();
-
     mysql.Select(sql, "Master_Notification", (err, result) => {
       if (err) console.error("Error: ", err);
 

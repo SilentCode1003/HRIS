@@ -35,14 +35,14 @@
                   <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editannouncementmodal"><i class="fas fa-fw fa-pen"></i></button>
                  `;
 
-              var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.image;
-              imgElement.alt = "Profile Image";
-              imgElement.style.width = "80px";
-              imgElement.style.height = "80px";
+              // var imgElement = document.createElement("img");
+              // imgElement.src = "data:image/jpg;base64," + item.image;
+              // imgElement.alt = "Profile Image";
+              // imgElement.style.width = "80px";
+              // imgElement.style.height = "80px";
 
               finalData.push({
-                image: imgElement.outerHTML,
+                // image: imgElement.outerHTML,
                 bulletinid: item.bulletinid,
                 tittle: item.tittle,
                 type: item.type,
@@ -65,7 +65,7 @@
           },
         ],
         columns: [
-          { data: "image" },
+          // { data: "image" },
           { data: "bulletinid" },
           { data: "tittle" },
           { data: "type" },
@@ -78,7 +78,7 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var statusCell = $(row).find("td:eq(8)");
+          var statusCell = $(row).find("td:eq(7)");
 
           var statusText = data.status;
 
@@ -147,9 +147,6 @@
       let targetdate = $("#targetdate").val();
       let enddate = $("#enddate").val();
       let description = $("#announcementdescription").summernote("code"); // Capture the HTML content
-
-      console.log(tittle, type, targetdate, enddate, description);
-      
 
       var message = "";
 
@@ -226,7 +223,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-      bulletinid = dataRow[1];
+      bulletinid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {

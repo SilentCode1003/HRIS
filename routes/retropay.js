@@ -57,12 +57,10 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -95,7 +93,6 @@ router.post("/save", (req, res) => {
         return res.json(JsonErrorResponse(err));
       }
 
-      console.log(result, "result");
 
       if (result.length > 0) {
         result.forEach((row) => {
@@ -195,12 +192,10 @@ GROUP BY
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -233,12 +228,10 @@ router.post("/getretropay", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -291,7 +284,6 @@ router.post("/insertadjustment", (req, res) => {
       [employeeid, adjustmenttype]
     );
 
-    console.log(checkStatement);
 
     Check(checkStatement)
       .then((result) => {
@@ -332,11 +324,9 @@ router.get("/viewpayrolldates", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
     
-      console.log(result);
     
       if (result != 0) {
         let data = DataModeling(result, "p_");
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

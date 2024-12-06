@@ -19,7 +19,7 @@ const logger = createLogger({
     format.colorize({ all: true }),
     format.printf(
       (info) =>
-        `Datetime: ${GetCurrentDatetime()} Status: ${info.status} | Level: ${
+        `Datetime: ${GetCurrentDatetime()} | Level: ${
           info.level
         } | Message: ${info.message}`
     )

@@ -8,6 +8,8 @@ const cors = require("cors");
 const { eventlogger, logger } = require("./middleware/logger");
 const cron = require("node-cron");
 const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_status");
+const swaggerDocs = require('./document/swagger');
+const swaggerUi = require('swagger-ui-express');
 
 // const corsOptions = {
 //   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
@@ -170,6 +172,12 @@ var suggestionquestionRouter = require("./routes/suggestionquestion");
 var sessionRouter = require("./routes/session");
 var adjournementRouter = require("./routes/adjournement");
 var adjournement_payRouter = require("./routes/adjournement_pay");
+var eportaldtr = require("./routes/eportaldtr");
+var teamleadapprovedotmealRouter = require("./routes/teamleadapprovedotmeal");
+var eportalobRouter = require("./routes/eportalob");
+var eportalundertime = require("./routes/eportalundertime");
+var teamleadmanualotmealRouter = require("./routes/teamleadmanualotmeal");
+var teamleadobRouter = require("./routes/teamleadob");
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -197,6 +205,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // app.use(cors(corsOptions));
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use((req, res, next) => {
   eventlogger(req, res, next);
 });
@@ -219,7 +229,6 @@ app.use("/approvedleave", approvedleaveRouter);
 app.use("/rejectedleave", rejectedleaveRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/shift", shiftRouter);
-app.use("/trainings", trainingsRouter);
 app.use("/position", positionRouter);
 app.use("/disciplinary", disciplinaryRouter);
 app.use("/disciplinaryaction", disciplinaryactionRouter);
@@ -312,6 +321,7 @@ app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
+app.use("/trainings", trainingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
 app.use("/medecines_request", medecinesrequestRouter);
@@ -351,6 +361,13 @@ app.use("/suggestionarea", suggestionareaRouter);
 app.use("/suggestionquestion", suggestionquestionRouter);
 app.use("/adjournement", adjournementRouter);
 app.use("/adjournement_pay", adjournement_payRouter);
+app.use("/eportaldtr", eportaldtr);
+app.use("/teamleadapprovedotmeal", teamleadapprovedotmealRouter);
+app.use("/eportalob", eportalobRouter);
+app.use("/eportalundertime", eportalundertime);
+app.use("/teamleadmanualotmeal", teamleadmanualotmealRouter);
+app.use("/teamleadob", teamleadobRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

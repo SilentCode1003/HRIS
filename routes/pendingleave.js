@@ -71,7 +71,6 @@ router.post("/getleavedashboard", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      //console.log(sql)
       .then((result) => {
         if (result.length > 0) {
           res.status(200).json({

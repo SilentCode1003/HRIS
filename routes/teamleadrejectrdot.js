@@ -24,7 +24,6 @@ module.exports = router;
 
 
 router.get("/load", (req, res) => {
-  console.log("HIT");
 
   try {
     let subgroupid = req.session.subgroupid;
@@ -50,7 +49,6 @@ router.get("/load", (req, res) => {
         roa_status = 'Rejected' 
             AND roa_subgroupid IN (${subgroupid})`;
 
-    console.log(sql);
 
     Select(sql, (err, result) => {
       if (err) {
@@ -61,7 +59,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -103,7 +100,6 @@ router.post("/getrdotapproval", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

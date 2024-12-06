@@ -62,12 +62,9 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "us_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -87,7 +84,7 @@ router.get("/loaduserid", (req, res) => {
         FROM master_user
         INNER JOIN master_employee ON master_user.mu_employeeid = me_id
         INNER JOIN master_access ON master_user.mu_accesstype = ma_accessid
-        WHERE ma_accessname IN ('Super Visor', 'Team Leader', 'Department Head', 'Manager')`;
+        WHERE ma_accessname IN ('Supervisor', 'Team Leader', 'Department Head', 'Manager')`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -97,8 +94,6 @@ router.get("/loaduserid", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mu_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

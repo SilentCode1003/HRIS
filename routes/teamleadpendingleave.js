@@ -25,48 +25,6 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-// router.get("/load", (req, res) => {
-//   try {
-//     let departmentid = req.session.departmentid;
-//     let subgroupid = req.session.subgroupid;
-//     let accesstypeid = req.session.accesstypeid;
-//     let sql = `SELECT
-//     l_leaveid,
-//     concat(me_lastname,' ',me_firstname) as l_employeeid,
-//     DATE_FORMAT(l_leavestartdate, '%Y-%m-%d') AS l_leavestartdate,
-//     DATE_FORMAT(l_leaveenddate, '%Y-%m-%d') AS l_leaveenddate,
-//     ml_leavetype as l_leavetype,
-//     l_leavereason,
-//     l_leaveapplieddate
-//     FROM leaves
-//     INNER JOIN
-//     master_employee ON leaves.l_employeeid = me_id
-//     INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
-//     WHERE l_leavestatus = 'Pending'
-//     AND l_subgroupid IN (${subgroupid})
-//     AND me_department = '${departmentid}'
-//     AND l_employeeid NOT IN (
-//         SELECT tu_employeeid FROM teamlead_user)
-//       AND l_approvalcount = (
-//         SELECT ats_count
-//         FROM aprroval_stage_settings
-//         WHERE ats_accessid = '${accesstypeid}'
-//         AND ats_departmentid = '${departmentid}'
-//     )`;
-
-//     mysql.Select(sql, "Leaves", (err, result) => {
-//       if (err) console.error("Error: ", err);
-
-//       res.json({
-//         msg: "success",
-//         data: result,
-//       });
-//     });
-//   } catch (error) {
-//     console.log(error);                                                
-//   }
-// });
-
 router.get("/load", (req, res) => {
   try {
     let subgroupid = req.session.subgroupid;
@@ -105,38 +63,61 @@ router.get("/load", (req, res) => {
   }
 });
 
-
-
-router.post("/leaveaction", (req, res) => {
-  console.log("HIT");
+router.post("/leaveaction", async (req, res) => {
   try {
-    let employeeid = req.session.employeeid;
-    let departmentid = req.session.departmentid;
-    let subgroupid = req.body.subgroupid;
-    let leaveid = req.body.leaveid;
-    let status = req.body.status;
-    let comment = req.body.comment;
+    const employeeid = req.session.employeeid;
+    const departmentid = req.session.departmentid;
+    const subgroupid = req.body.subgroupid;
+    const leaveid = req.body.leaveid;
+    const status = req.body.status;
+    const comment = req.body.comment;
     const { startdate, enddate } = req.body;
-    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    const createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    const conflictQuery = `
+      SELECT ld_leavedates 
+      FROM leave_dates 
+      WHERE ld_employeeid = '${employeeid}' 
+      AND ld_leavedates BETWEEN '${startdate}' AND '${enddate}'
+    `;
 
-    let data = [];
+    const conflictResult = await mysql.mysqlQueryPromise(conflictQuery);
 
-    data.push([
-      employeeid,
-      departmentid,
-      leaveid,
-      subgroupid,
-      status,
-      createdate,
-      comment,
-    ]);
+    if (conflictResult.length > 0) {
+      const conflictingDates = conflictResult.map(row => {
+        const date = new Date(row.ld_leavedates);
+        return date.toISOString().split("T")[0];
+      });
 
-    console.log(data);
+      return res.json({
+        msg: "conflict",
+        conflictingDates: conflictingDates,
+      });
+    }
+
+    const data = [
+      [
+        employeeid,
+        departmentid,
+        leaveid,
+        subgroupid,
+        status,
+        createdate,
+        comment,
+      ],
+    ];
+
 
     mysql.InsertTable("leave_request_activity", data, (err, result) => {
-      if (err) console.error("Error: ", err);
+      if (err) {
+        console.error("Error: ", err);
+        return res.json({
+          msg: "error",
+          data: err,
+        });
+      }
 
-      let emailbody = [
+
+      const emailbody = [
         {
           employeename: employeeid,
           date: createdate,
@@ -146,6 +127,7 @@ router.post("/leaveaction", (req, res) => {
           requesttype: REQUEST.LEAVE,
         },
       ];
+
       SendEmailNotificationEmployee(
         employeeid,
         subgroupid,
@@ -159,6 +141,7 @@ router.post("/leaveaction", (req, res) => {
       });
     });
   } catch (error) {
+    console.error("Error in /leaveaction route:", error);
     res.json({
       msg: "error",
       data: error,
@@ -166,62 +149,6 @@ router.post("/leaveaction", (req, res) => {
   }
 });
 
-// router.post("/leaveaction", (req, res) => {
-//   try {
-//     let employeeid = req.session.employeeid;
-//     let departmentid = req.session.departmentid;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-//     const { subgroupid, leaveid, status, comment } = req.body;
-
-//     let sql = InsertStatement("leave_request_activity", "lra", [
-//       "employeeid",
-//       "departmentid",
-//       "leaveid",
-//       "subgroupid",
-//       "status",
-//       "date",
-//       "comment",
-//     ]);
-
-//     console.log(InsertStatement);
-
-//     console.log(sql);
-
-//     let data = [[employeeid, departmentid, subgroupid, leaveid, status, createdate, comment]];
-//     let checkStatement = SelectStatement(
-//       "select * from leave_request_activity where lra_employeeid=? and lra_leaveid=? and lra_subgroupid=? and lra_status=?",
-//       [employeeid, leaveid, subgroupid, status]
-//     );
-
-//     console.log(checkStatement);
-
-//     Check(checkStatement)
-//       .then((result) => {
-//
-//         if (result != 0) {
-//           return res.json(JsonWarningResponse(MessageStatus.EXIST));
-//         } else {
-//           InsertTable(sql, data, (err, result) => {
-//             if (err) {
-//               console.log(err);
-//               res.json(JsonErrorResponse(err));
-//             }
-
-//             res.json(JsonSuccess());
-
-//
-//           });
-//         }
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//         res.json(JsonErrorResponse(error));
-//       });
-//   } catch (error) {
-//     console.log(err);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
 
 //#region FUNCTION
 function Check(sql) {

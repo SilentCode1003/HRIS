@@ -129,16 +129,6 @@ router.post("/update", (req, res) => {
           msg: error,
         });
       });
-
-    // mysql.Update(sqlupdate, (err,result) =>{
-    //   if(err) console.error('Error: ', err);
-
-    //
-
-    //   res.json({
-    //     msg: 'success'
-    //   })
-    // })
   } catch (error) {
     res.json({
       msg: "error",

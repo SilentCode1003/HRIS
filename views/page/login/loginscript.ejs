@@ -83,7 +83,7 @@
                   location.replace("/eportalindex");
                 } else if (result.data[0].accesstype === "Team Leader") {
                   location.replace("/teamleadindex");
-                } else if (result.data[0].accesstype === "Super Visor") {
+                } else if (result.data[0].accesstype === "Supervisor") {
                   location.replace("/teamleadindex");
                 } else if (result.data[0].accesstype === "Department Head") {
                   location.replace("/teamleadindex");
@@ -133,5 +133,48 @@
         $(this).find("i").removeClass("fa-eye-slash").addClass("fa-eye");
       }
     });
+
+
+    function askForLocationPermission() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log("Location access granted:", position);
+            validateUserLocation(); // Call your function here
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            if (error.code === error.PERMISSION_DENIED) {
+              swal({
+                title: "Location Access Denied",
+                text: "Location access is blocked. Please enable it in your browser settings.",
+                icon: "error",
+                buttons: ["Close", "Open Settings"],
+              }).then((openSettings) => {
+                if (openSettings) {
+                  // Opening settings based on browser
+                  if (navigator.userAgent.indexOf("Chrome") !== -1) {
+                    window.open("chrome://settings/content/location", "_blank"); // For Chrome
+                  } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+                    window.open("about:preferences#privacy", "_blank"); // For Firefox
+                  } else if (navigator.userAgent.indexOf("Safari") !== -1) {
+                    window.open("x-apple-system://settings", "_blank"); // For Safari (on macOS)
+                  }
+                }
+              });
+            } else {
+              handleError(error); // Handle other errors (e.g., timeout, unavailable)
+            }
+          },
+          {
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000, // Adjust timeout for location request
+          }
+        );
+      } else {
+        swal("Error", "Geolocation is not supported by your browser.", "error");
+      }
+    }
   });
 </script>

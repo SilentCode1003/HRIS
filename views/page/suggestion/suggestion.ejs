@@ -67,9 +67,9 @@
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header custom-bg">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content" >
+      <div class="modal-header" id="modal-header">
         <h6 class="font-weight-bold h4 label-title">Suggestions</h6>
         <button
           type="button"
@@ -80,20 +80,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="custom-modal-body">
-        <div class="card">
-          <div class="card-header py-2 header-bg">
-            <h6 class="pt-2 font-weight-bold h4 label-title">
-              Suggestion Details
-            </h6>
-          </div>
-          <div class="card-body">
-              <div class="justify-content-center" id="suggestion-details">
-                </div>
-              </div>
+      <div class="modal-body" id="modal-body">
+        <div class="modal-content">
+          <div class="card">
+            <div class="card-header py-2 header-bg">
+              <h6 class="pt-2 font-weight-bold h4 label-title">
+                Suggestion Details
+              </h6>
+            </div>
+            <div class="card-body justify-content-center">
+              <div id="suggestion-details"></div>
+            </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" id="modal-footer">
           <button
             type="button"
             class="btn btn-outline-inventory"

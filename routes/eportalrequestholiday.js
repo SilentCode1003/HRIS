@@ -24,7 +24,6 @@ const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('eportalrequestholidaylayout', { title: 'Express' });
   Validator(req, res, "eportalrequestholidaylayout", "eportalrequestholiday");
 });
 
@@ -53,12 +52,8 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -97,8 +92,6 @@ router.post("/getreqholiday", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -205,9 +198,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }
@@ -244,13 +234,8 @@ router.post("/loadapproved", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -283,13 +268,8 @@ router.post("/loadrejected", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -314,7 +294,7 @@ router.post("/loadcancelled", (req, res) => {
     ph_normal_ot_total
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
-    and ph_status = 'Cancel'
+    AND ph_status IN ('Cancelled','Cancel')
     order by ph_attendancedate asc`;
 
     Select(sql, (err, result) => {
@@ -323,12 +303,8 @@ router.post("/loadcancelled", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

@@ -96,7 +96,6 @@ router.post("/save", async (req, res) => {
     let insurancenumber = req.body.insurancenumber;
     let data = [];
 
-    // Check if a record with the same employeeid exists in the master_health table
     const checkQuery = `SELECT * FROM master_health WHERE mh_employeeid = '${employeeid}'`;
     const checkParams = [employeeid];
 
@@ -106,10 +105,8 @@ router.post("/save", async (req, res) => {
     );
 
     if (existingRecord.length > 0) {
-      // A record with the same employeeid already exists
       res.json({ msg: "exist" });
     } else {
-      // If no existing record is found, insert the data into the master_health table
       data.push([
         employeeid,
         bloodtype,
@@ -127,7 +124,6 @@ router.post("/save", async (req, res) => {
           console.error("Error inserting record: ", insertErr);
           res.json({ msg: "insert_failed" });
         } else {
-          console.log(insertResult);
           res.json({ msg: "success" });
         }
       });

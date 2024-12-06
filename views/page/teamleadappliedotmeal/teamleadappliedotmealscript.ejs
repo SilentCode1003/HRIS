@@ -37,7 +37,7 @@
               var action = "";
               var status = item.status;
 
-              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn"><i class="fas fa-fw fa-pen"></i></button>`;
 
               // var imgElement = document.createElement("img");
               // imgElement.src = "data:image/jpg;base64," + item.image;
@@ -163,6 +163,8 @@
     });
 
     $(document).on("click", "#editBtn", function () {
+      $('#otapprovalmodal').modal('show');
+
       $.ajax({
         type: "POST",
         url: "/teamleadappliedotmeal/getotmeal",
@@ -248,9 +250,10 @@
                 "You clicked the button!",
                 "success"
               ).then((result) => {
-                window.location.reload();
+                $('#otapprovalmodal').modal('hide');
+                LoadTable();
               });
-              LoadTable();
+             
             } else if (result.msg === "exist") {
               swal("Error", "This combination already exists.", "error");
             }
@@ -321,7 +324,7 @@
                 "You clicked the button!",
                 "success"
               ).then((results) => {
-                window.location.reload();
+                $('#otapprovalmodal').modal('hide');
               });
               LoadTable();
             } else if (result.msg == "exist") {

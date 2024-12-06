@@ -51,8 +51,6 @@ router.get("/loadPending", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -88,8 +86,6 @@ router.get("/loadApplied", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -125,8 +121,6 @@ router.get("/loadApproved", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -162,8 +156,41 @@ router.get("/loadRejected", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 
-        console.log(data);
+router.get("/loadCancelled", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Cancelled'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -200,8 +227,6 @@ router.post("/getotmeal", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -306,14 +331,10 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
-
     let checkStatement = SelectStatement(
       "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
       [employeeid, attendancedate, status]
     );
-
-    console.log(checkStatement, "check");
 
     Check(checkStatement)
       .then((result) => {

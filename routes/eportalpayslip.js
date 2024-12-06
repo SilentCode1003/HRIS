@@ -21,9 +21,6 @@ router.post("/viewpayslip", (req, res) => {
 
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
-
-      console.log(encrypted);
-
       let sql = `select 
       me_id
       from master_employee

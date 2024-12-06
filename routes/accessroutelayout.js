@@ -55,12 +55,9 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
 
       if (result != 0) {
         let data = DataModeling(result, "marl_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -73,16 +70,12 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
-  console.log("HIT");
   try {
     let status = "ACTIVE";
     let createdby =
       req.session.personelid == null ? "DEV42" : req.session.personelid;
     let createddate = GetCurrentDatetime();
     const { route, layout, access } = req.body;
-
-    console.log(req.body);
-
     let sql = InsertStatement("master_access_route_layout", "marl", [
       "route",
       "layout",
@@ -91,8 +84,6 @@ router.post("/save", (req, res) => {
       "createdby",
       "createddate",
     ]);
-
-    console.log(sql);
 
     let data = [[route, layout, access, status, createdby, createddate]];
     let checkStatement = SelectStatement(
@@ -187,9 +178,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from master_access_route_layout where marl_route = ? and marl_layout = ? and marl_accessid = ?",
       [route, layout, access]
@@ -202,9 +190,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }

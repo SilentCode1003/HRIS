@@ -25,7 +25,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Super Visor') {%>
+<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Supervisor' || accesstype == 'Team Leader') {%>
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseemployee"
             aria-expanded="true" aria-controls="collapseemployee">
@@ -38,15 +38,18 @@
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <a class="collapse-item" href="/teamleademployee">List of Employee</a>
                 <a class="collapse-item" href="/teamleadattendance">Attendance</a>
+                <a class="collapse-item" href="/teamleadmanualotmeal">Team Lead OT Meal</a>
+                <% if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Supervisor') {%>
                 <a class="collapse-item" href="/teamleadshift">Shift</a>
                 <a class="collapse-item" href="/teamleadshiftadjustment">Shift Adjustments</a>
+                <% }%>
             </div>
         </div>
     </li>
 <% }%>
 
 
-<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Super Visor' || accesstype == 'Team Leader') {%>
+<%if (accesstype == 'Department Head' || accesstype == 'Manager' || accesstype == 'Supervisor' || accesstype == 'Team Leader') {%>
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsecoa"
             aria-expanded="true" aria-controls="collapsecoa">
@@ -82,20 +85,42 @@
         </div>
     </li>
 
+    
+    <li class="nav-item sidebar-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseob"
+            aria-expanded="true" aria-controls="collapseob">
+            <lord-icon
+            src="https://cdn.lordicon.com/gznfrpfp.json"
+            trigger="loop" class="db-icon-hrmis">
+        </lord-icon>
+            <span><b>Official Business</b></span>
+        </a>
+  
+        <div id="collapseob" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="py-2 collapse-inner rounded boxshadow-sidebar">
+                <a class="collapse-item" href="/teamleadob">All Request</a>
+                <a class="collapse-item" href="/teamleadobapplied">Applied</a>
+                <a class="collapse-item" href="/teamleadobapproved">Approved</a>
+                <a class="collapse-item" href="/teamleadobrejected">Rejected</a>
+                <a class="collapse-item" href="/teamleadobcancelled">Cancelled</a>
+            </div>
+        </div>
+    </li>
+
 
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseotmeal"
             aria-expanded="true" aria-controls="collapseotmeal">
             <lord-icon src="https://cdn.lordicon.com/yeoppmgu.json" trigger="loop" class="db-icon-hrmis">
             </lord-icon>
-            <span><b>Meal</b></span>
+            <span><b>OT Meal</b></span>
         </a>
   
         <div id="collapseotmeal" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="py-2 collapse-inner rounded boxshadow-sidebar">
                 <!-- <a class="collapse-item" href="">Total OT Meal</a> -->
                 <a class="collapse-item" href="/teamleadappliedotmeal">Applied OT Meal</a>
-                <!-- <a class="collapse-item" href="">Approved OT Meal</a> -->
+                <a class="collapse-item" href="/teamleadapprovedotmeal">Approved OT Meal</a>
             </div>
         </div>
     </li>
@@ -103,8 +128,7 @@
     <li class="nav-item sidebar-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseholiday"
             aria-expanded="true" aria-controls="collapseholiday">
-            <lord-icon src="https://cdn.lordicon.com/janaytca.json" trigger="loop"
-            colors="primary:#121331,secondary:#e83a30,tertiary:#f9c9c0,quaternary:#ebe6ef">
+            <lord-icon src="https://cdn.lordicon.com/janaytca.json" trigger="loop" class="db-icon-hrmis">
             </lord-icon>
             <span><b>Holiday</b></span>
         </a>

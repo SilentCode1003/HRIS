@@ -16,17 +16,17 @@ const {
   SelectStatement,
   UpdateStatement,
 } = require("./repository/customhelper");
+const { log } = require("winston");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('candidatelayout', { title: 'Express' });
-
   Validator(req, res, "change_shiftlayout", "change_shift");
 });
 
 module.exports = router;
+//#region change Rest Day
 
 router.get("/load", (req, res) => {
   try {
@@ -59,7 +59,7 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/save", (req, res) => {
+router.post("/save", async (req, res) => {
   try {
     let createby = req.session.fullname;
     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
@@ -79,12 +79,9 @@ router.post("/save", (req, res) => {
     ];
 
     let checkStatement = SelectStatement(
-      "select * from change_shift where cs_employeeid =? and cs_actualrd= ?",
-      [employeeid, actualrddate]
+      "select * from change_shift where cs_employeeid =? and cs_actualrd=? or cs_employeeid =? and  cs_changerd =?",
+      [employeeid, actualrddate, employeeid, targetrddate]
     );
-
-    console.log(checkStatement);
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -106,6 +103,112 @@ router.post("/save", (req, res) => {
       });
   } catch (error) {
     console.log(err);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+// router.post("/save", async (req, res) => {
+//   try {
+//     let createby = req.session.fullname;
+//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+//     let status = "Active";
+//     const { employeeid, targetrddate, actualrddate } = req.body;
+
+//     if (!employeeid || !targetrddate || !actualrddate) {
+//       return res.json(JsonWarningResponse("Employee ID, Actual RD Date, and Target RD Date are required"));
+//     }
+
+//     let sql = InsertStatement("change_shift", "cs", [
+//       "employeeid",
+//       "actualrd",
+//       "changerd",
+//       "shiftstatus",
+//       "createby",
+//       "createdate",
+//     ]);
+//     let data = [
+//       [employeeid, actualrddate, targetrddate, status, createby, createdate],
+//     ];
+
+//     let checkStatement = SelectStatement(
+//       "SELECT * FROM change_shift WHERE (cs_employeeid = ? AND cs_actualrd = ?) OR (cs_employeeid = ? AND cs_changerd = ?)",
+//       [employeeid, actualrddate, employeeid, targetrddate]
+//     );
+
+//     const result = await Check(checkStatement);
+
+//     if (result.length > 0) {
+//       return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//     }
+
+//     InsertTable(sql, data, (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(JsonErrorResponse(err));
+//       }
+
+//       return res.json(JsonSuccess());
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
+
+router.post("/save", async (req, res) => {
+  try {
+    let createby = req.session.fullname;
+    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    let status = "Active";
+    const { employeeid, targetrddate, actualrddate } = req.body;
+
+    let sql = InsertStatement("change_shift", "cs", [
+      "employeeid",
+      "actualrd",
+      "changerd",
+      "shiftstatus",
+      "createby",
+      "createdate",
+    ]);
+    let data = [
+      [employeeid, actualrddate, targetrddate, status, createby, createdate],
+    ];
+
+    let checkActual = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
+      [employeeid, actualrddate]
+    );
+
+    let checkTarget = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
+      [employeeid, targetrddate]
+    );
+
+    const actualResult = await Check(checkActual);
+    const targetResult = await Check(checkTarget);
+
+    if (actualResult.length > 0) {
+      return res.json("Actual Date Exist");
+    }
+
+    if (targetResult.length > 0) {
+      return res.json("Target Date Exist");
+    }
+
+    InsertTable(sql, data, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      return res.json(JsonSuccess());
+    });
+
+  } catch (error) {
+    console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
@@ -143,7 +246,7 @@ router.post("/getchange_shift", (req, res) => {
   }
 });
 
-router.put("/edit", (req, res) => {
+router.put("/edit", async (req, res) => {
   try {
     const { changeshift, employeeid, actualrd, changerd, shiftstatus } =
       req.body;
@@ -196,76 +299,117 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
-
-    let checkStatement = SelectStatement(
-      "select * from change_shift where cs_employeeid = ? and cs_actualrd = ? and cs_changerd = ? and cs_shiftstatus = ? and cs_createby = ? and cs_createdate = ?",
-      [employeeid, actualrd, changerd, shiftstatus, createby, createdate]
+    let checkActual = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
+      [employeeid, actualrd]
     );
 
-    console.log(checkStatement, "check");
+    let checkTarget = SelectStatement(
+      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
+      [employeeid, changerd]
+    );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
 
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
+    const actualResult = await Check(checkActual);
+    const targetResult = await Check(checkTarget);
+
+    if (actualResult.length > 0) {
+      return res.json("Actual Date Exist");
+    }
+
+    if (targetResult.length > 0) {
+      return res.json("Target Date Exist");
+    }
+
+    Update(updateStatement, data, (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json(JsonSuccess());
+    });
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
 
-// router.post("/update", (req, res) => {
-//   try {
-//     let changeshift = req.body.changeshift;
-//     let employeeid = req.body.employeeid;
-//     let actualrd = req.body.actualrd;
-//     let changerd = req.body.changerd;
-//     let createby = req.session.fullname;
-//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-//     let shiftstatus = req.body.shiftstatus;
+//#endregion
 
-//     let sql = `  UPDATE subgroup SET
-//     s_departmentid = '${departmentid}',
-//     s_name = '${subgroupname}',
-//     s_createby = '${createby}',
-//     s_createdate = '${createdate}',
-//     s_status = '${status}'
-//     WHERE s_id = '${subgroupid}'`;
-//     mysql
-//       .Update(sql)
-//       .then((result) => {
-//         res.json({
-//           msg: "success",
-//           data: result,
-//         });
-//       })
-//       .catch((error) => {
-//         res.json({
-//           msg: "error",
-//           data: error,
-//         });
-//       });
-//   } catch (error) {
-//     res.json({
-//       msg: "error",
-//       data: error,
-//     });
-//     console.log(error);
-//   }
-// });
+//#region change Shift Time
+
+router.get("/loadshifttime", (req, res) => {
+  try {
+    let sql = `SELECT 
+    cst_id,
+    concat(me_lastname,' ',me_firstname) as cst_fullname,
+    cst_target_date,
+    cst_original_shift,
+    cst_changed_shift,
+    cst_status,
+    cst_createby,
+    cst_createdate
+    FROM change_shift_time
+    INNER JOIN master_employee on change_shift_time.cst_employeeid = me_id`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "cst_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getshift", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let dayname = req.body.dayname;
+
+    console.log(employeeid, dayname);
+    
+    let sql = `
+      SELECT 
+          CASE 
+              WHEN '${dayname}' = 'Monday' THEN ms_monday
+              WHEN '${dayname}' = 'Tuesday' THEN ms_tuesday
+              WHEN '${dayname}' = 'Wednesday' THEN ms_wednesday
+              WHEN '${dayname}' = 'Thursday' THEN ms_thursday
+              WHEN '${dayname}' = 'Friday' THEN ms_friday
+              WHEN '${dayname}' = 'Saturday' THEN ms_saturday
+              WHEN '${dayname}' = 'Sunday' THEN ms_sunday
+          END AS ms_shift
+      FROM master_shift
+      WHERE ms_employeeid = '${employeeid}'`;
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      if (result.length > 0) {
+        const transformedData = result.map((row) => transformShiftData(row));
+        res.json(JsonDataResponse(transformedData));
+      } else {
+        res.json(JsonDataResponse([]));
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+//#endregion
 
 //#region FUNCTION
 function Check(sql) {
@@ -277,4 +421,18 @@ function Check(sql) {
     });
   });
 }
+
+const transformShiftData = (data) => {
+  try {
+    const shiftData = JSON.parse(data.ms_shift);
+    return {
+      time_in: shiftData.time_in,
+      time_out: shiftData.time_out,
+    };
+  } catch (error) {
+    console.error("Error parsing shift data:", error);
+    return null;
+  }
+};
+
 //#endregion

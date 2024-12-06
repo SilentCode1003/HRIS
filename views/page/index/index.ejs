@@ -29,7 +29,6 @@
             />
           </span>
       </div>
-
     <br>
 
     <!-- First Card Row -->
@@ -175,462 +174,30 @@
             </div>
         </div>
 
+        <!-- Total Applicant  Card -->
+        <div data-toggle="modal" id="totalbagapuro" data-target="#totalaBagapuroModal"
+            class="card-link col-xl-2 col-md-6 mb-4">
+            <div id="totalempbagapuro" class="db-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1 card-text">
+                               <b> Total Applicant</b>
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold card-text">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-house-heart-fill card-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="departmentCardsContainer" class="row"></div>
 
     </div>
-    <!---- MODAL-->
-
-    <!-- Total Employee Modal -->
-    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header" id="modal-header">
-                        
-                        <div class="d-flex flex-column ">
-                            <div>
-                              <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Employee</h3>
-                          </div>
-                          <div>
-                            <input id='myInputtotal' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                          </div>
-                          </div>
-                          <i class='bx bx-x' data-dismiss="modal"></i>
-                    </div>
-                    <div class="modal-body" id="modal-body">
-                        <div class="modal-table">
-                            <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                                <table class="table custom-mobile-table table-bordered table-light" id="dataTableemployees">
-                                    <thead class="table-header">
-                                        <tr>
-                                            <td class="no-match-cell" style="display: none;"></td>
-                                            <!-- <th>Image</th> -->
-                                            <th class="col-sm-1">ID</th>
-                                            <th class="col-26">Name</th>
-                                            <th>Contact</th>
-                                            <th class="col-25">Email</th>
-                                            <th>Job Status</th>
-                                            <th>Department</th>
-                                            <th>Position</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" id="modal-footer">
-                        <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Regular Employee Modal -->
-    <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Regular Employee</h3>
-                      </div>
-                      <div>
-                        <input id='myInputRegular' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="regularemloyeetbl">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Department</th>
-                                        <th>Position</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Probitionary Employee Modal -->
-    <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Probationary Employee</h3>
-                      </div>
-                      <div>
-                        <input id='myInputproba' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="probiemloyeetbl">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Department</th>
-                                        <th>Position</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Resigned Employee Modal -->
-    <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="resignedEmployeeModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Resigned Employee</h3>
-                      </div>
-                      <div>
-                        <input id='myInputresigned' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="resignedemployeetbl">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <!-- <th>Email</th> -->
-                                        <th>Department</th>
-                                        <th>Position</th>
-                                        <th>Reason</th>
-                                        <th>Date Resigned</th>
-                                        <th>Create Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Table body content will be added dynamically using JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Total Admin Modal -->
-    <div class="modal fade" id="totaladminemployeeModal" tabindex="-1" role="dialog"
-        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>Admin Department</b></h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotaladmin' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totaladmintable">
-                                <thead class="table-header">
-                                    
-                                    <th class="col-sm-1">ID</th>
-                                    <th class="col-26">Name</th>
-                                    <th>Contact</th>
-                                    <th class="col-25">Email</th>
-                                    <th>Position</th>
-                                    <th>Tenure</th>
-                                </thead>
-                                <tbody>
-                                   
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Total IT Department Modal -->
-    <div class="modal fade" id="totalitModal" tabindex="-1" role="dialog" aria-labelledby="totalitModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>IT Department</b></h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotalit' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totalittable">
-                                <thead class="table-header">
-                                    <tr>
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Position</th>
-                                        <th>Tenure</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- All Department Modal -->
-    <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="alldepartmentname"><b></b></h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotalcabling' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-bs-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totalcablingtable">
-                                <thead class="table-header">
-                                    <tr>
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Contact</th>
-                                        <th class="col-25">Email</th>
-                                        <th>Position</th>
-                                        <th>Tenure</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Total Candidate for Regular Modal -->
-    <div class="modal fade" id="totalCandidateModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Candidate for Regular</h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotalcandidate' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totalcandidatetable">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Department</th>
-                                        <th>Hire Date</th>
-                                        <th>Tenure</th>
-                                        <th>Position</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Total Bagapuro Family Modal -->
-    <div class="modal fade" id="totalaBagapuroModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Bagapuro Family</h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotalbagapuro' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totalbagapurotable">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Department</th>
-                                        <th>Hire Dte</th>
-                                        <th>Position</th>
-                                        <th>Tenure</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Total Apprentice  Modal -->
-    <div class="modal fade" id="totalaApprenticeModal" tabindex="-1" role="dialog"
-        aria-labelledby="totalaApprenticeModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modal-header">
-                    <div class="d-flex flex-column ">
-                        <div>
-                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
-                      </div>
-                      <div>
-                        <input id='myInputtotalapprentice' class="db-modal-search mb-2" type='text' placeholder="  Search....">
-                      </div>
-                      </div>
-                      <i class='bx bx-x' data-dismiss="modal"></i>
-                </div>
-                <div class="modal-body m-body" id="modal-body">
-                    <div class="modal-table">
-                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                            <table class="table custom-mobile-table table-bordered table-light" id="totalapprenticetable">
-                                <thead class="table-header">
-                                    <tr>
-                                        <!-- <th>Image</th> -->
-                                        <th class="col-sm-1">ID</th>
-                                        <th class="col-26">Name</th>
-                                        <th>Department</th>
-                                        <th>Hire Date</th>
-                                        <th>Position</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Content Row -->
     <div class="row">
@@ -703,6 +270,14 @@
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
                             </button>
+                            <button class="nav-link employee-db" id="nav-misslog-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-misslogs" type="button" role="tab" aria-controls="nav-profile"
+                            aria-selected="false">
+                            <b>MISS LOGS</b>
+                            <span id="loadamisslogBadge"
+                            class="position-sticky translate-middle badge rounded-pill bg-danger">
+                        </span>
+                        </button>
                         </div>
                     </nav>
                 </div>
@@ -932,6 +507,31 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="nav-misslogs" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="row">
+                                <div class="card-body">
+                                    <div class="tableresposive">
+                                        <table class="table table-light table-bordered" id="datatable-misslogs">
+                                         <thead>
+                                            <tr>
+                                                <th>Attendance ID</th>
+                                                <th>Employee ID</th>
+                                                <th>Employee Name</th>
+                                                <th>Attendance Date</th>
+                                                <th>Clock In</th>
+                                                <th>Location In</th>
+                                                <th>Device In</th>
+                                                <th>Clock Out</th>
+                                                <th>Location Out</th>
+                                                <th>Device Out</th>
+                                            </tr>
+                                         </thead>
+                                         <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1157,8 +757,10 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-floating">
-                                      <input type="text" class="form-select border-form-modal" id="leavesubgroup" name="leavesubgroup"
+                                      <select type="text" class="form-select border-form-modal" id="leavesubgroup" name="leavesubgroup"
                                       aria-label="Floating label select example" disabled>
+                                      <option disabled selected>Choose...</option>
+                                      </select>
                                       <label for="floatingInput">Sub Group</label>
                                     </div>
                                 </div>
@@ -1179,6 +781,454 @@
                         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-modal-save" id="leavesavebutton">Save</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---- MODAL-->
+    <!-- Total Employee Modal -->
+    <div class="modal fade" id="totalEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="totalEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" id="modal-header">
+                        
+                        <div class="d-flex flex-column ">
+                            <div>
+                              <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Employee</h3>
+                          </div>
+                          <div>
+                            <input id='myInputtotal' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                          </div>
+                          </div>
+                          <i class='bx bx-x' data-dismiss="modal"></i>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div class="modal-table">
+                            <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                                <table class="table custom-mobile-table table-bordered table-light" id="dataTableemployees">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <td class="no-match-cell" style="display: none;"></td>
+                                            <!-- <th>Image</th> -->
+                                            <th class="col-sm-1">ID</th>
+                                            <th class="col-26">Name</th>
+                                            <th>Contact</th>
+                                            <th class="col-25">Email</th>
+                                            <th>Job Status</th>
+                                            <th>Department</th>
+                                            <th>Position</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="modal-footer">
+                        <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regular Employee Modal -->
+    <div class="modal fade" id="regularEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Regular Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputRegular' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="regularemloyeetbl">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Contact</th>
+                                        <th class="col-25">Email</th>
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content will be added dynamically using JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Probitionary Employee Modal -->
+    <div class="modal fade" id="probationaryEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Probationary Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputproba' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="probiemloyeetbl">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Contact</th>
+                                        <th class="col-25">Email</th>
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content will be added dynamically using JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resigned Employee Modal -->
+    <div class="modal fade" id="resignedEmployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="resignedEmployeeModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Resigned Employee</h3>
+                      </div>
+                      <div>
+                        <input id='myInputresigned' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="resignedemployeetbl">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Contact</th>
+                                        <!-- <th>Email</th> -->
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                        <th>Reason</th>
+                                        <th>Date Resigned</th>
+                                        <th>Create Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content will be added dynamically using JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Admin Modal -->
+    <div class="modal fade" id="totaladminemployeeModal" tabindex="-1" role="dialog"
+        aria-labelledby="regularEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>Admin Department</b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotaladmin' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totaladmintable">
+                                <thead class="table-header">
+                                    
+                                    <th class="col-sm-1">ID</th>
+                                    <th class="col-26">Name</th>
+                                    <th>Contact</th>
+                                    <th class="col-25">Email</th>
+                                    <th>Position</th>
+                                    <th>Tenure</th>
+                                </thead>
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total IT Department Modal -->
+    <div class="modal fade" id="totalitModal" tabindex="-1" role="dialog" aria-labelledby="totalitModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel"><b>IT Department</b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalit' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totalittable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Contact</th>
+                                        <th class="col-25">Email</th>
+                                        <th>Position</th>
+                                        <th>Tenure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Department Modal -->
+    <div class="modal fade" id="totalCablingModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="alldepartmentname"><b></b></h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalcabling' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-bs-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totalcablingtable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Contact</th>
+                                        <th class="col-25">Email</th>
+                                        <th>Position</th>
+                                        <th>Tenure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Candidate for Regular Modal -->
+    <div class="modal fade" id="totalCandidateModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Candidate for Regular</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalcandidate' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totalcandidatetable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Department</th>
+                                        <th>Hire Date</th>
+                                        <th>Tenure</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Bagapuro Family Modal -->
+    <div class="modal fade" id="totalaBagapuroModal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Bagapuro Family</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalbagapuro' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totalbagapurotable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Department</th>
+                                        <th>Hire Dte</th>
+                                        <th>Position</th>
+                                        <th>Tenure</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Apprentice  Modal -->
+    <div class="modal fade" id="totalaApprenticeModal" tabindex="-1" role="dialog"
+        aria-labelledby="totalaApprenticeModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <div class="d-flex flex-column ">
+                        <div>
+                          <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Total Apprentice Sheet</h3>
+                      </div>
+                      <div>
+                        <input id='myInputtotalapprentice' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+                      </div>
+                      </div>
+                      <i class='bx bx-x' data-dismiss="modal"></i>
+                </div>
+                <div class="modal-body m-body" id="modal-body">
+                    <div class="modal-table">
+                        <div class="table-responsive scrollable-table-container" id="table-responsive-id">
+                            <table class="table custom-mobile-table table-bordered table-light" id="totalapprenticetable">
+                                <thead class="table-header">
+                                    <tr>
+                                        <!-- <th>Image</th> -->
+                                        <th class="col-sm-1">ID</th>
+                                        <th class="col-26">Name</th>
+                                        <th>Department</th>
+                                        <th>Hire Date</th>
+                                        <th>Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <button type="button" class="btn btn-modal-close" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -1265,6 +1315,7 @@
             </div>
         </div>
     </div>
+
     <!--Overtime Modal-->
     <div class="modal fade" id="otapprovalmodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1286,7 +1337,7 @@
                                 <div class="p-4" style="width: 300px; margin-top: -100px;">
                                     <div class="text-center">
                                         <img id="preview" src="https://via.placeholder.com/250"
-                                            class="rounded rounded-circle border-form-modal" alt="placeholder">
+                                            class="rounded border-form-modal" alt="placeholder">
                                     </div>
                                     <br>
                                     <div class="col">
@@ -1343,6 +1394,14 @@
                                                 id="ottotalothours" name="ottotalothours" placeholder="Address"
                                                 disabled>
                                             <label for="floatingInput">Total Hours</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control border-form-modal"
+                                                id="ottotalotminutes" name="ottotalotminutes" placeholder="Address"
+                                                disabled>
+                                            <label for="floatingInput">Total Minutes OT</label>
                                         </div>
                                     </div>
                                 </div>
@@ -1453,6 +1512,7 @@
             </div>
         </div>
     </div>
+
     <!--COA MODAL-->
     <div class="modal fade" id="editrequestcoamodal" data-bs-backdrop="static" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1725,7 +1785,6 @@
             </div>
         </div>
     </div>
-
 
     <!--RDOT MODAL-->
     <div class="modal fade" id="rdotreqmodal" data-bs-backdrop="static" tabindex="-1"

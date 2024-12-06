@@ -25,6 +25,7 @@
             dataSrc: (json) => {
               var finalData = [];
               var data = json.data;
+
   
               $.each(data, (key, item) => {
                 var action = "";
@@ -34,7 +35,7 @@
                             <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#attendanceactivitymodal"><i class="fas fa-fw fa-pen"></i></button>
                         `;
                 finalData.push({
-                  requsetid: item.requsetid,
+                  requestid: item.requestid,
                   employeeid: item.employeeid,
                   attendancedate: item.attendancedate,
                   timein: item.timein,
@@ -51,7 +52,7 @@
             },
           },
           columns: [
-            { data: "requsetid" },
+            { data: "requestid" },
             { data: "employeeid" },
             { data: "attendancedate" },
             { data: "timein" },

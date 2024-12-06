@@ -53,8 +53,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -68,9 +66,7 @@ router.get("/load", (req, res) => {
 
 router.post("/getteamleadrdot", (req, res) => {
   try {
-    let rdotid = req.body.rdotid;
-    console.log(rdotid);
-    
+    let rdotid = req.body.rdotid;  
     let sql = `SELECT 
     roa.roa_rdotid,
     CONCAT(me.me_lastname, ' ', me.me_firstname) AS roa_fullname,
@@ -100,15 +96,10 @@ router.post("/getteamleadrdot", (req, res) => {
       if (err) {
         console.error(err);
         res.json(JsonErrorResponse(err));
-      }
-
-      console.log(result,'result');
-      
+      }      
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
