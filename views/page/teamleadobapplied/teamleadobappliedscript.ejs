@@ -1,6 +1,66 @@
 <script>
   $(document).ready(function () {
+    let obrid = "";
+
     LoadTable();
+
+    $("#datatable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      obrid = dataRow[0];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#modal").modal("show");
+
+      Fetch(`/teamleadobapplied/getobr/${obrid}`, (result) => {
+        let data = ([] = result.data);
+
+        console.log(data);
+        
+
+        $.each(data, (key, item) => {
+          $("#obrid").val(item.id);
+          $("#employeename").val(item.fullname);
+          $("#attendancedate").val(item.attendance_date);
+          $("#clockin").val(item.clockin);
+          $("#clockiout").val(item.clockout);
+          $("#obrstatus").val(item.status);
+          $("#applieddate").val(item.applied_date);
+          $("#subgroupid").val(item.subgroup_id);
+          $("#subgroup").val(item.subgroup);
+          $("#remarks").val(item.reason);
+        });
+      });
+    });
+
+    $(document).on("click", "#approvedBtn", function () {
+      let id = $("#obrid").val();
+      let remarks = $("#remarks").val();
+      let subgroupid = $("#subgroupid").val();
+      
+      Upsert(
+        "PUT",
+        "/teamleadobapplied/approved",
+        { id: id, remarks: remarks, subgroupid: subgroupid },
+        (result) => {
+          if (result.msg == "success") {
+            success("Success", "Data Saved Successfully", "success", "OK");
+            $("#modal").modal("hide");
+            LoadTable();
+          } else {
+            swal("Error", result.msg, "error", "OK");
+          }
+        }
+      );
+    });
+
+    $(document).on("click", "#rejectedBtn", function () {});
 
     function LoadTable() {
       $("#datatable").DataTable({
@@ -14,7 +74,7 @@
         scrollCollapse: true,
         serverMethod: "GET",
         ajax: {
-          url: "/teamleadob/load",
+          url: "/teamleadobapplied/load",
           dataSrc: (json) => {
             var finalData = [];
             var data = json.data;
@@ -23,6 +83,8 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" "><i class="fas fa-fw fa-pen"></i></button>`;
 
               finalData.push({
                 id: item.id,
@@ -33,7 +95,7 @@
                 clockout: item.clockout,
                 applieddate: item.applied_date,
                 overtimestatus: item.status,
-           
+                action: action,
               });
             });
 
@@ -55,6 +117,7 @@
           { data: "clockout" },
           { data: "applieddate" },
           { data: "overtimestatus" },
+          { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
@@ -68,7 +131,7 @@
             case "approved":
               overtimestatusClass = "approved-status";
               break;
-              case "applied":
+            case "applied":
               overtimestatusClass = "pending-status";
               break;
             case "cancel":
