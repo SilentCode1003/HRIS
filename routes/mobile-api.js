@@ -3046,7 +3046,7 @@ router.post("/getovertime",(req, res) => {
   }
 });
 
-router.post("/addrequstot", verifyJWT, (req, res) => {
+router.post("/addrequstot", verifyJWT,(req, res) => {
   try {
     let clockin = req.body.clockin;
     let clockout = req.body.clockout;
@@ -3059,12 +3059,13 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     let approvecount = 0;
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "App Manual";
+	let applieddate = GetCurrentDatetime();
+
 
     let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
-      [employeeid, attendancedate, overtimestatus]
+    "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
+        [employeeid, attendancedate, overtimestatus]
     );
-
     Check(checkStatement)
       .then((result) => {
         if (result != 0) {
@@ -3083,6 +3084,7 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
                 pao_early_ot,
                 pao_normal_ot,
                 pao_minutes_ot,
+				pao_early_minutes_ot,
                 pao_night_minutes_ot,
                 pao_night_pay,
                 pao_total_night_min_ot,
@@ -3099,7 +3101,8 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
                 pao_status,
                 pao_subgroupid,
                 pao_approvalcount,
-                pao_overtimeimage
+                pao_overtimeimage,
+				pao_applied_date
             )
             SELECT
                '${deviceaction}' AS pao_device_use,
@@ -3289,6 +3292,41 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
 						ELSE 0
 					END, 0
 				) AS pao_minutes_ot,
+				 CASE
+					WHEN '${clockin}' <= 
+					CASE
+						-- Monday
+						WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+						-- Tuesday
+						WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+						-- Wednesday
+						WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+						-- Thursday
+						WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+						-- Friday
+						WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+						-- Saturday
+						WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+						-- Sunday
+						ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+					END
+					THEN 
+						-- Calculate time difference and extract only the minutes part
+						MINUTE(TIMEDIFF(
+							CASE
+								-- Handle each day for scheduled time-in
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+							END, 
+							'${clockin}'
+						))
+					ELSE 0
+				END AS pao_early_minutes_ot,
 				  COALESCE(
 					CASE 
 						WHEN '${clockout}' > CAST(CONCAT(DATE('${attendancedate}'), ' 22:00:00') AS DATETIME) 
@@ -3858,7 +3896,8 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
                 '${overtimestatus}' AS pao_status,
 				'${subgroup}' AS pao_subgroupid,
 				'${approvecount}' AS pao_approvalcount,
-                '${overtimeimage}' AS pao_overtimeimage
+                '${overtimeimage}' AS pao_overtimeimage,
+				'${applieddate}' AS pao_applied_date
             FROM master_salary s
             INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
             INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
@@ -3899,6 +3938,8 @@ router.post("/update", verifyJWT, (req, res) => {
     let subgroup = req.body.subgroup;
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "App Automated";
+	let applieddate = GetCurrentDatetime();
+	
 
     let checkStatement = SelectStatement(
       "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
@@ -4080,6 +4121,46 @@ router.post("/update", verifyJWT, (req, res) => {
                             ELSE 0
                         END, 0
                     ) FROM master_salary s
+                    INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
+                    INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
+                    INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
+                    WHERE me_id = '${employeeid}'
+                    LIMIT 1),
+			pao_early_minutes_ot =  (SELECT CASE
+							WHEN '${clockin}' <= 
+							CASE
+								-- Monday
+								WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+								-- Tuesday
+								WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+								-- Wednesday
+								WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+								-- Thursday
+								WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+								-- Friday
+								WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+								-- Saturday
+								WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+								-- Sunday
+								ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+							END
+							THEN 
+								-- Calculate time difference and extract only the minutes part
+								MINUTE(TIMEDIFF(
+									CASE
+										-- Handle each day for scheduled time-in
+										WHEN DAYOFWEEK('${attendancedate}') = 2 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_MONDAY->>'$.time_in') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 3 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_TUESDAY->>'$.time_in') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 4 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_WEDNESDAY->>'$.time_in') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 5 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_THURSDAY->>'$.time_in') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 6 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_FRIDAY->>'$.time_in') AS DATETIME)
+										WHEN DAYOFWEEK('${attendancedate}') = 7 THEN CAST(CONCAT('${attendancedate}', ' ', ms.ms_SATURDAY->>'$.time_in') AS DATETIME)
+										ELSE CAST(CONCAT('${attendancedate}', ' ', ms.ms_SUNDAY->>'$.time_in') AS DATETIME)
+									END, 
+									'${clockin}'
+								))
+							ELSE 0
+						END FROM master_salary s
                     INNER JOIN master_shift ms ON s.ms_employeeid = ms.ms_employeeid
                     INNER JOIN master_attendance ma ON s.ms_employeeid = ma.ma_employeeid
                     INNER JOIN master_employee me ON s.ms_employeeid = me.me_id
@@ -4712,18 +4793,17 @@ router.post("/update", verifyJWT, (req, res) => {
             pao_reason = '${reason}',
             pao_status = '${overtimestatus}',
             pao_subgroupid = '${subgroup}',
-            pao_overtimeimage = '${overtimeimage}'
+            pao_overtimeimage = '${overtimeimage}',
+			pao_applied_date = '${applieddate}'
             WHERE pao_id = '${approveot_id}'`;
 
-          mysql
-            .Update(sql)
-            .then((result) => {
-              res.json(JsonSuccess());
-            })
-            .catch((error) => {
-              res.json(JsonErrorResponse(error));
-              console.log(error, "error");
-            });
+			mysql.Update(sql)
+			.then((result) => {
+				res.json(JsonSuccess());
+			})
+			.catch((error) => {
+				res.json(JsonErrorResponse(error));
+			});
         }
       })
       .catch((error) => {

@@ -294,7 +294,7 @@ router.post("/loadcancelled", (req, res) => {
     ph_normal_ot_total
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
-    and ph_status = 'Cancel'
+    AND ph_status IN ('Cancelled','Cancel')
     order by ph_attendancedate asc`;
 
     Select(sql, (err, result) => {
