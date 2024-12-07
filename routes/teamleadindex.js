@@ -9,6 +9,8 @@ const {
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
+const { REQUEST_STATUS } = require("./repository/enums");
+const { SelectStatement } = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -737,5 +739,41 @@ router.post("/searchemployee", (req, res) => {
       msg: "error",
       data: error,
     });
+  }
+});
+
+router.get("/countobcard", (req, res) => {
+  try {
+    let sql = SelectStatement(
+      `
+      SELECT 
+      obr_id,
+      obr_employee_id as obr_employeeid,
+      CONCAT(me_firstname, '', me_lastname) as obr_fullname,
+      obr_attendance_date,
+      s_name as obr_subgroup_id,
+      REPLACE(REPLACE(obr_clockin, 'T', ' '), 'Z', '') as obr_clockin,
+      REPLACE(REPLACE(obr_clockout, 'T', ' '), 'Z', '') as obr_clockout,
+      obr_applied_date,
+      obr_status
+      FROM official_business_request 
+      INNER JOIN master_employee ON me_id = obr_employee_id
+      INNER JOIN subgroup ON s_id = obr_subgroup_id
+      INNER JOIN aprroval_stage_settings ON ats_subgroupid = obr_subgroup_id and obr_approval_count = ats_count and ats_accessid = ?
+      WHERE obr_subgroup_id IN (?)
+      AND obr_status = ?
+      `,
+      [req.session.accesstypeid, req.session.subgroupid, REQUEST_STATUS.applied]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(err);
+      }
+      res.json(JsonDataResponse(result.length));
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
   }
 });
