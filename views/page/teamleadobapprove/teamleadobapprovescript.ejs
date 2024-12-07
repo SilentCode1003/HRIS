@@ -1,0 +1,97 @@
+<script>
+  $(document).ready(function () {
+    LoadTable();
+
+    function LoadTable() {
+      $("#datatable").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/teamleadobapprove/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              finalData.push({
+                id: item.id,
+                employeeid: item.employeeid,
+                fullname: item.fullname,
+                attendacedate: item.attendance_date,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                applieddate: item.applied_date,
+                overtimestatus: item.status,
+           
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "employeeid" },
+          { data: "fullname" },
+          { data: "attendacedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "applieddate" },
+          { data: "overtimestatus" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var overtimestatusCell = $(row).find("td:eq(7)");
+
+          var overtimestatusText = data.overtimestatus;
+
+          var overtimestatusClass = "";
+
+          switch (overtimestatusText.toLowerCase()) {
+            case "approved":
+              overtimestatusClass = "approved-status";
+              break;
+              case "applied":
+              overtimestatusClass = "pending-status";
+              break;
+            case "cancel":
+              overtimestatusClass = "cancel-status";
+              break;
+            case "pending":
+              overtimestatusClass = "pending-status";
+              break;
+            default:
+              overtimestatusClass = "";
+          }
+
+          overtimestatusCell.html(
+            `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
+          );
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+  });
+</script>
