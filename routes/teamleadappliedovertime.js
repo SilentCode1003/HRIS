@@ -80,32 +80,32 @@ router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
         let sql = `SELECT 
-        pao_id,
-        pao_fullname,
-        DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') AS pao_attendancedate,
-        DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
-        DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
-        TIME_FORMAT(SEC_TO_TIME((pao_night_differentials * 3600) + (pao_night_minutes_ot * 60)), '%H:%i') AS pao_night_differentials,
-        TIME_FORMAT(SEC_TO_TIME((pao_early_ot * 3600) + (pao_early_minutes_ot * 60)), '%H:%i') AS pao_early_ot,
-        TIME_FORMAT(SEC_TO_TIME((pao_normal_ot * 3600) + (pao_minutes_ot * 60)), '%H:%i') AS pao_normal_ot,
-        TIME_FORMAT(SEC_TO_TIME(((pao_night_differentials + pao_normal_ot + pao_early_ot) * 3600) + ((pao_minutes_ot + pao_night_minutes_ot + pao_early_minutes_ot) * 60)), '%H:%i') AS pao_total_hours,
-        DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
-        pao_reason,
-        pao_status,
-        pao_overtimeimage,
-        pao_subgroupid,
-        ma_locationIn AS pao_locationIn,
-        ma_locationOut AS pao_locationOut,
-        pao_applied_date as pao_applied_date,
-        (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
-    FROM 
-        payroll_approval_ot
-    INNER JOIN 
-        master_employee ON payroll_approval_ot.pao_employeeid = me_id
-    INNER JOIN 
-        master_attendance ON ma_employeeid = pao_employeeid AND ma_attendancedate = pao_attendancedate
-    WHERE 
-        pao_id = '${approveot_id}'`;
+            pao_id,
+            pao_fullname,
+            DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') AS pao_attendancedate,
+            DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
+            DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
+            TIME_FORMAT(SEC_TO_TIME((pao_night_differentials * 3600) + (pao_night_minutes_ot * 60)), '%H:%i') AS pao_night_differentials,
+            TIME_FORMAT(SEC_TO_TIME((pao_early_ot * 3600)), '%H:%i') AS pao_early_ot,
+            TIME_FORMAT(SEC_TO_TIME((pao_normal_ot * 3600) + (pao_minutes_ot * 60)), '%H:%i') AS pao_normal_ot,
+            TIME_FORMAT(SEC_TO_TIME(((pao_night_differentials + pao_normal_ot) * 3600) + ((pao_minutes_ot + pao_night_minutes_ot) * 60)), '%H:%i') AS pao_total_hours,
+            DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
+            pao_reason,
+            pao_status,
+            pao_overtimeimage,
+            pao_subgroupid,
+            ma_locationIn AS pao_locationIn,
+            ma_locationOut AS pao_locationOut,
+            pao_applied_date as pao_applied_date,
+            (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
+            FROM 
+            payroll_approval_ot
+            INNER JOIN 
+            master_employee ON payroll_approval_ot.pao_employeeid = me_id
+            INNER JOIN 
+            master_attendance ON ma_employeeid = pao_employeeid AND ma_attendancedate = pao_attendancedate
+            WHERE 
+            pao_id = '${approveot_id}'`;
 
     Select(sql, (err, result) => {
       if (err) {
