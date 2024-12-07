@@ -1,6 +1,7 @@
 <script>
   $(document).ready(function () {
     let obrid = "";
+    let employeeid = "";
 
     LoadTable();
 
@@ -13,6 +14,7 @@
           dataRow.push($(this).text());
         });
       obrid = dataRow[0];
+      employeeid = dataRow[1];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -22,7 +24,6 @@
         let data = ([] = result.data);
 
         console.log(data);
-        
 
         $.each(data, (key, item) => {
           $("#obrid").val(item.id);
@@ -43,11 +44,22 @@
       let id = $("#obrid").val();
       let remarks = $("#remarks").val();
       let subgroupid = $("#subgroupid").val();
-      
+      let clockin = $("#clockin").val();
+      let clockout = $("#clockiout").val();
+      let attendancedate = $("#attendancedate").val();
+
       Upsert(
         "PUT",
         "/teamleadobapplied/approved",
-        { id: id, remarks: remarks, subgroupid: subgroupid },
+        {
+          id: id,
+          remarks: remarks,
+          subgroupid: subgroupid,
+          clockin: clockin,
+          clockout: clockout,
+          attendancedate: attendancedate,
+          employeeid: employeeid,
+        },
         (result) => {
           if (result.msg == "success") {
             success("Success", "Data Saved Successfully", "success", "OK");

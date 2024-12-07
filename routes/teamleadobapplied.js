@@ -126,8 +126,20 @@ router.get("/getobr/:id", (req, res) => {
 
 router.put("/approved", (req, res) => {
   try {
-    const { id, remarks, subgroupid } = req.body;
+    const {
+      id,
+      remarks,
+      subgroupid,
+      clockin,
+      clockout,
+      attendancedate,
+      employeeid,
+    } = req.body;
     let queries = [];
+
+
+    console.log(id, remarks, subgroupid, clockin, clockout, attendancedate, employeeid);
+    
 
     async function ProcessData() {
       let approval_count = await GetRequestApprovalSetting(subgroupid);
@@ -143,6 +155,55 @@ router.put("/approved", (req, res) => {
       // to approved OBR
       let update_count = parseInt(obr_approval_count) + 1;
       if (approval_count == update_count) {
+        queries.push({
+          sql: NewInsertStatement("master_attendance", "ma", [
+            "employeeid",
+            "attendancedate",
+            "clockin",
+            "latitudeIn",
+            "longitudein",
+            "devicein",
+            "gefenceidIn",
+            "locationIn",
+          ]),
+          values: [
+            employeeid,
+            attendancedate,
+            clockin,
+            0.01,
+            0.01,
+            "OB",
+            "1",
+            "Official Business",
+          ],
+        });
+
+        queries.push({
+          sql: UpdateStatement(
+            "master_attendance",
+            "ma",
+            [
+              "clockout",
+              "latitudeout",
+              "longitudeout",
+              "deviceout",
+              "geofenceidOut",
+              "locationOut",
+            ],
+            ["employeeid", "attendancedate"]
+          ),
+          values: [
+            clockout,
+            0.01,
+            0.01,
+            "OB",
+            "1",
+            "Official Business",
+            employeeid,
+            attendancedate,
+          ],
+        });
+
         queries.push({
           sql: UpdateStatement(
             "official_business_request",
