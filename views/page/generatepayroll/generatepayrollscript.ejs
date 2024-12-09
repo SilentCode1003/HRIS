@@ -578,6 +578,9 @@
                 "src",
                 "data:image/jpg;base64," + item.Image
               );
+              $("#payslipdailytotal").html(
+                "<strong> ( " + item.Total_gp_status + " )</strong>"
+              );
               base64String = item.Image;
               $("#payslipSSSid").text(item.SSSID);
               $("#payslipTINid").text(item.TINID);

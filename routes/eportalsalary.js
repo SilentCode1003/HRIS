@@ -337,6 +337,7 @@ router.post("/generatepdf", async (req, res) => {
       globalapprovedearlyot,
       globalovertimemeal,
       globalleavepay,
+      globalgpstatus,
       globalregularholidaycomp,
       globalspecialholidaycomp,
       globalregularholidayot,
@@ -460,7 +461,7 @@ router.post("/generatepdf", async (req, res) => {
               ],
               ["Basic", "₱" + globalsalary, "SSS", "₱" + globalsssdeductions],
               [
-                "Daily Rate",
+                "Daily Rate" + "(" + globalgpstatus + ")",
                 "₱" + globalperday,
                 "Philhealth",
                 "₱" + globalphilhealthdeductions,
