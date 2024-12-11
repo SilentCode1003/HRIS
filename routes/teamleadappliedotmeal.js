@@ -193,15 +193,10 @@ router.get("/aprrovedotmeal", (req, res) => {
     FROM ot_meal_allowances
     INNER JOIN
     master_employee ON ot_meal_allowances.oma_employeeid = me_id
-    INNER JOIN 
-            aprroval_stage_settings ON 
-                aprroval_stage_settings.ats_accessid = ? AND
-                aprroval_stage_settings.ats_subgroupid = ot_meal_allowances.oma_subgroupid AND
-                aprroval_stage_settings.ats_count = ot_meal_allowances.oma_approvalcount
     WHERE 
         oma_status = ? 
         AND oma_subgroupid IN (?)`,
-      [accesstypeid, "Approved", subgroupid]
+      ["Approved", subgroupid]
     );
     
 
