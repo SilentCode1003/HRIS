@@ -481,6 +481,7 @@ router.post("/update", (req, res) => {
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "App Automated";
     let applieddate = GetCurrentDatetime();
+    let approvecount = 0;
 
     let sql = `call hrmis.UpdateRequestOvertime(
 		'${clockin}',

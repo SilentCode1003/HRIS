@@ -96,6 +96,88 @@
       });
     }
 
+    $(document).on("click", "#appliedtable", function () {
+      console.log("Hit");
+      $("#dataTableAppliedHoliday").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "POST",
+        url: "/eportalrequestholiday/loadapplied",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableAppliedHoliday"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HOLIDAY_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var HOLIDAY_TYPE = row.insertCell(4);
+            var TOTAL_HOURS = row.insertCell(5);
+            var NIGHT_DIFF = row.insertCell(6);
+            var NORMAL_OT = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary edit-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#holidaymemodal");
+            action.innerHTML = '<i class="fas fa-fw fa-pen"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                holidayid = dataRow[0];
+            };
+
+            HOLIDAY_ID.innerHTML = item.holidayid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.timein;
+            TIME_OUT.innerHTML = item.timeout;
+            HOLIDAY_TYPE.innerHTML = item.holidaytype;
+            TOTAL_HOURS.innerHTML = item.total_hours;
+            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
+            NORMAL_OT.innerHTML = item.normal_ot_total;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                HOLIDAY_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                HOLIDAY_TYPE,
+                TOTAL_HOURS,
+                NIGHT_DIFF,
+                NORMAL_OT,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
     $(document).on("click", "#approvedtable", function () {
       console.log("Hit");
       $("#dataTableApprovedHoliday").find("tr:gt(0)").remove();
@@ -186,6 +268,24 @@
             var TOTAL_HOURS = row.insertCell(5);
             var NIGHT_DIFF = row.insertCell(6);
             var NORMAL_OT = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary edit-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#holidaymemodal");
+            action.innerHTML = '<i class="fas fa-fw fa-pen"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                holidayid = dataRow[0];
+            };
 
             HOLIDAY_ID.innerHTML = item.holidayid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -195,6 +295,7 @@
             TOTAL_HOURS.innerHTML = item.total_hours;
             NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
             NORMAL_OT.innerHTML = item.normal_ot_total;
+            ACTION.appendChild(action);
 
             $.each(
               [
@@ -206,6 +307,7 @@
                 TOTAL_HOURS,
                 NIGHT_DIFF,
                 NORMAL_OT,
+                ACTION,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -247,6 +349,26 @@
             var TOTAL_HOURS = row.insertCell(5);
             var NIGHT_DIFF = row.insertCell(6);
             var NORMAL_OT = row.insertCell(7);
+            var ACTION = row.insertCell(8);
+
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary edit-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#holidaymemodal");
+            action.innerHTML = '<i class="fas fa-fw fa-pen"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                holidayid = dataRow[0];
+            };
+
 
             HOLIDAY_ID.innerHTML = item.holidayid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -256,6 +378,7 @@
             TOTAL_HOURS.innerHTML = item.total_hours;
             NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
             NORMAL_OT.innerHTML = item.normal_ot_total;
+            ACTION.appendChild(action);
 
             $.each(
               [
@@ -267,6 +390,7 @@
                 TOTAL_HOURS,
                 NIGHT_DIFF,
                 NORMAL_OT,
+                ACTION,
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -318,92 +442,6 @@
       });
     }
     
-
-    // $(document).on("click", "#pendingleavesavebtn", function () {
-    //   let startdate = $("#startldate").val();
-    //   let enddate = $("#endldate").val();
-    //   let leavetype = $("#leavetype").val();
-    //   let reason = $("#leavereason").val();
-    //   let durationDays = $("#durationdays").val();
-    //   let paidDays = $("#paiddays").val();
-    //   let unpaidDays = $("#unpaiddays").val();
-    //   let image = base64String;
-    //   let subgroup = $("#leavesubgroup").val();
-
-    //   var message = "";
-
-    //   if (startdate == "") {
-    //     message += "Start Date is required ";
-    //   }
-
-    //   if (subgroup == "") {
-    //     message += "subgroup is required ";
-    //   }
-
-    //   if (enddate == "") {
-    //     message += "End Date is required ";
-    //   }
-
-    //   if (leavetype === "") {
-    //     message += "Leave Type is required ";
-    //   }
-
-    //   if (durationDays == "") {
-    //     message += "Reason is required ";
-    //   }
-
-    //   if (reason == "") {
-    //     message += "Reason is required ";
-    //   }
-
-    //   if (paidDays == "") {
-    //     message += "Paid Days is required ";
-    //   } else if (paidDays <= 0) {
-    //     message += "Paid Days must be greater than 0 ";
-    //   }
-
-    //   if (image == "") {
-    //     message += "Image is required ";
-    //   }
-
-    //   if (message !== "") {
-    //     swal("Validation Error", message, "error");
-    //   } else {
-    //     $.ajax({
-    //       type: "POST",
-    //       url: "/eportalrequestleave/submit",
-    //       data: {
-    //         employeeid: employeeid,
-    //         startdate: startdate,
-    //         enddate: enddate,
-    //         leavetype: leavetype,
-    //         reason: reason,
-    //         durationDays: durationDays,
-    //         paidDays: paidDays,
-    //         unpaidDays: unpaidDays,
-    //         image: image,
-    //         subgroup: subgroup,
-    //       },
-    //       success: function (result) {
-    //         if (result.msg == "success") {
-    //           swal(
-    //             "Update Successfully",
-    //             "You clicked the button!",
-    //             "success"
-    //           ).then((result) => {
-    //             window.location.reload();
-    //           });
-    //           LoadTable();
-    //         } else if (result.msg == "exist") {
-    //           swal("Exist", "Data already exists!", "warning");
-    //         }
-    //       },
-    //       error: function (err) {
-    //         swal("Error", "An error occurred while saving data.", "error");
-    //       },
-    //     });
-    //   }
-    // });
 
     $(document).on("click", "#pendingleavesavebtn", function () {
       let startdate = $("#startldate").val();
@@ -547,18 +585,12 @@
               $("#holidaytype").val(item.holidaytype);
               $("#holidaydate").val(item.holidaydate);
               $("#holidayname").val(item.holidayname);
-              // $("#previewleave").attr(
-              //   "src",
-              //   "data:image/jpg;base64," + item.leaveimage
-              // );
-              //  $("#holidaysubgroup").val(item.totalleavedays);
-              // $("#editunusedleave").val(item.unusedleave);
-              // $("#editusedleave").val(item.usedleave);
-              // $("#editleaveyear").val(item.leaveyear);
-              // $("#editleavestatus").val(item.leavestatus);
-              // $("#editleaveduration").val(item.leaveduration);
-              // $("#editpaiddays").val(item.leavepaiddays);
-              // $("#editunpaiddays").val(item.leaveunpaiddays);
+              $("#holidaypayrolldate").val(item.payrolldate);
+              $("#holidaysubgroup").val(item.subgroupid);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.file
+              );
             });
           } else {
             swal("Error fetching employee data", "success");
@@ -645,19 +677,18 @@
                 employeeid: employeeid,
               },
               success: function (result) {
-                if (result.msg == "success") {
+                if (result.msg === "success") {
                   swal(
                     "Save Successfully",
                     "You clicked the button!",
                     "success"
-                  ).then((results) => {
+                  ).then((result) => {
                     window.location.reload();
                   });
                   LoadTable();
+                } else if (result.msg === "exist") {
+                  swal("Error", "This combination already exists.", "error");
                 }
-              },
-              error: function (err) {
-                swal("Error", "An error occurred while saving data.", "error");
               },
               error: function (err) {
                 swal("Error", "An error occurred while saving data.", "error");

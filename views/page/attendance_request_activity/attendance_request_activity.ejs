@@ -4,16 +4,17 @@
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
       <h3 class="title-card-table m-4">Attendance Request Activity</h3>
-      <div class="row g-2 m-4">
-        <div class="col">
-          <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
-        </div>
-        <div class="col-sm-1 col-add">
-          <!-- <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#assmodal">
-            <b>+ Add</b>
-          </button> -->
-        </div>
-      </div> 
+      <div class="row g-4">
+          <div class="col">
+              <input id='myInput'  type='text' placeholder="  Search....">
+          </div>
+          <div class="col-md-2">
+              <input id="datepicker"  type="text" name="daterange">
+          </div>
+          <div class="col-sm-1 col-add">
+              <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+          </div>
+      </div>
     </div>
     <div class="card-body">
         <div class="table-responsive"  id="table-responsive-id">

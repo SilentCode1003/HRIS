@@ -127,6 +127,7 @@ router.post("/submit", async (req, res) => {
             "attendance_request",
             data,
             (insertErr, insertResult) => {
+              console.log(insertResult,'result');
               if (insertErr) {
                 console.error("Error inserting leave record: ", insertErr);
                 res.json({ msg: "insert_failed" });
@@ -142,17 +143,22 @@ router.post("/submit", async (req, res) => {
                     requesttype: REQUEST.COA,
                   },
                 ];
-                SendEmailNotification(employeeid, subgroupid, REQUEST.COA, emailbody);
+                SendEmailNotification(
+                  employeeid,
+                  subgroupid,
+                  REQUEST.COA,
+                  emailbody
+                );
 
                 res.json({ msg: "success" });
               }
             }
           )
-          .catch((error) => {
-            console.error(error);
-            res.json(JsonErrorResponse(error));
-          });
       }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.json(JsonErrorResponse(error));
     });
   } catch (error) {
     console.error(error);
