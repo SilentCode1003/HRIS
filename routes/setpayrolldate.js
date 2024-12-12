@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { GetCurrentMonthFirstDay } = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -42,6 +43,7 @@ router.get("/load", (req, res) => {
 
 router.get("/loadreq", (req, res) => {
   try {
+    let firstDayofMonth = GetCurrentMonthFirstDay();
     let sql = `SELECT 
     pd_payrollid,
     pd_name,
@@ -52,7 +54,7 @@ router.get("/loadreq", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
+    pd_enddate >= '${firstDayofMonth}' OR pd_enddate IS NULL
     ORDER BY 
     pd_startdate
     LIMIT 5`;
@@ -76,6 +78,7 @@ router.get("/loadreq", (req, res) => {
 
 router.get("/loadreqbeforepayout", (req, res) => {
   try {
+    let firstDayofMonth = GetCurrentMonthFirstDay();
     let sql = `SELECT 
     pd_payrollid,
     pd_name,
@@ -86,7 +89,7 @@ router.get("/loadreqbeforepayout", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_payrolldate >= CURDATE()
+    pd_payrolldate >= '${firstDayofMonth}'
     ORDER BY 
     pd_payrolldate
     LIMIT 5`;
