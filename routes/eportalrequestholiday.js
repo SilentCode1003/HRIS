@@ -77,7 +77,10 @@ router.post("/getreqholiday", (req, res) => {
     ph_status,
     ph_holidaytype,
     DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,
-    mh_name as ph_holidayname
+    mh_name as ph_holidayname,
+    ph_file,
+    DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
+    ph_subgroupid
     FROM payroll_holiday
     INNER JOIN master_holiday ON payroll_holiday.ph_holidaydate = mh_date
     WHERE ph_employeeid='${employeeid}' AND ph_holidayid = '${holidayid}'
@@ -89,6 +92,9 @@ router.post("/getreqholiday", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
+
+      console.log(result);
+      
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -217,9 +223,9 @@ router.post("/loadapproved", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
     ph_nightdiff_ot_total,
@@ -246,14 +252,48 @@ router.post("/loadapproved", (req, res) => {
   }
 });
 
+router.post("/loadapplied", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    ph_holidayid,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
+    ph_holidaytype,
+    ph_total_hours,
+    ph_nightdiff_ot_total,
+    ph_normal_ot_total
+    from payroll_holiday
+    where ph_employeeid = '${employeeid}'
+    and ph_status = 'Applied'
+    order by ph_attendancedate asc`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.post("/loadrejected", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
     ph_nightdiff_ot_total,
@@ -285,9 +325,9 @@ router.post("/loadcancelled", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
     ph_nightdiff_ot_total,

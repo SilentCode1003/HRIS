@@ -1859,7 +1859,8 @@ router.post("/submit", async (req, res) => {
       [employeeid, attendancedate, "Pending"]
     );
 
-    Check(checkStatement).then((result) => {
+    Check(checkStatement)
+    .then((result) => {
       if (result != 0) {
         return res.json(JsonWarningResponse(MessageStatus.EXIST));
       } else {
@@ -1900,7 +1901,7 @@ router.post("/submit", async (req, res) => {
     .catch((error) => {
       console.error(error);
       res.json(JsonErrorResponse(error));
-    });;
+    });
   } catch (error) {
     console.error(error);
     res.json(JsonErrorResponse(error));
@@ -4851,6 +4852,7 @@ router.post("/update", verifyJWT, (req, res) => {
     let overtimeimage = req.body.overtimeimage;
     let deviceaction = "App Automated";
     let applieddate = GetCurrentDatetime();
+    let approvecount = 0;
 
     let sql = `call hrmis.UpdateRequestOvertime(
       '${clockin}',

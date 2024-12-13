@@ -123,6 +123,7 @@ router.post("/holidayaction", (req, res) => {
     let subgroupid = req.body.subgroupid;
     let createdate = GetCurrentDatetime();
     const { holiday_id, status, comment } = req.body;
+    
 
     let sql = InsertStatement("holiday_request_activity", "hra", [
       "employeeid",
