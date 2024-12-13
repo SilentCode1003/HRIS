@@ -4864,7 +4864,7 @@ router.post("/update", verifyJWT, (req, res) => {
       '${deviceaction}',
       '${applieddate}',
       '${reason}',
-      '${approvecount}',
+      0,
       '${approveot_id}')`;
   
       let checkStatement = SelectStatement(
