@@ -585,34 +585,55 @@ router.post("/update", (req, res) => {
 		'${approvecount}',
 		'${approveot_id}')`;
 
-    let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status =?",
-      [employeeid, attendancedate, overtimestatus]
+    let validationQuery1 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Pending'`,
+      [attendancedate, employeeid]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          mysql.StoredProcedure(sql, (err, insertResult) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            } else {
-              console.log(insertResult);
-              res.json(JsonSuccess());
-            }
-          });
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Applied'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery1)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.PENDINGOT));
         }
+        return Check(validationQuery2);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDOT));
+        }
+        return Check(validationQuery3);
+      })
+      .then((result3) => {
+        if (result3.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDOT));
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    return res.json(JsonErrorResponse(error));
   }
 });
 
