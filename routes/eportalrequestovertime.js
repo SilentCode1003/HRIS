@@ -438,8 +438,8 @@ router.post("/addrequstot", (req, res) => {
 	  '${approvecount}')`;
 
     let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
-      [employeeid, attendancedate, overtimestatus]
+      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=?",
+      [employeeid, attendancedate]
     );
 
     Check(checkStatement)
@@ -467,6 +467,7 @@ router.post("/addrequstot", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 router.post("/update", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
@@ -499,7 +500,7 @@ router.post("/update", (req, res) => {
 		'${approveot_id}')`;
 
     let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
+      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status =?",
       [employeeid, attendancedate, overtimestatus]
     );
 
@@ -528,6 +529,9 @@ router.post("/update", (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
+
+
 router.post("/getattendancedate", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
