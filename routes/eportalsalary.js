@@ -170,6 +170,7 @@ router.post("/loadpayslip", (req, res) => {
     p_presentdays_gp, 
     p_holidaydays, 
     p_absent, 
+    p_leave_with_out_pay,
     p_nightdiffpay, 
     p_restday_ot, 
     p_otpay, 
@@ -192,6 +193,7 @@ router.post("/loadpayslip", (req, res) => {
     p_suspension_pay,
     p_overall_netpay, 
     p_absent_deductions, 
+    p_leave_with_out_pay_deductions,
     p_wisp_deductions, 
     p_late_deductions, 
     p_sss_dedcutions, 
@@ -365,6 +367,8 @@ router.post("/generatepdf", async (req, res) => {
       globalnumlate,
       globalnumabsent,
       globalaccrued13thmonth,
+      globalleave_with_out_pay,
+      globalleave_with_out_pay_deductions,
     } = req.body;
     const deductions = (globalsuddendeductionsName || []).map(
       (name, index) => ({

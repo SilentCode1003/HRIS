@@ -418,6 +418,24 @@
             var NIGHT_DIFFERENTIALS = row.insertCell(7);
             var PAYROLL_DATE = row.insertCell(8);
             var STATUS = row.insertCell(9);
+            var ACTION = row.insertCell(10); 
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#appliedot");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                approveot_id = dataRow[0];
+            };
 
             REQUEST_ID.innerHTML = item.id;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -429,6 +447,7 @@
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
             STATUS.innerHTML = item.status;
+            ACTION.appendChild(action);
 
             $.each(
               [
@@ -442,6 +461,7 @@
                 NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
+                ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -482,6 +502,24 @@
             var NIGHT_DIFFERENTIALS = row.insertCell(7);
             var PAYROLL_DATE = row.insertCell(8);
             var STATUS = row.insertCell(9);
+            var ACTION = row.insertCell(10); // Adding action column
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#appliedot");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                approveot_id = dataRow[0];
+            };
 
             REQUEST_ID.innerHTML = item.id;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -493,6 +531,7 @@
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
             STATUS.innerHTML = item.status;
+            ACTION.appendChild(action);
 
             $.each(
               [
@@ -506,6 +545,7 @@
                 NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
+                ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -628,10 +668,10 @@
                 window.location.reload();
               });
               LoadTable();
-            } else if (result.msg === "exist") {
+            } if (result.msg === "exist") { 
               swal({
                 title: "Exist",
-                text: "Looks like you already have a file for Overtime this Day.",
+                text: result.data,
                 icon: "warning",
                 button: "OK!",
               });

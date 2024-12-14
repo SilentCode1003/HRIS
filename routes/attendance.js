@@ -507,7 +507,6 @@ router.post("/exportreports", async (req, res) => {
   }
 });
 
-
 function adjustColumnWidths(worksheet, data) {
   const cols = [];
 

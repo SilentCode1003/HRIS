@@ -55,6 +55,8 @@
   let globalnumlate = "";
   let globalnumabsent = "";
   let globalgpstatus = "";
+  let globalleave_with_out_pay = "";
+  let globalleave_with_out_pay_deductions = "";
   let globalsuddendedductionsName = [];
   let globalsuddendedductionsAmount = [];
 
@@ -351,10 +353,9 @@
               );
               globalspecialholidayot = item.specialholidayOT;
 
-               // Get the suspension pay value
-               let suspensionPay = item.suspension_pay;
-
-              // Check if the value is 0
+              let suspensionPay = item.suspension_pay;
+              let leaveNoPay = item.leave_with_out_pay;
+              let leaveNoPayDeductions = item.leave_with_out_pay_deductions;
               if (suspensionPay === 0) {
                 $("#payslipsuspensionpay").closest("tr").hide();
               } else {
@@ -364,6 +365,33 @@
                 );
               }
               globalsuspension_pay = item.suspension_pay;
+              globalleave_with_out_pay = item.leave_with_out_pay;
+              globalleave_with_out_pay_deductions = item.leave_with_out_pay_deductions;
+
+              if (suspensionPay === 0 && leaveNoPay === 0 && leaveNoPayDeductions === 0) {
+                  $("#payslipsuspensionpay").closest("tr").hide();
+              } else {
+                  $("#payslipsuspensionpay").closest("tr").show();
+                  if (suspensionPay > 0) {
+                      $("#payslipsuspensionpay").text(formatToCurrency(suspensionPay));
+                  } else {
+                      $("#payslipsuspensionpay").text("");
+                  }
+                  if (leaveNoPay > 0) {
+                      $("#payslipnopay").html(
+                          "<strong> ( " + leaveNoPay + " )</strong>"
+                      );
+                  } else {
+                      $("#payslipnopay").html("");
+                  }
+                  if (leaveNoPayDeductions > 0) {
+                      $("#payslipnopaydeductions").text(
+                          formatToCurrency(leaveNoPayDeductions)
+                      );
+                  } else {
+                      $("#payslipnopaydeductions").text("");
+                  }
+              }
 
               $("#paysliptotal").text(formatToCurrency(item.overall_netpay));
               globaloverallnetpay = item.overall_netpay;
@@ -658,6 +686,8 @@
           globalaccrued13thmonth: globalaccrued13thmonth,
           globalsuspension_pay: globalsuspension_pay,
           globalgpstatus: globalgpstatus,
+          globalleave_with_out_pay: globalleave_with_out_pay,
+          globalleave_with_out_pay_deductions: globalleave_with_out_pay_deductions,
         },
         dataType: "text",
         success: function (data) {
