@@ -6,6 +6,9 @@ const MessageStatus = {
     DUPENTRY: "dupentry",
     EXIST: "exist",
     NOENTRY: "noentry",
+    PENDINGOT: "Loooks like you have a pending overtime request. Please wait until the request is approved.",
+    APPLIEDOT: "Looks like you have a applied overtime request. Please wait until the request is approved.",
+    APPROVEDOT: "Looks like you have a approved overtime request.",
   };
   
   function JsonSuccess() {
