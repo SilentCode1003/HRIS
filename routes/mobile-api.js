@@ -403,7 +403,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
       message: "Unauthorized. Employee not logged in.",
     });
   }
-
   if (!locationin) {
     return res.status(400).json({
       status: "error",
@@ -454,6 +453,13 @@ router.post("/clockin", verifyJWT, (req, res) => {
       AND as_attendance_date = '${attendancedate}'
   `;
 
+  const fetchScheduledTimeOutQuery = `
+    SELECT as_scheduled_timeout 
+    FROM attendance_status 
+    WHERE as_employeeid = '${employee_id}' 
+      AND as_attendance_date = '${attendancedate}'
+  `;
+
   const executeSequentialQueries = (queries) =>
     queries.reduce(
       (promise, query) =>
@@ -469,152 +475,174 @@ router.post("/clockin", verifyJWT, (req, res) => {
     checkExistingClockInQuery,
     checkMissingClockOutQuery,
     fetchScheduledTimeInQuery,
+    fetchScheduledTimeOutQuery,
   ])
-    .then(([resultClockIn, resultMissingClockOut, resultScheduledTimeIn]) => {
-      if (resultClockIn.length > 0) {
-        return res.json({
-          status: "exist",
-          message:
-            "Clock-in not allowed. Employee already clocked in on the same day.",
-        });
-      } else if (resultMissingClockOut.length > 0) {
-        return res.json({
-          status: "disabled",
-          message:
-            "Clock-in not allowed. Missing clock-out on the previous day.",
-        });
-      } else if (resultScheduledTimeIn.length === 0) {
-        return res.status(400).json({
-          status: "error",
-          message: "Scheduled time-in not found for the employee.",
-        });
-      } else {
-        const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
-        const scheduledTimeIn = resultScheduledTimeIn[0].as_scheduled_timein;
-
-        let status,
-          minutesDifference = 0,
-          hoursDifference = 0;
-
-        if (scheduledTimeIn === "00:00:00") {
-          status = "Rest Day OT";
+    .then(
+      ([
+        resultClockIn,
+        resultMissingClockOut,
+        resultScheduledTimeIn,
+        resultScheduledTimeOut,
+      ]) => {
+        if (resultClockIn.length > 0) {
+          return res.json({
+            status: "exist",
+            message:
+              "Clock-in not allowed. Employee already clocked in on the same day.",
+          });
+        } else if (resultMissingClockOut.length > 0) {
+          return res.json({
+            status: "disabled",
+            message:
+              "Clock-in not allowed. Missing clock-out on the previous day.",
+          });
+        } else if (
+          resultScheduledTimeIn.length === 0 ||
+          resultScheduledTimeOut.length === 0
+        ) {
+          return res.status(400).json({
+            status: "error",
+            message:
+              "Scheduled time-in or time-out not found for the employee.",
+          });
         } else {
-          const clockInMoment = moment(clockinDateTime, "YYYY-MM-DD HH:mm:ss");
-          const scheduledTimeInMoment = moment(
-            `${attendancedate} ${scheduledTimeIn}`,
-            "YYYY-MM-DD HH:mm:ss"
+          const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+          const scheduledTimeIn = resultScheduledTimeIn[0].as_scheduled_timein;
+          const scheduledTimeOut =
+            resultScheduledTimeOut[0].as_scheduled_timeout;
+
+          let status,
+            minutesDifference = 0,
+            hoursDifference = 0;
+
+          if (scheduledTimeIn === "00:00:00") {
+            status = "Rest Day OT";
+          } else {
+            const clockInMoment = moment(
+              clockinDateTime,
+              "YYYY-MM-DD HH:mm:ss"
+            );
+            const scheduledTimeInMoment = moment(
+              `${attendancedate} ${scheduledTimeIn}`,
+              "YYYY-MM-DD HH:mm:ss"
+            );
+
+            if (clockInMoment.isBefore(scheduledTimeInMoment)) {
+              status = "Early";
+              minutesDifference = scheduledTimeInMoment.diff(
+                clockInMoment,
+                "minutes"
+              );
+            } else if (clockInMoment.isAfter(scheduledTimeInMoment)) {
+              status = "Late";
+              minutesDifference = clockInMoment.diff(
+                scheduledTimeInMoment,
+                "minutes"
+              );
+            } else {
+              status = "On Time";
+            }
+            hoursDifference = Math.floor(minutesDifference / 60);
+            minutesDifference %= 60;
+          }
+
+          const insertAttendanceQuery = InsertStatement(
+            "master_attendance",
+            "ma",
+            [
+              "employeeid",
+              "attendancedate",
+              "clockin",
+              "shift_timein",
+              "shift_timeout",
+              "latitudeIn",
+              "longitudein",
+              "devicein",
+              "gefenceidIn",
+              "locationIn",
+            ]
           );
 
-          if (clockInMoment.isBefore(scheduledTimeInMoment)) {
-            status = "Early";
-            minutesDifference = scheduledTimeInMoment.diff(
-              clockInMoment,
-              "minutes"
-            );
-          } else if (clockInMoment.isAfter(scheduledTimeInMoment)) {
-            status = "Late";
-            minutesDifference = clockInMoment.diff(
-              scheduledTimeInMoment,
-              "minutes"
-            );
-          } else {
-            status = "On Time";
-          }
-          hoursDifference = Math.floor(minutesDifference / 60);
-          minutesDifference %= 60;
-        }
+          const attendanceData = [
+            [
+              employee_id,
+              attendancedate,
+              clockinDateTime,
+              scheduledTimeIn,
+              scheduledTimeOut,
+              latitude,
+              longitude,
+              devicein,
+              geofenceid,
+              locationin,
+            ],
+          ];
 
-        const insertAttendanceQuery = InsertStatement(
-          "master_attendance",
-          "ma",
-          [
-            "employeeid",
-            "attendancedate",
-            "clockin",
-            "latitudeIn",
-            "longitudein",
-            "devicein",
-            "gefenceidIn",
-            "locationIn",
-          ]
-        );
+          const checkStatement = SelectStatement(
+            "SELECT * FROM master_attendance WHERE ma_attendancedate=? AND ma_employeeid=?",
+            [attendancedate, employee_id]
+          );
 
-        const attendanceData = [
-          [
-            employee_id,
-            attendancedate,
-            clockinDateTime,
-            latitude,
-            longitude,
-            devicein,
-            geofenceid,
-            locationin,
-          ],
-        ];
-
-        const checkStatement = SelectStatement(
-          "SELECT * FROM master_attendance WHERE ma_attendancedate=? AND ma_employeeid=?",
-          [attendancedate, employee_id]
-        );
-
-        Check(checkStatement)
-          .then((result) => {
-            if (result.length !== 0) {
-              return res.json(JsonWarningResponse(MessageStatus.EXIST));
-            } else {
-              InsertTable(
-                insertAttendanceQuery,
-                attendanceData,
-                (err, result) => {
-                  if (err) {
-                    console.log(err);
-                    return res.status(500).json({
-                      status: "error",
-                      message: "Failed to insert attendance. Please try again.",
-                    });
-                  }
-
-                  const updateAttendanceStatusQuery = `
-                    UPDATE attendance_status 
-                    SET as_status = '${status}', 
-                        as_minutes = ${minutesDifference}, 
-                        as_hours = ${hoursDifference} 
-                    WHERE as_employeeid = '${employee_id}' 
-                      AND as_attendance_date = '${attendancedate}'
-                  `;
-
-                  mysql
-                    .mysqlQueryPromise(updateAttendanceStatusQuery)
-                    .then(() => {
-                      return res.json({
-                        status: "success",
-                        message: "Clock-in successful.",
-                      });
-                    })
-                    .catch((updateError) => {
-                      console.error(
-                        "Error updating attendance status:",
-                        updateError
-                      );
+          Check(checkStatement)
+            .then((result) => {
+              if (result.length !== 0) {
+                return res.json(JsonWarningResponse(MessageStatus.EXIST));
+              } else {
+                InsertTable(
+                  insertAttendanceQuery,
+                  attendanceData,
+                  (err, result) => {
+                    if (err) {
+                      console.log(err);
                       return res.status(500).json({
                         status: "error",
-                        message: "Failed to update attendance status.",
+                        message:
+                          "Failed to insert attendance. Please try again.",
                       });
-                    });
-                }
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error during check statement:", error);
-            return res.status(500).json({
-              status: "error",
-              message: "Internal server error. Please try again.",
-              data: error,
+                    }
+
+                    const updateAttendanceStatusQuery = `
+                      UPDATE attendance_status 
+                      SET as_status = '${status}', 
+                          as_minutes = ${minutesDifference}, 
+                          as_hours = ${hoursDifference} 
+                      WHERE as_employeeid = '${employee_id}' 
+                        AND as_attendance_date = '${attendancedate}'
+                    `;
+
+                    mysql
+                      .mysqlQueryPromise(updateAttendanceStatusQuery)
+                      .then(() => {
+                        return res.json({
+                          status: "success",
+                          message: "Clock-in successful.",
+                        });
+                      })
+                      .catch((updateError) => {
+                        console.error(
+                          "Error updating attendance status:",
+                          updateError
+                        );
+                        return res.status(500).json({
+                          status: "error",
+                          message: "Failed to update attendance status.",
+                        });
+                      });
+                  }
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error during check statement:", error);
+              return res.status(500).json({
+                status: "error",
+                message: "Internal server error. Please try again.",
+                data: error,
+              });
             });
-          });
+        }
       }
-    })
+    )
     .catch((error) => {
       console.error("Error during clock-in process:", error);
       return res.status(500).json({
