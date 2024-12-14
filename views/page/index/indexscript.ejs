@@ -2548,7 +2548,7 @@
       } else {
         $.ajax({
           type: "PUT",
-          url: "/holidayaction",
+          url: "/index/holidayaction",
           data: {
             holidayid: id,
             payrolldate: payrolldate,
@@ -2673,7 +2673,7 @@
     $(document).on("click", "#editRdotBTN", function () {
       $.ajax({
         type: "POST",
-        url: "/getrdotapproval",
+        url: "/index/getrdotapproval",
         data: {
           rdotid: rdotid,
         },
@@ -2724,7 +2724,7 @@
       } else {
         $.ajax({
           type: "PUT",
-          url: "/rdotaction",
+          url: "/index/rdotaction",
           data: {
             rdotid: id,
             payrolldate: payrolldate,

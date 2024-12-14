@@ -54,6 +54,7 @@
   let globalsalary_loan = "";
   let globalnumlate = "";
   let globalnumabsent = "";
+  let globalgpstatus = "";
   let globalsuddendedductionsName = [];
   let globalsuddendedductionsAmount = [];
 
@@ -267,6 +268,10 @@
 
             console.log(existingData);
             $.each(existingData, (key, item) => {
+              $("#payslipdailytotal").html(
+                "<strong> ( " + item.presentdays_gp + " )</strong>"
+              );
+              globalgpstatus = item.presentdays_gp;
               $("#payslipSSSid").text(item.sssid);
               globalsssid = item.sssid;
               $("#payslipTINid").text(item.tinid);
@@ -652,6 +657,7 @@
           globalnumabsent: globalnumabsent,
           globalaccrued13thmonth: globalaccrued13thmonth,
           globalsuspension_pay: globalsuspension_pay,
+          globalgpstatus: globalgpstatus,
         },
         dataType: "text",
         success: function (data) {

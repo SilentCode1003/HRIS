@@ -178,6 +178,9 @@ var eportalobRouter = require("./routes/eportalob");
 var eportalundertime = require("./routes/eportalundertime");
 var teamleadmanualotmealRouter = require("./routes/teamleadmanualotmeal");
 var teamleadobRouter = require("./routes/teamleadob");
+var teamleadobappliedRouter = require("./routes/teamleadobapplied");
+var teamleadobapproveRouter = require("./routes/teamleadobapprove");
+
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -367,6 +370,8 @@ app.use("/eportalob", eportalobRouter);
 app.use("/eportalundertime", eportalundertime);
 app.use("/teamleadmanualotmeal", teamleadmanualotmealRouter);
 app.use("/teamleadob", teamleadobRouter);
+app.use("/teamleadobapplied", teamleadobappliedRouter);
+app.use("/teamleadobapprove", teamleadobapproveRouter);
 
 
 // catch 404 and forward to error handler

@@ -5,6 +5,7 @@ const REQUEST = {
   CA: "Cash Advance",
   LOAN: "Loan",
   OTMEAL: "Overtime Meal",
+
 };
 
 exports.REQUEST = REQUEST;
@@ -21,3 +22,13 @@ const STATUS_LOG = {
   REQUEST: 'Request',
 };
 exports.STATUS_LOG = STATUS_LOG;
+
+const REQUEST_STATUS = {
+  pending: "PENDING",
+  approved: "APPROVED",
+  rejected: "REJECTED",
+  cancelled: "CANCELLED",
+  applied: "APPLIED",
+};
+
+exports.REQUEST_STATUS = REQUEST_STATUS;

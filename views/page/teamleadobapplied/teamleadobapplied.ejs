@@ -1,0 +1,227 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-header ch-coop">
+      <h3 class="title-card-table">All Official Business Request</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <input
+            id="search"
+            type="text"
+            placeholder="  Search...."
+            class="form-control w-100"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="row mt-2">
+        <div class="col">
+          <div class="tableresponsive">
+            <table class="table table-bordered table-light" id="datatable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Attendance Date</th>
+                  <th>Clock In</th>
+                  <th>Clock Out</th>
+                  <th>Applied Date</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modal"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Offical Business Request</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">ID</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Employee ID"
+                id="obrid"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Employee</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Employee Name"
+                id="employeename"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Dated</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Attendance Date"
+                id="attendancedate"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Clock In</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Clock In"
+                id="clockin"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Clock Out</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Clock Out"
+                id="clockiout"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Status</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Status"
+                id="obrstatus"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Applied Date</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Applied Date"
+                id="applieddate"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text header-bg">Subgroup</span>
+              </div>
+              <input
+                type="text"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="Subgroup"
+                id="subgroup"
+                disabled
+              />
+              <input
+                type="hidden"
+                autocomplete="off"
+                class="form-control border-form-modal"
+                placeholder="SubgroupID"
+                id="subgroupid"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4 justify-content-center">
+          <div class="col">
+            <div class="input-group">
+              <textarea
+                name="remarks"
+                id="remarks"
+                class="form-control border-form-modal"
+                placeholder="Reason"
+                rows="5"
+                disabled
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-modal-save" id="approvedBtn">
+          Approved
+        </button>
+        <button type="button" class="btn btn-modal-close" id="rejectedBtn">
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

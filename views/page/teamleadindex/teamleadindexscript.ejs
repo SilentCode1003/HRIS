@@ -9,14 +9,9 @@
     let approveot_id = "";
     let requestid = "";
     LoadList();
+
+    LoadCards();
     //LoadTable();
-    loadCOAcard();
-    loadOvertimeCard();
-    loadLEAVECard();
-    loadOTmealCard();
-    loadattendanceBadge();
-    loadRestDayOtCard();
-    loadHolidayReqCard();
     LoadBdayFolks();
     //loadleaveBadge();
     loadCashBadge();
@@ -85,7 +80,7 @@
     //#endregion
 
     //#region Load Modal Table
-    
+
     //#COA Modal
     $(document).on("click", "#totalCOA", function () {
       $.ajax({
@@ -129,7 +124,7 @@
               "data-label": "Attendance Date",
               class: "custom-mobile-align",
             }),
-            $("<td>", {     
+            $("<td>", {
               text: item.timein,
               "data-label": "Time In",
               class: "custom-mobile-align",
@@ -385,8 +380,8 @@
       }
     }
 
-     //#REST DAY OT Modal
-     $(document).on("click", "#totalrestdayot", function () {
+    //#REST DAY OT Modal
+    $(document).on("click", "#totalrestdayot", function () {
       $.ajax({
         type: "GET",
         url: "/teamleadindex/totalrestdayot",
@@ -523,7 +518,7 @@
     //#endregion
 
     //#region Load Card
-    function loadCOAcard() {
+    async function loadCOAcard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countcoacard",
@@ -541,7 +536,7 @@
       });
     }
 
-    function loadOvertimeCard() {
+    async function loadOvertimeCard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countovertimecard",
@@ -559,7 +554,7 @@
       });
     }
 
-    function loadLEAVECard() {
+    async function loadLEAVECard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countleavecard",
@@ -578,7 +573,7 @@
       });
     }
 
-    function loadOTmealCard() {
+    async function loadOTmealCard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countotmealcard",
@@ -597,7 +592,7 @@
       });
     }
 
-    function loadRestDayOtCard() {
+    async function loadRestDayOtCard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countrestdayotcard",
@@ -616,7 +611,7 @@
       });
     }
 
-    function loadHolidayReqCard() {
+    async function loadHolidayReqCard() {
       $.ajax({
         type: "GET",
         url: "teamleadindex/countholidaycard",
@@ -624,6 +619,25 @@
           if (result.msg === "success") {
             const totalHOLIDAY = result.data.HOLIDAYCount;
             $("#totalholidayCard .h5-teamlead").text(totalHOLIDAY);
+          } else {
+            console.error("Error fetching data:", result.msg);
+          }
+        },
+        error: function (err) {
+          // Handle AJAX error
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    }
+
+    async function loadOBCard() {
+      $.ajax({
+        type: "GET",
+        url: "teamleadindex/countobcard",
+        success: function (result) {
+          if (result.msg === "success") {
+            const totalOB = result.data;
+            $("#totalobCard .h5-teamlead").text(totalOB);
           } else {
             console.error("Error fetching data:", result.msg);
           }
@@ -2356,5 +2370,16 @@
     // );
 
     //#endregion
+
+    async function LoadCards() {
+      await loadCOAcard();
+      await loadOvertimeCard();
+      await loadLEAVECard();
+      await loadOTmealCard();
+      await loadattendanceBadge();
+      await loadRestDayOtCard();
+      await loadHolidayReqCard();
+      await loadOBCard();
+    }
   });
 </script>

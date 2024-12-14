@@ -211,7 +211,7 @@ router.post("/getotmeal", (req, res) => {
     DATE_FORMAT(oma_clockout, '%Y-%m-%dT%H:%i') AS oma_clockout,
     oma_totalovertime,
     oma_subgroupid,
-    oma_payroll_date,
+    DATE_FORMAT(oma_payroll_date, '%Y-%m-%d') AS oma_payroll_date,
     oma_otmeal_amount,
     oma_approvalcount,
     oma_image,

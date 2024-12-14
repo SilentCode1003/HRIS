@@ -32,8 +32,8 @@
   }
 
   function LoadTable() {
-    Fetch("/eportalob/getob/pending", function (result) {
-      PopulateTable($("#datatable-pending-request tbody"), result.data);
+    Fetch("/eportalob/getob/applied", function (result) {
+      PopulateTable($("#datatable-applied-request tbody"), result.data);
     });
   }
 
