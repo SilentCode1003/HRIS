@@ -25,8 +25,7 @@ exports.SendEmail = (to, subject, text) => {
 
   const mailOptions = {
     from: process.env._EMAIL_FROM,
-    // to: to,
-    to: 'joseph.orencio@5lsolutions.com',
+    to: to,
     subject: subject,
     html: text,
   };
@@ -39,8 +38,6 @@ exports.SendEmail = (to, subject, text) => {
       // console.log(info);
       // console.log("Email sent: " + info.response);
       console.log("Email sent");
-      
     }
   });
 };
-
