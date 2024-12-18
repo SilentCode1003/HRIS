@@ -519,7 +519,9 @@ router.post("/addrequstot", (req, res) => {
     Check(validationQuery1)
       .then((result1) => {
         if (result1.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.PENDINGOT));
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGOT)
+          );
         }
         return Check(validationQuery2);
       })
@@ -554,7 +556,7 @@ router.post("/addrequstot", (req, res) => {
 });
 
 
-router.post("/update", (req, res) => {
+router.post("/update",(req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
@@ -571,24 +573,19 @@ router.post("/update", (req, res) => {
     let approvecount = 0;
 
     let sql = `call hrmis.UpdateRequestOvertime(
-		'${clockin}',
-		'${clockout}',
-		'${attendancedate}',
-		'${employeeid}',
-		'${payrolldate}',
-		'${overtimestatus}',
-		'${subgroup}',
-		'${overtimeimage}',
-		'${deviceaction}',
-		'${applieddate}',
-		'${reason}',
-		'${approvecount}',
-		'${approveot_id}')`;
-
-    let validationQuery1 = SelectStatement(
-      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Pending'`,
-      [attendancedate, employeeid]
-    );
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${overtimestatus}',
+      '${subgroup}',
+      '${overtimeimage}',
+      '${deviceaction}',
+      '${applieddate}',
+      '${reason}',
+      ${approvecount},
+      '${approveot_id}')`;
 
     let validationQuery2 = SelectStatement(
       `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Applied'`,
@@ -600,22 +597,20 @@ router.post("/update", (req, res) => {
       [attendancedate, employeeid]
     );
 
-    Check(validationQuery1)
+    Check(validationQuery2)
       .then((result1) => {
         if (result1.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.PENDINGOT));
-        }
-        return Check(validationQuery2);
-      })
-      .then((result2) => {
-        if (result2.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDOT));
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDOT)
+          );
         }
         return Check(validationQuery3);
       })
-      .then((result3) => {
-        if (result3.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDOT));
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDOT)
+          );
         }
         mysql.StoredProcedure(sql, (err, insertResult) => {
           if (err) {
@@ -636,6 +631,7 @@ router.post("/update", (req, res) => {
     return res.json(JsonErrorResponse(error));
   }
 });
+
 
 
 
