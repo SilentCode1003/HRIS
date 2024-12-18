@@ -4923,11 +4923,6 @@ router.post("/update", verifyJWT, (req, res) => {
       ${approvecount},
       '${approveot_id}')`;
 
-    let validationQuery1 = SelectStatement(
-      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Pending'`,
-      [attendancedate, employeeid]
-    );
-
     let validationQuery2 = SelectStatement(
       `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Applied'`,
       [attendancedate, employeeid]
@@ -4938,26 +4933,18 @@ router.post("/update", verifyJWT, (req, res) => {
       [attendancedate, employeeid]
     );
 
-    Check(validationQuery1)
+    Check(validationQuery2)
       .then((result1) => {
         if (result1.length > 0) {
-          return Promise.reject(
-            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGOT)
-          );
-        }
-        return Check(validationQuery2);
-      })
-      .then((result2) => {
-        if (result2.length > 0) {
-          return Promise.reject(
+          return res.status(409).json(
             JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDOT)
           );
         }
         return Check(validationQuery3);
       })
-      .then((result3) => {
-        if (result3.length > 0) {
-          return Promise.reject(
+      .then((result2) => {
+        if (result2.length > 0) {
+          return res.status(409).json(
             JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDOT)
           );
         }
