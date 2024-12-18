@@ -11,19 +11,13 @@ const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_
 const swaggerDocs = require('./document/swagger');
 const swaggerUi = require('swagger-ui-express');
 
-// const corsOptions = {
-//   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
-//   credentials: true,
-// };
-
-
 // Schedule the function to run every day at 23:59 (11:59 PM)
 cron.schedule("0 0 * * *", () => {
   console.log("Running daily attendance status insertion...");
   insertDailyAttendanceStatus();
 });
 
-
+//#region ROUTES IMPORT
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var employeeRouter = require("./routes/employee");
@@ -181,6 +175,8 @@ var teamleadobRouter = require("./routes/teamleadob");
 var teamleadobappliedRouter = require("./routes/teamleadobapplied");
 var teamleadobapproveRouter = require("./routes/teamleadobapprove");
 
+//#endregion
+
 
 const verifyJWT = require("./middleware/authenticator");
 
@@ -194,25 +190,16 @@ app.set("view engine", "ejs");
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(
-  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
-);
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//   })
-// );
-
-// app.use(cors(corsOptions));
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use((req, res, next) => {
   eventlogger(req, res, next);
 });
+
+//#region ROUTES USE
 
 app.use("/", loginlayoutRouter);
 app.use("/access", accessRouter);
@@ -372,6 +359,8 @@ app.use("/teamleadmanualotmeal", teamleadmanualotmealRouter);
 app.use("/teamleadob", teamleadobRouter);
 app.use("/teamleadobapplied", teamleadobappliedRouter);
 app.use("/teamleadobapprove", teamleadobapproveRouter);
+
+//#endregion
 
 
 // catch 404 and forward to error handler

@@ -12,14 +12,16 @@ const {
 const { Select, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { GetValue, PND } = require("./repository/dictionary");
-const { REQUEST_STATUS } = require("./repository/enums");
+const { REQUEST_STATUS, REQUEST } = require("./repository/enums");
 var router = express.Router();
 const {
   JsonErrorResponse,
   JsonDataResponse,
   JsonSuccess,
+  MessageStatus,
 } = require("./repository/response");
 const { Transaction } = require("./utility/utility");
+const { SendEmailNotification } = require("./repository/emailsender");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -137,9 +139,15 @@ router.put("/approved", (req, res) => {
     } = req.body;
     let queries = [];
 
-
-    console.log(id, remarks, subgroupid, clockin, clockout, attendancedate, employeeid);
-    
+    console.log(
+      id,
+      remarks,
+      subgroupid,
+      clockin,
+      clockout,
+      attendancedate,
+      employeeid
+    );
 
     async function ProcessData() {
       let approval_count = await GetRequestApprovalSetting(subgroupid);
@@ -242,6 +250,19 @@ router.put("/approved", (req, res) => {
       });
 
       await Transaction(queries);
+
+      let emailbody = [
+        {
+          employeename: employeeid,
+          date: attendancedate,
+          startdate: clockin,
+          enddate: clockout,
+          reason: remarks,
+          status: `${MessageStatus.APPROVED} - ${update_count} out of ${approval_count}`,
+          requesttype: REQUEST.OB,
+        },
+      ];
+      SendEmailNotification(employeeid, subgroupid, REQUEST.OB, emailbody);
 
       res.json(JsonSuccess());
     }

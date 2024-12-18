@@ -1921,8 +1921,9 @@ router.get("/loadmisslogs", (req, res) => {
       ma_deviceout
       from master_attendance
       inner join master_employee on ma_employeeid = me_id
-      where timestampdiff(HOUR, ma_clockin, ma_clockout) > ? 
-      and ma_attendancedate between ? and ?`,
+      where timestampdiff(HOUR, ma_clockin, ma_clockout) > ?
+      and ma_attendancedate between ? and ?
+      order by ma_attendancedate desc`,
       [duration, `${first_day_of_month}`, `${last_day_of_month}`]
     );
 

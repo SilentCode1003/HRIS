@@ -18,6 +18,8 @@ const {
   GetCurrentDatetime,
   InsertStatement,
 } = require("./repository/customhelper");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -352,6 +354,19 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: createddate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.RD,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.RD,
+              },
+            ];
+            SendEmailNotification(employeeid, subgroup, REQUEST.RD, emailbody);
+
             res.json(JsonSuccess());
           });
         }
@@ -463,6 +478,21 @@ router.post("/save", async (req, res) => {
                 console.log(err);
                 return res.json(JsonErrorResponse(err));
               }
+
+
+              let emailbody = [
+                {
+                  employeename: employeeid,
+                  date: attendancedate,
+                  startdate: timein,
+                  enddate: timeout,
+                  reason: REQUEST.RD,
+                  status: MessageStatus.APPLIED,
+                  requesttype: REQUEST.RD,
+                },
+              ];
+              SendEmailNotification(employeeid, subgroupid, REQUEST.RD, emailbody);
+  
 
               res.json(JsonSuccess());
             });

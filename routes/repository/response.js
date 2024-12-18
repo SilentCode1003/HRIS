@@ -9,8 +9,17 @@ const MessageStatus = {
     PENDINGOT: "Loooks like you have a pending overtime request. Please wait until the request is approved.",
     APPLIEDOT: "Looks like you have a applied overtime request. Please wait until the request is approved.",
     APPROVEDOT: "Looks like you have a approved overtime request.",
+    APPLIED: 'Applied',
+    APPROVED: 'Approved',
+    PENDING: 'Pending',
+    REJECTED: 'Rejected',
+    CANCELLED: 'Cancelled',
+    APPROVAL: 'Approval',
+    REJECTION: 'Rejection',
+    CANCELLATION: 'Cancellation',
+    DELETED: 'Deleted',
   };
-  
+
   function JsonSuccess() {
     return {
       msg: MessageStatus.SUCCESS,
