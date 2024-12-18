@@ -13,6 +13,7 @@ const {
   InsertStatement,
   SelectStatement,
 } = require("./repository/customhelper");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -150,6 +151,17 @@ router.post("/rdotaction", (req, res) => {
         console.log(err);
         res.json(JsonErrorResponse(err));
       }
+
+      let emailbody = [
+        {
+          employeename: employeeid,
+          date: createdate,
+          reason: comment,
+          status: status,
+          requesttype: REQUEST.RD,
+        },
+      ];
+      SendEmailNotification(employeeid, subgroupid, REQUEST.RD, emailbody);
 
       res.json(JsonSuccess());
     });

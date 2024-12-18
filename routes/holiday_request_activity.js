@@ -32,6 +32,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthL;
     let sql = `SELECT 
     hra.hra_id as hra_holidayid,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS hra_employeeid,
@@ -45,7 +47,9 @@ router.get("/load", (req, res) => {
     FROM holiday_request_activity hra
     INNER JOIN payroll_holiday ph ON hra.hra_holidayreqid = ph.ph_holidayid
     INNER JOIN master_employee me_request ON ph.ph_employeeid = me_request.me_id
-    INNER JOIN master_employee me_activity ON hra.hra_employeeid = me_activity.me_id`;
+    INNER JOIN master_employee me_activity ON hra.hra_employeeid = me_activity.me_id
+    WHERE hra_date BETWEEN '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY hra_date DESC`;
 
     Select(sql, (err, result) => {
       if (err) {

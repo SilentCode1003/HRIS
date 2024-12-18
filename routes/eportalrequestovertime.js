@@ -17,6 +17,8 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 const { sq } = require("date-fns/locale");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -54,7 +56,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -95,7 +96,6 @@ router.get("/loadapproved", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -408,65 +408,168 @@ router.post("/getovertime", (req, res) => {
   }
 });
 
+// router.post("/addrequstot", (req, res) => {
+//   try {
+//     let clockin = req.body.clockin;
+//     let clockout = req.body.clockout;
+//     let attendancedate = req.body.attendancedate;
+//     let employeeid = req.body.employeeid;
+//     let payrolldate = req.body.payrolldate;
+//     let reason = req.body.reason;
+//     let overtimestatus = req.body.overtimestatus;
+//     let subgroup = req.body.subgroup;
+//     let approvecount = 0;
+//     let overtimeimage = req.body.overtimeimage;
+//     let deviceaction = "App Manual";
+//     let applieddate = GetCurrentDatetime();
+
+//     let sql = `call hrmis.RequestOvertime(
+// 	  '${clockin}',
+// 	  '${clockout}',
+// 	  '${attendancedate}',
+// 	  '${employeeid}',
+// 	  '${payrolldate}',
+// 	  '${overtimestatus}',
+// 	  '${subgroup}',
+// 	  '${overtimeimage}',
+// 	  '${deviceaction}',
+// 	  '${applieddate}',
+// 	  '${reason}',
+// 	  '${approvecount}')`;
+
+//     let checkStatement = SelectStatement(
+//       "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=?",
+//       [employeeid, attendancedate]
+//     );
+
+//     Check(checkStatement)
+//       .then((result) => {
+//         if (result != 0) {
+//           return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//         } else {
+//           mysql.StoredProcedure(sql, (err, insertResult) => {
+//             if (err) {
+//               console.error(err);
+//               res.json(JsonErrorResponse(err));
+//             } else {
+//               console.log(insertResult);
+//               res.json(JsonSuccess());
+//             }
+//           });
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//         res.json(JsonErrorResponse(error));
+//       });
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
 router.post("/addrequstot", (req, res) => {
   try {
-    let clockin = req.body.clockin;
-    let clockout = req.body.clockout;
-    let attendancedate = req.body.attendancedate;
-    let employeeid = req.body.employeeid;
-    let payrolldate = req.body.payrolldate;
-    let reason = req.body.reason;
-    let overtimestatus = req.body.overtimestatus;
-    let subgroup = req.body.subgroup;
+    let {
+      clockin,
+      clockout,
+      attendancedate,
+      employeeid,
+      payrolldate,
+      reason,
+      overtimestatus,
+      subgroup,
+      overtimeimage,
+    } = req.body;
+
     let approvecount = 0;
-    let overtimeimage = req.body.overtimeimage;
     let deviceaction = "App Manual";
     let applieddate = GetCurrentDatetime();
 
-    let sql = `call hrmis.RequestOvertime(
-	  '${clockin}',
-	  '${clockout}',
-	  '${attendancedate}',
-	  '${employeeid}',
-	  '${payrolldate}',
-	  '${overtimestatus}',
-	  '${subgroup}',
-	  '${overtimeimage}',
-	  '${deviceaction}',
-	  '${applieddate}',
-	  '${reason}',
-	  '${approvecount}')`;
+    let sql = `CALL hrmis.RequestOvertime(
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${overtimestatus}',
+      '${subgroup}',
+      '${overtimeimage}',
+      '${deviceaction}',
+      '${applieddate}',
+      '${reason}',
+      '${approvecount}'
+    )`;
 
-    let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
-      [employeeid, attendancedate, overtimestatus]
+    let validationQuery1 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Pending'`,
+      [attendancedate, employeeid]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          mysql.StoredProcedure(sql, (err, insertResult) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            } else {
-              console.log(insertResult);
-              res.json(JsonSuccess());
-            }
-          });
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Applied'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery1)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGOT)
+          );
         }
+        return Check(validationQuery2);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDOT));
+        }
+        return Check(validationQuery3);
+      })
+      .then((result3) => {
+        if (result3.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDOT));
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OVERTIME,
+                startdate: clockin,
+                enddate: clockout,
+              },
+            ];
+
+            SendEmailNotification(employeeid, subgroup, REQUEST.OVERTIME, emailbody);
+
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    return res.json(JsonErrorResponse(error));
   }
 });
+
 router.post("/update", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
@@ -484,50 +587,79 @@ router.post("/update", (req, res) => {
     let approvecount = 0;
 
     let sql = `call hrmis.UpdateRequestOvertime(
-		'${clockin}',
-		'${clockout}',
-		'${attendancedate}',
-		'${employeeid}',
-		'${payrolldate}',
-		'${overtimestatus}',
-		'${subgroup}',
-		'${overtimeimage}',
-		'${deviceaction}',
-		'${applieddate}',
-		'${reason}',
-		'${approvecount}',
-		'${approveot_id}')`;
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${overtimestatus}',
+      '${subgroup}',
+      '${overtimeimage}',
+      '${deviceaction}',
+      '${applieddate}',
+      '${reason}',
+      ${approvecount},
+      '${approveot_id}')`;
 
-    let checkStatement = SelectStatement(
-      "SELECT * FROM payroll_approval_ot WHERE pao_employeeid=? AND pao_attendancedate=? AND pao_status=?",
-      [employeeid, attendancedate, overtimestatus]
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Applied'`,
+      [attendancedate, employeeid]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          mysql.StoredProcedure(sql, (err, insertResult) => {
-            if (err) {
-              console.error(err);
-              res.json(JsonErrorResponse(err));
-            } else {
-              console.log(insertResult);
-              res.json(JsonSuccess());
-            }
-          });
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_approval_ot WHERE pao_attendancedate = ? AND pao_employeeid = ? AND pao_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery2)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDOT)
+          );
         }
+        return Check(validationQuery3);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDOT)
+          );
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OVERTIME,
+                startdate: clockin,
+                enddate: clockout,
+              },
+            ];
+
+            SendEmailNotification(employeeid, subgroup, REQUEST.OVERTIME, emailbody);
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    return res.json(JsonErrorResponse(error));
   }
 });
+
 router.post("/getattendancedate", (req, res) => {
   try {
     let employeeid = req.body.employeeid;

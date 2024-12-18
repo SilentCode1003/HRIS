@@ -5,7 +5,9 @@ const REQUEST = {
   CA: "Cash Advance",
   LOAN: "Loan",
   OTMEAL: "Overtime Meal",
-
+  HD: "Holiday OT",
+  RD: "Rest Day OT",
+  OB: "Official Business",
 };
 
 exports.REQUEST = REQUEST;
@@ -14,12 +16,12 @@ const STAFF_HOUSE_STATUS = {};
 exports.STAFF_HOUSE_STATUS = STAFF_HOUSE_STATUS;
 
 const STATUS_LOG = {
-  ACTIVE:'Active',
-  INACTIVE: 'Inactive',
-  NEW: 'New',
-  UPDATE: 'Update',
-  DELETE: 'Delete',
-  REQUEST: 'Request',
+  ACTIVE: "Active",
+  INACTIVE: "Inactive",
+  NEW: "New",
+  UPDATE: "Update",
+  DELETE: "Delete",
+  REQUEST: "Request",
 };
 exports.STATUS_LOG = STATUS_LOG;
 

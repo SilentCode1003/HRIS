@@ -4,6 +4,7 @@ var express = require("express");
 const { Validator } = require("./controller/middleware");
 var router = express.Router();
 const currentDate = moment();
+const { GetCurrentMonthFirstDay, GetCurrentMonthLastDay } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -20,6 +21,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
     ara.ara_id as requestid,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS employeeid,
@@ -34,7 +37,8 @@ router.get("/load", (req, res) => {
     INNER JOIN attendance_request ar ON ara.ara_requestid = ar.ar_requestid
     INNER JOIN master_employee me_request ON ar.ar_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON ara.ara_employeeid = me_activity.me_id
-    WHERE LEFT(ara.ara_date, 10) = DATE_FORMAT(current_date(), '%Y-%m-%d')`;
+    WHERE ara_date between '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY ara_date DESC`;
 
     mysql
       .mysqlQueryPromise(sql)

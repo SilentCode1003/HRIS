@@ -24,7 +24,7 @@ const { Transaction } = require("./utility/utility");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   // res.render('eportaldtrlayout', { title: 'Express' });
-  Validator(req, res, "teamleadobappliedlayout", "teamleadobapplied");
+  Validator(req, res, "teamleadobapprovedlayout", "teamleadobapproved");
 });
 
 module.exports = router;

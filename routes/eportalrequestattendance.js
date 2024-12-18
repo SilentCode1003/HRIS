@@ -8,6 +8,7 @@ const {
   JsonDataResponse,
   JsonWarningResponse,
   MessageStatus,
+  JsonSuccess,
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
 const { SendEmailNotification } = require("./repository/emailsender");
@@ -209,30 +210,54 @@ router.post("/update", (req, res) => {
     let total = calculateTotalHours(timein, timeout);
     let file = req.body.file;
 
-    let sqlupdate = `UPDATE attendance_request SET 
-      ar_attendace_date = '${attendancedate}', 
-      ar_timein = '${timein}',
-      ar_timeout = '${timeout}', 
-      ar_reason = '${reason}',
-      ar_total = '${total}', 
-      ar_status = '${requeststatus}',
-      ar_file  = '${file}'
-      WHERE ar_requestid = '${requestid}'`;
+    async function ProcessData() {
+      let sql_check = SelectStatement('SELECT ar_employeeid as employeeid FROM attendance_request WHERE ar_requestid = ?', [requestid]);
+      let attendance_request = await Check(sql_check);
 
-    mysql
-      .Update(sqlupdate)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
+      if(attendance_request.length != 0){
+
+        let employeeid = attendance_request[0].employeeid;
+
+        let sqlupdate = `UPDATE attendance_request SET 
+        ar_attendace_date = '${attendancedate}', 
+        ar_timein = '${timein}',
+        ar_timeout = '${timeout}', 
+        ar_reason = '${reason}',
+        ar_total = '${total}', 
+        ar_status = '${requeststatus}',
+        ar_file  = '${file}'
+        WHERE ar_requestid = '${requestid}'`;
+        
+
+        let updateResult = await mysql.Update(sqlupdate);
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            timein: timein,
+            timeout: timeout,
+            reason: reason,
+            status: requeststatus,
+            requesttype: REQUEST.COA,
+          },
+        ];
+        SendEmailNotification(
+          employeeid,
+          subgroupid,
+          REQUEST.COA,
+          emailbody
+        );
+
+        res.json(JsonDataResponse(updateResult));
+
+      }
+      else{
+        return res.json(JsonWarningResponse(MessageStatus.NOTEXIST));
+      }
+    }
+
+      ProcessData();
   } catch (error) {
     res.json({
       msg: "error",

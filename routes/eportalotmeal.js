@@ -15,6 +15,8 @@ const {
   UpdateStatement,
   SelectStatement,
 } = require("./repository/customhelper");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -343,6 +345,24 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.OTMEAL,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OTMEAL,
+              },
+            ];
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.OTMEAL,
+              emailbody
+            );
 
             res.json(JsonSuccess());
           });
