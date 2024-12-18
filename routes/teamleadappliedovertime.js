@@ -172,6 +172,7 @@ router.post("/ovetimeaction", (req, res) => {
         {
           employeename: employeeid,
           date: attendancedate,
+          status: status,
           reason: comment,
           requesttype: REQUEST.OVERTIME,
         },

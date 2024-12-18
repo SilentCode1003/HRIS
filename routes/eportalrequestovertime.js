@@ -17,6 +17,8 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 const { sq } = require("date-fns/locale");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -54,7 +56,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -95,7 +96,6 @@ router.get("/loadapproved", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "pao_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -541,6 +541,21 @@ router.post("/addrequstot", (req, res) => {
             return res.json(JsonErrorResponse(err));
           } else {
             console.log(insertResult);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OVERTIME,
+                startdate: clockin,
+                enddate: clockout,
+              },
+            ];
+
+            SendEmailNotification(employeeid, subgroup, REQUEST.OVERTIME, emailbody);
+
             return res.json(JsonSuccess());
           }
         });
@@ -555,8 +570,7 @@ router.post("/addrequstot", (req, res) => {
   }
 });
 
-
-router.post("/update",(req, res) => {
+router.post("/update", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let clockin = req.body.clockin;
@@ -618,6 +632,20 @@ router.post("/update",(req, res) => {
             return res.json(JsonErrorResponse(err));
           } else {
             console.log(insertResult);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OVERTIME,
+                startdate: clockin,
+                enddate: clockout,
+              },
+            ];
+
+            SendEmailNotification(employeeid, subgroup, REQUEST.OVERTIME, emailbody);
             return res.json(JsonSuccess());
           }
         });
@@ -631,9 +659,6 @@ router.post("/update",(req, res) => {
     return res.json(JsonErrorResponse(error));
   }
 });
-
-
-
 
 router.post("/getattendancedate", (req, res) => {
   try {

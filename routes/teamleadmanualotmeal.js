@@ -14,7 +14,7 @@ const {
   InsertStatement,
   SelectStatement,
 } = require("./repository/customhelper");
-const { SendEmailNotificationEmployee } = require("./repository/emailsender");
+const { SendEmailNotificationEmployee, SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -258,6 +258,26 @@ router.post("/submit", (req, res) => {
           InsertTable(sql, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
+
+            
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.OTMEAL,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OTMEAL,
+              },
+            ];
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.OTMEAL,
+              emailbody
+            );
+
             res.json(JsonSuccess());
           });
         }
@@ -414,6 +434,24 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.OTMEAL,
+                status: status,
+                requesttype: REQUEST.OTMEAL,
+              },
+            ];
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.OTMEAL,
+              emailbody
+            );
 
             res.json(JsonSuccess());
           });

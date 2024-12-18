@@ -444,15 +444,16 @@ exports.EmailNotification = (details) => {
 
             <div class="card-body">
                 <div class="date"> 
+                    <i class='bx bx-calendar-alt icon-style'></i>
                     <span class="label-title">Date:</span>
                     <span class="text-md">${date}</span>
-                </div>
+                </div>  
         
-                    <div class="employeename">
-                        <i class='bx bx-user icon-style'></i>
-                        <span class="label-title">Employee:</span>
-                        <span class="text-md">${employeename}</span>
-                    </div>
+                <div class="employeename">
+                    <i class='bx bx-user icon-style'></i>
+                    <span class="label-title">Employee:</span>
+                    <span class="text-md">${employeename}</span>
+                </div>
           
 
                 <div class="status">
@@ -465,13 +466,15 @@ exports.EmailNotification = (details) => {
                   <div class="reason">
                     <i class='bx bx-message-alt-detail icon-style'></i>
                     <span class="label-title">Reason:</span>
-                    <span class="reason-context">${reason == undefined ? "N/A" : reason}</span>
+                    <span class="reason-context">${
+                      reason == undefined ? "N/A" : reason
+                    }</span>
                   </div>
 
                 <div class="card time-card">
                     <h6 class="shift-title">These are your shift records:</h6>
                 <div class="row mt-4">
-                    <div class="col-half">
+                    <div class="col">
                         <h6 class="label-title">${
                           timein == undefined ? "Start Date" : "Time In"
                         }:</h6>
@@ -484,7 +487,7 @@ exports.EmailNotification = (details) => {
                 <hr className="border-b-[3px] border-b-red-800 mb-4" />
 
                 <div class="row mt-4">
-                <div class="col-half">
+                  <div class="col">
                         <h6 class="label-title">${
                           timeout == undefined ? "Start Date" : "Time Out"
                         }:</h6>

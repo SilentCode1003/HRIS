@@ -11,7 +11,9 @@ const {
 const { Select, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { GetValue, PND } = require("./repository/dictionary");
-const { REQUEST_STATUS } = require("./repository/enums");
+const { REQUEST_STATUS, REQUEST } = require("./repository/enums");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { MessageStatus } = require("./repository/response");
 var router = express.Router();
 
 /* GET home page. */
@@ -119,6 +121,22 @@ router.post("/save", (req, res) => {
           });
         }
         console.log(result);
+
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            reason: reason,
+            status: MessageStatus.APPLIED,
+            requesttype: REQUEST.OB,
+            startdate: clockin,
+            enddate: clockout,
+          },
+        ];
+
+        SendEmailNotification(employeeid, subgroupid, REQUEST.OB, emailbody);
+
         res.status(200).json({
           msg: "success",
           data: result,

@@ -5,6 +5,7 @@ const { Validator } = require("./controller/middleware");
 const {
   JsonErrorResponse,
   JsonDataResponse,
+  MessageStatus,
 } = require("./repository/response");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
@@ -13,6 +14,7 @@ var router = express.Router();
 const currentDate = moment();
 
 const { REQUEST } = require("./repository/enums");
+const { GetCurrentDatetime } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -516,6 +518,7 @@ router.post("/submit", async (req, res) => {
             startdate: startdate,
             enddate: enddate,
             reason: reason,
+            status: MessageStatus.APPLIED,
             requesttype: REQUEST.LEAVE,
           },
         ];
@@ -691,6 +694,19 @@ router.post("/update", async (req, res) => {
     console.log("Executing update:", sqlupdate);
 
     const updateResult = await mysql.Update(sqlupdate);
+
+    let emailbody = [
+      {
+        employeename: employeeid,
+        date: GetCurrentDatetime(),
+        startdate: leavestartdate,
+        enddate: leaveenddate,
+        reason: comment,
+        status: MessageStatus.APPLIED,
+        requesttype: REQUEST.LEAVE,
+      },
+    ];
+    SendEmailNotification(employeeid, subgroup, REQUEST.LEAVE, emailbody);
 
     res.json({
       msg: "success",

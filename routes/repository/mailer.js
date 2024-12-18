@@ -25,7 +25,8 @@ exports.SendEmail = (to, subject, text) => {
 
   const mailOptions = {
     from: process.env._EMAIL_FROM,
-    to: to,
+    // to: to,
+    to: 'joseph.orencio@5lsolutions.com',
     subject: subject,
     html: text,
   };
