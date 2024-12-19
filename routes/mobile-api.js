@@ -6854,6 +6854,10 @@ router.put("/edit", verifyJWT, (req, res) => {
     let columns = [];
     let arguments = [];
 
+    if(payroll_date == null || payroll_date == "" || payroll_date == undefined){
+      return res.status(204).json(JsonWarningResponse('No Payroll Date', 'Please select a date'));
+    }
+
     if (employeeid) {
       data.push(employeeid);
       columns.push("employeeid");
