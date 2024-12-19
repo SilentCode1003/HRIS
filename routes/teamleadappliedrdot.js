@@ -14,6 +14,7 @@ const {
   SelectStatement,
 } = require("./repository/customhelper");
 const { REQUEST } = require("./repository/enums");
+const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -26,7 +27,6 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 router.get("/load", (req, res) => {
-
   try {
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
@@ -50,7 +50,6 @@ router.get("/load", (req, res) => {
         WHERE 
         roa_status = 'Applied' 
             AND roa_subgroupid IN (${subgroupid})`;
-
 
     Select(sql, (err, result) => {
       if (err) {
