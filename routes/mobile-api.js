@@ -6855,7 +6855,7 @@ router.put("/edit", verifyJWT, (req, res) => {
     let arguments = [];
 
     if(payroll_date == null || payroll_date == "" || payroll_date == undefined){
-      return res.status(204).json(JsonWarningResponse('No Payroll Date', 'Please select a date'));
+      return res.status(500).json(JsonWarningResponse('No Payroll Date', 'Please select a date'));
     }
 
     if (employeeid) {
