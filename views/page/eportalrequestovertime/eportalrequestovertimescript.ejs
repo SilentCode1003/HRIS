@@ -921,10 +921,10 @@
                 window.location.reload();
               });
               LoadTable();
-            } else if (result.msg === "exist") {
+            } if (result.msg === "exist") { 
               swal({
                 title: "Exist",
-                text: "Looks like you already have a file for Overtime this Day.",
+                text: result.data,
                 icon: "warning",
                 button: "OK!",
               });

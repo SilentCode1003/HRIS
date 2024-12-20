@@ -43,8 +43,8 @@
                 timeout: item.timeout,
                 holidaytype: item.holidaytype,
                 total_hours: item.total_hours,
-                nightdiff_ot_total: item.nightdiff_ot_total,
-                normal_ot_total: item.normal_ot_total,
+                nightdiffot_hour: item.nightdiffot_hour,
+                normalot_hour: item.normalot_hour,
                 action: action,
               });
             });
@@ -67,8 +67,8 @@
           { data: "timeout" },
           { data: "holidaytype" },
           { data: "total_hours" },
-          { data: "nightdiff_ot_total" },
-          { data: "normal_ot_total" },
+          { data: "nightdiffot_hour" },
+          { data: "normalot_hour" },
           { data: "action" },
         ],
         initComplete: function () {
@@ -151,8 +151,8 @@
             TIME_OUT.innerHTML = item.timeout;
             HOLIDAY_TYPE.innerHTML = item.holidaytype;
             TOTAL_HOURS.innerHTML = item.total_hours;
-            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
-            NORMAL_OT.innerHTML = item.normal_ot_total;
+            NIGHT_DIFF.innerHTML = item.nightdiffot_hour;
+            NORMAL_OT.innerHTML = item.normalot_hour;
             ACTION.appendChild(action);
 
             $.each(
@@ -214,8 +214,8 @@
             TIME_OUT.innerHTML = item.timeout;
             HOLIDAY_TYPE.innerHTML = item.holidaytype;
             TOTAL_HOURS.innerHTML = item.total_hours;
-            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
-            NORMAL_OT.innerHTML = item.normal_ot_total;
+            NIGHT_DIFF.innerHTML = item.nightdiffot_hour;
+            NORMAL_OT.innerHTML = item.normalot_hour;
 
             $.each(
               [
@@ -293,8 +293,8 @@
             TIME_OUT.innerHTML = item.timeout;
             HOLIDAY_TYPE.innerHTML = item.holidaytype;
             TOTAL_HOURS.innerHTML = item.total_hours;
-            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
-            NORMAL_OT.innerHTML = item.normal_ot_total;
+            NIGHT_DIFF.innerHTML = item.nightdiffot_hour;
+            NORMAL_OT.innerHTML = item.normalot_hour;
             ACTION.appendChild(action);
 
             $.each(
@@ -376,8 +376,8 @@
             TIME_OUT.innerHTML = item.timeout;
             HOLIDAY_TYPE.innerHTML = item.holidaytype;
             TOTAL_HOURS.innerHTML = item.total_hours;
-            NIGHT_DIFF.innerHTML = item.nightdiff_ot_total;
-            NORMAL_OT.innerHTML = item.normal_ot_total;
+            NIGHT_DIFF.innerHTML = item.nightdiffot_hour;
+            NORMAL_OT.innerHTML = item.normalot_hour;
             ACTION.appendChild(action);
 
             $.each(
@@ -678,16 +678,22 @@
               },
               success: function (result) {
                 if (result.msg === "success") {
-                  swal(
-                    "Save Successfully",
-                    "You clicked the button!",
-                    "success"
-                  ).then((result) => {
+                  swal({
+                    title: "Save Successfully",
+                    text: "You clicked the button!",
+                    icon: "success",
+                    button: "OK!",
+                  }).then((result) => {
                     window.location.reload();
                   });
                   LoadTable();
-                } else if (result.msg === "exist") {
-                  swal("Error", "This combination already exists.", "error");
+                } if (result.msg === "exist") { 
+                  swal({
+                    title: "Exist",
+                    text: result.data,
+                    icon: "warning",
+                    button: "OK!",
+                  });
                 }
               },
               error: function (err) {
