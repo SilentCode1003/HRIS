@@ -27,6 +27,9 @@
             dataSrc: (json) => {
               var finalData = [];
               var data = json.data;
+
+              console.log(data);
+              
   
               $.each(data, (key, item) => {
                 var action = "";
@@ -74,7 +77,9 @@
               this.style.verticalAlign = "middle";
             });
           },
-          initComplete: function () {},
+          initComplete: function () {
+            
+          },
         });
       }
   
