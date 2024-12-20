@@ -65,7 +65,7 @@ router.get("/load", (req, res) => {
       }
     });
   } catch (error) {
-    res.json(JsonErrorResponse(err));
+    res.json(JsonErrorResponse(error));
   }
 });
 
