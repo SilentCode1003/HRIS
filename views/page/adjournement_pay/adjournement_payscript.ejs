@@ -35,7 +35,7 @@
               var action = "";
               var status = item.status;
               action = `
-                          <button id="viewBtn" class="btn text-warning" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewadjournmentmodal"><i class="fas fa-eye"></i></button>
+                          <button id="viewBtn" class="btn text-primary" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewadjournmentmodal"><i class="fas fa-eye"></i></button>
                          `;
               finalData.push({
                 id: item.id,
@@ -240,39 +240,64 @@
         success: function (result) {
           if (result.msg === "success") {
             const tableBody = $("#viewadjournmentmodal table tbody");
-            tableBody.empty(); 
+            tableBody.empty();
 
             $.each(result.data, function (index, item) {
               const adjournStatus =
                 item.adjourn_status === null ? "Clear" : item.adjourn_status;
               let statusClass = "";
+
               switch (adjournStatus) {
                 case "Adjourned":
-                  statusClass = "project-based-status"; 
+                  statusClass = "adjourned-status";
                   break;
                 case "Lifted":
-                  statusClass = "probationary-status"; 
+                  statusClass = "lifted-status";
                   break;
                 case "Clear":
-                  statusClass = "regular-status";
+                  statusClass = "clear-status";
                   break;
                 case "Rest Day":
-                  statusClass = "apprentice-status"; 
+                  statusClass = "restday";
                   break;
                 default:
                   statusClass = "";
               }
 
-              const tableRow = `
-                <tr>
-                    <td>${item.employeeid}</td>
-                    <td>${item.date_value}</td>
-                    <td>${item.day_name}</td>
-                    <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
-                </tr>`;
+                // const tableRow = `
+                //   <tr>
+                //       <td>${item.employeeid}</td>
+                //       <td>${item.date_value}</td>
+                //       <td>${item.day_name}</td>
+                //       <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
+                //   </tr>`;
 
-              tableBody.append(tableRow);
+                // tableBody.append(tableRow);
+
+
+                  // Add a new table row
+              const rowNode = $(`
+          <tr>
+            <td>${item.employeeid}</td>
+            <td>${item.date_value}</td>
+            <td>${item.day_name}</td>
+            <td></td> <!-- Placeholder for the status -->
+          </tr>`);
+
+              // Find and update the status cell
+              const statusCell = $(rowNode).find("td:eq(3)");
+              statusCell.html(`<span class="${statusClass}">${adjournStatus}</span>`);
+
+              // Apply consistent cell styling
+              rowNode.find("td").css({
+                "text-align": "center",
+                "vertical-align": "middle",
+              });
+
+              // Append the row to the table body
+              tableBody.append(rowNode);
             });
+
           } else {
             swal("Error", "Could not fetch adjournment details.", "error");
           }

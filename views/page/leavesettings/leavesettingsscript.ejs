@@ -137,31 +137,7 @@
           { data: "status" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          // var statusCell = $(row).find("td:eq(8)");
-
-          // var statusText = data.status;
-
-          // var statusClass = "";
-
-          // switch (statusText.toLowerCase()) {
-          //   case "Claimed":
-          //     statusClass = "Claimed-status";
-          //     break;
-          //   case "Unclaimed":
-          //     statusClass = "Unclaimed-status";
-          //     break;
-          //   default:
-          //     statusClass = "";
-          // }
-
-          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+        
         initComplete: function () {},
       });
     }

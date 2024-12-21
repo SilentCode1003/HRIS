@@ -86,6 +86,18 @@
             case "inactive":
               statusClass = "inactive-status";
               break;
+            case "adjourned":
+              statusClass = "adjourned-status";
+              break;
+            case "lifted":
+              statusClass = "lifted-status";
+              break;
+            case "clear":
+              statusClass = "clear-status";
+              break;
+            case "restday":
+              statusClass = "restday";
+              break;
             default:
               statusClass = "";
           }
@@ -344,34 +356,59 @@
               const adjournStatus =
                 item.adjourn_status === null ? "Clear" : item.adjourn_status;
               let statusClass = "";
+              
               switch (adjournStatus) {
                 case "Adjourned":
-                  statusClass = "project-based-status"; // Class for Adjourned
+                  statusClass = "adjourned-status"; // Class for Adjourned
                   break;
                 case "Lifted":
-                  statusClass = "probationary-status"; // Class for Lifted
+                  statusClass = "lifted-status"; // Class for Lifted
                   break;
                 case "Clear":
-                  statusClass = "regular-status"; // Class for Clear
+                  statusClass = "clear-status"; // Class for Clear
                   break;
                 case "Rest Day":
-                  statusClass = "apprentice-status"; // Class for Clear
+                  statusClass = "restday"; // Class for Clear
                   break;
                 default:
                   statusClass = ""; 
               }
 
               // Create the table row with the class applied
-              const tableRow = `
-        <tr>
-          <td>${item.employeeid}</td>
-          <td>${item.date_value}</td>
-          <td>${item.day_name}</td>
-          <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
-        </tr>`;
+        //       const tableRow = `
+        // <tr>
+        //   <td>${item.employeeid}</td>
+        //   <td>${item.date_value}</td>
+        //   <td>${item.day_name}</td>
+        //   <td class="${statusClass}">${adjournStatus}</td> <!-- Apply the class -->
+        // </tr>`;
 
-              tableBody.append(tableRow);
+        //       tableBody.append(tableRow);
+
+
+         // Add a new table row
+         const rowNode = $(`
+          <tr>
+            <td>${item.employeeid}</td>
+            <td>${item.date_value}</td>
+            <td>${item.day_name}</td>
+            <td></td> <!-- Placeholder for the status -->
+          </tr>`);
+
+              // Find and update the status cell
+              const statusCell = $(rowNode).find("td:eq(3)");
+              statusCell.html(`<span class="${statusClass}">${adjournStatus}</span>`);
+
+              // Apply consistent cell styling
+              rowNode.find("td").css({
+                "text-align": "center",
+                "vertical-align": "middle",
+              });
+
+              // Append the row to the table body
+              tableBody.append(rowNode);
             });
+
           } else {
             swal("Error", "Could not fetch adjournment details.", "error");
           }

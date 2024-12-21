@@ -60,25 +60,25 @@
 
 .btn-search-eportal {
   background-color: #E41717 !important;
-  border: 2.5px solid #fef8ea  !important;
+  border: 2.5px solid #fef8ea !important;
   color: white !important;
 }
 
 
 .dropdown-eportal {
-    background-color: #7a1818 !important;
-    color: white !important;
-    border:  2px solid #7a1818 !important;
+  background-color: #7a1818 !important;
+  color: white !important;
+  border: 2px solid #7a1818 !important;
 }
 
 .profilename-eportal {
-    color: white !important;
-    font-weight: bold;
-    font-size: 13px;
+  color: white !important;
+  font-weight: bold;
+  font-size: 13px;
 }
 
-.navbar-expand .navbar-nav  .dropdown-profile-eportal {
-    background-color: #7a1818 !important;
+.navbar-expand .navbar-nav .dropdown-profile-eportal {
+  background-color: #7a1818 !important;
 }
 
 /*wendell*/
@@ -97,247 +97,6 @@
   background-size: cover;
 }
 
-
-:root{
-  --minus-15rem: calc(100% - 15rem);
-  --minus-6rem: calc(100% - 8rem);
-}
-
-
-/*default*/
-@media (min-width: 768px) {
-
-  .content {
-    margin-left: 250px;
-    margin-right: 25px;
-  }
-
-  .table th {
-    width: 100%;
-  }
-
-  .attendance-field {
-    flex-wrap: wrap;
-  }
-
-  .sidebar {
-    position: fixed;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-
-  .navbar {
-    margin-left: 14.5rem;
-    width: var(--minus-15rem);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    margin-top: 13px;
-    box-shadow: 0 4px 8px #3b3939 !important;
-  }
-
-  .img-hrmis img {
-    width: 50%;
-    padding-top: 12px !important;
-    margin-left: -30px;
-  }
-
-  h6.eportal-text {
-    float: right;
-    padding-top: 35px;
-    margin-right: 10px;
-    font-family: Calibri;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  
-
-}
-
-/*mobile-view/sidebar*/
-@media (max-width: 769px) {
-
-  /*wendell*/
-  #previewleave {
-    height: 150px;
-    width: 150px;
-  }
-
-  .attendance-field {
-    flex-direction: column !important;
-  }
-
-  #myInput {
-    width: 100% !important;
-  }
-
-  #datepicker, .btn-load-color, .btn-check-color, .btn-attendance-color, .btn-empPer-color, .btn-export-color, .btn-import-color, .btn-add-color {
-    width: 100% !important;
-  }
-
-  .table td {
-    padding: 1rem !important;
-  }
-
-  .table th {
-    width: 100%;
-  }
-
-  .content {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 50px !important;
-  }
-
-  .col-sm-8,
-  .col-4,
-  .col-md-4 {
-    width: 100% !important;
-    margin-bottom: 5%;
-  }
-
-  .content-toggled {
-    margin-left: 15px !important;
-    margin-right: 15px !important;
-  }
-
-  .footer-toggled {
-    margin-left: 0px !important;
-  }
-
-  .navbar {
-    width: 75%;
-    position: absolute !important;
-  }
-
-  .navbar-toggled {
-    margin-left: 0px !important;
-    width: 100%;
-  }
-
-
-  #card-announcement,
-  #card-birthday,
-  #card-attendance {
-    margin-top: 5% !important;
-  }
-
-  #card-map {
-    margin-bottom: 5%;
-  }
-
-  #myInput {
-    width: 35%;
-  }
-
-  .bi-box-arrow-in-left, .bi-box-arrow-in-right {
-    font-size: 0px;
-    padding: 0px;
-  }
-
-  #map {
-    width: 100%;
-  }
-
-  .deduction-card {
-    margin: auto !important;
-  }
-
-  .row .g-4 {
-    margin: 0%;
-  }
-
-  .col-xl-8.col-lg-7 {
-    margin-left: 0 !important;
-  }
-  
-  .modal-body .row {
-    flex-direction: column;
-    margin-left: 0 !important;
-  }
-
-  .modal-body .col {
-    width: 100%;
-    margin-top: 15px !important;
-  }
-
-    .time-profile-img {
-      width: 85px !important;
-      /* Adjust the size of the profile image as needed */
-      height: 85px !important;
-    }
-
-    .time-card h1 {
-      margin-top: 0.5rem !important;
-      font-size: 40px !important;
-    }
-
-    .time-p {
-      margin-top: 8px !important;
-      font-size: 10px !important;
-    }
-
-    .time-title {
-      font-family:Arial, Helvetica, sans-serif;
-      font-style: normal;
-      color: white !important;
-      font-style: italic;
-      margin-left: 0.5rem;
-      margin-bottom: 0%;
-      font-size: 18px !important;
-    }
-    
-    .time-name {
-      font-family: "Lexend", sans-serif;
-      font-style: normal;
-      color: white !important;
-      text-align: left;
-      font-weight: bold;
-      margin-left: 0.5rem;
-      font-size: 20px !important;
-    }
-
-    .clockin-out-card {
-      display: flex;
-      flex-direction: column;
-     }
-
-     .bi-box-arrow-in-left, .bi-box-arrow-in-right {
-      font-size: 23px !important;
-    }
-
-    .bday-img-eportal {
-      height: 150px !important;
-      width: 150px !important;
-      border: 3px solid rgb(233, 187, 3) !important;
-      box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
-      margin-top: 10% !important;
-    }
-
-    .bday-greet {
-      color: white !important;
-      text-align: center;
-      margin-top: 33% !important;
-      font-size: 1.5rem !important;
-      font-family: "Great Vibes", cursive;
-      font-weight: bold;
-      letter-spacing: 3px;
-    }
-
-    .fname-eportal {
-      font-size: 11px !important;
-    }
-    
-    .bdaydate-eportal {
-      font-size: 11px !important;
-    }
-
-    .btn-clockout, .btn-clockin {
-      margin-bottom: 4px !important;
-    }
-}
 
 
 #accordionSidebar {
@@ -358,50 +117,50 @@
 }
 
 ::-webkit-scrollbar {
-  width: 2px; 
+  width: 2px;
 }
 
 #clockin-out {
   background: linear-gradient(45deg, #cfcfcf, #ffffff, #b8b8b8, #ffffff, #979797) !important;
   box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
   height: 450px;
- }
+}
 
- .clockin-out-card {
+.clockin-out-card {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
- }
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+}
 
 
 #card-attendance {
-    width: 100% ;
-      box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
-    background-color: white !important;
-    height: 800px;
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
+  background-color: white !important;
+  height: 800px;
 }
 
 #card-announcement {
-      box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
-    background-color: white !important;
-    height: 650px;
+  box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
+  background-color: white !important;
+  height: 650px;
 }
 
 
 #card-birthday {
-box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
-height: 650px;
+  box-shadow: 0 4px 8px 0 rgb(34, 33, 33) !important;
+  height: 650px;
 }
 
 
 
 .ch-birthday {
-  color: white!important;
+  color: white !important;
   font-weight: bold;
   background: #7a1818 !important;
   text-align: center;
   letter-spacing: 1px;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .ch-attendance {
@@ -410,7 +169,7 @@ height: 650px;
   font-weight: bold;
   text-align: center;
   letter-spacing: 1px;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .ch-announcement {
@@ -420,7 +179,7 @@ height: 650px;
   font-weight: bold;
   text-align: center;
   letter-spacing: 1px;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .ch-map {
@@ -430,7 +189,7 @@ height: 650px;
   border-bottom: 2px solid transparent !important;
   letter-spacing: 1px;
   text-align: center;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .cb-map {
@@ -443,21 +202,27 @@ height: 650px;
 
 
 .consultation-icon {
-    height: 30px;
-    width: 30px;
-    top: 3px;
-    right: 10px;
+  height: 30px;
+  width: 30px;
+  top: 3px;
+  right: 10px;
 }
 
-.db-icon-eportal, .salary-icon-eportal, .cash-icon-eportal, .coop-icon-eportal, .attendance-icon-eportal, .leave-icon-eportal, .disciplinary-icon-eportal {
-    width: 25px;
-    height: 25px; 
-    top: 3px;
+.db-icon-eportal,
+.salary-icon-eportal,
+.cash-icon-eportal,
+.coop-icon-eportal,
+.attendance-icon-eportal,
+.leave-icon-eportal,
+.disciplinary-icon-eportal {
+  width: 25px;
+  height: 25px;
+  top: 3px;
 }
 
 .eportal-icon {
   width: 30px;
-  height: 30px; 
+  height: 30px;
   top: 6px;
 }
 
@@ -466,8 +231,8 @@ height: 650px;
 }
 
 #table-attendance {
-    width: 100%;
-    overflow-x: hidden;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* div.dataTables_scrollHead {
@@ -490,21 +255,21 @@ height: 650px;
 
 
 .btn-clockin {
-    background-color: #08aa3e !important;
-    color: white !important;
-    margin-top: 5% !important;
-    margin-bottom: 20px;
-    border-radius: 5px !important;
-    border: 3px solid rgb(6, 97, 3) !important;
-    font-size: 18px !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  background-color: #08aa3e !important;
+  color: white !important;
+  margin-top: 5% !important;
+  margin-bottom: 20px;
+  border-radius: 5px !important;
+  border: 3px solid rgb(6, 97, 3) !important;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .btn-clockin:hover {
@@ -513,44 +278,45 @@ height: 650px;
   background-color: rgb(6, 97, 3) !important;
 }
 
-.bi-box-arrow-in-left, .bi-box-arrow-in-right {
+.bi-box-arrow-in-left,
+.bi-box-arrow-in-right {
   font-size: 30px;
 }
 
-.btn-clockout {
+.btn-clockout, .btn-submit-dtr {
   background-color: rgb(201, 25, 25) !important;
-    color: white !important;
-    margin-top: 5% !important;
-    margin-bottom: 20px;
-    border-radius: 5px !important;
-    border: 3px solid rgb(158, 6, 6) !important;
-    font-size: 18px !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  color: white !important;
+  margin-top: 5% !important;
+  margin-bottom: 20px;
+  border-radius: 5px !important;
+  border: 3px solid rgb(158, 6, 6) !important;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-.btn-clockout:hover {
-    transform: scale(1.1);
-    font-weight: bold;
-    background-color: rgb(158, 6, 6) !important;
+.btn-clockout:hover, .btn-submit-dtr:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  background-color: rgb(158, 6, 6) !important;
 }
 
 #map {
-    height: 518px;
-    z-index: 1;
-    border: 2px solid rgb(210, 208, 208) !important;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-radius: 5px;
-    width: 100%;
+  height: 518px;
+  z-index: 1;
+  border: 2px solid rgb(210, 208, 208) !important;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-radius: 5px;
+  width: 100%;
 }
 
 #card-map {
@@ -561,9 +327,9 @@ height: 650px;
 }
 
 .container {
-    margin-bottom: 5%;
-    margin-left: 3%;
-    margin-right: 3%;
+  margin-bottom: 5%;
+  margin-left: 3%;
+  margin-right: 3%;
 }
 
 
@@ -581,14 +347,22 @@ height: 650px;
   height: 50% !important;
 }
 
-.ch-salary h3, .cheader-attendance h3, .ch-cashad h3, .ch-requestleave h3, .ch-da h3 {
-    color: white !important;
-    padding: 15px;
-    font-weight: bolder;
+.ch-salary h3,
+.cheader-attendance h3,
+.ch-cashad h3,
+.ch-requestleave h3,
+.ch-da h3 {
+  color: white !important;
+  padding: 15px;
+  font-weight: bolder;
 }
 
-.cbody-salary, .cbody-attendance, .cbody-cashad, .cbody-requestleave, .cbody-da {
-    background-color: #fef8ea;
+.cbody-salary,
+.cbody-attendance,
+.cbody-cashad,
+.cbody-requestleave,
+.cbody-da {
+  background-color: #fef8ea;
 }
 
 .btn-eportal-color {
@@ -649,7 +423,7 @@ height: 650px;
 
 .btn-add-color:hover {
   background-color: #1E5128 !important;
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 /* .btn-eportal-color h6 {
@@ -661,7 +435,7 @@ height: 650px;
   height: 40px;
   width: 40px;
   padding-left: 8px;
-  border: 2.5px solid #fef8ea  !important;
+  border: 2.5px solid #fef8ea !important;
   border-radius: 3px;
   background-color: #E41717 !important;
   color: white !important;
@@ -721,10 +495,11 @@ height: 650px;
   height: 15px;
 }
 
-.sidebar-item span{
+.sidebar-item span {
   color: white !important;
-  padding:8px;
+  padding: 8px;
 }
+
 .sidebar-item {
   transition: background-color 0.1s ease;
 }
@@ -741,24 +516,25 @@ height: 650px;
 .boxshadow-sidebar {
   background-color: #510A0A !important;
 }
+
 .collapse .collapse-item {
   font-weight: 600;
   color: white !important;
 }
 
 .collapse .collapse-item:hover {
-background-color: white !important;
-color: black !important;
+  background-color: white !important;
+  color: black !important;
 }
 
 #modal-header {
-  background-color: #7a1818 !important ;
+  background-color: #7a1818 !important;
   color: white !important;
   height: 80px;
 }
 
 #modal-footer {
-  background-color: #7a1818 !important ;
+  background-color: #7a1818 !important;
 }
 
 .modal-dialog #modal-body {
@@ -770,6 +546,7 @@ color: black !important;
   font-size: 30px;
   margin: 0%;
 }
+
 .bx-x:hover {
   border: 2px solid white !important;
   border-radius: 8px;
@@ -785,7 +562,7 @@ color: black !important;
   height: 250px;
 }
 
-.db-custom-cards  {
+.db-custom-cards {
   background-color: #fef8ea !important;
 }
 
@@ -805,7 +582,7 @@ color: black !important;
 
 .announce-title {
   margin: 6%;
-  color: black  !important;
+  color: black !important;
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
@@ -836,25 +613,28 @@ color: black !important;
   position: relative;
 }
 
-.prev-hrmis, .next-hrmis {
+.prev-hrmis,
+.next-hrmis {
   position: absolute;
   top: 22%;
-  color:#7a1818 !important; 
+  color: #7a1818 !important;
 }
 
 
 
 #clock-header {
   background-color: #7a1818 !important;
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .time-title {
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
   color: white !important;
   font-style: italic;
   margin-left: 0.5rem;
+  margin-top: 1rem;
   margin-bottom: 0%;
 }
 
@@ -886,15 +666,15 @@ color: black !important;
   font-style: italic;
   padding: 2px;
   margin-bottom: 8%;
-  text-align: center;
-
 }
 
-.time-profile-img {
-  width: 110px; /* Adjust the size of the profile image as needed */
-  height: 110px;
-  margin: 1rem;
-}
+
+
+
+
+
+
+
 /* 
 .ch-time {
   background:linear-gradient(45deg, rgb(169, 241, 253), white) !important;
@@ -931,7 +711,8 @@ color: black !important;
 
 .border-form-modal {
   border: 2.5px solid #7a1818 !important;
-} 
+}
+
 
 #badge-counter {
   height: 25px;
@@ -981,10 +762,12 @@ color: black !important;
   font-weight: bold !important;
   letter-spacing: 1px;
 }
+
 .btn-modal-close:hover {
   background-color: #E72929 !important;
   transform: scale(1.1);
 }
+
 .btn-modal-save {
   background-color: #30a32a !important;
   border: 2px solid #fef8ea !important;
@@ -994,12 +777,14 @@ color: black !important;
   font-weight: bold !important;
   letter-spacing: 1px;
 }
+
 .btn-modal-save:hover {
   background-color: #197214 !important;
   transform: scale(1.1);
 }
+
 .btn-logout-cancel {
-  background-color: #FFB72B !important;
+  background-color: #04a9be !important;
   color: white !important;
   border: 2px solid #fef8ea !important;
   font-weight: bold !important;
@@ -1008,7 +793,7 @@ color: black !important;
 }
 
 .btn-logout-cancel:hover {
-  background-color: #f68f00 !important;
+  background-color: #027281 !important;
   font-weight: bold;
   transform: scale(1.1);
 }
@@ -1040,7 +825,22 @@ color: black !important;
   background-color: #7a1818 !important;
 }
 
-.settings-acc, .settings-pw {
+.header-bg {
+  background-color: #7a1818 !important;
+}
+
+.label-title {
+  color: white !important;
+}
+
+.select-dtrtable {
+  background-color: #7a1818 !important;
+  border: 1px solid white !important;
+  color: white !important;
+}
+
+.settings-acc,
+.settings-pw {
   background-color: transparent !important;
   border: transparent !important;
   color: white !important;
@@ -1049,7 +849,8 @@ color: black !important;
   font-weight: bold;
 }
 
-.settings-acc:hover, .settings-pw:hover {
+.settings-acc:hover,
+.settings-pw:hover {
   background: #fef8ea !important;
   color: #881a1a !important;
   font-weight: 600;
@@ -1059,13 +860,14 @@ color: black !important;
 .settings-card {
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
 }
+
 .settings-body {
   /* background-color: #fef8ea !important; */
   background-image: url(/images/img/settings.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-} 
+}
 
 .label-set {
   font-weight: bold;
@@ -1110,27 +912,168 @@ color: black !important;
   background-color: #7a1818 !important;
 }
 
+.employee-label {
+  text-decoration: underline;
+  font-size: 25px;
+  letter-spacing: 1px;
+  color: #4d4943 !important;
+  font-weight: bolder;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.position-label, .department-label {
+  font-size: 16px;
+  color: #4d4943 !important;
+  font-weight: bold;
+  text-transform: none !important;
+}
+
+.department-label {
+  font-size: 16px;
+  color: #4d4943 !important;
+  font-weight: bold;
+  text-transform: none !important;
+  font-style: italic;
+}
+
 .generate-profile,
 .generate-payslip,
 .generate-date,
 .generate-deduction,
 .generate-holiday {
   color: white !important;
-  background-color: transparent !important;
-  font-size: 13px !important;
-  font-family: Georgia;
+  background-color: #7a1818 !important;
+  font-size: 14px !important;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold !important;
-  margin: 4px;
+  letter-spacing: 1px;
 }
 
-.generate-profile:hover,
+
+/* .generate-profile:hover,
 .generate-payslip:hover,
 .generate-date:hover,
 .generate-deduction:hover,
-.generate-holiday:hover  {
+.generate-holiday:hover {
+  background-color: white !important;
+
+ 
+
+
+} */
+
+
+.img-prof {
+  width: 150px;
+  height: 150px;
+}
+
+.col-card {
+  padding-top: 5% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: auto !important;
+}
+
+.col-emp {
+  border-bottom-left-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  background-color: #fef8ea !important;
+  border: 2px solid #7a1818 !important;
+}
+
+
+
+.col-start {
+  background-color: #7a1818 !important;
+  color: white !important;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  text-align: center;
+}
+
+.bi-pc-display {
+  font-size: 100px;
+  opacity: 0.1;
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bxs-bed {
+  font-size: 120px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 3px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bxs-calendar-x, .bxs-tree, .bxs-calendar-check {
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-suitcase-fill {
+  font-size: 100px;
+  opacity: 0.1;
+  position: absolute;
+  top: 63%;
+  right: 1px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bxs-time {
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 4px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+#nav-profile-tab.nav-link.generate-profile.active,
+#nav-payslip-tab.nav-link.generate-payslip.active,
+#nav-date-tab.nav-link.generate-date.active,
+#nav-holidays-tab.nav-link.generate-holiday.active  {
+  background-color: white !important;
+  color: #4d4943 !important;
+  border-top: 2px solid #EBE3D5 !important;
+  border-left: 2px solid #EBE3D5 !important;
+  border-right: 2px solid #EBE3D5 !important;
+}
+
+#nav-profile.tab-pane.fade.show.tab-content-eportal.active,
+#nav-payslip.tab-pane.fade.show.tab-content-eportal.active,
+#nav-date.tab-pane.fade.show.tab-content-eportal.active,
+#nav-holiday.tab-pane.fade.show.tab-content-eportal.active {
   background-color: white !important;
   color: #7a1818 !important;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
 
+.card-border {
+  border-left: 2px solid #EBE3D5 !important;
+  border-bottom: 2px solid #EBE3D5 !important;
+  border-right: 2px solid #EBE3D5 !important;
+  border-top: 2px white !important;
 }
 
 .cell-work {
@@ -1149,12 +1092,15 @@ color: black !important;
   right: 3px;
 }
 
-.p-work, .p-number {
-  color: white !important;
+
+.p-work,
+.p-number {
+  color: black !important;
   font-weight: 600;
 }
 
-.p-rest, .number-rest {
+.p-rest,
+.number-rest {
   color: black !important;
   font-weight: 600;
 }
@@ -1162,13 +1108,25 @@ color: black !important;
 .payroll-label {
   color: #7a1818 !important;
   font-weight: bold;
+  text-align: center;
+  font-style: italic;
+}
+
+.payroll-number {
+  color: black !important;
+  text-align: center;
+  font-weight: bold;
+}
+
+.payslipcard {
+  margin-top: 8% !important;
 }
 
 .card-work {
   border: 2px solid #7a1818 !important;
- }
+}
 
- .date-range {
+.date-range {
   color: #7a1818 !important;
   font-family: Georgia;
   font-size: 28px;
@@ -1178,71 +1136,201 @@ color: black !important;
 }
 
 .payslipname {
-  font-family: 'Times New Roman';
   color: black !important;
   margin-top: 5% !important;
+  font-size: 14px;
+  font-weight: 700 !important;
 }
 
 .empnamepayslip {
   border-bottom: 1px solid black !important;
-  font-weight: bold;
+  font-weight: 700 !important;
+}
+
+.authorised-sign {
+  color: black !important;
+  font-weight: 700 !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 12px;
 }
 
 .company-img {
-  width: 55px;
-  height: 55px;
+  width: 4rem;
+  height: 4rem;
 }
 
 .companyname {
-  font-family: Arial;
-  font-weight: bold;
-  font-size: 13px;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-weight: 700 !important;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 1rem;
 }
 
 .payslip {
-  color: black !important;
-  font-family: Georgia;
-  font-size: 18px;
-  padding: 2px;
-  margin-top: 5%;
+  font-weight: 700 !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  letter-spacing: 0.05em;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+
 }
 
+
 .payslipemp {
-  font-family: Arial;
-  font-weight: 500;
+  text-align: center;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
+}
+
+.payslip-date {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.datepayroll {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
 }
 
-.table .payslip-color {
-  background-color: #7a1818 !important;
+.date-span {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
 }
 
-.earning-table {
-  background-color: rgb(252, 190, 190) !important;
-  color: black !important;
-  border: 1px solid white !important;
-  font-weight: bolder;
+.payslip-type {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
 }
+
+.paysliptype-span {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
+}
+
+.payslip-profile {
+  margin-top: 1rem;
+  display: flex;
+  flex-grow: 1;
+}
+
+.payslip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.payslip-empid,
+.payslip-empname,
+.payslip-sss,
+.payslip-tin,
+.payslip-philhealth,
+.payslip-pagibig {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.payslip-position,
+.payslip-dept,
+.payslip-remaining,
+.payslip-accrued {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.empid-span,
+.empname-span,
+.position-span,
+.dept-span,
+.remain-span,
+.accrued-span,
+.sss-span,
+.tin-span,
+.philhealth-span, 
+.pagibig-span {
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.payslip-table {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(122 24 24 / var(--tw-bg-opacity)) !important;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+th.payslip-color, td.payslip-color {
+  text-transform: uppercase;
+  font-weight: 700 !important;
+  color: black !important;
+  --tw-bg-opacity: 1;
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity)) !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid white !important;
+  font-size: 12px;
+}
+
 
 
 .total-table {
-  background-color: rgb(171, 93, 93) !important;
-  color: white !important;
-  border: 1px solid white !important;
-  font-weight: bolder;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+  --tw-bg-opacity: 1;
+  background-color: rgb(171 93 93 / var(--tw-bg-opacity)) !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 700 !important;
+  font-size: 12px;
 }
 
 .total-table-td {
-  background-color: rgb(252, 190, 190) !important;
-  color: black !important;
-  /* border: 1px solid black !important; */
-  font-weight: bolder;
+  text-transform: uppercase;
+  font-weight: 700 !important;
+  --tw-text-opacity: 1;
+    color: rgb(37 99 235 / var(--tw-text-opacity)) !important;
+    --tw-bg-opacity: 1;
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity)) !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .netpay-total {
-  border: 2px solid green !important;
-  background-color: rgb(198, 241, 198) !important;
-  padding: 5px;
+  --tw-bg-opacity: 1;
+    background-color: rgb(187 247 208 / var(--tw-bg-opacity)) !important;
+    border: 2px solid #16a34a !important ;
+    padding: 0.5rem;
 }
 
 .netpay-words {
@@ -1262,15 +1350,15 @@ color: black !important;
 }
 
 .img-generate-pdf {
-  height: 20px;
-  width: 20px;
+  height: 2rem;
+  width: 2rem;
 }
 
 .a-pdf {
-  margin-right: 5px;
-  color: red !important;
-  font-size: small;
-  text-decoration: none;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+    color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .a-pdf:hover {
@@ -1278,10 +1366,10 @@ color: black !important;
 }
 
 .a-excel {
-  margin-left: 5px;
-  color: green !important;
-  font-size: small;
-  text-decoration: none;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+    color: rgb(22 163 74 / var(--tw-text-opacity));
 }
 
 .a-excel:hover {
@@ -1289,24 +1377,42 @@ color: black !important;
 }
 
 .img-generate-excel {
-  height: 18px;
-  width: 18px;
+  height: 1.75rem;
+  width: 1.75rem;
 }
 
-.print-slip {
+/* .print-slip {
   font-family: 'Calibri';
+} */
+
+.printed-slip {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-top: 1rem;
+  gap: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 /* Navbar notif */
 .notifdescription {
   font-family: 'Calibri';
-  color:  black !important;
+  color: black !important;
   font-weight: bold;
 }
 
 .notifsubdescription {
   font-family: 'Calibri';
-  color:  black !important;
+  color: black !important;
 }
 
 .notifdate {
@@ -1383,10 +1489,10 @@ color: black !important;
 }
 
 .cb-birthday {
-background: linear-gradient(45deg, #cfcfcf, #ffffff, #b8b8b8, #ffffff, #979797) !important;
+  background: linear-gradient(45deg, #cfcfcf, #ffffff, #b8b8b8, #ffffff, #979797) !important;
   /* background-color: black !important; */
-border-bottom-left-radius: 4px;
-border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .fname-eportal {
@@ -1406,18 +1512,22 @@ border-bottom-right-radius: 4px;
   font-weight: 600;
   font-style: normal;
 }
+
 .ribbon {
-  --s: 1.8em; /* the ribbon size */
-  --d: .5em;  /* the depth */
-  --c: .8em;  /* the cutout part */
-  
+  --s: 1.8em;
+  /* the ribbon size */
+  --d: .5em;
+  /* the depth */
+  --c: .8em;
+  /* the cutout part */
+
   padding: 0 calc(var(--s) + var(--d) + .5em) var(--d);
   line-height: 1.8;
-  background: 
-    linear-gradient(90deg,rgba(245, 242, 242, 0.267) var(--d),#0000 0 calc(100% - var(--d)),rgba(245, 242, 242, 0.267) 0) 
-    50%/calc(100% - 2*var(--s)) 100% no-repeat;
-  clip-path: polygon(0 100%,var(--s) 100%,calc(var(--s) + var(--d)) calc(100% - var(--d)),calc(100% - var(--s) - var(--d)) calc(100% - var(--d)),calc(100% - var(--s)) 100%,100% 100%,calc(100% - var(--c)) calc(50% + var(--d)/2),100% var(--d),calc(100% - var(--s)) var(--d),calc(100% - var(--s) - var(--d)) 0,calc(var(--s) + var(--d)) 0,var(--s) var(--d),0 var(--d),var(--c) calc(50% + var(--d)/2));
-  background-color: rgba(37, 193, 255, 0.836); /* the main color */
+  background:
+    linear-gradient(90deg, rgba(245, 242, 242, 0.267) var(--d), #0000 0 calc(100% - var(--d)), rgba(245, 242, 242, 0.267) 0) 50%/calc(100% - 2*var(--s)) 100% no-repeat;
+  clip-path: polygon(0 100%, var(--s) 100%, calc(var(--s) + var(--d)) calc(100% - var(--d)), calc(100% - var(--s) - var(--d)) calc(100% - var(--d)), calc(100% - var(--s)) 100%, 100% 100%, calc(100% - var(--c)) calc(50% + var(--d)/2), 100% var(--d), calc(100% - var(--s)) var(--d), calc(100% - var(--s) - var(--d)) 0, calc(var(--s) + var(--d)) 0, var(--s) var(--d), 0 var(--d), var(--c) calc(50% + var(--d)/2));
+  background-color: rgba(37, 193, 255, 0.836);
+  /* the main color */
   border: 3px solid rgb(255, 238, 3) !important;
   width: fit-content;
 }
@@ -1521,7 +1631,7 @@ a.leaflet-control-zoom-in:hover {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(43, 176, 43)!important;
+  border: 1px solid rgb(43, 176, 43) !important;
   letter-spacing: 1px;
 }
 
@@ -1533,7 +1643,7 @@ a.leaflet-control-zoom-in:hover {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(176, 43, 43)!important;
+  border: 1px solid rgb(176, 43, 43) !important;
   letter-spacing: 1px;
 }
 
@@ -1546,7 +1656,7 @@ a.leaflet-control-zoom-in:hover {
   /* text-transform: uppercase; */
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(43, 176, 174)!important;
+  border: 1px solid rgb(43, 176, 174) !important;
   letter-spacing: 1px;
 }
 
@@ -1564,7 +1674,7 @@ a.leaflet-control-zoom-in:hover {
 }
 
 .deduction-card {
-  background: linear-gradient(180deg, rgb(149, 51, 214), rgb(208, 146, 250))  !important;
+  background: linear-gradient(180deg, rgb(149, 51, 214), rgb(208, 146, 250)) !important;
   border-radius: 8px;
   height: 238px !important;
   width: 250px !important;
@@ -1680,39 +1790,88 @@ a.leaflet-control-zoom-in:hover {
   letter-spacing: 1px;
 }
 
-.pending-status{
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
+.pending-status {
+  color: #806f0f !important;
+  background-color: #fcf4ae !important;
+  border-radius: 6px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(146, 146, 14) !important;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
   letter-spacing: 1px;
 }
 
-.cancel-status {
-  color: darkred !important;
-  background-color: rgb(243, 186, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
+.nonworking {
+  color: #0f8077 !important;
+    background-color: #aefcf5 !important;
+    border-radius: 6px;
+    padding: 6px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.cancel-status, .rejected-status, .absent {
+  color: #800f0f !important;
+    background-color: #fcaeae !important;
+    border-radius: 6px;
+    padding: 5px;
+    text-transform: uppercase;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.normal-day {
+  color: #0f5c80 !important;
+  background-color: #aee3fc !important;
+  border-radius: 6px;
+  padding: 6px;
   text-transform: uppercase;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid red !important;
+  font-size: 12px;
   letter-spacing: 1px;
 }
 
-.approved-status {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
+.regularholiday {
+  color: #55800f !important;
+  background-color: #defcae !important;
+  border-radius: 6px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+
+.restday, .approved-status {
+  color: #0f8027 !important;
+  background-color: #aefcd7 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.exempted {
+  color: #0f5c80 !important;
+  background-color: #aee3fc !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
   letter-spacing: 1px;
 }
 
@@ -1732,7 +1891,7 @@ a.leaflet-control-zoom-in:hover {
 
 .db-hrmis {
   width: 35px;
-  height: 35px; 
+  height: 35px;
 }
 
 
@@ -1746,18 +1905,877 @@ span#viewbtn {
 }
 
 a#notifdropdown:hover {
-    background-color: #fef8ea !important;
-    color: black !important;
-    text-shadow: 1px 1px 2px white !important;
-    font-family: 'Arial Black';
+  background-color: #fef8ea !important;
+  color: black !important;
+  text-shadow: 1px 1px 2px white !important;
+  font-family: 'Arial Black';
 }
 
 .notif-hrmis {
   width: 25px;
-  height: 25px; 
+  height: 25px;
+}
+
+.bg-dtr {
+  background-color: #fef8ea !important;
 }
 
 
- 
+.leave-box-container {
+  margin-top: 5rem;
+}
+
+.total-leave-box {
+  border: 3px solid white !important;
+  border-radius: 5px;
+  background: linear-gradient(180deg, white, white, #7BD3EA) !important;
+  padding: 14px;
+}
+
+.total-leave {
+  color: #017291 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+
+.total-leave-number {
+  font-size: 40px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bolder;
+  color: #017291 !important;
+}
+
+.total-leave-h6 {
+  font-size: small;
+  text-align: center;
+  font-weight: bold;
+  color: #017291 !important;
+}
+
+.bi-calendar2-week-fill {
+  color: #017291 !important;
+}
+
+.total-unused-box {
+  border: 3px solid white !important;
+  border-radius: 5px;
+  background: linear-gradient(180deg, white, white, #EB8242) !important;
+  padding: 14px;
+}
+
+.total-unused-leave {
+  color: #c04b02 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.total-unused-number {
+  font-size: 40px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bolder;
+  color: #c04b02 !important;
+}
+
+
+.bi-airplane-fill {
+  color: #c04b02 !important;
+}
+
+.total-used-box {
+  border: 3px solid white !important;
+  border-radius: 5px;
+  background: linear-gradient(180deg, white, white, #dd9bc2) !important;
+  padding: 14px;
+}
+
+.total-used-leave {
+  color: #700145 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.total-used-number {
+  font-size: 40px;
+  text-align: center;
+  padding: 10px;
+  font-weight: bolder;
+  color: #700145 !important;
+}
+
+.bi-briefcase-fill {
+  color: #700145 !important;
+}
+
+.total-apply-box {
+  border: 3px solid white !important;
+  border-radius: 5px;
+  background: linear-gradient(180deg, white, white, #A5DD9B) !important;
+  padding: 14px;
+}
+
+.total-applied-leave {
+  color: #0f5f01 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.bi-file-earmark-post {
+  color: #0f5f01 !important;
+}
+
+.apply-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
+
+.apply-button {
+  position: relative; /* Ensure proper positioning for the pseudo-element */
+  display: inline-block; /* Keeps the button size consistent */
+  border: 3px solid #024e01 !important; /* Transparent border to show the gradient */
+  background: white !important; /* Button background */
+  color: white !important; /* Text color */
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 6px 12px; /* Adjust padding for better appearance */
+  margin: 1rem;
+  cursor: pointer;
+  overflow: hidden; /* Ensures the pseudo-element stays within bounds */
+  z-index: 1; /* Places the button above the pseudo-element */
+}
+
+.apply-button:before {
+  content: ''; /* Creates a visual element */
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 6px; /* Slightly larger than the button's border-radius */
+  background: linear-gradient(45deg, #015209, #04ad02, #015c0a); /* Apply gradient */
+  background-size: 400% 400%; /* Enlarges the gradient for smoother movement */
+  z-index: -1; /* Places behind the button content */
+  animation: move-gradient-border 3s linear infinite; /* Continuous animation */
+}
+
+@keyframes move-gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.apply-button:hover {
+  transform: scale(1.1);
+}
+
+
+.card-profile-edit {
+  height: 800px;
+  width: 350px;
+  background-color: white !important;
+  border-radius: 8px;
+  border: 3px solid #7a1818 !important;
+  margin-left: 5%;
+  margin-top: 5.3% !important;
+  margin-bottom: 10% !important;
+}
+
+.work-field {
+  text-transform: uppercase;
+}
+
+.day-overtime, .sched-timein, .sched-timeout {
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+
+.day-description {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.schedin-number {
+  font-weight: bold;
+  color: green !important;
+}
+
+.schedout-number {
+  font-weight: bold;
+  color: red !important;
+}
+
+
+:root {
+  --minus-15rem: calc(100% - 15rem);
+  --minus-6rem: calc(100% - 8rem);
+}
+
+
+/* responsiveness */
+@media (max-width: 746px) {
+  .content {
+    margin-left: 7rem !important;
+    margin-right: 1rem;
+  }
+
+  .time-profile-img {
+    width: 110px;
+    height: 110px;
+    margin: 1rem;
+  }
+
+  
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+
+  .company-img, span.companyname {
+    justify-content: center !important;
+    margin: auto !important;
+  }
+
+  .table .payslip-table {
+    display: none !important;
+  }
+  
+}
+
+
+@media (max-width: 1535px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-profile-img {
+    width: 110px;
+    height: 110px;
+    margin: 1rem;
+  }
+
+  
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+  
+}
+
+@media (max-width: 1134px) {
+  .time-profile-img {
+    width: 50px !important;
+    height: 50px !important;
+    margin: 0rem !important;
+  }
+
+  
+  .time-title {
+    font-size: 10px !important;
+  }
+
+  .time-name {
+    font-size: 12px !important;
+  }
+
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 10px;
+  }
+
+  table td {
+    font-size: 10px !important;
+  }
+
+
+}
+
+@media (max-width: 1355px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+
+  .time-profile-img {
+    width: 80px;
+    height: 80px;
+    margin: 1rem;
+  }
+  
+
+  .btn-clockin,
+  .btn-clockout {
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 0%;
+  }
+
+  .clockin-out-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .time-p {
+    font-size: 8px;
+  }
+
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 10px;
+  }
+
+  table td {
+    font-size: 10px !important;
+  }
+
+}
+
+@media (max-width: 1248px) {
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 8px !important;
+  }
+
+  table td {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 1159px) {
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 6px !important;
+  }
+
+  table td {
+    font-size: 10px !important;
+  }
+}
+
+
+@media (max-width: 1071px) {
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 5px !important;
+  }
+
+  table td {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 1027px) {
+  .clockin-btn,
+  .clockout-btn {
+    font-size: 4px !important;
+  }
+
+  table td {
+    font-size: 8px !important;
+  }
+
+}
+
+@media (max-width: 1281px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+
+  .time-profile-img {
+    width: 80px;
+    height: 80px;
+    margin: 1rem;
+  }
+  
+
+  .btn-clockin,
+  .btn-clockout {
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .clockin-out-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .payslip-profile {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+/* 100% zoom screen */
+@media (min-width: 1920px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-profile-img {
+    width: 110px;
+    height: 110px;
+    margin: 1rem;
+  }
+
+}
+
+/* 110% zoom screen */
+@media (min-width: 1745px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-profile-img {
+    width: 110px;
+    height: 110px;
+    margin: 1rem;
+  }
+}
+
+/* 125% zoom screen */
+@media (min-width: 1536px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-profile-img {
+    width: 110px;
+    height: 110px;
+    margin: 1rem;
+  }
+}
+
+
+/* 150% zoom screen */
+@media (max-width: 1280px) {
+  .content {
+    margin-left: 15rem;
+    margin-right: 1rem;
+  }
+
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+
+  .time-profile-img {
+    width: 80px;
+    height: 80px;
+    margin: 1rem;
+  }
+
+  .clockin-out-card {
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  .btn-clockin,
+  .btn-clockout {
+    margin-bottom: 0% !important;
+  }
+
+  .time-p {
+    font-size: 10px !important;
+  }
+
+  .clockin-btn, .clockout-btn {
+    font-size: 10px;
+  }
+
+}
+
+
+/* 200% zoom screen */
+@media (max-width: 960px) {
+  .time-title {
+    font-size: 16px;
+  }
+
+  .time-name {
+    font-size: 18px;
+  }
+
+  .time-profile-img {
+    width: 60px;
+    height: 60px;
+    margin: 0.5rem;
+  }
+
+  .clockin-out-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .time-p {
+    font-size: 8px;
+  }
+
+  .btn-clockin,
+  .btn-clockout {
+    font-size: 8px !important;
+  }
+
+  .bi-box-arrow-in-left, .bi-box-arrow-in-right {
+    font-size: 12px;
+  }
+
+  .table .payslip-table {
+    display: none !important;
+  }
+
+  .totalpayslip {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+}
+
+
+
+/* 250% zoom screen */
+@media (max-width: 768px) {
+
+  .content {
+    margin-left: 15rem;
+    margin-right: 0.5rem;
+  }
+
+  .eportal-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .totalpayslip {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+
+  .eportal-inout,
+  .eportal-bday,
+  .eportal-announcement,
+  .eportal-attendance,
+  .eportal-map {
+    width: 100% !important;
+  }
+
+  .table th {
+    width: 100%;
+  }
+
+
+  .eportal-map {
+    margin-bottom: 9rem;
+  }
+
+  .attendance-field {
+    flex-wrap: wrap;
+  }
+
+  .sidebar {
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+
+  .navbar {
+    margin-left: 14.5rem;
+    width: var(--minus-15rem);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    margin-top: 13px;
+    box-shadow: 0 4px 8px #3b3939 !important;
+  }
+
+  .img-hrmis img {
+    width: 50%;
+    padding-top: 12px !important;
+    margin-left: -30px;
+  }
+
+  h6.eportal-text {
+    float: right;
+    padding-top: 35px;
+    margin-right: 10px;
+    font-family: Calibri;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .leave-box-container {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .table .payslip-table {
+    display: none !important;
+  }
+
+}
+
+@media (max-width: 1000px) {
+  .table .payslip-table {
+    display: none !important;
+  }
+}
+
+/* 300% zoom screen */
+@media (max-width: 640px) {
+
+  /*wendell*/
+  #previewleave {
+    height: 150px;
+    width: 150px;
+  }
+
+  .leave-box-container {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .attendance-field {
+    flex-direction: column !important;
+  }
+
+  #myInput {
+    width: 100% !important;
+  }
+
+  #datepicker,
+  .btn-load-color,
+  .btn-check-color,
+  .btn-attendance-color,
+  .btn-empPer-color,
+  .btn-export-color,
+  .btn-import-color,
+  .btn-add-color {
+    width: 100% !important;
+  }
+
+  .table td {
+    padding: 1rem !important;
+  }
+
+  .table th {
+    width: 100%;
+  }
+
+  .table .payslip-table {
+    display: none !important;
+  }
+
+  .content {
+    margin-left: 8rem !important;
+    margin-right: 10px;
+  }
+
+  .col-sm-8,
+  .col-4,
+  .col-md-4 {
+    width: 100% !important;
+  }
+
+  .eportal-map {
+    margin-bottom: 0rem;
+  }
+
+  .content-toggled {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+  }
+
+  .footer-toggled {
+    margin-left: 0px !important;
+  }
+
+  .navbar {
+    width: 75%;
+    position: absolute !important;
+  }
+
+  .navbar-toggled {
+    margin-left: 0px !important;
+    width: 100%;
+  }
+
+
+  #card-announcement,
+  #card-birthday,
+  #card-attendance {
+    margin-top: 5% !important;
+  }
+
+  #myInput {
+    width: 35%;
+  }
+
+  .bi-box-arrow-in-left,
+  .bi-box-arrow-in-right {
+    font-size: 0px;
+    padding: 0px;
+  }
+
+  #map {
+    width: 100%;
+  }
+
+  .deduction-card {
+    margin: auto !important;
+  }
+
+  .row .g-4 {
+    margin: 0%;
+  }
+
+  .col-xl-8.col-lg-7 {
+    margin-left: 0 !important;
+  }
+
+  .modal-body .row {
+    flex-direction: column;
+    margin-left: 0 !important;
+  }
+
+  .modal-body .col {
+    width: 100%;
+    margin-top: 15px !important;
+  }
+
+  .time-profile-img {
+    width: 85px;
+    height: 85px;
+  }
+
+  .time-card h1 {
+    margin-top: 0.5rem !important;
+    font-size: 40px !important;
+  }
+
+  .time-p {
+    font-size: 10px !important;
+  }
+
+  .time-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    color: white !important;
+    font-style: italic;
+    margin-left: 0.5rem;
+    margin-bottom: 0%;
+    font-size: 18px !important;
+  }
+
+  .time-name {
+    font-family: "Lexend", sans-serif;
+    font-style: normal;
+    color: white !important;
+    text-align: left;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    font-size: 20px !important;
+  }
+
+  .clockin-out-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bi-box-arrow-in-left,
+  .bi-box-arrow-in-right {
+    font-size: 23px !important;
+  }
+
+  .bday-img-eportal {
+    height: 150px !important;
+    width: 150px !important;
+    border: 3px solid rgb(233, 187, 3) !important;
+    box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
+    margin-top: 10% !important;
+  }
+
+  .bday-greet {
+    color: white !important;
+    text-align: center;
+    margin-top: 33% !important;
+    font-size: 1.5rem !important;
+    font-family: "Great Vibes", cursive;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+
+  .fname-eportal {
+    font-size: 11px !important;
+  }
+
+  .bdaydate-eportal {
+    font-size: 11px !important;
+  }
+
+  .btn-clockout,
+  .btn-clockin {
+    margin-bottom: 4px !important;
+  }
+
+  .leave-box-container {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .totalpayslip {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+
 
 

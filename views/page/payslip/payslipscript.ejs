@@ -65,15 +65,7 @@
           { data: "late_minutes" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          var payrolldateCell = $(row).find("td:eq(0)");
-          payrolldateCell.wrapInner("<span class='applieddate-text'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+        
         initComplete: function () {},
       });
     }

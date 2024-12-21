@@ -132,22 +132,7 @@
           { data: "totalnetpay" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          var totalnetpayCell = $(row).find("td:eq(9)");
-          // var leaveenddateCell = $(row).find("td:eq(4)");
-          // var applieddateCell = $(row).find("td:eq(6)");
-
-          // leavestartdateCell.wrapInner(
-          //   "<span class='leavestartdate-text'></span>"
-          // );
-          //leaveenddateCell.wrapInner("<span class='leaveenddate-text'></span>");
-          totalnetpayCell.wrapInner("<span class='approved-status'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+       
         initComplete: function () {},
       });
     }
@@ -534,6 +519,36 @@
       });
     });
 
+       //miyaka
+       function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+        case "normal day":
+          return "normal-day";
+
+        case "rest day":
+          return "restday";
+
+          
+        case "exempted":
+          return "exempted";
+
+        case "missed logs":
+          return "pending-status";
+
+          case "absent":
+          return "absent";
+
+          case "regular holiday":
+          return "regularholiday";
+
+          case "non-working holiday":
+          return "nonworking";
+          
+        default:
+          return "";
+      }
+    }
+
     $(document).on("click", "#nav-date-tab", function () {
       $(`#dataTablePayslip`).find("tr:gt(0)").remove();
       $.ajax({
@@ -579,7 +594,7 @@
             var TOTAL_MINUTES = row.insertCell(10);
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
-            ATTENDANCE_STATUS.innerHTML = item.Attendance_Status;
+            ATTENDANCE_STATUS.innerHTML = `<span class="${getStatusClass(item.Attendance_Status)}">${item.Attendance_Status}</span>`;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;
@@ -742,4 +757,6 @@
 
     //#endregion
   });
+
+
 </script>
