@@ -91,7 +91,6 @@
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var typeCell = $(row).find("td:eq(2)");
-          var amountCell = $(row).find("td:eq(3)");
 
           var typeText = data.type;
 
@@ -99,23 +98,22 @@
 
           switch (typeText.toLowerCase()) {
             case "sss":
-              typeClass = "sss-type";
+              typeClass = "sss-idtype";
               break;
             case "philhealth":
-              typeClass = "philhealth-type";
+              typeClass = "philhealth-idtype";
               break;
             case "tin":
-              typeClass = "tin-type";
+              typeClass = "tin-idtype";
               break;
             case "pagibig":
-              typeClass = "pagibig-type";
+              typeClass = "pagibig-idtype";
               break;
             default:
               typeClass = "";
           }
 
           typeCell.html(`<span class="${typeClass}">${typeText}</span>`);
-          amountCell.wrapInner("<span class='amount-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

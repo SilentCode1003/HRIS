@@ -81,11 +81,36 @@
           // { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var mealstatusCell = $(row).find("td:eq(7)");
+
+          var mealstatusText = data.mealstatus;
+
+          var mealstatusClass = "";
+
+          switch (mealstatusText.toLowerCase()) {
+            case "approved":
+              mealstatusClass = "approved-status";
+              break;
+            case "cancel":
+              mealstatusClass = "cancel-status";
+              break;
+            case "pending":
+              mealstatusClass = "pending-status";
+              break;
+            default:
+              mealstatusClass = "";
+          }
+
+          mealstatusCell.html(
+            `<span class="${mealstatusClass}">${mealstatusText}</span>`
+          );
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
         },
+
         initComplete: function () {},
       });
     }

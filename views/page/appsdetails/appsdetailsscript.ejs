@@ -67,16 +67,7 @@
           { data: "appcreateby" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          var appnameCell = $(row).find("td:eq(2)");
-
-          appnameCell.wrapInner("<span class='appname-text'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+        
         initComplete: function () {},
       });
     }

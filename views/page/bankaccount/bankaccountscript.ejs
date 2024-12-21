@@ -631,6 +631,7 @@
           { data: "status" },
           { data: "action" },
         ],
+        
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var statusCell = $(row).find("td:eq(8)");
@@ -640,17 +641,11 @@
           var statusClass = "";
 
           switch (statusText.toLowerCase()) {
-            case "pending":
-              statusClass = "pending-status";
-              break;
-            case "cancelled":
-              statusClass = "cancelled-status";
-              break;
             case "active":
-              statusClass = "approved-status";
+              statusClass = "active-status";
               break;
             case "inactive":
-              statusClass = "rejected-status";
+              statusClass = "inactive-status";
               break;
             default:
               statusClass = "";
@@ -663,6 +658,8 @@
             this.style.verticalAlign = "middle";
           });
         },
+
+
         initComplete: function () {},
       });
     }

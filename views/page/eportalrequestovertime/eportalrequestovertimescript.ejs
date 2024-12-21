@@ -88,12 +88,15 @@
             case "approved":
               overtimestatusClass = "approved-status";
               break;
-            case "cancelled":
-              overtimestatusClass = "cancelled-status";
+              
+            case "cancel":
+              overtimestatusClass = "cancel-status";
               break;
+
             case "pending":
               overtimestatusClass = "pending-status";
               break;
+
             default:
               overtimestatusClass = "";
           }
@@ -174,6 +177,24 @@
           alert("error: " + result.data);
         },
       });
+    }
+
+    //miyaka
+    function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+
+        case "approved":
+              return "approved-status";
+              
+            case "rejected":
+              return "rejected-status";
+
+            case "pending":
+              return "pending-status";
+          
+        default:
+          return "";
+      }
     }
 
     $(document).on("click", "#addappliedday", function () {
@@ -300,7 +321,7 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             ACTION.appendChild(action);
 
             $.each(
@@ -366,7 +387,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [
@@ -446,8 +468,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
-            ACTION.appendChild(action);
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [
@@ -530,8 +552,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
-            ACTION.appendChild(action);
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [

@@ -1,54 +1,50 @@
-
 <br>
 <div class="container-fluid">
-  <div class="row g-4 mt-4">
+  <div class="row g-4 mt-4 eportal-grid">
 
-    <div class="col-4">
-      <div class="card w-100" id="clockin-out">
+    <div class="col-4 eportal-inout">
+      <div class="card " id="clockin-out">
         <div class="card-header" id="clock-header">
           <img class="img-profile time-profile-img" src="data:image/jpg;base64,<%= image%>" alt="Profile Image">
           <div class="time-text">
-              <h4 class="time-title">Hello,</h4>
-               <!-- <h1 class="time-name"><%= fullname%></h1> -->
-              <h1 class="time-name"><span><%= fullname%></span>!</h1>
+            <h5 class="time-title">Hello,</h5>
+            <!-- <h1 class="time-name"><%= fullname%></h1> -->
+            <h2 class="time-name"><span>
+                <%= fullname%>
+              </span>!</h2>
           </div>
         </div>
         <div class="card-body cb-inout">
           <br>
-          <br>
           <!-- <div class="time-card">
             <h1><b>8:00 AM</b></h1>
           </div> -->
-          <div class="m-2 clockin-out-card">
-            <button type="button" id="clockinbtn" class="btn btn-clockin me-4" >
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-box-arrow-in-left"></i>
-                    <span class="m-auto"><b>Clock In</b></span>
-                </div>
+          <div class="clockin-out-card">
+            <button type="button" id="clockinbtn" class="btn btn-clockin me-4">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-box-arrow-in-left"></i>
+                <span class="m-auto"><b>Clock In</b></span>
+              </div>
             </button>
             <button type="button" id="clockoutbtn" class="btn btn-clockout">
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-box-arrow-in-right"></i>
-                    <span class="m-auto"><b>Clock Out</b></span>
-                </div>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span class="m-auto"><b>Clock Out</b></span>
+              </div>
             </button>
-        </div>
-        
+          </div>
+          <br>
           <p class="time-p">Don't forget to <span><b>CLOCK IN</b></span> and <span><b>CLOCK OUT</b></span>.</p>
         </div>
       </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-8 eportal-map">
       <div class="card" id="card-map">
         <div class="card-header ch-map">
-          <lord-icon
-          src="https://cdn.lordicon.com/qnwzeotn.json"
-          trigger="loop"
-          stroke="bold"
-          colors="primary:#121331,secondary:#4bb3fd,tertiary:#ffc738,quaternary:#2ca58d,quinary:#ffffff,senary:#f24c00"
-          class="eportal-icon mr-2">
-      </lord-icon>
+          <lord-icon src="https://cdn.lordicon.com/qnwzeotn.json" trigger="loop" stroke="bold"
+            colors="primary:#121331,secondary:#4bb3fd,tertiary:#ffc738,quaternary:#2ca58d,quinary:#ffffff,senary:#f24c00" class="eportal-icon mr-2">
+          </lord-icon>
           <span id="span-text"><b>Corporate Geo-Fence Perimeter Map</b></span></a>
         </div>
         <div id="loading-overlay">
@@ -60,17 +56,13 @@
       </div>
     </div>
 
-    <div class="col-4">
+    <div class="col-4 eportal-attendance
+    ">
       <div class="card" id="card-attendance" style="margin-top: -150px;"> <!-- Adjust the margin as needed -->
         <div class="card-header ch-attendance">
-          <lord-icon
-    src="https://cdn.lordicon.com/svsiboke.json"
-    trigger="loop"
-    stroke="bold"
-    state="loop-flutter"
-    colors="primary:#121331,secondary:#ffffff,tertiary:#66d7ee,quaternary:#4bb3fd,quinary:#f9c9c0,senary:#000000"
-    class="eportal-icon mr-2">
-</lord-icon>
+          <lord-icon src="https://cdn.lordicon.com/svsiboke.json" trigger="loop" stroke="bold" state="loop-flutter"
+            colors="primary:#121331,secondary:#ffffff,tertiary:#66d7ee,quaternary:#4bb3fd,quinary:#f9c9c0,senary:#000000" class="eportal-icon mr-2">
+          </lord-icon>
           <span><b>Attendance</b></span></a>
         </div>
         <div class="card-body cb-attendance">
@@ -89,17 +81,12 @@
       </div>
     </div>
 
-    <div class="col-4">
+    <div class="col-4 eportal-bday">
       <div class="card" id="card-birthday">
         <div class="card-header ch-birthday">
-          <lord-icon
-    src="https://cdn.lordicon.com/poseeyvv.json"
-    trigger="loop"
-    stroke="bold"
-    state="morph-open"
-    colors="primary:#c7c116,secondary:#eee966,tertiary:#e83a30"
-    class="eportal-icon mr-2">
-</lord-icon>
+          <lord-icon src="https://cdn.lordicon.com/poseeyvv.json" trigger="loop" stroke="bold" state="morph-open"
+            colors="primary:#c7c116,secondary:#eee966,tertiary:#e83a30" class="eportal-icon mr-2">
+          </lord-icon>
           </lord-icon>
           <span><b>Birthday</b></span></a>
         </div>
@@ -113,16 +100,12 @@
       </div>
     </div>
 
-    <div class="col-4">
+    <div class="col-4 eportal-announcement">
       <div class="card" id="card-announcement">
         <div class="card-header ch-announcement">
-          <lord-icon
-    src="https://cdn.lordicon.com/ndzqltsx.json"
-    trigger="loop"
-    stroke="bold"
-    colors="primary:#2516c7,secondary:#a866ee,tertiary:#ee66aa,quaternary:#eee966,quinary:#30c9e8"
-    class="eportal-icon mr-2">
-</lord-icon>
+          <lord-icon src="https://cdn.lordicon.com/ndzqltsx.json" trigger="loop" stroke="bold"
+            colors="primary:#2516c7,secondary:#a866ee,tertiary:#ee66aa,quaternary:#eee966,quinary:#30c9e8" class="eportal-icon mr-2">
+          </lord-icon>
           <span><b>Announcement</b></span></a>
         </div>
         <div class="card-body db-custom-cards1">
@@ -140,20 +123,20 @@
   <br>
   <br>
   <div class="row mb-4">
-   
-
- 
-
-    </div>
 
 
-   
+
+
+  </div>
 
 
 
 
 
-    <!-- <div class="row">
+
+
+
+  <!-- <div class="row">
 
     <div class="col-xl-12 col-lg-12" id="card-map">
       <div class="card shadow mb-4">
@@ -176,7 +159,7 @@
         </div>
         <div id="carouselannouncement" class="carousel slide carousel-fade" data-bs-ride="carousel">
           <div class="carousel-inner"> -->
-    <!-- <div class="carousel-item active" data-bs-interval="2000">
+  <!-- <div class="carousel-item active" data-bs-interval="2000">
                   <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                       style="height: 470px;">
                   <div class="carousel-caption d-none d-md-block">
@@ -202,13 +185,13 @@
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
               </button> -->
-    <!-- </div>
+  <!-- </div>
         </div>
       </div>
     </div> -->
 
-    <!-- Birthday -->
-    <!-- <div class="col-md-4">
+  <!-- Birthday -->
+  <!-- <div class="col-md-4">
         <div class="card shadow mb-4">
           <div class="card-header">
             <h6 class="m-0">
@@ -218,7 +201,7 @@
           <div aria-labelledby="nav-profile-tab">
             <div id="carouselbday" class="carousel slide carousel-fade" data-bs-ride="carousel">
               <div class="carousel-inner"> -->
-    <!-- <div class="carousel-item active" data-bs-interval="2000">
+  <!-- <div class="carousel-item active" data-bs-interval="2000">
                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                             style="height: 470px;">
                         <div class="carousel-caption d-none d-md-block">
@@ -236,21 +219,21 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button> -->
-    <!-- </div>
+  <!-- </div>
             </div>
           </div>
         </div>
       </div> -->
 
-    <!--    
+  <!--    
   </div>
 
 
 <div class="row">
 
   <div class="col-xl-4 col-lg-5"> -->
-    <!--- Button ---->
-    <!-- <button type="button" id="clockinbtn">
+  <!--- Button ---->
+  <!-- <button type="button" id="clockinbtn">
       Clock In
     </button>
     <br>
@@ -259,8 +242,8 @@
     </button>
   </div> -->
 
-    <!-- Attendance -->
-    <!-- <div class="col-xl-4 col-lg-5">
+  <!-- Attendance -->
+  <!-- <div class="col-xl-4 col-lg-5">
     <div class="card shadow mb-4">
       <div class="card-header ch-attendance">
         <h6 class="m-0 h6-attendance">

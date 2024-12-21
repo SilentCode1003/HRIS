@@ -12,74 +12,30 @@
           <div id="dynamicButton" class="d-flex justify-content-between">
           </div>
         </div>
-      </div>
-    </div> 
-  </div>
-  <br>
-  <div class="col">
-    <div class="card">
-      <div class="card-header ch-generate">
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
-              data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-              aria-selected="true"><b>Rest Day Adjustments</b>
-            </button>
-            <button class="nav-link eportal-leave" id="automationTab" data-bs-toggle="tab"
-              data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
-              aria-selected="false"><b>Shift Time Adjustments</b>
-            </button>
-            </div>
-        </nav>
-      </div>
-      <!-- Tables  -->
-      <div class="card-body db-custom-cards">
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12">
-                        <div class="card shadow mb-4">
-                          <div class="card-body cbody-requestleave">
-                            <table class="table table-light table-bordered" id="dataTableChangeShiftSettings">
-                              <thead>
-                                  <tr>
-                                    <th class="col-sm-1">ID</th>
-                                    <th>Employee Name</th>
-                                    <th>Actual Rest Day</th>
-                                    <th>Target Rest Day</th>
-                                    <th>Create By</th>
-                                    <th>Status</th>
-                                    <th class="col-sm-1">Action</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                              </tbody>
-                            </table>            
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="nav-approved" role="tabpanel"
-            aria-labelledby="nav-profile-tab">
-            <div class="card-body">
-                <div class="table-responsive" id="table-responsive-id">
-                    <table class="table table-light table-bordered" id="dataTableShiftTimeAdjustments">
-                      <thead>
-                        <tr>
-                          <th class="col-sm-1">ID</th>
-                          <th>Employee Name</th>
-                          <th>Actual Rest Day</th>
-                          <th>Target Rest Day</th>
-                          <th>Create By</th>
-                          <th>Status</th>
-                          <th class="col-sm-1">Action</th>
-                        </tr>
-                      </thead>
-                    </table>
-                </div>
-            </div>
-            </div>
+        <div class="col-sm-1 col-add">
+          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#subgroupmodal">
+            <b>+ Add</b>
+          </button>
+        </div>
+      </div> 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive"  id="table-responsive-id">
+            <table class="table table-striped-light" id="dataTableChangeShiftSettings">
+                <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee Name</th>
+                        <th>Actual Rest Day</th>
+                        <th>Target Rest Day</th>
+                        <th>Create By</th>
+                        <th>Status</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
       </div>
     </div>

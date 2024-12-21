@@ -44,7 +44,7 @@ body{
 } */
 
 .searchbar-hrmis {
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
 }
 
 .searchbar-bg {
@@ -53,7 +53,7 @@ body{
 
 .btn-search-hrmis {
   background-color: #E41717 !important;
-  border: 2.5px solid #fef8ea  !important;
+  border: 2.5px solid #fcf7eb  !important;
   color: white !important;
 }
 
@@ -66,9 +66,9 @@ body{
 .map{
   color: white !important;
 }
-#nav-tabContent {
+/* #nav-tabContent {
   margin-top: 2%;
-}
+} */
 
 #map, #editMap {
   height: 480px;
@@ -123,9 +123,9 @@ body{
   margin-top: 10% !important;
 } */
 
-.img-prof {
+/* .img-prof {
   border: 4px solid #6e0c0c !important;
-}
+} */
 
 .apprentice-label, .coa-label, .cor-label {
   color: #7a1818 !important;
@@ -136,7 +136,7 @@ body{
 
 #dp-header {
     background-color: #7a1818 !important;
-    border: 3px solid #fef8ea !important;
+    border: 3px solid #fcf7eb !important;
 }
 
 .dropdown-item {
@@ -144,7 +144,7 @@ body{
 }
 
 .dropdown-item:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   color: black !important;
   text-shadow: 1px 1px 2px white !important;
   font-family: 'Arial Black';
@@ -159,7 +159,7 @@ body{
 }
 
 .navbar-search {
-    border: 2.5px solid #fef8ea !important;
+    border: 2.5px solid #fcf7eb !important;
     border-radius: 8px;
 }
 
@@ -179,7 +179,7 @@ body{
     height: 38px;
     width: 40px;
     padding-left: 8px;
-    border: 2.5px solid #fef8ea  !important;
+    border: 2.5px solid #fcf7eb  !important;
     border-radius: 6px;
     background-color: #E41717 !important;
     color: white !important;
@@ -228,7 +228,7 @@ body{
 }
 
 .sidebar-item:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   font-weight: bold;
 }
 
@@ -246,12 +246,12 @@ body{
   /* width: 100; */
   margin-left: 2%;
   margin-right: 2%;
-  background-color:  #fef8ea !important;
+  background-color:  #fcf7eb !important;
 }
 
 
 .modal-dialog #modal-body, .ch-body {
-    background-color: #fef8ea !important;
+    background-color: #fcf7eb !important;
 }
 #employeeid, #loanid {
     height: 36px;
@@ -338,6 +338,10 @@ body{
   background-color: #7a1818  !important;
 }
 
+/* .teamlead-attendancecard, .missedlogcard {
+  background-color: #fef8ea !important;
+} */
+
 /*
 table {
   border-collapse: collapse;
@@ -368,7 +372,8 @@ tr:hover {
       scroll-behavior: smooth;
       border: 0;
   }
-  #table th {
+
+  #table thead, .payslip-table {
       border: none;
       clip: rect(0 0 0);
       height: 1px;
@@ -380,6 +385,7 @@ tr:hover {
       width: 1%;
       font-weight: 600;
   }
+  
   #table tr {
       border-bottom: 1px solid #8ED1AE !important;
       display: block;
@@ -404,12 +410,25 @@ tr:hover {
   #employeeid, #loanid {
     width: 40%;
   }
+
 }
+
+/* 13th month details */
+.thirteenmonth-details {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.retropay-details {
+  align-items: center;
+  justify-content: start;
+}
+
+
 /*--- Employee ---*/
 .btn-color, .btn-attendance {
     background-color: #219897 !important;
     color: white !important;
-    text-shadow: 1px 1px 1px black !important;
     float: right;
     border-radius: 8px;
     border: 2px solid white !important;
@@ -420,7 +439,6 @@ tr:hover {
 .btn-upload-color {
   background-color: #2F58CD !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   float: right;
   border-radius: 8px;
   border: 2px solid white !important;
@@ -428,10 +446,19 @@ tr:hover {
   width: 100%;
 }
 
+.teamlead-btn-download {
+  background-color: #2F58CD !important;
+  color: white !important;
+  float: right;
+  border-radius: 8px;
+  border: 2px solid white !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
 .btn-download-color {
   background-color: #d11e1e !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   float: right;
   border-radius: 8px;
   border: 2px solid white !important;
@@ -445,7 +472,8 @@ tr:hover {
   transform: scale(1.1);
 }
 
-.btn-upload-color:hover {
+.btn-upload-color:hover,
+.teamlead-btn-download:hover {
   background-color: #022586 !important;
   color: white !important;
   transform: scale(1.1);
@@ -460,7 +488,6 @@ tr:hover {
   background-color: #1093cf !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -472,7 +499,6 @@ tr:hover {
   background-color: #4E9F3D !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -481,7 +507,7 @@ tr:hover {
 }
 
 /* #yearInput {
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
 } */
 
 .modal-title {
@@ -498,7 +524,6 @@ tr:hover {
   background-color: #4E9F3D !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -513,7 +538,6 @@ tr:hover {
   background-color: #0382d6 !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -528,7 +552,6 @@ tr:hover {
   background-color: #4E9F3D !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -543,7 +566,6 @@ tr:hover {
   background-color: #029fad !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -558,7 +580,6 @@ tr:hover {
   background-color: #dd5704 !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -572,7 +593,6 @@ tr:hover {
   background-color: #d30303 !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -587,7 +607,6 @@ tr:hover {
   background-color: #14837a !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -602,7 +621,6 @@ tr:hover {
   background-color: #4E9F3D !important;
   border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 15px !important;
 }
 
@@ -622,9 +640,8 @@ tr:hover {
   border-radius: 8px;
   height: 33px;
   background-color: #30a32a !important;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-size: 12px !important;
 } */
 
@@ -676,7 +693,7 @@ tr:hover {
 .geofence-db:hover,
 .announcement-db:hover,
 .bday-db:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   border: 2px solid white !important;
   color: #7a1818 !important;
   font-weight: bold;
@@ -822,7 +839,7 @@ tr:hover {
     width: 100% !important;
   }
 
-  .btn-delete-close {
+  .btn-delete-close, .btn-per-color {
     width: 100% !important;
   }
 
@@ -864,7 +881,7 @@ tr:hover {
 
 .db-modal-search {
   width: 100%;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
   border-radius: 8px;
   padding: 4px;
 }
@@ -895,9 +912,8 @@ tr:hover {
 
 .btn-insert-save {
   background-color: #30a32a !important;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-family: 'Arial';
   font-weight: bold !important;
   letter-spacing: 1px;
@@ -913,8 +929,7 @@ tr:hover {
   background-color: #E74646 !important;
   color: white !important;
   font-family: 'Arial';
-  border: 2px solid #fef8ea !important;
-  text-shadow: 1px 1px 1px black !important;
+  border: 2px solid #fcf7eb !important;
   font-weight: bold !important;
   letter-spacing: 1px;
   font-size: 12px !important;
@@ -928,10 +943,9 @@ tr:hover {
 .btn-modal-close {
   background-color: #E74646 !important;
   color: white !important;
-  font-family: 'Arial';
-  border: 2px solid #fef8ea !important;
-  text-shadow: 1px 1px 1px black !important;
-  font-weight: bold !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  border: 2px solid #fcf7eb !important;
+  font-weight: 700 !important;
   letter-spacing: 1px;
   font-size: 12px !important;
 }
@@ -946,13 +960,12 @@ tr:hover {
 
 .btn-modal-save {
   background-color: #30a32a !important;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
-  font-family: 'Arial';
-  font-weight: bold !important;
+  font-weight: 700 !important;
   letter-spacing: 1px;
   font-size: 12px !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 .btn-modal-save:hover {
@@ -961,10 +974,9 @@ tr:hover {
 }
 
 .btn-logout-cancel {
-  background-color: #FFB72B !important;
-  border: 2px solid #fef8ea !important;
+  background-color: #04a9be !important;
+  border: 2px solid #fcf7eb !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-family: 'Arial';
   font-weight: bold !important;
   letter-spacing: 1px;
@@ -972,16 +984,15 @@ tr:hover {
 }
 
 .btn-logout-cancel:hover {
-  background-color: #f68f00 !important;
+  background-color: #04a9be !important;
   font-weight: bold;
   transform: scale(1.1);
 }
 
 .btn-logout {
   background-color: #FD5D5D !important;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
   font-family: 'Arial';
   font-weight: bold !important;
   letter-spacing: 1px;
@@ -1048,7 +1059,7 @@ tr:hover {
 /* .btn-modal-upload {
   background-color: green !important;
   color: white !important;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
 }
 .btn-modal-upload:hover {
   background-color: #00B25A !important;
@@ -1065,15 +1076,19 @@ tr:hover {
   border: 2.5px solid #7a1818 !important;
 }
 
+.clockin-manualot, .clockout-manualot {
+  background-color: white !important;
+}
+
 
 /* .modal-dialog .content-size-modal {
   height: 700px;
   width: 1200px;
   margin-left: -350px;
 } */
-.modal-dialog .modal-batch-body {
+/* .modal-dialog .modal-batch-body {
   height: 135px;
-}
+} */
 
 
 /*Attendance*/
@@ -1127,7 +1142,7 @@ tr:hover {
   font-weight: bold !important;
 }
 .profile-box-db:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   color: #7a1818 !important;
   font-weight: bold !important;
 }
@@ -1184,7 +1199,7 @@ tr:hover {
 }
 
 .db-custom-cards  {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   height: 600px;
   overflow: auto;
   width: 100%;
@@ -1286,9 +1301,9 @@ tr:hover {
   z-index: 2;
 }
 
-::-webkit-scrollbar {
-  width: 2px; 
-}
+/* ::-webkit-scrollbar {
+  width: 5px; 
+} */
 
 :root{
   --minus-15rem: calc(100% - 15rem);
@@ -1521,8 +1536,62 @@ tr:hover {
   .bday-text-hrmis {
     font-size: 11px !important;
   }
+
+ .img-generatepay {
+    justify-content: center !important;
+    margin: auto !important;
+  }
+
+  /* 13th month details */
+.thirteenmonth-details {
+  display: flex;
+  flex-direction: column !important;
+  margin: auto !important;
 }
 
+.name-generatepay, .number-generatepay {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.generate-bg {
+  margin-top: 2rem;
+}
+
+.attendance-searchbar, .attendance-buttons, .missedlog-searchbar {
+  width: 100% !important;
+  margin-top: 1rem !important;
+}
+
+.misslog-teamlead {
+  flex-direction: column !important;
+  width: 100%;
+}
+
+}
+
+.overtime-caption {
+  font-weight: 700 !important;
+  text-transform: uppercase;
+}
+
+.teamlead-manualot {
+  color: white !important;
+  background-color: #7a1818 !important;
+  font-size: 13px !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+  margin: 4px;
+}
+
+.teamlead-manualot:hover {
+  background-color: white !important;
+  color: #7a1818 !important;
+}
+
+.attendance-teamlead, .misslog-teamlead, .manualot-header {
+  flex-wrap: wrap;
+}
 .label-cell {
   display: none;
 }
@@ -1558,7 +1627,7 @@ a.leaflet-control-zoom-in, a.leaflet-control-zoom-out {
 }
 
 a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   color: #7a1818 !important;
   font-weight: bold !important;
   font-size: 30px !important;
@@ -1834,8 +1903,33 @@ span.prev-bday, span.next-bday {
   margin-bottom: 5px !important;
 }
 
-div#nav-tab.nav.nav-tabs, .ch-generate {
+/* div#nav-tab.nav.nav-tabs, .ch-generate {
   background-color: #7a1818 !important;
+} */
+
+
+.employee-label {
+  text-decoration: underline;
+  font-size: 25px;
+  letter-spacing: 1px;
+  color: #4d4943 !important;
+  font-weight: bolder;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.position-label {
+  font-size: 16px;
+  color: #4d4943 !important;
+  font-weight: bold;
+  text-transform: none !important;
+}
+
+.department-label {
+  font-size: 16px;
+  color: #4d4943 !important;
+  font-weight: bold;
+  text-transform: none !important;
+  font-style: italic;
 }
 
 .generate-profile,
@@ -1844,34 +1938,261 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 .generate-deduction,
 .generate-holiday {
   color: white !important;
-  background-color: transparent !important;
-  font-size: 13px !important;
-  font-family: Georgia;
+  background-color: #7a1818 !important;
+  font-size: 14px !important;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold !important;
+  letter-spacing: 1px;
 }
 
-.generate-profile:hover,
-.generate-payslip:hover,
-.generate-date:hover,
-.generate-deduction:hover,
-.generate-holiday:hover  {
+
+.img-prof {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.img-generatepay {
+  width: 150px !important;   
+  height: 150px !important;
+  margin-left: 1rem;
+}
+
+.name-generatepay {
+  text-decoration: underline;
+  letter-spacing: 0.05rem;
+}
+
+.number-generatepay {
+  letter-spacing: 0.05rem;
+}
+
+.total-generatepay {
+  background-color: #187a35 !important;
+  color: white !important;
+}
+
+.totalnumber-generatepay {
+  text-align: center;
+  letter-spacing: 0.05rem;
+}
+
+.generate-bg {
   background-color: white !important;
+  border-radius: 8px;
+  border: 3px solid #187a35 !important;
+}
+
+.col-card {
+  padding-top: 5% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: auto !important;
+}
+
+.col-emp {
+  border-bottom-left-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  background-color: #fef8ea !important;
+  border: 2px solid #7a1818 !important;
+}
+
+.col-emppayslip {
+  border-bottom-left-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  background-color: white !important;
+  border: 2px solid #7a1818 !important;
+}
+
+.col-start {
+  background-color: #7a1818 !important;
+  color: white !important;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  text-align: center;
+}
+
+.present-number {
   color: #7a1818 !important;
 }
 
-.card-payroll {
- background-image: url(/images/img/card-payroll.png);
- background-position: center;
- background-repeat: no-repeat;
- background-size: cover;
- border: 2px solid #7a1818 !important;
+.bi-pc-display {
+  font-size: 100px;
+  opacity: 0.1;
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.card-work {
-  border: 2px solid #7a1818 !important;
- }
+.bxs-bed {
+  font-size: 120px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 3px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-.employee-label {
+.bxs-calendar-x, .bxs-tree, .bxs-calendar-check {
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-suitcase-fill {
+  font-size: 100px;
+  opacity: 0.1;
+  position: absolute;
+  top: 63%;
+  right: 1px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bxs-time {
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 65%;
+  right: 4px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-person-fill-check {
+  color: #7a1818 !important;
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 42%;
+  right: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-person-fill-x {
+  color: #7a1818 !important;
+  font-size: 110px;
+  opacity: 0.1;
+  position: absolute;
+  top: 56%;
+  right: 14px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-clock-history, .bi-clock-fill {
+  color: #7a1818 !important;
+  font-size: 95px;
+  opacity: 0.1;
+  position: absolute;
+  top: 62%;
+  right: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bi-person-fill {
+  font-size: 18px;
+}
+
+label.custom-cursor-default-hover #text {
+  display: none !important;
+}
+
+
+#nav-profile-tab.nav-link.generate-profile.active,
+#nav-payslip-tab.nav-link.generate-payslip.active,
+#nav-date-tab.nav-link.generate-date.active,
+#nav-deductions-tab.nav-link.generate-deduction.active,
+#nav-holidays-tab.nav-link.generate-holiday.active   {
+  background-color: white !important;
+  color: #4d4943 !important;
+  border-top: 2px solid #EBE3D5 !important;
+  border-left: 2px solid #EBE3D5 !important;
+  border-right: 2px solid #EBE3D5 !important;
+}
+
+#nav-profile.tab-pane.fade.show.tab-content-admin.active,
+#nav-payslip.tab-pane.fade.show.tab-content-admin.active,
+#nav-date.tab-pane.fade.show.tab-content-admin.active,
+#nav-deductions.tab-pane.fade.show.tab-content-admin.active,
+#nav-#nav-holidays.tab-pane.fade.show.tab-content-admin.active  {
+  background-color: white !important;
+  color: #7a1818 !important;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+#nav-attendance-tab.nav-link.teamlead-attendance.active,
+#nav-missed-logs-tab.nav-link.teamlead-misslog.active    {
+  background-color: #7a1818 !important;
+  color: white !important;
+  border-top: 2px solid #7a1818 !important;
+  border-left: 2px solid #7a1818 !important;
+  border-right: 2px solid #7a1818 !important;
+}
+
+
+#nav-attendance-tab.nav-link.teamlead-attendance,
+#nav-missed-logs-tab.nav-link.teamlead-misslog {
+  background-color: #fef8ea !important;
+  color: #7a1818 !important;
+  border-top: 2px solid #d4be88 !important;
+  border-left: 2px solid #d4be88 !important;
+  border-right: 2px solid #d4be88 !important;
+}
+
+.missedlog-searchbar {
+  border-radius: 6px;
+  border: 2px solid #fef8ea !important;
+}
+
+
+.card-border {
+  border-left: 2px solid #EBE3D5 !important;
+  border-bottom: 2px solid #EBE3D5 !important;
+  border-right: 2px solid #EBE3D5 !important;
+  border-top: 2px white !important;
+}
+
+
+.payroll-label {
+  color: #7a1818 !important;
+  font-weight: bold;
+  text-align: center;
+  font-style: italic;
+}
+
+.payroll-number {
+  color: black !important;
+  text-align: center;
+  font-weight: bold;
+}
+
+.payslipcard {
+  margin-top: 8% !important;
+}
+
+/* .card-work {
+  border: 2px solid #7a1818 !important;
+ } */
+
+/* .employee-label {
   color: #7a1818 !important;
   font-family: Georgia;
   font-weight: bold;
@@ -1880,20 +2201,18 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 .position-label, .department-label {
   color: rgb(90, 89, 89) !important;
   font-weight: 600;
-}
+} */
 
 .img-generate-pdf {
-  height: 20px;
-  width: 20px;
+  height: 2rem;
+  width: 2rem;
 }
 
 .a-pdf {
-  margin-right: 5px;
-  color: red !important;
-  font-size: small;
-  text-decoration: none;
-  font-weight: bold;
-  font-weight: 'Calibri';
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+    color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .a-pdf:hover {
@@ -1901,12 +2220,10 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .a-excel {
-  margin-left: 5px;
-  color: green !important;
-  font-size: small;
-  text-decoration: none;
-  font-weight: bold;
-  font-weight: 'Calibri';
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+    color: rgb(22 163 74 / var(--tw-text-opacity));
 }
 
 .a-excel:hover {
@@ -1914,8 +2231,8 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .img-generate-excel {
-  height: 18px;
-  width: 18px;
+  height: 1.75rem;
+  width: 1.75rem;
 }
 
 .cell-work {
@@ -1924,7 +2241,7 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
 }
 
 .cell-rest {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
 }
 .p-work, .p-number {
   color: white !important;
@@ -1945,6 +2262,10 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
   color: #7a1818 !important;
 }
 
+.hr-table {
+  color: white !important;
+}
+
 .date-range {
   color: #7a1818 !important;
   font-family: Georgia;
@@ -1954,68 +2275,259 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
   text-align: center;
 }
 
+
 .payslipname {
-  font-family: Arial, Helvetica, sans-serif;
-  color: rgb(0, 0, 0) !important;
+  color: black !important;
   margin-top: 5% !important;
+  font-size: 14px;
+  font-weight: 700 !important;
 }
 
 .empnamepayslip {
-  border-bottom: 1px solid rgb(0, 0, 0) !important;
-  font-weight: bolder;
-  font-size: xx-large;
+  border-bottom: 1px solid black !important;
+  font-weight: 700 !important;
 }
 
-/* .payslip-thead {
-  background-color: gray !important;
-} */
+.retroempadjust {
+  border-bottom: 1px solid black !important;
+  font-weight: 700 !important;
+  color: green !important;
+}
+
+.authorised-sign {
+  color: black !important;
+  font-weight: 700 !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 12px;
+}
 
 .payslip {
+  font-weight: 700 !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  letter-spacing: 0.05em;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+
+}
+
+
+.payslipemp {
+  text-align: center;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
+}
+
+.payslip-type {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.paysliptype-span {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
+}
+
+.payslip-date {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.printed-slip {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-top: 1rem;
+  gap: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.datepayroll {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.date-span {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity)) !important;
+}
+
+.payslip-profile {
+  margin-top: 1rem;
+  display: flex;
+  flex-grow: 1;
+}
+
+.payslip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.payslip-empid,
+.payslip-empname,
+.payslip-sss,
+.payslip-tin,
+.payslip-philhealth,
+.payslip-pagibig {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.payslip-position,
+.payslip-dept,
+.payslip-remaining,
+.payslip-accrued {
+  font-weight: 700 !important;
+  letter-spacing: 0.025em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.empid-span,
+.empname-span,
+.position-span,
+.dept-span,
+.remain-span,
+.accrued-span,
+.sss-span,
+.tin-span,
+.philhealth-span, 
+.pagibig-span {
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.payslip-table {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(122 24 24 / var(--tw-bg-opacity)) !important;
+  --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+th.payslip-color, td.payslip-color {
+  text-transform: uppercase;
+  font-weight: 700 !important;
   color: black !important;
-  font-family: Georgia;
-  font-size: 18px;
-  padding: 2px;
-  margin-top: 5%;
+  --tw-bg-opacity: 1;
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity)) !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border: 1px solid white !important;
+  font-size: 12px;
+}
+
+
+
+.total-table {
+  text-transform: uppercase;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+  --tw-bg-opacity: 1;
+  background-color: rgb(171 93 93 / var(--tw-bg-opacity)) !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 700 !important;
+  font-size: 12px;
+}
+
+.total-table-td {
+  text-transform: uppercase;
+  font-weight: 700 !important;
+  --tw-text-opacity: 1;
+    color: rgb(37 99 235 / var(--tw-text-opacity)) !important;
+    --tw-bg-opacity: 1;
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity)) !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.netpay-total {
+  --tw-bg-opacity: 1;
+    background-color: rgb(187 247 208 / var(--tw-bg-opacity)) !important;
+    border: 2px solid #16a34a !important ;
+    padding: 0.5rem;
+}
+
+.img-retropay {
+  font-weight: 700 !important;
 }
 
 .company-img {
-  width: 55px;
-  height: 55px;
+  width: 4rem;
+  height: 4rem;
 }
 
 .companyname {
-  font-family: Arial;
-  font-weight: bold;
-  font-size: 13px;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-weight: 700 !important;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding-top: 1rem;
 }
 
-.table .payslip-color {
+
+
+
+/* .table .payslip-color {
   background-color: #7a1818 !important;
-}
+} */
 
 .table .date-range-table {
   background-color: #7a1818 !important;
   border: 1px solid #5f0f0f !important;
 }
 
-.earning-table {
+/* .earning-table {
   background-color: rgb(252, 190, 190) !important;
   color: black !important;
   border: 1px solid white !important;
   font-weight: bolder;
-}
+} */
 
-.total-table {
+/* .total-table {
   background-color: rgb(171, 93, 93) !important;
   color: white !important;
   border: 1px solid white !important;
   font-weight: bolder;
-}
+} */
 
-.total-table-td {
+/* .total-table-td {
   background-color: rgb(252, 190, 190) !important;
   color: black !important;
-  /* border: 1px solid black !important; */
   font-weight: bolder;
 }
 
@@ -2023,7 +2535,7 @@ div#nav-tab.nav.nav-tabs, .ch-generate {
   border: 2px solid green !important;
   background-color: rgb(198, 241, 198) !important;
   padding: 5px;
-}
+} */
 
 .netpay-words {
   border: 2px solid #7a1818 !important;
@@ -2119,16 +2631,17 @@ div.drp-buttons {
   font-family: Arial;
   font-size: 15px;
   padding: 10% !important;
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
 }
 
 .btn-out-body {
-  background-color: red !important;
+  background-color: rgb(206, 3, 3) !important;
+  border: 2px solid rgb(248, 65, 65) !important;
   color: white !important;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-weight: bold;
   padding: 5px;
-  font-size: 16px;
-  border: 1px solid lightslategray !important;
+  font-size: 12px;
 }
 
 /* .btn-logout-cancel {
@@ -2176,7 +2689,7 @@ div.drp-buttons {
 }
 
 .settings-acc:hover, .settings-pw:hover {
-  background: #fef8ea !important;
+  background: #fcf7eb !important;
   color: #881a1a !important;
   font-weight: 600;
   font-family: Arial;
@@ -2186,7 +2699,7 @@ div.drp-buttons {
   box-shadow: 0 4px 8px 0 rgb(47, 48, 48) !important;
 }
 .settings-body {
-  /* background-color: #fef8ea !important; */
+  /* background-color: #fcf7eb !important; */
   background-image: url(/images/img/settings.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -2229,8 +2742,7 @@ div.drp-buttons {
   background-color: #00A9FF !important;
   color: white !important;
   font-family: 'Arial';
-  border: 2px solid #fef8ea !important;
-  text-shadow: 1px 1px 1px black !important;
+  border: 2px solid #fcf7eb !important;
   font-weight: bold !important;
   letter-spacing: 1px;
   font-size: 12px !important;
@@ -2245,8 +2757,7 @@ div.drp-buttons {
   background-color: #E74646 !important;
   color: white !important;
   font-family: 'Arial';
-  border: 2px solid #fef8ea !important;
-  text-shadow: 1px 1px 1px black !important;
+  border: 2px solid #fcf7eb !important;
   font-weight: bold !important;
   letter-spacing: 1px;
   font-size: 12px !important;
@@ -2258,176 +2769,141 @@ div.drp-buttons {
 }
 
 /* Employee / Job Status */
-.regular-status {
-    color: darkgreen !important;
-    background-color: rgb(186, 243, 186) !important;
-    border-radius: 8px;
-    padding: 5px;
+.regular-status, .active-status, .restday, .approved-status, .finished-status, .paid-status, .Claimed-status {
+    color: #0f8027 !important;
+    background-color: #aefcd7 !important;
+    border-radius: 6px;
+    padding: 6px;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 10px;
-    border: 1px solid green !important;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 12px;
     letter-spacing: 1px;
 }
 
-.probationary-status {
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(170, 170, 10) !important;
-  letter-spacing: 1px;
-}
 
-.project-based-status {
-  color: rgb(143, 10, 143) !important;
-  background-color: rgb(246, 197, 246) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid darkmagenta !important;
-  letter-spacing: 1px;
-}
-
-.apprentice-status{
-  color: rgb(0, 123, 139) !important;
-  background-color: lightcyan !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(16, 178, 203) !important;
-  letter-spacing: 1px;
-}
-
-/*Training / Status*/
-.active-status {
-  color: darkgreen !important;
-    background-color: rgb(186, 243, 186) !important;
-    border-radius: 8px;
+.inactive-status, .resigned-status, .rejected-status, .unpaid-status, .Unclaimed-status, .absent {
+  color: #800f0f !important;
+    background-color: #fcaeae !important;
+    border-radius: 6px;
     padding: 5px;
     text-transform: uppercase;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
-    font-size: 10px;
-    border: 1px solid green !important;
+    font-size: 12px;
     letter-spacing: 1px;
 }
 
-.inactive-status {
-  color: darkred !important;
-    background-color: rgb(243, 186, 186) !important;
-    border-radius: 8px;
-    padding: 5px;
+.probationary-status, .exempted, .lifted-status, .sss-idtype, .applied-status, .incoming-status, .normal-day {
+  color: #0f5c80 !important;
+  background-color: #aee3fc !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.project-based-status, .health-card-idtype, .cancelled-status, .idtype-text, .clear-status, .nonworking {
+  color: #0f8077 !important;
+    background-color: #aefcf5 !important;
+    border-radius: 6px;
+    padding: 6px;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 10px;
-    border: 1px solid red !important;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 12px;
     letter-spacing: 1px;
 }
 
-.sss-idtype {
+
+.apprentice-status, .clear-status {
   color: white !important;
-  background-color: rgb(20, 102, 179) !important;
-  border-radius: 8px;
+  background-color: #f15c06 !important;
+  border-radius: 5px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(2, 84, 116) !important;
+  border: 2px solid #c04802 !important;
   letter-spacing: 1px;
 }
+
+
+
 
 .philhealth-idtype {
   color: yellow !important;
   background-color: rgb(17, 125, 15) !important;
-  border-radius: 8px;
-  padding: 5px;
+  border-radius: 5px;
+  padding: 6px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid green !important;
   letter-spacing: 1px;
 }
 
 .pagibig-idtype {
   color: rgb(244, 244, 4) !important;
   background-color: rgb(16, 30, 138) !important;
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(6, 6, 120) !important;
   letter-spacing: 1px;
 }
 
 .tin-idtype {
   color: white !important;
   background-color: rgb(204, 43, 43) !important;
-  border-radius: 8px;
+  border-radius: 5px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 10px;
-  border: 1px solid rgb(143, 10, 10) !important;
   letter-spacing: 1px;
 }
 
-.health-card-idtype {
-  color: #365d12 !important;
-  background: linear-gradient(90deg, #9BCF53, #BFEA7C) !important;
-  border-radius: 8px;
+.terminated-status, .adjourned-status, .pending-status {
+  color: #806f0f !important;
+  background-color: #fcf4ae !important;
+  border-radius: 6px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid #416D19 !important;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
   letter-spacing: 1px;
 }
 
-.resigned-status {
-  color: white !important;
-  background-color: rgb(200, 13, 13) !important;
-  border-radius: 8px;
+.end_of_contract-status, .regularholiday {
+  color: #55800f !important;
+  background-color: #defcae !important;
+  border-radius: 6px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(246, 106, 106) !important;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
   letter-spacing: 1px;
 }
 
-.terminated-status {
-  color: white !important;
-  background-color: rgb(17, 155, 116) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
+
+.approver-teamlead {
+  text-decoration: underline;
+  white-space: nowrap;
+  font-family: serif;
+}
+
+.authorised-approver {
   font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(7, 105, 77) !important;
-  letter-spacing: 1px;
+  font-style: italic;
 }
 
-.end_of_contract-status {
-  color: white !important;
-  background-color: rgb(14, 128, 14) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid darkgreen!important;
-  letter-spacing: 1px;
-}
-
-.awol-status {
+/* .awol-status {
   color: white !important;
   background-color: rgb(77, 72, 72) !important;
   border-radius: 8px;
@@ -2436,80 +2912,6 @@ div.drp-buttons {
   font-weight: bold;
   font-size: 10px;
   border: 1px solid darkgray!important;
-  letter-spacing: 1px;
-}
-
-
-.restday {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.exempted {
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(143, 143, 14) !important;
-  letter-spacing: 1px;
-}
-
-.startdate-text{
-  color: #0a80c9 !important;
-  background-color: #aef1fd !important;
-  border-radius: 8px;
-  border: 1px darkblue !important;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid #1c90d8 !important;
-  letter-spacing: 1px;
-}
-
-.enddate-text {
-  color: #ae0909 !important;
-  background-color: #faaaaa !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid #df3333 !important;
-  letter-spacing: 1px;
-}
-
-.hiredate-text {
-  color: white !important;
-  background-color: #56a916 !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid #47900f !important;
-  letter-spacing: 1px;
-}
-
-.idnumber-text {
-  color: rgb(73, 73, 5) !important;
-  background-color: #faf3cf !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(180, 177, 9) !important;
   letter-spacing: 1px;
 }
 
@@ -2608,21 +3010,9 @@ div.drp-buttons {
   font-size: 10px;
   border: 1px solid rgb(180, 177, 9) !important;
   letter-spacing: 1px;
-}
+} */
 
-.pending-requeststatus {
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(183, 183, 19) !important;
-  letter-spacing: 1px;
-}
-
-.approved-requeststatus {
+/* .Claimed-status {
   color: darkgreen !important;
   background-color: rgb(186, 243, 186) !important;
   border-radius: 8px;
@@ -2632,30 +3022,6 @@ div.drp-buttons {
   font-size: 10px;
   border: 1px solid green !important;
   letter-spacing: 1px;
-}
-
-.Claimed-status {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.cancel-requeststatus {
-  color: darkred !important;
-    background-color: rgb(243, 186, 186) !important;
-    border-radius: 8px;
-    padding: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 10px;
-    border: 1px solid red !important;
-    letter-spacing: 1px;
 }
 
 .Unclaimed-status {
@@ -2668,127 +3034,7 @@ div.drp-buttons {
     font-size: 10px;
     border: 1px solid red !important;
     letter-spacing: 1px;
-}
-
-.monthly-text {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.allowances-text {
-  color: rgb(73, 73, 5) !important;
-  background-color: #faf3cf !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(180, 177, 9) !important;
-  letter-spacing: 1px;
-}
-
-.approved-status {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.cancelled-status {
-  color: darkred !important;
-    background-color: rgb(243, 186, 186) !important;
-    border-radius: 8px;
-    padding: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 10px;
-    border: 1px solid red !important;
-    letter-spacing: 1px;
-}
-
-.amount-text {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.sss-type {
-  color: white !important;
-  background-color: rgb(20, 102, 179) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(2, 84, 116) !important;
-  letter-spacing: 1px;
-}
-
-.philhealth-type{
-  color: yellow !important;
-  background-color: rgb(17, 125, 15) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.tin-type {
-  color: white !important;
-  background-color: rgb(204, 43, 43) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(143, 10, 10) !important;
-  letter-spacing: 1px;
-}
-
-.pagibig-type {
-  color: rgb(244, 244, 4) !important;
-  background-color: rgb(16, 30, 138) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(6, 6, 120) !important;
-  letter-spacing: 1px;
-}
-
-.idtype-text {
-  color: #365d12 !important;
-  background: linear-gradient(90deg, #9BCF53, #BFEA7C) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid #416D19 !important;
-  letter-spacing: 1px;
-}
+} */
 
 .payroll_startdate-text {
   color: #0a80c9 !important;
@@ -2827,18 +3073,6 @@ div.drp-buttons {
   letter-spacing: 1px;
 }
 
-.pending-status{
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(146, 146, 14) !important;
-  letter-spacing: 1px;
-}
-
 .cancel-status {
   color: darkred !important;
   background-color: rgb(243, 186, 186) !important;
@@ -2848,30 +3082,6 @@ div.drp-buttons {
   font-weight: bold;
   font-size: 10px;
   border: 1px solid red !important;
-  letter-spacing: 1px;
-}
-/* 
-.approved-status {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-} */
-
-.rejected-status {
-  color: white !important;
-  background-color: rgb(204, 43, 43) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(143, 10, 10) !important;
   letter-spacing: 1px;
 }
 
@@ -2909,42 +3119,6 @@ div.drp-buttons {
   font-weight: bold;
   font-size: 10px;
   border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.finished-status {
-  color: darkgreen !important;
-  background-color: rgb(186, 243, 186) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid green !important;
-  letter-spacing: 1px;
-}
-
-.incoming-status {
-  color: darkgoldenrod !important;
-  background-color: rgb(248, 248, 169) !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 10px;
-  border: 1px solid rgb(183, 183, 19) !important;
-  letter-spacing: 1px;
-}
-
-.idnumber1-text {
-  color: rgb(73, 73, 5) !important;
-  background-color: #faf3cf !important;
-  border-radius: 8px;
-  padding: 5px;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 9.5px;
-  border: 1px solid rgb(180, 177, 9) !important;
   letter-spacing: 1px;
 }
 
@@ -3162,9 +3336,9 @@ div.drp-buttons {
 } */
 
 .title-card-table {
-  font-family: 'Times New Roman';
+  font-weight: bold;
   color: white !important;
-  margin-bottom: 2% !important;
+  letter-spacing: 1px;
 }
 
 .text-gray-500#viewbtn {
@@ -3205,7 +3379,7 @@ span#viewbtn {
 }
 
 .bank-body {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
 }
 
 .bank-card-title {
@@ -3267,7 +3441,7 @@ align-items: center;
 }
 
 .body-color {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
 }
 
 .header-bg {
@@ -3283,11 +3457,11 @@ align-items: center;
 }
 
 .card-size2 {
-  margin-top: 30px;
   margin-left: 25px;
   margin-right: 25px;
   margin-bottom: 25px;
 }
+
 
 
 

@@ -89,10 +89,8 @@
         ],
         createdRow: function (row, data, dataIndex) {
           var idtypeCell = $(row).find("td:eq(3)");
-          var amountCell = $(row).find("td:eq(4)");
 
           idtypeCell.wrapInner("<span class='idtype-text'></span>");
-          amountCell.wrapInner("<span class='amount-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
