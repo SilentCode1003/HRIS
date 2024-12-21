@@ -30,6 +30,8 @@ const {
   GetCurrentDatetime,
   UpdateStatement,
   GetCurrentDatetimeSecconds,
+  GetCurrentMonthFirstDay,
+  GetCurrentMonthLastDay,
 } = require("./repository/customhelper");
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
@@ -2149,6 +2151,8 @@ router.post("/filterforapp", verifyJWT, (req, res) => {
 router.post("/loadrdot", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `
         SELECT 
             roa_rdotid,
@@ -2162,6 +2166,7 @@ router.post("/loadrdot", verifyJWT, (req, res) => {
             DATE_FORMAT(roa_createdate, '%Y-%m-%d %H:%i:%s') AS roa_createdate
         FROM restday_ot_approval
         WHERE roa_employeeid = '${employeeid}'
+        AND roa_attendancedate BETWEEN '${startdate}' AND '${enddate}'
         ORDER BY roa_rdotid DESC`;
 
     Select(sql, (err, result) => {
@@ -2482,6 +2487,53 @@ router.post("/cancelrdot", verifyJWT, (req, res) => {
   }
 });
 
+router.post("/filterrdot", (req, res) => {
+  try {
+
+    const { employeeid, status, startdate, enddate } = req.body;
+
+    console.log(employeeid, status, startdate, enddate );
+    
+    let sql = `
+        SELECT 
+            roa_rdotid,
+            DATE_FORMAT(roa_attendancedate, '%Y-%m-%d') AS roa_attendancedate,
+            DAYNAME(roa_attendancedate) AS roa_dayname,
+            DATE_FORMAT(roa_timein, '%H:%i:%s') AS roa_timein,
+            DATE_FORMAT(roa_timeout, '%H:%i:%s') AS roa_timeout,
+            roa_total_hours,
+            roa_status,
+            roa_admin_comment,
+            DATE_FORMAT(roa_createdate, '%Y-%m-%d %H:%i:%s') AS roa_createdate
+        FROM restday_ot_approval
+        WHERE roa_employeeid = '${employeeid}'`;
+
+
+        if(status){
+            sql += ` AND roa_status = '${status}'`
+        }
+
+        sql += ` AND roa_attendancedate BETWEEN '${startdate}' AND '${enddate}'
+        ORDER BY roa_rdotid DESC`
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "roa_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -2491,6 +2543,8 @@ router.post("/cancelrdot", verifyJWT, (req, res) => {
 router.post("/loadholiday", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `select 
     ph_holidayid,
     DATE_FORMAT(ph_attendancedate, '%Y-%m-%d, %W') as ph_attendancedate,
@@ -2503,6 +2557,7 @@ router.post("/loadholiday", verifyJWT, (req, res) => {
     ph_normal_ot_total
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
+    and ph_attendancedate between '${startdate}' and '${enddate}'
     order by ph_attendancedate asc`;
 
     Select(sql, (err, result) => {
@@ -2610,6 +2665,49 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/filterholiday", verifyJWT, (req, res) => {
+  try {
+    const {employeeid, status,startdate,  enddate} = req.body;
+    let sql = `select 
+    ph_holidayid,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d, %W') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
+    ph_holidaytype,
+    ph_total_hours,
+    ph_status,
+    ph_nightdiff_ot_total,
+    ph_normal_ot_total
+    from payroll_holiday
+    where ph_employeeid = '${employeeid}'
+    `;
+
+    if(status){
+      sql += ` and ph_status = '${status}'`;
+    }
+
+    sql += ` and ph_attendancedate between '${startdate}' and '${enddate}'
+    order by ph_attendancedate desc`
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.error(error);
     res.json(JsonErrorResponse(error));
   }
 });
@@ -6787,6 +6885,8 @@ router.post("/cancelot", verifyJWT, (req, res) => {
 router.post("/loadotmeal", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
     oma_mealid,
     DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
@@ -6799,7 +6899,8 @@ router.post("/loadotmeal", verifyJWT, (req, res) => {
     FROM  ot_meal_allowances
     INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
     WHERE oma_employeeid = '${employeeid}'
-    AND oma_status in ('Pending', 'Applied', 'Approved','Rejected', 'Cancel')`;
+    AND oma_attendancedate BETWEEN '${startdate}' AND '${enddate}'
+    ORDER BY oma_attendancedate DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -7153,6 +7254,48 @@ router.post("/cancelotmeal", verifyJWT, (req, res) => {
   }
 });
 
+router.post("/filterotmeal", verifyJWT, (req, res) => {
+  try {
+    const {employeeid, status, startdate, enddate} = req.body;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    `;
+
+    if(status ){
+      sql += ` AND oma_status = '${status}'`;
+    }
+
+    sql += `AND oma_attendancedate BETWEEN '${startdate}' AND '${enddate}'
+    ORDER BY oma_attendancedate DESC`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -7263,11 +7406,14 @@ router.post("/loadleavetypeforapp", verifyJWT, (req, res) => {
 router.post("/getleave", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT *,
         ml_leavetype
         FROM leaves
         INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
         WHERE l_employeeid = '${employeeid}'
+        AND l_leavesstartdate BETWEEN '${startdate}' AND '${enddate}'
         ORDER BY l_leaveid DESC`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
@@ -7446,6 +7592,42 @@ router.post("/cancelLeave", verifyJWT, async (req, res) => {
   } catch (error) {
     console.error("Error in /cancelLeave route: ", error);
     res.json({ msg: "error" });
+  }
+});
+
+router.post("/filterleave", verifyJWT, (req, res) => {
+  try {
+    const {employeeid, status, startdate, enddate} = req.body;
+    let sql = `SELECT *,
+        ml_leavetype
+        FROM leaves
+        INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
+        WHERE l_employeeid = '${employeeid}'
+        `;
+
+
+        if(status){
+           sql += ` AND l_leavestatus = '${status}'`;
+        }
+
+        sql += ` AND l_leavesstartdate BETWEEN '${startdate}' AND '${enddate}'
+        ORDER BY l_leaveid DESC`
+
+
+
+    mysql.Select(sql, "Leaves", (err, result) => {
+      if (err) console.error("Error: ", err);
+
+      res.json({
+        msg: "success",
+        data: result,
+      });
+    });
+  } catch (error) {
+    res.json({
+      msg: "error",
+      error,
+    });
   }
 });
 
