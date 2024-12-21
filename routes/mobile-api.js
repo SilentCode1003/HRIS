@@ -2526,8 +2526,8 @@ router.post("/loadholiday", verifyJWT, (req, res) => {
 
 router.put("/editholiday", verifyJWT, (req, res) => {
   try {
-    let createdby = req.body.fullname;
     let createddate = GetCurrentDatetime();
+    let approvecount = 0;
     const {
       holidayid,
       status,
@@ -2540,92 +2540,80 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       employeeid,
     } = req.body;
 
-    let data = [];
-    let columns = [];
-    let arguments = [];
+    console.log(req.body);
 
-    if (createdby) {
-      data.push(createdby);
-      columns.push("createby");
-    }
+    let sql = `call hrmis.UpdateRequestHoliday(
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${status}',
+      '${subgroup}',
+      '${holidayimage}',
+      '${createddate}',
+      '${approvecount}',
+      '${holidayid}')`;
 
-    if (createddate) {
-      data.push(createddate);
-      columns.push("createdate");
-    }
-
-    if (status) {
-      data.push(status);
-      columns.push("status");
-    }
-
-    if (clockin) {
-      data.push(clockin);
-      columns.push("timein");
-    }
-
-    if (clockout) {
-      data.push(clockout);
-      columns.push("timeout");
-    }
-
-    if (attendancedate) {
-      data.push(attendancedate);
-      columns.push("attendancedate");
-    }
-
-    if (payrolldate) {
-      data.push(payrolldate);
-      columns.push("payrolldate");
-    }
-
-    if (holidayimage) {
-      data.push(holidayimage);
-      columns.push("file");
-    }
-
-    if (subgroup) {
-      data.push(subgroup);
-      columns.push("subgroupid");
-    }
-
-    if (holidayid) {
-      data.push(holidayid);
-      arguments.push("holidayid");
-    }
-
-    let updateStatement = UpdateStatement(
-      "payroll_holiday",
-      "ph",
-      columns,
-      arguments
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Applied'`,
+      [attendancedate, employeeid]
     );
 
-    let checkStatement = SelectStatement(
-      "select * from payroll_holiday where ph_employeeid = ? and ph_attendancedate = ? and ph_status = ?",
-      [employeeid, attendancedate, status]
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Approved'`,
+      [attendancedate, employeeid]
     );
-
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
-            res.json(JsonSuccess());
-          });
+    
+    Check(validationQuery2)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDOT)
+          );
         }
+        return Check(validationQuery3);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDOT)
+          );
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: createddate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: status,
+                status: status,
+                requesttype: REQUEST.HD,
+              },
+            ];
+            SendEmailNotification(employeeid, subgroup, REQUEST.HD, emailbody);
+
+            //res.json(JsonSuccess());
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 //#endregion
 
