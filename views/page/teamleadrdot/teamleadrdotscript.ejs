@@ -77,34 +77,43 @@
           ],
           createdRow: function (row, data, dataIndex) {
             // //miyaka
-            // var overtimestatusCell = $(row).find("td:eq(8)");
+            var statusCell = $(row).find("td:eq(7)");
   
-            // var overtimestatusText = data.overtimestatus;
+            var statusText = data.status;
   
-            // var overtimestatusClass = "";
+            var statusClass = "";
   
-            // switch (overtimestatusText.toLowerCase()) {
-            //   case "approved":
-            //     overtimestatusClass = "approved-status";
-            //     break;
-            //   case "cancel":
-            //     overtimestatusClass = "cancel-status";
-            //     break;
-            //   case "pending":
-            //     overtimestatusClass = "pending-status";
-            //     break;
-            //   default:
-            //     overtimestatusClass = "";
-            // }
+            switch (statusText.toLowerCase()) {
+              case "approved":
+                statusClass = "approved-status";
+                break;
+              case "cancel":
+                statusClass = "cancel-status";
+                break;
+              case "pending":
+                statusClass = "pending-status";
+                break;
+                case "rejected":
+                statusClass = "rejected-status";
+                break;
+                case "applied":
+                statusClass = "applied-status";
+                break;
+              default:
+                statusClass = "";
+            }
   
-            // overtimestatusCell.html(
-            //   `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
-            // );
+            statusCell.html(
+              `<span class="${statusClass}">${statusText}</span>`
+            );
+
+
             $("td", row).each(function (index) {
               this.style.textAlign = "center";
               this.style.verticalAlign = "middle";
             });
           },
+          
           initComplete: function () {},
         });
       }

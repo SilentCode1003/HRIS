@@ -94,14 +94,31 @@
             { data: "action" },
           ],
           createdRow: function (row, data, dataIndex) {
-            var statusCell = $(row).find("td:eq(6)");
-            statusCell.wrapInner("<span class='approved-status'></span>");
-  
-            $("td", row).each(function (index) {
-              this.style.textAlign = "center";
-              this.style.verticalAlign = "middle";
-            });
-          },
+          //miyaka
+          var statusCell = $(row).find("td:eq(6)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
   
           initComplete: function () {},
         });
@@ -302,12 +319,12 @@
   
                 switch (statusText) {
                   case "PAID":
-                    statusClass = "active-status";
+                    statusClass = "paid-status";
   
                     totalAmountPaid += parseFloat(item.per_month);
                     break;
                   case "NOT PAID":
-                    statusClass = "pending-status";
+                    statusClass = "unpaid-status";
                     break;
                   default:
                     statusClass = "";

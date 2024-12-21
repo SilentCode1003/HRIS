@@ -103,18 +103,18 @@
           var sundayClass = "";
 
           switch (mondayText.toLowerCase()) {
-            case "00:00:00":
-              mondayClass = "restday-monday";
+            case "restday":
+              mondayClass = "restday";
               break;
             case "exempted":
-              mondayClass = "exempted-monday";
+              mondayClass = "exempted";
               break;
             default:
               mondayClass = "";
           }
 
           switch (tuesdayText.toLowerCase()) {
-            case "00:00:00":
+            case "restday":
               tuesdayClass = "restday";
               break;
             case "exempted":
@@ -125,7 +125,7 @@
           }
 
           switch (wednesdayText.toLowerCase()) {
-            case "00:00:00":
+            case "restday":
               wednesdayClass = "restday";
               break;
             case "exempted":
@@ -136,7 +136,7 @@
           }
 
           switch (thursdayText.toLowerCase()) {
-            case "00:00:00":
+            case "restday":
               thursdayClass = "restday";
               break;
             case "exempted":
@@ -147,7 +147,7 @@
           }
 
           switch (fridayText.toLowerCase()) {
-            case "00:00:00":
+            case "restday":
               fridayClass = "restday";
               break;
             case "exempted":
@@ -158,7 +158,7 @@
           }
 
           switch (saturdayText.toLowerCase()) {
-            case "00:00:00":
+            case "restday":
               saturdayClass = "restday";
               break;
             case "exempted":

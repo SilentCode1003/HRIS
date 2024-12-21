@@ -84,22 +84,27 @@
           var requeststatusClass = "";
 
           switch (requeststatusText.toLowerCase()) {
-            case "pending":
-              requeststatusClass = "pending-requeststatus";
-              break;
             case "approved":
-              requeststatusClass = "approved-requeststatus";
+              requeststatusClass = "approved-status";
               break;
+
+            case "pending":
+              requeststatusClass = "pending-status";
+              break;
+
             case "cancel":
-              requeststatusClass = "cancel-requeststatus";
+              requeststatusClass = "cancelled-status";
               break;
+
+            case "rejected":
+              requeststatusClass = "rejected-status";
+              break;
+
             default:
               requeststatusClass = "";
           }
 
-          requeststatusCell.html(
-            `<span class="${requeststatusClass}">${requeststatusText}</span>`
-          );
+          requeststatusCell.html(`<span class="${requeststatusClass}">${requeststatusText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

@@ -126,20 +126,7 @@
           { data: "departmentname" },
           { data: "action" },
         ],
-
-        createdRow: function (row, data, dataIndex) {
-          //miyaka
-          var monthlyCell = $(row).find("td:eq(2)");
-          var allowancesCell = $(row).find("td:eq(3)");
-
-          monthlyCell.wrapInner("<span class='monthly-text'></span>");
-          allowancesCell.wrapInner("<span class='allowances-text'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+        
         initComplete: function () {
           console.log("Done");
         },
@@ -752,6 +739,9 @@
       }
     }
   }
+
+
+
 
   //#endregion
 </script>

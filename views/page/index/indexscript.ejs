@@ -1741,6 +1741,21 @@
       }
     });
 
+
+      //miyaka
+      function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+        case "approved":
+          return "approved-status";
+        case "cancel":
+          return "cancel-status";
+        case "pending":
+          return "pending-status";
+        default:
+          return "";
+      }
+    }
+
     //cashadvance section-->
     $(document).on("click", "#nav-ca-tab", function () {
       $("#dataTablecashrequest").find("tr:gt(0)").remove();
@@ -1794,7 +1809,8 @@
             REQUEST_DATE.innerHTML = item.requestdate;
             AMOUNT.innerHTML = item.amount;
             PURPOSE.innerHTML = item.purpose;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             ACTION.appendChild(action);
 
             $.each(

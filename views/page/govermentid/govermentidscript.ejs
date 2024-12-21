@@ -75,7 +75,6 @@
           //miyaka
           var statusCell = $(row).find("td:eq(8)");
           var idtypeCell = $(row).find("td:eq(3)");
-          var idnumberCell = $(row).find("td:eq(4)");
 
           var statusText = data.status;
           var idtypeText = data.idtype;
@@ -113,7 +112,6 @@
 
           statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
           idtypeCell.html(`<span class="${idtypeClass}">${idtypeText}</span>`);
-          idnumberCell.wrapInner("<span class='idnumber-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

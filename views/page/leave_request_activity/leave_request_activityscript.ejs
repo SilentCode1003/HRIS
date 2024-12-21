@@ -63,9 +63,30 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
-          var appnameCell = $(row).find("td:eq(2)");
+          var statusCell = $(row).find("td:eq(8)");
 
-          appnameCell.wrapInner("<span class='appname-text'></span>");
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "approved":
+              statusClass = "approved-status";
+              break;
+
+            case "pending":
+              statusClass = "pending-status";
+              break;
+
+            case "rejected":
+              statusClass = "rejected-status";
+              break;
+              
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";

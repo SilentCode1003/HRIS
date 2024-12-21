@@ -24,8 +24,8 @@
 }
 
 .value {
-  color: #7a1818;
-  font-style: italic;
+  color: black !important;
+  font-weight: 900;
 }
 
 .card-overtime {
@@ -326,11 +326,11 @@ table caption {
   margin: .5em 0 .75em;
 }
 
-table tr {
-  /* background-color: #f8f8f8; */
+/* table tr {
+  background-color: #f8f8f8;
   border: none !important;
   margin: 3px !important;
-}
+} */
 
 table td {
   text-align: center;
@@ -366,7 +366,7 @@ table th {
     font-size: 1.3em;
   }
 
-  table thead {
+  table thead  {
     border: none;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -376,6 +376,7 @@ table th {
     position: absolute;
     width: 1px;
   }
+
 
   table tr {
     border-bottom: 3px solid #ddd;

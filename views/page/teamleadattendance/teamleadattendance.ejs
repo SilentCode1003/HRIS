@@ -1,25 +1,46 @@
-<div class="row">
-    <div class="card">
-        <div class="card-header">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-attendance-tab" data-bs-toggle="tab" data-bs-target="#nav-attendace" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
-                        <b>Attendance</b>
-                    </button>
-                    <button class="nav-link" id="nav-missed-logs-tab" data-bs-toggle="tab" data-bs-target="#nav-missed-logs" type="button" role="tab" aria-controls="nav-home" aria-selected="false">
-                        <b>Missed Logs</b>
-                    </button>
-                </div>
-            </nav>
-        </div>
+<br>
+<br>
 
-        <div class="card-body">
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-attendace" role="tabpanel" aria-labelledby="nav-profile-tab"> 
-                    <div class="card" id="tablecard">
-                        <div class="card-header ch-coop">
-                            <h3 class="title-card-table">Attendance</h3>
-                            <div class="row g-4">
+<div class="row">
+    <nav>
+        <div class="nav nav-tabs gap-1" id="nav-tab" role="tablist">
+            <button class="nav-link teamlead-attendance active" id="nav-attendance-tab" data-bs-toggle="tab" data-bs-target="#nav-attendace"
+                type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                <b>Attendance</b>
+            </button>
+            <button class="nav-link teamlead-misslog" id="nav-missed-logs-tab" data-bs-toggle="tab" data-bs-target="#nav-missed-logs" type="button"
+                role="tab" aria-controls="nav-home" aria-selected="false">
+                <b>Missed Logs</b>
+            </button>
+        </div>
+    </nav>
+
+
+
+    <div class="tab-content" id="nav-tabContent">
+        <!-- attendance tab -->
+        <div class="tab-pane  fade show active " id="nav-attendace" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="card-header c-header py-4 px-4">
+                <h3 class="title-card-table py-2 mt-2">Attendance</h3>
+
+                <div class="row row-cols-2 d-flex attendance-teamlead">
+                    <div class="d-flex justify-content-start attendance-searchbar">
+                        <input id='myInput' type='text' placeholder="  Search....">
+                    </div>
+
+                    <div class="d-flex justify-content-end attendance-buttons">
+                        <div class="d-flex attendance-teamlead gap-4">
+                            <input id="datepicker" type="text" name="daterange">
+                            <button id="loaddate" class="btn btn-load-color"><b>Load</b></button>
+                            <button class="btn btn-per-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+                                <b>Export Per Employee</b>
+                            </button>
+                            <button id="reportsBtn" class="btn btn-export-color"><b>Attendance Reports</b></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                   
                                 <div class="col">
                                     <input id='myInput'  type='text' placeholder="  Search....">
                                 </div>
@@ -36,39 +57,55 @@
                                 </div>
                                 <div class="col-sm-2 col-add">
                                     <button id="reportsBtn" class="btn btn-export-color"><b>Attendance Reports</b></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive" id="table-responsive-id">
-                                <table class="table table-light table-bordered" id="dataTableattendance">
-                                    <thead>
-                                            <!-- <th>Image</th> -->
-                                            <th class="col-sm-1">ID</th>
-                                            <th class="col-25">Name</th>
-                                            <th>Date</th>
-                                            <th class="col-sm-1">Time In</th>
-                                            <th class="col-sm-1">Time Out</th>
-                                            <th>Device In</th>
-                                            <th>Device Out</th>
-                                            <th class="col-sm-1">Total Hours</th>
-                                            <th class="col-sm-1">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                </div> -->
+                <hr class="hr-table">
+
+
+                <div class="table-responsive" id="table-responsive-id">
+                    <table class="table table-striped-light" id="dataTableattendance">
+                        <thead>
+                            <!-- <th>Image</th> -->
+                            <th class="col-sm-1">ID</th>
+                            <th class="col-25">Name</th>
+                            <th>Date</th>
+                            <th class="col-sm-1">Time In</th>
+                            <th class="col-sm-1">Time Out</th>
+                            <th>Device In</th>
+                            <th>Device Out</th>
+                            <th class="col-sm-1">Total Hours</th>
+                            <th class="col-sm-1">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- missed logs tab -->
+        <div class="tab-pane fade" id="nav-missed-logs" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="card-header c-header py-4 px-4">
+                <h3 class="title-card-table py-2 mt-2">Missed Logs</h3>
+
+                <div class="row row-cols-2">
+                    <div class="d-flex justify-content-start attendance-buttons">
+                        <input class="missedlog-searchbar" id='missed-search' type='text' placeholder="  Search....">
+                    </div>
+
+                    <div class="d-flex justify-content-end attendance-buttons">
+                        <div class="d-flex misslog-teamlead gap-4">
+                            <input id="miss-log-datepicker" type="text" name="miss-log-datepicker">
+                            <div class="input-group-prepend">
+                                <button id="load-date-miss-log" class="btn btn-load-color"><b>Load</b></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="nav-missed-logs" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <div class="row">
-                        <div class="card-header ch-coop">
-                            <h3 class="title-card-table">Missed Logs</h3>
-                            <div class="row g-4">
-                                <div class="col-md-6">
+
+                <!-- <div class="col-md-6">
                                     <input class="form-control" id='missed-search'  type='text' placeholder="  Search....">
                                 </div>
                                 <div class="col">
@@ -78,31 +115,28 @@
                                             <button id="load-date-miss-log" class="btn btn-load-color"><b>Load</b></button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="tableresposive">
-                                <table class="table table-light table-bordered" id="datatable-misslogs">
-                                 <thead>
-                                    <tr>
-                                        <th>Attendance ID</th>
-                                        <th>Employee ID</th>
-                                        <th>Employee Name</th>
-                                        <th>Attendance Date</th>
-                                        <th>Clock In</th>
-                                        <th>Location In</th>
-                                        <th>Device In</th>
-                                        <th>Clock Out</th>
-                                        <th>Location Out</th>
-                                        <th>Device Out</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                                </div> -->
+
+
+                <hr class="hr-table">
+                <div class="table-responsive">
+                    <table class="table table-striped-light" id="datatable-misslogs">
+                        <thead>
+                            <tr>
+                                <th>Attendance ID</th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Attendance Date</th>
+                                <th>Clock In</th>
+                                <th>Location In</th>
+                                <th>Device In</th>
+                                <th>Clock Out</th>
+                                <th>Location Out</th>
+                                <th>Device Out</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -112,50 +146,49 @@
 <!--Export Employee Modal-->
 <div class="modal fade" id="openModalButton" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h1 class="modal-title" id="exampleModalLabel">Export Employee Attendance</h1>
-          <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <form>
-            <div class="row g-3">
-                <div class="col">
-                    <div class="form-floating">
-                      <select class="form-select border-form-modal" id="employeename" name="employeename"
-                        aria-label="Floating label select example">
-                        <option selected>Choose</option>
-                      </select>
-                      <label for="floatingSelectGrid">Select Employee</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-floating">
-                        <input id="datepickermodal" class="form-select border-form-modal" type="text" name="daterangemodal" />
-                        <label for="floatingSelectGrid">Select Date</label>
-                    </div>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h1 class="modal-title" id="exampleModalLabel">Export Employee Attendance</h1>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
-          </form>
+            <div class="modal-body" id="modal-body">
+                <form>
+                    <div class="d-flex flex-column gap-4">
+                        <div class="col">
+                            <div class="form-floating">
+                                <select class="form-select border-form-modal" id="employeename" name="employeename"
+                                    aria-label="Floating label select example">
+                                    <option selected>Choose</option>
+                                </select>
+                                <label for="floatingSelectGrid">Select Employee</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input id="datepickermodal" class="form-select border-form-modal" type="text" name="daterangemodal" />
+                                <label for="floatingSelectGrid">Select Date</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn teamlead-btn-download" id="exportemployeeattendance">Download</button>
+            </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-modal-upload" id="exportemployeeattendance">Download</button>
-        </div>
-      </div>
     </div>
 </div>
 
 <!--MODAL-->
 
-<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal"
-    aria-hidden="true">
+<div class="modal fade" id="editlogsmodal" tabindex="-1" role="dialog" aria-labelledby="totalCablingModal" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
                 <div>
                     <h1 class="modal-title" id="exampleModalToggleLabel">
-                       Logs
+                        Logs
                     </h1>
                 </div>
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
@@ -181,6 +214,8 @@
                     </table>
                 </div>
             </div>
+
+
             <div class="modal-footer" id="modal-footer">
                 <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
             </div>
