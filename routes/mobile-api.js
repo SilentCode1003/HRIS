@@ -2596,7 +2596,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       employeeid,
     } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
 
     let sql = `call hrmis.UpdateRequestHoliday(
       '${clockin}',
@@ -2641,7 +2641,6 @@ router.put("/editholiday", verifyJWT, (req, res) => {
             console.error(err);
             return res.json(JsonErrorResponse(err));
           } else {
-            console.log(insertResult);
             let emailbody = [
               {
                 employeename: employeeid,
