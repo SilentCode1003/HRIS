@@ -97,7 +97,7 @@ router.post("/leaveaction", (req, res) => {
       } else {
         const data = [
           [
-            employeeid,
+            employeeid[0].employeeid,
             departmentid,
             leaveid,
             subgroupid,
