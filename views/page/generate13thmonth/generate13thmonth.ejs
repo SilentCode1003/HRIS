@@ -308,3 +308,55 @@
 </div>
 </div>
 
+
+
+<!-- Payroll Adjustments Modal -->
+<div class="modal" id="proceedtopayrolladjustments" data-bs-backdrop="static" tabindex="-1" aria-labelledby="payrollAdjustmentsLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title" id="payrollAdjustmentsLabel">Payroll Adjustment</h3>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="d-flex align-items-center gap-4 justify-content-start">
+            <div class="d-flex flex-wrap">
+              <i class="bi bi-person-fill mr-2"></i>
+              <span>
+                <h5 class="img-retropay" id="adjustmentfname"></h5>
+              </span>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="mb-3">
+            <label for="payrollDateSelect" class="form-label">Select Payroll Date:</label>
+            <select class="form-select" id="payrollDateSelect">
+              <option selected disabled>Select a date</option>
+            </select>
+          </div>
+
+          <br>
+          <br>
+    
+            <div class="d-flex flex-column payslipname">
+              <center><span><h2 class="retroempadjust" id="totalretropaydiff"></h2></span></center>
+              <span class="text-center">Total 13th Month</span>
+            </div>
+         
+            <br>
+            <br>
+
+        
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-toggle="modal" data-bs-target="#viewretrodetails">Back</button>
+        <button type="button" class="btn btn-modal-save" id="addjustmentsaveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
