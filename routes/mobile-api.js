@@ -7414,7 +7414,7 @@ router.post("/getleave", verifyJWT, (req, res) => {
         FROM leaves
         INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
         WHERE l_employeeid = '${employeeid}'
-        AND l_leavesstartdate BETWEEN '${startdate}' AND '${enddate}'
+        AND l_leavestartdate BETWEEN '${startdate}' AND '${enddate}'
         ORDER BY l_leaveid DESC`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
