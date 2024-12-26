@@ -1800,6 +1800,8 @@ router.post("/getgovloans", verifyJWT, (req, res) => {
 router.post("/loadcoa", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
       ar_requestid,
       DATE_FORMAT(ar_attendace_date, '%Y-%m-%d, %W') as ar_attendace_date,
@@ -1812,7 +1814,9 @@ router.post("/loadcoa", verifyJWT, (req, res) => {
     FROM attendance_request
     INNER JOIN
     master_employee ON attendance_request.ar_employeeid = me_id
-    where ar_employeeid ='${employeeid}'`;
+    where ar_employeeid ='${employeeid}'
+    and ar_attendace_date between '${startdate}' and '${enddate}'
+    order by ar_requestid desc`;
 
     Select(sql, (err, result) => {
       if (err) {
