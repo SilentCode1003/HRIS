@@ -32,6 +32,7 @@ const {
   GetCurrentDatetimeSecconds,
   GetCurrentMonthFirstDay,
   GetCurrentMonthLastDay,
+  ConvertToDate,
 } = require("./repository/customhelper");
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
@@ -2600,7 +2601,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
     let sql = `call hrmis.UpdateRequestHoliday(
       '${clockin}',
       '${clockout}',
-      '${attendancedate}',
+      '${ConvertToDate(attendancedate)}',
       '${employeeid}',
       '${payrolldate}',
       '${status}',
@@ -2612,7 +2613,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
 
     let validationQuery2 = SelectStatement(
       `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Applied'`,
-      [attendancedate, employeeid]
+      [ConvertToDate(attendancedate), employeeid]
     );
 
     let validationQuery3 = SelectStatement(
@@ -7413,7 +7414,7 @@ router.post("/getleave", verifyJWT, (req, res) => {
         FROM leaves
         INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
         WHERE l_employeeid = '${employeeid}'
-        AND l_leavesstartdate BETWEEN '${startdate}' AND '${enddate}'
+        AND l_leavestartdate BETWEEN '${startdate}' AND '${enddate}'
         ORDER BY l_leaveid DESC`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
