@@ -1927,9 +1927,6 @@ router.get("/loadmisslogs", (req, res) => {
       [duration, `${first_day_of_month}`, `${last_day_of_month}`]
     );
 
-    console.log(sql);
-    
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -1938,9 +1935,6 @@ router.get("/loadmisslogs", (req, res) => {
         });
         return;
       }
-
-      console.log(result);
-      
 
       if (result != 0) {
         let data = DataModeling(result, "ma_");
@@ -1964,10 +1958,10 @@ router.get("/loadmisslogs", (req, res) => {
 
 router.post("/getmislog", (req, res) => {
   try {
-    const {startdate, enddate} = req.body;
-    let departmentid  = req.session.departmentid
+    const { startdate, enddate } = req.body;
+    let departmentid = req.session.departmentid;
     console.log(startdate, enddate);
-    
+
     const duration = 24;
     let sql = SelectStatement(
       `select 
@@ -1987,11 +1981,13 @@ router.post("/getmislog", (req, res) => {
       and ma_attendancedate between ? and ?
       and me_department = ?
       order by ma_attendancedate desc`,
-      [duration, `${ConvertToDate(startdate)}`, `${ConvertToDate(enddate)}`, departmentid]
+      [
+        duration,
+        `${ConvertToDate(startdate)}`,
+        `${ConvertToDate(enddate)}`,
+        departmentid,
+      ]
     );
-
-    console.log(sql);
-    
 
     Select(sql, (err, result) => {
       if (err) {
