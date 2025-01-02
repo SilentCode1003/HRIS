@@ -4,7 +4,7 @@ const LINQ = require("node-linq").LINQ;
 const { format } = require("date-fns");
 const os = require("os");
 const interfaces = os.networkInterfaces();
-const axios = require('axios');
+const axios = require("axios");
 
 //#region READ & WRITE JSON FILES
 exports.ReadJSONFile = function (filepath) {
@@ -521,7 +521,7 @@ exports.InsertStatement = (tablename, prefix, columns) => {
   return statement;
 };
 
-exports.NewInsertStatement = (tablename, prefix, columns) => {
+exports.InsertStatementTransCommit = (tablename, prefix, columns) => {
   let cols = "";
   let payload = "";
 
@@ -627,18 +627,17 @@ exports.getNetwork = () => {
 
 exports.GetIPAddress = () => {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.ipify.org?format=json')
-    .then(response => {
-      console.log(`Your IP address is: ${response.data.ip}`);
-      resolve(response.data.ip);
-    })
-    .catch(error => {
-      reject(error);
-      console.error('Error fetching IP address:', error);
-    });
+    axios
+      .get("https://api.ipify.org?format=json")
+      .then((response) => {
+        console.log(`Your IP address is: ${response.data.ip}`);
+        resolve(response.data.ip);
+      })
+      .catch((error) => {
+        reject(error);
+        console.error("Error fetching IP address:", error);
+      });
   });
 };
-
-
 
 //#endregion
