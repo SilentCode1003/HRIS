@@ -9,27 +9,10 @@
       <div class="col">
         <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
       </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-striped-light" id="dataTableLeaveSettings">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee</th>
-                        <th>Tenure</th>
-                        <th>Leave Type</th>
-                        <th>Leave Year</th>
-                        <th>Total Leave Days</th>
-                        <th>Unused Leave</th>
-                        <th>Used Leave</th>
-                        <th>Status</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+      <div class="d-flex gap-4 attendance-field">
+        <div class="col" id="dynamicButtonContainer">
+          <div id="dynamicButton" class="d-flex justify-content-between">
+          </div>
         </div>
       </div>
     </div> 
@@ -37,7 +20,7 @@
   <br>
   <div class="col">
     <div class="card">
-      <div class="card-header ch-generate">
+      <div class="card-header ch-generate ch-coop">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
