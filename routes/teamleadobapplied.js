@@ -7,7 +7,7 @@ const {
   InsertStatement,
   UpdateStatement,
   GetCurrentDatetime,
-  NewInsertStatement,
+  InsertStatementTransCommit,
 } = require("./repository/customhelper");
 const { Select, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
@@ -164,7 +164,7 @@ router.put("/approved", (req, res) => {
       let update_count = parseInt(obr_approval_count) + 1;
       if (approval_count == update_count) {
         queries.push({
-          sql: NewInsertStatement("master_attendance", "ma", [
+          sql: InsertStatementTransCommit("master_attendance", "ma", [
             "employeeid",
             "attendancedate",
             "clockin",
@@ -233,7 +233,7 @@ router.put("/approved", (req, res) => {
       });
 
       queries.push({
-        sql: NewInsertStatement("official_business_activity", "oba", [
+        sql: InsertStatementTransCommit("official_business_activity", "oba", [
           "ob_id",
           "employee_id",
           "remarks",

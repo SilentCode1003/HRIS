@@ -7,7 +7,7 @@ const {
   InsertStatement,
   UpdateStatement,
   GetCurrentDatetime,
-  NewInsertStatement,
+  InsertStatementTransCommit,
 } = require("./repository/customhelper");
 const { Select, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
@@ -50,7 +50,11 @@ router.get("/load", (req, res) => {
       WHERE obr_subgroup_id IN (?)
       AND obr_status = ?
       `,
-      [req.session.accesstypeid, req.session.subgroupid, REQUEST_STATUS.approved]
+      [
+        req.session.accesstypeid,
+        req.session.subgroupid,
+        REQUEST_STATUS.approved,
+      ]
     );
 
     Select(sql, (err, result) => {

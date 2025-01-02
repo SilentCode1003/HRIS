@@ -215,7 +215,6 @@
       </div>
     </div>
 
-
     <!---- MODAL-->
 
     <!-- pending coa card -->
@@ -1131,6 +1130,23 @@
                   >
                   </span>
                 </button>
+                <button
+                  class="nav-link requestleave-db"
+                  id="nav-leave-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-missedlogs"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="false"
+                >
+                  <b>MISSED LOGS</b>
+                  <span
+                    id="missedlogsBadge"
+                    class="position-sticky translate-middle badge badge-danger"
+                  >
+                  </span>
+                </button>
                 <!-- <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false">
@@ -1168,6 +1184,7 @@
           <!-- Leave  Request -->
           <div class="card-body db-custom-cards">
             <div class="tab-content" id="nav-tabContent">
+              <!-- GEOFENCE -->
               <div
                 class="tab-pane fade show active"
                 id="nav-geofence"
@@ -1185,6 +1202,7 @@
                   </div>
                 </div>
               </div>
+              <!-- ATTENDANCE STATUS -->
               <div
                 class="tab-pane fade"
                 id="nav-request"
@@ -1245,142 +1263,19 @@
                   </div>
                 </div>
               </div>
+              <!-- MMISSED LOGS -->
               <div
                 class="tab-pane fade"
-                id="nav-cashadvance"
+                id="nav-missedlogs"
                 role="tabpanel"
                 aria-labelledby="nav-profile-tab"
               >
                 <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                    <table
-                      class="table table-light table-bordered"
-                      id="dataTablecashrequest"
-                    >
-                      <thead>
-                        <tr>
-                          <th class="font-tb">Image</th>
-                          <th class="font-tb">Cash Advance ID</th>
-                          <th class="font-tb">Employee</th>
-                          <th class="font-tb">Date</th>
-                          <th class="font-tb">Amount</th>
-                          <th class="col-25 font-tb">Purpose</th>
-                          <th class="font-tb">Status</th>
-                          <th class="font-tb">Action</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="nav-requestovertime"
-                role="tabpanel"
-                aria-labelledby="nav-profile-tab"
-              >
-                <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                    <table
-                      class="table table-light table-bordered"
-                      id="dataTableovertimerequest"
-                    >
-                      <thead>
-                        <tr>
-                          <th class="col-25 font-tb">Image</th>
-                          <th class="font-tb">Overtime ID</th>
-                          <th class="col-25 font-tb">Employee</th>
-                          <th class="font-tb">Date</th>
-                          <th class="font-tb">Payroll Date</th>
-                          <th class="font-tb">Clock In</th>
-                          <th class="font-tb">Clock Out</th>
-                          <th class="font-tb">Total Hours</th>
-                          <th class="font-tb">Action</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="nav-reqattendance"
-                role="tabpanel"
-                aria-labelledby="nav-profile-tab"
-              >
-                <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                    <table
-                      class="table table-light table-bordered"
-                      id="dataTableattendancerequest"
-                    >
-                      <thead>
-                        <tr>
-                          <th class="col-25 font-tb">Image</th>
-                          <th class="font-tb">ID</th>
-                          <th class="col-25 font-tb">Employee</th>
-                          <th class="col-25 font-tb">Attendance Date</th>
-                          <th class="col-25 font-tb">Time In</th>
-                          <th class="col-25 font-tb">Time Out</th>
-                          <th class="font-tb">Total Hours</th>
-                          <th class="font-tb">Action</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="nav-attendance"
-                role="tabpanel"
-                aria-labelledby="nav-profile-tab"
-              >
-                <div class="row">
-                  <!-- attendance chart -->
-                  <div class="col-xl-6 col-lg-5">
-                    <div class="chart-container">
-                      <canvas id="employeeChart"></canvas>
+                  <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                      <h6 class="m-0">Recent</h6>
                     </div>
-                  </div>
-                  <!-- employee chart -->
-                  <div class="col-xl-6 col-lg-5">
-                    <div class="chart-container">
-                      <canvas id="attendanceChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="nav-employee"
-                role="tabpanel"
-                aria-labelledby="nav-profile-tab"
-              >
-                <div class="row">
-                  <!-- attendance chart -->
-                  <div class="col-xl-6 col-lg-5">
-                    <div class="chart-container">
-                      <center>
-                        <h3 class="fw-normal">Job Status</h3>
-                      </center>
-                      <canvas
-                        id="jobstatusChart"
-                        style="width: 600px; height: 600px"
-                      ></canvas>
-                    </div>
-                  </div>
-                  <!-- employee chart -->
-                  <div class="col-xl-6 col-lg-5">
-                    <div class="chart-container">
-                      <center>
-                        <h3 class="fw-normal">Department</h3>
-                      </center>
-                      <canvas
-                        id="departmentChart"
-                        style="width: 600px; height: 600px"
-                      ></canvas>
-                    </div>
+                    <div class="box-body p-0"></div>
                   </div>
                 </div>
               </div>
@@ -1883,7 +1778,6 @@
       </div>
     </div>
 
-    
     <!--Overtime Modal-->
     <div
       class="modal fade"
