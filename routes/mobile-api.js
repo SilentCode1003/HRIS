@@ -2539,8 +2539,9 @@ router.post("/loadholiday", verifyJWT, (req, res) => {
     ph_normal_ot_total
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
-    and ph_attendancedate between '${startdate}' and '${enddate}'
     order by ph_attendancedate asc`;
+
+      // and ph_attendancedate between '${startdate}' and '${enddate}'
 
     Select(sql, (err, result) => {
       if (err) {
