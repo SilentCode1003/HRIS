@@ -211,12 +211,14 @@ router.post("/update", (req, res) => {
     let file = req.body.file;
 
     async function ProcessData() {
-      let sql_check = SelectStatement('SELECT ar_employeeid as employeeid FROM attendance_request WHERE ar_requestid = ?', [requestid]);
+      let sql_check = SelectStatement('SELECT ar_employeeid as employeeid, ar_subgroupid as subgroupid FROM attendance_request WHERE ar_requestid = ?', [requestid]);
       let attendance_request = await Check(sql_check);
 
       if(attendance_request.length != 0){
 
         let employeeid = attendance_request[0].employeeid;
+
+        let subgroupid = attendance_request[0].subgroupid;
 
         let sqlupdate = `UPDATE attendance_request SET 
         ar_attendace_date = '${attendancedate}', 

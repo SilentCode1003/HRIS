@@ -63,9 +63,8 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/leaveaction", async (req, res) => {
+router.post("/leaveaction", (req, res) => {
   try {
-    const employeeid = req.session.employeeid;
     const departmentid = req.session.departmentid;
     const subgroupid = req.body.subgroupid;
     const leaveid = req.body.leaveid;
@@ -73,73 +72,77 @@ router.post("/leaveaction", async (req, res) => {
     const comment = req.body.comment;
     const { startdate, enddate } = req.body;
     const createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    const conflictQuery = `
-      SELECT ld_leavedates 
+
+    const employeeinfoQuery = `select l_employeeid as employeeid from leaves where l_leaveid = '${leaveid}'`;
+
+    async function ProcessData() {
+      const employeeid = await mysql.mysqlQueryPromise(employeeinfoQuery);
+      const conflictQuery = `SELECT * 
       FROM leave_dates 
-      WHERE ld_employeeid = '${employeeid}' 
-      AND ld_leavedates BETWEEN '${startdate}' AND '${enddate}'
-    `;
+      WHERE ld_employeeid = '${employeeid[0].employeeid}' 
+      AND ld_leavedates BETWEEN '${startdate}' AND '${enddate}'`;
 
-    const conflictResult = await mysql.mysqlQueryPromise(conflictQuery);
+      const conflictResult = await mysql.mysqlQueryPromise(conflictQuery);
 
-    if (conflictResult.length > 0) {
-      const conflictingDates = conflictResult.map(row => {
-        const date = new Date(row.ld_leavedates);
-        return date.toISOString().split("T")[0];
-      });
+      if (conflictResult.length > 0) {
+        const conflictingDates = conflictResult.map((row) => {
+          const date = new Date(row.ld_leavedates);
+          return date.toISOString().split("T")[0];
+        });
 
-      return res.json({
-        msg: "conflict",
-        conflictingDates: conflictingDates,
-      });
-    }
-
-    const data = [
-      [
-        employeeid,
-        departmentid,
-        leaveid,
-        subgroupid,
-        status,
-        createdate,
-        comment,
-      ],
-    ];
-
-
-    mysql.InsertTable("leave_request_activity", data, (err, result) => {
-      if (err) {
-        console.error("Error: ", err);
         return res.json({
-          msg: "error",
-          data: err,
+          msg: "conflict",
+          conflictingDates: conflictingDates,
+        });
+      } else {
+        const data = [
+          [
+            employeeid[0].employeeid,
+            departmentid,
+            leaveid,
+            subgroupid,
+            status,
+            createdate,
+            comment,
+          ],
+        ];
+
+        mysql.InsertTable("leave_request_activity", data, (err, result) => {
+          if (err) {
+            console.error("Error: ", err);
+            return res.json({
+              msg: "error",
+              data: err,
+            });
+          }
+
+          const emailbody = [
+            {
+              employeename: employeeid,
+              date: createdate,
+              startdate: startdate,
+              enddate: enddate,
+              reason: comment,
+              requesttype: REQUEST.LEAVE,
+            },
+          ];
+
+          SendEmailNotificationEmployee(
+            employeeid,
+            subgroupid,
+            REQUEST.LEAVE,
+            emailbody
+          );
+
+          res.json({
+            msg: "success",
+            data: result,
+          });
         });
       }
+    }
 
-
-      const emailbody = [
-        {
-          employeename: employeeid,
-          date: createdate,
-          startdate: startdate,
-          enddate: enddate,
-          reason: comment,
-          requesttype: REQUEST.LEAVE,
-        },
-      ];
-
-      SendEmailNotificationEmployee(
-        employeeid,
-        subgroupid,
-        REQUEST.LEAVE,
-        emailbody
-      );
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
+    ProcessData();
   } catch (error) {
     console.error("Error in /leaveaction route:", error);
     res.json({
@@ -148,7 +151,6 @@ router.post("/leaveaction", async (req, res) => {
     });
   }
 });
-
 
 //#region FUNCTION
 function Check(sql) {

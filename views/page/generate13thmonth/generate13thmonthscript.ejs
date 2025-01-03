@@ -10,7 +10,7 @@
   $(document).ready(function () {
     console.log("Initialize");
     searchTable();
-    //LoadPayrollDate();
+    LoadPayrollDate();
     //LoadYear();
     LoadAllPayrollDate();
 
@@ -18,32 +18,51 @@
       searchTable();
     });
 
-    //   function LoadPayrollDate() {
-    //     $.ajax({
-    //       type: "GET",
-    //       url: "/generatepayroll/payrolldateload",
-    //       success: function (result) {
-    //         var data = result.data;
-    //         function populateSelectOptions(selectElementId) {
-    //           var $select = $("#" + selectElementId);
-    //           $select.empty();
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreqbeforepayout",
+        success: function (result) {
+          var data = result.data;
 
-    //           $select.append("<option selected disabled>Choose</option>");
-    //           $.each(data, function (key, item) {
-    //             var option = new Option(item.payrolldate, item.payrolldate);
-    //             $(option).html(item.payrolldate);
-    //             $select.append(option);
-    //           });
-    //         }
-    //         populateSelectOptions("loademplyrcontribution");
-    //         populateSelectOptions("genemplyrcontribution");
-    //         populateSelectOptions("emplyrcontribution");
-    //       },
-    //       error: function (result) {
-    //         showSweetAlert("Error", result.responseText, "error");
-    //       },
-    //     });
-    //   }
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#payrollDateSelect").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    // function LoadPayrollDate() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/generatepayroll/payrolldateload",
+    //     success: function (result) {
+    //       var data = result.data;
+    //       function populateSelectOptions(selectElementId) {
+    //         var $select = $("#" + selectElementId);
+    //         $select.empty();
+
+    //         $select.append("<option selected disabled>Choose</option>");
+    //         $.each(data, function (key, item) {
+    //           var option = new Option(item.payrolldate, item.payrolldate);
+    //           $(option).html(item.payrolldate);
+    //           $select.append(option);
+    //         });
+    //       }
+    //       populateSelectOptions("loademplyrcontribution");
+    //       populateSelectOptions("genemplyrcontribution");
+    //       populateSelectOptions("emplyrcontribution");
+    //     },
+    //     error: function (result) {
+    //       showSweetAlert("Error", result.responseText, "error");
+    //     },
+    //   });
+    // }
 
     function LoadAllPayrollDate() {
       $.ajax({
@@ -328,7 +347,9 @@
               $("#13thmonthabsent").text(item.absent);
               $("#13thmonthlateminutes").text(item.late_minutes);
               $("#13thmonthlatehours").text(item.late_hours);
-              $("#totalretropaydiff").text(formatCurrencyValue(item.totalaccrued));
+              $("#totalretropaydiff").text(
+                formatCurrencyValue(item.totalaccrued)
+              );
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -357,7 +378,6 @@
             material_list_tbl.clear().draw();
 
             $.each(existingData, function (key, item) {
-
               var rowNode = material_list_tbl.row
                 .add([
                   formatDate(item.payrolldate),

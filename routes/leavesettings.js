@@ -12,7 +12,7 @@ const {
 } = require("./repository/response");
 const { Select, InsertTable, Insert, Update } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
-const { InsertStatement, SelectStatement, UpdateStatement } = require("./repository/customhelper");
+const { InsertStatement, SelectStatement, UpdateStatement, GetCurrentYear } = require("./repository/customhelper");
 var router = express.Router();
 
 /* GET home page. */
@@ -27,6 +27,7 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let year = GetCurrentYear();
     let sql = `SELECT
     ml_id, 
     concat(me_lastname,' ',me_firstname) AS ml_employeeid,
@@ -39,7 +40,8 @@ router.get("/load", (req, res) => {
     ml_status
     FROM master_leaves
     INNER JOIN master_employee ON master_leaves.ml_employeeid = me_id
-    WHERE ml_leave_pay = TRUE`;
+    WHERE ml_leave_pay = TRUE
+    and ml_year = '${year}'`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
@@ -245,6 +247,7 @@ router.post("/update", (req, res) => {
 
 router.get("/loadnopaid", (req, res) => {
   try {
+    let year = GetCurrentYear();
     let sql = `SELECT
     ml_id, 
     concat(me_lastname,' ',me_firstname) AS ml_employeeid,
@@ -257,7 +260,8 @@ router.get("/loadnopaid", (req, res) => {
     ml_status
     FROM master_leaves
     INNER JOIN master_employee ON master_leaves.ml_employeeid = me_id
-    WHERE ml_leave_pay = FALSE`;
+    WHERE ml_leave_pay = FALSE
+    and ml_year = '${year}'`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);
@@ -456,8 +460,6 @@ router.post("/updatenopaid", (req, res) => {
    res.json(JsonErrorResponse(error))
   }
 });
-
-
 
 router.post("/getleavedatesnopaid", (req, res) => {
   try {
