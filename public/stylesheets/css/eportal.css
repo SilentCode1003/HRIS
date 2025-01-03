@@ -2514,13 +2514,13 @@ a#notifdropdown:hover {
   .attendance-field {
     flex-wrap: wrap;
   }
-
+/* 
   .sidebar {
     position: fixed;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-  }
+  } */
 
 
   .navbar {
