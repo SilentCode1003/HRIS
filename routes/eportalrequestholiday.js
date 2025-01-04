@@ -67,6 +67,135 @@ router.get("/load", (req, res) => {
   }
 });
 
+router.post("/getholidayday", (req, res) => {
+  try {
+    let attendancedate = req.body.attendancedate;
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS ma_clockin,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS ma_clockout,
+    ma_attendancedate,
+    mh_name as ma_name,
+    mh_type as ma_type
+    FROM master_attendance 
+    INNER JOIN master_holiday ON master_attendance.ma_attendancedate = mh_date
+    WHERE ma_attendancedate = '${attendancedate}'
+    AND mh_date = '${attendancedate}'
+    AND ma_employeeid = '${employeeid}'`;
+
+    Check(sql)
+      .then((result) => {
+        if (result.length === 0) {
+          return res.json(JsonWarningResponse(MessageStatus.NOTEXIST));
+        } else {
+          Select(sql, (err, result) => {
+            if (err) {
+              console.error(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            if (result != 0) {
+              let data = DataModeling(result, "ma_");
+              res.json(JsonDataResponse(data));
+            } else {
+              res.json(JsonDataResponse(result));
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.post("/addrequestholiday", (req, res) => {
+  try {
+    let {
+      clockin,
+      clockout,
+      attendancedate,
+      employeeid,
+      payrolldate,
+      holidayStatus,
+      subGroup,
+      holidayImage,
+    } = req.body;
+
+    let approvecount = 0;
+    let applieddate = GetCurrentDatetime();
+
+    let sql = `CALL hrmis.RequestHoliday(
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${holidayStatus}',
+      '${subGroup}',
+      '${holidayImage}',
+      '${applieddate}',
+      '${approvecount}'
+    )`;
+
+    let validationQuery1 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Pending'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Applied'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery1)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGOT)
+          );
+        }
+        return Check(validationQuery2);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDOT));
+        }
+        return Check(validationQuery3);
+      })
+      .then((result3) => {
+        if (result3.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDOT));
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            return res.json(JsonSuccess());
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+    return res.json(JsonErrorResponse(error));
+  }
+});
+
 router.post("/getreqholiday", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
@@ -96,7 +225,6 @@ router.post("/getreqholiday", (req, res) => {
       }
 
       console.log(result);
-      
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
@@ -153,7 +281,7 @@ router.put("/edit", (req, res) => {
       `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Approved'`,
       [attendancedate, employeeid]
     );
-    
+
     Check(validationQuery2)
       .then((result1) => {
         if (result1.length > 0) {
