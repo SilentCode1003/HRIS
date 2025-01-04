@@ -2694,6 +2694,53 @@ router.post("/filterholiday", verifyJWT, (req, res) => {
   }
 });
 
+router.post("/getholidayday", verifyJWT, (req, res) => {
+  try {
+    let attendancedate = req.body.attendancedate;
+    let employeeid = req.body.employeeid;
+    let sql = `SELECT 
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS ma_clockin,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS ma_clockout,
+    ma_attendancedate,
+    mh_name as ma_name,
+    mh_type as ma_type
+    FROM master_attendance 
+    INNER JOIN master_holiday ON master_attendance.ma_attendancedate = mh_date
+    WHERE ma_attendancedate = '${attendancedate}'
+    AND mh_date = '${attendancedate}'
+    AND ma_employeeid = '${employeeid}'`;
+
+    Check(sql)
+      .then((result) => {
+        if (result.length === 0) {
+          return res.json(JsonWarningResponse(MessageStatus.NOTEXIST));
+        } else {
+          Select(sql, (err, result) => {
+            if (err) {
+              console.error(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            if (result != 0) {
+              let data = DataModeling(result, "ma_");
+              res.json(JsonDataResponse(data));
+            } else {
+              res.json(JsonDataResponse(result));
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

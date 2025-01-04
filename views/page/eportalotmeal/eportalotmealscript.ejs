@@ -229,24 +229,6 @@
             var SUBGROUP = row.insertCell(5);
             var AMOUNT = row.insertCell(6);
             var STATUS = row.insertCell(7);
-            // var ACTION = row.insertCell(8);
-
-            // var action = document.createElement("button");
-            // action.id = "editBtn";
-            // action.className = "btn text-primary view-btn";
-            // action.setAttribute("data-bs-toggle", "modal");
-            // action.setAttribute("data-bs-target", "#appliedot");
-            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
-            // action.onclick = function () {
-            //   var dataRow = [];
-            //   $(this)
-            //     .closest("tr")
-            //     .find("td")
-            //     .each(function () {
-            //       dataRow.push($(this).text());
-            //     });
-            //     mealotid = dataRow[0];
-            // };
 
             MEAL_ID.innerHTML = item.mealid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -256,7 +238,6 @@
             SUBGROUP.innerHTML = item.subgroupid;
             AMOUNT.innerHTML = item.otmeal_amount;
             STATUS.innerHTML = item.status;
-            // ACTION.appendChild(action);
 
             $.each(
               [
@@ -268,7 +249,6 @@
                 SUBGROUP,
                 AMOUNT,
                 STATUS,
-                // ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -305,24 +285,24 @@
             var SUBGROUP = row.insertCell(5);
             var AMOUNT = row.insertCell(6);
             var STATUS = row.insertCell(7);
-            // var ACTION = row.insertCell(8); // Adding action column
+            var ACTION = row.insertCell(8); // Adding action column
 
-            // var action = document.createElement("button");
-            // action.id = "editBtn";
-            // action.className = "btn text-primary view-btn";
-            // action.setAttribute("data-bs-toggle", "modal");
-            // action.setAttribute("data-bs-target", "#appliedot");
-            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
-            // action.onclick = function () {
-            //   var dataRow = [];
-            //   $(this)
-            //     .closest("tr")
-            //     .find("td")
-            //     .each(function () {
-            //       dataRow.push($(this).text());
-            //     });
-            //     mealotid = dataRow[0];
-            // };
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#appliedot");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                mealotid = dataRow[0];
+            };
 
             MEAL_ID.innerHTML = item.mealid;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -332,7 +312,7 @@
             SUBGROUP.innerHTML = item.subgroupid;
             AMOUNT.innerHTML = item.otmeal_amount;
             STATUS.innerHTML = item.status;
-            // ACTION.appendChild(action);
+            ACTION.appendChild(action);
 
             $.each(
               [
@@ -344,7 +324,7 @@
                 SUBGROUP,
                 AMOUNT,
                 STATUS,
-                // ACTION
+                ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -383,7 +363,7 @@
             var SUBGROUP = row.insertCell(5);
             var AMOUNT = row.insertCell(6);
             var STATUS = row.insertCell(7);
-            var ACTION = row.insertCell(8); // Adding action column
+            var ACTION = row.insertCell(8);
 
             var action = document.createElement("button");
             action.id = "editBtn";
@@ -696,7 +676,7 @@
         message += "attendancedate is required. ";
       }
 
-      if (payroll_date === "") {
+      if (payroll_date === "" || payroll_date === null) {
         message += "payroll_date is required. ";
       }
 
@@ -761,16 +741,22 @@
           },
           success: function (result) {
             if (result.msg === "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((result) => {
+              swal({
+                title: "Save Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
                 window.location.reload();
               });
               LoadTable();
-            } else if (result.msg === "exist") {
-              swal("Error", "This combination already exists.", "error");
+            } if (result.msg === "exist") { 
+              swal({
+                title: "Exist",
+                text: result.data,
+                icon: "warning",
+                button: "OK!",
+              });
             }
           },
           error: function (err) {
