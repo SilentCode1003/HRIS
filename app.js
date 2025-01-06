@@ -16,8 +16,6 @@ cron.schedule("0 0 * * *", () => {
   console.log("Running daily attendance status insertion...");
   insertDailyAttendanceStatus();
 });
-insertDailyAttendanceStatus();
-
 
 //#region ROUTES IMPORT
 var indexRouter = require("./routes/index");
