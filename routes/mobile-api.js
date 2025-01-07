@@ -1351,15 +1351,7 @@ router.post("/subgrouploadforapp", verifyJWT, (req, res) => {
 
 router.post("/getpayrolldate", verifyJWT, (req, res) => {
   try {
-    let sql = `SELECT DISTINCT 
-    DATE_FORMAT(gp_payrolldate, '%Y-%m-%d') as gp_payrolldate,
-    concat(gp_startdate,' To ',gp_enddate) as DateRange,
-    gp_cutoff
-    FROM 
-    generate_payroll  
-    ORDER BY 
-    gp_payrolldate DESC
-    LIMIT 2`;
+    let sql = `select pd_payrolldate as gp_payrolldate from payroll_date where current_date() between pd_startdate and pd_enddate`;
 
     mysql
       .mysqlQueryPromise(sql)
@@ -1429,19 +1421,16 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
 router.post("/loadreqbeforepayout", verifyJWT, (req, res) => {
   try {
     let sql = `SELECT 
-    pd_payrollid,
-    pd_name,
-    pd_cutoff,
-    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
-    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
-    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
-    FROM 
-    payroll_date
-    WHERE
-    pd_payrolldate >= CURDATE()
-    ORDER BY 
-    pd_payrolldate
-    LIMIT 5`;
+              pd_payrollid,
+              pd_name,
+              pd_cutoff,
+              DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+              DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+              DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+              FROM 
+              payroll_date
+              WHERE
+              current_date() between pd_startdate and pd_enddate`;
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
