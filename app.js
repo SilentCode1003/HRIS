@@ -16,8 +16,6 @@ cron.schedule("0 0 * * *", () => {
   console.log("Running daily attendance status insertion...");
   insertDailyAttendanceStatus();
 });
-insertDailyAttendanceStatus();
-
 
 //#region ROUTES IMPORT
 var indexRouter = require("./routes/index");
@@ -210,6 +208,14 @@ app.use("/mobile-api", mobileAPIRouter);
 app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/applicant_registration", applicant_registrationRouter);
 app.use("/session", sessionRouter);
+app.use("/register", registerRouter);
+app.use("/ojtlogin", ojtloginRouter);
+app.use("/ojtindex", ojtindexRouter);
+app.use("/ojtattendance", ojtattendanceRouter);
+app.use("/ojtprofile", ojtprofileRouter);
+app.use("/ojtreqabsent", ojtreqabsentRouter);
+app.use("/attendanceojt", attendanceojtRouter);
+app.use("/appsdetails", appsdetailsRouter);
 app.use(verifyJWT);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
@@ -256,20 +262,12 @@ app.use("/payment", paymentRouter);
 app.use("/interest", interestRouter);
 app.use("/deposit", depositRouter);
 app.use("/member", memberRouter);
-app.use("/register", registerRouter);
 app.use("/ojtuser", ojtuserRouter);
 app.use("/geofencesettings", geofencesettingsRouter);
 app.use("/salaryhistory", salaryhistoryRouter);
 app.use("/payslip", payslipRouter);
 app.use("/generatepayroll", generatepayrollRouter);
 app.use("/apprentice", apprenticeRouter);
-app.use("/ojtindex", ojtindexRouter);
-app.use("/ojtlogin", ojtloginRouter);
-app.use("/ojtattendance", ojtattendanceRouter);
-app.use("/ojtprofile", ojtprofileRouter);
-app.use("/ojtreqabsent", ojtreqabsentRouter);
-app.use("/attendanceojt", attendanceojtRouter);
-app.use("/appsdetails", appsdetailsRouter);
 app.use("/otapproval", otapprovalRouter);
 app.use("/healthcarddeductions", healthcarddeductionsRouter);
 app.use("/healthcarddeductionsID", healthcarddeductionsIDRouter);
