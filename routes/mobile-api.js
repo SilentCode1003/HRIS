@@ -2544,7 +2544,7 @@ router.post("/loadholiday", verifyJWT, (req, res) => {
     where ph_employeeid = '${employeeid}'
     order by ph_attendancedate asc`;
 
-      // and ph_attendancedate between '${startdate}' and '${enddate}'
+    // and ph_attendancedate between '${startdate}' and '${enddate}'
 
     Select(sql, (err, result) => {
       if (err) {
@@ -2742,7 +2742,6 @@ router.post("/getholidayday", verifyJWT, (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
-
 
 //#endregion
 
@@ -7752,6 +7751,165 @@ router.post("/submitforapp", verifyJWT, async (req, res) => {
   } catch (error) {
     console.error("Error in /submit route: ", error);
     res.json({ msg: "error" });
+  }
+});
+
+//#endregion
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+//#region OFFICIAL BUSINESS
+router.post("/getob", (req, res) => {
+  try {
+    const { employeeid } = req.body;
+    let sql = SelectStatement(
+      "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ?",
+      [employeeid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay()]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "obr_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getobstatus", (req, res) => {
+  try {
+    const { employeeid, status } = req.body;
+    let sql = SelectStatement(
+      "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ? and obr_status = ?",
+      [employeeid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay(), status]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "obr_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/filterob", (req, res) => {
+  try {
+    const {employeeid, startdate, enddate} = req.body;
+    let sql = SelectStatement(
+      "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ?",
+      [employeeid, startdate, enddate]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "obr_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/appplyob", (req, res) => {
+  try {
+    const {employeeid,attendancedate, subgroupid,clockin, clockout, reason} = req.body;
+    let status = REQUEST_STATUS.applied;
+    let applied_date = GetCurrentDatetime();
+
+        async function ProcessData() {
+          let official_business_request_sql = InsertStatement(
+            "official_business_request",
+            "obr",
+            [
+              "employee_id",
+              "attendance_date",
+              "subgroup_id",
+              "clockin",
+              "clockout",
+              "applied_date",
+              "reason",
+              "status",
+              "approval_count",
+            ]
+          );
+    
+          let obr_data = [
+            [
+              employeeid,
+              attendancedate,
+              subgroupid,
+              clockin,
+              clockout,
+              applied_date,
+              reason,
+              status,
+              0,
+            ],
+          ];
+    
+          Insert(official_business_request_sql, obr_data, (err, result) => {
+            if (err) {
+              console.log(err);
+    
+              res.status(500).json({
+                msg: err,
+              });
+            }
+            console.log(result);
+    
+    
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OB,
+                startdate: clockin,
+                enddate: clockout,
+              },
+            ];
+    
+            SendEmailNotification(employeeid, subgroupid, REQUEST.OB, emailbody);
+    
+            res.status(200).json({
+              msg: "success",
+              data: result,
+            });
+          });
+        }
+    
+        ProcessData();
+    
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 
