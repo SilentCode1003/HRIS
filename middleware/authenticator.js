@@ -2,8 +2,7 @@ const jwt = require('jsonwebtoken');
 const { Decrypter, DecrypterString} = require('../routes/repository/cryptography');
 
 const verifyJWT = (req, res, next) => {
-    const token = req.session.jwt ?? req.body.APK ?? req.query.APK;
-
+    const token = req.session.jwt ?? req.body.APK ?? req.query.APK ?? req.params.APK;
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
