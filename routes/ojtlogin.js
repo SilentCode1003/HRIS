@@ -1,5 +1,5 @@
 var express = require("express");
-const { Encrypter } = require("./repository/cryptography");
+const { Encrypter, EncrypterString } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 const { error } = require("jquery");
 const { OjtLogin } = require("./repository/helper");
@@ -59,7 +59,7 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
                   ),
                   {}
                 );
-                
+
                 res.cookie(
                   "token",
                   EncrypterString(
