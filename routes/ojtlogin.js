@@ -48,6 +48,36 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
                 req.session.accesstype = user.accesstype;
                 req.session.departmentid = user.departmentid;
                 req.session.status = user.status;
+
+                req.session.jwt = EncrypterString(
+                  jwt.sign(
+                    JSON.stringify({
+                      employeeid: user.ojtid,
+                      fullname: user.fullname,
+                    }),
+                    process.env._SECRET_KEY
+                  ),
+                  {}
+                );
+                
+                res.cookie(
+                  "token",
+                  EncrypterString(
+                    jwt.sign(
+                      JSON.stringify({
+                        employeeid: user.ojtid,
+                        fullname: user.fullname,
+                      }),
+                      process.env._SECRET_KEY
+                    ),
+                    {}
+                  ),
+                  {
+                    secure: true,
+                    sameSite: "None", // Allow cross-origin
+                    domain: ".5lsolutions.com", // For subdomains
+                  }
+                );
               });
 
               return res.json({
