@@ -3,6 +3,7 @@ const { Encrypter, EncrypterString } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 const { error } = require("jquery");
 const { OjtLogin } = require("./repository/helper");
+const jwt = require("jsonwebtoken");
 var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
