@@ -21,17 +21,17 @@ router.post("/login", (req, res) => {
 
       let sql = `
       select 
-mo_id as ojtid,
-concat(mo_lastname,' ',mo_name) as fullname,
-ma_accessname as accesstype,
-mo_status as status,
-mo_image as image,
-mo_department as departmentid
-from ojt_user
-inner join master_access on ou_accesstype = ma_accessid
-left join master_ojt on ou_ojtid = mo_id
-left join master_department on md_departmentid = mo_department
-where ou_username = '${username}' and ou_password = '${encrypted}'`;
+      mo_id as ojtid,
+      concat(mo_lastname,' ',mo_name) as fullname,
+      ma_accessname as accesstype,
+      mo_status as status,
+      mo_image as image,
+      mo_department as departmentid
+      from ojt_user
+      inner join master_access on ou_accesstype = ma_accessid
+      left join master_ojt on ou_ojtid = mo_id
+      left join master_department on md_departmentid = mo_department
+      where ou_username = '${username}' and ou_password = '${encrypted}'`;
 
       mysql
         .mysqlQueryPromise(sql)
@@ -84,6 +84,7 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
               return res.json({
                 msg: "success",
                 data: data,
+                apk: req.session.jwt
               });
             } else {
               return res.json({

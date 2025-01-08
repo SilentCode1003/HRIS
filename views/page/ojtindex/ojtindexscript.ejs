@@ -395,7 +395,7 @@
     function LoadBdayFolks() {
       $.ajax({
         type: "GET",
-        url: "/getbdaytoday",
+        url: "/index/getbdaytoday",
         success: function (result) {
           if (result.msg === "success") {
             const bdayData = result.data;
@@ -453,7 +453,7 @@
     function GenerateAnouncement() {
       $.ajax({
         type: "GET",
-        url: "/getbulletin",
+        url: "/index/getbulletin",
         // data: {
         //   bulletinid: id,
         // },
