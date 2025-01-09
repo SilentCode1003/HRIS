@@ -568,7 +568,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
         );
 
         const isAlreadyClockedIn = await Check(checkStatement);
-        console.log(checkStatement);
 
         if (isAlreadyClockedIn.length !== 0) {
           return res.json(JsonWarningResponse(MessageStatus.EXIST));
@@ -609,6 +608,25 @@ router.post("/clockin", verifyJWT, (req, res) => {
             attendancedate,
           ],
         });
+
+        console.log(
+          "Employee ID: ",
+          employee_id,
+          "Attendance Date: ",
+          attendancedate,
+          "Clock-in Time: ",
+          clockinDateTime,
+          "Scheduled Time In: ",
+          scheduledTimeIn,
+          "Status: ",
+          status,
+          "Minutes Difference: ",
+          minutesDifference,
+          "Hours Difference: ",
+          hoursDifference,
+          'Location: ',
+          locationin
+        );
 
         //#endregion
 
@@ -7813,7 +7831,7 @@ router.post("/getobstatus", (req, res) => {
 
 router.post("/filterob", (req, res) => {
   try {
-    const {employeeid, startdate, enddate} = req.body;
+    const { employeeid, startdate, enddate } = req.body;
     let sql = SelectStatement(
       "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ?",
       [employeeid, startdate, enddate]
@@ -7839,75 +7857,80 @@ router.post("/filterob", (req, res) => {
 
 router.post("/appplyob", (req, res) => {
   try {
-    const {employeeid,attendancedate, subgroupid,clockin, clockout, reason} = req.body;
+    const {
+      employeeid,
+      attendancedate,
+      subgroupid,
+      clockin,
+      clockout,
+      reason,
+    } = req.body;
     let status = REQUEST_STATUS.applied;
     let applied_date = GetCurrentDatetime();
 
-        async function ProcessData() {
-          let official_business_request_sql = InsertStatement(
-            "official_business_request",
-            "obr",
-            [
-              "employee_id",
-              "attendance_date",
-              "subgroup_id",
-              "clockin",
-              "clockout",
-              "applied_date",
-              "reason",
-              "status",
-              "approval_count",
-            ]
-          );
-    
-          let obr_data = [
-            [
-              employeeid,
-              attendancedate,
-              subgroupid,
-              clockin,
-              clockout,
-              applied_date,
-              reason,
-              status,
-              0,
-            ],
-          ];
-    
-          Insert(official_business_request_sql, obr_data, (err, result) => {
-            if (err) {
-              console.log(err);
-    
-              res.status(500).json({
-                msg: err,
-              });
-            }
-            console.log(result);
-    
-    
-            let emailbody = [
-              {
-                employeename: employeeid,
-                date: attendancedate,
-                reason: reason,
-                status: MessageStatus.APPLIED,
-                requesttype: REQUEST.OB,
-                startdate: clockin,
-                enddate: clockout,
-              },
-            ];
-    
-            SendEmailNotification(employeeid, subgroupid, REQUEST.OB, emailbody);
-    
-            res.status(200).json({
-              msg: "success",
-              data: result,
-            });
+    async function ProcessData() {
+      let official_business_request_sql = InsertStatement(
+        "official_business_request",
+        "obr",
+        [
+          "employee_id",
+          "attendance_date",
+          "subgroup_id",
+          "clockin",
+          "clockout",
+          "applied_date",
+          "reason",
+          "status",
+          "approval_count",
+        ]
+      );
+
+      let obr_data = [
+        [
+          employeeid,
+          attendancedate,
+          subgroupid,
+          clockin,
+          clockout,
+          applied_date,
+          reason,
+          status,
+          0,
+        ],
+      ];
+
+      Insert(official_business_request_sql, obr_data, (err, result) => {
+        if (err) {
+          console.log(err);
+
+          res.status(500).json({
+            msg: err,
           });
         }
-    
-        ProcessData();
-    
+        console.log(result);
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            reason: reason,
+            status: MessageStatus.APPLIED,
+            requesttype: REQUEST.OB,
+            startdate: clockin,
+            enddate: clockout,
+          },
+        ];
+
+        SendEmailNotification(employeeid, subgroupid, REQUEST.OB, emailbody);
+
+        res.status(200).json({
+          msg: "success",
+          data: result,
+        });
+      });
+    }
+
+    ProcessData();
   } catch (error) {
     res.status(500).json(JsonErrorResponse(error));
   }
