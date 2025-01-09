@@ -609,24 +609,15 @@ router.post("/clockin", verifyJWT, (req, res) => {
           ],
         });
 
-        console.log(
-          "Employee ID: ",
-          employee_id,
-          "Attendance Date: ",
-          attendancedate,
-          "Clock-in Time: ",
-          clockinDateTime,
-          "Scheduled Time In: ",
-          scheduledTimeIn,
-          "Status: ",
-          status,
-          "Minutes Difference: ",
-          minutesDifference,
-          "Hours Difference: ",
-          hoursDifference,
-          'Location: ',
-          locationin
-        );
+        console.log("Employee ID: ", employee_id);
+        console.log("Attendance Date: ", attendancedate);
+        console.log("Clock-in Time: ", clockinDateTime);
+        console.log("Scheduled Time In: ", scheduledTimeIn);
+        console.log("Status: ", status);
+        console.log("Minutes Difference: ", minutesDifference);
+        console.log("Hours Difference: ", hoursDifference);
+        console.log("Location: ", locationin);
+        
 
         //#endregion
 
