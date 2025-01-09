@@ -26,20 +26,22 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
-        rp_employeeid,
-        rp_fullname,
-        rp_salary,
-        p_salary as rp_payslip_salary,
-        ms_payrolltype as rp_payrolltype,
-        mp_positionname as rp_positionname,
-        md_departmentname as rp_departmentname
+    rp_employeeid,
+    rp_fullname,
+    rp_salary,
+    DATE_FORMAT(MIN(rp_payrolldate), '%Y-%m-%d') AS rp_payroll_start_date,
+    DATE_FORMAT(MAX(rp_payrolldate), '%Y-%m-%d') AS rp_payroll_end_date,
+    p_salary AS rp_payslip_salary,
+    ms_payrolltype AS rp_payrolltype,
+    mp_positionname AS rp_positionname,
+    md_departmentname AS rp_departmentname
     FROM 
         retro_payslip
-    INNER JOIN payslip ON retro_payslip.rp_employeeid = p_employeeid
-    INNER JOIN master_salary ON rp_employeeid = ms_employeeid
-    INNER JOIN master_employee ON retro_payslip.rp_employeeid = me_id
-    INNER JOIN master_department ON master_employee.me_department = md_departmentid
-    INNER JOIN master_position ON master_employee.me_position = mp_positionid
+    INNER JOIN payslip ON retro_payslip.rp_employeeid = payslip.p_employeeid
+    INNER JOIN master_salary ON retro_payslip.rp_employeeid = master_salary.ms_employeeid
+    INNER JOIN master_employee ON retro_payslip.rp_employeeid = master_employee.me_id
+    INNER JOIN master_department ON master_employee.me_department = master_department.md_departmentid
+    INNER JOIN master_position ON master_employee.me_position = master_position.mp_positionid
     GROUP BY 
     rp_employeeid,
     rp_fullname,
@@ -55,12 +57,10 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -93,7 +93,6 @@ router.post("/save", (req, res) => {
         return res.json(JsonErrorResponse(err));
       }
 
-      console.log(result, "result");
 
       if (result.length > 0) {
         result.forEach((row) => {
@@ -144,6 +143,8 @@ router.post("/save", (req, res) => {
 router.post("/viewretropay", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
+    let startpayrolldate = req.body.startpayrolldate;
+    let endpayrolldate = req.body.endpayrolldate;
     let sql = `SELECT 
     me_profile_pic as rp_image,
     rp.rp_employeeid,
@@ -158,7 +159,8 @@ router.post("/viewretropay", (req, res) => {
     (SELECT 
         SUM(CASE WHEN p_sub.p_total_netpay > 0 THEN p_sub.p_total_netpay ELSE 0 END)
     FROM payslip p_sub 
-    WHERE p_sub.p_employeeid = rp.rp_employeeid
+    WHERE p_payrolldate BETWEEN '${startpayrolldate}' AND '${endpayrolldate}'
+    AND p_sub.p_employeeid = rp.rp_employeeid
     ) AS rp_payslip_netpay,
     (
         (SELECT 
@@ -166,11 +168,12 @@ router.post("/viewretropay", (req, res) => {
         FROM retro_payslip rp_sub 
         WHERE rp_sub.rp_employeeid = rp.rp_employeeid
         ) - 
-        (SELECT 
-            SUM(CASE WHEN p_sub.p_total_netpay > 0 THEN p_sub.p_total_netpay ELSE 0 END)
-        FROM payslip p_sub 
-        WHERE p_sub.p_employeeid = rp.rp_employeeid
-        )
+         (SELECT 
+        SUM(CASE WHEN p_sub.p_total_netpay > 0 THEN p_sub.p_total_netpay ELSE 0 END)
+    FROM payslip p_sub 
+    WHERE p_payrolldate BETWEEN '${startpayrolldate}' AND '${endpayrolldate}'
+    AND p_sub.p_employeeid = rp.rp_employeeid
+    )
     ) AS rp_total_retro_pay
 FROM 
     retro_payslip rp
@@ -189,12 +192,10 @@ GROUP BY
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -227,12 +228,10 @@ router.post("/getretropay", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //console.log(result);
 
       if (result != 0) {
         let data = DataModeling(result, "rp_");
 
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -285,7 +284,6 @@ router.post("/insertadjustment", (req, res) => {
       [employeeid, adjustmenttype]
     );
 
-    console.log(checkStatement);
 
     Check(checkStatement)
       .then((result) => {
@@ -326,11 +324,9 @@ router.get("/viewpayrolldates", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
     
-      console.log(result);
     
       if (result != 0) {
         let data = DataModeling(result, "p_");
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

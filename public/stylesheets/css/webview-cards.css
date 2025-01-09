@@ -1,0 +1,104 @@
+.cardbody-size-sales-details {
+    height: 750px;
+}
+
+.history-modal{
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.scroll-cardbody-size-sales-details {
+    height: 590px !important;
+    overflow-y: auto !important;
+}
+
+.scroll-cardbody-size-sm {
+    height: 330px !important;
+    overflow-y: auto !important;
+}
+
+.cardbody-size-580 {
+    height: 590px;
+}
+
+.scroll-cardbody-size-580 {
+    height: 430px !important;
+    overflow-y: auto !important;
+}
+
+.cardbody-size-710{
+    height: 760px;
+}
+
+.scroll-cardbody-size-710 {
+    height: 600px !important;
+    overflow-y: auto !important;
+}
+
+.scroll-cardbody-size-640 {
+    height: 640px !important;
+    overflow-y: auto !important;
+}
+
+.tooltip-container {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 16px;
+    height: 16px;
+    border-radius: 6px;
+    font-size: 17px;
+}
+
+.tooltip {
+    --background-tooltip: #6e7681; /* Default background color for tooltip */
+    position: absolute;
+    top: -75px; /* Adjusted top position */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.25em;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    background: var(--background-tooltip);
+    color: white; /* Text color */
+    border-radius: 5px;
+    width: 210px;
+    height: 72px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.tooltip::before {
+    position: absolute;
+    content: "";
+    height: 0.6em;
+    width: 0.6em;
+    bottom: -0.2em;
+    left: 50%;
+    transform: translate(-50%) rotate(45deg);
+    background: var(
+        --background-tooltip
+    ); 
+}
+
+.tooltip-container:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.inventory-card {
+    height: 720px; 
+    max-height: 720px; 
+    overflow-y: auto; 
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+
+    .tooltip{
+        transform: translateX(-125%) !important; 
+        top: -90px !important; /* Adjusted top position */
+    }
+}

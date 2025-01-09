@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { GetCurrentMonthFirstDay, GetCurrentMonthLastDay } = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -15,6 +16,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
     lra.lra_id AS leaverequestid,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS employeeid,
@@ -29,7 +32,9 @@ router.get("/load", (req, res) => {
     INNER JOIN leaves l ON lra.lra_leaveid = l.l_leaveid
     INNER JOIN master_employee me_request ON l.l_employeeid = me_request.me_id
     INNER JOIN master_employee me_activity ON lra.lra_employeeid = me_activity.me_id
-    INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id`;
+    INNER JOIN master_leaves ml ON l.l_leavetype = ml.ml_id
+    WHERE lra_date between '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY lra_date DESC`;
 
     mysql
       .mysqlQueryPromise(sql)

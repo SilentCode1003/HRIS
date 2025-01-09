@@ -1,12 +1,12 @@
 <br>
 
 <!-- Table -->
-<div class="card" id="tablecard">
+<!-- <div class="card" id="tablecard">
     <div class="card-header ch-coop">
-      <h3 class="title-card-table">Disciplinary</h3>
-      <div class="row g-2">
+      <h3 class="title-card-table m-4">Disciplinary</h3>
+      <div class="row g-2 m-2 mb-4">
         <div class="col">
-          <input id='myInput'  type='text' placeholder="  Search....">
+          <input id='myInput' class="pl-2 font-weight-bold"  type='text' placeholder="  Search....">
         </div>
         <div class="col-sm-1 col-add">
           <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
@@ -17,7 +17,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTabledisciplianary">
+            <table class="table table-striped-light" id="dataTabledisciplianary">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -42,8 +42,146 @@
 </div>
 </div>
 </div>
+</div> -->
+
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-requestleave">
+    <h3 class="title-card-table m-4">Disciplinary</h3>
+    <div class="row g-2 m-2 mb-4">
+      <div class="col">
+        <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 col-add" id="dynamicButton">
+        <!-- Dynamic button will be injected here -->
+      </div>      
+    </div>
+  </div>
+ 
+        <div class="card-header ch-generate">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active eportal-leave m-1" id="nav-profile-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                        aria-selected="true"><b>Manual Memo</b>
+                    </button>
+                    <button class="nav-link eportal-leave m-1" id="approvedtable" data-bs-toggle="tab"
+                        data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                        aria-selected="false"><b>Approved</b>
+                    </button>
+                    <button class="nav-link eportal-leave m-1" id="rejectedtable" data-bs-toggle="tab"
+                        data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                        aria-selected="false"><b>Rejected</b>
+                    </button>
+                    <button class="nav-link eportal-leave m-1" id="cancelledtable" data-bs-toggle="tab"
+                        data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                        aria-selected="false"><b>Cancelled</b>
+                    </button>
+                </div>
+            </nav>
+        </div>
+        <!-- Tables  -->
+        <div class="card-body db-custom-cards">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12">
+                          <div class="card-body">
+                            <table class="table table-striped-light" id="dataTabledisciplianary">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th class="col-sm-1">ID</th>
+                                        <th>Employee ID</th>
+                                        <th>Offense ID</th>
+                                        <th>Action Code</th>             
+                                        <th class="col-25">Description</th>
+                                        <th>Date</th>
+                                        <th>Created By</th>
+                                        <th>Created Date</th>
+                                        <th>Status</th>
+                                        <th class="col-sm-1">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+                aria-labelledby="nav-profile-tab">
+                <div class="card-body">
+                  <div class="table-responsive" id="table-responsive-id">
+                      <table class="table table-striped-light" id="dataTableleaveApproved">
+                          <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Attendance Date</th>
+                                <th scope="col">Time In</th>
+                                <th scope="col">Time Out</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Applied Date</th>
+                            </tr>
+                          </thead>
+                      </table>
+                  </div>
+              </div>
+              </div>
+              <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+                aria-labelledby="nav-profile-tab">
+                <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped-light" id="dataTableleaveRejected">
+                            <thead>
+                              <tr>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">Attendance Date</th>
+                                  <th scope="col">Time In</th>
+                                  <th scope="col">Time Out</th>
+                                  <th scope="col">Total Hours</th>
+                                  <th scope="col">Reason</th>
+                                  <th scope="col">Status</th>
+                                  <th scope="col">Applied Date</th>
+                                  <!-- <th scope="col">Action</th> -->
+                              </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+                aria-labelledby="nav-profile-tab">
+                <div class="card-body">
+                    <div class="table-responsive" id="table-responsive-id">
+                        <table class="table table-striped-light" id="dataTableleaveCancelled">
+                            <thead>
+                              <tr>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">Attendance Date</th>
+                                  <th scope="col">Time In</th>
+                                  <th scope="col">Time Out</th>
+                                  <th scope="col">Total Hours</th>
+                                  <th scope="col">Reason</th>
+                                  <th scope="col">Status</th>
+                                  <th scope="col">Applied Date</th>
+                                  <!-- <th scope="col">Action</th> -->
+                              </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+   
+  
 </div>
-<!-- Modal -->
+
+
+<!-- Add Modal -->
 <div class="modal fade" id="disciplinarymodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -116,7 +254,6 @@
 
 
 <!--Edit Modal-->
-
 <div class="modal fade" id="editdisciplinarymodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
@@ -229,6 +366,67 @@
       <div class="modal-footer" id="modal-footer">
         <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-modal-save" id="employeesavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="filterModalLabel">Filter Options</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="datetime-local" class="form-select border-form-modal" id="disciplinaryactionactioncode" name="disciplinaryactionactioncode"
+                  aria-label="Floating label select example">
+                <label for="floatingSelectGrid">Start Date</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-floating">
+                <input type="datetime-local" class="form-select border-form-modal" id="disciplinaryactionactioncode" name="disciplinaryactionactioncode"
+                  aria-label="Floating label select example">
+                <label for="floatingSelectGrid">End Date</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select border-form-modal" id="disciplinaryactionoffenseid" name="disciplinaryactionoffenseid"
+                  aria-label="Floating label select example">
+                  <option selected>Offense ID</option>
+                </select>
+                <label for="floatingSelectGrid">Offense ID</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="disciplinaryactiondescription"
+                  name="disciplinaryactiondescription" placeholder="Created By">
+                <label for="floatingInput">Description</label>
+              </div>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="applyFilterBtn">Apply Filter</button>
       </div>
     </div>
   </div>

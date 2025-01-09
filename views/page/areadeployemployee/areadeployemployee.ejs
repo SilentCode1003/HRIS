@@ -1,22 +1,22 @@
 <div class="card">
-  <div class="card-body">
-    <div class="card-header">
-      <h3 class="card-title mb-0 font-weight-bold">Area Deploy Employee</h3>
-    </div>
+  <div class="card-header header-bg">
+    <h3 class="card-title ch-text">Area Deploy Employee</h3>
+  </div>
+  <div class="card-body ch-body">
     <div class="row mb-2 mt-2">
       <div class="col-md-6">
         <div class="input-group">
           <input
             autocomplete="off"
             id="area"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Select Staff House"
             type="text"
             name="area"
           />
           <input autocomplete="off" type="hidden" id="areaID" name="areaID" />
           <div class="input-group-append">
-            <span class="input-group-text">Select Area</span>
+            <span class="input-group-text header-bg">Select Area</span>
           </div>
         </div>
         <div class="custom-dropdown cdw-tableoption" id="areaDropdown"></div>
@@ -29,7 +29,7 @@
           <input
             autocomplete="off"
             id="employee"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Select Staff House"
             type="text"
             name="employee"
@@ -41,7 +41,7 @@
             name="employeeID"
           />
           <div class="input-group-append">
-            <span class="input-group-text">Select Employee</span>
+            <span class="input-group-text header-bg">Select Employee</span>
           </div>
         </div>
         <div
@@ -51,31 +51,31 @@
       </div>
     </div>
 
-    <div class="row mt-3 justify-content-start">
-      <div class="col-md-6">
-        <button id="addBtn" class="btn btn-add-color w-25">Add</button>
+    <div class="d-flex mt-3 justify-content-end">
+      <div class="flex">
+        <button id="addBtn" class="btn btn-add-color"><i class="bi bi-plus mr-2"></i><b>Add</b></button>
       </div>
     </div>
   </div>
 
-  <div class="card-body">
+  <div class="card-body header-bg">
     <div class="card-title">
-      <h6 class="m-0 font-weight-bold">Area Deploy Employee Table</h6>
+      <h6 class="ch-text">Area Deploy Employee Table</h6>
     </div>
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6 mb-3 m-2">
         <input
           id="search"
           type="text"
-          class="form-control"
-          placeholder="Search"
+          class="form-control pl-2 font-weight-bold"
+          placeholder="Search...."
         />
       </div>
     </div>
 
     <div class="row mt-2">
-      <div class="table-responsive">
-        <table id="data-table" class="table table-bordered table-hover">
+      <div class="table-responsive m-2">
+        <table id="data-table" class="table table-striped-light table-hover">
           <thead class="thead-dark">
             <th>ID</th>
             <th>Area</th>

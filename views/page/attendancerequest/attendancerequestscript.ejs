@@ -77,29 +77,34 @@
         ],
         createdRow: function (row, data, dataIndex) {
           //miyaka
-          var requeststatusCell = $(row).find("td:eq(8)");
+          var requeststatusCell = $(row).find("td:eq(7)");
 
           var requeststatusText = data.requeststatus;
 
           var requeststatusClass = "";
 
           switch (requeststatusText.toLowerCase()) {
-            case "pending":
-              requeststatusClass = "pending-requeststatus";
-              break;
             case "approved":
-              requeststatusClass = "approved-requeststatus";
+              requeststatusClass = "approved-status";
               break;
+
+            case "pending":
+              requeststatusClass = "pending-status";
+              break;
+
             case "cancel":
-              requeststatusClass = "cancel-requeststatus";
+              requeststatusClass = "cancelled-status";
               break;
+
+            case "rejected":
+              requeststatusClass = "rejected-status";
+              break;
+
             default:
               requeststatusClass = "";
           }
 
-          requeststatusCell.html(
-            `<span class="${requeststatusClass}">${requeststatusText}</span>`
-          );
+          requeststatusCell.html(`<span class="${requeststatusClass}">${requeststatusText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -119,7 +124,7 @@
           dataRow.push($(this).text());
         });
       console.log(dataRow);
-      requestid = dataRow[1];
+      requestid = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {

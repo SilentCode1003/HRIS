@@ -154,8 +154,6 @@ router.post("/save", async (req, res) => {
           });
         }
 
-        console.log("Ojt record inserted: ", insertResult);
-
         const { username, password } = generateUsernameAndPasswordforOjt({
           mo_name: firstname,
           mo_lastname: lastname,
@@ -238,8 +236,6 @@ router.post("/update", async (req, res) => {
     let department = req.body.department;
     let startdate = req.body.startdate;
     let hours = req.body.hours;
-
-    console.log(ojtid);
 
     let sql = `UPDATE master_ojt SET
       mo_image = '${image}',
@@ -329,8 +325,6 @@ async function saveOjtRecord(req, ojtID, username, encryptedPassword) {
       req.session && req.session.fullname
         ? req.session.fullname
         : "DefaultUser";
-
-    console.log("Session:", req.session);
 
     const data = [
       [ojtID, username, encryptedPassword, 4, createby, createdate, "Active"],

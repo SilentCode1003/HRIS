@@ -2,29 +2,97 @@
   let changeshift = "";
 
   $(document).ready(function () {
+    const manualMemoTab = $("#manualMemoTab");
+    const automationTab = $("#automationTab");
+    const dynamicButtonContainer = $("#dynamicButton");
+    const titleCard = $("#titleCard");
+
+    if (
+      manualMemoTab.length &&
+      automationTab.length &&
+      dynamicButtonContainer.length
+    ) {
+      console.log("Elements found: Adding event listeners.");
+
+      function updateButton(isManualMemo) {
+        if (isManualMemo) {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#subgroupmodal">
+                <b>+ Add Shift Rest Day</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Shift Adjustments - Rest Day");
+        } else {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button id="addDeductionBtn" type="button" class="btn btn-add-color">
+                <b>+ Add Shift Time</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Shift Adjustments - Shift Time");
+        }
+      }
+
+      manualMemoTab.on("click", function () {
+        updateButton(true);
+      });
+
+      automationTab.on("click", function () {
+        updateButton(false);
+      });
+
+      updateButton(true);
+    } else {
+      console.error("One or more elements are missing:", {
+        manualMemoTab: manualMemoTab.length,
+        automationTab: automationTab.length,
+        dynamicButtonContainer: dynamicButtonContainer.length,
+      });
+    }
+
     LoadTable();
     LoadList();
     searchTable();
     LoadListEdit();
 
+    //#region Rest Day
+
     $(document).on("keyup", "#myInput", function () {
       searchTable();
     });
 
+    // $(function () {
+    //   var dtToday = new Date();
+
+    //   var month = dtToday.getMonth() + 1;
+    //   var day = dtToday.getDate();
+    //   var year = dtToday.getFullYear();
+    //   if (month < 10) month = "0" + month.toString();
+    //   if (day < 10) day = "0" + day.toString();
+
+    //   var minDate = year + "-" + month + "-" + day;
+
+    //   $("#targetdate").attr("min", minDate);
+    //   $("#actualdate").attr("min", minDate);
+
+    //   $('input[type="date"]').on("change", function () {
+    //     var dateInput = this.value;
+    //     var date = new Date(dateInput);
+    //     var options = { weekday: "long" };
+    //     var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+
+    //     if (this.id === "targetdate") {
+    //       $("#targetdayName").val(dayName);
+    //     } else if (this.id === "actualdate") {
+    //       $("#actualdayName").val(dayName);
+    //     }
+    //   });
+    // });
+
     $(function () {
-      var dtToday = new Date();
-
-      var month = dtToday.getMonth() + 1;
-      var day = dtToday.getDate();
-      var year = dtToday.getFullYear();
-      if (month < 10) month = "0" + month.toString();
-      if (day < 10) day = "0" + day.toString();
-
-      var minDate = year + "-" + month + "-" + day;
-
-      $("#targetdate").attr("min", minDate);
-      $("#actualdate").attr("min", minDate);
-
       $('input[type="date"]').on("change", function () {
         var dateInput = this.value;
         var date = new Date(dateInput);
@@ -59,7 +127,7 @@
             $.each(data, (key, item) => {
               var action = "";
               var status = item.status;
-    
+
               action = `
                 <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editchangeshift"><i class="fas fa-fw fa-pen"></i></button>
                             `;
@@ -213,7 +281,7 @@
         .each(function () {
           dataRow.push($(this).text());
         });
-        changeshift = dataRow[0];
+      changeshift = dataRow[0];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -241,6 +309,20 @@
           console.error("An error occurred while fetching employee data", err);
           swal("An error occurred while fetching employee data", msg, "error");
         },
+      });
+    });
+
+    $(function () {
+      $('input[type="date"]').on("change", function () {
+        var dateInput = this.value;
+        var date = new Date(dateInput);
+        var options = { weekday: "long" };
+        var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+        if (this.id === "edittargetdate") {
+          $("#targetdayName").val(dayName);
+        } else if (this.id === "editactualdate") {
+          $("#actualdayName").val(dayName);
+        }
       });
     });
 
@@ -334,5 +416,191 @@
         }
       }
     }
+
+    //#endregion
+
+    //#region Shift Time
+    $(document).on("click", "#addDeductionBtn", function () {
+      $("#subgroupmodaltime").modal("show");
+    });
+
+    $(document).on("click", "#viewBtn", function () {
+      $("#editchangeshifttime").modal("show");
+    });
+
+    LoadEmpDeduc();
+
+    $(document).on("click", "#automationTab", function () {
+      console.log("Hit");
+      $("#dataTableShiftTimeAdjustments").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/change_shift/loadshifttime",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById(
+            "dataTableShiftTimeAdjustments"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var SHIFTTIME_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var TARGET_DATE = row.insertCell(2);
+            var ORIGINAL_SHIFT = row.insertCell(3);
+            var CHANGED_SHIFT = row.insertCell(4);
+            var CREATE_BY = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            SHIFTTIME_ID.innerHTML = item.id;
+            FULLNAME.innerHTML = item.fullname;
+            TARGET_DATE.innerHTML = item.target_date;
+            ORIGINAL_SHIFT.innerHTML = item.original_shift;
+            CHANGED_SHIFT.innerHTML = item.changed_shift;
+            STATUS.innerHTML = item.status;
+            CREATE_BY.innerHTML = item.createby;
+
+            var adjustmentStatus = item.status;
+            var statusClass = "";
+            switch (adjustmentStatus.toLowerCase()) {
+              case "active":
+                statusClass = "active-status";
+                break;
+              case "inactive":
+                statusClass = "inactive-status";
+                break;
+              default:
+                statusClass = "";
+            }
+            STATUS.innerHTML = `<span class="${statusClass}">${adjustmentStatus}</span>`;
+
+            ACTION.innerHTML =
+              '<button id="viewBtn" class="btn text-primary view-btn"><i class="fas fa-fw fa-eye"></i></button>';
+            $.each(
+              [
+                SHIFTTIME_ID,
+                FULLNAME,
+                TARGET_DATE,
+                ORIGINAL_SHIFT,
+                CHANGED_SHIFT,
+                CREATE_BY,
+                STATUS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+
+          $("#dataTableShiftTimeAdjustments").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+              .find("td")
+              .each(function () {
+                dataRow.push($(this).text());
+              });
+            changeshift = dataRow[0];
+            console.log("Selected Leave ID:", changeshift);
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching approved leaves:", status, error);
+        },
+      });
+    });
+
+    function LoadEmpDeduc() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#timeemployeename").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#timeemployeename").on("change", function () {
+      let employeeid = $(this).val();
+      $("#timetargertdate").val("");
+      $("#timefromorigin").val("");
+      $("#timetoorigin").val("");
+      $.ajax({
+        type: "POST",
+        url: "/payroll_adjustments/getimage",
+        data: { employeeid: employeeid },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.profile_pic
+              );
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $("#timetargertdate").on("change", function () {
+      let target_date = $(this).val();
+      let employeeid = $("#timeemployeename").val();
+
+      if (!target_date) {
+        swal("Please select a date", "", "warning");
+        return;
+      }
+      function getDayName(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString("en-US", { weekday: "long" });
+      }
+      let dayName = getDayName(target_date);
+      $.ajax({
+        type: "POST",
+        url: "/change_shift/getshift",
+        data: {
+          employeeid: employeeid,
+          dayname: dayName,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            $.each(existingData, (key, item) => {
+              $("#timefromorigin").val(item.time_in);
+              $("#timetoorigin").val(item.time_out);
+            });
+          } else {
+            swal("Error fetching employee data", "", "error");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    //#endregion
   });
 </script>

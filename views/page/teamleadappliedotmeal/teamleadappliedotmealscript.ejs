@@ -37,7 +37,7 @@
               var action = "";
               var status = item.status;
 
-              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn"><i class="fas fa-fw fa-pen"></i></button>`;
 
               // var imgElement = document.createElement("img");
               // imgElement.src = "data:image/jpg;base64," + item.image;
@@ -81,11 +81,42 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var mealstatusCell = $(row).find("td:eq(7)");
+          
+          var mealstatusText = data.mealstatus;
+
+          var mealstatusClass = "";
+
+          switch (mealstatusText.toLowerCase()) {
+            case "approved":
+              mealstatusClass = "approved-status";
+              break;
+
+              case "applied":
+              mealstatusClass = "applied-status";
+              break;
+
+            case "cancel":
+              mealstatusClass = "cancel-status";
+              break;
+
+            case "pending":
+              mealstatusClass = "pending-status";
+              break;
+
+            default:
+              mealstatusClass = "";
+          }
+
+          mealstatusCell.html(`<span class="${mealstatusClass}">${mealstatusText}</span>`);
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
           });
         },
+
         initComplete: function () {},
       });
     }
@@ -163,6 +194,8 @@
     });
 
     $(document).on("click", "#editBtn", function () {
+      $('#otapprovalmodal').modal('show');
+
       $.ajax({
         type: "POST",
         url: "/teamleadappliedotmeal/getotmeal",
@@ -248,9 +281,10 @@
                 "You clicked the button!",
                 "success"
               ).then((result) => {
-                window.location.reload();
+                $('#otapprovalmodal').modal('hide');
+                LoadTable();
               });
-              LoadTable();
+             
             } else if (result.msg === "exist") {
               swal("Error", "This combination already exists.", "error");
             }
@@ -261,103 +295,6 @@
         });
       }
     });
-
-    $(document).on("click", "#otsavebutton", function () {
-      console.log("HIT");
-      let id = approveot_id;
-      let night_ot = $("#otnight").val();
-      let earlyot = $("#otearly").val();
-      let normal_ot = $("#otnormal").val();
-      let payrolldate = $("#otpayrolldate").val();
-      let overtimestatus = $("#otstatus").val();
-
-      var message = "";
-
-      if (night_ot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (earlyot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (normal_ot === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (payrolldate === "") {
-        message += "status is required. ";
-      }
-
-      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
-        message += "You Need to Approve or Disregard. ";
-      }
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "otapproval/update",
-          data: {
-            approveot_id: id,
-            night_ot: night_ot,
-            earlyot: earlyot,
-            normal_ot: normal_ot,
-            payrolldate: payrolldate,
-            overtimestatus: overtimestatus,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Update Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning");
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
-          },
-        });
-      }
-    });
-
-    // Event listener for clockin and clockout input fields
-    // $("#otclockin, #otclockout").on("change", function () {
-    //   // Get the values of clockin and clockout
-    //   let clockinValue = $("#otclockin").val();
-    //   let clockoutValue = $("#otclockout").val();
-
-    //   // Calculate duration in minutes
-    //   let duration = moment
-    //     .duration(
-    //       moment(clockoutValue, "HH:mm").diff(moment(clockinValue, "HH:mm"))
-    //     )
-    //     .asMinutes();
-
-    //   // Adjust night_ot, earlyot, and normal_ot based on duration
-    //   if (duration >= 480) {
-    //     // 8 hours or more
-    //     $("#otnight").val(duration);
-    //     $("#otearly").val(0);
-    //     $("#otnormal").val(0);
-    //   } else if (duration >= 240) {
-    //     // 4 to 8 hours
-    //     $("#otnight").val(0);
-    //     $("#otearly").val(duration);
-    //     $("#otnormal").val(0);
-    //   } else {
-    //     // Less than 4 hours
-    //     $("#otnight").val(0);
-    //     $("#otearly").val(0);
-    //     $("#otnormal").val(duration);
-    //   }
-    // });
 
     $(document).on("change", "#otimage", function (e) {
       const input = document.getElementById("otimage");

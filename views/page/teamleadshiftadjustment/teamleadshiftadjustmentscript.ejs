@@ -1,3 +1,9 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
   let changeshift = "";
 
@@ -25,6 +31,34 @@
         }
       });
     });
+
+    // $(function () {
+    //   var dtToday = new Date();
+
+    //   var month = dtToday.getMonth() + 1;
+    //   var day = dtToday.getDate();
+    //   var year = dtToday.getFullYear();
+    //   if (month < 10) month = "0" + month.toString();
+    //   if (day < 10) day = "0" + day.toString();
+
+    //   var minDate = year + "-" + month + "-" + day;
+
+    //   $("#targetdate").attr("min", minDate);
+    //   $("#actualdate").attr("min", minDate);
+
+    //   $('input[type="date"]').on("change", function () {
+    //     var dateInput = this.value;
+    //     var date = new Date(dateInput);
+    //     var options = { weekday: "long" };
+    //     var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+
+    //     if (this.id === "targetdate") {
+    //       $("#targetdayName").val(dayName);
+    //     } else if (this.id === "actualdate") {
+    //       $("#actualdayName").val(dayName);
+    //     }
+    //   });
+    // });
 
     function LoadTable() {
       $("#dataTableChangeShiftSettings").DataTable({
@@ -103,6 +137,86 @@
       });
     }
 
+    $("#csemployeename").on("change", function () {
+      let employeeid = $(this).val();
+      $("#actualdate").val("");
+      $("#targetdate").val("");
+
+      $.ajax({
+        type: "POST",
+        url: "/teamleadshiftadjustment/viewactualrd",
+        data: {
+          employeeid: employeeid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            let dates = result.data.map((item) => item.forecast_date);
+            console.log("Blocked Dates:", dates);
+
+            $("#actualdate").flatpickr({
+              enable: dates,
+              onChange: function (selectedDates, dateStr) {
+                if (selectedDates.length > 0) {
+                  let selectedDate = new Date(selectedDates[0]);
+
+                  let startOfWeek = new Date(selectedDate);
+                  if (selectedDate.getDay() === 6) {
+                    startOfWeek.setDate(selectedDate.getDate() - 1);
+                  } else {
+                    startOfWeek.setDate(
+                      selectedDate.getDate() - selectedDate.getDay()
+                    );
+                  }
+
+                  let startOfPrevWeek = new Date(startOfWeek);
+                  startOfPrevWeek.setDate(startOfPrevWeek.getDate() - 14);
+
+                  let formatDate = (date) => date.toISOString().split("T")[0];
+                  let combinedWeekDates = [];
+
+                  for (
+                    let d = new Date(startOfPrevWeek);
+                    d <= new Date(startOfWeek);
+                    d.setDate(d.getDate() + 1)
+                  ) {
+                    combinedWeekDates.push(formatDate(new Date(d)));
+                  }
+
+                  let endOfWeek = new Date(startOfWeek);
+                  endOfWeek.setDate(startOfWeek.getDate() + 14);
+                  for (
+                    let d = new Date(startOfWeek);
+                    d <= endOfWeek;
+                    d.setDate(d.getDate() + 1)
+                  ) {
+                    combinedWeekDates.push(formatDate(new Date(d)));
+                  }
+
+                  let validDates = combinedWeekDates.filter(
+                    (date) => !dates.includes(date)
+                  );
+
+                  console.log(
+                    "Valid Dates (including previous week, excluding blocked):",
+                    validDates
+                  );
+                  $("#targetdate").val("");
+
+                  $("#targetdate").flatpickr({
+                    enable: validDates,
+                  });
+                }
+              },
+            });
+          }
+        },
+        error: function (err) {
+          console.error("An error occurred while fetching employee data", err);
+          swal("An error occurred while fetching employee data", "", "error");
+        },
+      });
+    });
+
     $(document).on("click", "#changeshiftsavebtn", function () {
       let employeeid = $("#csemployeename").val();
       let targetrddate = $("#targetdate").val();
@@ -134,17 +248,36 @@
             actualrddate: actualrddate,
           },
           success: function (result) {
-            if (result.msg == "success") {
+            if (result.msg === "success") {
               swal(
                 "Save Successfully",
-                "You clicked the button!",
+                "The shift change has been saved.",
                 "success"
               ).then((result) => {
                 window.location.reload();
               });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Error", "This combination already exists.", "error");
+            } else if (result.msg === "exist") {
+              swal(
+                "Error",
+                "This combination of Actual RD Date and Target RD Date already exists.",
+                "error"
+              );
+            } else if (result === "Actual Date Exist") {
+              swal("Error", "The actual RD date already exists.", "error");
+            } else if (result === "Target Date Exist") {
+              swal("Error", "The target RD date already exists.", "error");
+            } else if (result.msg === "validation_error") {
+              swal(
+                "Validation Error",
+                result.message || "Please check the input data.",
+                "error"
+              );
+            } else {
+              swal(
+                "Error",
+                "An unexpected error occurred. Please try again.",
+                "error"
+              );
             }
           },
           error: function (err) {
@@ -176,7 +309,7 @@
     function LoadListEdit() {
       $.ajax({
         type: "GET",
-        url: "/teamleadshift/selectdistinct",
+        url: "/teamleadshift/selectshift",
         success: function (result) {
           var data = result.data;
 
@@ -219,15 +352,155 @@
               $("#editactualdate").val(item.actualrd);
               $("#edittargetdate").val(item.changerd);
               $("#editshiftstatus").val(item.shiftstatus);
+
+              $.ajax({
+                type: "POST",
+                url: "/teamleadshiftadjustment/viewactualrd",
+                data: {
+                  employeeid: item.employeeid,
+                },
+                success: function (datesResult) {
+                  if (datesResult.msg === "success") {
+                    const validDates = datesResult.data.map(
+                      (date) => date.forecast_date
+                    );
+
+                    const formattedValidDates = validDates.map(
+                      (date) => new Date(date).toISOString().split("T")[0]
+                    );
+
+                    if (!$("#editactualdate").data("flatpickr")) {
+                      $("#editactualdate").flatpickr({
+                        enable: formattedValidDates,
+                        onChange: function (selectedDates) {
+                          //$("#edittargetdate").val("");
+                          if (selectedDates.length > 0) {
+                            const selectedDate = new Date(selectedDates[0]);
+
+                            let startOfRange = new Date(selectedDate);
+                            startOfRange.setDate(selectedDate.getDate() - 14);
+
+                            let endOfRange = new Date(selectedDate);
+                            endOfRange.setDate(selectedDate.getDate() + 14);
+
+                            let rangeDates = [];
+                            const formatDate = (date) =>
+                              date.toISOString().split("T")[0];
+                            for (
+                              let d = new Date(startOfRange);
+                              d <= endOfRange;
+                              d.setDate(d.getDate() + 1)
+                            ) {
+                              rangeDates.push(formatDate(new Date(d)));
+                            }
+
+                            if ($("#edittargetdate").data("flatpickr")) {
+                              $("#edittargetdate").flatpickr().destroy();
+                            }
+
+                            // $("#edittargetdate").flatpickr({
+                            //   enable: rangeDates,
+                            //   disable: formattedValidDates,
+                            // });
+
+                            $("#edittargetdate").flatpickr({
+                              disable: [
+                                ...formattedValidDates,
+                                formattedActualDate,
+                              ],
+                              onDayCreate: function (dObj, dStr, fp, dayElem) {
+                                if (
+                                  formattedValidDates.includes(
+                                    dayElem.dateObj.toISOString().split("T")[0]
+                                  )
+                                ) {
+                                  dayElem.classList.add("disabled");
+                                }
+                              },
+                            });
+                          }
+                        },
+                      });
+                    }
+
+                    if (!$("#edittargetdate").data("flatpickr")) {
+                      const actualDate = $("#editactualdate").val();
+                      const formattedActualDate = new Date(actualDate)
+                        .toISOString()
+                        .split("T")[0];
+
+                      $("#edittargetdate").flatpickr({
+                        disable: [...formattedValidDates, formattedActualDate],
+                        onDayCreate: function (dObj, dStr, fp, dayElem) {
+                          if (
+                            formattedValidDates.includes(
+                              dayElem.dateObj.toISOString().split("T")[0]
+                            )
+                          ) {
+                            dayElem.classList.add("disabled");
+                          }
+                        },
+                      });
+                    }
+                  } else {
+                    swal(
+                      "Error fetching allowed dates",
+                      datesResult.msg,
+                      "error"
+                    );
+                  }
+                },
+                error: function (err) {
+                  console.error(
+                    "An error occurred while fetching allowed dates",
+                    err
+                  );
+                  swal(
+                    "An error occurred while fetching allowed dates",
+                    "",
+                    "error"
+                  );
+                },
+              });
             });
           } else {
-            swal("Error fetching employee data", msg, "error");
+            swal("Error fetching employee data", result.msg, "error");
           }
         },
         error: function (err) {
           console.error("An error occurred while fetching employee data", err);
-          swal("An error occurred while fetching employee data", msg, "error");
+          swal("An error occurred while fetching employee data", "", "error");
         },
+      });
+    });
+
+    $(function () {
+      var dtToday = new Date();
+
+      var month = dtToday.getMonth() + 1;
+      var day = dtToday.getDate();
+      var year = dtToday.getFullYear();
+
+      if (month < 10) month = "0" + month.toString();
+      if (day < 10) day = "0" + day.toString();
+
+      var minDate = year + "-" + month + "-" + day;
+
+      $("#edittargetdate").attr("min", minDate);
+      $("#editactualdate").attr("min", minDate);
+
+      $('input[type="date"]').on("change", function () {
+        var dateInput = this.value;
+        var date = new Date(dateInput);
+
+        var options = { weekday: "long" };
+        var dayName = new Intl.DateTimeFormat("en-US", options).format(date);
+
+        if (this.id === "edittargetdate") {
+          $("#edittargetdayName").val(dayName);
+        } else if (this.id === "editactualdate") {
+          $("#editactualdayName").val(dayName);
+        }
       });
     });
 
@@ -239,6 +512,10 @@
       let shiftstatus = $("#editshiftstatus").val();
 
       let message = "";
+
+      if (actualrd === changerd) {
+        message += "The Actual Rest Day must not be the Target Rest Day.";
+      }
 
       if (employeeid === "") {
         message += "employeeid ID is required. ";
@@ -271,22 +548,29 @@
           },
           success: function (result) {
             if (result.msg === "success") {
-              swal({
-                title: "Update Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then(() => {
+              swal(
+                "Save Successfully",
+                "The shift change has been saved.",
+                "success"
+              ).then((result) => {
                 window.location.reload();
               });
-            } else if (result.msg === "exist") {
+            } else if (result === "Actual Date Exist") {
+              swal("Error", "The actual RD date already exists.", "error");
+            } else if (result === "Target Date Exist") {
+              swal("Error", "The target RD date already exists.", "error");
+            } else if (result.msg === "validation_error") {
               swal(
-                "Exist",
-                "Maybe The Department and Approver Count combination already exists.",
-                "warning"
+                "Validation Error",
+                result.message || "Please check the input data.",
+                "error"
               );
             } else {
-              swal("Error", "An error occurred while updating.", "error");
+              swal(
+                "Error",
+                "An unexpected error occurred. Please try again.",
+                "error"
+              );
             }
           },
           error: function (err) {

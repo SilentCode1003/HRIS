@@ -86,7 +86,6 @@ router.post("/save", async (req, res) => {
                   console.error("Error inserting record: ", inserterr);
                   res.json({ msg: "insert failed" });
                 } else {
-                  console.log(insertresult);
                   res.json({ msg: "success" });
                 }
               }
@@ -130,12 +129,8 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "tu_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -153,18 +148,6 @@ router.post("/update", async (req, res) => {
     let subgroupid = req.body.subgroupid;
     let status = req.body.status;
 
-    // Wrap the Encrypter function in a promise
-    // const encrypted = await new Promise((resolve, reject) => {
-    //   Encrypter(password, (err, result) => {
-    //     if (err) {
-    //       console.error("Error in Encrypter: ", err);
-    //       reject(err);
-    //     } else {
-    //       resolve(result);
-    //     }
-    //   });
-    // });
-
     let sqlupdate = `        
     UPDATE teamlead_user SET 
     tu_username = '${username}',
@@ -173,8 +156,6 @@ router.post("/update", async (req, res) => {
     WHERE tu_userid ='${tluserid}'`;
 
     const updateResult = await mysql.Update(sqlupdate);
-
-    console.log(updateResult);
 
     res.json({
       msg: "success",
@@ -219,30 +200,6 @@ router.post("/getusers", (req, res) => {
 router.get("/subgroupload", (req, res) => {
   try {
     let departmentid = req.session.departmentid;
-    let sql = `select * 
-    from subgroup
-    where s_departmentid = '${departmentid}'
-    AND s_status = 'Active'`;
-
-    mysql.Select(sql, "Subgroup", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: "Internal server error",
-      error: error,
-    });
-  }
-});
-
-router.post("/subgrouploadforapp", (req, res) => {
-  try {
-    let departmentid = req.body.departmentid;
     let sql = `select * 
     from subgroup
     where s_departmentid = '${departmentid}'

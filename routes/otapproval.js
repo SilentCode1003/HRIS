@@ -126,8 +126,8 @@ router.post("/getotapproval", (req, res) => {
   try {
     let approveot_id = req.body.approveot_id;
     let sql = `select 
-    pao_image,
     pao_fullname,
+    pao_overtimeimage,
     DATE_FORMAT(pao_attendancedate, '%W, %M %e, %Y') as pao_attendancedate,
     TIME_FORMAT(pao_clockin, '%H:%i:%s')  as pao_clockin,
     TIME_FORMAT(pao_clockout, '%H:%i:%s')  as pao_clockout,
@@ -141,8 +141,11 @@ router.post("/getotapproval", (req, res) => {
     pao_total_ot_net_pay,
     DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
     pao_reason,
-    pao_status
+    pao_status,
+    s_name as pao_subgroupid,
+    (pao_minutes_ot + pao_night_minutes_ot) AS pao_total_min_ot
     from payroll_approval_ot
+    INNER JOIN subgroup on payroll_approval_ot.pao_subgroupid = s_id
     where pao_id = '${approveot_id}'`;
 
     mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {

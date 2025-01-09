@@ -1,0 +1,1036 @@
+<script>
+  let base64String = "";
+  let mealotid = "";
+  $(document).ready(function () {
+    console.log("Initialize");
+    let employeeid = "<%= employeeid %>";
+    LoadTable();
+    LoadPayrollDate();
+    EditLoadPayrollDate();
+    LoadSubgroup();
+    EditLoadSubgroup();
+    LoadTlSg();
+    LoadPayrollDateTl();
+
+    function LoadTable() {
+      $("#dataTableAppliedOtmeal").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 400,
+        scrollCollapse: true,
+        type: "GET",
+        ajax: {
+          url: "/eportalotmeal/loadApplied",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+            $.each(data, (key, item) => {
+              var action = "";
+              var status = item.status;
+
+              action = `
+                          <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#overtimemodal"><i class="fas fa-fw fa-pen"></i></button>
+                        `;
+
+              finalData.push({
+                mealid: item.mealid,
+                attendancedate: item.attendancedate,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                subgroupid: item.subgroupid,
+                otmeal_amount: item.otmeal_amount,
+                status: item.status,
+                action: action,
+              });
+            });
+
+            console.log(finalData);
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "mealid" },
+          { data: "attendancedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "subgroupid" },
+          {
+            data: "otmeal_amount",
+            render: function (data, type, row) {
+              return (
+                "₱" +
+                parseFloat(data).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              );
+            },
+          },
+          { data: "status" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var overtimestatusCell = $(row).find("td:eq(6)");
+
+          var overtimestatusText = data.status;
+
+          var overtimestatusClass = "";
+
+          switch (overtimestatusText.toLowerCase()) {
+            case "Approved":
+              overtimestatusClass = "approved-status";
+              break;
+            case "Cancelled":
+              overtimestatusClass = "cancelled-status";
+              break;
+            case "Pending":
+              overtimestatusClass = "pending-status";
+              break;
+            case "Applied":
+              overtimestatusClass = "approved-status";
+              break;
+            default:
+              overtimestatusClass = "";
+          }
+
+          overtimestatusCell.html(
+            `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
+          );
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          console.log("Done");
+        },
+      });
+    }
+
+    //   $(document).on("click", "#appliedtable", function () {
+    //     console.log("Hit");
+    //     $("#dataTableAppliedOtmeal").find("tr:gt(0)").remove();
+
+    //     $.ajax({
+    //       type: "GET",
+    //       url: "/eportalotmeal/loadApplied",
+    //       success: function (json) {
+    //         var finalData = [];
+    //         var data = json.data;
+    //         console.log(finalData);
+
+    //         var material_list_tbl = document.getElementById(
+    //           "dataTableAppliedOtmeal"
+    //         );
+
+    //         $.each(data, function (key, item) {
+    //           var row = material_list_tbl.insertRow(1);
+    //           var MEAL_ID = row.insertCell(0);
+    //           var ATTENDANCE_DATE = row.insertCell(1);
+    //           var TIME_IN = row.insertCell(2);
+    //           var TIME_OUT = row.insertCell(3);
+    //           var TOTAL = row.insertCell(4);
+    //           var SUBGROUP = row.insertCell(5);
+    //           var AMOUNT = row.insertCell(6);
+    //           var STATUS = row.insertCell(7);
+    //           var ACTION = row.insertCell(8);
+
+    //           var action = document.createElement("button");
+    //           action.id = "editBtn";
+    //           action.className = "btn text-primary view-btn";
+    //           action.setAttribute("data-bs-toggle", "modal");
+    //           action.setAttribute("data-bs-target", "#appliedot");
+    //           action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+    //           action.onclick = function () {
+    //             var dataRow = [];
+    //             $(this)
+    //               .closest("tr")
+    //               .find("td")
+    //               .each(function () {
+    //                 dataRow.push($(this).text());
+    //               });
+    //               mealotid = dataRow[0];
+    //           };
+
+    //           MEAL_ID.innerHTML = item.mealid;
+    //           ATTENDANCE_DATE.innerHTML = item.attendancedate;
+    //           TIME_IN.innerHTML = item.clockin;
+    //           TIME_OUT.innerHTML = item.clockout;
+    //           TOTAL.innerHTML = item.totalovertime;
+    //           SUBGROUP.innerHTML = item.subgroupid;
+    //           AMOUNT.innerHTML = item.otmeal_amount;
+    //           STATUS.innerHTML = item.status;
+    //           ACTION.appendChild(action);
+
+    //           $.each(
+    //             [
+    //               MEAL_ID,
+    //               ATTENDANCE_DATE,
+    //               TIME_IN,
+    //               TIME_OUT,
+    //               TOTAL,
+    //               SUBGROUP,
+    //               AMOUNT,
+    //               STATUS,
+    //               ACTION
+    //             ],
+    //             function (_, cell) {
+    //               cell.style.textAlign = "center";
+    //               cell.style.verticalAlign = "middle";
+    //             }
+    //           );
+    //         });
+    //       },
+    //       error: function (xhr, status, error) {},
+    //     });
+    //   });
+
+    $(document).on("click", "#approvedtable", function () {
+      console.log("Hit");
+      $("#dataTableleaveApproved").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalotmeal/loadApproved",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById(
+            "dataTableleaveApproved"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var MEAL_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var TOTAL = row.insertCell(4);
+            var SUBGROUP = row.insertCell(5);
+            var AMOUNT = row.insertCell(6);
+            var STATUS = row.insertCell(7);
+            // var ACTION = row.insertCell(8);
+
+            // var action = document.createElement("button");
+            // action.id = "editBtn";
+            // action.className = "btn text-primary view-btn";
+            // action.setAttribute("data-bs-toggle", "modal");
+            // action.setAttribute("data-bs-target", "#appliedot");
+            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            // action.onclick = function () {
+            //   var dataRow = [];
+            //   $(this)
+            //     .closest("tr")
+            //     .find("td")
+            //     .each(function () {
+            //       dataRow.push($(this).text());
+            //     });
+            //   mealotid = dataRow[0];
+            // };
+
+            MEAL_ID.innerHTML = item.mealid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.clockin;
+            TIME_OUT.innerHTML = item.clockout;
+            TOTAL.innerHTML = item.totalovertime;
+            SUBGROUP.innerHTML = item.subgroupid;
+            AMOUNT.innerHTML = item.otmeal_amount;
+            STATUS.innerHTML = item.status;
+            // ACTION.appendChild(action);
+
+            $.each(
+              [
+                MEAL_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL,
+                SUBGROUP,
+                AMOUNT,
+                STATUS,
+                // ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#rejectedtable", function () {
+      console.log("Hit");
+      $("#dataTableRejectedOtmeal").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalotmeal/loadRejected",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableRejectedOtmeal"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var MEAL_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var TOTAL = row.insertCell(4);
+            var SUBGROUP = row.insertCell(5);
+            var AMOUNT = row.insertCell(6);
+            var STATUS = row.insertCell(7);
+
+            // var action = document.createElement("button");
+            // action.id = "editBtn";
+            // action.className = "btn text-primary view-btn";
+            // action.setAttribute("data-bs-toggle", "modal");
+            // action.setAttribute("data-bs-target", "#appliedot");
+            // action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            // action.onclick = function () {
+            //   var dataRow = [];
+            //   $(this)
+            //     .closest("tr")
+            //     .find("td")
+            //     .each(function () {
+            //       dataRow.push($(this).text());
+            //     });
+            //   mealotid = dataRow[0];
+            // };
+
+            MEAL_ID.innerHTML = item.mealid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.clockin;
+            TIME_OUT.innerHTML = item.clockout;
+            TOTAL.innerHTML = item.totalovertime;
+            SUBGROUP.innerHTML = item.subgroupid;
+            AMOUNT.innerHTML = item.otmeal_amount;
+            STATUS.innerHTML = item.status;
+
+            $.each(
+              [
+                MEAL_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                TOTAL,
+                SUBGROUP,
+                AMOUNT,
+                STATUS,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    $(document).on("click", "#cancelledtable", function () {
+      console.log("Hit");
+      $("#dataTableCancelledOtmeal").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/eportalotmeal/loadcancelled",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          material_list_tbl = document.getElementById(
+            "dataTableCancelledOtmeal"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var MEAL_ID = row.insertCell(0);
+            var ATTENDANCE_DATE = row.insertCell(1);
+            var TIME_IN = row.insertCell(2);
+            var TIME_OUT = row.insertCell(3);
+            var SUBGROUP = row.insertCell(4);
+            var AMOUNT = row.insertCell(5);
+            var STATUS = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#overtimemodal");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                mealotid = dataRow[0];
+            };
+
+            MEAL_ID.innerHTML = item.mealid;
+            ATTENDANCE_DATE.innerHTML = item.attendancedate;
+            TIME_IN.innerHTML = item.clockin;
+            TIME_OUT.innerHTML = item.clockout;
+            SUBGROUP.innerHTML = item.subgroupid;
+            AMOUNT.innerHTML = item.otmeal_amount;
+            STATUS.innerHTML = item.status;
+            ACTION.appendChild(action);
+
+            $.each(
+              [
+                MEAL_ID,
+                ATTENDANCE_DATE,
+                TIME_IN,
+                TIME_OUT,
+                SUBGROUP,
+                AMOUNT,
+                STATUS,
+                ACTION
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {},
+      });
+    });
+
+    function LoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#mealsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadSubgroup() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#editmealsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#addovertime", function () {
+      let clockin = $("#addappliedotstart").val();
+      let clockout = $("#addappliedotend").val();
+      let attendancedate = $("#addappliedday").val();
+      let payrolldate = $("#addpayrolldateot").val();
+      let reason = $("#addappliedotreason").val();
+      let overtimestatus = $("#addappliedstatusot").val();
+      let subgroup = $("#addappliedsubgroup").val();
+      let overtimeimage = base64String;
+
+      var message = "";
+
+      if (clockin === "") {
+        message += "status is required. ";
+      }
+
+      if (clockout === "") {
+        message += "status is required. ";
+      }
+
+      if (attendancedate === "") {
+        message += "status is required. ";
+      }
+
+      if (payrolldate === "") {
+        message += "status is required. ";
+      }
+
+      if (reason === "") {
+        message += "status is required. ";
+      }
+
+      if (subgroup === "") {
+        message += "subgroup is required. ";
+      }
+
+      if (overtimestatus === "") {
+        message += "status is required. ";
+      }
+
+      if (overtimestatus === "Approved") {
+        message += "You Are Not Allowed to Approved You're Request";
+      }
+
+      if (overtimeimage === "") {
+        message += "status is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        function formatDateTime(dateTime) {
+          dateTime = dateTime.replace("T", " ");
+          let date = new Date(dateTime);
+          let year = date.getFullYear();
+          let month = ("0" + (date.getMonth() + 1)).slice(-2);
+          let day = ("0" + date.getDate()).slice(-2);
+          let hours = ("0" + date.getHours()).slice(-2);
+          let minutes = ("0" + date.getMinutes()).slice(-2);
+          let seconds = ("0" + date.getSeconds()).slice(-2);
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        let formattedClockin = formatDateTime(clockin);
+        let formattedClockout = formatDateTime(clockout);
+
+        console.log(formattedClockin, "format");
+        console.log(formattedClockout, "format");
+        $.ajax({
+          type: "POST",
+          url: "/eportalrequestovertime/addrequstot",
+          data: {
+            employeeid: employeeid,
+            clockin: formattedClockin,
+            clockout: formattedClockout,
+            attendancedate: attendancedate,
+            payrolldate: payrolldate,
+            reason: reason,
+            overtimestatus: overtimestatus,
+            subgroup: subgroup,
+            overtimeimage: overtimeimage,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                window.location.reload();
+              });
+              LoadTable();
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $("#dataTableAppliedOtmeal tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      console.log(dataRow);
+      mealotid = dataRow[0];
+    });
+    $(document).on("click", "#editBtn", function () {
+      $.ajax({
+        type: "POST",
+        url: "/eportalotmeal/getotmeal",
+        data: {
+          mealotid: mealotid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+
+            $.each(existingData, (key, item) => {
+              $("#mealclockin").val(item.clockin);
+              $("#mealclockout").val(item.clockout);
+              $("#mealtotalovertime").val(item.totalovertime);
+              $("#mealattendancedate").val(item.attendancedate);
+              $("#mealsubgroup").val(item.subgroupid);
+              $("#mealpayrolldate").val(item.payroll_date);
+              $("#mealamount").val(
+                "₱" + parseFloat(item.otmeal_amount).toFixed(2)
+              );
+              $("#mealapprovecount").val(item.approvalcount);
+              $("#mealstatus").val(item.status);
+              $("#previewleave").attr(
+                "src",
+                "data:image/jpg;base64," + item.image
+              );
+              base64String = item.image;
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    function LoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#mealpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function EditLoadPayrollDate() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#editmealpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $(document).on("click", "#mealsavebtn", function () {
+      console.log("Save button clicked");
+      let id = mealotid;
+      let clockin = $("#mealclockin").val();
+      let clockout = $("#mealclockout").val();
+      let attendancedate = $("#mealattendancedate").val();
+      let totalovertime = $("#mealtotalovertime").val();
+      let subgroupid = $("#mealsubgroup").val();
+      let payroll_date = $("#mealpayrolldate").val();
+      let approvalcount = $("#mealapprovecount").val();
+      let otmeal_amount = $("#mealamount").val();
+      let status = $("#mealstatus").val();
+      let image = base64String;
+
+      console.log(base64String, "Image");
+
+      var message = "";
+
+      if (clockin === "") {
+        message += "clockin is required. ";
+      }
+
+      if (clockout === "") {
+        message += "clockout is required. ";
+      }
+
+      if (attendancedate === "") {
+        message += "attendancedate is required. ";
+      }
+
+      if (payroll_date === "") {
+        message += "payroll_date is required. ";
+      }
+
+      if (subgroupid === "Choose Sub Group") {
+        message += "Sub Group is required. ";
+      }
+
+      if (totalovertime === "") {
+        message += "totalovertime is required. ";
+      }
+
+      if (image === "") {
+        message += "image is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+
+      if (otmeal_amount === "") {
+        message += "otmeal_amount is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        otmeal_amount = otmeal_amount.replace(/,/g, "").replace("₱", "");
+
+        function formatDateTime(dateTime) {
+          dateTime = dateTime.replace("T", " ");
+          let date = new Date(dateTime);
+          let year = date.getFullYear();
+          let month = ("0" + (date.getMonth() + 1)).slice(-2);
+          let day = ("0" + date.getDate()).slice(-2);
+          let hours = ("0" + date.getHours()).slice(-2);
+          let minutes = ("0" + date.getMinutes()).slice(-2);
+          let seconds = ("0" + date.getSeconds()).slice(-2);
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        let formattedClockin = formatDateTime(clockin);
+        let formattedClockout = formatDateTime(clockout);
+
+        $.ajax({
+          type: "PUT",
+          url: "/eportalotmeal/edit",
+          data: {
+            employeeid: employeeid,
+            mealotid: id,
+            clockin: formattedClockin,
+            clockout: formattedClockout,
+            attendancedate: attendancedate,
+            payroll_date: payroll_date,
+            otmeal_amount: parseFloat(otmeal_amount),
+            approvalcount: approvalcount,
+            totalovertime: totalovertime,
+            subgroupid: subgroupid,
+            status: status,
+            image: image,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg === "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadTlSg() {
+      $.ajax({
+        type: "GET",
+        url: "/teamleadusers/subgroupload",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.subgroupid, item.subgroupid);
+            $(options).html(item.subgroupname);
+            $("#addmealsubgroup").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPayrollDateTl() {
+      $.ajax({
+        type: "GET",
+        url: "/setpayrolldate/loadreq",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.payrolldate, item.payrolldate);
+            $(options).html(item.payrolldate);
+            $("#addmealpayrolldate").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    $("#addmealattendancedate").on("change", function () {
+      let attendancedate = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getattendance",
+        data: {
+          attendancedate: attendancedate,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            $.each(existingData, (key, item) => {
+              $("#addmealclockin").val(item.clockin);
+              $("#addmealclockout").val(item.clockout);
+            });
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $("#addmealsubgroup").on("change", function () {
+      let subgroup = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getapprover",
+        data: {
+          subgroup: subgroup,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const approverList = $("#approverList");
+            approverList.empty();
+            $.each(existingData, (key, item) => {
+              approverList.append(
+                `<li class="list-group-item"><b>${item.fullname}</b></li>`
+              );
+            });
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $(document).on("click", "#addmealsavebtn", function () {
+      let clockin = $("#addmealclockin").val();
+      let clockout = $("#addmealclockout").val();
+      let attendancedate = $("#addmealattendancedate").val();
+      let subgroupid = $("#addmealsubgroup").val();
+      let payroll_date = $("#addmealpayrolldate").val();
+      let status = $("#addmealstatus").val();
+      let meal_amount = $("#addmealamount").val();
+      let image = base64String;
+      var message = "";
+
+      meal_amount = meal_amount.replace(/[^0-9.]/g, "");    
+
+      if (clockin === "") {
+        message += "Looks like you have no Time In. On that day, what time did you work? ";
+      }
+
+      if (clockout === "") {
+        message += "Looks like you have no Time Out. On that day, what time did you work? ";
+      }
+
+      if (attendancedate === "") {
+        message += "attendancedate is required. ";
+      }
+
+      if (meal_amount === "") {
+        message += "Amount is required. ";
+      }
+
+      if (payroll_date === "") {
+        message += "payroll_date is required. ";
+      }
+
+      if (subgroupid === "Choose Sub Group") {
+        message += "Sub Group is required. ";
+      }
+
+      if (image === "") {
+        message += "image is required. ";
+      }
+
+      if (status === "") {
+        message += "status is required. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/teamleadmanualotmeal/submit",
+          data: {
+            clockin: clockin,
+            clockout: clockout,
+            attendancedate: attendancedate,
+            payroll_date: payroll_date,
+            subgroupid: subgroupid,
+            status: status,
+            otmeal_amount: meal_amount,
+            image: image,
+          },
+          success: function (result) {
+            if (result.msg === "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                window.location.reload();
+              });
+              LoadTable();
+            } else if (result.msg === "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+  });
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatDateTime(dateTime) {
+    const formattedDateTime = moment(dateTime).format("YYYY-MM-DD HH:mm:ss");
+    return formattedDateTime;
+  }
+
+  $(document).on("change", "#uploadtlmeal", function (e) {
+    const input = document.getElementById("uploadtlmeal");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("previewold");
+      preview.src = reader.result;
+    };
+    imageUploadedleave();
+  });
+
+  function imageUploadedleave() {
+    const input = document.getElementById("uploadtlmeal");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  $(document).on("change", "#uploadimage", function (e) {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function () {
+      const preview = document.getElementById("preview");
+      preview.src = reader.result;
+    };
+    imageUploaded();
+  });
+
+  function imageUploaded() {
+    const input = document.getElementById("uploadimage");
+    const file = input.files[0];
+
+    var reader = new FileReader();
+
+    reader.onload = function () {
+      base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+      imageBase64Stringsep = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function formatPriceTl(event, input) {
+    event.preventDefault();
+
+    const cursorPosition = input.selectionStart;
+    const originalValue = input.value;
+    const defaultValue = "₱0.00";
+    const currentValue = originalValue || defaultValue;
+    let value = currentValue.replace(/[^0-9.]/g, "");
+    let number = parseFloat(value);
+    if (!isNaN(number)) {
+      if (number > 120) {
+        number = 120;
+      }
+      const formattedValue = number.toLocaleString("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      input.value = formattedValue;
+      let newPosition =
+        cursorPosition +
+        (formattedValue.indexOf(".") > currentValue.indexOf(".") ? 1 : 0);
+      input.setSelectionRange(newPosition, newPosition);
+    } else {
+      input.value = defaultValue;
+    }
+  }
+</script>

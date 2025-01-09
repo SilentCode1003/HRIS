@@ -61,10 +61,11 @@ router.post("/getattendancerequest", (req, res) => {
         ar_status,
         ar_reason,
         ar_file,
-        ar_subgroupid
+        s_name as ar_subgroupid
       FROM attendance_request
       INNER JOIN
       master_employee ON attendance_request.ar_employeeid = me_id
+      INNER JOIN subgroup on attendance_request.ar_subgroupid = s_id
       WHERE ar_requestid = '${requestid}'
       ORDER BY ar_requestid`;
 
@@ -98,10 +99,9 @@ router.post("/updateMasterAttendance", (req, res) => {
     let geofenceout = "1";
     let devicein = "app";
     let deviceout = "app";
+    let locationIn = "COA";
+    let locationOut = "COA";
     let data = [];
-
-    console.log(data);
-
     let selectQuery = `SELECT * FROM master_attendance WHERE ma_employeeid = '${emp_id}' AND ma_attendancedate = '${attendancedate}'`;
     mysql.Select(
       selectQuery,
@@ -128,7 +128,9 @@ router.post("/updateMasterAttendance", (req, res) => {
         ma_gefenceidIn = '${geofencein}', 
         ma_geofenceidOut = '${geofenceout}',
         ma_devicein = '${devicein}', 
-        ma_deviceout = '${deviceout}' 
+        ma_deviceout = '${deviceout}',
+        ma_locationIn = '${locationIn}',
+        ma_locationOut = '${locationOut}'
         WHERE ma_employeeid = '${emp_id}' 
         AND ma_attendancedate = '${attendancedate}'`;
           mysql
@@ -159,6 +161,8 @@ router.post("/updateMasterAttendance", (req, res) => {
             geofenceout,
             devicein,
             deviceout,
+            locationIn,
+            locationOut,
           ]);
 
           mysql.InsertTable(

@@ -88,12 +88,15 @@
             case "approved":
               overtimestatusClass = "approved-status";
               break;
-            case "cancelled":
-              overtimestatusClass = "cancelled-status";
+              
+            case "cancel":
+              overtimestatusClass = "cancel-status";
               break;
+
             case "pending":
               overtimestatusClass = "pending-status";
               break;
+
             default:
               overtimestatusClass = "";
           }
@@ -112,6 +115,32 @@
         },
       });
     }
+
+    $("#addappliedsubgroup").on("change", function () {
+      let subgroup = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getapprover",
+        data: {
+          subgroup: subgroup,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const approverList = $("#approverList");
+            approverList.empty();
+            $.each(existingData, (key, item) => {
+              approverList.append(
+                `<li class="list-group-item"><b>${item.fullname}</b></li>`
+              );
+            });
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
 
     function LoadSubgroup() {
       $.ajax({
@@ -150,6 +179,24 @@
       });
     }
 
+    //miyaka
+    function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+
+        case "approved":
+              return "approved-status";
+              
+            case "rejected":
+              return "rejected-status";
+
+            case "pending":
+              return "pending-status";
+          
+        default:
+          return "";
+      }
+    }
+
     $(document).on("click", "#addappliedday", function () {
       $("#addappliedday").on("change", function () {
         let selectedDate = $(this).val();
@@ -162,32 +209,43 @@
           url: "/eportalrequestovertime/getattendancedate",
           data: {
             attendancedate: formattedDate,
-            employeeid: employeeid,
+            employeeid: employeeid, 
           },
           success: function (result) {
             if (result.msg === "success") {
               const existingData = result.data;
               const currentDate = new Date();
-              const DateSubmmitted = currentDate.toISOString().split("T")[0];
+              const DateSubmitted = currentDate.toISOString().split("T")[0];
 
               $.each(existingData, (key, item) => {
+                let clockInFormatted = item.clockin
+                  .replace(" ", "T")
+                  .slice(0, 16);
+                let clockOutFormatted = item.clockout
+                  .replace(" ", "T")
+                  .slice(0, 16);
+
                 let combinedTime;
                 if (item.starttime === item.endtime) {
                   combinedTime = item.pao_starttime;
                 } else {
                   combinedTime = `${item.starttime} - ${item.endtime}`;
                 }
+
+                // Update the input fields and display elements
+                $("#addappliedotstart").val(clockInFormatted); // Set 'Shift from:' value
+                $("#addappliedotend").val(clockOutFormatted); // Set 'To:' value
                 $("#addotshiftscheduled").text(combinedTime);
                 $("#otpositionname").text(item.schedtimein);
                 $("#otdepartmentname").text(item.schedtimeout);
                 $("#addotpositionname").text(item.positioname);
                 $("#addotdepartmentname").text(item.departmentname);
                 $("#addotfullname").text(item.fullname);
-                $("#adddatesubmittedot").text(DateSubmmitted);
+                $("#adddatesubmittedot").text(DateSubmitted);
               });
             } else if (result.msg === "notexist") {
               swal("Warning", "You have No Logs On that Date", "warning").then(
-                (results) => {
+                () => {
                   window.location.reload();
                 }
               );
@@ -263,7 +321,7 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             ACTION.appendChild(action);
 
             $.each(
@@ -273,9 +331,9 @@
                 TIME_IN,
                 TIME_OUT,
                 TOTAL,
-                NIGHT_DIFFERENTIALS,
                 EARLY_OT,
                 NORMAL_OT,
+                NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
                 ACTION,
@@ -329,7 +387,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [
@@ -338,9 +397,9 @@
                 TIME_IN,
                 TIME_OUT,
                 TOTAL,
-                NIGHT_DIFFERENTIALS,
                 EARLY_OT,
                 NORMAL_OT,
+                NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
               ],
@@ -381,6 +440,24 @@
             var NIGHT_DIFFERENTIALS = row.insertCell(7);
             var PAYROLL_DATE = row.insertCell(8);
             var STATUS = row.insertCell(9);
+            var ACTION = row.insertCell(10); 
+
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#appliedot");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                approveot_id = dataRow[0];
+            };
 
             REQUEST_ID.innerHTML = item.id;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -391,7 +468,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [
@@ -400,11 +478,12 @@
                 TIME_IN,
                 TIME_OUT,
                 TOTAL,
-                NIGHT_DIFFERENTIALS,
                 EARLY_OT,
                 NORMAL_OT,
+                NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
+                ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -445,7 +524,24 @@
             var NIGHT_DIFFERENTIALS = row.insertCell(7);
             var PAYROLL_DATE = row.insertCell(8);
             var STATUS = row.insertCell(9);
+            var ACTION = row.insertCell(10); // Adding action column
 
+            var action = document.createElement("button");
+            action.id = "editBtn";
+            action.className = "btn text-primary view-btn";
+            action.setAttribute("data-bs-toggle", "modal");
+            action.setAttribute("data-bs-target", "#appliedot");
+            action.innerHTML = '<i class="fas fa-fw fa-eye"></i>';
+            action.onclick = function () {
+              var dataRow = [];
+              $(this)
+                .closest("tr")
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+                approveot_id = dataRow[0];
+            };
 
             REQUEST_ID.innerHTML = item.id;
             ATTENDANCE_DATE.innerHTML = item.attendancedate;
@@ -456,7 +552,8 @@
             NORMAL_OT.innerHTML = item.normal_ot;
             NIGHT_DIFFERENTIALS.innerHTML = item.night_differentials;
             PAYROLL_DATE.innerHTML = item.payroll_date;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`
 
             $.each(
               [
@@ -465,11 +562,12 @@
                 TIME_IN,
                 TIME_OUT,
                 TOTAL,
-                NIGHT_DIFFERENTIALS,
                 EARLY_OT,
                 NORMAL_OT,
+                NIGHT_DIFFERENTIALS,
                 PAYROLL_DATE,
                 STATUS,
+                ACTION
               ],
               function (_, cell) {
                 cell.style.textAlign = "center";
@@ -485,19 +583,17 @@
     document
       .getElementById("addappliedday")
       .addEventListener("change", function () {
-        const selectedDate = this.value; // Get the selected date
+        const selectedDate = this.value;
         const datetimeInput = document.getElementById("addappliedotstart");
 
-        // Check if a valid date is selected
         if (selectedDate) {
           const formattedDate = new Date(selectedDate);
-          // Format the date to match the format required by datetime-local input
           const formattedDateString = `${
             formattedDate.toISOString().split("T")[0]
           }T00:00`;
-          datetimeInput.value = formattedDateString; // Set the datetime-local input to the selected date
+          datetimeInput.value = formattedDateString;
         } else {
-          datetimeInput.value = ""; // Clear the datetime-local input if no date is selected
+          datetimeInput.value = "";
         }
       });
 
@@ -563,16 +659,9 @@
           return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
 
-        // function extractDate(dateString) {
-        //   let dateParts = dateString.split(", ")[1];
-        //   return dateParts;
-        // }
-
         let formattedClockin = formatDateTime(clockin);
         let formattedClockout = formatDateTime(clockout);
-        // let attendancedateFormatted = extractDate(attendancedate);
 
-        //console.log(attendancedateFormatted, "formatday");
         console.log(formattedClockin, "format");
         console.log(formattedClockout, "format");
 
@@ -591,9 +680,9 @@
             overtimeimage: overtimeimage,
           },
           success: function (result) {
-            if (result.msg == "success") {
+            if (result.msg === "success") {
               swal({
-                title: "Update Successfully",
+                title: "Save Successfully",
                 text: "You clicked the button!",
                 icon: "success",
                 button: "OK!",
@@ -601,16 +690,14 @@
                 window.location.reload();
               });
               LoadTable();
-            } else {
-              swal(
-                "Data already exists!",
-                "You clicked the button!",
-                "warning"
-              );
+            } if (result.msg === "exist") { 
+              swal({
+                title: "Exist",
+                text: result.data,
+                icon: "warning",
+                button: "OK!",
+              });
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");
@@ -674,15 +761,41 @@
               $("#schedtimeout").text(item.scheduledtimeout);
               $("#previewleave").attr(
                 "src",
-                "data:image/jpg;base64," + item.overtimeimage
+                "data:image/jpg;base64," + item.overtimeimages
               );
-              base64String = item.overtimeimage;
+              base64String = item.overtimeimages;
 
               console.log(item.clockin);
               console.log(item.clockout);
             });
           } else {
             swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+    $("#appliedsubgroup").on("change", function () {
+      let subgroup = $(this).val();
+      $.ajax({
+        type: "POST",
+        url: "/teamleadmanualotmeal/getapprover",
+        data: {
+          subgroup: subgroup,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            const approverList = $("#approverListAutomated");
+            approverList.empty();
+            $.each(existingData, (key, item) => {
+              approverList.append(
+                `<li class="list-group-item"><b>${item.fullname}</b></li>`
+              );
+            });
           }
         },
         error: function (err) {
@@ -741,8 +854,7 @@
       let subgroup = $("#appliedsubgroup").val();
       let overtimeimage = base64String;
 
-      console.log(overtimestatus,'overtimestatus');
-      
+      console.log(overtimestatus, "overtimestatus");
 
       var message = "";
 
@@ -821,19 +933,24 @@
             overtimeimage: overtimeimage,
           },
           success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Save Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
+            if (result.msg === "success") {
+              swal({
+                title: "Save Successfully",
+                text: "You clicked the button!",
+                icon: "success",
+                button: "OK!",
+              }).then((result) => {
                 window.location.reload();
               });
               LoadTable();
+            } if (result.msg === "exist") { 
+              swal({
+                title: "Exist",
+                text: result.data,
+                icon: "warning",
+                button: "OK!",
+              });
             }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
           },
           error: function (err) {
             swal("Error", "An error occurred while saving data.", "error");

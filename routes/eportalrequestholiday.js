@@ -19,12 +19,13 @@ const {
   SelectStatementWithArray,
   SelectStatement,
 } = require("./repository/customhelper");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render('eportalrequestholidaylayout', { title: 'Express' });
   Validator(req, res, "eportalrequestholidaylayout", "eportalrequestholiday");
 });
 
@@ -40,8 +41,8 @@ router.get("/load", (req, res) => {
     DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
-    ph_nightdiff_ot_total,
-    ph_normal_ot_total
+    ph_nightdiffot_hour,
+    ph_normalot_hour
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Pending'
@@ -53,12 +54,8 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -67,6 +64,135 @@ router.get("/load", (req, res) => {
   } catch (error) {
     console.error(error);
     res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getholidayday", (req, res) => {
+  try {
+    let attendancedate = req.body.attendancedate;
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    DATE_FORMAT(ma_clockin, '%Y-%m-%d %H:%i:%s') AS ma_clockin,
+    DATE_FORMAT(ma_clockout, '%Y-%m-%d %H:%i:%s') AS ma_clockout,
+    ma_attendancedate,
+    mh_name as ma_name,
+    mh_type as ma_type
+    FROM master_attendance 
+    INNER JOIN master_holiday ON master_attendance.ma_attendancedate = mh_date
+    WHERE ma_attendancedate = '${attendancedate}'
+    AND mh_date = '${attendancedate}'
+    AND ma_employeeid = '${employeeid}'`;
+
+    Check(sql)
+      .then((result) => {
+        if (result.length === 0) {
+          return res.json(JsonWarningResponse(MessageStatus.NOTEXIST));
+        } else {
+          Select(sql, (err, result) => {
+            if (err) {
+              console.error(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            if (result != 0) {
+              let data = DataModeling(result, "ma_");
+              res.json(JsonDataResponse(data));
+            } else {
+              res.json(JsonDataResponse(result));
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
+  } catch (error) {
+    console.error(error);
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+
+router.post("/addrequestholiday", (req, res) => {
+  try {
+    let {
+      clockin,
+      clockout,
+      attendancedate,
+      employeeid,
+      payrolldate,
+      holidayStatus,
+      subGroup,
+      holidayImage,
+    } = req.body;
+
+    let approvecount = 0;
+    let applieddate = GetCurrentDatetime();
+
+    let sql = `CALL hrmis.RequestHoliday(
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${holidayStatus}',
+      '${subGroup}',
+      '${holidayImage}',
+      '${applieddate}',
+      '${approvecount}'
+    )`;
+
+    let validationQuery1 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Pending'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Applied'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery1)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGOT)
+          );
+        }
+        return Check(validationQuery2);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDOT));
+        }
+        return Check(validationQuery3);
+      })
+      .then((result3) => {
+        if (result3.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDOT));
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            return res.json(JsonSuccess());
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+    return res.json(JsonErrorResponse(error));
   }
 });
 
@@ -82,7 +208,10 @@ router.post("/getreqholiday", (req, res) => {
     ph_status,
     ph_holidaytype,
     DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,
-    mh_name as ph_holidayname
+    mh_name as ph_holidayname,
+    ph_file,
+    DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
+    ph_subgroupid
     FROM payroll_holiday
     INNER JOIN master_holiday ON payroll_holiday.ph_holidaydate = mh_date
     WHERE ph_employeeid='${employeeid}' AND ph_holidayid = '${holidayid}'
@@ -95,10 +224,10 @@ router.post("/getreqholiday", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
+      console.log(result);
+
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -114,8 +243,8 @@ router.post("/getreqholiday", (req, res) => {
 
 router.put("/edit", (req, res) => {
   try {
-    let createdby = req.session.fullname;
     let createddate = GetCurrentDatetime();
+    let approvecount = 0;
     const {
       holidayid,
       status,
@@ -130,91 +259,71 @@ router.put("/edit", (req, res) => {
 
     console.log(req.body);
 
-    let data = [];
-    let columns = [];
-    let arguments = [];
+    let sql = `call hrmis.UpdateRequestHoliday(
+      '${clockin}',
+      '${clockout}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${status}',
+      '${subgroup}',
+      '${holidayimage}',
+      '${createddate}',
+      '${approvecount}',
+      '${holidayid}')`;
 
-    if (createdby) {
-      data.push(createdby);
-      columns.push("createby");
-    }
-
-    if (createddate) {
-      data.push(createddate);
-      columns.push("createdate");
-    }
-
-    if (status) {
-      data.push(status);
-      columns.push("status");
-    }
-
-    if (clockin) {
-      data.push(clockin);
-      columns.push("timein");
-    }
-
-    if (clockout) {
-      data.push(clockout);
-      columns.push("timeout");
-    }
-
-    if (attendancedate) {
-      data.push(attendancedate);
-      columns.push("attendancedate");
-    }
-
-    if (payrolldate) {
-      data.push(payrolldate);
-      columns.push("payrolldate");
-    }
-
-    if (holidayimage) {
-      data.push(holidayimage);
-      columns.push("file");
-    }
-
-    if (subgroup) {
-      data.push(subgroup);
-      columns.push("subgroupid");
-    }
-
-    if (holidayid) {
-      data.push(holidayid);
-      arguments.push("holidayid");
-    }
-
-    let updateStatement = UpdateStatement(
-      "payroll_holiday",
-      "ph",
-      columns,
-      arguments
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Applied'`,
+      [attendancedate, employeeid]
     );
 
-    console.log(updateStatement);
-
-    let checkStatement = SelectStatement(
-      "select * from payroll_holiday where ph_employeeid = ? and ph_attendancedate = ? and ph_status = ?",
-      [employeeid, attendancedate, status]
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM payroll_holiday WHERE ph_attendancedate = ? AND ph_employeeid = ? AND ph_status = 'Approved'`,
+      [attendancedate, employeeid]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
-
-            //
-
-            res.json(JsonSuccess());
-          });
+    Check(validationQuery2)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDOT)
+          );
         }
+        return Check(validationQuery3);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDOT)
+          );
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: createddate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: status,
+                status: status,
+                requesttype: REQUEST.HD,
+              },
+            ];
+            SendEmailNotification(employeeid, subgroup, REQUEST.HD, emailbody);
+
+            //res.json(JsonSuccess());
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
@@ -227,13 +336,13 @@ router.post("/loadapproved", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
-    ph_nightdiff_ot_total,
-    ph_normal_ot_total
+    ph_nightdiffot_hour,
+    ph_normalot_hour
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Approved'
@@ -244,13 +353,42 @@ router.post("/loadapproved", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-        //console.log(data);
+router.post("/loadapplied", (req, res) => {
+  try {
+    let employeeid = req.body.employeeid;
+    let sql = `select 
+    ph_holidayid,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
+    ph_holidaytype,
+    ph_total_hours,
+    ph_nightdiffot_hour,
+    ph_normalot_hour
+    from payroll_holiday
+    where ph_employeeid = '${employeeid}'
+    and ph_status = 'Applied'
+    order by ph_attendancedate asc`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+      if (result != 0) {
+        let data = DataModeling(result, "ph_");
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -266,13 +404,13 @@ router.post("/loadrejected", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
-    ph_nightdiff_ot_total,
-    ph_normal_ot_total
+    ph_nightdiffot_hour,
+    ph_normalot_hour
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
     and ph_status = 'Rejected'
@@ -283,13 +421,8 @@ router.post("/loadrejected", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -305,16 +438,16 @@ router.post("/loadcancelled", (req, res) => {
     let employeeid = req.body.employeeid;
     let sql = `select 
     ph_holidayid,
-    ph_attendancedate,
-    ph_timein,
-    ph_timeout,
+    DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
+    DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
+    DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
     ph_holidaytype,
     ph_total_hours,
-    ph_nightdiff_ot_total,
-    ph_normal_ot_total
+    ph_nightdiffot_hour,
+    ph_normalot_hour
     from payroll_holiday
     where ph_employeeid = '${employeeid}'
-    and ph_status = 'Cancel'
+    AND ph_status IN ('Cancelled','Cancel')
     order by ph_attendancedate asc`;
 
     Select(sql, (err, result) => {
@@ -323,12 +456,8 @@ router.post("/loadcancelled", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

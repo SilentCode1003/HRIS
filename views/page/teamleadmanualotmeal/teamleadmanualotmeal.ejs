@@ -1,0 +1,373 @@
+<br>
+<!-- Table -->
+<div class="card shadow mb-4" id="tablecard">
+  <div class="card-header ch-requestleave">
+    <h3 class="py-4">Request Leads Overtime Meal</h3>
+    <div class="d-flex manualot-header gap-4 my-4">
+      <div class="col">
+        <input id='myInput' class="font-weight-bold" type='text' placeholder="  Search....">
+      </div>
+      <div class="col-sm-1 col-add">
+        <button type="button" class="btn btn-add-color bg-success" data-bs-toggle="modal" data-bs-target="#addmodal">
+          <b>+ Add</b>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-header c-header">
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active teamlead-manualot" id="appliedtable" data-bs-toggle="tab" data-bs-target="#nav-applied" type="button"
+          role="tab" aria-controls="nav-profile" aria-selected="false"><b>Applied</b>
+        </button>
+        <button class="nav-link teamlead-manualot" id="approvedtable" data-bs-toggle="tab" data-bs-target="#nav-approved" type="button" role="tab"
+          aria-controls="nav-profile" aria-selected="false"><b>Approved</b>
+        </button>
+        <button class="nav-link teamlead-manualot" id="rejectedtable" data-bs-toggle="tab" data-bs-target="#nav-rejected" type="button" role="tab"
+          aria-controls="nav-profile" aria-selected="false"><b>Rejected</b>
+        </button>
+        <button class="nav-link teamlead-manualot" id="cancelledtable" data-bs-toggle="tab" data-bs-target="#nav-cancelled" type="button" role="tab"
+          aria-controls="nav-profile" aria-selected="false"><b>Cancelled</b>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+
+  <!-- Leave  Request -->
+  <div class="card-body db-custom-cards">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-applied" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+          <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-striped-light" id="dataTableAppliedOtmeal">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Attendance Date</th>
+                  <th scope="col">Clock In</th>
+                  <th scope="col">Clock Out</th>
+                  <th scope="col">Sub Group Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-approved" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+          <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableApprovedOtmeal">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Attendance Date</th>
+                  <th scope="col">Clock In</th>
+                  <th scope="col">Clock Out</th>
+                  <th scope="col">Sub Group Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-rejected" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+          <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableRejectedOtmeal">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Attendance Date</th>
+                  <th scope="col">Clock In</th>
+                  <th scope="col">Clock Out</th>
+                  <th scope="col">Sub Group Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-cancelled" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+          <div class="table-responsive" id="table-responsive-id">
+            <table class="table table-light table-bordered" id="dataTableCancelledOtmeal">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Attendance Date</th>
+                  <th scope="col">Clock In</th>
+                  <th scope="col">Clock Out</th>
+                  <th scope="col">Sub Group Name</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Add Modal-->
+<div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">Applied Overtime Meal?</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="previewold" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="uploadtlmeal" id="uploadtlmeal" class="form-control border-form-modal" accept="image/*">
+                  </div>
+                </div>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">File Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="addmealattendancedate" name="addmealattendancedate">
+                    <label for="floatingInput">Attendance Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="addmealsubgroup" name="addmealsubgroup">
+                      <option selected disabled>Choose Sub Group</option>
+                    </select>
+                    <label for="floatingInput">Sub Group Name</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating clockin-manualot">
+                    <input type="datetime-local" class="form-control border-form-modal" id="addmealclockin" name="addmealclockin"
+                      placeholder="Address" readonly>
+                    <label for="floatingInput">Clock In</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating clockout-manualot">
+                    <input type="datetime-local" class="form-control border-form-modal" id="addmealclockout" name="addmealclockout"
+                      placeholder="Address" readonly>
+                    <label for="floatingInput">Clock Out</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="addmealamount" name="addmealamount"
+                      oninput="formatPriceTl(event, this)">
+                    <label for="floatingInput">Meal Amount</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="addmealstatus" name="addmealstatus" aria-label="Floating label select example">
+                      <option value="Applied">Applied</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <label for="floatingInput">Status</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="addmealpayrolldate" name="addmealpayrolldate"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="floatingInput">Payroll Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <textarea type="text" class="form-control border-form-modal" id="addmealreason" name="addmealreason"
+                      placeholder="Type Your Reason"></textarea>
+                    <label for="floatingInput">Reason</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <br>
+
+            <div class="d-flex justify-content-end">
+              <div class="flex-column d-flex gap-2">
+                <h6 class="text-center authorised-approver">Authorized Approvers:</h6>
+                <h6 class="text-center approver-teamlead" id="approverList"></h6>
+                <!-- <label for="approverList">Authorized Approvers</label>
+                                        <div class="form-floating approver-teamlead">
+                                                      <ul id="approverList"></ul>
+                                                    </div>
+                                      </div> -->
+              </div>
+            </div>
+            <br>
+            <br>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="addmealsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Modal-->
+<div class="modal fade" id="overtimemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">Applied Overtime ?</h3>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br>
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px;">
+                <div class="text-center">
+                  <img id="previewleave" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                </div>
+                <br>
+                <div class="col">
+                  <div class="col g-6">
+                    <input type="file" name="edituploadimage" id="edituploadimage" class="form-control border-form-modal" accept="image/*">
+                  </div>
+                </div>
+                <h2 class="pb-3 mb-4 text-center modal-content-title">File Preview</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+            <form>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="datetime-local" class="form-control border-form-modal" id="mealclockin" name="mealclockin" placeholder="Address">
+                    <label for="floatingInput">Clock In</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="datetime-local" class="form-control border-form-modal" id="mealclockout" name="mealclockout" placeholder="Address">
+                    <label for="floatingInput">Clock Out</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="mealattendancedate" name="mealattendancedate">
+                    <label for="floatingInput">Attendance Date</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="mealtotalovertime" name="mealtotalovertime">
+                    <label for="floatingInput">Total Overtime</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="mealsubgroup" name="mealsubgroup">
+                      <option selected disabled>Choose Sub Group</option>
+                    </select>
+                    <label for="floatingInput">Sub Group Name</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="number" class="form-control border-form-modal" id="mealapprovecount" name="mealapprovecount" readonly>
+                    <label for="floatingInput">Total Approve Count</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="mealpayrolldate" name="mealpayrolldate"
+                      aria-label="Floating label select example">
+                    </select>
+                    <label for="floatingInput">Pyroll Date</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input type="text" class="form-control border-form-modal" id="mealamount" name="mealamount" placeholder="OT Meal Amount"
+                      oninput="formatPriceTl(event, this)">
+                    <label for="floatingInput">OT Meal Amount</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select class="form-select border-form-modal" id="mealstatus" name="mealstatus" aria-label="Floating label select example">
+                      <option value="Applied">Applied</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <label for="floatingInput">Status</label>
+                  </div>
+                </div>
+              </div>
+              <br>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="mealsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

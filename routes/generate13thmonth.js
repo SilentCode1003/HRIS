@@ -47,7 +47,6 @@ router.post("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result);
       if (result != 0) {
         let data = DataModeling(result, "p_");
         res.json(JsonDataResponse(data));

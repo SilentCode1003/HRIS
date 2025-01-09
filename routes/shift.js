@@ -54,26 +54,7 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/loadshiftforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `call hrmis.LoadShiftForApp('${employeeid}')`;
 
-    mysql.StoredProcedure(sql, (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
 
 // router.post("/save", async (req, res) => {
 //   try {
@@ -167,8 +148,6 @@ router.post("/save", async (req, res) => {
     let department = req.body.department;
     let shiftsettingsid = req.body.shiftsettingsid;
 
-    console.log(employeeName, department, shiftsettingsid);
-
     let checkSql = `SELECT * FROM master_shift WHERE ms_employeeid = '${employeeName}'`;
 
     mysql.Select(checkSql, "Master_Shift", (err, result) => {
@@ -226,7 +205,6 @@ router.post("/update", (req, res) => {
     let saturdayformat = req.body.saturdayformat;
     let sundayformat = req.body.sundayformat;
 
-    console.log(shiftid);
 
     let sqlupdate = `update master_shift set 
     ms_monday = '${mondayformat}',
@@ -238,7 +216,6 @@ router.post("/update", (req, res) => {
     ms_sunday = '${sundayformat}'
     WHERE ms_id = '${shiftid}'`;
 
-    console.log(sqlupdate);
     mysql
       .Update(sqlupdate)
       .then((result) => {

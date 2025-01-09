@@ -43,8 +43,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mb_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -153,9 +151,6 @@ router.put("/edit", (req, res) => {
       columns,
       arguments
     );
-
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from master_bank where mb_name = ?",
       [bank]

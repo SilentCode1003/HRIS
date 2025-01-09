@@ -33,9 +33,6 @@ router.get("/load", (req, res) => {
       LEFT JOIN master_ojt ON oa_ojtid = mo_id
        where oa_ojtid = '${ojtid}'
       ORDER BY oa_attendanceid DESC`;
-
-    console.log(ojtid);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -78,9 +75,6 @@ router.post("/loadforapp", (req, res) => {
      where oa_ojtid = '${ojtid}'
     ORDER BY oa_attendanceid DESC
     LIMIT 2`;
-
-    console.log(ojtid);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -207,7 +201,6 @@ router.post("/gethomestatus2", (req, res) => {
         where oa_ojtid = '${ojtid}' and oa_attendancedate = '${attendancedate}'
         order by oa_attendancedate desc 
         limit 1`;
-    console.log(sql);
 
     mysql
       .mysqlQueryPromise(sql)

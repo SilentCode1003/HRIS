@@ -3,13 +3,13 @@
 <!-- Table -->
 <div class="card" id="tablecard">
   <div class="card-header ch-coop">
-    <h3 class="bank-card-title">For Approval Over Time</h3>
+    <h3 class="bank-card-title m-4">For Approval Over Time</h3>
     <!-- <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button> -->
-    <input id="myInput" type="text" placeholder="  Search...." />
+    <input id="myInput" class="m-4 pl-2 font-weight-bold" type="text" placeholder="  Search...." />
   </div>
   <div class="card-body bank-body">
     <div class="table-responsive" id="table-responsive-id">
-      <table class="table table-light table-bordered" id="dataTableOtapproval">
+      <table class="table table-striped-light" id="dataTableOtapproval">
         <thead>
           <th>ID</th>
           <th>Employee Name</th>
@@ -158,6 +158,14 @@
                     <label for="floatingInput">Total Hours</label>
                   </div>
                 </div>
+                <div class="col">
+                  <div class="form-floating">
+                      <input type="text" class="form-control border-form-modal"
+                          id="ottotalotminutes" name="ottotalotminutes" placeholder="Address"
+                          disabled>
+                      <label for="floatingInput">Total Minutes OT</label>
+                  </div>
+              </div>
               </div>
               <br />
               <div class="row g-3">

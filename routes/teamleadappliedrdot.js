@@ -13,6 +13,8 @@ const {
   InsertStatement,
   SelectStatement,
 } = require("./repository/customhelper");
+const { REQUEST } = require("./repository/enums");
+const { SendEmailNotification } = require("./repository/emailsender");
 var router = express.Router();
 const currentDate = moment();
 
@@ -24,65 +26,7 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-// router.get("/load", (req, res) => {
-//   try {
-//     let departmentid = req.session.departmentid;
-//     let subgroupid = req.session.subgroupid;
-//     let accesstypeid = req.session.accesstypeid;
-//     let sql = `select
-//         pao_id,
-//         pao_image,
-//         pao_fullname,
-//         DATE_FORMAT(pao_attendancedate, '%Y-%m-%d') as pao_attendancedate,
-//         DATE_FORMAT(pao_clockin, '%Y-%m-%d %H:%i:%s') AS pao_clockin,
-//         DATE_FORMAT(pao_clockout, '%Y-%m-%d %H:%i:%s') AS pao_clockout,
-//         (pao_night_differentials + pao_normal_ot + pao_early_ot) AS pao_total_hours,
-//         DATE_FORMAT(pao_payroll_date, '%Y-%m-%d') AS pao_payroll_date,
-//         pao_status
-//     FROM payroll_approval_ot
-//     INNER JOIN
-//     master_employee ON payroll_approval_ot.pao_employeeid = me_id
-//     INNER JOIN
-//             aprroval_stage_settings ON
-//                 aprroval_stage_settings.ats_accessid = '${accesstypeid}' AND
-//                 aprroval_stage_settings.ats_departmentid = '${departmentid}' AND
-//                 aprroval_stage_settings.ats_subgroupid = payroll_approval_ot.pao_subgroupid AND
-//                 aprroval_stage_settings.ats_count = payroll_approval_ot.pao_approvalcount
-//         WHERE
-//         pao_status = 'Applied'
-//             AND pao_subgroupid IN (${subgroupid})
-//             AND me_department = '${departmentid}'
-//             AND pao_employeeid NOT IN (
-//                 SELECT tu_employeeid
-//                 FROM teamlead_user
-//             )`;
-
-//     Select(sql, (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         res.json(JsonErrorResponse(err));
-//       }
-
-//
-
-//       if (result != 0) {
-//         let data = DataModeling(result, "pao_");
-
-//         console.log(data);
-//         res.json(JsonDataResponse(data));
-//       } else {
-//         res.json(JsonDataResponse(result));
-//       }
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
 router.get("/load", (req, res) => {
-  console.log("HIT");
-
   try {
     let subgroupid = req.session.subgroupid;
     let accesstypeid = req.session.accesstypeid;
@@ -107,8 +51,6 @@ router.get("/load", (req, res) => {
         roa_status = 'Applied' 
             AND roa_subgroupid IN (${subgroupid})`;
 
-    console.log(sql);
-
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);
@@ -118,7 +60,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -158,7 +99,6 @@ router.post("/getrdotapproval", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "roa_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -173,7 +113,6 @@ router.post("/getrdotapproval", (req, res) => {
 });
 
 router.post("/rdotaction", (req, res) => {
-  console.log("HIT");
   try {
     let employeeid = req.session.employeeid;
     let departmentid = req.session.departmentid;
@@ -206,13 +145,22 @@ router.post("/rdotaction", (req, res) => {
       [employeeid, rdotid]
     );
 
-    console.log(checkStatement, "result");
-
     InsertTable(sql, data, (err, result) => {
       if (err) {
         console.log(err);
         res.json(JsonErrorResponse(err));
       }
+
+      let emailbody = [
+        {
+          employeename: employeeid,
+          date: createdate,
+          reason: comment,
+          status: status,
+          requesttype: REQUEST.RD,
+        },
+      ];
+      SendEmailNotification(employeeid, subgroupid, REQUEST.RD, emailbody);
 
       res.json(JsonSuccess());
     });

@@ -1,3 +1,9 @@
+<!-- Include Litepicker CSS and JS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
 <script>
   let map;
   let attendanceid = "";
@@ -78,6 +84,104 @@
           console.log("Done");
         },
       });
+    }
+
+    $(function () {
+      let startDate, endDate;
+
+      const picker = new Litepicker({
+        element: document.getElementById("datepicker"),
+        singleMode: false,
+        format: "YYYY-MM-DD",
+        onSelect: function () {
+          startDate = picker.getStartDate().format("YYYY-MM-DD");
+          endDate = picker.getEndDate().format("YYYY-MM-DD");
+        },
+      });
+
+      $("#loaddate").click(function () {
+        startDate = picker.getStartDate()
+          ? picker.getStartDate().format("YYYY-MM-DD")
+          : null;
+        endDate = picker.getEndDate()
+          ? picker.getEndDate().format("YYYY-MM-DD")
+          : null;
+
+        if (startDate && endDate) {
+          console.log(startDate, endDate, "date");
+          showspinner();
+          LoadDateRange(startDate, endDate);
+        } else {
+          swal("Please select a date range first!", "Attendance", "warning");
+        }
+      });
+    });
+    function LoadDateRange(startDate, endDate) {
+      $("#dataTableattendance").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/eportalattendance/daterange",
+          data: {
+            startdate: startDate,
+            enddate: endDate,
+          },
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, (key, item) => {
+              var action = "";
+              action = `
+          <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editlogsmodal"><i class="fas fa-fw fa-pen"></i></button>
+         `;
+              finalData.push({
+                attendanceid: item.attendanceid,
+                attendancedate: item.attendancedate,
+                clockin: item.clockin,
+                clockout: item.clockout,
+                devicein: item.devicein,
+                deviceout: item.deviceout,
+                totalhours: item.totalhours,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columnDefs: [
+          {
+            targets: 1,
+            className: "td-indent",
+          },
+        ],
+        columns: [
+          { data: "attendanceid" },
+          { data: "attendancedate" },
+          { data: "clockin" },
+          { data: "clockout" },
+          { data: "devicein" },
+          { data: "deviceout" },
+          { data: "totalhours" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+      hidespinner();
     }
 
     $("#dataTableattendance tbody").on("click", "tr", function () {

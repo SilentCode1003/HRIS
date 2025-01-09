@@ -38,7 +38,7 @@ router.get("/load", (req, res) => {
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
-      (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
+      ph_total_hours,
       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate
   FROM payroll_holiday
   INNER JOIN
@@ -60,7 +60,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -82,13 +81,14 @@ router.post("/getholidayapproval", (req, res) => {
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
-      (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
+      ph_total_hours,
       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
 	    ph_holidaytype,
       DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,
       mh_name as ph_holidayname,
       ph_subgroupid,
-      ph_status
+      ph_status,
+      ph_createdate
       FROM payroll_holiday
       INNER JOIN master_holiday ON payroll_holiday.ph_holidaydate = mh_date
       INNER JOIN
@@ -103,24 +103,11 @@ router.post("/getholidayapproval", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ph_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
       }
     });
-
-    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-    //   if (err) console.error("Error: ", err);
-
-    //
-
-    //   res.json({
-    //     msg: "success",
-    //     data: result,
-    //   });
-    // });
   } catch (error) {
     res.json({
       msg: "error",
@@ -136,6 +123,7 @@ router.post("/holidayaction", (req, res) => {
     let subgroupid = req.body.subgroupid;
     let createdate = GetCurrentDatetime();
     const { holiday_id, status, comment } = req.body;
+    
 
     let sql = InsertStatement("holiday_request_activity", "hra", [
       "employeeid",
@@ -161,8 +149,6 @@ router.post("/holidayaction", (req, res) => {
       "select * from holiday_request_activity where hra_employeeid=? and hra_holidayreqid=? and hra_status=? ",
       [employeeid, holiday_id, status]
     );
-
-    console.log(checkStatement, "result");
 
     Check(checkStatement)
       .then((result) => {

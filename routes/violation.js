@@ -66,7 +66,6 @@ router.get("/load", (req, res) => {
 
     mysql.Select(sql, "Master_Violation", (err, result) => {
       if (err) console.error("Error: ", err);
-
       res.json({
         msg: "success",
         data: result,
@@ -103,7 +102,6 @@ router.post("/save", async (req, res) => {
           console.error("Error inserting record: ", insertErr);
           res.json({ msg: "insert_failed" });
         } else {
-          console.log(insertResult);
           res.json({ msg: "success" });
         }
       });

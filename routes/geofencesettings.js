@@ -94,8 +94,6 @@ router.post("/departmentgefence", (req, res) => {
       LEFT JOIN master_department md ON master_geofence_settings.mgs_departmentid = md_departmentid
       where mgs_status = 'Active' and mgs_departmentid = '${departmentid}'`;
 
-    console.log("department", departmentid);
-
     mysql.Select(sql, "Master_Geofence_Settings", (err, result) => {
       if (err) console.error("Error: ", err);
 
@@ -159,7 +157,6 @@ router.post("/save", async (req, res) => {
           console.error("Error inserting record: ", insertErr);
           res.json({ msg: "insert_failed" });
         } else {
-          console.log(insertResult);
           res.json({ msg: "success" });
         }
       }
@@ -177,8 +174,6 @@ router.post("/selectgeofence", (req, res) => {
     let departmentid = req.body.departmentid;
     let sql = `select * from master_geofence_settings
     where mgs_departmentid ='${departmentid}' and mgs_status = 'Active'`;
-
-    console.log(departmentid);
 
     mysql
       .mysqlQueryPromise(sql)
@@ -222,8 +217,6 @@ router.post("/update", (req, res) => {
     mgs_location ='${location}', 
     mgs_status ='${status}'
     WHERE mgs_id ='${geofenceid}'`;
-
-    console.log(sqlupdate);
 
     mysql
       .Update(sqlupdate)

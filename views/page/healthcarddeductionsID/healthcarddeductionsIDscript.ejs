@@ -73,7 +73,6 @@
           //miyaka
           var statusCell = $(row).find("td:eq(7)");
           var idtypeCell = $(row).find("td:eq(2)");
-          var idnumberCell = $(row).find("td:eq(3)");
 
           var statusText = data.status;
           var idtypeText = data.idtype;
@@ -102,7 +101,6 @@
 
           statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
           idtypeCell.html(`<span class="${idtypeClass}">${idtypeText}</span>`);
-          idnumberCell.wrapInner("<span class='idnumber1-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -305,9 +303,9 @@
                 icon: "success",
                 button: "OK!",
               }).then((results) => {
-                window.location.reload();
+                LoadTable();
               });
-              LoadTable();
+           
             } else if (result.msg == "exist") {
               swal({
                 title: "Exist",

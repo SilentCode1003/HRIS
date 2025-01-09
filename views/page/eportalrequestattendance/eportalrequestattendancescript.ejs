@@ -68,6 +68,7 @@
           { data: "createdate" },
           { data: "action" },
         ],
+
         createdRow: function (row, data, dataIndex) {
           //miyaka
           var requeststatusCell = $(row).find("td:eq(6)");
@@ -80,19 +81,17 @@
             case "approved":
               requeststatusClass = "approved-status";
               break;
-            case "cancelled":
-              requeststatusClass = "cancelled-status";
+            case "cancel":
+              requeststatusClass = "cancel-status";
               break;
-            case "pending":
+              case "pending":
               requeststatusClass = "pending-status";
               break;
             default:
               requeststatusClass = "";
           }
 
-          requeststatusCell.html(
-            `<span class="${requeststatusClass}">${requeststatusText}</span>`
-          );
+          requeststatusCell.html(`<span class="${requeststatusClass}">${requeststatusText}</span>`);
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -103,6 +102,21 @@
           console.log("Done");
         },
       });
+    }
+
+
+     //miyaka
+     function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+        case "approved":
+          return "approved-status";
+        case "cancel":
+          return "cancel-status";
+        case "pending":
+          return "pending-status";
+        default:
+          return "";
+      }
     }
 
     
@@ -139,7 +153,8 @@
             TIME_OUT.innerHTML = item.timeout;
             TOTAL.innerHTML = item.total;
             CREATE_DATE.innerHTML = item.createdate;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             REASON.innerHTML = item.reason;
 
             $("#dataTableleaveApproved tbody").on("click", "tr", function () {
@@ -208,7 +223,8 @@
             TIME_OUT.innerHTML = item.timeout;
             TOTAL.innerHTML = item.total;
             CREATE_DATE.innerHTML = item.createdate;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             REASON.innerHTML = item.reason;
 
             $.each(
@@ -232,6 +248,9 @@
         error: function (xhr, status, error) {},
       });
     });
+
+
+
 
     $(document).on("click", "#cancelledtable", function () {
       console.log("Hit");
@@ -266,7 +285,8 @@
             TIME_OUT.innerHTML = item.timeout;
             TOTAL.innerHTML = item.total;
             CREATE_DATE.innerHTML = item.createdate;
-            STATUS.innerHTML = item.status;
+            // STATUS.innerHTML = item.status;
+            STATUS.innerHTML = `<span class="${getStatusClass(item.status)}">${item.status}</span>`;
             REASON.innerHTML = item.reason;
 
             $.each(
@@ -320,11 +340,11 @@
       }
 
       if (reason == "") {
-        message += "createby is required ";
+        message += "reason is required ";
       }
 
       if (file == "") {
-        message += "createby is required ";
+        message += "file is required ";
       }
 
       if (message !== "") {
@@ -366,6 +386,14 @@
                 title: "Error",
                 text: "Something Wrong",
                 icon: "Error",
+                button: "OK!",
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal({
+                title: "Exist",
+                text: "You Already Have a CoA Request",
+                icon: "warning",
                 button: "OK!",
               });
               LoadTable();

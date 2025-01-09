@@ -2,7 +2,9 @@ const fs = require("fs");
 const moment = require("moment");
 const LINQ = require("node-linq").LINQ;
 const { format } = require("date-fns");
-const { type } = require("os");
+const os = require("os");
+const interfaces = os.networkInterfaces();
+const axios = require("axios");
 
 //#region READ & WRITE JSON FILES
 exports.ReadJSONFile = function (filepath) {
@@ -205,9 +207,25 @@ exports.ConvertToDate = (datestring) => {
   }
 };
 
-exports.ConvertTo24Formart = (timestring) =>{
+exports.ConvertTo24Formart = (timestring) => {
   return moment(timestring, "h:mm a").format("HH:mm:ss");
-}
+};
+
+exports.GenerateDates = (startDate, endDate) => {
+  const dates = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= new Date(endDate)) {
+    // Format the date as YYYY-MM-DD
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    dates.push(formattedDate);
+
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+};
 //#endregion
 
 //#region  SUMMARY REPORTS
@@ -503,6 +521,23 @@ exports.InsertStatement = (tablename, prefix, columns) => {
   return statement;
 };
 
+exports.InsertStatementTransCommit = (tablename, prefix, columns) => {
+  let cols = "";
+  let payload = "";
+
+  columns.forEach((col) => {
+    cols += `${prefix}_${col},`;
+    payload += `?,`;
+  });
+
+  cols = cols.slice(0, -1);
+  payload = payload.slice(0, -1);
+
+  let statement = `INSERT INTO ${tablename}(${cols}) VALUES (${payload})`;
+
+  return statement;
+};
+
 exports.UpdateStatement = (tablename, prefix, columns, arguments) => {
   let cols = "";
   let agrs = "";
@@ -573,3 +608,36 @@ exports.SelectStatementWithArray = (str, data) => {
   }
   return statement;
 };
+
+//#region Network Information
+
+exports.getNetwork = () => {
+  return new Promise((resolve, reject) => {
+    Object.keys(interfaces).forEach((interfaceName) => {
+      interfaces[interfaceName].forEach((iface) => {
+        // Filter for IPv4 addresses
+        if (iface.family === "IPv4" && !iface.internal) {
+          // console.log(`${interfaceName}: ${iface.address}`);
+          resolve(`${iface.address}`);
+        }
+      });
+    });
+  });
+};
+
+exports.GetIPAddress = () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get("https://api.ipify.org?format=json")
+      .then((response) => {
+        console.log(`Your IP address is: ${response.data.ip}`);
+        resolve(response.data.ip);
+      })
+      .catch((error) => {
+        reject(error);
+        console.error("Error fetching IP address:", error);
+      });
+  });
+};
+
+//#endregion

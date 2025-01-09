@@ -52,12 +52,8 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "sd_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -143,12 +139,8 @@ router.post("/getsuddendeduction", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "sd_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -223,8 +215,6 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from sudden_deductions where sd_deduction_name = ? and sd_payrolldate = ? and sd_amount = ?",
       [deduction_name, payroll_date, amount]
@@ -237,9 +227,6 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
-
             res.json(JsonSuccess());
           });
         }

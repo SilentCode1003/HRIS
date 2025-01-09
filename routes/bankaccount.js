@@ -31,90 +31,6 @@ module.exports = router;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// router.post('/upload', upload.single('file'), async (req, res) => {
-//   console.log('HIT');
-//   try {
-//     const file = req.file;
-//     const bankid = req.body.bankid;
-//     if (!file) {
-//       return res.status(400).json({ error: 'No file uploaded' });
-//     }
-//     const workbook = xlsx.read(file.buffer, { type: 'buffer' });
-//     const sheetName = workbook.SheetNames[0];
-//     const sheet = workbook.Sheets[sheetName];
-//     const data = xlsx.utils.sheet_to_json(sheet);
-
-//     const createdby = req.session.fullname;
-//     const createddate = GetCurrentDatetime();
-//     const status = GetValue(ACT());
-//     const cardnumber = 'N/A';
-//     const expiration = 'N/A';
-
-//     console.log(data, 'DATA');
-//     console.log(bankid, 'BANKID');
-//     console.log(file, 'file');
-
-//     const invalidEmployeeIds = [];
-//     const validInsertData = [];
-//     for (let row of data) {
-//       const employeeId = row['EMPLOYEE ID'];
-//       const checkStatement = SelectStatement(
-//         "SELECT me_id, me_jobstatus FROM master_employee WHERE me_id = ?",
-//         [employeeId]
-//       );
-//       const checkResult = await Check(checkStatement);
-//       if (checkResult.length === 0 || checkResult[0].me_jobstatus === 'resigned') {
-//         invalidEmployeeIds.push(employeeId);
-//       } else {
-//         validInsertData.push([
-//           employeeId,
-//           bankid,
-//           row['ACCOUNT NUMBER'],
-//           cardnumber,
-//           expiration,
-//           status,
-//           createdby,
-//           createddate,
-//         ]);
-//       }
-//     }
-
-//     if (invalidEmployeeIds.length > 0) {
-//       return res.status(400).json({
-//         error: `Some employee IDs do not exist in master_employee or have a job status of 'Resigned': ${invalidEmployeeIds.join(', ')}`,
-//         invalidIds: invalidEmployeeIds
-//       });
-//     }
-
-//     const sql = InsertStatement('bank_account', 'ba', [
-//       'employeeid',
-//       'bankid',
-//       'accountnumber',
-//       'cardnumber',
-//       'expiration',
-//       'status',
-//       'createdby',
-//       'createddate',
-//     ]);
-
-//     if (validInsertData.length > 0) {
-//       InsertTable(sql, validInsertData, (err, result) => {
-//         if (err) {
-//           console.log(err);
-//           return res.json(JsonErrorResponse(err));
-//         }
-//         const insertedIds = validInsertData.map(row => row[0]);
-//         res.json({ msg: 'success', insertedIds });
-//       });
-//     } else {
-//       res.json({ msg: 'success', insertedIds: [] }); // No valid data to insert
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.json(JsonErrorResponse(error));
-//   }
-// });
-
 router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
@@ -141,7 +57,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       const employeeId = row["EMPLOYEE ID"];
       const accountNumber = row["ACCOUNT NUMBER"];
 
-      // Check if employee exists and is not resigned
       const checkStatement = SelectStatement(
         "SELECT me_id, me_jobstatus FROM master_employee WHERE me_id = ?",
         [employeeId]
@@ -155,7 +70,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         continue;
       }
 
-      // Check if the combination of employeeid, bankid, and accountnumber already exists
       const checkExistingRecordStatement = SelectStatement(
         "SELECT 1 FROM bank_account WHERE ba_employeeid = ? AND ba_bankid = ? AND ba_accountnumber = ?",
         [employeeId, bankid, accountNumber]
@@ -215,7 +129,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         res.json({ msg: "success", insertedIds });
       });
     } else {
-      res.json({ msg: "success", insertedIds: [] }); // No valid data to insert
+      res.json({ msg: "success", insertedIds: [] });
     }
   } catch (error) {
     console.error(error);
@@ -247,8 +161,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ba_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -349,7 +261,6 @@ router.put("/status", (req, res) => {
   }
 });
 
-//di pa na gawa ang UI and Backend
 router.put("/edit", (req, res) => {
   try {
     const { employee, bank, accountnumber, cardnumber, expiration, id } =

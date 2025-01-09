@@ -259,7 +259,7 @@
 
  <div class="card bank-card">
   <div class="card-header" id="modal-header">
-    <h3 class="bank-card-title">Bank</h3>
+    <h3 class="bank-card-title m-4">Bank</h3>
   </div>
   <div class="card-body bank-body">
     <div class="row">
@@ -324,26 +324,17 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-end">
-      <div class="col-sm-1 col-add">
-        <button
-          id="addBtn"
-          name="addBtn"
-          class="btn btn-add-color"
-          type="button"><b>+ Add</b></button>
-      </div>
+    <br>
+    <br>
+  <div class="d-flex gap-4 justify-content-end attendance-field mb-4">
+    <div class="flex">
+      <button id="addBtn" name="addBtn" class="btn btn-add-color" type="button"><b>+ Add</b></button>
     </div>
-    <div class="row justify-content-end mt-3">
-      <div class="col-sm-1 col-add">
-        <button
-          id="uploadBtn"
-          name="uploadBtn"
-          class="btn btn-export-color"
-          type="button"
-          data-bs-toggle="modal"
-          data-bs-target="#uploadModal"><b>Upload</b></button>
-      </div>
+    <div class="flex">
+      <button id="uploadBtn" name="uploadBtn" class="btn btn-upload-color" type="button" data-bs-toggle="modal"
+        data-bs-target="#uploadModal"><i class="bi bi-upload mr-2"></i><b>Upload</b></button>
     </div>
+  </div>
   </div>
 </div>
 
@@ -351,27 +342,27 @@
 <br>
 <div class="card bank-card-table">
   <div class="card-header ch-coop">
-    <h3 class="bank-card-title">Bank Table</h3>
+    <h3 class="bank-card-title m-4">Bank Table</h3>
     <div class="input-group mb-3 col-md-3 mt-3">
       <span class="input-group-text" id="basic-addon1"><i class="fa fa-solid fa-search"> Search</i></span>
       <input
         id="search"
         name="search"
         type="text"
-        class="form-control bank-search"
-        placeholder="search"
+        class="form-control bank-search pl-2 font-weight-bold"
+        placeholder="Search...."
         aria-label="search"
         aria-describedby="basic-addon1"
       />
     </div>
   </div>
   <div class="card-body bank-body">
-    <div class="table-responsive">
+    <div class="table-responsive-md">
       <table
         id="data-table"
-        class="table align-middle table-sm table-bordered table-hover"
+        class="table align-middle table-striped-light table-hover"
       >
-        <thead class="table-light">
+        <thead>
           <tr>
             <th>ID</th>
             <th>Employee</th>
@@ -492,14 +483,14 @@
           class="btn btn-modal-close"
           data-bs-dismiss="modal"
         >
-          <i class="fa fa-times" aria-hidden="true"></i> Close
+         Close
         </button>
         <button
           type="button"
           id="saveBtn"
           class="btn btn-modal-save"
         >
-          <i class="fa fa-check" aria-hidden="true"></i> Save
+          Save
         </button>
       </div>
     </div>

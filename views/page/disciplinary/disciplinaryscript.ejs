@@ -16,6 +16,48 @@
       searchTable();
     });
 
+    const manualMemoTab = $("#manualMemoTab");
+    const automationTab = $("#automationTab");
+    const dynamicButtonContainer = $("#dynamicButton");
+
+    if (
+      manualMemoTab.length &&
+      automationTab.length &&
+      dynamicButtonContainer.length
+    ) {
+      console.log("Elements found: Adding event listeners.");
+      function updateButton(isManualMemo) {
+        if (isManualMemo) {
+          dynamicButtonContainer.html(`
+                    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#disciplinarymodal">
+                        <b>+ Add</b>
+                    </button>
+                `);
+          console.log("Button set to Add for Manual Memo.");
+        } else {
+          dynamicButtonContainer.html(`
+                    <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <b>+ Filter</b>
+                    </button>
+                `);
+          console.log("Button set to Filter for Automation.");
+        }
+      }
+      manualMemoTab.on("click", function () {
+        updateButton(true);
+      });
+      automationTab.on("click", function () {
+        updateButton(false);
+      });
+      updateButton(true);
+    } else {
+      console.error("One or more elements are missing:", {
+        manualMemoTab: manualMemoTab.length,
+        automationTab: automationTab.length,
+        dynamicButtonContainer: dynamicButtonContainer.length,
+      });
+    }
+
     function LoadTable() {
       $("#dataTabledisciplianary").DataTable({
         destroy: true,
@@ -85,6 +127,25 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          var statusCell = $(row).find("td:eq(9)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";

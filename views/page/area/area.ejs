@@ -1,51 +1,56 @@
+<br>
+<br>
+
 <div class="card">
-  <div class="card-footer">
-    <div class="row card-header">
-      <h3 class="card-title mb-0 font-weight-bold">Area</h3>
+    <div class="card-header header-bg">
+      <h3 class="card-title ch-text">Area</h3>
     </div>
+    <div class="card-body ch-body">
     <div class="row mb-2 mt-2">
       <div class="col-md-6">
         <div class="input-group">
           <input
             autocomplete="off"
             id="area"
-            class="form-control"
+            class="form-control border-form-modal"
             placeholder="Input Area Name"
             type="text"
             name="area"
           />
           <div class="input-group-append">
-            <span class="input-group-text">Area</span>
+            <span class="input-group-text header-bg">Area</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row-mt-2">
-      <div class="col-md-6 justify-content-center">
-        <button id="addBtn" name="addBtn" class="btn btn-add-color w-25">
-          Add
+    <div class="d-flex mt-4 justify-content-end">
+      <div class="flex">
+        <button id="addBtn" name="addBtn" class="btn btn-add-color">
+          <i class="bi bi-plus mr-2"></i><b>Add</b>
         </button>
       </div>
     </div>
-    <div class="card-body">
+  </div>
+
+    <div class="card-body header-bg">
       <div class="card-title">
-        <h6 class="m-0 font-weight-bold">Area Table</h6>
+        <h6 class="ch-text"><b>Area Table</b></h6>
       </div>
       <div class="row">
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6 mb-4 m-2">
           <input
             id="search"
             type="text"
-            class="form-control"
-            placeholder="Search"
+            class="form-control border-form-modal pl-2 font-weight-bold"
+            placeholder="Search...."
           />
         </div>
       </div>
-      <div class="row">
-        <div class="table-responsive">
-            <table id="data-table" class="table table-bordered table-hover">
-                <thead class="thead-dark">
+      <div class="row ">
+        <div class="table-responsive m-2">
+            <table id="data-table" class="table table-striped-light table-hover">
+                <thead>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Status</th>
@@ -57,7 +62,7 @@
       </div>
     </div>
   </div>
-</div>
+
 
 
 

@@ -18,6 +18,8 @@ const {
   GetCurrentDatetime,
   InsertStatement,
 } = require("./repository/customhelper");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -54,8 +56,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -93,8 +93,6 @@ router.get("/loadapproved", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -132,8 +130,6 @@ router.get("/loadapplied", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -171,8 +167,6 @@ router.get("/loadrejected", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -210,8 +204,6 @@ router.get("/loadcancelled", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -234,10 +226,19 @@ router.post("/getrestdayot", (req, res) => {
         roa_status,
         roa_total_hours,
         roa_file,
+        roa_admin_comment,
+          (
+          SELECT rra_comment 
+          FROM restdayot_request_activity 
+          WHERE rra_restdayotid = roa_rdotid
+          ORDER BY rra_date DESC
+          LIMIT 1
+        ) AS roa_comment,
         DATE_FORMAT(roa_payrolldate, '%Y-%m-%d') AS roa_payrolldate,
         roa_subgroupid
         FROM restday_ot_approval
-        WHERE roa_rdotid = '${rdotid}'`;
+        WHERE roa_rdotid = '${rdotid}'
+        LIMIT 1`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -247,8 +248,6 @@ router.post("/getrestdayot", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "roa_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -276,7 +275,6 @@ router.put("/edit", (req, res) => {
       employeeid,
     } = req.body;
 
-    console.log(req.body);
 
     let data = [];
     let columns = [];
@@ -344,8 +342,6 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from restday_ot_approval where roa_employeeid = ? and roa_attendancedate = ? and roa_status = ?",
       [employeeid, attendancedate, status]
@@ -358,8 +354,18 @@ router.put("/edit", (req, res) => {
         } else {
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
-
-            //
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: createddate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.RD,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.RD,
+              },
+            ];
+            SendEmailNotification(employeeid, subgroup, REQUEST.RD, emailbody);
 
             res.json(JsonSuccess());
           });
@@ -473,6 +479,21 @@ router.post("/save", async (req, res) => {
                 return res.json(JsonErrorResponse(err));
               }
 
+
+              let emailbody = [
+                {
+                  employeename: employeeid,
+                  date: attendancedate,
+                  startdate: timein,
+                  enddate: timeout,
+                  reason: REQUEST.RD,
+                  status: MessageStatus.APPLIED,
+                  requesttype: REQUEST.RD,
+                },
+              ];
+              SendEmailNotification(employeeid, subgroupid, REQUEST.RD, emailbody);
+  
+
               res.json(JsonSuccess());
             });
           }
@@ -486,6 +507,7 @@ router.post("/save", async (req, res) => {
     res.json(JsonErrorResponse(error));
   }
 });
+
 
 //#region FUNCTION
 function Check(sql) {

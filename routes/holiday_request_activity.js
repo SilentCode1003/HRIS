@@ -17,10 +17,6 @@ const {
   GetCurrentDatetime,
 } = require("./repository/customhelper");
 var router = express.Router();
-//const currentDate = moment();
-
-/* GET home page. */
-
 /* GET home page. */
 router.get("/", function (req, res, next) {
   //res.render('ojtindexlayout', { title: 'Express' });
@@ -36,6 +32,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthL;
     let sql = `SELECT 
     hra.hra_id as hra_holidayid,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS hra_employeeid,
@@ -49,7 +47,9 @@ router.get("/load", (req, res) => {
     FROM holiday_request_activity hra
     INNER JOIN payroll_holiday ph ON hra.hra_holidayreqid = ph.ph_holidayid
     INNER JOIN master_employee me_request ON ph.ph_employeeid = me_request.me_id
-    INNER JOIN master_employee me_activity ON hra.hra_employeeid = me_activity.me_id`;
+    INNER JOIN master_employee me_activity ON hra.hra_employeeid = me_activity.me_id
+    WHERE hra_date BETWEEN '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY hra_date DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -59,15 +59,13 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
       }
     });
   } catch (error) {
-    res.json(JsonErrorResponse(err));
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -112,8 +110,6 @@ router.post("/getholidayactivity", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "hra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

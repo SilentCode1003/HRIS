@@ -10,6 +10,7 @@ const {
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
+const { GetCurrentMonthFirstDay, GetCurrentMonthLastDay } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -21,6 +22,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
     mra.mra_id AS mra_id,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS mra_fullname,
@@ -34,7 +37,9 @@ router.get("/load", (req, res) => {
     FROM meal_request_activity mra
     INNER JOIN ot_meal_allowances oma ON mra.mra_mealid = oma.oma_mealid
     INNER JOIN master_employee me_request ON oma.oma_employeeid = me_request.me_id
-    INNER JOIN master_employee me_activity ON mra.mra_employeeid = me_activity.me_id`;
+    INNER JOIN master_employee me_activity ON mra.mra_employeeid = me_activity.me_id
+    WHERE mra_date BETWEEN '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY mra_date DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -44,8 +49,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -92,8 +95,6 @@ router.post("/getotmealactivity", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "mra_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

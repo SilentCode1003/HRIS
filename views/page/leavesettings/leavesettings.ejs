@@ -1,52 +1,98 @@
 <br>
 
 <!-- Table -->
+
 <div class="card" id="tablecard">
-    <div class="card-header ch-coop">
-      <h3 class="title-card-table">Leave Settings</h3>
-      <div class="row g-3">
-        <div class="col">
-          <input id='myInput'  type='text' placeholder="  Search....">
-        </div>
-        <div class="col-sm-2">
-          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addleavesettingsmodalperemployee">
-            <b>+ Add Per Employee</b>
-          </button>
-        </div>
-          <div class="col-sm-2">
-            <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addleavesettingsmodal">
-              <b>+ Add To All</b>
-            </button>
-          </div>
-        
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table m-4" id="titleCard">Leave Settings</h3>
+    <div class="d-flex gap-4 m-2 mb-4 attendance-field">
+      <div class="col">
+        <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
       </div>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTableLeaveSettings">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee</th>
-                        <th>Tenure</th>
-                        <th>Leave Type</th>
-                        <th>Leave Year</th>
-                        <th>Total Leave Days</th>
-                        <th>Unused Leave</th>
-                        <th>Used Leave</th>
-                        <th>Status</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+      <div class="d-flex gap-4 attendance-field">
+        <div class="col" id="dynamicButtonContainer">
+          <div id="dynamicButton" class="d-flex justify-content-between">
+          </div>
         </div>
+      </div>
+    </div> 
+  </div>
+  <br>
+  <div class="col">
+    <div class="card">
+      <div class="card-header ch-generate ch-coop">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
+              data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+              aria-selected="true"><b>Paid Leaves</b>
+            </button>
+            <button class="nav-link eportal-leave" id="automationTab" data-bs-toggle="tab"
+              data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+              aria-selected="false"><b>Unpaid Leaves</b>
+            </button>
+            </div>
+        </nav>
+      </div>
+      <!-- Tables  -->
+      <div class="card-body db-custom-cards">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                          <div class="card-body cbody-requestleave">
+                            <table class="table table-light table-bordered" id="dataTableLeaveSettings">
+                              <thead>
+                                  <tr>
+                                      <th class="col-sm-1">ID</th>
+                                      <th>Employee</th>
+                                      <th>Tenure</th>
+                                      <th>Leave Type</th>
+                                      <th>Leave Year</th>
+                                      <th>Total Leave Days</th>
+                                      <th>Unused Leave</th>
+                                      <th>Used Leave</th>
+                                      <th>Status</th>
+                                      <th class="col-sm-1">Action</th>
+                                  </tr>
+                              </thead>
+                          </table>           
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+            aria-labelledby="nav-profile-tab">
+            <div class="card-body">
+                <div class="table-responsive" id="table-responsive-id">
+                  <table class="table table-light table-bordered" id="dataTableLeaveSettingsWithOutPaidLeaves">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-1">ID</th>
+                            <th>Employee</th>
+                            <th>Tenure</th>
+                            <th>Leave Type</th>
+                            <th>Leave Year</th>
+                            <th>Total Leave Days</th>
+                            <th>Unused Leave</th>
+                            <th>Used Leave</th>
+                            <th>Status</th>
+                            <th class="col-sm-1">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+            </div>
+            </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Modal To All -->
+<!-- Modal To All With Paid Leaves -->
 <div class="modal fade" id="addleavesettingsmodal" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -99,7 +145,7 @@
   </div>
 </div>
 
-<!-- View Modal -->
+<!-- View Modal With Paid Leaves -->
 <div class="modal fade" id="viewleave" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -146,8 +192,7 @@
   </div>
 </div>
 
-
-<!-- Modal Per Employee -->
+<!-- Modal Per Employee With Paid Leaves -->
 <div class="modal fade" id="addleavesettingsmodalperemployee" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -209,7 +254,7 @@
   </div>
 </div>
 
-<!-- Edit Modal -->
+<!-- Edit Modal With Paid Leaves -->
 <div class="modal fade" id="editleave" data-bs-backdrop="static" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -281,4 +326,199 @@
         <button type="button" class="btn btn-modal-save" id="editsavebtn">Save</button>
       </div>
   </div>
+  </div>
 </div>
+
+
+
+
+
+<!-- Modal To All With Out Paid Leaves -->
+<div class="modal fade" id="addleavesettingsmodalwithoutpaid" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Add Another type of Leave ?</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-form-modal" id="leavetypenamenopaid" name="leavetypenamenopaid">
+              <label for="floatingInput">Leave Type</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+                <select type="text" class="form-control border-form-modal" id="yearleavenopaid" name="yearleavenopaid" placeholder="Year Leave">
+                    <option selected disabled>Year Leave</option>
+                </select>
+                <label for="yearleave">Year Leave</label>
+            </div>
+          </div>          
+          <br>       
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="leavesavebtnnopaid">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Per Employee With Out Paid Leaves -->
+<div class="modal fade" id="addleavesettingsmodalperemployeewithoutpaid" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+        colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Add Another type of Leave ?</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+            <div class="col">
+                <div class="form-floating">
+                    <select type="text" class="form-control border-form-modal" id="leaveperemployeenopaid" name="leaveperemployeenopaid" placeholder="Employee">
+                        <option selected disabled>Choose Employee</option>
+                    </select>
+                    <label for="leaveperemployeenopaid">Select Employee</label>
+                </div>
+          </div>
+          <br>      
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-form-modal" id="leavetypeperemployeenopaid" name="leavetypeperemployeenopaid">
+              <label for="floatingInput">Leave Type</label>
+            </div>
+          </div>
+          <br>
+          <div class="col">
+            <div class="form-floating">
+                <select type="text" class="form-control border-form-modal" id="yearleaveperemployeenopaid" name="yearleaveperemployeenopaid" placeholder="Year Leave">
+                    <option selected disabled>Year Leave</option>
+                </select>
+                <label for="yearleaveperemployee">Year Leave</label>
+            </div>
+          </div>          
+          <br>    
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="leavesavebtnperemployeenopaid">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Modal With Out Paid Leaves -->
+<div class="modal fade" id="viewleavewithoutpaid" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/pdsourfn.json" stroke="bold"
+          colors="primary:#9cf4a7,secondary:#109121,tertiary:#ebfad1" class="db-hrmis"></lord-icon>
+        <div id="TittleContainerNoPaid">
+        </div>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="col-md-12">
+            <div class="row">
+              <table class="table table-bordered" id="tablewithoutpaid">
+                <thead>
+                  <tr>
+                    <th class="date-range-table">Full Name</th>
+                    <th class="date-range-table">Leave Dates</th>
+                    <th class="date-range-table">Amount Paid</th>
+                    <th class="date-range-table">Leave Type</th>
+                    <th class="date-range-table">Leave Year</th>
+                    <th class="date-range-table">Payroll Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-end">
+              <div class="d-flex flex-column payslipname">
+                <span class="empnamepayslip" id="datename"></span>
+                <span class="text-center">Authorised Signatory</span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="govermentloaneditbtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal With Out Paid Leaves -->
+<div class="modal fade" id="editleavewithoutpaid" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+          colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+        </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Add Another type of Leave ?</h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                  <select type="text" class="form-control border-form-modal" id="editleaveperemployeenopaid" name="editleaveperemployeenopaid" placeholder="Employee" disabled>
+                      <option selected disabled>Choose Employee</option>
+                  </select>
+                  <label for="editleaveperemployee">Select Employee</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                <input type="text" class="form-control border-form-modal" id="editleavetypeperemployeenopaid" name="editleavetypeperemployeenopaid">
+                <label for="floatingInput">Leave Type</label>
+              </div>
+            </div>
+          </div> 
+          <br>
+          <div class="row g-3">
+            <div class="col">
+              <div class="form-floating">
+                  <select type="text" class="form-control border-form-modal" id="edityearleaveperemployeenopaid" name="edityearleaveperemployeenopaid" placeholder="Year Leave">
+                      <option selected disabled>Year Leave</option>
+                  </select>
+                  <label for="edityearleaveperemployee">Year Leave</label>
+              </div>
+            </div>                 
+          </div>
+          <br>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="editsavebtnNoPaid">Save</button>
+      </div>
+  </div>
+  </div>
+</div>
+

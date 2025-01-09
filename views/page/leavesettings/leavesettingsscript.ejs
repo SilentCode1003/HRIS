@@ -1,6 +1,72 @@
 <script>
   let leavesettingsid = "";
+  let leavenopaidid = "";
   $(document).ready(function () {
+    const manualMemoTab = $("#manualMemoTab");
+    const automationTab = $("#automationTab");
+    const dynamicButtonContainer = $("#dynamicButton");
+    const titleCard = $("#titleCard");
+
+    if (
+      manualMemoTab.length &&
+      automationTab.length &&
+      dynamicButtonContainer.length
+    ) {
+      console.log("Elements found: Adding event listeners.");
+
+      function updateButton(isManualMemo) {
+        if (isManualMemo) {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#addleavesettingsmodalperemployee">
+                <b>+ Add Per Employee</b>
+              </button>
+            </div>
+            <div class="flex">
+              <button class="btn btn-load-color" data-bs-toggle="modal" data-bs-target="#addleavesettingsmodal">
+                <i class="bi bi-box-arrow-in-down mr-2"></i><b>+ Add to All</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Leave Settings - With Paid Leaves");
+          console.log("Buttons set for Additional Adjustments.");
+        } else {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+              <button id="PerEmployeeBtn" type="button" class="btn btn-add-color">
+                <b>+ Add Per Employee</b>
+              </button>
+            </div>
+            <div class="flex">
+              <button id="addDeductionBtn" type="button" class="btn btn-load-color">
+                <i class="bi bi-box-arrow-in-down mr-2"></i><b>+ Add to All</b>
+              </button>
+            </div>
+          `);
+          titleCard.text("Leave Settings - With Out Paid Leaves");
+          console.log("Buttons set for Deductions Adjustments.");
+        }
+      }
+
+      manualMemoTab.on("click", function () {
+        updateButton(true);
+      });
+
+      automationTab.on("click", function () {
+        updateButton(false);
+      });
+
+      updateButton(true);
+    } else {
+      console.error("One or more elements are missing:", {
+        manualMemoTab: manualMemoTab.length,
+        automationTab: automationTab.length,
+        dynamicButtonContainer: dynamicButtonContainer.length,
+      });
+    }
+
+    //#region With Paid Leaves
+
     LoadTable();
     LoadList();
     EditLoadList();
@@ -71,31 +137,7 @@
           { data: "status" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          // var statusCell = $(row).find("td:eq(8)");
-
-          // var statusText = data.status;
-
-          // var statusClass = "";
-
-          // switch (statusText.toLowerCase()) {
-          //   case "Claimed":
-          //     statusClass = "Claimed-status";
-          //     break;
-          //   case "Unclaimed":
-          //     statusClass = "Unclaimed-status";
-          //     break;
-          //   default:
-          //     statusClass = "";
-          // }
-
-          // statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+        
         initComplete: function () {},
       });
     }
@@ -374,9 +416,9 @@
           material_list_tbl = document.getElementById("dataTableLeaves");
 
           const TittleContainer = $("#TittleContainer");
-            TittleContainer.empty();
-          
-          const firstItem = data[0]; 
+          TittleContainer.empty();
+
+          const firstItem = data[0];
           const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.leavetype}</h3>`;
           TittleContainer.append(cardHtml);
 
@@ -461,5 +503,397 @@
     populateYears("yearleave");
     populateYears("yearleaveperemployee");
     populateYears("edityearleaveperemployee");
+
+    //#endregion
+
+    //#region With Out Paid Leaves
+
+    $(document).on("click", "#addDeductionBtn", function () {
+      $("#addleavesettingsmodalwithoutpaid").modal("show");
+    });
+
+    $(document).on("click", "#PerEmployeeBtn", function () {
+      $("#addleavesettingsmodalperemployeewithoutpaid").modal("show");
+    });
+
+    LoadPerEmployee();
+    LoadPerEmployeeEdit();
+
+    $(document).on("click", "#automationTab", function () {
+      console.log("Hit");
+      $("#dataTableLeaveSettingsWithOutPaidLeaves").find("tr:gt(0)").remove();
+
+      $.ajax({
+        type: "GET",
+        url: "/leavesettings/loadnopaid",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById(
+            "dataTableLeaveSettingsWithOutPaidLeaves"
+          );
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var LEAVE_SETTINGS_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var TENURE = row.insertCell(2);
+            var LEAVE_TYPE = row.insertCell(3);
+            var YEAR_LEAVE = row.insertCell(4);
+            var TOTAL_LEAVE = row.insertCell(5);
+            var UNUSED_LEAVE = row.insertCell(6);
+            var USED_LEAVE = row.insertCell(7);
+            var STATUS = row.insertCell(8);
+            var ACTION = row.insertCell(9);
+
+            LEAVE_SETTINGS_ID.innerHTML = item.leavesettingsid;
+            FULLNAME.innerHTML = item.employeeid;
+            TENURE.innerHTML = item.tenure;
+            LEAVE_TYPE.innerHTML = item.leavetype;
+            YEAR_LEAVE.innerHTML = item.yearleave;
+            TOTAL_LEAVE.innerHTML = item.totalleave;
+            UNUSED_LEAVE.innerHTML = item.unusedleave;
+            USED_LEAVE.innerHTML = item.usedleave;
+            STATUS.innerHTML = item.status;
+
+            var leaveStatus = item.status;
+            var statusClass = "";
+            switch (leaveStatus.toLowerCase()) {
+              case "Unclaimed":
+                statusClass = "active-status";
+                break;
+              case "Claimed":
+                statusClass = "inactive-status";
+                break;
+              default:
+                statusClass = "";
+            }
+            STATUS.innerHTML = `<span class="${statusClass}">${leaveStatus}</span>`;
+
+            ACTION.innerHTML =
+            '<button id="viewBtnNoPaid" class="btn text-primary view-btn"><i class="fas fa-fw fa-eye"></i></button>' +
+            '<button id="editBtnNoPaid" class="btn text-success edit-btn"><i class="fas fa-fw fa-edit"></i></button>';
+            $.each(
+              [
+                LEAVE_SETTINGS_ID,
+                FULLNAME,
+                TENURE,
+                LEAVE_TYPE,
+                YEAR_LEAVE,
+                TOTAL_LEAVE,
+                UNUSED_LEAVE,
+                USED_LEAVE,
+                STATUS,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+
+          $("#dataTableLeaveSettingsWithOutPaidLeaves").on(
+            "click",
+            "tr",
+            function () {
+              var dataRow = [];
+              $(this)
+                .find("td")
+                .each(function () {
+                  dataRow.push($(this).text());
+                });
+              leavenopaidid = dataRow[0];
+              console.log("Selected Leave ID:", leavenopaidid);
+            }
+          );
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching approved leaves:", status, error);
+        },
+      });
+    });
+
+    $(document).on("click", "#leavesavebtnnopaid", function () {
+      let yearleave = $("#yearleavenopaid").val();
+      let leavetype = $("#leavetypenamenopaid").val();
+
+      var message = "";
+
+      if (yearleave === "Year Leave" || yearleave === null) {
+        message += "Year Leave is required. ";
+      }
+
+      if (leavetype === "Choose Type of Leave") {
+        message += "Leave Type is required. ";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/addleavenopaid",
+          data: {
+            yearleave: yearleave,
+            leavetype: leavetype,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                $("#automationTab").click();
+                $("#addleavesettingsmodalwithoutpaid").modal("hide");
+              });
+              LoadTable();
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    $(document).on("click", "#leavesavebtnperemployeenopaid", function () {
+      let yearleave = $("#yearleaveperemployeenopaid").val();
+      let leavetype = $("#leavetypeperemployeenopaid").val();
+      let employeeid = $("#leaveperemployeenopaid").val();
+
+      var message = "";
+
+      if (yearleave === "Year Leave" || yearleave === null) {
+        message += "Year Leave is required. ";
+      }
+
+      if (leavetype === "") {
+        message += "Leave Type is required. ";
+      }
+
+      if (employeeid === "") {
+        message += "Select Employee";
+      }
+
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/setleaveperemployeenopaid",
+          data: {
+            yearleave: yearleave,
+            leavetype: leavetype,
+            employeeid: employeeid,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                $("#automationTab").click();
+                $("#addleavesettingsmodalperemployeewithoutpaid").modal("hide");
+              });
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("Error", "An error occurred while saving data.", "error");
+          },
+        });
+      }
+    });
+
+    function LoadPerEmployee() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#leaveperemployeenopaid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+    function LoadPerEmployeeEdit() {
+      $.ajax({
+        type: "GET",
+        url: "/employee/load",
+        success: function (result) {
+          var data = result.data;
+
+          $.each(data, function (key, item) {
+            var options = new Option(item.id, item.id);
+            $(options).html(item.fullname);
+            $("#editleaveperemployeenopaid").append(options);
+          });
+        },
+        error: function (result) {
+          alert("error: " + result.data);
+        },
+      });
+    }
+
+
+    $(document).on("click", "#viewBtnNoPaid", function () {
+      $("#viewleavewithoutpaid").modal("show");
+      $("#tablewithoutpaid").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "POST",
+        url: "leavesettings/getleavedatesnopaid",
+        data: {
+          leavesettingsid: leavenopaidid,
+        },
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(data, "data");
+          material_list_tbl = document.getElementById("tablewithoutpaid");
+
+          const TittleContainerNoPaid = $("#TittleContainerNoPaid");
+          TittleContainerNoPaid.empty();
+
+          const firstItemNoPaid = data[0];
+          const cardHtml = `<h3 class="modal-title" id="">${firstItemNoPaid.fullnamenopaid}'s ${firstItemNoPaid.leavetypenopaid}</h3>`;
+          TittleContainerNoPaid.append(cardHtml);
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var FULLNAME_NOPAID = row.insertCell(0);
+            var LEAVEDATES_NOPAID = row.insertCell(1);
+            var LEAVE_DAY_NOPAID = row.insertCell(2);
+            var LEAVE_TYPE_NOPAID = row.insertCell(3);
+            var LEAVE_YEAR_NOPAID = row.insertCell(4);
+            var LEAVE_PAYROLLDATE_NOPAID = row.insertCell(5);
+
+            FULLNAME_NOPAID.innerHTML = item.fullnamenopaid;
+            LEAVEDATES_NOPAID.innerHTML = item.leavedatesnopaid;
+            LEAVE_DAY_NOPAID.innerHTML = item.day_namenopaid;
+            LEAVE_TYPE_NOPAID.innerHTML = item.leavetypenopaid;
+            LEAVE_YEAR_NOPAID.innerHTML = item.yearnopaid;
+            LEAVE_PAYROLLDATE_NOPAID.innerHTML = item.payrolldatenopaid;
+
+            $.each(
+              [
+                FULLNAME_NOPAID,
+                LEAVEDATES_NOPAID,
+                LEAVE_DAY_NOPAID,
+                LEAVE_TYPE_NOPAID,
+                LEAVE_YEAR_NOPAID,
+                LEAVE_PAYROLLDATE_NOPAID,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+        },
+        error: function (xhr, status, error) {
+          // Handle errors here
+        },
+      });
+    });
+
+    $(document).on("click", "#editBtnNoPaid", function () {
+      $("#editleavewithoutpaid").modal("show");
+      $.ajax({
+        type: "POST",
+        url: "/leavesettings/getleavesettings",
+        data: {
+          leavesettingsid: leavenopaidid,
+        },
+        success: function (result) {
+          if (result.msg === "success") {
+            const existingData = result.data;
+            $.each(existingData, (key, item) => {
+              $("#editleaveperemployeenopaid").val(item.employeeid);
+              $("#editleavetypeperemployeenopaid").val(item.leavetype);
+              $("#edityearleaveperemployeenopaid").val(item.yearleave);
+            });
+          } else {
+            swal("Error fetching employee data", "success");
+          }
+        },
+        error: function (err) {
+          swal("An error occurred while fetching employee data", err, "error");
+        },
+      });
+    });
+
+
+    $(document).on("click", "#editsavebtnNoPaid", function () {
+      let id = leavenopaidid;
+      let employeeid = $("#editleaveperemployeenopaid").val();
+      let leavetype = $("#editleavetypeperemployeenopaid").val();
+      let yearleave = $("#edityearleaveperemployeenopaid").val();
+
+      var message = "";
+
+      if (employeeid === "") {
+        message += "Employee is required. ";
+      }
+
+      if (leavetype === "") {
+        message += "Leave Type is required. ";
+      }
+
+      if (yearleave === "") {
+        message += "Year Leave is required. ";
+      }
+      if (message !== "") {
+        swal("Validation Error", message, "error");
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/leavesettings/updatenopaid",
+          data: {
+            leavesettingsid: id,
+            employeeid: employeeid,
+            leavetype: leavetype,
+            yearleave: yearleave,
+          },
+          success: function (result) {
+            if (result.msg == "success") {
+              swal(
+                "Save Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((result) => {
+                $("#automationTab").click();
+                $("#editleavewithoutpaid").modal("hide");
+              });
+            } else if (result.msg == "exist") {
+              swal("Error", "This combination already exists.", "error");
+            }
+          },
+          error: function (err) {
+            swal("An error occurred while fetching employee data", err, "error");
+          },
+        });
+      }
+    });
+
+    populateYears("yearleavenopaid");
+    populateYears("yearleaveperemployeenopaid");
+    populateYears("edityearleaveperemployeenopaid");
+    //#endregion
   });
 </script>

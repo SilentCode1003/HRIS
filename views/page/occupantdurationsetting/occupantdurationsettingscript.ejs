@@ -205,9 +205,10 @@
                 name: item.name,
                 duration: item.duration,
                 status:
-                  item.status == "Active"
-                    ? `<div class="status-active"><span>${item.status}</span></div>`
-                    : `<div class="status-inactive"><span>${item.status}</span></div>`,
+                  item.status, 
+                  // == "Active"
+                  //   ? `<div class="status-active"><span>${item.status}</span></div>`
+                  //   : `<div class="status-inactive"><span>${item.status}</span></div>`,
                 action: action,
               });
             });
@@ -222,6 +223,34 @@
           { data: "status" },
           { data: "action" },
         ],
+        createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var statusCell = $(row).find("td:eq(4)");
+
+          var statusText = data.status;
+
+          var statusClass = "";
+
+          switch (statusText.toLowerCase()) {
+            case "active":
+              statusClass = "active-status";
+              break;
+            case "inactive":
+              statusClass = "inactive-status";
+              break;
+
+            default:
+              statusClass = "";
+          }
+
+          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
+
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        
         initComplete: function () {},
       });
     }

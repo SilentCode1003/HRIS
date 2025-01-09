@@ -2,11 +2,11 @@
 
 <!-- Table -->
 <div class="card" id="tablecard">
-    <div class="card-header ch-coop">
-        <h3 class="title-card-table">Geo-fence Settings</h3>
+    <div class="card-header ch-coop p-4">
+        <h3 class="title-card-table">Geofence Settings</h3>
         <div class="row g-2">
             <div class="col">
-                <input id='myInput' type='text' placeholder="  Search....">
+                <input id='myInput' class="my-3" type='text' placeholder="  Search....">
             </div>
             <div class="col-sm-1 col-add">
                 <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#geoFenceModal">
@@ -17,7 +17,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-light table-striped" id="dataTablegeofence">
+            <table class="table table-striped-light" id="dataTablegeofence">
                 <thead>
                     <tr>
                         <th class="col-sm-1">ID</th>
@@ -46,7 +46,7 @@
     <div class="modal-dialog modal-lg"> 
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Geo-Fence</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Geofence</h1>
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
             <div class="modal-body" id="modal-body">
@@ -57,7 +57,7 @@
                                 <div class="form-floating">
                                     <input type="text" class="form-control border-form-modal" id="geofencename" name="geofencename"
                                         placeholder="Geo-Fence Name">
-                                    <label for="floatingInput">Geo-Fence Name</label>
+                                    <label for="floatingInput">Geofence Name</label>
                                 </div>
                             </div>
                             <br>
@@ -123,7 +123,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
-                <h1 class="modal-title fs-5" id="editGeoFenceModalLabel">Edit Geo-Fence</h1>
+                <h1 class="modal-title fs-5" id="editGeoFenceModalLabel">Edit Geofence</h1>
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
             <div class="modal-body" id="modal-body">
@@ -134,7 +134,7 @@
                                 <div class="form-floating">
                                     <input type="text" class="form-control border-form-modal" id="editGeofenceName"
                                         name="editGeofenceName" placeholder="Geo-Fence Name">
-                                    <label for="editGeofenceName">Geo-Fence Name</label>
+                                    <label for="editGeofenceName">Geofence Name</label>
                                 </div>
                             </div>
                             <br>

@@ -1,768 +1,538 @@
 <!-- Begin Page Content -->
+<br />
 <div class="container-fluid">
-  <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4"></div>
-
-  <!-- First Card Row -->
-  <div class="row g-3">
-    <!-- COA Employee Card -->
-    <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalCOA"
-        data-target="#totalEmployeeModal"
-        class="card-link"
-      >
-        <div id="totalCOACard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>COA</b>
+  <div class="row g-4 mt-4">
+    <!-- First Card Row -->
+    <div class="row">
+      <!-- COA Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalCOA"
+          data-target="#totalEmployeeModal"
+          class="card-link"
+        >
+          <div id="totalCOACard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>COA</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-people-fill card-icon"></i> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- OVERTIME Employee Card -->
-    <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalovertime"
-        data-target="#regularEmployeeModal"
-        class="card-link"
-      >
-        <div id="totalovertimeCard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>Overtime</b>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-people-fill card-icon"></i> -->
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-person-check-fill card-icon"></i> -->
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- LEAVE Employee Card -->
-    <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalleave"
-        data-target="#probationaryEmployeeModal"
-        class="card-link"
-      >
-        <div id="totalleaveCard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>Leave</b>
+      <!-- LEAVE Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalleave"
+          data-target="#probationaryEmployeeModal"
+          class="card-link"
+        >
+          <div id="totalleaveCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>Leave</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- OT Meal Employee Card -->
-    <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalotmeal"
-        data-target="#otmealEmployeeModal"
-        class="card-link"
-      >
-        <div id="totalotmealCard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>OT Meal</b>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-
-     <!-- Rest Day Ot Employee Card -->
-     <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalrestdayot"
-        data-target="#restdayOTmodal"
-        class="card-link"
-      >
-        <div id="totalrestdayotCard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>RD OT</b>
+      <!-- Holiday request Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalholiday"
+          data-target="#holidayModal"
+          class="card-link"
+        >
+          <div id="totalholidayCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>Holiday</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Holiday request Employee Card -->
-    <div class="col-lg-2 col-md-6">
-      <div
-        data-toggle="modal"
-        id="totalholiday"
-        data-target="#holidayModal"
-        class="card-link"
-      >
-        <div id="totalholidayCard" class="card h-100 py-2 db-card">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div
-                  class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
-                >
-                  <b>Holiday</b>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
                 </div>
-                <div
-                  class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
-                ></div>
-              </div>
-              <div class="col-auto">
-                <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!---- MODAL-->
-
-  <!-- Total Employee Modal -->
-  <div
-    class="modal fade"
-    id="totalEmployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalEmployeeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title" id="exampleModalToggleLabel">
-              Pending COA
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputtotal"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="dataTableemployees"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <td class="no-match-cell" style="display: none"></td>
-                    <th class="col-26">Name</th>
-                    <th class="col-26">Attendance Date</th>
-                    <th class="col-sm-1">Time In</th>
-                    <th class="col-sm-1">Time Out</th>
-                    <th class="col-sm-1">Total Hours</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+      <!-- Official Business Request Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalob"
+          data-target="#totalobModal"
+          class="card-link"
+        >
+          <div id="totalobCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>OB Request</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
+                </div>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- TOTAL OVERTIME Employee Modal -->
-  <div
-    class="modal fade"
-    id="regularEmployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="regularEmployeeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Applied Overtime
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputRegular"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="overtimetable"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <td class="no-match-cell" style="display: none"></td>
-                    <th class="col-26">Name</th>
-                    <th class="col-26">Attendance Date</th>
-                    <th class="col-sm-1">Time In</th>
-                    <th class="col-sm-1">Time Out</th>
-                    <th class="col-sm-1">Total Hours</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+      <!-- OVERTIME Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalovertime"
+          data-target="#regularEmployeeModal"
+          class="card-link"
+        >
+          <div id="totalovertimeCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>Overtime</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
+                </div>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-check-fill card-icon"></i> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
       </div>
-    </div>
-  </div>
 
-  <!--  Total LEAVE Modal -->
-  <div
-    class="modal fade"
-    id="probationaryEmployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="regularEmployeeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Pending Leave
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputproba"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="probiemloyeetbl"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <td class="no-match-cell" style="display: none"></td>
-                    <th class="col-26">Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Leave Type</th>
-                    <th class="col-sm-1">Applied Date</th>
-                    <th class="col-sm-1">Leave Duration</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+      <!-- Rest Day Ot Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalrestdayot"
+          data-target="#restdayOTmodal"
+          class="card-link"
+        >
+          <div id="totalrestdayotCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>RESTDAY OT</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
+                </div>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Total OVERTIME Modal -->
-  <div
-    class="modal fade"
-    id="resignedEmployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="resignedEmployeeModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Resigned Employee
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputresigned"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="resignedemployeetbl"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <!-- <th>Image</th> -->
-                    <th class="col-sm-1">ID</th>
-                    <th class="col-26">Name</th>
-                    <th>Contact</th>
-                    <!-- <th>Email</th> -->
-                    <th>Department</th>
-                    <th>Position</th>
-                    <th>Reason</th>
-                    <th>Date Resigned</th>
-                    <th>Create Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+      <!-- OT Meal Employee Card -->
+      <div class="col-lg-2 col-md-6">
+        <div
+          data-toggle="modal"
+          id="totalotmeal"
+          data-target="#otmealEmployeeModal"
+          class="card-link"
+        >
+          <div id="totalotmealCard" class="card h-75 py-2 db-card">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-uppercase mb-1 card-text-teamlead"
+                  >
+                    <b>OT Meal</b>
+                  </div>
+                  <div
+                    class="h5-teamlead mb-0 font-weight-bold card-text-teamlead"
+                  ></div>
+                </div>
+                <div class="col-auto">
+                  <!-- <i class="bi bi-person-fill-add card-icon"></i> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Total LEAVE Modal -->
-  <div
-    class="modal fade"
-    id="totaladminemployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="regularEmployeeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title" id="exampleModalToggleLabel">
-              Admin Department
-            </h3>
+    <!---- MODAL-->
+
+    <!-- pending coa card -->
+    <div
+      class="modal fade"
+      id="totalEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalEmployeeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  Pending COA
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputtotal"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-          <br />
-          <input
-            id="myInputtotaladmin"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totaladmintable"
+          <div class="modal-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <!-- <th>Image</th> -->
-                  <th class="col-sm-1">ID</th>
-                  <th class="col-26">Name</th>
-                  <th>Contact</th>
-                  <th class="col-25">Email</th>
-                  <th>Position</th>
-                  <th>Tenure</th>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="dataTableemployees"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <td class="no-match-cell" style="display: none"></td>
+                      <th class="col-26">Name</th>
+                      <th class="col-26">Attendance Date</th>
+                      <th class="col-sm-1">Time In</th>
+                      <th class="col-sm-1">Time Out</th>
+                      <th class="col-sm-1">Total Hours</th>
+                      <th>Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Total OT MEAL  Modal -->
-  <div
-    class="modal fade"
-    id="otmealEmployeeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              OT Meal Request
-            </h3>
+    <!-- applied overtime card -->
+    <div
+      class="modal fade"
+      id="regularEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="regularEmployeeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  Applied Overtime
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputRegular"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-          <br />
-          <input
-            id="myInputtotalotmeal"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalOtMealTable"
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <tr>
-                    <th class="col-26">Name</th>
-                    <th>Attendance Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Total Overtime</th>
-                    <th>Total Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="overtimetable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <td class="no-match-cell" style="display: none"></td>
+                      <th class="col-26">Name</th>
+                      <th class="col-26">Attendance Date</th>
+                      <th class="col-sm-1">Time In</th>
+                      <th class="col-sm-1">Time Out</th>
+                      <th class="col-sm-1">Total Hours</th>
+                      <th>Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Total Rest Day Ot  Modal -->
-  <div
-    class="modal fade"
-    id="restdayOTmodal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Rest Day OT Request
-            </h3>
+    <!--  pending leave card -->
+    <div
+      class="modal fade"
+      id="probationaryEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="regularEmployeeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  Pending Leave
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputproba"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-          <br />
-          <input
-            id="myInputtotalotmeal"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalrestdayottable"
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <tr>
-                    <th class="col-26">Name</th>
-                    <th>Attendance Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Total Overtime</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="probiemloyeetbl"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <td class="no-match-cell" style="display: none"></td>
+                      <th class="col-26">Name</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Leave Type</th>
+                      <th class="col-sm-1">Applied Date</th>
+                      <th class="col-sm-1">Leave Duration</th>
+                      <th>Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-  <!-- Total Holiday Day Ot  Modal -->
-  <div
-    class="modal fade"
-    id="holidayModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Holiday Request
-            </h3>
+    <!-- resigned employee card -->
+    <div
+      class="modal fade"
+      id="resignedEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="resignedEmployeeModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+                Resigned Employee
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputresigned"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-          <br />
-          <input
-            id="myInputtotalotmeal"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalHolidayReqTable"
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <tr>
-                    <th class="col-26">Name</th>
-                    <th>Attendance Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Total Overtime</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="resignedemployeetbl"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Contact</th>
+                      <!-- <th>Email</th> -->
+                      <th>Department</th>
+                      <th>Position</th>
+                      <th>Reason</th>
+                      <th>Date Resigned</th>
+                      <th>Create Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-
-
-  <!-- Total  it Modal -->
-  <div
-    class="modal fade"
-    id="totalitModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalitModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              IT Department
-            </h3>
+    <!-- admin department card -->
+    <div
+      class="modal fade"
+      id="totaladminemployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="regularEmployeeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title" id="exampleModalToggleLabel">
+                Admin Department
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotaladmin"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-          <br />
-          <input
-            id="myInputtotalit"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalittable"
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <tr>
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totaladmintable"
+                >
+                  <thead class="table-header">
                     <!-- <th>Image</th> -->
                     <th class="col-sm-1">ID</th>
                     <th class="col-26">Name</th>
@@ -770,326 +540,614 @@
                     <th class="col-25">Email</th>
                     <th>Position</th>
                     <th>Tenure</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Total Cabling Department Modal -->
-  <div
-    class="modal fade"
-    id="totalCablingModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Cabling Department
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputtotalcabling"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
             >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalcablingtable"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <!-- <th>Image</th> -->
-                    <th class="col-sm-1">ID</th>
-                    <th class="col-26">Name</th>
-                    <th>Contact</th>
-                    <th class="col-25">Email</th>
-                    <th>Position</th>
-                    <th>Tenure</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Table body content will be added dynamically using JavaScript -->
-                </tbody>
-              </table>
-            </div>
+              Close
+            </button>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Total Candidate for Regular Modal -->
-  <div
-    class="modal fade"
-    id="totalCandidateModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
-              Candidate for Regular
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputtotalcandidate"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalcandidatetable"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <!-- <th>Image</th> -->
-                    <th class="col-sm-1">ID</th>
-                    <th class="col-26">Name</th>
-                    <th>Department</th>
-                    <th>Hire Date</th>
-                    <th>Tenure</th>
-                    <th>Position</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+    <!-- ot meal request card -->
+    <div
+      class="modal fade"
+      id="otmealEmployeeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  OT Meal Request
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputtotalotmeal"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
             </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
           </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Total Bagapuro Family Modal -->
-  <div
-    class="modal fade"
-    id="totalaBagapuroModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalCablingModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title" id="exampleModalToggleLabel">
-              Bagapuro Family
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputtotalbagapuro"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalbagapurotable"
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
               >
-                <thead class="table-header">
-                  <tr>
-                    <!-- <th>Image</th> -->
-                    <th class="col-sm-1">ID</th>
-                    <th class="col-26">Name</th>
-                    <th>Department</th>
-                    <th>Hire Dte</th>
-                    <th>Position</th>
-                    <th>Tenure</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Total Apprentice  Modal -->
-  <div
-    class="modal fade"
-    id="totalaApprenticeModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="totalaApprenticeModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <div>
-            <h3 class="modal-title fs-6" id="exampleModalToggleLabel">
-              Total Apprentice Sheet
-            </h3>
-          </div>
-          <br />
-          <input
-            id="myInputtotalapprentice"
-            class="db-modal-search"
-            type="text"
-            placeholder="  Search...."
-          />
-          <i class="bx bx-x" data-dismiss="modal"></i>
-        </div>
-        <div class="modal-body m-body" id="modal-body">
-          <div class="modal-table">
-            <div
-              class="table-responsive scrollable-table-container"
-              id="table-responsive-id"
-            >
-              <table
-                class="table custom-mobile-table table-light table-bordered"
-                id="totalapprenticetable"
-              >
-                <thead class="table-header">
-                  <tr>
-                    <!-- <th>Image</th> -->
-                    <th class="col-sm-1">ID</th>
-                    <th class="col-26">Name</th>
-                    <th>Department</th>
-                    <th>Hire Dte</th>
-                    <th>Position</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Content Row -->
-  <div class="row">
-    <div class="col-xl-8 col-lg-5 db-wholecard">
-      <div class="card">
-        <div class="card-header header-card ch-coop">
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <button
-                class="nav-link active geofence-db"
-                id="nav-profile-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-geofence"
-                type="button"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="true"
-              >
-                <b>GEO FENCE'S</b>
-              </button>
-              <button
-                class="nav-link requestleave-db"
-                id="nav-leave-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-request"
-                type="button"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="false"
-              >
-                <b>ATTENDANCE STATUS</b>
-                <span
-                  id="loadattendanceBadge"
-                  class="position-sticky translate-middle badge badge-danger"
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalOtMealTable"
                 >
-                </span>
-              </button>
-              <!-- <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
+                  <thead class="table-header">
+                    <tr>
+                      <th class="col-26">Name</th>
+                      <th>Attendance Date</th>
+                      <th>Time In</th>
+                      <th>Time Out</th>
+                      <th>Total Overtime</th>
+                      <th>Total Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rest day ot request card -->
+    <div
+      class="modal fade"
+      id="restdayOTmodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  Rest Day OT Request
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputtotalotmeal"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalrestdayottable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <th class="col-26">Name</th>
+                      <th>Attendance Date</th>
+                      <th>Time In</th>
+                      <th>Time Out</th>
+                      <th>Total Overtime</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- holiday request card -->
+    <div
+      class="modal fade"
+      id="holidayModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div class="d-flex flex-column">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">
+                  Holiday Request
+                </h3>
+              </div>
+              <div>
+                <input
+                  id="myInputtotalotmeal"
+                  class="db-modal-search mb-2"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalHolidayReqTable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <th class="col-26">Name</th>
+                      <th>Attendance Date</th>
+                      <th>Time In</th>
+                      <th>Time Out</th>
+                      <th>Total Overtime</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IT department card -->
+    <div
+      class="modal fade"
+      id="totalitModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalitModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+                IT Department
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotalit"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalittable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Contact</th>
+                      <th class="col-25">Email</th>
+                      <th>Position</th>
+                      <th>Tenure</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- cabling card -->
+    <div
+      class="modal fade"
+      id="totalCablingModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+                Cabling Department
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotalcabling"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalcablingtable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Contact</th>
+                      <th class="col-25">Email</th>
+                      <th>Position</th>
+                      <th>Tenure</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Table body content will be added dynamically using JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- candidate for regular card -->
+    <div
+      class="modal fade"
+      id="totalCandidateModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title admin-ttitle" id="exampleModalToggleLabel">
+                Candidate for Regular
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotalcandidate"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalcandidatetable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Department</th>
+                      <th>Hire Date</th>
+                      <th>Tenure</th>
+                      <th>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- bagapuro family card -->
+    <div
+      class="modal fade"
+      id="totalaBagapuroModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalCablingModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title" id="exampleModalToggleLabel">
+                Bagapuro Family
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotalbagapuro"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalbagapurotable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Department</th>
+                      <th>Hire Dte</th>
+                      <th>Position</th>
+                      <th>Tenure</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- apprentice card -->
+    <div
+      class="modal fade"
+      id="totalaApprenticeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="totalaApprenticeModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <div>
+              <h3 class="modal-title fs-6" id="exampleModalToggleLabel">
+                Total Apprentice Sheet
+              </h3>
+            </div>
+            <br />
+            <input
+              id="myInputtotalapprentice"
+              class="db-modal-search"
+              type="text"
+              placeholder="  Search...."
+            />
+            <i class="bx bx-x" data-dismiss="modal"></i>
+          </div>
+          <div class="modal-body m-body" id="modal-body">
+            <div class="modal-table">
+              <div
+                class="table-responsive scrollable-table-container"
+                id="table-responsive-id"
+              >
+                <table
+                  class="table custom-mobile-table table-striped-light"
+                  id="totalapprenticetable"
+                >
+                  <thead class="table-header">
+                    <tr>
+                      <!-- <th>Image</th> -->
+                      <th class="col-sm-1">ID</th>
+                      <th class="col-26">Name</th>
+                      <th>Department</th>
+                      <th>Hire Dte</th>
+                      <th>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+      <div class="col-xl-8 col-lg-5 db-wholecard">
+        <div class="card">
+          <div class="card-header header-card ch-coop">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button
+                  class="nav-link active geofence-db"
+                  id="nav-profile-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-geofence"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-profile"
+                  aria-selected="true"
+                >
+                  <b>GEOFENCE</b>
+                </button>
+                <button
+                  class="nav-link requestleave-db"
+                  id="nav-leave-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-request"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="false"
+                >
+                  <b>ATTENDANCE STATUS</b>
+                  <span
+                    id="loadattendanceBadge"
+                    class="position-sticky translate-middle badge badge-danger"
+                  >
+                  </span>
+                </button>
+                <button
+                  class="nav-link requestleave-db"
+                  id="nav-leave-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-missedlogs"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="false"
+                >
+                  <b>MISSED LOGS</b>
+                  <span
+                    id="missedlogsBadge"
+                    class="position-sticky translate-middle badge badge-danger"
+                  >
+                  </span>
+                </button>
+                <!-- <button class="nav-link requestcash-db" id="nav-ca-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-cashadvance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false">
                                 <b>REQUEST CASH ADVANCE</b>
@@ -1097,7 +1155,7 @@
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button> -->
-              <!-- <button class="nav-link requestot-db" id="nav-ot-tab" data-bs-toggle="tab"
+                <!-- <button class="nav-link requestot-db" id="nav-ot-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-requestovertime" type="button" role="tab"
                                 aria-controls="nav-profile" aria-selected="false">
                                 <b>REQUEST OVERTIME</b>
@@ -1105,7 +1163,7 @@
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button> -->
-              <!-- <button class="nav-link requestattendance-db" id="nav-reqattendance-tab"
+                <!-- <button class="nav-link requestattendance-db" id="nav-reqattendance-tab"
                                 data-bs-toggle="tab" data-bs-target="#nav-reqattendance" type="button" role="tab"
                                 aria-controls="nav-reqattendance" aria-selected="false">
                                 <b>REQUEST ATTENDANCE</b>
@@ -1113,51 +1171,51 @@
                                     class="position-sticky translate-middle badge rounded-pill bg-danger">
                                 </span>
                             </button> -->
-              <!-- <button class="nav-link attendance-db" id="nav-profile-tab" data-bs-toggle="tab"
+                <!-- <button class="nav-link attendance-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-attendance" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>ATTENDANCE</b></button>
                             <button class="nav-link employee-db" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-employee" type="button" role="tab" aria-controls="nav-profile"
                                 aria-selected="false"><b>EMPLOYEE</b>
                             </button> -->
-            </div>
-          </nav>
-        </div>
-        <!-- Leave  Request -->
-        <div class="card-body db-custom-cards">
-          <div class="tab-content" id="nav-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="nav-geofence"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="row">
-                <div class="col-xl-12 col-lg-12">
-                  <div class="card shadow mb-4">
-                    <div class="card-header ch-coop">
-                      <h6 class="m-0 map">
-                        <i class="bx bx-map bx-flashing"></i> MAP
-                      </h6>
+              </div>
+            </nav>
+          </div>
+          <!-- Leave  Request -->
+          <div class="card-body db-custom-cards">
+            <div class="tab-content" id="nav-tabContent">
+              <!-- GEOFENCE -->
+              <div
+                class="tab-pane fade show active"
+                id="nav-geofence"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow">
+                      <div class="card-header ch-coop">
+                        <h6 class="m-0 map">MAP</h6>
+                      </div>
+                      <div id="map"></div>
                     </div>
-                    <div id="map"></div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-request"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="card-body">
-                <div class="box shadow-sm rounded bg-white mb-3">
-                  <div class="box-title border-bottom p-3">
-                    <h6 class="m-0">Recent</h6>
-                  </div>
-                  <div class="box-body p-0">
-                    <!-- <div class="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
+              <!-- ATTENDANCE STATUS -->
+              <div
+                class="tab-pane fade"
+                id="nav-request"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <div class="card-body">
+                  <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                      <h6 class="m-0">Recent</h6>
+                    </div>
+                    <div class="box-body p-0">
+                      <!-- <div class="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
                                             <div class="dropdown-list-image mr-3">
                                                 <img id="profilepreview" class="rounded-circle" alt="" />
                                             </div>
@@ -1179,7 +1237,7 @@
                                                 <div class="text-right text-muted pt-1">3d</div>
                                             </span>
                                         </div> -->
-                    <!-- <div class="p-3 d-flex align-items-center osahan-post-header">
+                      <!-- <div class="p-3 d-flex align-items-center osahan-post-header">
                                             <div class="dropdown-list-image mr-3">
                                                 <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
                                             </div>
@@ -1201,145 +1259,23 @@
                                                 <div class="text-right text-muted pt-1">4d</div>
                                             </span>
                                         </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-cashadvance"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="card-body">
-                <div class="table-responsive" id="table-responsive-id">
-                  <table
-                    class="table table-light table-bordered"
-                    id="dataTablecashrequest"
-                  >
-                    <thead>
-                      <tr>
-                        <th class="font-tb">Image</th>
-                        <th class="font-tb">Cash Advance ID</th>
-                        <th class="font-tb">Employee</th>
-                        <th class="font-tb">Date</th>
-                        <th class="font-tb">Amount</th>
-                        <th class="col-25 font-tb">Purpose</th>
-                        <th class="font-tb">Status</th>
-                        <th class="font-tb">Action</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-requestovertime"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="card-body">
-                <div class="table-responsive" id="table-responsive-id">
-                  <table
-                    class="table table-light table-bordered"
-                    id="dataTableovertimerequest"
-                  >
-                    <thead>
-                      <tr>
-                        <th class="col-25 font-tb">Image</th>
-                        <th class="font-tb">Overtime ID</th>
-                        <th class="col-25 font-tb">Employee</th>
-                        <th class="font-tb">Date</th>
-                        <th class="font-tb">Payroll Date</th>
-                        <th class="font-tb">Clock In</th>
-                        <th class="font-tb">Clock Out</th>
-                        <th class="font-tb">Total Hours</th>
-                        <th class="font-tb">Action</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-reqattendance"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="card-body">
-                <div class="table-responsive" id="table-responsive-id">
-                  <table
-                    class="table table-light table-bordered"
-                    id="dataTableattendancerequest"
-                  >
-                    <thead>
-                      <tr>
-                        <th class="col-25 font-tb">Image</th>
-                        <th class="font-tb">ID</th>
-                        <th class="col-25 font-tb">Employee</th>
-                        <th class="col-25 font-tb">Attendance Date</th>
-                        <th class="col-25 font-tb">Time In</th>
-                        <th class="col-25 font-tb">Time Out</th>
-                        <th class="font-tb">Total Hours</th>
-                        <th class="font-tb">Action</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-attendance"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="row">
-                <!-- attendance chart -->
-                <div class="col-xl-6 col-lg-5">
-                  <div class="chart-container">
-                    <canvas id="employeeChart"></canvas>
-                  </div>
-                </div>
-                <!-- employee chart -->
-                <div class="col-xl-6 col-lg-5">
-                  <div class="chart-container">
-                    <canvas id="attendanceChart"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="nav-employee"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              <div class="row">
-                <!-- attendance chart -->
-                <div class="col-xl-6 col-lg-5">
-                  <div class="chart-container">
-                    <center>
-                      <h3 class="fw-normal">Job Status</h3>
-                    </center>
-                    <canvas
-                      id="jobstatusChart"
-                      style="width: 600px; height: 600px"
-                    ></canvas>
-                  </div>
-                </div>
-                <!-- employee chart -->
-                <div class="col-xl-6 col-lg-5">
-                  <div class="chart-container">
-                    <center>
-                      <h3 class="fw-normal">Department</h3>
-                    </center>
-                    <canvas
-                      id="departmentChart"
-                      style="width: 600px; height: 600px"
-                    ></canvas>
+              <!-- MMISSED LOGS -->
+              <div
+                class="tab-pane fade"
+                id="nav-missedlogs"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <div class="card-body">
+                  <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                      <h6 class="m-0">Recent</h6>
+                    </div>
+                    <div class="box-body p-0"></div>
                   </div>
                 </div>
               </div>
@@ -1347,56 +1283,55 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-xl-4 col-lg-5 db-wholecard">
-      <div class="card shadow mb-4">
-        <div class="card-header header-card ch-coop">
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <button
-                class="nav-link active announcement-db"
-                id="nav-home-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-announcement"
-                type="button"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="true"
-              >
-                <b>Announcement</b>
-              </button>
-              <button
-                class="nav-link bday-db"
-                id="nav-profile-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-bday"
-                type="button"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="false"
-              >
-                <b>Birthday Folks</b>
-              </button>
-            </div>
-          </nav>
-        </div>
+      <div class="col-xl-4 col-lg-5 db-wholecard">
+        <div class="card shadow mb-4">
+          <div class="card-header header-card ch-coop">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button
+                  class="nav-link active announcement-db"
+                  id="nav-home-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-announcement"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="true"
+                >
+                  <b>Announcement</b>
+                </button>
+                <button
+                  class="nav-link bday-db"
+                  id="nav-profile-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-bday"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-profile"
+                  aria-selected="false"
+                >
+                  <b>Birthday Folks</b>
+                </button>
+              </div>
+            </nav>
+          </div>
 
-        <div class="card-body db-custom-cards1">
-          <div class="tab-content db-custom-cards1" id="nav-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="nav-announcement"
-              role="tabpanel"
-              aria-labelledby="nav-home-tab"
-            >
+          <div class="card-body db-custom-cards1">
+            <div class="tab-content db-custom-cards1" id="nav-tabContent">
               <div
-                id="carouselannouncement"
-                class="carousel slide carousel-fade"
-                data-bs-ride="carousel"
+                class="tab-pane fade show active"
+                id="nav-announcement"
+                role="tabpanel"
+                aria-labelledby="nav-home-tab"
               >
-                <div class="carousel-inner">
-                  <!-- <div class="carousel-item active" data-bs-interval="2000">
+                <div
+                  id="carouselannouncement"
+                  class="carousel slide carousel-fade"
+                  data-bs-ride="carousel"
+                >
+                  <div class="carousel-inner">
+                    <!-- <div class="carousel-item active" data-bs-interval="2000">
                                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                                             style="height: 470px;">
                                         <div class="carousel-caption d-none d-md-block">
@@ -1422,22 +1357,22 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button> -->
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="tab-pane fade bday-hrmis-tab"
-              id="nav-bday"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
               <div
-                id="carouselbday"
-                class="carousel slide carousel-fade"
-                data-bs-ride="carousel"
+                class="tab-pane fade bday-hrmis-tab"
+                id="nav-bday"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
               >
-                <div class="carousel-inner">
-                  <!-- <div class="carousel-item active" data-bs-interval="2000">
+                <div
+                  id="carouselbday"
+                  class="carousel slide carousel-fade"
+                  data-bs-ride="carousel"
+                >
+                  <div class="carousel-inner">
+                    <!-- <div class="carousel-item active" data-bs-interval="2000">
                                         <img src="/images/img/mark1.jpg" class="d-block w-100" alt="..."
                                             style="height: 470px;">
                                         <div class="carousel-caption d-none d-md-block">
@@ -1455,18 +1390,240 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button> -->
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!--Leave Modal-->
+      <div
+        class="modal fade"
+        id="allleavemodal"
+        data-bs-backdrop="static"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <form>
+                <div class="row g-3">
+                  <input
+                    type="hidden"
+                    class="form-control"
+                    id="pendingleaveid"
+                    name="pendingleaveid"
+                    disabled
+                  />
+                  <div class="col">
+                    <label for="pendingleavename" class="form-label"
+                      >Full Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleavename"
+                      name="pendingleavename"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleaveemail" class="form-label"
+                      >Email</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleaveemail"
+                      name="pendingleaveemail"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleavegender" class="form-label"
+                      >Gender</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleavegender"
+                      name="pendingleavegender"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <br />
+                <div class="row g-3">
+                  <div class="col">
+                    <label for="pendingleavephone" class="form-label"
+                      >Phone Number</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleavephone"
+                      name="pendingleavephone"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleavetype" class="form-label"
+                      >Leave Type</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleavetype"
+                      name="pendingleavetype"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleaveapplydate" class="form-label"
+                      >Apply Date</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleaveapplydate"
+                      name="pendingleaveapplydate"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <br />
+                <div class="row g-3">
+                  <div class="col">
+                    <label for="pendingleaveapplynodays" class="form-label"
+                      >Applied No. of Days</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleaveapplynodays"
+                      name="pendingleaveapplynodays"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleaveavailabledays" class="form-label"
+                      >Available No. of Days</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleaveavailabledays"
+                      name="pendingleaveavailabledays"
+                      value="6"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleavestart" class="form-label"
+                      >Leave Start</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleavestart"
+                      name="pendingleavestart"
+                      disabled
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleaveend" class="form-label"
+                      >Leave End</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="pendingleaveend"
+                      name="pendingleaveend"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="mb-3">
+                    <label for="pendingleavereason" class="col-form-label"
+                      >Reason:</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="pendingleavereason"
+                      name="pendingleavereason"
+                      disabled
+                    ></textarea>
+                  </div>
+                  <div class="col-md-8">
+                    <label for="pendingleaveremarks" class="form-label"
+                      >Remarks</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="pendingleaveremarks"
+                      name="pendingleaveremarks"
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="pendingleaveaction" class="form-label"
+                      >Action</label
+                    >
+                    <select
+                      class="form-select"
+                      id="pendingleaveaction"
+                      name="pendingleaveaction"
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Cancel">Cancel</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </div>
+                </div>
+                <br />
+              </form>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button
+                type="button"
+                class="btn btn-modal-close"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-modal-save"
+                id="pendingleavesavebtn"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!--Leave Modal-->
+    <!--Cash Advance Modal-->
+
     <div
       class="modal fade"
-      id="allleavemodal"
+      id="pendingcamodal"
       data-bs-backdrop="static"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
@@ -1474,8 +1631,10 @@
     >
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
-          <div class="modal-header" id="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Pending Leave</h5>
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Pending Cash Advance Request
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -1483,7 +1642,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body" id="modal-body">
+          <div class="modal-body">
             <form>
               <div class="row g-3">
                 <input
@@ -1494,38 +1653,34 @@
                   disabled
                 />
                 <div class="col">
-                  <label for="pendingleavename" class="form-label"
+                  <label for="pendingcaname" class="form-label"
                     >Full Name</label
                   >
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleavename"
-                    name="pendingleavename"
+                    id="pendingcaname"
+                    name="pendingcaname"
                     disabled
                   />
                 </div>
                 <div class="col">
-                  <label for="pendingleaveemail" class="form-label"
-                    >Email</label
-                  >
+                  <label for="pendingcaemail" class="form-label">Email</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleaveemail"
-                    name="pendingleaveemail"
+                    id="pendingcaemail"
+                    name="pendingcaemail"
                     disabled
                   />
                 </div>
                 <div class="col">
-                  <label for="pendingleavegender" class="form-label"
-                    >Gender</label
-                  >
+                  <label for="pendingcagender" class="form-label">Gender</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleavegender"
-                    name="pendingleavegender"
+                    id="pendingcagender"
+                    name="pendingcagender"
                     disabled
                   />
                 </div>
@@ -1533,38 +1688,26 @@
               <br />
               <div class="row g-3">
                 <div class="col">
-                  <label for="pendingleavephone" class="form-label"
+                  <label for="pendingcaphone" class="form-label"
                     >Phone Number</label
                   >
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleavephone"
-                    name="pendingleavephone"
+                    id="pendingcaphone"
+                    name="pendingcaphone"
                     disabled
                   />
                 </div>
                 <div class="col">
-                  <label for="pendingleavetype" class="form-label"
-                    >Leave Type</label
+                  <label for="pendingreqdate" class="form-label"
+                    >Request Date</label
                   >
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleavetype"
-                    name="pendingleavetype"
-                    disabled
-                  />
-                </div>
-                <div class="col">
-                  <label for="pendingleaveapplydate" class="form-label"
-                    >Apply Date</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="pendingleaveapplydate"
-                    name="pendingleaveapplydate"
+                    id="pendingreqdate"
+                    name="pendingreqdate"
                     disabled
                   />
                 </div>
@@ -1572,95 +1715,502 @@
               <br />
               <div class="row g-3">
                 <div class="col">
-                  <label for="pendingleaveapplynodays" class="form-label"
-                    >Applied No. of Days</label
-                  >
+                  <label for="pendingamount" class="form-label">Amount</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleaveapplynodays"
-                    name="pendingleaveapplynodays"
+                    id="pendingamount"
+                    name="pendingamount"
                     disabled
                   />
                 </div>
                 <div class="col">
-                  <label for="pendingleaveavailabledays" class="form-label"
-                    >Available No. of Days</label
-                  >
+                  <label for="pendingpurpose" class="form-label">Purpose</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="pendingleaveavailabledays"
-                    name="pendingleaveavailabledays"
+                    id="pendingpurpose"
+                    name="pendingpurpose"
                     value="6"
                     disabled
                   />
                 </div>
                 <div class="col">
-                  <label for="pendingleavestart" class="form-label"
-                    >Leave Start</label
+                  <label for="pendingcastatus" class="form-label">Action</label>
+                  <select
+                    class="form-select"
+                    id="pendingcastatus"
+                    name="pendingcastatus"
                   >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="pendingleavestart"
-                    name="pendingleavestart"
-                    disabled
-                  />
-                </div>
-                <div class="col">
-                  <label for="pendingleaveend" class="form-label"
-                    >Leave End</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="pendingleaveend"
-                    name="pendingleaveend"
-                    disabled
-                  />
-                </div>
-              </div>
-              <div class="row g-3">
-                <div class="mb-3">
-                  <label for="pendingleavereason" class="col-form-label"
-                    >Reason:</label
-                  >
-                  <textarea
-                    class="form-control"
-                    id="pendingleavereason"
-                    name="pendingleavereason"
-                    disabled
-                  ></textarea>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
                 </div>
                 <div class="col-md-8">
-                  <label for="pendingleaveremarks" class="form-label"
+                  <label for="pendingcaremarks" class="form-label"
                     >Remarks</label
                   >
                   <input
                     type="email"
                     class="form-control"
-                    id="pendingleaveremarks"
-                    name="pendingleaveremarks"
+                    id="pendingcaremarks"
+                    name="pendingcaremarks"
                   />
-                </div>
-                <div class="col">
-                  <label for="pendingleaveaction" class="form-label"
-                    >Action</label
-                  >
-                  <select
-                    class="form-select"
-                    id="pendingleaveaction"
-                    name="pendingleaveaction"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Cancel">Cancel</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
                 </div>
               </div>
               <br />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="pendingcasavebtn">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Overtime Modal-->
+    <div
+      class="modal fade"
+      id="otapprovalmodal"
+      data-bs-backdrop="static"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content content-size-modal">
+          <div class="modal-header" id="modal-header">
+            <h3 class="modal-title fs-5" id="exampleModalLabel">
+              Approve This Overtime ?
+            </h3>
+            <i class="bx bx-x" data-bs-dismiss="modal" aria-label="CLose"></i>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-xl-2 col-lg-4" style="margin-left: 10px">
+                <div class="col g-6">
+                  <div class="p-4" style="width: 300px; margin-top: -100px">
+                    <div class="text-center">
+                      <img
+                        id="preview"
+                        src="https://via.placeholder.com/250"
+                        class="rounded rounded-circle border-form-modal"
+                        alt="placeholder"
+                      />
+                    </div>
+                    <br />
+                    <div class="col">
+                      <div class="col g-6">
+                        <input
+                          type="file"
+                          name="otimage"
+                          id="otimage"
+                          class="form-control border-form-modal"
+                          accept="image/*"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <h2
+                      class="border-top pb-3 mb-4 text-center modal-content-title"
+                    >
+                      Avatar Preview
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-8 col-lg-7" style="margin-left: 150px">
+                <form>
+                  <br />
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-form-modal"
+                          id="otfullname"
+                          name="otfullname"
+                          placeholder="First Name"
+                          disabled
+                        />
+                        <label for="floatingInput">Full Name</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input
+                            type="text"
+                            class="form-control border-form-modal"
+                            id="otdate"
+                            name="otdate"
+                            disabled
+                          />
+                          <label for="floatingInput">Attendance Date</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-form-modal"
+                          id="otclockin"
+                          name="otclockin"
+                          placeholder="Address"
+                          disabled
+                        />
+                        <label for="floatingInput">Clock In</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-form-modal"
+                          id="otclockout"
+                          name="otclockout"
+                          placeholder="Address"
+                          disabled
+                        />
+                        <label for="floatingInput">Clock Out</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-form-modal"
+                          id="ottotalothours"
+                          name="ottotalothours"
+                          placeholder="Address"
+                          disabled
+                        />
+                        <label for="floatingInput">Total Hours</label>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otnight"
+                          name="otnight"
+                        />
+                        <label for="floatingInput"
+                          >Night Differentials Hours</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otnormal"
+                          name="otnormal"
+                        />
+                        <label for="otnormal">Normal Overtime</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otearly"
+                          name="otearly"
+                        />
+                        <label for="otearly">Early Overtime</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otnightpay"
+                          name="otnightpay"
+                          placeholder="Phone Number"
+                          disabled
+                        />
+                        <label for="floatingInput"
+                          >Night Differentials Pay</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otearlypay"
+                          name="otearlypay"
+                          placeholder="Phone Number"
+                          disabled
+                        />
+                        <label for="floatingInput">Early Overtime Pay</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="otnormalpay"
+                          name="otnormalpay"
+                          placeholder="Phone Number"
+                          disabled
+                        />
+                        <label for="floatingInput">Normal Overtime Pay</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="number"
+                          class="form-control border-form-modal"
+                          id="ottotalpay"
+                          name="ottotalpay"
+                          placeholder="Phone Number"
+                          disabled
+                        />
+                        <label for="floatingInput">Total Overtime Pay</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <select
+                          class="form-select border-form-modal"
+                          id="otpayrolldate"
+                          name="otpayrolldate"
+                          aria-label="Floating label select example"
+                        >
+                          <option selected>Choose...</option>
+                        </select>
+                        <label for="employeedepartment">Payroll Date</label>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <div class="row g-3">
+                    <br />
+                    <div class="col">
+                      <div class="form-floating">
+                        <select
+                          class="form-select border-form-modal"
+                          id="otstatus"
+                          name="otstatus"
+                          aria-label="Floating label select example"
+                        >
+                          <option value="Approved">Approved</option>
+                          <option value="Applied">Applied</option>
+                          <option value="Pending">Pending</option>
+                          <option value="Applied">Applied</option>
+                        </select>
+                        <label for="floatingInput">Status</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control border-form-modal"
+                          id="otreason"
+                          name="otreason"
+                          placeholder="Reason"
+                          disabled
+                        />
+                        <label for="floatingInput">Reason</label>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <br />
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" id="modal-footer">
+            <button
+              type="button"
+              class="btn btn-modal-close"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-modal-save" id="otsavebutton">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--COA MODAL-->
+    <div
+      class="modal fade"
+      id="editrequestcoamodal"
+      data-bs-backdrop="static"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Are you sure you want to Approve this COA?
+            </h1>
+            <i class="bx bx-x" data-bs-dismiss="modal" aria-label="CLose"></i>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <form>
+              <div class="card">
+                <div class="card-body candidate-prof">
+                  <form>
+                    <div class="row">
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="coafullname">Employee Name</label>
+                          <input
+                            type="text"
+                            class="form-control border-form-prof"
+                            id="coafullname"
+                            placeholder="Employee Name"
+                            disabled
+                          />
+                        </div>
+                        <div class="col">
+                          <label for="editpassword" class="form-label"
+                            >Status</label
+                          >
+                          <select
+                            class="form-control"
+                            id="editcoastatus"
+                            name="editcoastatus"
+                          >
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Cancel">Cancel</option>
+                          </select>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="text-center">
+                            <img
+                              id="editpreview"
+                              style="width: 200px; height: 200px"
+                              class="rounded rounded-circle border-form-prof"
+                              alt="placeholder"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="editattendancedate" class="form-label"
+                            >Date</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="editattendancedate"
+                            name="editattendancedate"
+                          />
+                        </div>
+                        <div class="col">
+                          <label for="edittimein" class="form-label"
+                            >Date Time In</label
+                          >
+                          <input
+                            type="datetime-local"
+                            class="form-control"
+                            id="edittimein"
+                            name="edittimein"
+                          />
+                        </div>
+                        <div class="col">
+                          <label for="edittimeout" class="form-label"
+                            >Date Time Out</label
+                          >
+                          <input
+                            type="datetime-local"
+                            class="form-control"
+                            id="edittimeout"
+                            name="edittimeout"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="row g-3">
+                        <div class="col">
+                          <label for="message-text" class="col-form-label"
+                            >Reason:</label
+                          >
+                          <textarea
+                            class="form-control"
+                            id="editcoareason"
+                            name="editcoareason"
+                            disabled
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <label for="empid" class="form-label"
+                          >Employee ID</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="empid"
+                          name="empid"
+                          disabled
+                        />
+                      </div>
+                      <div class="row g-3">
+                        <div class="form-floating">
+                          <label class="form-label" for="customFile"></label>
+                          <div class="text-center">
+                            <img
+                              id="editpreviewfile"
+                              src="https://via.placeholder.com/250"
+                              style="width: 250px; height: 250px"
+                              class="rounded"
+                              alt="placeholder"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer" id="modal-footer">
@@ -1674,612 +2224,11 @@
             <button
               type="button"
               class="btn btn-modal-save"
-              id="pendingleavesavebtn"
+              id="editcOAsavebtn"
             >
               Save
             </button>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--Cash Advance Modal-->
-
-  <div
-    class="modal fade"
-    id="pendingcamodal"
-    data-bs-backdrop="static"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Pending Cash Advance Request
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <input
-                type="hidden"
-                class="form-control"
-                id="pendingleaveid"
-                name="pendingleaveid"
-                disabled
-              />
-              <div class="col">
-                <label for="pendingcaname" class="form-label">Full Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingcaname"
-                  name="pendingcaname"
-                  disabled
-                />
-              </div>
-              <div class="col">
-                <label for="pendingcaemail" class="form-label">Email</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingcaemail"
-                  name="pendingcaemail"
-                  disabled
-                />
-              </div>
-              <div class="col">
-                <label for="pendingcagender" class="form-label">Gender</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingcagender"
-                  name="pendingcagender"
-                  disabled
-                />
-              </div>
-            </div>
-            <br />
-            <div class="row g-3">
-              <div class="col">
-                <label for="pendingcaphone" class="form-label"
-                  >Phone Number</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingcaphone"
-                  name="pendingcaphone"
-                  disabled
-                />
-              </div>
-              <div class="col">
-                <label for="pendingreqdate" class="form-label"
-                  >Request Date</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingreqdate"
-                  name="pendingreqdate"
-                  disabled
-                />
-              </div>
-            </div>
-            <br />
-            <div class="row g-3">
-              <div class="col">
-                <label for="pendingamount" class="form-label">Amount</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingamount"
-                  name="pendingamount"
-                  disabled
-                />
-              </div>
-              <div class="col">
-                <label for="pendingpurpose" class="form-label">Purpose</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="pendingpurpose"
-                  name="pendingpurpose"
-                  value="6"
-                  disabled
-                />
-              </div>
-              <div class="col">
-                <label for="pendingcastatus" class="form-label">Action</label>
-                <select
-                  class="form-select"
-                  id="pendingcastatus"
-                  name="pendingcastatus"
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-              </div>
-              <div class="col-md-8">
-                <label for="pendingcaremarks" class="form-label">Remarks</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="pendingcaremarks"
-                  name="pendingcaremarks"
-                />
-              </div>
-            </div>
-            <br />
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-          <button type="button" class="btn btn-primary" id="pendingcasavebtn">
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--Overtime Modal-->
-  <div
-    class="modal fade"
-    id="otapprovalmodal"
-    data-bs-backdrop="static"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content content-size-modal">
-        <div class="modal-header" id="modal-header">
-          <h3 class="modal-title fs-5" id="exampleModalLabel">
-            Approve This Overtime ?
-          </h3>
-          <i class="bx bx-x" data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <br />
-          <br />
-          <div class="row">
-            <div class="col-xl-2 col-lg-4" style="margin-left: 10px">
-              <div class="col g-6">
-                <div class="p-4" style="width: 300px; margin-top: -100px">
-                  <div class="text-center">
-                    <img
-                      id="preview"
-                      src="https://via.placeholder.com/250"
-                      class="rounded rounded-circle border-form-modal"
-                      alt="placeholder"
-                    />
-                  </div>
-                  <br />
-                  <div class="col">
-                    <div class="col g-6">
-                      <input
-                        type="file"
-                        name="otimage"
-                        id="otimage"
-                        class="form-control border-form-modal"
-                        accept="image/*"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  <br />
-                  <h2
-                    class="border-top pb-3 mb-4 text-center modal-content-title"
-                  >
-                    Avatar Preview
-                  </h2>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-8 col-lg-7" style="margin-left: 150px">
-              <form>
-                <br />
-                <div class="row g-3">
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class="form-control border-form-modal"
-                        id="otfullname"
-                        name="otfullname"
-                        placeholder="First Name"
-                        disabled
-                      />
-                      <label for="floatingInput">Full Name</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="col">
-                      <div class="form-floating">
-                        <input
-                          type="text"
-                          class="form-control border-form-modal"
-                          id="otdate"
-                          name="otdate"
-                          disabled
-                        />
-                        <label for="floatingInput">Attendance Date</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <div class="row g-3">
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class="form-control border-form-modal"
-                        id="otclockin"
-                        name="otclockin"
-                        placeholder="Address"
-                        disabled
-                      />
-                      <label for="floatingInput">Clock In</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class="form-control border-form-modal"
-                        id="otclockout"
-                        name="otclockout"
-                        placeholder="Address"
-                        disabled
-                      />
-                      <label for="floatingInput">Clock Out</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class="form-control border-form-modal"
-                        id="ottotalothours"
-                        name="ottotalothours"
-                        placeholder="Address"
-                        disabled
-                      />
-                      <label for="floatingInput">Total Hours</label>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <div class="row g-3">
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otnight"
-                        name="otnight"
-                      />
-                      <label for="floatingInput"
-                        >Night Differentials Hours</label
-                      >
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otnormal"
-                        name="otnormal"
-                      />
-                      <label for="otnormal">Normal Overtime</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otearly"
-                        name="otearly"
-                      />
-                      <label for="otearly">Early Overtime</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otnightpay"
-                        name="otnightpay"
-                        placeholder="Phone Number"
-                        disabled
-                      />
-                      <label for="floatingInput">Night Differentials Pay</label>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <div class="row g-3">
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otearlypay"
-                        name="otearlypay"
-                        placeholder="Phone Number"
-                        disabled
-                      />
-                      <label for="floatingInput">Early Overtime Pay</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="otnormalpay"
-                        name="otnormalpay"
-                        placeholder="Phone Number"
-                        disabled
-                      />
-                      <label for="floatingInput">Normal Overtime Pay</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="number"
-                        class="form-control border-form-modal"
-                        id="ottotalpay"
-                        name="ottotalpay"
-                        placeholder="Phone Number"
-                        disabled
-                      />
-                      <label for="floatingInput">Total Overtime Pay</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <select
-                        class="form-select border-form-modal"
-                        id="otpayrolldate"
-                        name="otpayrolldate"
-                        aria-label="Floating label select example"
-                      >
-                        <option selected>Choose...</option>
-                      </select>
-                      <label for="employeedepartment">Payroll Date</label>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <div class="row g-3">
-                  <br />
-                  <div class="col">
-                    <div class="form-floating">
-                      <select
-                        class="form-select border-form-modal"
-                        id="otstatus"
-                        name="otstatus"
-                        aria-label="Floating label select example"
-                      >
-                        <option value="Approved">Approved</option>
-                        <option value="Applied">Applied</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Applied">Applied</option>
-                      </select>
-                      <label for="floatingInput">Status</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-floating">
-                      <input
-                        type="text"
-                        class="form-control border-form-modal"
-                        id="otreason"
-                        name="otreason"
-                        placeholder="Reason"
-                        disabled
-                      />
-                      <label for="floatingInput">Reason</label>
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <br />
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-          <button type="button" class="btn btn-modal-save" id="otsavebutton">
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--COA MODAL-->
-  <div
-    class="modal fade"
-    id="editrequestcoamodal"
-    data-bs-backdrop="static"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Are you sure you want to Approve this COA?
-          </h1>
-          <i class="bx bx-x" data-bs-dismiss="modal" aria-label="CLose"></i>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <form>
-            <div class="card">
-              <div class="card-body candidate-prof">
-                <form>
-                  <div class="row">
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="coafullname">Employee Name</label>
-                        <input
-                          type="text"
-                          class="form-control border-form-prof"
-                          id="coafullname"
-                          placeholder="Employee Name"
-                          disabled
-                        />
-                      </div>
-                      <div class="col">
-                        <label for="editpassword" class="form-label"
-                          >Status</label
-                        >
-                        <select
-                          class="form-control"
-                          id="editcoastatus"
-                          name="editcoastatus"
-                        >
-                          <option value="Pending" selected>Pending</option>
-                          <option value="Approved">Approved</option>
-                          <option value="Cancel">Cancel</option>
-                        </select>
-                      </div>
-                      <div class="col-lg-4">
-                        <div class="text-center">
-                          <img
-                            id="editpreview"
-                            style="width: 200px; height: 200px"
-                            class="rounded rounded-circle border-form-prof"
-                            alt="placeholder"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="editattendancedate" class="form-label"
-                          >Date</label
-                        >
-                        <input
-                          type="date"
-                          class="form-control"
-                          id="editattendancedate"
-                          name="editattendancedate"
-                        />
-                      </div>
-                      <div class="col">
-                        <label for="edittimein" class="form-label"
-                          >Date Time In</label
-                        >
-                        <input
-                          type="datetime-local"
-                          class="form-control"
-                          id="edittimein"
-                          name="edittimein"
-                        />
-                      </div>
-                      <div class="col">
-                        <label for="edittimeout" class="form-label"
-                          >Date Time Out</label
-                        >
-                        <input
-                          type="datetime-local"
-                          class="form-control"
-                          id="edittimeout"
-                          name="edittimeout"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="row g-3">
-                      <div class="col">
-                        <label for="message-text" class="col-form-label"
-                          >Reason:</label
-                        >
-                        <textarea
-                          class="form-control"
-                          id="editcoareason"
-                          name="editcoareason"
-                          disabled
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label for="empid" class="form-label">Employee ID</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="empid"
-                        name="empid"
-                        disabled
-                      />
-                    </div>
-                    <div class="row g-3">
-                      <div class="form-floating">
-                        <label class="form-label" for="customFile"></label>
-                        <div class="text-center">
-                          <img
-                            id="editpreviewfile"
-                            src="https://via.placeholder.com/250"
-                            style="width: 250px; height: 250px"
-                            class="rounded"
-                            alt="placeholder"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer" id="modal-footer">
-          <button
-            type="button"
-            class="btn btn-modal-close"
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
-          <button type="button" class="btn btn-modal-save" id="editcOAsavebtn">
-            Save
-          </button>
         </div>
       </div>
     </div>

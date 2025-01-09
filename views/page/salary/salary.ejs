@@ -3,30 +3,33 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
     <div class="card-header ch-coop">
-      <h3 class="title-card-table">Salary Settings</h3>
-      <div class="row g-2">
+      <h3 class="title-card-table m-4">Salary Settings</h3>
+      <div class="d-flex gap-4 m-2 mb-4 attendance-field">
         <div class="col">
-          <input id='myInput'  type='text' placeholder="  Search....">
+          <input id='myInput' class="pl-2 font-weight-bold"  type='text' placeholder="  Search....">
         </div>
-        <div class="col-sm-1 col-add">
+      <div class="d-flex gap-4 attendance-field">
+        <div class="flex">
           <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#resignedmodal">
             <b>+ Add</b>
           </button>
         </div>
-        <div class="col-sm-1 col-add">
-          <button id="exportExcelBtn" class="btn btn-export-color"><b>Export</b></button>
+        <div class="flex">
+          <button id="exportExcelBtn" class="btn btn-export-color"><i class="bi bi-database-fill-gear mr-2"></i><b>Export</b></button>
         </div>
-        <div class="col-sm-1 col-add">
-          <button id="importExcelBtn" class="btn btn-per-color"><b>Import</b></button>
+        <div class="flex">
+          <button id="importExcelBtn" class="btn btn-import-color"><i class="bi bi-box-arrow-in-down mr-2"></i><b>Import</b></button>
         </div>
+      </div>
       </div>
     </div>
     <div class="card-body">
         <div class="table-responsive" id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTablesalary">
+            <table class="table table-striped-light" id="dataTablesalary">
                 <thead>
                     <tr>
                         <th class="col-sm-1">ID</th>
+                        <th>Employee ID</th>
                         <th class="col-26">Employee</th>
                         <th>Monthly/Daily Salary</th>
                         <th>Monthly Allowances</th>
@@ -96,9 +99,17 @@
                   </select>
                   <label for="floatingSelectGrid">Payroll Type</label>
               </div>
-          </div>
-           <br>       
-            </form>
+           </div>
+           <br>   
+           <div class="col">
+            <div class="form-floating">
+                <input type="date" class="form-control border-form-modal" id="effectivedate" name="effectivedate"
+                    placeholder="Effective Date">
+                <label for="effectivedate">Effective Date</label>
+            </div>
+          </div>                 
+          <br>     
+          </form>
         </div>
         <div class="modal-footer" id="modal-footer">
           <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
@@ -138,43 +149,40 @@
                 </div>
               </div>                                       
               <br>
-              
               <div class="col">
                   <div class="form-floating">
                       <input type="text" class="form-control border-form-modal" id="editallowances" name="editallowances"
                           placeholder="Monthly Allowances" oninput="formatPrice(event, this)">
                       <label for="editallowances">Edit Monthly Allowances</label>
-                     
                   </div>
-              </div>
-              <br>
-              <div class="col">
-                <div class="form-floating">
-                  <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
-                  placeholder="Adjustments" oninput="formatPrice(event, this)">
-              <label for="editadjustments">Edit Adjustments</label>
-                </div>
-              </div>
-
+              </div>                                                  
               <br> 
               <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control border-form-modal" id="editadjustments" name="editadjustments"
-                        placeholder="Adjustments">
-                    <label for="editallowances" oninput="formatPrice(event, this)">Edit Adjustments</label>
+                        placeholder="Adjustments" oninput="formatPrice(event, this)">
+                    <label for="editallowances">Edit Adjustments</label>
                 </div>
-            </div>                 
-            <br> 
-            <div class="col">
-              <div class="form-floating">
-                  <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
-                    <option value="Daily">Daily</option>
-                    <option value="Monthly">Monthly</option>
-                  </select>
-                  <label for="floatingSelectGrid">Edit Payroll Type</label>
+              </div>                 
+              <br> 
+              <div class="col">
+                <div class="form-floating">
+                    <select class="form-select border-form-modal" id="editpayrolltype" name="editpayrolltype">
+                      <option value="Daily">Daily</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                    <label for="floatingSelectGrid">Edit Payroll Type</label>
+                </div>
               </div>
-          </div>
-            <br>    
+              <br>
+              <div class="col">
+                <div class="form-floating">
+                    <input type="date" class="form-control border-form-modal" id="editeffectivedate" name="editeffectivedate"
+                        placeholder="Effective Date">
+                    <label for="editeffectivedate">Effective Date</label>
+                </div>
+              </div>                 
+              <br>      
           </form>
       </div>
       <div class="modal-footer" id="modal-footer">

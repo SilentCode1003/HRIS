@@ -45,8 +45,6 @@ LEFT JOIN
     ojt_attendance ON mo_id = oa_ojtid
     where mo_id = '${ojtid}'`;
 
-    console.log(ojtid);
-
     mysql
       .mysqlQueryPromise(sql)
       .then((result) => {
@@ -75,9 +73,6 @@ router.post("/updatepassword", async (req, res) => {
     let currentPass = req.body.currentPass;
     let newPass = req.body.newPass;
     let confirmPass = req.body.confirmPass;
-
-    console.log(ojtid, currentPass, newPass, confirmPass);
-
     if (newPass !== confirmPass) {
       return res.json({
         msg: "error",

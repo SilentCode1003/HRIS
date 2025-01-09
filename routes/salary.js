@@ -6,9 +6,12 @@ const {
   SelectStatement,
   UpdateStatement,
   InsertStatement,
+  GetCurrentDate,
 } = require("./repository/customhelper");
-const { Select, Update, Insert } = require("./repository/dbconnect");
+const { Select, Update, Insert, InsertTable } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
+const { ro } = require("date-fns/locale");
+const { JsonErrorResponse, JsonWarningResponse, MessageStatus, JsonSuccess, JsonDataResponse } = require("./repository/response");
 var router = express.Router();
 const currentDate = moment();
 
@@ -23,24 +26,32 @@ module.exports = router;
 router.get("/load", (req, res) => {
   try {
     let sql = `    
-    SELECT 
+  SELECT 
    ms_id,
+   me_id as ms_number,
    concat(me_lastname,' ',me_firstname) as ms_employeeid,
    ms_monthly,
    ms_allowances,
    ms_basic_adjustments,
    ms_payrolltype
    FROM master_salary
-    LEFT JOIN master_employee ON master_salary.ms_employeeid = me_id`;
+  LEFT JOIN master_employee ON master_salary.ms_employeeid = me_id
+  WHERE me_jobstatus IN ('probitionary','regular')`;
 
-    mysql.Select(sql, "Master_Salary", (err, result) => {
-      if (err) console.error("Error: ", err);
+  Select(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.json(JsonErrorResponse(err));
+    }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
+    if (result != 0) {
+      let data = DataModeling(result, "ms_");
+
+      res.json(JsonDataResponse(data));
+    } else {
+      res.json(JsonDataResponse(result));
+    }
+  });
   } catch (error) {
     res.json({
       msg: error,
@@ -116,43 +127,148 @@ router.post("/getsalary", (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {
+router.put("/edit", async (req, res) => {
   try {
-    let salaryid = req.body.salaryid;
-    let employeeid = req.body.employeeid;
-    let monthly = req.body.monthly;
-    let allowances = req.body.allowances;
-    let adjustments = req.body.adjustments;
-    let payrolltype = req.body.payrolltype;
-    let sqlupdate = `update master_salary set 
-    ms_employeeid = '${employeeid}',
-    ms_monthly = '${monthly}',
-    ms_allowances = '${allowances}',
-    ms_basic_adjustments = '${adjustments}',
-    ms_payrolltype = '${payrolltype}'
-    where ms_id = '${salaryid}'`;
+    const {
+      salaryid,
+      employeeid,
+      monthly,
+      allowances,
+      adjustments,
+      payrolltype,
+      effectivedate,
+    } = req.body;
+    let createdBy = req.session.fullname;
+    let createDate = GetCurrentDate();
 
-    console.log(sqlupdate);
+    let Oldquery = `SELECT ms_monthly FROM master_salary WHERE ms_id = '${salaryid}'`;
+    let oldSalaryResult = await mysql.mysqlQueryPromise(Oldquery);
 
-    mysql
-      .Update(sqlupdate)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
+    const oldSalary = oldSalaryResult[0]?.ms_monthly || 0;
+
+    let data = [];
+    let columns = [];
+    let arguments = [];
+
+    if (employeeid) {
+      data.push(employeeid);
+      columns.push("employeeid");
+    }
+
+    if (monthly) {
+      data.push(monthly);
+      columns.push("monthly");
+    }
+
+    if (allowances) {
+      data.push(allowances);
+      columns.push("allowances");
+    }
+
+    if (adjustments) {
+      data.push(adjustments);
+      columns.push("basic_adjustments");
+    }
+
+    if (payrolltype) {
+      data.push(payrolltype);
+      columns.push("payrolltype");
+    }
+
+    if (salaryid) {
+      data.push(salaryid);
+      arguments.push("id");
+    }
+
+    let updateStatement = UpdateStatement(
+      "master_salary",
+      "ms",
+      columns,
+      arguments
+    );
+
+    await Update(updateStatement, data, async (err, result) => {
+      if (err) {
+        console.error("Error: ", err);
+        return res.json(JsonErrorResponse(err));
+      }
+
+      if (effectivedate) {
+        const mes_perday_old_salary = (oldSalary / 313) * 12;
+
+
+        let mes_perday_new_salary;
+        if (payrolltype === "Monthly") {
+          mes_perday_new_salary = (monthly / 313) * 12;
+        } else {
+          mes_perday_new_salary = (monthly * 313) / 12;
+        }
+
+        const formatDate = (date) => {
+          let year = date.getFullYear();
+          let month = String(date.getMonth() + 1).padStart(2, "0");
+          let day = String(date.getDate()).padStart(2, "0");
+          return `${year}-${month}-${day}`;
+        };
+
+        const getPayrollDate = (date) => {
+          let day = date.getDate();
+          let year = date.getFullYear();
+          let month = date.getMonth() + 1;
+
+          if (day >= 26 || day <= 10) {
+            return new Date(year, month, 15);
+          } else {
+            return new Date(year, month, 0);
+          }
+        };
+
+        let payrollDate = getPayrollDate(new Date(effectivedate));
+        let formattedEffectiveDate = formatDate(new Date(effectivedate));
+        let formattedPayrollDate = formatDate(payrollDate);
+
+        let sqlInsertMovement = InsertStatement(
+          "movement_effective_salary",
+          "mes",
+          [
+            "salaryid",
+            "employeeid",
+            "effectivedate",
+            "perday_old_salary",
+            "perday_new_salary",
+            "payrolldate",
+            "createby",
+            "createdate",
+          ]
+        );
+        let movementData = [
+          [
+            salaryid,
+            employeeid,
+            formattedEffectiveDate,
+            mes_perday_old_salary,
+            mes_perday_new_salary,
+            formattedPayrollDate,
+            createdBy,
+            createDate,
+          ],
+        ];
+
+        InsertTable(sqlInsertMovement, movementData, (err, result) => {
+          if (err) {
+            console.error("Error: ", err);
+            return res.json(JsonErrorResponse(err));
+          }
+
+          res.json(JsonSuccess());
         });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
+      } else {
+        res.json(JsonSuccess());
+      }
     });
+  } catch (error) {
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -171,7 +287,6 @@ router.post("/upload", (req, res) => {
           for (const content of data) {
             const { id, employeeid } = content;
 
-            console.log(employeeid);
 
             let sqlupdate = UpdateStatement(
               "master_salary",
@@ -221,3 +336,295 @@ router.post("/upload", (req, res) => {
     });
   }
 });
+
+
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+
+
+  
+// SAVE PAYROLL WITH MOVEMENT EFFECTIVE SALARY
+// router.post("/save", async (req, res) => {
+//   try {
+//     let employeeid = req.body.employeeid;
+//     let monthly = req.body.monthly;
+//     let allowances = req.body.allowances;
+//     let adjustments = req.body.adjustments;
+//     let payrolltype = req.body.payrolltype;
+//     let effectivedate = new Date(req.body.effectivedate);
+//     let createdBy = req.session.fullname;
+//     let createDate = GetCurrentDate();
+
+//     const formatDate = (date) => {
+//       let year = date.getFullYear();
+//       let month = String(date.getMonth() + 1).padStart(2, '0');
+//       let day = String(date.getDate()).padStart(2, '0');
+//       return `${year}-${month}-${day}`;
+//     };
+
+//     const getPayrollDate = (date) => {
+//       let day = date.getDate();
+//       let year = date.getFullYear();
+//       let month = date.getMonth() + 1;
+
+//       if (day >= 26 || day <= 10) {
+//         return new Date(year, month - 1, 15); 
+//       } else {
+//         return new Date(year, month, 0); 
+//       }
+//     };
+
+//     let payrollDate = getPayrollDate(effectivedate);
+
+//     let formattedEffectiveDate = formatDate(effectivedate);
+//     let formattedPayrollDate = formatDate(payrollDate);
+
+//     let sqlInsertSalary = InsertStatement("master_salary", "ms", [
+//       "employeeid",
+//       "monthly",
+//       "allowances",
+//       "basic_adjustments",
+//       "payrolltype",
+//     ]);
+//     let salaryData = [
+//       [employeeid, monthly, allowances, adjustments, payrolltype],
+//     ];
+
+//     let checkStatement = SelectStatement(
+//       "SELECT * FROM master_salary WHERE ms_employeeid = ? AND ms_payrolltype = ? AND ms_monthly = ?",
+//       [employeeid, payrolltype, monthly]
+//     );
+
+//     let existingRecord = await Check(checkStatement);
+//     if (existingRecord != 0) {
+//       return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//     }
+
+//     InsertTable(sqlInsertSalary, salaryData, async (err, result) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(JsonErrorResponse(err));
+//       }
+
+//       let insertedSalaryId = result[0].id;
+
+//       let sqlInsertMovement = InsertStatement(
+//         "movement_effective_salary",
+//         "mes",
+//         [
+//           "salaryid",
+//           "employeeid",
+//           "effectivedate",
+//           "payrolldate",
+//           "createby",
+//           "createdate",
+//         ]
+//       );
+//       let movementData = [
+//         [
+//           insertedSalaryId,
+//           employeeid,
+//           formattedEffectiveDate, 
+//           formattedPayrollDate,  
+//           createdBy,
+//           createDate,
+//         ],
+//       ];
+
+//       InsertTable(sqlInsertMovement, movementData, (err, result) => {
+//         if (err) {
+//           console.log(err);
+//           return res.json(JsonErrorResponse(err));
+//         }
+
+//         res.json(JsonSuccess());
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
+
+// router.put("/edit", async (req, res) => {
+//   try {
+//     const {
+//       salaryid,
+//       employeeid,
+//       monthly,
+//       allowances,
+//       adjustments,
+//       payrolltype,
+//       effectivedate,
+//     } = req.body;
+//     let createdBy = req.session.fullname;
+//     let createDate = GetCurrentDate();
+    
+//     let data = [];
+//     let columns = [];
+//     let arguments = [];
+
+//     if (employeeid) {
+//       data.push(employeeid);
+//       columns.push("employeeid");
+//     }
+
+//     if (monthly) {
+//       data.push(monthly);
+//       columns.push("monthly");
+//     }
+
+//     if (allowances) {
+//       data.push(allowances);
+//       columns.push("allowances");
+//     }
+
+//     if (adjustments) {
+//       data.push(adjustments);
+//       columns.push("basic_adjustments");
+//     }
+
+//     if (payrolltype) {
+//       data.push(payrolltype);
+//       columns.push("payrolltype");
+//     }
+
+//     if (salaryid) {
+//       data.push(salaryid);
+//       arguments.push("id");
+//     }
+
+//     let updateStatement = UpdateStatement(
+//       "master_salary",
+//       "ms",
+//       columns,
+//       arguments
+//     );
+
+//     console.log(updateStatement);
+
+//     await Update(updateStatement, data, async (err, result) => {
+//       if (err) {
+//         console.error("Error: ", err);
+//         return res.json(JsonErrorResponse(err));
+//       }
+
+//       if (effectivedate) {
+//         const formatDate = (date) => {
+//           let year = date.getFullYear();
+//           let month = String(date.getMonth() + 1).padStart(2, "0");
+//           let day = String(date.getDate()).padStart(2, "0");
+//           return `${year}-${month}-${day}`;
+//         };
+
+//         const getPayrollDate = (date) => {
+//           let day = date.getDate();
+//           let year = date.getFullYear();
+//           let month = date.getMonth() + 1;
+
+//           if (day >= 26 || day <= 10) {
+//             return new Date(year, month, 15);
+//           } else {
+//             return new Date(year, month, 0);
+//           }
+//         };
+
+//         let payrollDate = getPayrollDate(new Date(effectivedate));
+//         let formattedEffectiveDate = formatDate(new Date(effectivedate));
+//         let formattedPayrollDate = formatDate(payrollDate);
+
+//         let sqlInsertMovement = InsertStatement(
+//           "movement_effective_salary",
+//           "mes",
+//           [
+//             "salaryid",
+//             "employeeid",
+//             "effectivedate",
+//             "payrolldate",
+//             "createby",
+//             "createdate",
+//           ]
+//         );
+//         let movementData = [
+//           [
+//             salaryid,
+//             employeeid,
+//             formattedEffectiveDate,
+//             formattedPayrollDate,
+//             createdBy,
+//             createDate,
+//           ],
+//         ];
+
+//         InsertTable(sqlInsertMovement, movementData, (err, result) => {
+//           if (err) {
+//             console.error("Error: ", err);
+//             return res.json(JsonErrorResponse(err));
+//           }
+
+//           res.json(JsonSuccess());
+//         });
+//       } else {
+//         res.json(JsonSuccess());
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
+
+
+
+
+// router.post("/update", (req, res) => {
+//   try {
+//     let salaryid = req.body.salaryid;
+//     let employeeid = req.body.employeeid;
+//     let monthly = req.body.monthly;
+//     let allowances = req.body.allowances;
+//     let adjustments = req.body.adjustments;
+//     let payrolltype = req.body.payrolltype;
+//     let sqlupdate = `update master_salary set 
+//     ms_employeeid = '${employeeid}',
+//     ms_monthly = '${monthly}',
+//     ms_allowances = '${allowances}',
+//     ms_basic_adjustments = '${adjustments}',
+//     ms_payrolltype = '${payrolltype}'
+//     where ms_id = '${salaryid}'`;
+
+//     console.log(sqlupdate);
+
+//     mysql
+//       .Update(sqlupdate)
+//       .then((result) => {
+//         res.json({
+//           msg: "success",
+//           data: result,
+//         });
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//       data: error,
+//     });
+//   }
+// });
+
+  //#endregion

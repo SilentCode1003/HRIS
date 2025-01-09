@@ -1,123 +1,132 @@
-<div class="card">
-  <div class="card-header">
-    <h3 class="card-title mb-0 font-weight-bold">Staff House Occupant</h3>
-    <div class="row mb-2 mt-2">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input
-            autocomplete="off"
-            id="staffhouse"
-            class="form-control"
-            placeholder="Select Staff House"
-            type="text"
-            name="staffhouse"
-          />
-          <input
-            autocomplete="off"
-            type="hidden"
-            id="staffhouseID"
-            name="staffhouseID"
-          />
-          <div class="input-group-append">
-            <span class="input-group-text">Select Staff House</span>
-          </div>
-        </div>
-        <div
-          class="custom-dropdown cdw-tableoption"
-          id="staffhouseDropdown"
-        ></div>
-      </div>
-    </div>
+<br>
+<br>
 
-    <div class="row mb-2">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input
-            autocomplete="off"
-            id="employee"
-            class="form-control"
-            placeholder="Select Staff House"
-            type="text"
-            name="employee"
-          />
-          <input
-            autocomplete="off"
-            type="hidden"
-            id="employeeID"
-            name="employeeID"
-          />
-          <div class="input-group-append">
-            <span class="input-group-text">Select Employee</span>
-          </div>
-        </div>
-        <div
-          class="custom-dropdown cdw-tableoption"
-          id="employeeDropdown"
-        ></div>
-      </div>
-    </div>
 
-    <div class="row mb-2">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input
-            autocomplete="off"
-            type="date"
-            class="form-control"
-            id="startdate"
-            name="startdate"
-            max=""
-          />
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon2">Start Date:</span>
-          </div>
+  <div class="card-header header-bg">
+    <h3 class="card-title ch-text">Staff House Occupant</h3>
+  </div>
+  <div class="card">
+<div class="card-body ch-body">
+  <div class="row mb-2 mt-2">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input
+          autocomplete="off"
+          id="staffhouse"
+          class="form-control border-form-modal"
+          placeholder="Select Staff House"
+          type="text"
+          name="staffhouse"
+        />
+        <input
+          autocomplete="off"
+          type="hidden"
+          id="staffhouseID"
+          name="staffhouseID"
+        />
+        <div class="input-group-append">
+          <span class="input-group-text header-bg">Select Staff House</span>
         </div>
       </div>
+      <div
+        class="custom-dropdown cdw-tableoption"
+        id="staffhouseDropdown"
+      ></div>
     </div>
-
-    <div class="row mb-2">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input
-            autocomplete="off"
-            type="date"
-            class="form-control"
-            id="enddate"
-            name="enddate"
-            max=""
-          />
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon2">End Date:</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mt-3 justify-content-start">
-        <div class="col-md-6">
-          <button id="addBtn" class="btn btn-add-color w-75">Add</button>
-        </div>
-      </div>
   </div>
 
-  <div class="card-body">
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input
+          autocomplete="off"
+          id="employee"
+          class="form-control border-form-modal"
+          placeholder="Select Staff House"
+          type="text"
+          name="employee"
+        />
+        <input
+          autocomplete="off"
+          type="hidden"
+          id="employeeID"
+          name="employeeID"
+        />
+        <div class="input-group-append">
+          <span class="input-group-text header-bg">Select Employee</span>
+        </div>
+      </div>
+      <div
+        class="custom-dropdown cdw-tableoption"
+        id="employeeDropdown"
+      ></div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input
+          autocomplete="off"
+          type="date"
+          class="form-control border-form-modal"
+          id="startdate"
+          name="startdate"
+          max=""
+        />
+        <div class="input-group-prepend">
+          <span class="input-group-text header-bg" id="basic-addon2">Start Date:</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input
+          autocomplete="off"
+          type="date"
+          class="form-control border-form-modal"
+          id="enddate"
+          name="enddate"
+          max=""
+        />
+        <div class="input-group-prepend">
+          <span class="input-group-text header-bg" id="basic-addon2">End Date:</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-3 justify-content-end">
+    <div class="flex">
+      <button id="addBtn" class="btn btn-add-color"><i class="bi bi-plus mr-2"></i><b>Add</b></button>
+    </div>
+  </div>
+</div>
+
+
+ 
+
+  <div class="card-body header-bg">
     <div class="card-title">
-        <h6 class="m-0 font-weight-bold">Staff House Occupant Table</h6>
+        <h6 class="ch-text"><b>Staff House Occupant Table</b></h6>
       </div>
       <div class="row">
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6 mb-3 m-2">
           <input
             id="search"
             type="text"
-            class="form-control"
-            placeholder="Search"
+            class="form-control pl-2 font-weight-bold"
+            placeholder="Search...."
           />
         </div>
       </div>
   
-      <div class="row mt-2">
+      <div class="row mt-2 m-2">
         <div class="table">
-          <table id="data-table" class="table table-bordered table-hover">
+          <table id="data-table" class="table table-striped-light table-hover">
             <thead>
               <th>ID</th>
               <th>Staff House</th>
@@ -148,18 +157,18 @@ aria-hidden="true"
 >
 <div class="modal-dialog" role="document">
   <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-header header-bg">
       <h5 class="modal-title" id="editDateModalLabel">Edit Assigned Start Date & End Date</h5>
       <button
         type="button"
-        class="close"
+        class="close staff-close"
         data-bs-dismiss="modal"
         aria-label="Close"
       >
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body ch-body">
       <div class="form">
         <div class="row">
           <div class="col-sm-12">
@@ -167,17 +176,17 @@ aria-hidden="true"
               <input
                 autocomplete="off"
                 type="date"
-                class="form-control"
+                class="form-control border-form-modal"
                 id="startdatemodal"
                 name="startdatemodal"
                 max=""
               />
               <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2">New Start Date:</span>
+                <span class="input-group-text header-bg" id="basic-addon2">New Start Date:</span>
               </div>
             </div>
           </div>
-          <input type="hidden" class="form-control" id="id" />
+          <input type="hidden" class="form-control border-form-modal" id="id" />
         </div>
 
         <div class="row mt-2">
@@ -186,21 +195,21 @@ aria-hidden="true"
               <input
                 autocomplete="off"
                 type="date"
-                class="form-control"
+                class="form-control border-form-modal"
                 id="enddatemodal"
                 name="enddatemodal"
                 max=""
               />
               <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2">New End Date:</span>
+                <span class="input-group-text header-bg" id="basic-addon2">New End Date:</span>
               </div>
             </div>
           </div>
-          <input type="hidden" class="form-control" id="id" />
+          <input type="hidden" class="form-control border-form-modal" id="id" />
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer header-bg">
       <div class="row justify-content-end">
         <button id="updateDateBtn" class="btn btn-add-color w-100">Update</button>
       </div>
@@ -221,18 +230,18 @@ aria-hidden="true"
 >
 <div class="modal-dialog" role="document">
   <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-header header-bg">
       <h5 class="modal-title" id="editStaffhouseModalLabel">Edit Assigned Staff House</h5>
       <button
         type="button"
-        class="close"
+        class="close staff-close"
         data-bs-dismiss="modal"
         aria-label="Close"
       >
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body ch-body">
       <div class="form">
         <div class="row">
           <div class="col-sm-12">
@@ -240,7 +249,7 @@ aria-hidden="true"
               <input
                 autocomplete="off"
                 id="staffhousemodal"
-                class="form-control"
+                class="form-control border-form-modal"
                 placeholder="Select Staff House"
                 type="text"
                 name="staffhousemodal"
@@ -252,7 +261,7 @@ aria-hidden="true"
                 name="staffhousemodalID"
               />
               <div class="input-group-append">
-                <span class="input-group-text">Select New Staff House</span>
+                <span class="input-group-text header-bg">Select New Staff House</span>
               </div>
             </div>
             <div class="custom-dropdown cdw-tableoption" id="staffhousemodalDropdown"></div>
@@ -260,9 +269,9 @@ aria-hidden="true"
         </div>
     </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer header-bg">
       <div class="row justify-content-end">
-        <button id="updateStaffhouseBtn" class="btn btn-add-color w-100">Update</button>
+        <button id="updateStaffhouseBtn" class="btn btn-add-color"><b>Update</b></button>
       </div>
     </div>
   </div>

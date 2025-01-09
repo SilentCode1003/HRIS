@@ -1,11 +1,11 @@
 <!-- LOADER -->
-<div class="loader-wrapper">
+<!-- <div class="loader-wrapper">
   <div class="spinner"></div>
-</div>
+</div> -->
 <!-- LOADER -->
-<div class="loader-wrapper">
+<!-- <div class="loader-wrapper">
   <span class="loader"><span class="loader-inner"></span></span>
-</div>
+</div> -->
 
 <!-- Logout Modal-->
 <div
@@ -95,6 +95,9 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+<!-- Summernote -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+
 <!--Date Picker-->
 <script
   type="text/javascript"
@@ -112,10 +115,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script>
+  // document.addEventListener("contextmenu", function (event) {
+  //   event.preventDefault();
+  // });
+
+  // document.onkeydown = function (e) {
+  //   if (
+  //     e.key === "F12" ||
+  //     (e.ctrlKey &&
+  //       e.shiftKey &&
+  //       (e.key === "I" || e.key === "J" || e.key === "C")) ||
+  //     (e.ctrlKey && e.key === "U")
+  //   ) {
+  //     e.preventDefault();
+  //     return false;
+  //   }
+  // };
   $(document).on("click", "#logoutBtn", function () {
     $.ajax({
       type: "POST",
-      url: "/login/logout",
+      url: "/logout",
       success: function (result) {
         swal({
           title: "Ba Bye!!!",
@@ -188,7 +207,7 @@
       input.value = defaultValue;
     }
   }
-  hidespinner();
+  // hidespinner();
   function showspinner() {
     console.log("show loader");
     $(".loader-wrapper").show();
@@ -341,49 +360,35 @@
   // });
 
   function toggleSidebarAndNavbar() {
-    $("body").toggleClass("sidebar-toggled"); // Toggle class for body
-    $(".sidebar").toggleClass("toggled"); // Toggle class for sidebar
-    // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
-    $(".navbar").toggleClass("navbar-toggled"); // Toggle class for navbar
-    $(".content").toggleClass("content-toggled"); // Toggle class for content
-  }
+  // Check if the sidebar is currently toggled
+  const isSidebarToggled = $(".sidebar").hasClass("toggled");
 
-  $(document).ready(function () {
-    $("#sidebarToggleTop").on("click", function () {
-      toggleSidebarAndNavbar();
-    });
+  if (isSidebarToggled) {
+    // Sidebar is currently hidden, so show it
+    $("body").removeClass("sidebar-toggled");
+    $(".sidebar").removeClass("toggled");
+    $("#accordionSidebar").removeClass("toggled");
+    $(".navbar").removeClass("navbar-toggled"); // Reset navbar width
+    $(".content").removeClass("content-toggled"); // Adjust content width
+    $(".navbar").css("width", "calc(100% - 6.5rem)"); // Adjust navbar width for sidebar
+  } else {
+    // Sidebar is currently visible, so hide it
+    $("body").addClass("sidebar-toggled");
+    $(".sidebar").addClass("toggled");
+    $("#accordionSidebar").addClass("toggled");
+    $(".navbar").addClass("navbar-toggled");
+    $(".content").addClass("content-toggled");
+    $(".navbar").css("width", "100%"); // Set navbar to full width
+  }
+}
+
+$(document).ready(function () {
+  // Attach event listener to the toggle button
+  $("#sidebarToggleTop").on("click", function () {
+    toggleSidebarAndNavbar();
   });
+});
 
-  function filterTableRows(tablename, colcount, searchid) {
-    console.log("triggered search");
-
-    const searchQuery = $(searchid).val().trim().toLowerCase();
-    let foundMatches = false;
-
-    $("#no-match-row").remove();
-
-    $(tablename + " tbody tr").each(function () {
-      const rowData = $(this).text().toLowerCase();
-      if (rowData.includes(searchQuery)) {
-        $(this).show();
-        foundMatches = true;
-      } else {
-        $(this).hide();
-      }
-    });
-
-    if (!foundMatches) {
-      const noMatchRow = $("<tr>").append(
-        $("<td>", {
-          colspan: colcount,
-          class: "text-center",
-          text: "No Data Matched",
-        })
-      );
-      $(tablename + " tbody").append(noMatchRow);
-      noMatchRow.attr("id", "no-match-row");
-    }
-  }
 
   //#region  Alerts
 
@@ -547,7 +552,7 @@
 
   //#region Search Table
   function filterTableRows(tablename, colcount, searchid) {
-    console.log("triggered search");
+    // console.log("triggered search");
 
     const searchQuery = $(searchid).val().trim().toLowerCase();
     let foundMatches = false;
@@ -576,5 +581,449 @@
       noMatchRow.attr("id", "no-match-row");
     }
   }
+  //#endregion
+
+  //#region Card Body Show
+  const toggleButton = document.getElementById("toggleButton");
+  const toggleView = document.querySelector(".toggle-view");
+  let isOpen = false;
+  if (toggleButton != null && toggleView != null) {
+    toggleButton.addEventListener("click", function () {
+      if (!isOpen) {
+        toggleView.style.display = "block";
+        toggleView.style.height = toggleView.scrollHeight + "px";
+        toggleButton.innerHTML = '<i class="fas fa-chevron-up"></i>';
+      } else {
+        toggleView.style.height = "0";
+        setTimeout(() => {
+          toggleView.style.display = "none";
+        }, 500);
+        toggleButton.innerHTML = '<i class="fas fa-plus"></i>';
+      }
+
+      isOpen = !isOpen;
+    });
+  }
+  //#endregion
+
+  //#region Status backgrounds
+  function getStatusBackground(status) {
+    switch (status) {
+      case "REQUEST":
+        return "status-pending";
+      case "REFUNDED":
+        return "status-pending";
+      case "PENDING":
+        return "status-pending";
+      case "COMPLETED":
+        return "status-success";
+      case "SOLD":
+        return "status-success";
+      case "Active":
+        return "status-success";
+      case "APPROVED":
+        return "status-success";
+      case "REPLACE":
+        return "status-inprogress";
+      case "RETURN":
+        return "status-inprogress";
+      case "IN PROGRESS":
+        return "status-inprogress";
+      case "DAMAGE":
+        return "status-warning";
+      case "Inactive":
+        return "status-warning";
+      case "CANCELLED":
+        return "status-warning";
+      case "NOT COMPLETE":
+        return "status-inprogress";
+      default:
+        return "";
+    }
+  }
+
+  function getStatusContainerBackground(status) {
+    switch (status) {
+      case "PENDING":
+        return "status-container-pd";
+      case "REQUEST":
+        return "status-container-pd";
+      case "REFUNDED":
+        return "status-container-pd";
+      case "COMPLETED":
+        return "status-container-sc";
+      case "SOLD":
+        return "status-container-sc";
+      case "Active":
+        return "status-container-sc";
+      case "APPROVED":
+        return "status-container-sc";
+      case "REPLACE":
+        return "status-container-inpg";
+      case "RETURN":
+        return "status-container-inpg";
+      case "IN PROGRESS":
+        return "status-container-inpg";
+      case "DAMAGE":
+        return "status-container-wr";
+      case "Inactive":
+        return "status-container-wr";
+      case "CANCELLED":
+        return "status-container-wr";
+      case "COMPLETE":
+        return "status-container-sc";
+      default:
+        return "";
+    }
+  }
+  //#endregion
+
+  //#region Toastr
+  function successlogin(title, text) {
+    return swal({
+      title: title,
+      text: text,
+      icon: "success",
+      buttons: {
+        confirm: {
+          text: "OK",
+          value: true,
+          visible: true,
+          className: "swal-button-ok",
+        },
+      },
+    }).then((result) => {
+      return new Promise((resolve, reject) => {
+        if (result === true) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  function Loading(title) {
+    toastr.info(
+      `<strong>${title}</strong> <br>
+        <div style="text-align: center; margin-top: 5px;">
+          <div class="spinner-border" role="status" style="display: inline-block;">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>`,
+      null,
+      {
+        closeButton: false,
+        debug: false,
+        newestOnTop: true,
+        progressBar: false,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "0",
+        timeOut: "0",
+        extendedTimeOut: "0",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "hide",
+      }
+    );
+  }
+
+  function success(title, text) {
+    toastr.success(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function warning(title, text) {
+    toastr.warning(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function info(title, text) {
+    toastr.info(text, title, {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+
+  function errormsg(err) {
+    toastr.error(err, "Error!", {
+      closeButton: false,
+      debug: false,
+      newestOnTop: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      preventDuplicates: true,
+      onclick: null,
+      showDuration: "300",
+      hideDuration: "1000",
+      timeOut: "5000",
+      extendedTimeOut: "1000",
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    });
+  }
+  //#endregion
+
+  //#region Date Converter Month:Day:Year:HH:MM
+  ConvertDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? "0" : ""
+    }${minutes} ${ampm}`;
+
+    return `${formattedDate} - ${formattedTime}`;
+  };
+  //#endregion
+
+  //#region AJAX CALLS
+  //@use for updating/saving/inserting data
+  Upsert = (type, url, data, callback) => {
+    $.ajax({
+      type: type,
+      url: url,
+      data: data,
+      success: function (result) {
+        callback(result);
+      },
+      error: function (err) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+
+  //@use for fetching GET data
+  Fetch = (url, callback) => {
+    $.ajax({
+      url: url,
+      method: "GET",
+      dataType: "json",
+      success: function (result) {
+        callback(result);
+      },
+      error: function (err) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+
+  //@use for fetching data with progress bar
+  FetchTableData = (url, callback) => {
+    $(".progress").hide();
+    $(".progress").slideDown();
+
+    $.ajax({
+      url: url,
+      type: "GET",
+      xhrFields: {
+        onprogress: function (e) {
+          if (e.lengthComputable) {
+            let percentComplete = (e.loaded / e.total) * 100;
+            $(".progress-bar").css("width", percentComplete + "%");
+          }
+        },
+      },
+      success: function (result) {
+        setTimeout(function () {
+          $(".progress").slideUp(function () {
+            const data = result.data;
+            if (result.msg === "success") {
+              callback(data);
+            } else {
+              console.error(result.msg);
+            }
+          });
+        }, 1000);
+      },
+      error: function (error) {
+        warning(
+          "Error",
+          "An error occurred while communicating with the server."
+        );
+      },
+    });
+  };
+  //#endregion
+
+  //#region Ajax Utility
+  const Query = (url, type, data = null) => {
+    return new Promise((resolve, reject) => {
+      let ajaxOptions = {
+        url: url,
+        method: type,
+        dataType: "json",
+        success: function (result) {
+          resolve(result);
+        },
+        error: function (err) {
+          reject(err);
+          warning(
+            "Error",
+            "An error occurred while communicating with the server."
+          );
+        },
+      };
+
+      if (["PUT", "POST", "PATCH", "DELETE"].includes(type) && data) {
+        ajaxOptions.data = JSON.stringify(data);
+        ajaxOptions.contentType = "application/json";
+      }
+
+      $.ajax(ajaxOptions);
+    });
+  };
+
+  const queryUtility = {
+    async Load(url) {
+      return await Query(url, "GET");
+    },
+    async Save(url, data) {
+      return await Query(url, "POST", data);
+    },
+    async Update(url, data) {
+      return await Query(url, "PUT", data);
+    },
+    async Delete(url, data) {
+      return await Query(url, "DELETE", data);
+    },
+  };
+  //#endregion
+
+   //#region Sidebar
+   $(document).ready(function () {
+    if ($('.collapse-item.active').length > 0) {
+      $('.collapse-item.active').closest('.collapse').addClass('show')
+    }
+
+    $('.collapse-item').click(function () {
+      $('.collapse-item').removeClass('active')
+      $(this).addClass('active')
+    })
+
+    var path = window.location.pathname
+
+    $('.collapse-item').each(function () {
+      var href = $(this).attr('href')
+      if (path === href) {
+        $(this).addClass('active')
+        $(this).closest('.collapse').addClass('show')
+      }
+    })
+
+    function adjustCollapse() {
+      if ($(window).width() <= 767) {
+        $('.collapse').removeClass('show')
+        $('.row.d-flex.justify-content-center.align-items-center').removeClass('login-height')
+      } else {
+        $('.collapse-item.active').closest('.collapse').addClass('show')
+      }
+    }
+    adjustCollapse()
+
+    $(window).resize(function () {
+      adjustCollapse()
+    })
+
+    $(document).on('click', function (event) {
+      if ($(window).width() <= 767) {
+        if (!$(event.target).closest('.collapse').length) {
+          $('.collapse').removeClass('show')
+        }
+      }
+    })
+  })
+
+  // $(document).ready(function () {
+  //   let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true'
+
+  //   function updateSidebarState() {
+  //     $('body').toggleClass('sidebar-toggled', isSidebarOpen)
+  //     $('.sidebar').toggleClass('toggled', isSidebarOpen)
+
+  //     if (isSidebarOpen) {
+  //       $('.sidebar .collapse').collapse('hide')
+  //       $('#content').toggleClass('content-toggled')
+  //       $('.navbar').toggleClass('navbar-toggled')
+  //       $('.sticky-footer').toggleClass('footer-toggled')
+  //     } else {
+  //       $('#content').removeClass('content-toggled')
+  //       $('.navbar').removeClass('navbar-toggled')
+  //       $('.sticky-footer').removeClass('footer-toggled')
+  //     }
+  //   }
+
+  //   updateSidebarState()
+
+  //   $('#sidebarToggle, #sidebarToggleTop').on('click', function (e) {
+  //     isSidebarOpen = !isSidebarOpen
+
+  //     localStorage.setItem('isSidebarOpen', isSidebarOpen)
+
+  //     updateSidebarState()
+  //   })
+  // })
   //#endregion
 </script>

@@ -54,8 +54,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gl_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -88,8 +86,6 @@ router.get("/loadreq", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "pd_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -180,9 +176,6 @@ router.post("/save", (req, res) => {
               loanstatus,
               payment_type,
             ]);
-
-            console.log(detailsData, "Dates");
-
             let detailsSql = InsertStatement("gov_loan_details", "gld", [
               "employeeid",
               "loanid",
@@ -237,8 +230,6 @@ router.post("/getgovloans", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -274,8 +265,6 @@ router.post("/getgovloansadvanced", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "gld_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -315,11 +304,6 @@ router.put("/edit", (req, res) => {
       columns.push("loanstatus");
     }
 
-    // if (payment_type === "VIA PAYSLIP") {
-    //   data.push("NOT PAID");
-    //   columns.push("loanstatus");
-    // }
-
     if (selected_dates) {
       data.push(selected_dates);
       arguments.push("payrolldates");
@@ -337,8 +321,6 @@ router.put("/edit", (req, res) => {
       ["payrolldates"],
       "loanid"
     );
-
-    console.log(updateStatement);
 
     let checkStatement = SelectStatementWithArray(
       "SELECT * FROM gov_loan_details INNER JOIN gov_loans ON gov_loan_details.gld_loanid = gl_loanid WHERE gld_employeeid = ? AND gld_payrolldates IN (?) AND gld_loanstatus = ? AND gl_loan_type = ?",
@@ -397,9 +379,6 @@ function generateForecastDates(effectiveDate, duration) {
   let dates = [];
   let currentDate = new Date(effectiveDate);
 
-  console.log("Effective Date:", currentDate);
-  console.log("Duration:", duration);
-
   currentDate.setHours(8, 0, 0, 0);
   dates.push(new Date(currentDate));
 
@@ -420,8 +399,6 @@ function generateForecastDates(effectiveDate, duration) {
     currentDate.setHours(8, 0, 0, 0);
     dates.push(new Date(currentDate));
   }
-
-  console.log("Final Dates Array:", dates);
   return dates;
 }
 

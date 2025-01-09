@@ -3,21 +3,16 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
-    <h3>Request Overtime</h3>
-    <div class="row g-2">
-      <div class="col"></div>
-      <div class="col-sm-2">
-        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#addmodal">
-          <h6>Request Overtime</h6> 
+    <h3 class="m-4">Request Overtime</h3>
+    <div class="d-flex gap-4 m-2 mb-4 justify-content-end attendance-field">
+      <div class="flex">
+        <button type="button" id="applybtn" class="btn btn-add-color font-weight-bold" data-bs-toggle="modal" data-bs-target="#addmodal">
+            <i class="bi bi-clock mr-2"></i>Request Overtime 
         </button>
       </div>
     </div>
-  
   </div>
-</div>
 
-<div class="col">
-  <div class="card">
       <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -50,9 +45,8 @@
               <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
                   <div class="row">
                       <div class="col-xl-12 col-lg-12">
-                          <div class="card shadow mb-4">
-                            <div class="card-body cbody-requestleave">
-                                <table class="table table-light table-bordered" id="dataTableapplyOvertime">
+                            <div class="card-body">
+                                <table class="table table-striped-light" id="dataTableapplyOvertime">
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
@@ -70,7 +64,6 @@
                                     </thead>
                                 </table>
                             </div>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -78,7 +71,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableOvertimeApplied">
+                      <table class="table table-striped-light" id="dataTableOvertimeApplied">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -86,9 +79,9 @@
                                 <th scope="col">Clock In</th>
                                 <th scope="col">Clock Out</th>
                                 <th scope="col">Total Hours</th>
-                                <th scope="col">Night OT</th>
                                 <th scope="col">Early OT</th>
                                 <th scope="col">Normal OT</th>
+                                <th scope="col">Night OT</th>
                                 <th scope="col">Payroll Date</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
@@ -102,7 +95,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                      <table class="table table-striped-light" id="dataTableleaveApproved">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -110,9 +103,9 @@
                                 <th scope="col">Clock In</th>
                                 <th scope="col">Clock Out</th>
                                 <th scope="col">Total Hours</th>
-                                <th scope="col">Night OT</th>
                                 <th scope="col">Early OT</th>
                                 <th scope="col">Normal OT</th>
+                                <th scope="col">Night OT</th>
                                 <th scope="col">Payroll Date</th>
                                 <th scope="col">Status</th>
                             </tr>
@@ -125,7 +118,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                      <table class="table table-striped-light" id="dataTableleaveRejected">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -133,9 +126,9 @@
                                 <th scope="col">Clock In</th>
                                 <th scope="col">Clock Out</th>
                                 <th scope="col">Total Hours</th>
-                                <th scope="col">Night OT</th>
                                 <th scope="col">Early OT</th>
                                 <th scope="col">Normal OT</th>
+                                <th scope="col">Night OT</th>
                                 <th scope="col">Payroll Date</th>
                                 <th scope="col">Status</th>
                             </tr>
@@ -148,7 +141,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                      <table class="table table-striped-light" id="dataTableleaveCancelled">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -156,11 +149,12 @@
                                 <th scope="col">Clock In</th>
                                 <th scope="col">Clock Out</th>
                                 <th scope="col">Total Hours</th>
-                                <th scope="col">Night OT</th>
                                 <th scope="col">Early OT</th>
                                 <th scope="col">Normal OT</th>
+                                <th scope="col">Night OT</th>
                                 <th scope="col">Payroll Date</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                             </tr>
                           </thead>
                       </table>
@@ -169,8 +163,9 @@
             </div>
           </div>
       </div>
-  </div>
 </div>
+  
+
 
 <!--Add Ot-->
 <div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -182,41 +177,41 @@
             </div>
             <div class="modal-body" id="modal-body">
                 <form>
-                    <div class="row card-overtime">
-                        <div class="col-md-3 col-sm-12 p-0 box">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <table class="spaced-table">
+                    <div class="row gap-4 mt-4">
+                        <div class="col-xl-4 col-lg-5">
+                          <div class="card-body text-center card-profile-edit">
+                             
+                                    <table class="spaced-table mt-4">
                                         <tbody>
                                             <tr>
-                                                <td class="field text-left work-field">Name:</td>
+                                                <td class="field work-field px-2"><b>Name:</b></td>
                                                 <td class="value" id="addotfullname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Position:</td>
+                                                <td class="field work-field px-2"><b>Position:</b></td>
                                                 <td class="value" id="addotpositionname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Department:</td>
+                                                <td class="field work-field px-2"><b>Department:</b></td>
                                                 <td class="value" id="addotdepartmentname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Date Submitted:</td>
+                                                <td class="field work-field px-2"><b>Date Submitted:</b></td>
                                                 <td class="value" id="adddatesubmittedot"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Shift Schedule:</td>
+                                                <td class="field work-field px-2"><b>Shift Schedule:</b></td>
                                                 <td class="value" id="addotshiftscheduled"></td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                  
                         </div>
-                        <div class="col-md-9 col-sm-12 p-0 box">
+                        <div class="col-xl-7 col-lg-6 mt-4">
                             <div class="row g-3">
                                 <div class="col">
-                                    <label for="editattendancedate" class="form-label">Day</label>
+                                    <label for="editattendancedate" class="form-label">Day:</label>
                                     <input type="date" class="form-control border-form-modal" id="addappliedday" name="addappliedday">
                                 </div>
                                 <div class="col">
@@ -231,44 +226,46 @@
                             <br>
                             <div class="row g-3">
                                 <div class="col">
-                                    <label for="editpayrolldate" class="form-label">Payroll Date</label>
+                                    <label for="editpayrolldate" class="form-label">Payroll Date:</label>
                                     <select class="form-select border-form-modal" id="addpayrolldateot" name="addpayrolldateot">
                                         <option selected disabled>Select Payroll Date</option> 
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="editstatus" class="form-label">Status</label>
+                                    <label for="editstatus" class="form-label">Status:</label>
                                     <select class="form-control border-form-modal" id="addappliedstatusot" name="addappliedstatusot">
                                         <option value="Applied">Applied</option>
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="editstatus" class="form-label">Subgroup</label>
+                                    <label for="editstatus" class="form-label">Subgroup:</label>
                                     <select class="form-control border-form-modal" id="addappliedsubgroup" name="addappliedsubgroup">
+                                        <option selected disabled>Choose Sub Group</option>
                                     </select>
                                 </div>
                             </div>
                             <br>
                             <div class="row g-3">
                                 <div class="col">
-                                    <label for="editreason" class="form-label">Reason :</label>
+                                    <label for="editreason" class="form-label">Reason:</label>
                                     <textarea class="form-control border-form-modal" id="addappliedotreason" name="addappliedotreason"></textarea>
                                 </div>
                             </div>
                             <br>
-                            <div class="row g-3">
+                            
                                 <div class="col">
                                     <label class="form-label" for="EditFile"></label>
                                     <input type="file" name="uploadimage" id="uploadimage" class="form-control border-form-modal"
                                     accept="image/*">
                                 </div>
+                                <br>
                                 <div class="col">
                                     <div class="text-center">
-                                      <img id="preview" src="https://via.placeholder.com/250" style="width: 650px;; height: 250px;"
+                                      <img id="preview" src="https://via.placeholder.com/250" style="height: 250px;"
                                         class="rounded border-form-modal" alt="placeholder">
                                     </div>
                                 </div>
-                            </div>
+                         
                         </div>
                     </div>
                 </form>
@@ -288,55 +285,55 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" id="modal-header">
-                <h5 class="modal-title fs-5" id="exampleModalLabel">Add Overtime</h5>
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Edit Overtime</h5>
                 <i class='bx bx-x' data-bs-dismiss="modal" aria-label="Close"></i>
             </div>
             <div class="modal-body" id="modal-body">
                 <form>
-                    <div class="row card-overtime">
-                        <div class="col-md-3 col-sm-12 p-0 box">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <table class="spaced-table">
+                    <div class="row gap-4 mt-4">
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card-body text-center card-profile-edit">
+                            
+                                    <table class="spaced-table mt-4">
                                         <tbody>
                                             <tr>
-                                                <td class="field text-left work-field">Name:</td>
+                                                <td class="field work-field px-2">Name:</td>
                                                 <td class="value" id="otfullname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Position:</td>
+                                                <td class="field work-field px-2">Position:</td>
                                                 <td class="value" id="otpositionname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Department:</td>
+                                                <td class="field work-field px-2">Department:</td>
                                                 <td class="value" id="otdepartmentname"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Date Submitted:</td>
+                                                <td class="field work-field px-2">Date Submitted:</td>
                                                 <td class="value" id="datesubmitted"></td>
                                             </tr>
                                             <tr>
-                                                <td class="field text-left work-field">Shift Schedule:</td>
+                                                <td class="field work-field px-2">Shift Schedule:</td>
                                                 <td class="value" id="otshiftscheduled"></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                             
                             </div>
                         </div>
-                        <div class="col-md-9 col-sm-12 p-0 box">
-                            <div class="row g-3">
+                        <div class="col-xl-7 col-lg-6 mt-4">
+                            <div class="row g-3 mb-4">
                                 <div class="col">
-                                    <label for="appliedday">Day</label>
-                                    <h4 id="appliedday" name="appliedday" disabled></h4>
+                                    <label for="appliedday" class="day-overtime">Day</label>
+                                    <h6 id="appliedday" class="day-description" name="appliedday" disabled></h6>
                                 </div>
                                 <div class="col">
-                                    <label for="schedtimein">Scheduled Time In</label>
-                                    <h4 id="schedtimein" name="schedtimein"></h4>
+                                    <label for="schedtimein" class="sched-timein">Scheduled Time In</label>
+                                    <h5 id="schedtimein" class="schedin-number" name="schedtimein"></h5>
                                 </div>
                                 <div class="col">
-                                    <label for="schedtimeout">Scheduled Time Out</label>
-                                    <h4 id="schedtimeout" name="schedtimeout"></h4>
+                                    <label for="schedtimeout" class="sched-timeout">Scheduled Time Out</label>
+                                    <h5 id="schedtimeout" class="schedout-number" name="schedtimeout"></h5>
                                 </div>
                             </div>                            
                             <br>
@@ -368,29 +365,36 @@
                                 <div class="col">
                                     <label for="editstatus" class="form-label">Subgroup</label>
                                     <select class="form-control border-form-modal" id="appliedsubgroup" name="appliedsubgroup">
+                                        <option selected disabled>Choose Sub Group</option>
                                     </select>
                                 </div>
                             </div>
+                            <br>
                             <div class="row g-3">
+                                <div class="col">
+                                    <label for="approverList">Authorized Approvers</label>
+                                    <div class="form-floating">
+                                      <ul id="approverListAutomated"></ul>
+                                    </div>
+                                </div> 
                                 <div class="col">
                                     <label for="editreason" class="form-label">Reason :</label>
                                     <textarea class="form-control border-form-modal" id="appliedotreason" name="appliedotreason"></textarea>
                                 </div>
                             </div>
                             <br>
-                            <div class="row g-3">
                                 <div class="col">
                                     <label class="form-label" for="EditFile"></label>
                                     <input type="file" name="editotimage" id="editotimage" class="form-control border-form-modal"
                                     accept="image/*">
                                 </div>
+                                <br>
                                 <div class="col">
                                     <div class="text-center">
-                                      <img id="previewleave" src="https://via.placeholder.com/250" style="width: 650px;; height: 250px;"
+                                      <img id="previewleave" src="https://via.placeholder.com/250" style="height: 250px;"
                                         class="rounded border-form-modal" alt="placeholder">
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </form>
@@ -400,5 +404,7 @@
                 <button type="button" class="btn btn-modal-save" id="applyovertimesavebtn">Save</button>
             </div>
         </div>
+           
     </div>
 </div>
+

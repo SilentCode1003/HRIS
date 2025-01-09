@@ -437,22 +437,23 @@ exports.EmailNotification = (details) => {
     <div class="container">
         <div class="card">
             <div class="card-header header-style">
-                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <img rel src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="card-logo">
                 <b class="header-title">Solutions Supply and Allied Services Corp.</b>
                 <h2 class="line-title">${requesttype} Request</h2>
             </div>
 
             <div class="card-body">
                 <div class="date"> 
+                    <i class='bx bx-calendar-alt icon-style'></i>
                     <span class="label-title">Date:</span>
                     <span class="text-md">${date}</span>
-                </div>
+                </div>  
         
-                    <div class="employeename">
-                        <i class='bx bx-user icon-style'></i>
-                        <span class="label-title">Employee:</span>
-                        <span class="text-md">${employeename}</span>
-                    </div>
+                <div class="employeename">
+                    <i class='bx bx-user icon-style'></i>
+                    <span class="label-title">Employee:</span>
+                    <span class="text-md">${employeename}</span>
+                </div>
           
 
                 <div class="status">
@@ -465,13 +466,15 @@ exports.EmailNotification = (details) => {
                   <div class="reason">
                     <i class='bx bx-message-alt-detail icon-style'></i>
                     <span class="label-title">Reason:</span>
-                    <span class="reason-context">${reason == undefined ? "N/A" : reason}</span>
+                    <span class="reason-context">${
+                      reason == undefined ? "N/A" : reason
+                    }</span>
                   </div>
 
                 <div class="card time-card">
                     <h6 class="shift-title">These are your shift records:</h6>
                 <div class="row mt-4">
-                    <div class="col-half">
+                    <div class="col">
                         <h6 class="label-title">${
                           timein == undefined ? "Start Date" : "Time In"
                         }:</h6>
@@ -484,9 +487,9 @@ exports.EmailNotification = (details) => {
                 <hr className="border-b-[3px] border-b-red-800 mb-4" />
 
                 <div class="row mt-4">
-                <div class="col-half">
+                  <div class="col">
                         <h6 class="label-title">${
-                          timeout == undefined ? "Start Date" : "Time In"
+                          timeout == undefined ? "Start Date" : "Time Out"
                         }:</h6>
                         <h6 class="label-value">${
                           timeout == undefined ? enddate : timeout
@@ -503,7 +506,7 @@ exports.EmailNotification = (details) => {
 
             <div class="card-footer">
                 <span class="title-footer">Chronus MTK Powered by </span>
-                <a href="https://www.5lsolutions.com/" class="company-link"><img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo">Solutions Supply and Allied Services Corp.</a>
+                <a href="https://www.5lsolutions.com/" class="company-link"><img src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="company-logo">Solutions Supply and Allied Services Corp.</a>
             </div>
         </div>
     </div>
@@ -547,7 +550,7 @@ exports.ForgotPasswordTemplate = (details) => {
     <div class="container">
         <div class="card">
             <div class="card-header header-style">
-                <img rel src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="card-logo">
+                <img rel src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="card-logo">
                 <b class="header-title">Solutions Supply and Allied Services Corp.</b>
                 <h2 class="line-title">Forgot Password</h2>
             </div>
@@ -584,7 +587,7 @@ exports.ForgotPasswordTemplate = (details) => {
 
             <div class="card-footer">
                 <span class="title-footer">Chronus MTK Powered by </span>
-                <a href="https://www.5lsolutions.com/" class="company-link"> <img src="https://www.5lsolutions.com/wp-content/uploads/2023/03/FiveL-1.png" alt="Logo" class="company-logo"> Solutions Supply and Allied Services Corp.</a>
+                <a href="https://www.5lsolutions.com/" class="company-link"> <img src="https://hrmis.5lsolutions.com/images/img/5L.png" alt="Logo" class="company-logo"> Solutions Supply and Allied Services Corp.</a>
             </div>
         </div>
     </div>

@@ -2,15 +2,22 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+var morgan = require("morgan");
 const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
+const { eventlogger, logger } = require("./middleware/logger");
+const cron = require("node-cron");
+const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_status");
+const swaggerDocs = require('./document/swagger');
+const swaggerUi = require('swagger-ui-express');
 
-// const corsOptions = {
-//   origin: "http://192.168.30.109:5173", // Evaluation Sysyem React Url
-//   credentials: true,
-// };
+// Schedule the function to run every day at 23:59 (11:59 PM)
+cron.schedule("0 0 * * *", () => {
+  console.log("Running daily attendance status insertion...");
+  insertDailyAttendanceStatus();
+});
 
+//#region ROUTES IMPORT
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var employeeRouter = require("./routes/employee");
@@ -149,6 +156,30 @@ var occupantdurationsettingRouter = require("./routes/occupantdurationsetting");
 var staffhousehistoryRouter = require("./routes/staffhousehistory");
 var areaRouter = require("./routes/area");
 var areadeployemployeeRouter = require("./routes/areadeployemployee");
+var teamleadapprovedholidayRouter = require("./routes/teamleadapprovedholiday");
+var teamleadrejectholidayRouter = require("./routes/teamleadrejectholiday");
+var teamleadrdotRouter = require("./routes/teamleadrdot");
+var teamleadrejectrdotRouter = require("./routes/teamleadrejectrdot");
+var suggestionRouter = require("./routes/suggestion");
+var suggestionareaRouter = require("./routes/suggestionarea");
+var suggestionquestionRouter = require("./routes/suggestionquestion");
+var sessionRouter = require("./routes/session");
+var adjournementRouter = require("./routes/adjournement");
+var adjournement_payRouter = require("./routes/adjournement_pay");
+var eportaldtr = require("./routes/eportaldtr");
+var teamleadapprovedotmealRouter = require("./routes/teamleadapprovedotmeal");
+var eportalobRouter = require("./routes/eportalob");
+var eportalundertime = require("./routes/eportalundertime");
+var teamleadmanualotmealRouter = require("./routes/teamleadmanualotmeal");
+var teamleadobRouter = require("./routes/teamleadob");
+var teamleadobappliedRouter = require("./routes/teamleadobapplied");
+var teamleadobapproveRouter = require("./routes/teamleadobapprove");
+var official_business_request_activityRouter = require("./routes/official_business_request_activity");
+
+//#endregion
+
+
+const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
 
@@ -158,17 +189,35 @@ SetMongo(app);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
-app.use(
-  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
-);
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  eventlogger(req, res, next);
+});
 
-app.use("/", indexRouter);
+//#region ROUTES USE
+
+app.use("/", loginlayoutRouter);
+app.use("/access", accessRouter);
+app.use("/mobile-api", mobileAPIRouter);
+app.use("/forgotpassword", forgotpasswordRouter);
+app.use("/applicant_registration", applicant_registrationRouter);
+app.use("/session", sessionRouter);
+app.use("/register", registerRouter);
+app.use("/ojtlogin", ojtloginRouter);
+app.use("/ojtindex", ojtindexRouter);
+app.use("/ojtattendance", ojtattendanceRouter);
+app.use("/ojtprofile", ojtprofileRouter);
+app.use("/ojtreqabsent", ojtreqabsentRouter);
+app.use("/attendanceojt", attendanceojtRouter);
+app.use("/appsdetails", appsdetailsRouter);
+app.use(verifyJWT);
+app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/employee", employeeRouter);
 app.use("/employeeprofile", employeeprofileRouter);
@@ -179,7 +228,6 @@ app.use("/approvedleave", approvedleaveRouter);
 app.use("/rejectedleave", rejectedleaveRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/shift", shiftRouter);
-app.use("/trainings", trainingsRouter);
 app.use("/position", positionRouter);
 app.use("/disciplinary", disciplinaryRouter);
 app.use("/disciplinaryaction", disciplinaryactionRouter);
@@ -194,7 +242,6 @@ app.use("/ojt", ojtRouter);
 app.use("/announcement", announcementRouter);
 app.use("/settings", settingsRouter);
 app.use("/eportalsettings", eportalsettingsRouter);
-app.use("/access", accessRouter);
 app.use("/salary", salaryRouter);
 app.use("/deduction", deductionRouter);
 app.use("/requestcashadvance", requestcashadvanceRouter);
@@ -215,20 +262,12 @@ app.use("/payment", paymentRouter);
 app.use("/interest", interestRouter);
 app.use("/deposit", depositRouter);
 app.use("/member", memberRouter);
-app.use("/register", registerRouter);
 app.use("/ojtuser", ojtuserRouter);
 app.use("/geofencesettings", geofencesettingsRouter);
 app.use("/salaryhistory", salaryhistoryRouter);
 app.use("/payslip", payslipRouter);
 app.use("/generatepayroll", generatepayrollRouter);
 app.use("/apprentice", apprenticeRouter);
-app.use("/ojtindex", ojtindexRouter);
-app.use("/ojtlogin", ojtloginRouter);
-app.use("/ojtattendance", ojtattendanceRouter);
-app.use("/ojtprofile", ojtprofileRouter);
-app.use("/ojtreqabsent", ojtreqabsentRouter);
-app.use("/attendanceojt", attendanceojtRouter);
-app.use("/appsdetails", appsdetailsRouter);
 app.use("/otapproval", otapprovalRouter);
 app.use("/healthcarddeductions", healthcarddeductionsRouter);
 app.use("/healthcarddeductionsID", healthcarddeductionsIDRouter);
@@ -271,9 +310,9 @@ app.use("/teamleadappliedotmeal", teamleadappliedotmealRouter);
 app.use("/meal_request_activity", meal_request_activityRouter);
 app.use("/teamleadshift", teamleadshiftRouter);
 app.use("/teamleadshiftadjustment", teamleadshiftadjustmentRouter);
-app.use("/mobile-api", mobileAPIRouter);
 app.use("/gov_loans", gov_loansRouter);
 app.use("/teamleadsettings", teamleadsettingsRouter);
+app.use("/trainings", trainingsRouter);
 app.use("/sidebar", sidebarRouter);
 app.use("/medecines", medecinesRouter);
 app.use("/medecines_request", medecinesrequestRouter);
@@ -282,7 +321,6 @@ app.use("/question_type", question_typeRouter);
 app.use("/question", questionRouter);
 app.use("/rating", ratingRouter);
 app.use("/teamleadgeofenceemp", teamleadgeofenceempRouter);
-app.use("/applicant_registration", applicant_registrationRouter);
 app.use("/eportalrequestholiday", eportalrequestHolidayRouter);
 app.use("/teamleadholiday", teamleadholidayRouter);
 app.use("/teamleadtotalholiday", teamleadtotalholidayRouter);
@@ -293,7 +331,6 @@ app.use("/sudden_deductions", sudden_deductionsRouter);
 app.use("/generate13thmonth", generate13thmonthRouter);
 app.use("/usersubgroup", usersubgrouplayoutRouter);
 app.use("/eportalgovloans", eportalgovloansRouter);
-app.use("/forgotpassword", forgotpasswordRouter);
 app.use("/enrolled_bank_acc", enrolled_bank_accRouter);
 app.use("/eportalrestdayot", eportalrestdayotRouter);
 app.use("/restdayot_request_activity", restdayot_request_activityRouter);
@@ -306,6 +343,27 @@ app.use("/occupantdurationsetting", occupantdurationsettingRouter);
 app.use("/staffhousehistory", staffhousehistoryRouter);
 app.use("/area", areaRouter);
 app.use("/areadeployemployee", areadeployemployeeRouter);
+app.use("/teamleadapprovedholiday", teamleadapprovedholidayRouter);
+app.use("/teamleadrejectholiday", teamleadrejectholidayRouter);
+app.use("/teamleadrdot", teamleadrdotRouter);
+app.use("/teamleadrejectrdot", teamleadrejectrdotRouter);
+app.use("/suggestion", suggestionRouter);
+app.use("/suggestionarea", suggestionareaRouter);
+app.use("/suggestionquestion", suggestionquestionRouter);
+app.use("/adjournement", adjournementRouter);
+app.use("/adjournement_pay", adjournement_payRouter);
+app.use("/eportaldtr", eportaldtr);
+app.use("/teamleadapprovedotmeal", teamleadapprovedotmealRouter);
+app.use("/eportalob", eportalobRouter);
+app.use("/eportalundertime", eportalundertime);
+app.use("/teamleadmanualotmeal", teamleadmanualotmealRouter);
+app.use("/teamleadob", teamleadobRouter);
+app.use("/teamleadobapplied", teamleadobappliedRouter);
+app.use("/teamleadobapprove", teamleadobapproveRouter);
+app.use("/obactivity", official_business_request_activityRouter);
+
+//#endregion
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -317,7 +375,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
+  logger.error(err);
   // // render the error page
   res.status(err.status || 500);
   res.render("error");

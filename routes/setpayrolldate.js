@@ -2,6 +2,7 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { GetCurrentMonthFirstDay } = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -42,20 +43,24 @@ router.get("/load", (req, res) => {
 
 router.get("/loadreq", (req, res) => {
   try {
+    let firstDayofMonth = GetCurrentMonthFirstDay();
     let sql = `SELECT 
-    pd_payrollid,
-    pd_name,
-    pd_cutoff,
-    DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
-    DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
-    DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
-    FROM 
-    payroll_date
-    WHERE
-    pd_enddate >= CURDATE() OR pd_enddate IS NULL
-    ORDER BY 
-    pd_startdate
-    LIMIT 5`;
+            pd_payrollid,
+            pd_name,
+            pd_cutoff,
+            DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+            DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+            DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+            FROM 
+            payroll_date
+            WHERE
+            pd_startdate = (
+              SELECT CASE 
+                WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
+                WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
+                ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
+                    END
+            )  `;
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -76,7 +81,9 @@ router.get("/loadreq", (req, res) => {
 
 router.get("/loadreqbeforepayout", (req, res) => {
   try {
-    let sql = `SELECT 
+    let firstDayofMonth = GetCurrentMonthFirstDay();
+    let sql = `
+    SELECT 
     pd_payrollid,
     pd_name,
     pd_cutoff,
@@ -86,10 +93,13 @@ router.get("/loadreqbeforepayout", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_payrolldate >= CURDATE()
-    ORDER BY 
-    pd_payrolldate
-    LIMIT 5`;
+    pd_startdate = (
+      SELECT CASE 
+        WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
+        WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
+        ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
+            END
+    )  `;
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);

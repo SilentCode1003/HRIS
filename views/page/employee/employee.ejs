@@ -2,14 +2,14 @@
 <!-- Table --> <!--- hehe-->
 <div class="card" id="tablecard">
   <div class="card-header ch-coop">
-    <h3 class="title-card-table">Employee</h3>
-    <div class="row g-4">
+    <h3 class="title-card-table m-4">Employee</h3>
+    <div class="row g-4 m-2 mb-4">
       <div class="col">
-        <input id='myInput' type='text' placeholder="  Search....">
+        <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
       </div>
       <div class="col-sm-2">
         <button class="btn btn-color" id="total1year" data-bs-toggle="modal" data-bs-target="#total1YearModal">
-            <i class="fas fa-filter"><b>Filter</b></i>
+            <i class="fas fa-filter mr-2"></i><b>Filter</b>
         </button>
       </div>    
       <div class="col-sm-2">
@@ -23,12 +23,12 @@
         </button>
       </div>
       <div class="col-sm-1">
-        <button class="btn btn-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
+        <button class="btn btn-upload-color" data-bs-toggle="modal" data-bs-target="#openModalButton">
           <b>Upload</b>
         </button>
       </div>
       <div class="col-sm-2">
-        <button class="btn btn-color" id="downloadalphalist" name="downloadalphalist">
+        <button class="btn btn-download-color" id="downloadalphalist" name="downloadalphalist">
           <b>Dowload Alpha List</b>
         </button>
       </div>
@@ -61,7 +61,7 @@
   </div>
   <div class="card-body">
     <div class="table-responsive" id="table-responsive-id">
-      <table class="table table-light table-bordered" id="dataTableemployees">
+      <table class="table table-striped-light" id="dataTableemployees">
         <thead>
           <tr>
             <!-- <th>Image</th> -->
@@ -89,17 +89,20 @@ aria-hidden="true">
 <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <div class="modal-header" id="modal-header">
-            <div>
-                <h3 class="modal-title" id="exampleModalToggleLabel">Filter Tenure Employee</h3>
+            <div class="d-flex flex-column ">
+              <div>
+                <h3 class="modal-title mb-4 mt-2" id="exampleModalToggleLabel">Filter Tenure Employee</h3>
             </div>
-            <br>
-            <input id='myInputtotal1year' class="db-modal-search" type='text' placeholder="  Search....">
+            <div>
+              <input id='myInputtotal1year' class="db-modal-search mb-2" type='text' placeholder="  Search....">
+            </div>
+            </div>
             <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
         </div>
         <div class="modal-body m-body" id="modal-body">
             <div class="modal-table">
                 <div class="table-responsive scrollable-table-container" id="table-responsive-id">
-                    <table class="table custom-mobile-table table-bordered table-light" id="total1yeartable">
+                    <table class="table custom-mobile-table table-striped-light" id="total1yeartable">
                         <thead class="table-header">
                             <tr>
                                 <th class="col-sm-1">ID</th>
@@ -191,6 +194,7 @@ aria-hidden="true">
                     <label for="floatingInput">Old Employee ID</label>
                   </div>
                 </div>
+
                 <div class="col">
                   <div class="form-floating">
                     <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeefname"
@@ -198,6 +202,7 @@ aria-hidden="true">
                     <label for="floatingInput">First Name</label>
                   </div>
                 </div>
+                
                 <div class="col">
                   <div class="form-floating">
                     <input type="text" class="form-control border-form-modal uppercase-input" id="oldemployeelname"

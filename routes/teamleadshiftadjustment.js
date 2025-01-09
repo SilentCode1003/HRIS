@@ -22,8 +22,6 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 
-
-
 router.get("/load", (req, res) => {
     try {
       let departmentid = req.session.departmentid; 
@@ -56,5 +54,61 @@ router.get("/load", (req, res) => {
       });
     } catch (error) {
       res.json(JsonErrorResponse(err));
+    }
+  });
+
+
+  router.post("/viewactualrd", (req, res) => {
+    try {
+      let employeeid = req.body.employeeid;
+      let sql = `WITH RECURSIVE date_series AS (
+            SELECT DATE_SUB(CURDATE(), INTERVAL 2 MONTH) AS forecast_date
+            UNION ALL
+            SELECT DATE_ADD(forecast_date, INTERVAL 1 DAY)
+            FROM date_series
+            WHERE forecast_date < DATE_ADD(CURDATE(), INTERVAL 2 MONTH)
+        )
+        SELECT 
+            DATE_FORMAT(ds.forecast_date, '%Y-%m-%d') AS forecast_date
+        FROM date_series ds
+        JOIN master_shift ms
+            ON ms.ms_employeeid = '${employeeid}'
+        WHERE JSON_EXTRACT(
+            CASE DAYNAME(ds.forecast_date)
+                WHEN 'Monday' THEN ms.ms_monday
+                WHEN 'Tuesday' THEN ms.ms_tuesday
+                WHEN 'Wednesday' THEN ms.ms_wednesday
+                WHEN 'Thursday' THEN ms.ms_thursday
+                WHEN 'Friday' THEN ms.ms_friday
+                WHEN 'Saturday' THEN ms.ms_saturday
+                WHEN 'Sunday' THEN ms.ms_sunday
+            END, '$.time_in') = '00:00:00'
+        AND JSON_EXTRACT(
+            CASE DAYNAME(ds.forecast_date)
+                WHEN 'Monday' THEN ms.ms_monday
+                WHEN 'Tuesday' THEN ms.ms_tuesday
+                WHEN 'Wednesday' THEN ms.ms_wednesday
+                WHEN 'Thursday' THEN ms.ms_thursday
+                WHEN 'Friday' THEN ms.ms_friday
+                WHEN 'Saturday' THEN ms.ms_saturday
+                WHEN 'Sunday' THEN ms.ms_sunday
+            END, '$.time_out') = '00:00:00'`;
+
+          Select(sql, (err, result) => {
+            if (err) {
+              console.error(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            if (result != 0) {
+              let data = DataModeling(result, "cs_");
+              res.json(JsonDataResponse(data));
+            } else {
+              res.json(JsonDataResponse(result));
+            }
+          });
+    } catch (error) {
+      console.error(error);
+      res.json(JsonErrorResponse(error));
     }
   });

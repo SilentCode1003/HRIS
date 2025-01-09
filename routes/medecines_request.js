@@ -49,8 +49,6 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      console.log(result, "result");
-
       if (result != 0) {
         let data = DataModeling(result, "mr_");
 
@@ -79,8 +77,6 @@ router.post("/getmedecinequantity", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
 
       if (result != 0) {
         let data = DataModeling(result, "mm_");
@@ -194,8 +190,6 @@ router.post("/save", (req, res) => {
 
                 let newMedicineId = result[0].id;
 
-                console.log(newMedicineId);
-
                 let historySql = InsertStatement("medecine_history", "mh", [
                   "history_type",
                   "responsible",
@@ -268,9 +262,6 @@ router.post("/viewmedreq", (req, res) => {
         console.error(err);
         res.json(JsonErrorResponse(err));
       }
-
-      console.log(result, "result");
-
       if (result != 0) {
         let data = DataModeling(result, "mr_");
 

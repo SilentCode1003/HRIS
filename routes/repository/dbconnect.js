@@ -1,6 +1,7 @@
 const model = require("../model/hrmisdb");
 const mysql = require("mysql");
 const { Encrypter, Decrypter } = require("./cryptography");
+const { logger, logEvents } = require("../../middleware/logger");
 require("dotenv").config();
 
 let password = "";
@@ -10,7 +11,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Encrypter("m@iLcOwpaybLsol!2023", (err, encrypted) => {
+Decrypter("b65374b7eb304e48389357a0c0eda326d6934315ed328ae1dd539c66e6120c1a", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -24,9 +25,10 @@ const connection = mysql.createConnection({
 });
 
 exports.CheckConnection = () => {
-  connection.connect((err) => {
-    if (err) {
-      console.error("Error connection to MYSQL database: ", err);
+  connection.connect((error) => {
+    if (error) {
+      console.error("Error connection to MYSQL database: ", error);
+      logEvents(error,'sqlError.log');
       return;
     }
     console.log("MySQL database connection established successfully!");
@@ -40,6 +42,7 @@ exports.Select = (sql, callback) => {
     });
     connection.query(sql, (error, results, fields) => {
       if (error) {
+        logger.error(`error: ${error.sqlMessage}`);
         console.log(error);
 
         return callback(error, null);
@@ -47,6 +50,7 @@ exports.Select = (sql, callback) => {
       callback(null, results);
     });
   } catch (error) {
+    logEvents(error,'sqlError.log');
     console.log(error);
   }
 };
@@ -55,6 +59,7 @@ exports.Update = async (sql, data, callback) => {
   try {
     connection.query(sql, data, (error, results, fields) => {
       if (error) {
+        logger.error(`error: ${error.sqlMessage}`);
         callback(error, null);
       }
       // console.log("Rows affected:", results.affectedRows);
@@ -62,13 +67,14 @@ exports.Update = async (sql, data, callback) => {
       callback(null, `Rows affected: ${results.affectedRows}`);
     });
   } catch (error) {
-    console.log(error);
+    logEvents(error,'sqlError.log');
   }
 };
 
 exports.SelectParameter = (sql, condition, callback) => {
   connection.query(sql, [condition], (error, results, fields) => {
     if (error) {
+      logger.error(`error: ${err.sqlMessage}`);
       return callback(error, null);
     }
     // console.log(results);
@@ -86,6 +92,7 @@ exports.Insert = (stmt, todos, callback) => {
 
     connection.query(stmt, [todos], (err, results, fields) => {
       if (err) {
+        logger.error(`error: ${err.sqlMessage}`);
         callback(err, null);
       }
       // callback(null, Row inserted: ${results});
@@ -99,6 +106,7 @@ exports.Insert = (stmt, todos, callback) => {
       // console.log(Row inserted: ${results.affectedRows});
     });
   } catch (error) {
+    logEvents(error,'sqlError.log');
     callback(error, null);
   }
 };
@@ -106,6 +114,7 @@ exports.Insert = (stmt, todos, callback) => {
 exports.InsertTable = (sql, data, callback) => {
   this.Insert(sql, data, (err, result) => {
     if (err) {
+      logger.error(`error: ${err.sqlMessage}`);
       callback(err, null);
     }
     callback(null, result);

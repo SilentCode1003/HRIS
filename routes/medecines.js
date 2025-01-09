@@ -46,12 +46,8 @@ router.get("/load", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "mm_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -127,9 +123,6 @@ router.post("/save", (req, res) => {
             }
 
             let newMedicineId = result[0].id;
-
-            console.log(newMedicineId);
-
             let historySql = InsertStatement("medecine_history", "mh", [
               "history_type",
               "responsible",
@@ -299,8 +292,6 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement);
-
     let checkStatement = SelectStatement(
       "select * from master_medecines where mm_name=? and mm_category=? and mm_manufacturer= ? and mm_createdate=? and mm_expirydate=? ",
       [
@@ -442,12 +433,8 @@ router.get("/loadstockin", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "mh_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -481,12 +468,8 @@ router.get("/loadstockout", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
-      //
-
       if (result != 0) {
         let data = DataModeling(result, "mh_");
-
-        //console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

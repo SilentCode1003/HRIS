@@ -105,7 +105,6 @@ router.post("/update", async (req, res) => {
     let hiredate = currentDate.format("YYYY-MM-DD");
 
     let newEmployeeId = await generateEmployeeId(currentYear, currentMonth);
-    console.log("New Employee ID:", newEmployeeId);
 
     const existingEmployeeData = await fetchEmployeeData(employeeid);
 
@@ -135,14 +134,9 @@ router.post("/update", async (req, res) => {
           '${existingEmployeeData.address}',
           '${existingEmployeeData.profilePicturePath}'
       )`;
-
-    console.log("Insert Employee Query:", insertEmployeeQuery);
-
     mysql
       .mysqlQueryPromise(insertEmployeeQuery)
       .then(async (result) => {
-        console.log("Insert Employee Result:", result);
-
         const { username, password } = generateUsernameAndPasswordforemployee({
           me_firstname: existingEmployeeData.firstname,
           me_lastname: existingEmployeeData.lastname,
@@ -170,8 +164,6 @@ router.post("/update", async (req, res) => {
                       mu_status) VALUES (
                       '${newEmployeeId}', '${username}', '${encryptedPassword}', '${accessType}', '${createBy}', '${createdate}', 'Active')`;
 
-          console.log("Insert User Query:", insertUserQuery);
-
           mysql
             .mysqlQueryPromise(insertUserQuery)
             .then((result) => {
@@ -183,9 +175,6 @@ router.post("/update", async (req, res) => {
         });
 
         let updateOldEmployeeQuery = `UPDATE master_employee SET me_jobstatus = 'Done Apprentice' WHERE me_id = '${employeeid}'`;
-
-        console.log("Update Old Employee Query:", updateOldEmployeeQuery);
-
         mysql
           .mysqlQueryPromise(updateOldEmployeeQuery)
           .then((result) => {

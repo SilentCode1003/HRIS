@@ -10,6 +10,7 @@ const {
 const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
+const { GetCurrentMonthFirstDay, GetCurrentMonthLastDay } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -26,6 +27,8 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let startdate = GetCurrentMonthFirstDay();
+    let enddate = GetCurrentMonthLastDay();
     let sql = `SELECT 
     ora.ora_id AS ora_id,
     CONCAT(me_request.me_lastname, ' ', me_request.me_firstname) AS ora_fullname,
@@ -39,7 +42,9 @@ router.get("/load", (req, res) => {
     FROM overtime_request_activity ora
     INNER JOIN payroll_approval_ot pao ON ora.ora_overtimeid = pao.pao_id
     INNER JOIN master_employee me_request ON pao.pao_employeeid = me_request.me_id
-    INNER JOIN master_employee me_activity ON ora.ora_employeeid = me_activity.me_id`;
+    INNER JOIN master_employee me_activity ON ora.ora_employeeid = me_activity.me_id
+    WHERE ora_date BETWEEN '${startdate} 00:00:00' AND '${enddate} 23:59:59'
+    ORDER BY ora_date DESC`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -49,8 +54,6 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ora_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -97,8 +100,6 @@ router.post("/getovertimeactivity", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "ora_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));

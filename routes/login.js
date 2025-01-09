@@ -1,9 +1,10 @@
 var express = require("express");
-const { Encrypter } = require("./repository/cryptography");
+const { Encrypter, EncrypterString } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 var router = express.Router();
 const nodemailer = require("nodemailer");
 const { UserLogin } = require("./repository/helper");
+const jwt = require("jsonwebtoken");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("loginlayout", { title: "Express" });
@@ -89,6 +90,16 @@ router.post("/login", (req, res) => {
                 let data = UserLogin(result);
 
                 data.forEach((user) => {
+                  req.session.jwt = EncrypterString(
+                    jwt.sign(
+                      JSON.stringify({
+                        employeeid: user.employeeid,
+                        fullname: user.fullname,
+                      }),
+                      process.env._SECRET_KEY
+                    ),
+                    {}
+                  );
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
@@ -101,10 +112,38 @@ router.post("/login", (req, res) => {
                   req.session.geofenceid = user.geofenceid;
                   req.session.accesstypeid = user.accesstypeid;
                   req.session.subgroupid = user.subgroupid;
-                });
-                console.log("accesstype", req.session.accesstype);
+                  req.session.clientip = req.body.client_ipaddress;
 
-                console.log(req.session.isgeofence, "data");
+                  res.cookie("employeeid", user.employeeid, {
+                    secure: true,
+                    sameSite: "None", // Allow cross-origin
+                    domain: ".5lsolutions.com", // For subdomains
+                  });
+                  res.cookie("department", user.departmentname, {
+                    secure: true,
+                    sameSite: "None", // Allow cross-origin
+                    domain: ".5lsolutions.com", // For subdomains
+                  });
+                  res.cookie(
+                    "token",
+                    EncrypterString(
+                      jwt.sign(
+                        JSON.stringify({
+                          employeeid: user.employeeid,
+                          fullname: user.fullname,
+                        }),
+                        process.env._SECRET_KEY
+                      ),
+                      {}
+                    ),
+                    {
+                      secure: true,
+                      sameSite: "None", // Allow cross-origin
+                      domain: ".5lsolutions.com", // For subdomains
+                    }
+                  );
+                });
+
                 return res.json({
                   msg: "success",
                   data: data,

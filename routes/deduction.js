@@ -144,8 +144,6 @@ router.post("/update", (req, res) => {
     gd_cutoff = '${cutoff}'
     where gd_id = '${govdeduct}'`;
 
-    console.log(sqlupdate);
-
     mysql
       .Update(sqlupdate)
       .then((result) => {

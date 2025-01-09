@@ -89,10 +89,8 @@
         ],
         createdRow: function (row, data, dataIndex) {
           var idtypeCell = $(row).find("td:eq(3)");
-          var amountCell = $(row).find("td:eq(4)");
 
           idtypeCell.wrapInner("<span class='idtype-text'></span>");
-          amountCell.wrapInner("<span class='amount-text'></span>");
 
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
@@ -166,9 +164,8 @@
                 icon: "warning",
                 button: "OK!",
               }).then((result) => {
-                window.location.reload();
+                LoadTable();
               });
-              LoadTable();
             }
           },
           error: function (err) {
@@ -453,9 +450,8 @@
                 icon: "success",
                 button: "OK!",
               }).then((results) => {
-                window.location.reload();
+                LoadTable();
               });
-              LoadTable();
             } else if (result.msg == "exist") {
               swal({
                 title: "Exist",

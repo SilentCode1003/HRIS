@@ -4,14 +4,14 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-cashad">
-    <h3>Cash Advance History</h3>
-    <button type="button" id="applybtn" class="btn btn-eportal-color col-sm-2 col-add" data-bs-toggle="modal" data-bs-target="#addcamodal">
-        <b>Apply Cash Advance</b>
+    <h3 class="m-4">Cash Advance History</h3>
+    <div class="d-flex gap-4 m-2 mb-4 justify-content-end attendance-field">
+      <button type="button" id="applybtn" class="btn btn-add-color font-weight-bold" data-bs-toggle="modal" data-bs-target="#addcamodal">
+        <i class="bi bi-cash-coin mr-2"></i>Apply Cash Advance
       </button>
+    </div>
   </div>
-  <br>
-  <div class="col">
-    <div class="card">
+  
         <div class="card-header ch-generate">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -40,7 +40,7 @@
                 <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
+                        
                                 <div class="card-header ch-coop">
                                   <table class="table table-light table-striped" id="dataTableapplycashadvance">
                                     <thead>
@@ -57,17 +57,17 @@
                                     </tbody>
                                   </table>
                                 </div>
-                            </div>
+                        
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-approved" role="tabpanel"
                 aria-labelledby="nav-profile-tab">
-                <div class="card shadow mb-4">
+                
                   <div class="card-header ch-coop">
                     <div class="card-body">
                       <div class="table-responsive" id="table-responsive-id">
-                          <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                          <table class="table table-striped-light" id="dataTableleaveApproved">
                               <thead>
                                 <tr>
                                   <th scope="col">ID</th>
@@ -83,15 +83,15 @@
                       </div>
                    </div>
                   </div>
-                </div>
+              
               </div>
               <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
                 aria-labelledby="nav-profile-tab">
-                <div class="card shadow mb-4">
+               
                   <div class="card-header ch-coop">
                     <div class="card-body">
                       <div class="table-responsive" id="table-responsive-id">
-                          <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                          <table class="table table-striped-light" id="dataTableleaveRejected">
                               <thead>
                                 <tr>
                                   <th scope="col">ID</th>
@@ -107,15 +107,15 @@
                       </div>
                     </div>
                   </div>
-                </div>
+             
               </div>
               <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
                 aria-labelledby="nav-profile-tab">
-                <div class="card shadow mb-4">
+               
                   <div class="card-header ch-coop">
                     <div class="card-body">
                       <div class="table-responsive" id="table-responsive-id">
-                          <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                          <table class="table table-striped-light" id="dataTableleaveCancelled">
                               <thead>
                                 <tr>
                                   <th scope="col">ID</th>
@@ -131,12 +131,12 @@
                       </div>
                   </div>
                   </div>
-                </div>
+              
               </div>
             </div>
         </div>
-    </div>
-  </div>
+    
+
 
   <!-- Modal -->
   <div class="modal fade" id="addcamodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

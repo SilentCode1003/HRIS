@@ -30,6 +30,7 @@
   let globalspecialholidaycomp = "";
   let globalregularholidayot = "";
   let globalspecialholidayot = "";
+  let globalsuspension_pay = "";
   let globaloverallnetpay = "";
   let globalsssdeductions = "";
   let globalpagibigdeductions = "";
@@ -53,6 +54,9 @@
   let globalsalary_loan = "";
   let globalnumlate = "";
   let globalnumabsent = "";
+  let globalgpstatus = "";
+  let globalleave_with_out_pay = "";
+  let globalleave_with_out_pay_deductions = "";
   let globalsuddendedductionsName = [];
   let globalsuddendedductionsAmount = [];
 
@@ -128,22 +132,7 @@
           { data: "totalnetpay" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          var totalnetpayCell = $(row).find("td:eq(9)");
-          // var leaveenddateCell = $(row).find("td:eq(4)");
-          // var applieddateCell = $(row).find("td:eq(6)");
-
-          // leavestartdateCell.wrapInner(
-          //   "<span class='leavestartdate-text'></span>"
-          // );
-          //leaveenddateCell.wrapInner("<span class='leaveenddate-text'></span>");
-          totalnetpayCell.wrapInner("<span class='approved-status'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+       
         initComplete: function () {},
       });
     }
@@ -266,6 +255,10 @@
 
             console.log(existingData);
             $.each(existingData, (key, item) => {
+              $("#payslipdailytotal").html(
+                "<strong> ( " + item.presentdays_gp + " )</strong>"
+              );
+              globalgpstatus = item.presentdays_gp;
               $("#payslipSSSid").text(item.sssid);
               globalsssid = item.sssid;
               $("#payslipTINid").text(item.tinid);
@@ -344,6 +337,47 @@
                 formatToCurrency(item.specialholidayOT)
               );
               globalspecialholidayot = item.specialholidayOT;
+
+              let suspensionPay = item.suspension_pay;
+              let leaveNoPay = item.leave_with_out_pay;
+              let leaveNoPayDeductions = item.leave_with_out_pay_deductions;
+              if (suspensionPay === 0) {
+                $("#payslipsuspensionpay").closest("tr").hide();
+              } else {
+                $("#payslipsuspensionpay").closest("tr").show();
+                $("#payslipsuspensionpay").text(
+                  formatToCurrency(suspensionPay)
+                );
+              }
+              globalsuspension_pay = item.suspension_pay;
+              globalleave_with_out_pay = item.leave_with_out_pay;
+              globalleave_with_out_pay_deductions = item.leave_with_out_pay_deductions;
+
+              if (suspensionPay === 0 && leaveNoPay === 0 && leaveNoPayDeductions === 0) {
+                  $("#payslipsuspensionpay").closest("tr").hide();
+              } else {
+                  $("#payslipsuspensionpay").closest("tr").show();
+                  if (suspensionPay > 0) {
+                      $("#payslipsuspensionpay").text(formatToCurrency(suspensionPay));
+                  } else {
+                      $("#payslipsuspensionpay").text("");
+                  }
+                  if (leaveNoPay > 0) {
+                      $("#payslipnopay").html(
+                          "<strong> ( " + leaveNoPay + " )</strong>"
+                      );
+                  } else {
+                      $("#payslipnopay").html("");
+                  }
+                  if (leaveNoPayDeductions > 0) {
+                      $("#payslipnopaydeductions").text(
+                          formatToCurrency(leaveNoPayDeductions)
+                      );
+                  } else {
+                      $("#payslipnopaydeductions").text("");
+                  }
+              }
+
               $("#paysliptotal").text(formatToCurrency(item.overall_netpay));
               globaloverallnetpay = item.overall_netpay;
               $("#payslipsss").text(formatToCurrency(item.sss_dedcutions));
@@ -485,6 +519,36 @@
       });
     });
 
+       //miyaka
+       function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+        case "normal day":
+          return "normal-day";
+
+        case "rest day":
+          return "restday";
+
+          
+        case "exempted":
+          return "exempted";
+
+        case "missed logs":
+          return "pending-status";
+
+          case "absent":
+          return "absent";
+
+          case "regular holiday":
+          return "regularholiday";
+
+          case "non-working holiday":
+          return "nonworking";
+          
+        default:
+          return "";
+      }
+    }
+
     $(document).on("click", "#nav-date-tab", function () {
       $(`#dataTablePayslip`).find("tr:gt(0)").remove();
       $.ajax({
@@ -530,7 +594,7 @@
             var TOTAL_MINUTES = row.insertCell(10);
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
-            ATTENDANCE_STATUS.innerHTML = item.Attendance_Status;
+            ATTENDANCE_STATUS.innerHTML = `<span class="${getStatusClass(item.Attendance_Status)}">${item.Attendance_Status}</span>`;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;
@@ -635,6 +699,10 @@
           globalnumlate: globalnumlate,
           globalnumabsent: globalnumabsent,
           globalaccrued13thmonth: globalaccrued13thmonth,
+          globalsuspension_pay: globalsuspension_pay,
+          globalgpstatus: globalgpstatus,
+          globalleave_with_out_pay: globalleave_with_out_pay,
+          globalleave_with_out_pay_deductions: globalleave_with_out_pay_deductions,
         },
         dataType: "text",
         success: function (data) {
@@ -689,4 +757,6 @@
 
     //#endregion
   });
+
+
 </script>

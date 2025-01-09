@@ -45,8 +45,6 @@ function getDeviceInformation(req) {
 router.post("/latestlog", (req, res) => {
   const ojtid = req.body.ojtid;
 
-  console.log(ojtid);
-
   getLatestLog(ojtid)
     .then((latestLog) => {
       res.json({
@@ -63,7 +61,7 @@ router.post("/latestlog", (req, res) => {
 
 router.post("/clockin", (req, res) => {
   const ojt_id = req.body.ojtid;
-  const geofenceid = req.body.geofenceid;
+  const geofenceid = 1;
 
   if (!ojt_id) {
     return res.status(401).json({
@@ -91,8 +89,6 @@ router.post("/clockin", (req, res) => {
       AND oa_attendancedate = DATE_ADD('${attendancedate}', INTERVAL -1 DAY)
       AND oa_clockout IS NULL
   `;
-
-  console.log(checkMissingClockOutQuery);
 
   const executeSequentialQueries = (queries) =>
     queries.reduce(
@@ -144,8 +140,6 @@ router.post("/clockin", (req, res) => {
               message: "Failed to insert attendance. Please try again.",
             });
           }
-
-          console.log("Insert result:", result);
           res.json({
             status: "success",
             message: "Clock-in successful.",
@@ -167,9 +161,8 @@ router.post("/clockout", (req, res) => {
   const ojt_id = req.body.ojtid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
-  const geofenceid = req.body.geofenceid;
+  const geofenceid = 1;
 
-  console.log(ojt_id);
 
   const checkExistingClockInQuery = `
   SELECT oa_ojtid, oa_attendancedate
@@ -178,9 +171,7 @@ router.post("/clockout", (req, res) => {
     AND oa_clockin IS NOT NULL
     AND oa_clockout IS NULL
   ORDER BY oa_attendancedate DESC
-  LIMIT 1
-    
-  `;
+  LIMIT 1`;
 
   mysql
     .mysqlQueryPromise(checkExistingClockInQuery)
@@ -204,14 +195,12 @@ router.post("/clockout", (req, res) => {
         mysql
           .Update(updateQuery)
           .then((updateResult) => {
-            console.log(updateResult);
             res.json({
               status: "success",
               message: "Clock-out successful.",
             });
           })
           .catch((updateError) => {
-            console.log(updateError);
             res.json({
               status: "error",
               message: "Error updating clock-out record.",

@@ -1,0 +1,53 @@
+<script>
+  $(document).ready(function () {
+    LoadTable();
+
+    function LoadTable() {
+      FetchTableData("/obactivity/load", (result) => {
+        console.log(result);
+        PopulateTable(result);
+      });
+    }
+
+    function PopulateTable(data) {
+      const tableBody = $("#datatable tbody");
+      tableBody.empty();
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Found",
+          })
+        );
+        tableBody.append(tr);
+      } else{
+
+        data.forEach(item => {
+            const statusBackground = getStatusBackground(item.status);
+            const containerBackground = getStatusContainerBackground(item.status);
+
+            const tr = $('<tr>').append(
+                $('<td>', { text: item.id, 'data-label': 'Activity ID', class: 'custom-mobile-align' }),
+                $('<td>', { text: item.ob_id, 'data-label': 'Reference ID', class: 'custom-mobile-align' }),
+                $('<td>', { text: item.attendance_date, 'data-label': 'Attendance Date', class: 'custom-mobile-align' }),
+                $('<td>', { text: ConvertDate(item.clockin), 'data-label': 'Clock In', class: 'custom-mobile-align' }),
+                $('<td>', { text: ConvertDate(item.clockout), 'data-label': 'Clock Out', class: 'custom-mobile-align' }),
+                $('<td>', { text: item.reason, 'data-label': 'Reason', class: 'custom-mobile-align' }),
+                $('<td>', { text: item.employee_id, 'data-label': 'Approved By', class: 'custom-mobile-align' }),
+                    $('<td>', { text: item.remarks, 'data-label': 'Remarks', class: 'custom-mobile-align' }),
+                $('<td>', { text: ConvertDate(item.date), 'data-label': 'Applied Date', class: 'custom-mobile-align' }),
+                $('<td>', { class: 'custom-mobile-align', 'data-label': 'Status' }).append(
+                    $('<div>', { class: containerBackground }).append(
+                        $('<span>', { text: item.status, class: statusBackground })
+                    )
+                ),
+            );
+
+            tableBody.append(tr);
+        });       
+      }
+    }
+  });
+</script>

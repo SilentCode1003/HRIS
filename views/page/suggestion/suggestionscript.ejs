@@ -1,0 +1,173 @@
+<script>
+  $(document).ready(function () {
+    let id = "";
+    let name = "";
+    let status = "";
+    LoadTable();
+
+    const loader = `  
+              <tr id="loading-state">
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+                  <td><div class="custom-loader"></div></td>
+              </tr>`;
+
+    const tbody = $("#dataTable tbody");
+    for (let i = 0; i < 12; i++) {
+      tbody.append(loader);
+    }
+
+    $("#dataTable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      // // console.log(dataRow);
+      id = dataRow[0];
+      name = dataRow[1];
+      status = dataRow[4];
+    });
+
+    $(document).on("click", "#viewdetailBtn", function () {
+      $("#Modal").modal("show");
+
+      $.ajax({
+        url: `/suggestion/getdetails/${id}`,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+          if (data.msg === "success") {
+            const modalbody = $("#suggestion-details");
+            modalbody.empty();
+            let question = data.data;
+            console.log(question);
+            $.each(question, (key, item) => {
+              modalbody.append(
+                `
+              <div class="row mt-2 mb-2">
+                <div class="col-md-12">
+                  <label for="comments">Question: ${item.question}</label><br>
+                  <textarea id="comments" name="comments" rows="6" cols="100" disabled>${item.answer}</textarea>
+                </div>
+              </div>
+                `
+              );
+            });
+          } else {
+            console.error(data.msg);
+          }
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    });
+
+    function populateProductsTable(data) {
+      const tableBody = $("#dataTable tbody");
+      tableBody.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 5,
+            class: "text-center",
+            text: "No Data",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          let action = "";
+          let spinner = $(
+            '<div class="spinner-border" style="width: 85px; height: 85px; role="status"><span class="visually-hidden"></span></div>'
+          );
+
+          //   if (item.status === "ACTIVE" || item.status === "Active") {
+          //       action = `
+          //                         <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //                         <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+          //   //   } else if (item.status === "INACTIVE" || item.status === "Inactive") {
+          //     action = `
+          //                       <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //                       <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+          //   }
+
+          //   const statusBackground = getStatusBackground(item.status);
+          //   const containerBackground = getStatusContainerBackground(item.status);
+
+          action = `<span class="editbutton" id="viewdetailBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.id,
+              "data-label": "ID",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: item.employee,
+              "data-label": "Employee",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: ConvertDate(item.date),
+              "data-label": "Created Date",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", {
+              text: item.suggestionarea,
+              "data-label": "Suggestion Area",
+              class: "custom-mobile-align text-left",
+            }),
+            $("<td>", { html: action, "data-label": "Action" })
+          );
+
+          tableBody.append(tr);
+        });
+      }
+    }
+    function LoadTable() {
+      $(".progress").hide();
+      $(".progress").slideDown();
+
+      $.ajax({
+        url: "/suggestion/load",
+        method: "GET",
+        dataType: "json",
+        xhrFields: {
+          onprogress: function (e) {
+            if (e.lengthComputable) {
+              var percentComplete = (e.loaded / e.total) * 100;
+              $(".progress-bar").css("width", percentComplete + "%");
+            }
+          },
+        },
+        success: function (data) {
+          setTimeout(function () {
+            $(".progress").slideUp(function () {
+              if (data.msg === "success") {
+                populateProductsTable(data.data);
+              } else {
+                console.error(data.msg);
+              }
+            });
+          }, 1000);
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    }
+
+    $("#search-input").on("input", function () {
+      filterTableRows("#dataTable", 6, "#search-input");
+    });
+  });
+</script>

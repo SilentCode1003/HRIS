@@ -2,6 +2,10 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { InsertStatement, GetCurrentDatetime, SelectStatement, UpdateStatement } = require("./repository/customhelper");
+const { InsertTable, Select, Update } = require("./repository/dbconnect");
+const { JsonSuccess, JsonErrorResponse, JsonWarningResponse, MessageStatus, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -21,6 +25,7 @@ router.post("/getannouncement", (req, res) => {
     mb_type as type,
     mb_description as description,
     mb_targetdate as targetdate,
+    mb_enddate as enddate,
     mb_createby as createby,
     mb_status as status
     FROM master_bulletin
@@ -50,35 +55,30 @@ router.post("/getannouncement", (req, res) => {
 
 router.get("/load", (req, res) => {
   try {
-    let sql = "select * from master_bulletin";
+    let sql = `SELECT
+    mb_bulletinid,
+    mb_tittle,
+    mb_type,
+    mb_targetdate,
+    mb_enddate,
+    mb_createby,
+    mb_createdate,
+    mb_status
+    FROM master_bulletin`;
 
-    mysql.Select(sql, "Master_Bulletin", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: error,
-    });
-  }
-});
+      if (result != 0) {
+        let data = DataModeling(result, "mb_");
 
-router.post("/loadforapp", (req, res) => {
-  try {
-    let sql = `select * from master_bulletin
-    order by mb_bulletinid desc`;
-
-    mysql.Select(sql, "Master_Bulletin", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
     res.json({
@@ -88,91 +88,224 @@ router.post("/loadforapp", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
+  console.log("SAVE");
   try {
     let image = req.body.image;
     let tittle = req.body.tittle;
     let type = req.body.type;
     let targetdate = req.body.targetdate;
+    let enddate = req.body.enddate;
     let description = req.body.description;
     let createby = req.session.fullname;
-    let createdate = currentDate.format("YYYY-MM-DD");
+    let createdate = GetCurrentDatetime();
     let status = "Active";
 
-    let data = [];
+    console.log(image);
+    console.log(req.body,'body');
+    
+    
 
-    data.push([
-      image,
-      tittle,
-      type,
-      targetdate,
-      description,
-      createby,
-      createdate,
-      status,
+    let sql = InsertStatement("master_bulletin", "mb", [
+      "image",
+      "tittle",
+      "type",
+      "targetdate",
+      "enddate",
+      "description",
+      "createby",
+      "createdate",
+      "status",
     ]);
-    let query = `SELECT * FROM master_bulletin WHERE mb_description = '${description}'`;
-    mysql.Select(query, "Master_Bulletin", (err, result) => {
-      if (err) console.error("Error: ", err);
 
-      if (result.length != 0) {
-        res.json({
-          msg: "exist",
-        });
-      } else {
-        mysql.InsertTable("master_bulletin", data, (err, result) => {
-          if (err) console.error("Error: ", err);
+    console.log(sql);
+    
 
-          res.status(200).json({
-            msg: "success",
-            data: data,
+    let data = [
+      [
+        image,
+        tittle,
+        type,
+        targetdate,
+        enddate,
+        description,
+        createby,
+        createdate,
+        status,
+      ],
+    ];
+
+    console.log(data);
+    
+    let checkStatement = SelectStatement(
+      "select * from master_bulletin where mb_tittle=? and mb_type=? and mb_targetdate=? and mb_status",
+      [tittle, type, targetdate, status]
+    );
+
+    Check(checkStatement)
+      .then((result) => {
+        console.log(result);
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          InsertTable(sql, data, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.json(JsonErrorResponse(err));
+            }
+
+            res.json(JsonSuccess());
           });
-        });
-      }
-    });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json(JsonErrorResponse(error));
+      });
   } catch (error) {
-    res.json({
-      msg: "error",
-    });
+    console.log(err);
+    res.json(JsonErrorResponse(error));
   }
 });
 
-router.post("/update", (req, res) => {
+// router.post("/update", (req, res) => {
+//   try {
+//     let bulletinid = req.body.bulletinid;
+//     let image = req.body.image;
+//     let tittle = req.body.tittle;
+//     let type = req.body.type;
+//     let targetdate = req.body.targetdate;
+//     let description = req.body.description;
+//     let createby = req.session.fullname;
+//     let status = req.body.status;
+
+//     let sqlupdate = `UPDATE master_bulletin SET   
+//     mb_description ='${description}', 
+//     mb_image ='${image}',
+//     mb_tittle = '${tittle}',
+//     mb_type = '${type}',
+//     mb_targetdate = '${targetdate}',
+//     mb_createby ='${createby}', 
+//     mb_status ='${status}'
+//     WHERE mb_bulletinid ='${bulletinid}'`;
+
+//     mysql
+//       .Update(sqlupdate)
+//       .then((result) => {
+//         res.json({
+//           msg: "success",
+//         });
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//     });
+//   }
+// });
+
+
+router.put("/edit", (req, res) => {
   try {
     let bulletinid = req.body.bulletinid;
     let image = req.body.image;
     let tittle = req.body.tittle;
     let type = req.body.type;
     let targetdate = req.body.targetdate;
+    let enddate = req.body.enddate;
     let description = req.body.description;
     let createby = req.session.fullname;
     let status = req.body.status;
 
-    let sqlupdate = `UPDATE master_bulletin SET   
-    mb_description ='${description}', 
-    mb_image ='${image}',
-    mb_tittle = '${tittle}',
-    mb_type = '${type}',
-    mb_targetdate = '${targetdate}',
-    mb_createby ='${createby}', 
-    mb_status ='${status}'
-    WHERE mb_bulletinid ='${bulletinid}'`;
+    let data = [];
+    let columns = [];
+    let arguments = [];
 
-    mysql
-      .Update(sqlupdate)
+    if (image) {
+      data.push(image);
+      columns.push("image");
+    }
+
+    if (tittle) {
+      data.push(tittle);
+      columns.push("tittle");
+    }
+
+    if (targetdate) {
+      data.push(targetdate);
+      columns.push("targetdate");
+    }
+
+    if (enddate) {
+      data.push(enddate);
+      columns.push("enddate");
+    }
+
+
+    if (type) {
+      data.push(type);
+      columns.push("type");
+    }
+
+    if (description) {
+      data.push(description);
+      columns.push("description");
+    }
+
+    if (createby) {
+      data.push(createby);
+      columns.push("createby");
+    }
+
+
+    if (status) {
+      data.push(status);
+      columns.push("status");
+    }
+
+    if (bulletinid) {
+      data.push(bulletinid);
+      arguments.push("bulletinid");
+    }
+
+    let updateStatement = UpdateStatement(
+      "master_bulletin",
+      "mb",
+      columns,
+      arguments
+    );
+
+    console.log(updateStatement);
+
+    let checkStatement = SelectStatement(
+      "select * from master_bulletin where mb_bulletinid = ? and mb_tittle = ? and mb_type = ? and mb_status = ? and mb_image = ? and mb_description = ? and mb_enddate = ? and mb_targetdate = ?",
+      [bulletinid, tittle, type, status, image, description, enddate, targetdate]
+    );
+
+    Check(checkStatement)
       .then((result) => {
-        res.json({
-          msg: "success",
-        });
+        if (result != 0) {
+          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+        } else {
+          Update(updateStatement, data, (err, result) => {
+            if (err) console.error("Error: ", err);
+
+            console.log(result);
+
+            res.json(JsonSuccess());
+          });
+        }
       })
       .catch((error) => {
-        res.json({
-          msg: error,
-        });
+        console.log(error);
+        res.json(JsonErrorResponse(error));
       });
   } catch (error) {
-    res.json({
-      msg: "error",
-    });
+    console.log(error);
+    res.json(JsonErrorResponse(error));
   }
 });
 
@@ -231,3 +364,16 @@ router.post("/getnotif", (req, res) => {
     });
   }
 });
+
+
+//#region FUNCTION
+function Check(sql) {
+  return new Promise((resolve, reject) => {
+    Select(sql, (err, result) => {
+      if (err) reject(err);
+
+      resolve(result);
+    });
+  });
+}
+//#endregion

@@ -64,11 +64,12 @@
 
               finalData.push({
                 // image: imgElement.outerHTML,
-                salaryid: item.salaryid,
+                id: item.id,
+                number: item.number,
                 employeeid: item.employeeid,
                 monthly: item.monthly,
                 allowances: item.allowances,
-                adjustments: item.adjustments,
+                basic_adjustments: item.basic_adjustments,
                 payrolltype: item.payrolltype,
                 action: action,
               });
@@ -84,7 +85,8 @@
           },
         ],
         columns: [
-          { data: "salaryid" },
+          { data: "id" },
+          { data: "number" },
           { data: "employeeid" },
           {
             data: "monthly",
@@ -111,7 +113,7 @@
             },
           },
           {
-            data: "adjustments",
+            data: "basic_adjustments",
             render: function (data, type, row) {
               return (
                 "₱" +
@@ -126,19 +128,7 @@
           { data: "action" },
         ],
 
-        createdRow: function (row, data, dataIndex) {
-          //miyaka
-          var monthlyCell = $(row).find("td:eq(2)");
-          var allowancesCell = $(row).find("td:eq(3)");
-
-          monthlyCell.wrapInner("<span class='monthly-text'></span>");
-          allowancesCell.wrapInner("<span class='allowances-text'></span>");
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+      
         initComplete: function () {
           console.log("Done");
         },
@@ -151,6 +141,7 @@
       let allowances = $("#allowances").val();
       let adjustments = $("#adjustments").val();
       let payrolltype = $("#payrolltype").val();
+      let effectivedate = $("#effectivedate").val();
 
       var message = "";
 
@@ -174,6 +165,10 @@
         message += "allowances is required ";
       }
 
+      if (effectivedate == "") {
+        message += "effectivedate is required ";
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
@@ -189,6 +184,7 @@
             monthly: parseFloat(monthly),
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {
@@ -317,6 +313,7 @@
         .val()
         .replace(/[^\d.-]/g, "");
       let payrolltype = $("#editpayrolltype").val();
+      let effectivedate = $("#editeffectivedate").val();
 
       var message = "";
 
@@ -340,12 +337,16 @@
         message += "allowances is required. ";
       }
 
+      if (effectivedate === "") {
+        message += "effectivedate is required. "; 
+      }
+
       if (message !== "") {
         swal("Validation Error", message, "error");
       } else {
         $.ajax({
-          type: "POST",
-          url: "/salary/update",
+          type: "PUT",
+          url: "/salary/edit",
           data: {
             salaryid: id,
             employeeid: employeeid,
@@ -353,6 +354,7 @@
             allowances: parseFloat(allowances),
             adjustments: parseFloat(adjustments),
             payrolltype: payrolltype,
+            effectivedate: effectivedate,
           },
           success: function (result) {
             if (result.msg == "success") {

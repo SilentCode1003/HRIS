@@ -4,6 +4,7 @@
     let attendancedate = "";
     let clockin = "";
     let clockout = "";
+    let employeeid = "";
 
     LoadTable();
     searchTable();
@@ -37,7 +38,9 @@
               var action = "";
               var status = item.status;
 
-              action = `<button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#otapprovalmodal"><i class="fas fa-fw fa-pen"></i></button>`;
+              //data-bs-toggle="modal" data-bs-target="#otapprovalmodal
+
+              action = `<button id="editBtn" class="btn text-primary" name="editBtn" "><i class="fas fa-fw fa-pen"></i></button>`;
 
               // var imgElement = document.createElement("img");
               // imgElement.src = "data:image/jpg;base64," + item.image;
@@ -48,6 +51,7 @@
               finalData.push({
                 // image: imgElement.outerHTML,
                 approveot_id: item.id,
+                employeeid: item.employeeid,
                 fullname: item.fullname,
                 attendancedate: item.attendancedate,
                 clockin: item.clockin,
@@ -71,6 +75,7 @@
         columns: [
           // { data: "image" },
           { data: "approveot_id" },
+          { data: "employeeid" },
           { data: "fullname" },
           { data: "attendancedate" },
           { data: "clockin" },
@@ -81,6 +86,36 @@
           { data: "action" },
         ],
         createdRow: function (row, data, dataIndex) {
+          //miyaka
+          var overtimestatusCell = $(row).find("td:eq(8)");
+          
+          var overtimestatusText = data.overtimestatus;
+
+          var overtimestatusClass = "";
+
+          switch (overtimestatusText.toLowerCase()) {
+            case "approved":
+              overtimestatusClass = "approved-status";
+              break;
+
+              case "applied":
+              overtimestatusClass = "applied-status";
+              break;
+
+            case "cancel":
+              overtimestatusClass = "cancel-status";
+              break;
+
+            case "pending":
+              overtimestatusClass = "pending-status";
+              break;
+
+            default:
+              overtimestatusClass = "";
+          }
+
+          overtimestatusCell.html(`<span class="${overtimestatusClass}">${overtimestatusText}</span>`);
+
           $("td", row).each(function (index) {
             this.style.textAlign = "center";
             this.style.verticalAlign = "middle";
@@ -157,12 +192,14 @@
         });
       console.log(dataRow);
       approveot_id = dataRow[0];
-      attendancedate = dataRow[2];
+      employeeid = dataRow[1];
+      attendancedate = dataRow[3];
       clockin = dataRow[3];
       clockout = dataRow[4];
     });
 
     $(document).on("click", "#editBtn", function () {
+      $("#otapprovalmodal").modal("show");
       $.ajax({
         type: "POST",
         url: "/teamleadappliedovertime/getotapproval",
@@ -172,6 +209,8 @@
         success: function (result) {
           if (result.msg === "success") {
             const existingData = result.data;
+            console.log(existingData,'data');
+            
 
             $.each(existingData, (key, item) => {
               $("#previewleave").attr(
@@ -181,8 +220,11 @@
               base64String = item.overtimeimage;
               $("#appliedotfullname").val(item.fullname);
               $("#appliedattendancedate").val(item.attendancedate);
+              $("#applieddateemployee").val(item.applied_date)
               $("#appliedclockin").val(item.clockin);
               $("#appliedclockout").val(item.clockout);
+              $("#appliedclockinlocation").val(item.locationIn);
+              $("#appliedclockoutlocation").val(item.locationOut);
               $("#totalothours").val(item.total_hours);
               $("#totalnightdiff").val(item.night_differentials);
               $("#totalearlytot").val(item.early_ot);
@@ -191,6 +233,7 @@
               $("#appliedreason").val(item.reason);
               $("#appliedstatus").val(item.status);
               $("#subgroupid").val(item.subgroupid);
+              $("#totalminot").val(item.total_min_ot);
             });
           } else {
             swal("Error fetching employee data", message, "error");
@@ -204,7 +247,12 @@
           );
         },
       });
+
+      Fetch(`/eportaldtr/getdtr/${attendancedate}/${employeeid}`, (data) => {
+        populateTable(data.data);
+      });
     });
+
 
     $(document).on("click", "#otsavebutton", function () {
       console.log("hit");
@@ -212,21 +260,16 @@
       let requeststatus = $("#appliedstatus").val();
       let comment = $("#otcomment").val();
       let subgroupid = $("#subgroupid").val();
-
       console.log(approveot_id, "LEAVE");
       console.log(requeststatus, "LEAVE");
       console.log(comment, "LEAVE");
-
       var message = "";
-
-      if (requeststatus === "") {
+      if (requeststatus === null) {
         message += "Status is required. ";
       }
-
       if (comment === "") {
         message += "comment is required. ";
       }
-
       if (message !== "") {
         swal("Oops!!!", message, "error");
       } else {
@@ -244,15 +287,14 @@
           },
           success: function (result) {
             if (result.msg == "success") {
-              swal({
-                title: "Saved Successfully",
-                text: "You clicked the button!",
-                icon: "success",
-                button: "OK!",
-              }).then((results) => {
-                window.location.reload();
+              swal(
+                "Update Successfully",
+                "You clicked the button!",
+                "success"
+              ).then((results) => {
+                $("#otapprovalmodal").modal("hide");
+                LoadTable();
               });
-              LoadTable();
             } else {
               swal({
                 title: "Exist",
@@ -264,71 +306,6 @@
           },
           error: function (err) {
             swal("Data already exist!", "You clicked the button!", "warning");
-          },
-        });
-      }
-    });
-
-    $(document).on("click", "#otsavebutton", function () {
-      console.log("HIT");
-      let id = approveot_id;
-      let night_ot = $("#otnight").val();
-      let earlyot = $("#otearly").val();
-      let normal_ot = $("#otnormal").val();
-      let payrolldate = $("#otpayrolldate").val();
-      let overtimestatus = $("#otstatus").val();
-
-      var message = "";
-
-      if (night_ot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (earlyot === "") {
-        message += "departmentname is required. ";
-      }
-
-      if (normal_ot === "") {
-        message += "departmenthead is required. ";
-      }
-
-      if (payrolldate === "") {
-        message += "status is required. ";
-      }
-
-      if (overtimestatus === "Applied" || overtimestatus === "Pending") {
-        message += "You Need to Approve or Disregard. ";
-      }
-      if (message !== "") {
-        swal("Validation Error", message, "error");
-      } else {
-        $.ajax({
-          type: "POST",
-          url: "otapproval/update",
-          data: {
-            approveot_id: id,
-            night_ot: night_ot,
-            earlyot: earlyot,
-            normal_ot: normal_ot,
-            payrolldate: payrolldate,
-            overtimestatus: overtimestatus,
-          },
-          success: function (result) {
-            if (result.msg == "success") {
-              swal(
-                "Update Successfully",
-                "You clicked the button!",
-                "success"
-              ).then((results) => {
-                window.location.reload();
-              });
-              LoadTable();
-            } else if (result.msg == "exist") {
-              swal("Exist", "Data already exists!", "warning");
-            }
-          },
-          error: function (err) {
-            swal("Error", "An error occurred while saving data.", "error");
           },
         });
       }
@@ -463,6 +440,67 @@
         } else {
           tr[i].style.display = "none";
         }
+      }
+    }
+
+    function populateTable(data) {
+      const tableBody = $("#dtr-datatable tbody");
+      tableBody.empty();
+
+      console.log(data);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 5,
+            class: "text-center",
+            text: "Not Yet Filled",
+          })
+        );
+        tableBody.append(tr);
+      } else {
+        data.forEach((item) => {
+          // if (item.status === "ACTIVE") {
+          //   action = `
+          //               <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //               <span class="editbutton" id="inactiveBtn"><i class="fas fa-eye-slash" style="color: rgb(99, 115, 129);"></i></span>`;
+          // } else if (item.status === "INACTIVE") {
+          //   action = `
+          //               <span class="editbutton" id="editBtn" name="editBtn" data-toggle="modal" data-target="#accessModal"><i class="fas fa-edit" style="color: rgb(99, 115, 129);"></i></span>
+          //               <span class="editbutton" id="activeBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></span>`;
+          // }
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.attendance_date,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "Access",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.ticket_number == null ? "NOT YET FILLED" : item.ticket_number,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.service == null ? "NOT YET FILLED" : item.service,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.remarks == null ? "NOT YET FILLED" : item.remarks,
+              "data-label": "Created By",
+              class: "custom-mobile-align",
+            })
+          );
+          tableBody.append(tr);
+        });
       }
     }
   });

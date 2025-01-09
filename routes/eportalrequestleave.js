@@ -5,6 +5,7 @@ const { Validator } = require("./controller/middleware");
 const {
   JsonErrorResponse,
   JsonDataResponse,
+  MessageStatus,
 } = require("./repository/response");
 const { Select } = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
@@ -13,6 +14,7 @@ var router = express.Router();
 const currentDate = moment();
 
 const { REQUEST } = require("./repository/enums");
+const { GetCurrentDatetime } = require("./repository/customhelper");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -126,43 +128,6 @@ router.post("/getrestdays", (req, res) => {
     });
   } catch (error) {
     res.json(JsonErrorResponse(error));
-  }
-});
-
-router.post("/loadheaderforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `select 
-    ml_leavetype as leavetype,
-    ml_totalleavedays as totalleave,
-    ml_unusedleavedays as unused,
-    ml_usedleavedays as used,
-    (select 
-    count(l_leavestatus) as Pending
-    from leaves
-    where l_leavestatus = 'Pending') as Pending
-    from master_leaves
-    where ml_employeeid = '${employeeid}'`;
-
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
   }
 });
 
@@ -379,6 +344,92 @@ router.get("/loadcancelled", (req, res) => {
 //   }
 // });
 
+// router.post("/submit", async (req, res) => {
+//   try {
+//     const {
+//       employeeid,
+//       startdate,
+//       enddate,
+//       leavetype,
+//       reason,
+//       image,
+//       subgroup,
+//       durationDays,
+//       paidDays,
+//       unpaidDays,
+//     } = req.body;
+//     const createdate = moment().format("YYYY-MM-DD HH:mm:ss");
+//     const status = "Pending";
+//     const approvedcount = "0";
+
+//     console.log("Received request with data:", req.body);
+
+//     // Calculate the date 3 days from now
+//     const allowedStartDate = moment().add(3, "days").startOf("day");
+
+//     // Convert startdate to a moment object
+//     const startDateMoment = moment(startdate);
+
+//     // Check if the startdate is within the allowed 3-day rule
+//     if (startDateMoment.isBefore(allowedStartDate)) {
+//       console.log("Start date is within the 3-day rule");
+//       return res.json({ msg: "not allowed" });
+//     }
+
+//     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
+//     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
+
+//     if (employeeResult.length === 0) {
+//       console.log("Invalid employee ID");
+//       return res.json({ msg: "Invalid employee ID" });
+//     }
+
+//     const data = [
+//       [
+//         employeeid,
+//         startdate,
+//         enddate,
+//         leavetype,
+//         reason,
+//         image,
+//         status,
+//         createdate,
+//         durationDays,
+//         paidDays,
+//         unpaidDays,
+//         subgroup,
+//         approvedcount,
+//       ],
+//     ];
+
+//     mysql.InsertTable("leaves", data, (insertErr, insertResult) => {
+//       if (insertErr) {
+//         console.error("Error inserting leave record:", insertErr);
+//         res.json({ msg: "insert_failed" });
+//       } else {
+//         console.log("Insert result:", insertResult);
+
+//         let emailbody = [
+//           {
+//             employeename: employeeid,
+//             date: createdate,
+//             startdate: startdate,
+//             enddate: enddate,
+//             reason: reason,
+//             requesttype: REQUEST.LEAVE,
+//           },
+//         ];
+//         SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
+
+//         res.json({ msg: "success" });
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error in /submit route:", error);
+//     res.json({ msg: "error" });
+//   }
+// });
+
 router.post("/submit", async (req, res) => {
   try {
     const {
@@ -396,20 +447,15 @@ router.post("/submit", async (req, res) => {
     const createdate = moment().format("YYYY-MM-DD HH:mm:ss");
     const status = "Pending";
     const approvedcount = "0";
-
     console.log("Received request with data:", req.body);
 
-    // Calculate the date 3 days from now
-    const allowedStartDate = moment().add(3, "days").startOf("day");
+    // const allowedStartDate = moment().add(3, "days").startOf("day");
+    // const startDateMoment = moment(startdate);
 
-    // Convert startdate to a moment object
-    const startDateMoment = moment(startdate);
-
-    // Check if the startdate is within the allowed 3-day rule
-    if (startDateMoment.isBefore(allowedStartDate)) {
-      console.log("Start date is within the 3-day rule");
-      return res.json({ msg: "not allowed" });
-    }
+    // if (startDateMoment.isBefore(allowedStartDate)) {
+    //   console.log("Start date is within the 3-day rule");
+    //   return res.json({ msg: "not allowed" });
+    // }
 
     const employeeQuery = `SELECT * FROM master_employee WHERE me_id = '${employeeid}'`;
     const employeeResult = await mysql.mysqlQueryPromise(employeeQuery);
@@ -419,6 +465,27 @@ router.post("/submit", async (req, res) => {
       return res.json({ msg: "Invalid employee ID" });
     }
 
+    const dateRange = [];
+    let currentDate = moment(startdate);
+    const endDateMoment = moment(enddate);
+
+    while (currentDate.isSameOrBefore(endDateMoment)) {
+      dateRange.push(currentDate.format("YYYY-MM-DD"));
+      currentDate = currentDate.add(1, "day");
+    }
+
+    const checkDatesQuery = `
+      SELECT ld_leavedates
+      FROM leave_dates
+      WHERE ld_employeeid = '${employeeid}' AND ld_leavedates IN (${dateRange.map(date => `'${date}'`).join(",")})
+    `;
+    const existingDatesResult = await mysql.mysqlQueryPromise(checkDatesQuery);
+
+    if (existingDatesResult.length > 0) {
+      console.log("Leave dates conflict with existing records:", existingDatesResult);
+      return res.json({ msg: "dates_conflict", existingDates: existingDatesResult });
+    }
+    
     const data = [
       [
         employeeid,
@@ -451,16 +518,17 @@ router.post("/submit", async (req, res) => {
             startdate: startdate,
             enddate: enddate,
             reason: reason,
+            status: MessageStatus.APPLIED,
             requesttype: REQUEST.LEAVE,
           },
         ];
-        SendEmailNotification(employeeid,subgroup,REQUEST.LEAVE, emailbody);
+        SendEmailNotification(employeeid, subgroup, REQUEST.LEAVE, emailbody);
 
         res.json({ msg: "success" });
       }
     });
   } catch (error) {
-    console.error("Error in /submit route:", error);
+    console.error("Error in /submitleave route:", error);
     res.json({ msg: "error" });
   }
 });
@@ -468,11 +536,12 @@ router.post("/submit", async (req, res) => {
 router.post("/getleave", (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `SELECT *
-    FROM leaves
-    WHERE l_employeeid = '${employeeid}'
-    ORDER BY l_leaveid DESC;`;
-    console.log(employeeid);
+    let sql = `SELECT *,
+        ml_leavetype
+        FROM leaves
+        INNER JOIN master_leaves ON leaves.l_leavetype = ml_id
+        WHERE l_employeeid = '${employeeid}'
+        ORDER BY l_leaveid DESC`;
 
     mysql.Select(sql, "Leaves", (err, result) => {
       if (err) console.error("Error: ", err);
@@ -509,38 +578,149 @@ router.post("/cancelLeave", async (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {
+// router.post("/update", (req, res) => {
+//   console.log("HIT");
+//   try {
+//     let leaveid = req.body.leaveid;
+//     let status = req.body.status;
+//     let leavestartdate = req.body.leavestartdate;
+//     let leaveenddate = req.body.leaveenddate;
+//     let leaveduration = req.body.leaveduration;
+//     let leavereason = req.body.leavereason;
+//     let leavepaidays = req.body.leavepaidays;
+//     let leaveunpaiddays = req.body.leaveunpaiddays;
+//     let comment = req.body.comment;
+
+//     console.log("Received Parameters:");
+//     console.log("leaveid:", leaveid);
+//     console.log("status:", status);
+//     console.log("leavestartdate:", leavestartdate);
+//     console.log("leaveenddate:", leaveenddate);
+//     console.log("leaveduration:", leaveduration);
+//     console.log("leavepaidays:", leavepaidays);
+//     console.log("leaveunpaiddays:", leaveunpaiddays);
+//     console.log("comment:", comment);
+
+//     let sqlupdate = `UPDATE 
+//     leaves SET l_leavestatus = '${status}',
+//     l_leavestartdate = '${leavestartdate}',
+//     l_leaveenddate = '${leaveenddate}',
+//     l_leaveduration = '${leaveduration}',
+//     l_leavepaiddays = '${leavepaidays}',
+//     l_leaveunpaiddays = '${leaveunpaiddays}',
+//     l_leavereason = '${leavereason}',
+//     l_comment = '${comment}' 
+//     WHERE l_leaveid = '${leaveid}'`;
+
+//     console.log(sqlupdate);
+
+//     mysql
+//       .Update(sqlupdate)
+//       .then((result) => {
+//         console.log(sqlupdate);
+//         res.json({
+//           msg: "success",
+//           data: result,
+//         });
+//       })
+//       .catch((error) => {
+//         res.json({
+//           msg: "error",
+//           data: error,
+//         });
+//       });
+//   } catch (error) {
+//     res.json({
+//       msg: "error",
+//     });
+//   }
+// });
+
+router.post("/update", async (req, res) => {
+  console.log("HIT");
   try {
-    let leaveid = req.body.leaveid;
-    let status = req.body.status;
-    let comment = req.body.comment;
+    const {
+      leaveid,
+      status,
+      leavestartdate,
+      leaveenddate,
+      leaveduration,
+      leavereason,
+      leavepaidays,
+      leaveunpaiddays,
+      comment,
+      employeeid,
+    } = req.body;
 
-    let sqlupdate = `UPDATE 
-    leaves SET l_leavestatus = '${status}', 
-    l_comment = '${comment}'  
-    WHERE l_leaveid = '${leaveid}'`;
+    console.log("Received Parameters:", req.body);
+    const conflictQuery = `
+      SELECT ld_leavedates 
+      FROM leave_dates 
+      WHERE ld_employeeid = '${employeeid}'
+      AND ld_leavedates BETWEEN '${leavestartdate}' AND '${leaveenddate}'
+    `;
 
-    mysql
-      .Update(sqlupdate)
-      .then((result) => {
-        console.log(sqlupdate);
+    console.log("Checking for date conflicts:", conflictQuery);
 
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: error,
-        });
+    const conflicts = await mysql.mysqlQueryPromise(conflictQuery);
+
+    if (conflicts.length > 0) {
+      const conflictingDates = conflicts.map((row) =>
+        new Date(row.ld_leavedates).toISOString().split("T")[0]
+      );
+
+      console.log("Conflict detected on dates:", conflictingDates);
+
+      return res.json({
+        msg: "conflict",
+        conflictingDates: conflictingDates,
       });
+    }
+
+    const sqlupdate = `
+      UPDATE leaves 
+      SET 
+        l_leavestatus = '${status}',
+        l_leavestartdate = '${leavestartdate}',
+        l_leaveenddate = '${leaveenddate}',
+        l_leaveduration = '${leaveduration}',
+        l_leavepaiddays = '${leavepaidays}',
+        l_leaveunpaiddays = '${leaveunpaiddays}',
+        l_leavereason = '${leavereason}',
+        l_comment = '${comment}' 
+      WHERE l_leaveid = '${leaveid}'
+    `;
+
+    console.log("Executing update:", sqlupdate);
+
+    const updateResult = await mysql.Update(sqlupdate);
+
+    let emailbody = [
+      {
+        employeename: employeeid,
+        date: GetCurrentDatetime(),
+        startdate: leavestartdate,
+        enddate: leaveenddate,
+        reason: comment,
+        status: MessageStatus.APPLIED,
+        requesttype: REQUEST.LEAVE,
+      },
+    ];
+    SendEmailNotification(employeeid, subgroup, REQUEST.LEAVE, emailbody);
+
+    res.json({
+      msg: "success",
+      data: updateResult,
+    });
   } catch (error) {
+    console.error("Error in /update route:", error);
     res.json({
       msg: "error",
+      data: error,
     });
   }
 });
+
 
 router.get("/loadleavetype", (req, res) => {
   try {
@@ -583,40 +763,6 @@ router.post("/getunusedleave", (req, res) => {
     ml_unusedleavedays
     FROM master_leaves
     WHERE ml_id = '${leavetype}'`;
-
-    mysql.Select(sql, "Master_Leaves", (err, result) => {
-      if (err) console.error("Error :", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
-
-router.post("/loadleavetypeforapp", (req, res) => {
-  try {
-    let employeeid = req.body.employeeid;
-    let sql = `SELECT
-    ml_id, 
-    concat(me_lastname,' ',me_firstname) as ml_employeeid,
-    ml_tenure,
-    ml_leavetype,
-    ml_year,
-    ml_totalleavedays,
-    ml_unusedleavedays,
-    ml_usedleavedays,
-    ml_status
-    FROM master_leaves
-    inner join master_employee on master_leaves.ml_employeeid = me_id
-    where ml_employeeid = '${employeeid}'
-    and ml_year = year(curdate())`;
 
     mysql.Select(sql, "Master_Leaves", (err, result) => {
       if (err) console.error("Error :", err);

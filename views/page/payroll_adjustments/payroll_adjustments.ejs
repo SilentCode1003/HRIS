@@ -3,40 +3,93 @@
 <!-- Table -->
 <div class="card" id="tablecard">
     <div class="card-header ch-coop">
-      <h3 class="title-card-table">Payroll Adjustments</h3>
-      <div class="row g-2">
+      <h3 class="title-card-table m-4" id="titleCard">Payroll Adjustments</h3>
+      <div class="d-flex gap-4 m-2 mb-4 attendance-field">
         <div class="col">
-          <input id='myInput' type='text' placeholder="  Search....">
+          <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
         </div>
-        <div class="col-sm-1 col-add">
-          <button type="button" class="btn btn-add-color" data-bs-toggle="modal" data-bs-target="#adjustmentmodal">
-            <b>+ Add</b>
-          </button>
+        <div class="d-flex gap-4 attendance-field">
+          <div class="col" id="dynamicButtonContainer">
+            <div id="dynamicButton" class="d-flex justify-content-between">
+            </div>
+          </div>
         </div>
       </div> 
     </div>
-    <div class="card-body">
-        <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-light table-bordered" id="dataTablePayrollAdjustments">
-                <thead>
-                    <tr>
-                        <th class="col-sm-1">ID</th>
-                        <th>Employee Name</th>
-                        <th>Adjustment Type</th>
-                        <th>Amount</th>
-                        <th>Payroll Date</th>
-                        <th>Create By</th>
-                        <th>Status</th>
-                        <th class="col-sm-1">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <div class="col">
+      <div class="card">
+        <div class="card-header ch-generate ch-coop">
+          <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
+                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="true"><b>Additionals</b>
+              </button>
+              <button class="nav-link eportal-leave" id="automationTab" data-bs-toggle="tab"
+                data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="false"><b>Deductions</b>
+              </button>
+              </div>
+          </nav>
         </div>
+        <!-- Tables  -->
+        <div class="card-body db-custom-cards">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <div class="row">
+                  <div class="col-xl-12 col-lg-12">
+                      <div class="card shadow mb-4">
+                        <div class="card-body cbody-requestleave">
+                          <table class="table table-light table-bordered" id="dataTablePayrollAdjustments">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-1">ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Adjustment Type</th>
+                                    <th>Amount</th>
+                                    <th>Payroll Date</th>
+                                    <th>Create By</th>
+                                    <th>Status</th>
+                                    <th class="col-sm-1">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>            
+                        </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+            aria-labelledby="nav-profile-tab">
+            <div class="card-body">
+                <div class="table-responsive" id="table-responsive-id">
+                  <table class="table table-striped-light" id="dataTablePayrollDeductions">
+                    <thead>
+                      <tr>
+                          <th class="col-sm-1">ID</th>
+                          <th>Employee Name</th>
+                          <th>Adjustment Type</th>
+                          <th>Amount</th>
+                          <th>Payroll Date</th>
+                          <th>Create By</th>
+                          <th>Status</th>
+                          <th class="col-sm-1">Action</th>
+                      </tr>
+                  </thead>
+                </table>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Additionals-->
 <div class="modal fade" id="adjustmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -127,8 +180,8 @@
         </div>
     </div>
 </div>
-<!-- Edit Modal -->
 
+<!-- Edit Additionals -->
 <div class="modal fade" id="editadjustmentmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -157,7 +210,7 @@
                       <div class="row g-3">
                         <div class="col">
                             <div class="form-floating">
-                                <select class="form-select border-form-modal" id="editpaemployeename" name="editpaemployeename" aria-label="Floating label select example">
+                                <select class="form-select border-form-modal" id="editpaemployeename" name="editpaemployeename" aria-label="Floating label select example" disabled>
                                 </select>
                                 <label for="floatingSelectGrid">Employee Name</label>
                             </div>
@@ -178,6 +231,7 @@
                                 <option>Missed Logs</option>
                                 <option>Late OT Application</option>
                                 <option>Late Effectivity Of Increase</option>
+                                <option>Retro Active Pay</option>
                                 <option>Other Adjustments</option>
                               </select>
                               <label for="floatingInput">Adjustments Type</label>
@@ -230,4 +284,266 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Import Modal Additionals-->
+<div class="modal fade" id="importsalarymodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Import Payroll Adjustment of Employee </h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <input type="file" name="importexcelfile" id="importexcelfile">
+                </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="importexcelsavebtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Deductions-->
+<div class="modal fade" id="adjustmentmodaldeductions" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Add Deductions Adjustments?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewholiday" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="paemployeenamedeductions" name="paemployeenamedeductions" aria-label="Floating label select example">
+                                <option selected disabled>Choose</option>
+                              </select>
+                              <label for="floatingSelectGrid">Employee Name</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="papayrolldatedeductions" name="papayrolldatedeductions" aria-label="Floating label select example">
+                              </select>
+                              <label for="floatingSelectGrid">Payroll Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <select class="form-select border-form-modal" id="patypedeductions" name="patypedeductions" aria-label="Floating label select example">
+                              <option>Missed Logs</option>
+                              <option>Late OT Application</option>
+                              <option>Late Effectivity Of Increase</option>
+                              <option>Other Adjustments</option>
+                              <option>Eye Glasses</option>
+                            </select>
+                            <label for="floatingInput">Adjustments Type</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="paamountdeductions" name="paamountdeductions"
+                                  placeholder="Adjustment Amount" oninput="formatPrice(event, this)">
+                              <label for="paamount">Adjustment Amount</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                  <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="date" class="form-control border-form-modal" id="paorigindatedeductions" name="paorigindatedeductions"
+                            placeholder="Reason">
+                          <label for="floatingInput">Origin Date</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <textarea type="text" class="form-control border-form-modal" id="pareasondeductions" name="pareasondeductions"
+                              placeholder="Reason"></textarea>
+                            <label for="floatingInput">Reason</label>
+                          </div>
+                      </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="adjustmentsavebtndeductions">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Edit Deductions -->
+<div class="modal fade" id="editadjustmentmodaldeductions" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header" id="modal-header">
+              <h3 class="modal-title fs-5" id="exampleModalLabel">Edit Deductions Adjustments?</h3>
+              <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+              <br>
+              <br>
+              <div class="row">
+                <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
+                  <div class="col g-6">
+                    <div class="p-4" style="width: 300px; margin-top: -100px;">
+                      <div class="text-center">
+                        <img id="previewrdot" src="https://via.placeholder.com/250" class="border border-5 border-form-modal" alt="placeholder">
+                      </div>
+                      <br>
+                      <h2 class="pb-3 mb-4 text-center modal-content-title">File  Preview</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-8 col-lg-7" style="margin-left: 150px;">
+                  <form>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                              <select class="form-select border-form-modal" id="editpaemployeenamedeductions" name="editpaemployeenamedeductions" aria-label="Floating label select example" disabled>
+                              </select>
+                              <label for="floatingSelectGrid">Employee Name</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <select type="date" class="form-select border-form-modal" id="editpapayrolldatedeductions" name="editpapayrolldatedeductions" aria-label="Floating label select example">
+                              </select>
+                              <label for="floatingSelectGrid">Payroll Date</label>
+                          </div>
+                      </div>  
+                    </div>                             
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
+                          <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editpatypedeductions" name="editpatypedeductions" aria-label="Floating label select example">
+                              <option>Missed Logs</option>
+                              <option>Late OT Application</option>
+                              <option>Late Effectivity Of Increase</option>
+                              <option>Retro Active Pay</option>
+                              <option>Other Adjustments</option>
+                            </select>
+                            <label for="floatingInput">Adjustments Type</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                              <input type="text" class="form-control border-form-modal" id="editpaamountdeductions" name="editpaamountdeductions"
+                                  placeholder="Adjustment Amount" oninput="formatPrice(event, this)">
+                              <label for="paamount">Adjustment Amount</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                  <div class="row g-3">
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="date" class="form-control border-form-modal" id="editpaorigindatedeductions" name="editpaorigindatedeductions"
+                            placeholder="Reason">
+                          <label for="floatingInput">Origin Date</label>
+                        </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <select class="form-select border-form-modal" id="editstatuspadeductions" name="editstatuspadeductions" aria-label="Floating label select example">
+                              <option>Active</option>
+                              <option>Inactive</option>
+                            </select>
+                            <label for="floatingInput">Status</label>
+                          </div>
+                      </div>
+                  </div>
+                  <br>
+                  <div class="row g-3">
+                    <div class="col">
+                      <div class="form-floating">
+                        <textarea type="text" class="form-control border-form-modal" id="editpareasondeductions" name="editpareasondeductions"
+                          placeholder="Reason"></textarea>
+                        <label for="floatingInput">Reason</label>
+                      </div>
+                  </div>
+                  </div>
+                </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-modal-save" id="adjustmenteditbtndeductions">Save</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Import Modal Deductions-->
+<div class="modal fade" id="importsalarymodaldeductions" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <lord-icon src="https://cdn.lordicon.com/lsrcesku.json" stroke="bold"
+        colors="primary:#242424,secondary:#e8e230,tertiary:#e83a30,quaternary:#d1f3fa" class="db-hrmis">
+      </lord-icon>
+        <h1 class="modal-title" id="exampleModalLabel">Import Deductions Adjustment of Employee </h1>
+        <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <form>
+          <div class="form-control">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <input type="file" name="importexcelfiledeductions" id="importexcelfiledeductions">
+                </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-modal-save" id="importexcelsavebtndeductions">Save</button>
+      </div>
+    </div>
+  </div>
 </div>

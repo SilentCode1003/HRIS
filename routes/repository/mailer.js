@@ -24,7 +24,7 @@ exports.SendEmail = (to, subject, text) => {
   // Email content
 
   const mailOptions = {
-    from: `${process.env._EMAIL_USER}`,
+    from: process.env._EMAIL_FROM,
     to: to,
     subject: subject,
     html: text,
@@ -33,11 +33,11 @@ exports.SendEmail = (to, subject, text) => {
   // Send the email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error(error);
+      console.error(`Email Error: `, error);
     } else {
-      console.log(info);
-      console.log("Email sent: " + info.response);
+      // console.log(info);
+      // console.log("Email sent: " + info.response);
+      console.log("Email sent");
     }
   });
 };
-

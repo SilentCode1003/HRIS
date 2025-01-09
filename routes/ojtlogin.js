@@ -1,8 +1,9 @@
 var express = require("express");
-const { Encrypter } = require("./repository/cryptography");
+const { Encrypter, EncrypterString } = require("./repository/cryptography");
 const mysql = require("./repository/hrmisdb");
 const { error } = require("jquery");
 const { OjtLogin } = require("./repository/helper");
+const jwt = require("jsonwebtoken");
 var router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -18,23 +19,19 @@ router.post("/login", (req, res) => {
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
 
-      console.log(encrypted);
-
       let sql = `
       select 
-mo_id as ojtid,
-concat(mo_lastname,' ',mo_name) as fullname,
-ma_accessname as accesstype,
-mo_status as status,
-mo_image as image,
-mo_department as departmentid
-from ojt_user
-inner join master_access on ou_accesstype = ma_accessid
-left join master_ojt on ou_ojtid = mo_id
-left join master_department on md_departmentid = mo_department
-where ou_username = '${username}' and ou_password = '${encrypted}'`;
-
-      console.log(sql);
+      mo_id as ojtid,
+      concat(mo_lastname,' ',mo_name) as fullname,
+      ma_accessname as accesstype,
+      mo_status as status,
+      mo_image as image,
+      mo_department as departmentid
+      from ojt_user
+      inner join master_access on ou_accesstype = ma_accessid
+      left join master_ojt on ou_ojtid = mo_id
+      left join master_department on md_departmentid = mo_department
+      where ou_username = '${username}' and ou_password = '${encrypted}'`;
 
       mysql
         .mysqlQueryPromise(sql)
@@ -45,8 +42,6 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
             if (user.status === "Active") {
               let data = OjtLogin(result);
 
-              console.log("result", result);
-
               data.forEach((user) => {
                 req.session.image = user.image;
                 req.session.ojtid = user.ojtid;
@@ -54,11 +49,42 @@ where ou_username = '${username}' and ou_password = '${encrypted}'`;
                 req.session.accesstype = user.accesstype;
                 req.session.departmentid = user.departmentid;
                 req.session.status = user.status;
+
+                req.session.jwt = EncrypterString(
+                  jwt.sign(
+                    JSON.stringify({
+                      employeeid: user.ojtid,
+                      fullname: user.fullname,
+                    }),
+                    process.env._SECRET_KEY
+                  ),
+                  {}
+                );
+
+                res.cookie(
+                  "token",
+                  EncrypterString(
+                    jwt.sign(
+                      JSON.stringify({
+                        employeeid: user.ojtid,
+                        fullname: user.fullname,
+                      }),
+                      process.env._SECRET_KEY
+                    ),
+                    {}
+                  ),
+                  {
+                    secure: true,
+                    sameSite: "None", // Allow cross-origin
+                    domain: ".5lsolutions.com", // For subdomains
+                  }
+                );
               });
 
               return res.json({
                 msg: "success",
                 data: data,
+                apk: req.session.jwt
               });
             } else {
               return res.json({

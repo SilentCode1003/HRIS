@@ -2,18 +2,19 @@
 
 <!-- Table -->
 <div class="card" id="tablecard">
-    <div class="card-header ch-coop">
+    <div class="card-header ch-coop p-4">
       <h3 class="title-card-table">Applied Over Time</h3>
       <!-- <button id="loadbutton" class="btn btn-add-color"><b>Load</b></button> -->
-      <input id='myInput' type='text' placeholder="  Search....">
+      <input id='myInput' class="my-3" type='text' placeholder="  Search....">
     </div>
     <div class="card-body">
         <div class="table-responsive"  id="table-responsive-id">
-            <table class="table table-bordered table-light" id="dataTableOtapproval">
+            <table class="table table-striped-light" id="dataTableOtapproval">
                 <thead>
                     <tr>
                         <!-- <th>Image</th> -->
                         <th>ID</th>
+                        <th>Employee ID</th>
                         <th>Employee Name</th>
                         <th>Attendance Date</th>
                         <th>Clock In</th>
@@ -41,7 +42,6 @@
               <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
             </div>
             <div class="modal-body" id="modal-body">
-              <br>
               <br>
               <div class="row">
                 <div class="col-xl-2 col-lg-4" style="margin-left: 10px;">
@@ -71,6 +71,12 @@
                             <label for="floatingInput">Attendace Date</label>
                           </div>
                       </div>  
+                      <div class="col">
+                        <div class="form-floating">
+                          <input type="datetime-local" class="form-control border-form-modal" id="applieddateemployee" name="applieddateemployee" disabled>
+                          <label for="floatingInput">Applied Date</label>
+                        </div>
+                    </div> 
                     </div>                             
                     <br>
                     <div class="row g-3">
@@ -90,7 +96,7 @@
                       </div>
                       <div class="col">
                           <div class="form-floating">
-                            <input type="number" class="form-control border-form-modal" id="totalothours" name="totalothours" disabled>
+                            <input type="text" class="form-control border-form-modal" id="totalothours" name="totalothours" disabled>
                             <label for="floatingInput">Total Overtime</label>
                           </div>
                         </div>
@@ -98,21 +104,38 @@
                     <br>
                     <div class="row g-3">
                       <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="appliedclockinlocation" name="appliedclockinlocation" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Clock In Location</label>
+                          </div>
+                      </div>
+                      <div class="col">
+                          <div class="form-floating">
+                            <input type="text" class="form-control border-form-modal" id="appliedclockoutlocation" name="appliedclockoutlocation" disabled
+                            placeholder="Address">
+                            <label for="floatingInput">Clock Out Location</label>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row g-3">
+                      <div class="col">
                         <div class="form-floating">
-                          <input type="number" class="form-control border-form-modal" id="totalnightdiff" name="totalnightdiff" disabled
+                          <input type="text" class="form-control border-form-modal" id="totalnightdiff" name="totalnightdiff" disabled
                           placeholder="Address">
                           <label for="floatingInput">Total Night Differentials</label>
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-floating">
-                          <input type="number" class="form-control border-form-modal" id="totalnormalot" name="totalnormalot" disabled>
+                          <input type="text" class="form-control border-form-modal" id="totalnormalot" name="totalnormalot" disabled>
                           <label for="floatingInput">Total Normal Overtime</label>
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-floating">
-                          <input type="number" class="form-control border-form-modal" id="totalearlytot" name="totalearlytot" disabled>
+                          <input type="text" class="form-control border-form-modal" id="totalearlytot" name="totalearlytot" disabled>
                           <label for="otnormal">Total Early Overtime</label>
                         </div>
                       </div>
@@ -147,8 +170,8 @@
                       </div>                    
                     </div>
                     </div>
-                  <br>
-                  <div class="row g-3">
+                    <br>
+                    <div class="row g-3">
                       <div class="col">
                         <div class="form-floating">
                           <textarea type="text" class="form-control border-form-modal" id="appliedreason" name="appliedreason"
@@ -163,16 +186,36 @@
                             <label for="floatingInput">Comment</label>
                           </div>
                         </div>
-                      </div>
+                    </div>
+                    <br>
                     <br>
                   </form>
                 </div>
+            </div>
+
+            <div class="row m-4">
+              <div class="table-responsive">
+                <h6 class="overtime-caption py-4">Daily Time Record</h6>
+                <table class="table table-striped-light caption-top" id="dtr-datatable">
+                  <thead>
+                    <tr>
+                      <th>Attendance Date</th>
+                      <th>Employee Name</th>
+                      <th>Ticket Number</th>
+                      <th>Service</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
+            </div>
             <div class="modal-footer" id="modal-footer">
-              <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-modal-save" id="otsavebutton">Save</button>
-          </div>
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-modal-save" id="otsavebutton">Save</button>
+            </div>
       </div>
   </div>
 </div>

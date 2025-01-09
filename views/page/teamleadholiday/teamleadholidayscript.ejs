@@ -75,36 +75,7 @@
           { data: "payrolldate" },
           { data: "action" },
         ],
-        createdRow: function (row, data, dataIndex) {
-          // //miyaka
-          // var overtimestatusCell = $(row).find("td:eq(8)");
-
-          // var overtimestatusText = data.overtimestatus;
-
-          // var overtimestatusClass = "";
-
-          // switch (overtimestatusText.toLowerCase()) {
-          //   case "approved":
-          //     overtimestatusClass = "approved-status";
-          //     break;
-          //   case "cancel":
-          //     overtimestatusClass = "cancel-status";
-          //     break;
-          //   case "pending":
-          //     overtimestatusClass = "pending-status";
-          //     break;
-          //   default:
-          //     overtimestatusClass = "";
-          // }
-
-          // overtimestatusCell.html(
-          //   `<span class="${overtimestatusClass}">${overtimestatusText}</span>`
-          // );
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
+         
         initComplete: function () {},
       });
     }
@@ -182,6 +153,7 @@
               $("#holidaytype").val(item.holidaytype);
               $("#holidaydate").val(item.holidaydate);
               $("#holidayname").val(item.holidayname);
+              $("#holidaycreatedate").val(item.createdate);
               $("#holidaystatus").val(item.status);
               $("#holidaysubgroup").val(item.subgroupid);
             });

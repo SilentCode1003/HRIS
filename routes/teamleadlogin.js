@@ -50,9 +50,6 @@ router.post("/login", (req, res) => {
             ) {
               if (user.status === "Active") {
                 let data = TeamLeadLogin(result);
-
-                console.log("result", result);
-
                 data.forEach((user) => {
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
@@ -65,8 +62,6 @@ router.post("/login", (req, res) => {
                   req.session.jobstatus = user.jobstatus;
                   req.session.subgroupid = user.subgroupid;
                 });
-
-                console.log("accesstype", req.session.accesstype);
                 return res.json({
                   msg: "success",
                   data: data,

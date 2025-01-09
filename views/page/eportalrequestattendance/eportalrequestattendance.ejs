@@ -3,21 +3,17 @@
 <!-- Table -->
 <div class="card shadow mb-4" id="tablecard">
   <div class="card-header ch-requestleave">
-    <h3>COA</h3>
-    <div class="row g-2">
-      <div class="col"></div>
-      <div class="col-sm-2">
-        <button type="button" id="applybtn" class="btn btn-eportal-color" data-bs-toggle="modal" data-bs-target="#reqcoamodal">
-          <h6>Request Attendance</h6> 
+    <h3 class="m-4">COA</h3>
+    <div class="d-flex gap-4 m-2 justify-content-end attendance-field">
+      <div class="flex">
+        <button type="button" id="applybtn" class="btn btn-add-color font-weight-bold" data-bs-toggle="modal" data-bs-target="#reqcoamodal">
+            <i class="bi bi-card-checklist mr-2"></i>Request Attendance 
         </button>
       </div>
     </div>
-  
   </div>
-</div>
 
-<div class="col">
-  <div class="card">
+
       <div class="card-header ch-generate">
           <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -46,9 +42,8 @@
               <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
                   <div class="row">
                       <div class="col-xl-12 col-lg-12">
-                          <div class="card shadow mb-4">
-                            <div class="card-body cbody-requestleave">
-                                <table class="table table-light table-bordered" id="dataTablereqCOA">
+                            <div class="card-body">
+                                <table class="table table-striped-light" id="dataTablereqCOA">
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
@@ -64,7 +59,6 @@
                                     </thead>
                                 </table>
                             </div>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -72,7 +66,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveApproved">
+                      <table class="table table-striped-light" id="dataTableleaveApproved">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -93,7 +87,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveRejected">
+                      <table class="table table-striped-light" id="dataTableleaveRejected">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -115,7 +109,7 @@
               aria-labelledby="nav-profile-tab">
               <div class="card-body">
                   <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-light table-bordered" id="dataTableleaveCancelled">
+                      <table class="table table-striped-light" id="dataTableleaveCancelled">
                           <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -135,8 +129,8 @@
             </div>
           </div>
       </div>
-  </div>
-</div>
+ 
+
 
 
 <!-- Modal -->
@@ -169,24 +163,25 @@
                             <textarea class="form-control border-form-modal" id="coareason" name="coareason"></textarea>
                         </div>
                     </div>
-                    <div class="row g-3">
+                    
+                        <div class="col">
+                            <label for="timeout" class="form-label">Sub Group</label>
+                            <select type="text" class="form-control border-form-modal" id="coasubgroup" name="coasubgroup">
+                            </select>
+                        </div>
                         <div class="col">
                           <label class="form-label" for="customFile"></label>
                           <input type="file" name="coafile" id="coafile" class="form-control border-form-modal"
                             accept="image/*">
                         </div>
+                        <br>
                         <div class="col">
                           <div class="text-center">
                             <img id="preview" src="https://via.placeholder.com/250" style="width: 250px;; height: 250px;"
                                 class="rounded border-form-modal" alt="placeholder">
                           </div>
                         </div>
-                        <div class="col">
-                            <label for="timeout" class="form-label">Sub Group</label>
-                            <select type="text" class="form-control border-form-modal" id="coasubgroup" name="coasubgroup">
-                            </select>
-                        </div>
-                    </div>
+                 
                 </form>
             </div>
             <div class="modal-footer" id="modal-footer">

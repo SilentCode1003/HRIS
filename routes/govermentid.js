@@ -2,6 +2,9 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const { Select } = require("./repository/dbconnect");
+const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { DataModeling } = require("./model/hrmisdb");
 var router = express.Router();
 const currentDate = moment();
 
@@ -65,7 +68,6 @@ router.post("/save", async (req, res) => {
     let status = "Active";
     let data = [];
 
-    // Check if a record with the same employeeid and idtype exists
     const checkQuery = `SELECT * FROM master_govid WHERE mg_employeeid = '${employeeid}' AND mg_idtype = '${idtype}'`;
     const checkParams = [employeeid, idtype];
 
@@ -75,7 +77,6 @@ router.post("/save", async (req, res) => {
     );
 
     if (existingRecord.length > 0) {
-      // A record with the same employeeid and idtype already exists
       res.json({ msg: "exist" });
       return;
     }
@@ -95,7 +96,6 @@ router.post("/save", async (req, res) => {
         console.error("Error inserting record: ", insertErr);
         res.json({ msg: "insert_failed" });
       } else {
-        console.log(insertResult);
         res.json({ msg: "success" });
       }
     });
@@ -110,7 +110,8 @@ router.get("/load", (req, res) => {
     let sql = `    
     SELECT 
     mg_governmentid,
-    concat(me_firstname, ' ', me_lastname) AS mg_employeeid,
+    mg_employeeid,
+    concat(me_firstname, ' ', me_lastname) AS mg_fullname,
     mg_idtype,
     mg_idnumber,
     mg_issuedate,
@@ -120,13 +121,18 @@ router.get("/load", (req, res) => {
     FROM master_govid
     LEFT JOIN master_employee ON master_govid.mg_employeeid = me_id`;
 
-    mysql.Select(sql, "Master_GovId", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
 
-      res.json({
-        msg: "success",
-        data: result,
-      });
+      if (result != 0) {
+        let data = DataModeling(result, "mg_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
     });
   } catch (error) {
     res.json({

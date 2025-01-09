@@ -524,13 +524,14 @@
               );
               $("#overtimemeal").text(formatToCurrency(item.Overtime_Meal));
               $("#leavepayprofile").text(formatToCurrency(item.Leave_Pay));
-              let totalLoans = (parseFloat(item.Calamity_Loan) || 0) +
-              (parseFloat(item.Short_Term_Loan) || 0) +
-              (parseFloat(item.Housing_Loan) || 0) +
-              (parseFloat(item.Education_Loan) || 0) +
-              (parseFloat(item.Sterling_Loan) || 0) +
-              (parseFloat(item.Salary_Loan) || 0) +
-              (parseFloat(item.Wisp_Deductions) || 0);
+              let totalLoans =
+                (parseFloat(item.Calamity_Loan) || 0) +
+                (parseFloat(item.Short_Term_Loan) || 0) +
+                (parseFloat(item.Housing_Loan) || 0) +
+                (parseFloat(item.Education_Loan) || 0) +
+                (parseFloat(item.Sterling_Loan) || 0) +
+                (parseFloat(item.Salary_Loan) || 0) +
+                (parseFloat(item.Wisp_Deductions) || 0);
               let formattedTotal = formatToCurrency(totalLoans);
               $("#loandeductions").text(formattedTotal);
               $("#dailyrate").text(formatToCurrency(item.Per_Day));
@@ -571,19 +572,23 @@
 
             console.log(existingData);
             $.each(existingData[0], (key, item) => {
+              console.log(existingData[0], "data");
 
-              console.log(existingData[0],'data');
-              
               $("#editpreview").attr(
                 "src",
                 "data:image/jpg;base64," + item.Image
+              );
+              $("#payslipdailytotal").html(
+                "<strong> ( " + item.Total_gp_status + " )</strong>"
               );
               base64String = item.Image;
               $("#payslipSSSid").text(item.SSSID);
               $("#payslipTINid").text(item.TINID);
               $("#payslipphilhealthid").text(item.PhilHealthID);
               $("#payslipdeppagibigid").text(item.PagIbigID);
-              $("#payslipheader13thmonthpay").text(formatToCurrency(item.Accrued13thMonth));
+              $("#payslipheader13thmonthpay").text(
+                formatToCurrency(item.Accrued13thMonth)
+              );
               $("#payslippayrolltype").text(item.PayrollType);
               $("#payslipid").text(item.EmployeeId);
               $("#payslipname").text(item.EmployeeFullName);
@@ -631,6 +636,59 @@
               $("#payslipspecialovertime").text(
                 formatToCurrency(item.SpecialHolidayOT)
               );
+              // let suspensionPay = item.Suspension_Pay;
+              // if (suspensionPay === 0) {
+              //   $("#payslipsuspensionpay").closest("tr").hide();
+              // } else {
+              //   $("#payslipsuspensionpay").closest("tr").show();
+              //   $("#payslipsuspensionpay").text(
+              //     formatToCurrency(suspensionPay)
+              //   );
+              // }
+              // let leaveNoPay = item.Leave_with_out_pay;
+              // if (leaveNoPay === 0) {
+              //   $("#payslipnopay").closest("tr").hide();
+              // } else {
+              //   $("#payslipnopay").closest("tr").show();
+              //   $("#payslipnopay").html(
+              //     "<strong> ( " + leaveNoPay + " )</strong>");
+              // }
+              // let leaveNoPayDeductions = item.Leave_With_Out_Pay_Deductions;
+              // if (leaveNoPayDeductions === 0) {
+              //   $("#payslipnopaydeductions").closest("tr").hide();
+              // } else {
+              //   $("#payslipnopaydeductions").closest("tr").show();
+              //   $("#payslipnopaydeductions").text(
+              //     formatToCurrency(leaveNoPayDeductions)
+              //   );
+              // }
+              let suspensionPay = item.Suspension_Pay;
+              let leaveNoPay = item.Leave_with_out_pay;
+              let leaveNoPayDeductions = item.Leave_With_Out_Pay_Deductions;
+              if (suspensionPay === 0 && leaveNoPay === 0 && leaveNoPayDeductions === 0) {
+                  $("#payslipsuspensionpay").closest("tr").hide();
+              } else {
+                  $("#payslipsuspensionpay").closest("tr").show();
+                  if (suspensionPay > 0) {
+                      $("#payslipsuspensionpay").text(formatToCurrency(suspensionPay));
+                  } else {
+                      $("#payslipsuspensionpay").text("");
+                  }
+                  if (leaveNoPay > 0) {
+                      $("#payslipnopay").html(
+                          "<strong> ( " + leaveNoPay + " )</strong>"
+                      );
+                  } else {
+                      $("#payslipnopay").html("");
+                  }
+                  if (leaveNoPayDeductions > 0) {
+                      $("#payslipnopaydeductions").text(
+                          formatToCurrency(leaveNoPayDeductions)
+                      );
+                  } else {
+                      $("#payslipnopaydeductions").text("");
+                  }
+              }
               $("#paysliptotal").text(formatToCurrency(item.Overall_Net_Pay));
               $("#payslipsss").text(formatToCurrency(item.SSS));
               $("#payslippagibig").text(formatToCurrency(item.PagIbig));
@@ -639,8 +697,19 @@
               $("#payslipabsent").text(
                 formatToCurrency(item.Absent_Deductions)
               );
-              $("#payslipnumabsent").html("<strong> ( " + item.Absent + " )</strong>");
+              $("#paysliplate").html(formatToCurrency(item.Late_Deductions));
+              $("#payslipnumlate").html(
+                "<strong> ( " +
+                  item.Late_Hours +
+                  " : " +
+                  item.Late_Minutes +
+                  " )</strong>"
+              );
+              $("#payslipnumabsent").html(
+                "<strong> ( " + item.Absent + " )</strong>"
+              );
               $("#paysliphealthcard").text(formatToCurrency(item.Health_Card));
+              $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#payslipcalamity").text(formatToCurrency(item.Calamity_Loan));
               $("#payslipshortterm").text(
                 formatToCurrency(item.Short_Term_Loan)
@@ -652,10 +721,7 @@
               $("#payslipsterlingloan").text(
                 formatToCurrency(item.Sterling_Loan)
               );
-              $("#paysliplate").html(formatToCurrency(item.Late_Deductions)); 
-              $("#payslipnumlate").html("<strong> ( " + item.Late_Hours + " : " + item.Late_Minutes + " )</strong>");
               $("#payslipwisp").text(formatToCurrency(item.Wisp_Deductions));
-              $("#paysliprestdayot").text(formatToCurrency(item.RestDay_OTpay));
               $("#payslipsalaryloan").text(formatToCurrency(item.Salary_Loan));
               $("#paysliptotaldeductions").text(
                 formatToCurrency(item.Total_AllDeductions)
@@ -718,6 +784,32 @@
       });
     });
 
+     //miyaka
+     function getStatusClass(statusText) {
+      switch (statusText.toLowerCase()) {
+        case "normal day":
+          return "normal-day";
+
+        case "rest day":
+          return "restday";
+
+        case "missed logs":
+          return "pending-status";
+
+          case "absent":
+          return "absent";
+
+          case "regular holiday":
+          return "regularholiday";
+
+          case "non-working holiday":
+          return "nonworking";
+          
+        default:
+          return "";
+      }
+    }
+
     $(document).on("click", "#nav-date-tab", function () {
       $(`#dataTablePayslip`).find("tr:gt(0)").remove();
       $.ajax({
@@ -763,7 +855,8 @@
             var TOTAL_MINUTES = row.insertCell(10);
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
-            ATTENDANCE_STATUS.innerHTML = item.Attendance_Status;
+            // ATTENDANCE_STATUS.innerHTML = item.Attendance_Status;
+            ATTENDANCE_STATUS.innerHTML = `<span class="${getStatusClass(item.Attendance_Status)}">${item.Attendance_Status}</span>`;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;

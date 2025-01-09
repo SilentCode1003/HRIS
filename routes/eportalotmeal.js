@@ -15,6 +15,8 @@ const {
   UpdateStatement,
   SelectStatement,
 } = require("./repository/customhelper");
+const { SendEmailNotification } = require("./repository/emailsender");
+const { REQUEST } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -26,7 +28,7 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.get("/load", (req, res) => {
+router.get("/loadPending", (req, res) => {
   try {
     let employeeid = req.session.employeeid;
     let sql = `SELECT 
@@ -41,7 +43,7 @@ router.get("/load", (req, res) => {
     FROM  ot_meal_allowances
     INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
     WHERE oma_employeeid = '${employeeid}'
-    AND oma_status in ('Pending', 'Applied')`;
+    AND oma_status = 'Pending'`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -51,8 +53,146 @@ router.get("/load", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
 
-        console.log(data);
+router.get("/loadApplied", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Applied'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadApproved", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Approved'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadRejected", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Rejected'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadCancelled", (req, res) => {
+  try {
+    let employeeid = req.session.employeeid;
+    let sql = `SELECT 
+    oma_mealid,
+    DATE_FORMAT(oma_attendancedate, '%W, %Y-%m-%d') AS oma_attendancedate,
+    DATE_FORMAT(oma_clockin, '%d %M %Y, %h:%i %p') AS oma_clockin,
+    DATE_FORMAT(oma_clockout, '%d %M %Y, %h:%i %p') AS oma_clockout,
+    oma_totalovertime,
+    s_name as oma_subgroupid,
+    oma_otmeal_amount,
+    oma_status
+    FROM  ot_meal_allowances
+    INNER JOIN subgroup ON ot_meal_allowances.oma_subgroupid = s_id
+    WHERE oma_employeeid = '${employeeid}'
+    AND oma_status = 'Cancelled'`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "oma_");
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -73,7 +213,7 @@ router.post("/getotmeal", (req, res) => {
     DATE_FORMAT(oma_clockout, '%Y-%m-%dT%H:%i') AS oma_clockout,
     oma_totalovertime,
     oma_subgroupid,
-    oma_payroll_date,
+    DATE_FORMAT(oma_payroll_date, '%Y-%m-%d') AS oma_payroll_date,
     oma_otmeal_amount,
     oma_approvalcount,
     oma_image,
@@ -89,8 +229,6 @@ router.post("/getotmeal", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "oma_");
-
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -195,31 +333,92 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    console.log(updateStatement, "Update");
+    if (status === "Cancelled") {
+      Update(updateStatement, data, (err, result) => {
+        if (err) {
+          console.error("Error: ", err);
+          return res.json(JsonErrorResponse(err));
+        }
 
-    let checkStatement = SelectStatement(
-      "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
-      [employeeid, attendancedate, status]
-    );
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            startdate: clockin,
+            enddate: clockout,
+            reason: REQUEST.OTMEAL,
+            status: MessageStatus.CANCELLED,
+            requesttype: REQUEST.OTMEAL,
+          },
+        ];
+        SendEmailNotification(
+          employeeid,
+          subgroupid,
+          REQUEST.OTMEAL,
+          emailbody
+        );
+        res.json(JsonSuccess());
+      });
+    } else {
+      let validationQuery2 = SelectStatement(
+        `SELECT 1 FROM ot_meal_allowances WHERE oma_attendancedate = ? AND oma_employeeid = ? AND oma_status = 'Applied'`,
+        [attendancedate, employeeid]
+      );
 
-    console.log(checkStatement, "check");
+      let validationQuery3 = SelectStatement(
+        `SELECT 1 FROM ot_meal_allowances WHERE oma_attendancedate = ? AND oma_employeeid = ? AND oma_status = 'Approved'`,
+        [attendancedate, employeeid]
+      );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
+      Check(validationQuery2)
+        .then((result1) => {
+          if (result1.length > 0) {
+            return Promise.reject(
+              JsonWarningResponse(
+                MessageStatus.EXIST,
+                MessageStatus.APPLIEDOTMEAL
+              )
+            );
+          }
+          return Check(validationQuery3);
+        })
+        .then((result2) => {
+          if (result2.length > 0) {
+            return Promise.reject(
+              JsonWarningResponse(
+                MessageStatus.EXIST,
+                MessageStatus.APPLIEDOTMEAL
+              )
+            );
+          }
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                startdate: clockin,
+                enddate: clockout,
+                reason: REQUEST.OTMEAL,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.OTMEAL,
+              },
+            ];
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.OTMEAL,
+              emailbody
+            );
             res.json(JsonSuccess());
           });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.json(error);
+        });
+    }
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));

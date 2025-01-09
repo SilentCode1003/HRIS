@@ -58,7 +58,6 @@ router.get("/load", (req, res) => {
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
@@ -73,6 +72,7 @@ router.get("/load", (req, res) => {
 router.post("/getholidayapproval", (req, res) => {
   try {
     let holiday_id = req.body.holiday_id;
+    
     let sql = `SELECT 
         ph.ph_holidayid,
         CONCAT(me.me_lastname, ' ', me.me_firstname) AS ph_fullname,
@@ -109,26 +109,16 @@ router.post("/getholidayapproval", (req, res) => {
         res.json(JsonErrorResponse(err));
       }
 
+      
+
       if (result != 0) {
         let data = DataModeling(result, "ph_");
 
-        console.log(data);
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
       }
     });
-
-    // mysql.Select(sql, "Payroll_Approval_Ot", (err, result) => {
-    //   if (err) console.error("Error: ", err);
-
-    //
-
-    //   res.json({
-    //     msg: "success",
-    //     data: result,
-    //   });
-    // });
   } catch (error) {
     res.json({
       msg: "error",

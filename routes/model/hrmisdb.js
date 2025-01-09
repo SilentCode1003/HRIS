@@ -77,6 +77,7 @@ exports.Leaves = (data) => {
       reason: key.l_leavereason,
       status: key.l_leavestatus,
       applieddate: key.l_leaveapplieddate,
+      typeleave: key.ml_leavetype,
     });
   });
 
@@ -735,7 +736,6 @@ exports.Payroll_Approval_Ot = (data) => {
   data.forEach((key, item) => {
     dataResult.push({
       approveot_id: key.pao_id,
-      image: key.pao_image,
       fullname: key.pao_fullname,
       employeeid: key.pao_employeeid,
       attendancedate: key.pao_attendancedate,
@@ -754,6 +754,9 @@ exports.Payroll_Approval_Ot = (data) => {
       payrolldate: key.pao_payroll_date,
       reason: key.pao_reason,
       overtimestatus: key.pao_status,
+      subgroupid: key.pao_subgroupid,
+      overtimeimage: key.pao_overtimeimage,
+      total_min_ot: key.pao_total_min_ot,
     });
   });
 
