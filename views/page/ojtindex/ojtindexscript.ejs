@@ -13,7 +13,7 @@
     LoadBdayFolks();
     GenerateAnouncement();
 
-    console.log("department", departmentid);
+    console.log("department", geofenceid);
 
     const map = L.map("map").setView([14.338169350273253, 121.06126070315966], 15);
 
@@ -21,7 +21,7 @@
       attribution: "© OpenStreetMap contributors",
     }).addTo(map);
 
-    // let geofencesettings = [];
+    let geofencesettings = [];
     let geofences = [];
 
     $.ajax({
@@ -197,6 +197,8 @@
     //#region buttons
 
     $("#clockinbtn").on("click", function () {
+      console.log(geofenceid,'id');
+      
       swal({
         title: "Confirm Clock-in",
         text: "Are you sure you want to clock in?",
