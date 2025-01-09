@@ -38,7 +38,7 @@ router.get("/load", (req, res) => {
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
-      (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
+      ph_total_hours,
       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate
   FROM payroll_holiday
   INNER JOIN
@@ -81,7 +81,7 @@ router.post("/getholidayapproval", (req, res) => {
       DATE_FORMAT(ph_attendancedate, '%Y-%m-%d') as ph_attendancedate,
       DATE_FORMAT(ph_timein, '%Y-%m-%d %H:%i:%s') AS ph_timein,
       DATE_FORMAT(ph_timeout, '%Y-%m-%d %H:%i:%s') AS ph_timeout,
-      (ph_normal_ot_total + ph_nightdiff_ot_total) AS ph_total_hours,
+      ph_total_hours,
       DATE_FORMAT(ph_payrolldate, '%Y-%m-%d') AS ph_payrolldate,
 	    ph_holidaytype,
       DATE_FORMAT(ph_holidaydate, '%Y-%m-%d') as ph_holidaydate,

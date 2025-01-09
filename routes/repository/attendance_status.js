@@ -96,6 +96,8 @@ exports.insertDailyAttendanceStatus = () => {
                   status = "On Leave";
                 } else if (isHoliday) {
                   status = "Holiday";
+                  scheduledTimeIn = shiftForToday.time_in;
+                  scheduledTimeOut = shiftForToday.time_out;
                 } else {
                   scheduledTimeIn = shiftForToday.time_in;
                   scheduledTimeOut = shiftForToday.time_out;

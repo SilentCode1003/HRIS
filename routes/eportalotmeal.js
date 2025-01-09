@@ -333,16 +333,64 @@ router.put("/edit", (req, res) => {
       arguments
     );
 
-    let checkStatement = SelectStatement(
-      "select * from ot_meal_allowances where oma_employeeid = ? and oma_attendancedate = ? and oma_status = ?",
-      [employeeid, attendancedate, status]
-    );
+    if (status === "Cancelled") {
+      Update(updateStatement, data, (err, result) => {
+        if (err) {
+          console.error("Error: ", err);
+          return res.json(JsonErrorResponse(err));
+        }
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            startdate: clockin,
+            enddate: clockout,
+            reason: REQUEST.OTMEAL,
+            status: MessageStatus.CANCELLED,
+            requesttype: REQUEST.OTMEAL,
+          },
+        ];
+        SendEmailNotification(
+          employeeid,
+          subgroupid,
+          REQUEST.OTMEAL,
+          emailbody
+        );
+        res.json(JsonSuccess());
+      });
+    } else {
+      let validationQuery2 = SelectStatement(
+        `SELECT 1 FROM ot_meal_allowances WHERE oma_attendancedate = ? AND oma_employeeid = ? AND oma_status = 'Applied'`,
+        [attendancedate, employeeid]
+      );
+
+      let validationQuery3 = SelectStatement(
+        `SELECT 1 FROM ot_meal_allowances WHERE oma_attendancedate = ? AND oma_employeeid = ? AND oma_status = 'Approved'`,
+        [attendancedate, employeeid]
+      );
+
+      Check(validationQuery2)
+        .then((result1) => {
+          if (result1.length > 0) {
+            return Promise.reject(
+              JsonWarningResponse(
+                MessageStatus.EXIST,
+                MessageStatus.APPLIEDOTMEAL
+              )
+            );
+          }
+          return Check(validationQuery3);
+        })
+        .then((result2) => {
+          if (result2.length > 0) {
+            return Promise.reject(
+              JsonWarningResponse(
+                MessageStatus.EXIST,
+                MessageStatus.APPLIEDOTMEAL
+              )
+            );
+          }
           Update(updateStatement, data, (err, result) => {
             if (err) console.error("Error: ", err);
 
@@ -363,15 +411,14 @@ router.put("/edit", (req, res) => {
               REQUEST.OTMEAL,
               emailbody
             );
-
             res.json(JsonSuccess());
           });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.json(error);
+        });
+    }
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
