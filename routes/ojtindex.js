@@ -61,7 +61,7 @@ router.post("/latestlog", (req, res) => {
 
 router.post("/clockin", (req, res) => {
   const ojt_id = req.body.ojtid;
-  const geofenceid = req.body.geofenceid;
+  const geofenceid = 1;
 
   if (!ojt_id) {
     return res.status(401).json({
@@ -161,7 +161,7 @@ router.post("/clockout", (req, res) => {
   const ojt_id = req.body.ojtid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
-  const geofenceid = req.body.geofenceid;
+  const geofenceid = 1;
 
 
   const checkExistingClockInQuery = `
@@ -171,9 +171,7 @@ router.post("/clockout", (req, res) => {
     AND oa_clockin IS NOT NULL
     AND oa_clockout IS NULL
   ORDER BY oa_attendancedate DESC
-  LIMIT 1
-    
-  `;
+  LIMIT 1`;
 
   mysql
     .mysqlQueryPromise(checkExistingClockInQuery)
