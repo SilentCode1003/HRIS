@@ -29,8 +29,7 @@
       </div>
       <div class="modal-body logout-body">
         <h5>
-          Select <span class="btn-out-body">Log Out</span> below if you are
-          ready to end your current session.
+          Click <span class="btn-out-body">Log Out</span>  below when you're ready to end your session.
         </h5>
       </div>
       <div class="modal-footer logout-footer">
@@ -955,46 +954,96 @@ $(document).ready(function () {
    //#region Sidebar
    $(document).ready(function () {
     if ($('.collapse-item.active').length > 0) {
-      $('.collapse-item.active').closest('.collapse').addClass('show')
+        $('.collapse-item.active').closest('.collapse').addClass('show');
     }
 
     $('.collapse-item').click(function () {
-      $('.collapse-item').removeClass('active')
-      $(this).addClass('active')
-    })
+        $('.collapse-item').removeClass('active');
+        $(this).addClass('active');
+    });
 
-    var path = window.location.pathname
+    var path = window.location.pathname;
 
     $('.collapse-item').each(function () {
-      var href = $(this).attr('href')
-      if (path === href) {
-        $(this).addClass('active')
-        $(this).closest('.collapse').addClass('show')
-      }
-    })
+        var href = $(this).attr('href');
+        if (path === href) {
+            $(this).addClass('active');
+            $(this).closest('.collapse').addClass('show');
+        }
+    });
 
     function adjustCollapse() {
-      if ($(window).width() <= 767) {
-        $('.collapse').removeClass('show')
-        $('.row.d-flex.justify-content-center.align-items-center').removeClass('login-height')
-      } else {
-        $('.collapse-item.active').closest('.collapse').addClass('show')
-      }
+        if ($(window).width() <= 767) {
+            $('.collapse').removeClass('show');
+            $('.row.d-flex.justify-content-center.align-items-center').removeClass('login-height');
+        } else {
+            $('.collapse-item.active').closest('.collapse').addClass('show');
+        }
     }
-    adjustCollapse()
+    adjustCollapse();
 
     $(window).resize(function () {
-      adjustCollapse()
-    })
+        adjustCollapse();
+    });
 
     $(document).on('click', function (event) {
-      if ($(window).width() <= 767) {
-        if (!$(event.target).closest('.collapse').length) {
-          $('.collapse').removeClass('show')
+        if ($(window).width() <= 767) {
+            if (!$(event.target).closest('.collapse, .collapse-item').length) {
+                $('.collapse').removeClass('show');
+            }
         }
-      }
-    })
-  })
+    });
+
+    // Prevent collapse from hiding on scroll
+    $(window).on('scroll', function () {
+        if ($(window).width() <= 767) {
+            // Do nothing, allowing the collapse to remain open while scrolling
+        }
+    });
+});
+
+  //  $(document).ready(function () {
+  //   if ($('.collapse-item.active').length > 0) {
+  //     $('.collapse-item.active').closest('.collapse').addClass('show')
+  //   }
+
+  //   $('.collapse-item').click(function () {
+  //     $('.collapse-item').removeClass('active')
+  //     $(this).addClass('active')
+  //   })
+
+  //   var path = window.location.pathname
+
+  //   $('.collapse-item').each(function () {
+  //     var href = $(this).attr('href')
+  //     if (path === href) {
+  //       $(this).addClass('active')
+  //       $(this).closest('.collapse').addClass('show')
+  //     }
+  //   })
+
+  //   function adjustCollapse() {
+  //     if ($(window).width() <= 767) {
+  //       $('.collapse').removeClass('show')
+  //       $('.row.d-flex.justify-content-center.align-items-center').removeClass('login-height')
+  //     } else {
+  //       $('.collapse-item.active').closest('.collapse').addClass('show')
+  //     }
+  //   }
+  //   adjustCollapse()
+
+  //   $(window).resize(function () {
+  //     adjustCollapse()
+  //   })
+
+  //   $(document).on('click', function (event) {
+  //     if ($(window).width() <= 767) {
+  //       if (!$(event.target).closest('.collapse').length) {
+  //         $('.collapse').removeClass('show')
+  //       }
+  //     }
+  //   })
+  // })
 
   // $(document).ready(function () {
   //   let isSidebarOpen = localStorage.getItem('isSidebarOpen') === 'true'
