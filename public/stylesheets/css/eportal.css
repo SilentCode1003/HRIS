@@ -16,10 +16,10 @@
   color: #333;
 }
 
-#map {
+/* #map {
   height: 500px;
   width: 100%;
-}
+} */
 
 #content-wrapper {
   background-color: white !important;
@@ -215,8 +215,8 @@
 .attendance-icon-eportal,
 .leave-icon-eportal,
 .disciplinary-icon-eportal {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   top: 3px;
 }
 
@@ -368,17 +368,14 @@
 .btn-eportal-color {
   float: right;
   border-radius: 8px;
-  width: 100%;
-  height: 33px;
-  background-color: #30a32a !important;
-  border: 2px solid #fef8ea !important;
+  background-color: #4E9F3D !important;
+  border: 2px solid white !important;
   color: white !important;
-  text-shadow: 1px 1px 1px black !important;
-  font-size: 15px !important;
+  font-size: 15px;
 }
 
 .btn-eportal-color:hover {
-  background-color: #197214 !important;
+  background-color: #1E5128 !important;
   transform: scale(1.1);
 }
 
@@ -412,6 +409,10 @@
   transform: scale(1.1);
 }
 
+.apply-holiday {
+  margin-left: auto;
+}
+
 .btn-add-color {
   float: right;
   border-radius: 8px;
@@ -426,10 +427,7 @@
   transform: scale(1.1);
 }
 
-/* .btn-eportal-color h6 {
-    font-weight: bold;
-    font-family: 'Times New Roman';
-} */
+
 
 .btn-search-topbar {
   height: 40px;
@@ -495,22 +493,24 @@
   height: 15px;
 }
 
-.sidebar-item span {
+.sidebar-item span{
   color: white !important;
-  padding: 8px;
+  padding: 4px;
 }
-
 .sidebar-item {
   transition: background-color 0.1s ease;
 }
 
 .sidebar-item:hover {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   font-weight: bold;
 }
 
 .sidebar-item:hover span {
   color: #7a1818 !important;
+}
+.sidebar-divider {
+    border-bottom: 3px solid white !important;
 }
 
 .boxshadow-sidebar {
@@ -518,13 +518,13 @@
 }
 
 .collapse .collapse-item {
-  font-weight: 600;
+  font-weight: 400;
   color: white !important;
 }
 
 .collapse .collapse-item:hover {
-  background-color: white !important;
-  color: black !important;
+background-color: white !important;
+color: black !important;
 }
 
 #modal-header {
@@ -713,6 +713,12 @@
   border: 2.5px solid #7a1818 !important;
 }
 
+#addmealclockin,
+#addmealclockout,
+#holidayname,
+#holidaytype {
+  background-color: white !important;
+}
 
 #badge-counter {
   height: 25px;
@@ -745,12 +751,9 @@
 }
 
 .btn-out-body {
-  background-color: red !important;
-  color: white !important;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 16px;
-  border: 1px solid lightslategray !important;
+  --tw-bg-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-bg-opacity)) !important;
+  font-weight: 800 !important;
 }
 
 .btn-modal-close {
@@ -784,31 +787,40 @@
 }
 
 .btn-logout-cancel {
-  background-color: #04a9be !important;
+  background-color: #219897 !important;
+  border: 2px solid white !important;
   color: white !important;
-  border: 2px solid #fef8ea !important;
   font-weight: bold !important;
-  text-shadow: 1px 1px 1px black !important;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.375rem;
 }
 
 .btn-logout-cancel:hover {
-  background-color: #027281 !important;
-  font-weight: bold;
+  background-color: #015f66 !important;
   transform: scale(1.1);
 }
 
 .btn-logout {
-  background-color: #FD5D5D !important;
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity)) !important;
+  letter-spacing: 0.05em;
+  border: 2px solid white !important;
   color: white !important;
-  border: 2px solid #fef8ea !important;
   font-weight: bold !important;
-  text-shadow: 1px 1px 1px black !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.375rem;
 }
 
 .btn-logout:hover {
-  background-color: #ef3a3a !important;
-  font-weight: bold;
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity)) !important;
   transform: scale(1.1);
 }
 
@@ -1804,26 +1816,87 @@ a.leaflet-control-zoom-in:hover {
 
 .nonworking {
   color: #0f8077 !important;
-    background-color: #aefcf5 !important;
-    border-radius: 6px;
-    padding: 6px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
+  background-color: #aefcf5 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.restday-ot-status {
+  color: #85586F !important;
+  background-color: #F2D1D1 !important;
+  border-radius: 6px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.specialholiday-status {
+  color: #ac1652 !important;
+  background-color: #FDCEDF !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.onleave-status {
+  color: #c2381f !important;
+  background-color: #FDDBBB !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+
+.onleave-wo-pay {
+  color: #7469B6 !important;
+  background-color: #E5D9F2 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.exempted-status {
+  color: #6a686d !important;
+  background-color: #EEEEEE !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 .cancel-status, .rejected-status, .absent {
   color: #800f0f !important;
-    background-color: #fcaeae !important;
-    border-radius: 6px;
-    padding: 5px;
-    text-transform: uppercase;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    font-size: 12px;
-    letter-spacing: 1px;
+  background-color: #fcaeae !important;
+  border-radius: 6px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 .normal-day {
@@ -1832,7 +1905,7 @@ a.leaflet-control-zoom-in:hover {
   border-radius: 6px;
   padding: 6px;
   text-transform: uppercase;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: 12px;
   letter-spacing: 1px;
@@ -1858,7 +1931,19 @@ a.leaflet-control-zoom-in:hover {
   padding: 6px;
   text-transform: uppercase;
   font-weight: bold;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.missed-status {
+  color: #fdeb45 !important;
+  background-color: #a00404 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
   font-size: 12px;
   letter-spacing: 1px;
 }
@@ -2514,14 +2599,13 @@ a#notifdropdown:hover {
   .attendance-field {
     flex-wrap: wrap;
   }
-/* 
-  .sidebar {
+
+  /* .sidebar {
     position: fixed;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
   } */
-
 
   .navbar {
     margin-left: 14.5rem;
@@ -2574,6 +2658,19 @@ a#notifdropdown:hover {
     width: 150px;
   }
 
+  .apply-holiday {
+    margin-left: 0;
+  }
+
+  .btn-eportal-color {
+    width: 100%;
+  }
+
+  .card-profile-edit {
+    width: 100%;
+    margin-left: 0%;
+  }
+
   .leave-box-container {
     margin-top: 5rem;
     display: flex;
@@ -2584,7 +2681,7 @@ a#notifdropdown:hover {
     flex-direction: column !important;
   }
 
-  #myInput {
+  #myInput{
     width: 100% !important;
   }
 
@@ -2601,6 +2698,7 @@ a#notifdropdown:hover {
 
   .table td {
     padding: 1rem !important;
+    font-weight: 700 !important;
   }
 
   .table th {
@@ -2612,7 +2710,8 @@ a#notifdropdown:hover {
   }
 
   .content {
-    margin-left: 8rem !important;
+    /* margin-left: 8rem !important; */
+    margin-left: 1rem !important;
     margin-right: 10px;
   }
 
@@ -2680,7 +2779,6 @@ a#notifdropdown:hover {
 
   .modal-body .row {
     flex-direction: column;
-    margin-left: 0 !important;
   }
 
   .modal-body .col {
@@ -2774,6 +2872,12 @@ a#notifdropdown:hover {
     flex-direction: column;
     gap: 2rem;
   }
+
+  table.spaced-table {
+    margin: auto !important;
+    margin-top: 5rem !important;
+  }
+
 }
 
 

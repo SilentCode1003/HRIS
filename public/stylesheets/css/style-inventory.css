@@ -135,9 +135,9 @@
   border-left: none !important;
 }
 
-.form-control[readonly] {
+/* .form-control[readonly] {
   background-color: transparent !important;
-}
+} */
 
 .daterangepicker .ranges li.active {
   background-color: var(--clr-6) !important;
@@ -750,9 +750,10 @@ td {
     left: 0;
     width: 50%;
     padding-left: 15px;
-    font-size: 15px;
+    /* font-size: 15px; */
     font-weight: bold;
     text-align: left;
+    align-items: center;
   }
 
   .custom-mobile-table tbody tr:nth-child(even) {

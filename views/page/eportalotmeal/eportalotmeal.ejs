@@ -193,7 +193,7 @@
                     <div class="col">
                         <div class="form-floating">
                           <input type="datetime-local" class="form-control border-form-modal" id="mealclockin" name="mealclockin"
-                          placeholder="Address">
+                         >
                           <label for="floatingInput">Clock In</label>
                         </div>
                     </div>
@@ -331,8 +331,7 @@
                   <div class="row g-3">
                     <div class="col">
                         <div class="form-floating">
-                          <input type="datetime-local" class="form-control border-form-modal" id="addmealclockin" name="addmealclockin"
-                          placeholder="Address" readonly>
+                          <input type="datetime-local" class="form-control border-form-modal" id="addmealclockin" name="addmealclockin" readonly>
                           <label for="floatingInput">Clock In</label>
                         </div>
                     </div>
@@ -346,12 +345,7 @@
                   </div>
                   <br>
                   <div class="row g-3">
-                    <div class="col">
-                      <label for="approverList">Authorized Approvers</label>
-                      <div class="form-floating">
-                        <ul id="approverList"></ul>
-                      </div>
-                    </div>                      
+                                         
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-select border-form-modal" id="addmealpayrolldate" name="addmealpayrolldate"
@@ -392,6 +386,15 @@
                   </div>
                   </div>
                   <br>
+                  <br>
+                  <div class="d-flex justify-content-end ml-auto">
+                   <div class="flex-column">
+                    <label for="approverList"><i>Authorized Approvers:</i></label>
+                    <div class="form-floating">
+                      <ul id="approverList" class="authorised-sign"></ul>
+                    </div>
+                   </div>
+                  </div>
                 </form>
               </div>
             </div>
