@@ -1,0 +1,142 @@
+<div class="row mt-4">
+  <div class="col-md-8">
+    <div class="card shadow mb-4 cardbody-size-710">
+      <div class="progress progress-sm-mb-2">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          style="width: 0%"
+          aria-valuenow="0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
+      <div class="card-header py-3 header-bg">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="mt-2 ml-3 font-weight-bold h4 label-title">
+              Undertime Request Table
+            </h6>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive scroll-cardbody-size-710 border">
+          <table
+            class="table table-bordered custom-mobile-table table-hover"
+            id="datatable"
+            width="100%"
+            cellspacing="10"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-3">
+    <div class="card shadow mb-4 cardbody-size-710">
+      <div class="card-header py-3 header-bg">
+        <h6 class="m-0 font-weight-bold-mt-2 label-title">
+          Add Undertime Request
+        </h6>
+      </div>
+
+      <div class="card-body extend bg-undertime">
+        <div class="row">
+          <div class="col-md">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Date</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Select Date"
+                name="attendancedate"
+                id="attendancedate"
+                type="date"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Clock In</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                name="clockin"
+                id="clockin"
+                type="datetime-local"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Clock Out</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                name="clockout"
+                id="clockout"
+                type="datetime-local"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Reason</span>
+              </div>
+              <textarea
+                name="reason"
+                id="reason"
+                class="form-control"
+                cols="30"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="row justify-content-end">
+          <div class="col-12 text-right">
+            <button
+              type="button"
+              id="submitBtn"
+              class="btn btn-submit-dtr w-40"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
