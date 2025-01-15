@@ -35,9 +35,11 @@ router.get("/load", (req, res) => {
         master_ojt mo
     LEFT JOIN
         ojt_attendance oa ON mo.mo_id = oa.oa_ojtid
+    WHERE mo_status = 'Active'
     GROUP BY
         mo.mo_id, mo.mo_hours
         ORDER BY mo_startdate DESC
+    
         `;
 
     mysql

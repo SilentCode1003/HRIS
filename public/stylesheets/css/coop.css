@@ -339,7 +339,7 @@ body{
 }
 
 /* .teamlead-attendancecard, .missedlogcard {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
 } */
 
 /*
@@ -974,34 +974,40 @@ tr:hover {
 }
 
 .btn-logout-cancel {
-  background-color: #04a9be !important;
-  border: 2px solid #fcf7eb !important;
+  background-color: #219897 !important;
+  border: 2px solid white !important;
   color: white !important;
-  font-family: 'Arial';
   font-weight: bold !important;
-  letter-spacing: 1px;
-  font-size: 12px !important;
+  letter-spacing: 0.05em;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.375rem;
 }
 
 .btn-logout-cancel:hover {
-  background-color: #04a9be !important;
-  font-weight: bold;
+  background-color: #015f66 !important;
   transform: scale(1.1);
 }
 
 .btn-logout {
-  background-color: #FD5D5D !important;
-  border: 2px solid #fcf7eb !important;
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity)) !important;
+  letter-spacing: 0.05em;
+  border: 2px solid white !important;
   color: white !important;
-  font-family: 'Arial';
   font-weight: bold !important;
-  letter-spacing: 1px;
-  font-size: 12px !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.375rem;
 }
 
 .btn-logout:hover {
-  background-color: #ef3a3a !important;
-  font-weight: bold;
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity)) !important;
   transform: scale(1.1);
 }
 
@@ -1330,6 +1336,7 @@ tr:hover {
     flex-wrap: wrap;
     margin-top: 3%;
     margin-bottom: 2%;
+    align-items: center !important;
   }
 
   .emp-button {
@@ -1341,7 +1348,6 @@ tr:hover {
   }
 
 }
-
 
 /* mobile state */
 @media (max-width: 769px) {
@@ -1646,9 +1652,9 @@ a.leaflet-control-zoom-in:hover, a.leaflet-control-zoom-out:hover {
 } */
 
 .db-icon-hrmis {
-  width: 25px;
-  height: 25px; 
-  top: 3px;
+  width: 30px;
+  height: 30px; 
+  top: 5px;
 }
 
 .db-hrmis {
@@ -1903,9 +1909,9 @@ span.prev-bday, span.next-bday {
   margin-bottom: 5px !important;
 }
 
-/* div#nav-tab.nav.nav-tabs, .ch-generate {
+.ch-generate {
   background-color: #7a1818 !important;
-} */
+}
 
 
 .employee-label {
@@ -1992,7 +1998,7 @@ span.prev-bday, span.next-bday {
 .col-emp {
   border-bottom-left-radius: 6px !important;
   border-bottom-right-radius: 6px !important;
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   border: 2px solid #7a1818 !important;
 }
 
@@ -2114,6 +2120,20 @@ label.custom-cursor-default-hover #text {
   display: none !important;
 }
 
+.eportal-leave {
+  color: white !important;
+  background-color: transparent !important;
+  font-size: 13px !important;
+  font-family: 'Arial';
+  font-weight: bold !important;
+  margin: 4px;
+}
+
+.eportal-leave:hover {
+  background-color: white !important;
+  color: #7a1818 !important;
+}
+
 
 #nav-profile-tab.nav-link.generate-profile.active,
 #nav-payslip-tab.nav-link.generate-payslip.active,
@@ -2150,7 +2170,7 @@ label.custom-cursor-default-hover #text {
 
 #nav-attendance-tab.nav-link.teamlead-attendance,
 #nav-missed-logs-tab.nav-link.teamlead-misslog {
-  background-color: #fef8ea !important;
+  background-color: #fcf7eb !important;
   color: #7a1818 !important;
   border-top: 2px solid #d4be88 !important;
   border-left: 2px solid #d4be88 !important;
@@ -2159,7 +2179,7 @@ label.custom-cursor-default-hover #text {
 
 .missedlog-searchbar {
   border-radius: 6px;
-  border: 2px solid #fef8ea !important;
+  border: 2px solid #fcf7eb !important;
 }
 
 
@@ -2635,35 +2655,15 @@ div.drp-buttons {
 }
 
 .btn-out-body {
-  background-color: rgb(206, 3, 3) !important;
-  border: 2px solid rgb(248, 65, 65) !important;
-  color: white !important;
-  border-radius: 6px;
-  font-weight: bold;
-  padding: 5px;
-  font-size: 12px;
+  --tw-bg-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-bg-opacity)) !important;
+  font-weight: 800 !important;
 }
 
-/* .btn-logout-cancel {
-  background-color: rgb(6, 161, 244) !important;
-  color: white !important;
-  border: 1px solid rgb(4, 95, 145) !important;
-}
-
-.btn-logout-cancel:hover {
-  background-color: rgb(34, 129, 169) !important;
-  font-weight: bold;
-} */
-
-/* .btn-logout {
-  background-color: rgb(248, 65, 65) !important;
-  color: white !important;
-  border: 1px solid rgb(224, 35, 35) !important;
-}
-
-.btn-logout:hover {
-  background-color: rgb(225, 59, 59) !important;
-  font-weight: bold;
+/* .btn-out-body:hover {
+  --tw-bg-opacity: 1;
+    background-color: rgb(220 38 38 / var(--tw-bg-opacity)) !important;
+    transform: scale(1.1);
 } */
 
 .logout-footer {
@@ -2769,57 +2769,154 @@ div.drp-buttons {
 }
 
 /* Employee / Job Status */
-.regular-status, .active-status, .restday, .approved-status, .finished-status, .paid-status, .Claimed-status {
-    color: #0f8027 !important;
-    background-color: #aefcd7 !important;
-    border-radius: 6px;
-    padding: 6px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
-
-
-.inactive-status, .resigned-status, .rejected-status, .unpaid-status, .Unclaimed-status, .absent {
-  color: #800f0f !important;
-    background-color: #fcaeae !important;
-    border-radius: 6px;
-    padding: 5px;
-    text-transform: uppercase;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bold;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
-
-.probationary-status, .exempted, .lifted-status, .sss-idtype, .applied-status, .incoming-status, .normal-day {
-  color: #0f5c80 !important;
-  background-color: #aee3fc !important;
+.regular-status,
+.active-status,
+.restday,
+.approved-status,
+.finished-status,
+.paid-status,
+.Claimed-status {
+  color: #0f8027 !important;
+  background-color: #aefcd7 !important;
   border-radius: 6px;
   padding: 6px;
   text-transform: uppercase;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+
+.inactive-status,
+.resigned-status,
+.rejected-status,
+.unpaid-status,
+.Unclaimed-status,
+.absent {
+  color: #800f0f !important;
+  background-color: #fcaeae !important;
+  border-radius: 6px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   font-size: 12px;
   letter-spacing: 1px;
 }
 
-.project-based-status, .health-card-idtype, .cancelled-status, .idtype-text, .clear-status, .nonworking {
-  color: #0f8077 !important;
-    background-color: #aefcf5 !important;
-    border-radius: 6px;
-    padding: 6px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
+.probationary-status,
+.exempted,
+.lifted-status,
+.sss-idtype,
+.applied-status,
+.incoming-status,
+.normal-day {
+  color: #0f5c80 !important;
+  background-color: #aee3fc !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.on-leave-status {
+  color: #80380f !important;
+  background-color: #fccdae !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.missed-status {
+  color: #fdeb45 !important;
+  background-color: #a00404 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.specialholiday-status {
+  color: #ac1652 !important;
+  background-color: #FDCEDF !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.onleave-status {
+  color: #c2381f !important;
+  background-color: #FDDBBB !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.exempted-status {
+  color: #6a686d !important;
+  background-color: #EEEEEE !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.onleave-wo-pay {
+  color: #7469B6 !important;
+  background-color: #E5D9F2 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 
-.apprentice-status, .clear-status {
+
+.project-based-status,
+.health-card-idtype,
+.cancelled-status,
+.idtype-text,
+.clear-status,
+.nonworking {
+  color: #0f8077 !important;
+  background-color: #aefcf5 !important;
+  border-radius: 6px;
+  padding: 6px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+
+.apprentice-status,
+.clear-status {
   color: white !important;
   background-color: #f15c06 !important;
   border-radius: 5px;
@@ -2867,19 +2964,35 @@ div.drp-buttons {
   letter-spacing: 1px;
 }
 
-.terminated-status, .adjourned-status, .pending-status {
+.terminated-status,
+.adjourned-status,
+.pending-status
+ {
   color: #806f0f !important;
   background-color: #fcf4ae !important;
   border-radius: 6px;
   padding: 5px;
   text-transform: uppercase;
   font-weight: bold;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 12px;
   letter-spacing: 1px;
 }
 
-.end_of_contract-status, .regularholiday {
+.restday-ot-status {
+  color: #85586F !important;
+  background-color: #F2D1D1 !important;
+  border-radius: 6px;
+  padding: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.end_of_contract-status,
+.regularholiday {
   color: #55800f !important;
   background-color: #defcae !important;
   border-radius: 6px;
@@ -3398,36 +3511,82 @@ span#viewbtn {
   color:  white !important;
 }
 
+
+@keyframes move-gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.accesstype {
+  position: relative; /* Ensure proper positioning for the pseudo-element */
+  display: inline-block; /* Keeps the button size consistent */
+  border: 3px solid #7a1818 !important; /* Transparent border to show the gradient */
+  background: white !important; /* Button background */
+  color: white !important; /* Text color */
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 6px 12px; /* Adjust padding for better appearance */
+  margin: 1rem;
+  cursor: pointer;
+  overflow: hidden; /* Ensures the pseudo-element stays within bounds */
+  z-index: 1; /* Places the button above the pseudo-element */
+}
+
+.accesstype:before {
+  content: ''; /* Creates a visual element */
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 6px; /* Slightly larger than the button's border-radius */
+  background: linear-gradient(45deg, #520101, #ad0202, #5c0101); /* Apply gradient */
+  background-size: 400% 400%; /* Enlarges the gradient for smoother movement */
+  z-index: -1; /* Places behind the button content */
+  animation: move-gradient-border 3s linear infinite; /* Continuous animation */
+}
+
 /* category-text */
 .category-text {
-  height: 60px;
-  width: 60px;
+  height: 75px;
+  width: 75px;
   display: flex;
+  margin-left: 1rem;
 }
 
 .category-style {
   font-size: x-large;
   color: white !important;
-  font-weight: bold;
-  font-family: serif;
-align-items: center;
+  align-items: center;
   text-transform: uppercase;
   display: flex;
+  letter-spacing: 0.05em;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .category-color {
-  background-color: #009FBD !important;
-  padding: 6px;
-  border-radius: 6px !important;
-  border: 2px solid white !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 0.25rem !important;
   box-shadow: 0 4px 8px #918b8b !important;
 }
 
 .slash-category {
-  color: #009FBD !important;
+  color: #7a1818 !important;
   font-size: 35px;
   display: flex;
   align-items: center;
+  font-weight: 600;
 }
 
 .text-shadow2 {

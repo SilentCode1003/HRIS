@@ -7,9 +7,11 @@ const { SetMongo } = require("./routes/controller/mongoose");
 const cors = require("cors");
 const { eventlogger, logger } = require("./middleware/logger");
 const cron = require("node-cron");
-const { insertDailyAttendanceStatus } = require("./routes/repository/attendance_status");
-const swaggerDocs = require('./document/swagger');
-const swaggerUi = require('swagger-ui-express');
+const {
+  insertDailyAttendanceStatus,
+} = require("./routes/repository/attendance_status");
+const swaggerDocs = require("./document/swagger");
+const swaggerUi = require("swagger-ui-express");
 
 // Schedule the function to run every day at 23:59 (11:59 PM)
 cron.schedule("0 0 * * *", () => {
@@ -178,7 +180,6 @@ var official_business_request_activityRouter = require("./routes/official_busine
 
 //#endregion
 
-
 const verifyJWT = require("./middleware/authenticator");
 
 var app = express();
@@ -191,10 +192,12 @@ app.set("view engine", "ejs");
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 500000 })
+);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use((req, res, next) => {
   eventlogger(req, res, next);
@@ -216,6 +219,7 @@ app.use("/ojtprofile", ojtprofileRouter);
 app.use("/ojtreqabsent", ojtreqabsentRouter);
 app.use("/attendanceojt", attendanceojtRouter);
 app.use("/appsdetails", appsdetailsRouter);
+app.use("/geofencesettings", geofencesettingsRouter);
 app.use(verifyJWT);
 app.use("/index", indexRouter);
 app.use("/users", usersRouter);
@@ -263,7 +267,7 @@ app.use("/interest", interestRouter);
 app.use("/deposit", depositRouter);
 app.use("/member", memberRouter);
 app.use("/ojtuser", ojtuserRouter);
-app.use("/geofencesettings", geofencesettingsRouter);
+
 app.use("/salaryhistory", salaryhistoryRouter);
 app.use("/payslip", payslipRouter);
 app.use("/generatepayroll", generatepayrollRouter);
@@ -363,7 +367,6 @@ app.use("/teamleadobapprove", teamleadobapproveRouter);
 app.use("/obactivity", official_business_request_activityRouter);
 
 //#endregion
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

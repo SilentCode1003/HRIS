@@ -29,8 +29,7 @@
       </div>
       <div class="modal-body logout-body">
         <h5>
-          Select <span class="btn-out-body">Log Out</span> below if you are
-          ready to end your current session.
+          Click <span class="btn-out-body">Log Out</span> below when you're ready to end your session.
         </h5>
       </div>
       <div class="modal-footer logout-footer">
@@ -177,19 +176,52 @@
     });
   }
 
-  function toggleSidebarAndNavbar() {
-    $("body").toggleClass("sidebar-toggled"); // Toggle class for body
-    $(".sidebar").toggleClass("toggled"); // Toggle class for sidebar
-    // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
-    $(".navbar").toggleClass("navbar-toggled"); // Toggle class for navbar
-    $(".content").toggleClass("content-toggled"); // Toggle class for content
-  }
+//   function toggleSidebarAndNavbar() {
+//     $("body").toggleClass("sidebar-toggled"); // Toggle class for body
+//     $(".sidebar").toggleClass("toggled"); // Toggle class for sidebar
+//     // $('#accordionSidebar').toggleClass('toggled'); // Toggle class for sidebar container (if using SB Admin 2)
+//     $(".navbar").toggleClass("navbar-toggled"); // Toggle class for navbar
+//     $(".content").toggleClass("content-toggled"); // Toggle class for content
+//   }
 
-  $(document).ready(function () {
-    $("#sidebarToggleTop").on("click", function () {
-      toggleSidebarAndNavbar();
-    });
+//   $(document).ready(function () {
+//     $("#sidebarToggleTop").on("click", function () {
+//       toggleSidebarAndNavbar();
+//     });
+//   });
+
+
+
+function toggleSidebarAndNavbar() {
+  // Check if the sidebar is currently toggled
+  const isSidebarToggled = $(".sidebar").hasClass("toggled");
+
+  if (isSidebarToggled) {
+    // Sidebar is currently hidden, so show it
+    $("body").removeClass("sidebar-toggled");
+    $(".sidebar").removeClass("toggled");
+    $("#accordionSidebar").removeClass("toggled");
+    $(".navbar").removeClass("navbar-toggled"); // Reset navbar width
+    $(".content").removeClass("content-toggled"); // Adjust content width
+    $(".navbar").css("width", "calc(100% - 6.5rem)"); // Adjust navbar width for sidebar
+  } else {
+    // Sidebar is currently visible, so hide it
+    $("body").addClass("sidebar-toggled");
+    $(".sidebar").addClass("toggled");
+    $("#accordionSidebar").addClass("toggled");
+    $(".navbar").addClass("navbar-toggled");
+    $(".content").addClass("content-toggled");
+    $(".navbar").css("width", "100%"); // Set navbar to full width
+  }
+}
+
+$(document).ready(function () {
+  // Attach event listener to the toggle button
+  $("#sidebarToggleTop").on("click", function () {
+    toggleSidebarAndNavbar();
   });
+});
+
 </script>
 
 <!---Java Script for Topbar-->
