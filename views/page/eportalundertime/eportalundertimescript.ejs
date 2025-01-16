@@ -1,0 +1,164 @@
+<script>
+  $(document).ready(function () {
+    const table = $("#datatable tbody");
+
+    //#region Initialize Data
+    LoadTable();
+    LoadList();
+    //#endregion
+
+    //#region Event Listeners
+    $(document).on("click", "#submitBtn", function () {
+      let attendancedate = $("#attendancedate").val();
+      let clockin = $("#clockin").val();
+      let clockout = $("#clockout").val();
+      let reason = $("#reason").val();
+      let status = $("#status").val();
+      let subgroupid = $("#subgroupID").val();
+
+      console.log(clockin, clockout);
+
+      var message = "";
+
+      if (attendancedate == "") {
+        message += "attendancedate is required ";
+      }
+
+      if (clockin == "") {
+        message += "clockin is required ";
+      }
+
+      if (clockout == "") {
+        message += "clockout is required ";
+      }
+
+      if (reason == "") {
+        message += "reason is required ";
+      }
+
+      if (message !== "") {
+        warning("Required Fields", message);
+      } else {
+        Upsert(
+          "POST",
+          "/eportalundertime/save",
+          {
+            attendancedate: attendancedate,
+            clockin: clockin,
+            clockout: clockout,
+            reason: reason,
+            subgroupid: subgroupid,
+          },
+          function (result) {
+            if (result.msg === "success") {
+              success("Success", "Data Saved Successfully");
+              LoadTable();
+            } else {
+              warning("Error", result.msg);
+            }
+          }
+        );
+      }
+    });
+    //#endregion
+
+    //#region Functions
+    function LoadTable() {
+      FetchTableData("/eportalundertime/load", (result) => {
+        console.log(result);
+
+        PopulateTable(table, result);
+      });
+    }
+
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.id,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.attendance_date,
+              "data-label": "Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockin,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockout,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.reason,
+              "data-label": "Reason",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              class: "custom-mobile-align",
+              "data-label": "Status",
+            }).append(
+              $("<div>", { class: containerBackground }).append(
+                $("<span>", { text: item.status, class: statusBackground })
+              )
+            ),
+           
+          );
+          table.append(tr);
+        });
+      }
+    }
+
+    function LoadList() {
+      $.ajax({
+        type: "POST",
+        url: "/subgroup/getsubgroupbydepartment",
+        success: function (result) {
+          let activeData = [];
+          let dropdownID = "subgroupDropdown";
+          let inputID = "subgroup";
+          let hiddenID = "subgroupID";
+          let container = result.data;
+          console.log(container);
+          $.each(container, (key, item) => {
+            if (item.status != "resigned") {
+              let name = item.subgroupname;
+              let id = item.subgroupid;
+              activeData.push({
+                display: name,
+                value: id,
+              });
+            }
+          });
+          AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+        },
+        error: function (err) {
+          warning("Warning", err);
+        },
+      });
+    }
+    //#endregion
+  });
+</script>
