@@ -8,6 +8,7 @@ const REQUEST = {
   HD: "Holiday OT",
   RD: "Rest Day OT",
   OB: "Official Business",
+  UT: "Undertime",
 };
 
 exports.REQUEST = REQUEST;

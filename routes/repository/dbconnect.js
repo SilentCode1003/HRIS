@@ -11,7 +11,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("b65374b7eb304e48389357a0c0eda326d6934315ed328ae1dd539c66e6120c1a", (err, encrypted) => {
+Decrypter("d4baebbaa10ee721c442b0620a238c71", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -28,7 +28,7 @@ exports.CheckConnection = () => {
   connection.connect((error) => {
     if (error) {
       console.error("Error connection to MYSQL database: ", error);
-      logEvents(error,'sqlError.log');
+      logEvents(error, "sqlError.log");
       return;
     }
     console.log("MySQL database connection established successfully!");
@@ -50,7 +50,7 @@ exports.Select = (sql, callback) => {
       callback(null, results);
     });
   } catch (error) {
-    logEvents(error,'sqlError.log');
+    logEvents(error, "sqlError.log");
     console.log(error);
   }
 };
@@ -67,7 +67,7 @@ exports.Update = async (sql, data, callback) => {
       callback(null, `Rows affected: ${results.affectedRows}`);
     });
   } catch (error) {
-    logEvents(error,'sqlError.log');
+    logEvents(error, "sqlError.log");
   }
 };
 
@@ -106,7 +106,7 @@ exports.Insert = (stmt, todos, callback) => {
       // console.log(Row inserted: ${results.affectedRows});
     });
   } catch (error) {
-    logEvents(error,'sqlError.log');
+    logEvents(error, "sqlError.log");
     callback(error, null);
   }
 };
@@ -120,3 +120,16 @@ exports.InsertTable = (sql, data, callback) => {
     callback(null, result);
   });
 };
+
+//#region  Async Functions
+exports.Check = (sql) => {
+  return new Promise((resolve, reject) => {
+    this.Select(sql, (error, result) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(result);
+    });
+  });
+};
+//#endregion

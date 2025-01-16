@@ -19,6 +19,26 @@
             </h6>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <input type="text" id="search" class="form-control" placeholder="Input to search">
+          </div>
+          <div class="col-md-2">
+            <input type="date" id="datetime" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <select id="status" class="form-control">
+              <option value="">Select Status</option>
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+        </div>
       </div>
 
       <div class="card-body">
@@ -32,11 +52,11 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Employee</th>
                 <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
                 <th>Reason</th>
                 <th>Status</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -103,6 +123,34 @@
                 type="datetime-local"
               />
             </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Select Subgroup</span>
+              </div>
+              <input
+                autocomplete="off"
+                id="subgroup"
+                class="form-control"
+                placeholder="Select Subgroup"
+                type="text"
+                name="subgroup"
+              />
+              <input
+                autocomplete="off"
+                type="hidden"
+                id="subgroupID"
+                name="subgroupID"
+              />
+            </div>
+            <div
+              class="custom-dropdown cdw-tableoption"
+              id="subgroupDropdown"
+            ></div>
           </div>
         </div>
 
