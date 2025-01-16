@@ -7,7 +7,7 @@
 
     LoadTable();
     searchTable();
-    LoadPayrollDate();
+    //LoadPayrollDate();
     LoadEditEmp();
     LoadSubgroup();
 
@@ -121,24 +121,24 @@
       });
     }
 
-    function LoadPayrollDate() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreq",
-        success: function (result) {
-          var data = result.data;
+    // function LoadPayrollDate() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/setpayrolldate/loadreq",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#mealpayrolldate").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.payrolldate, item.payrolldate);
+    //         $(options).html(item.payrolldate);
+    //         $("#mealpayrolldate").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
     function LoadEditEmp() {
       $.ajax({
