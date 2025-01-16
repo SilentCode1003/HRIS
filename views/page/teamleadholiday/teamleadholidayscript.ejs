@@ -5,7 +5,7 @@
   $(document).ready(function () {
     LoadTable();
     searchTable();
-    LoadList();
+    //LoadList();
     LoadSubgroup();
 
     $(document).on("keyup", "#myInput", function () {
@@ -80,24 +80,24 @@
       });
     }
 
-    function LoadList() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreq",
-        success: function (result) {
-          var data = result.data;
+    // function LoadList() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/setpayrolldate/loadreq",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#holidaypayrolldate").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.payrolldate, item.payrolldate);
+    //         $(options).html(item.payrolldate);
+    //         $("#holidaypayrolldate").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
     function LoadSubgroup() {
       $.ajax({
