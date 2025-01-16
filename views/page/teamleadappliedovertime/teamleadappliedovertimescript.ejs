@@ -8,7 +8,7 @@
 
     LoadTable();
     searchTable();
-    LoadList();
+    //LoadList();
     LoadSubgroup();
     //LoadEditEmp();
 
@@ -125,24 +125,24 @@
       });
     }
 
-    function LoadList() {
-      $.ajax({
-        type: "GET",
-        url: "/setpayrolldate/loadreqbeforepayout",
-        success: function (result) {
-          var data = result.data;
+    // function LoadList() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/setpayrolldate/loadreqbeforepayout",
+    //     success: function (result) {
+    //       var data = result.data;
 
-          $.each(data, function (key, item) {
-            var options = new Option(item.payrolldate, item.payrolldate);
-            $(options).html(item.payrolldate);
-            $("#appliedpayrolldate").append(options);
-          });
-        },
-        error: function (result) {
-          alert("error: " + result.data);
-        },
-      });
-    }
+    //       $.each(data, function (key, item) {
+    //         var options = new Option(item.payrolldate, item.payrolldate);
+    //         $(options).html(item.payrolldate);
+    //         $("#appliedpayrolldate").append(options);
+    //       });
+    //     },
+    //     error: function (result) {
+    //       alert("error: " + result.data);
+    //     },
+    //   });
+    // }
 
     // function LoadEditEmp() {
     //   $.ajax({

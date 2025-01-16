@@ -1295,6 +1295,7 @@ router.post("/loadpayslip", verifyJWT, (req, res) => {
     p_suspension_pay,
     p_overall_netpay, 
     p_absent_deductions, 
+    p_leave_with_out_pay_deductions,
     p_wisp_deductions, 
     p_late_deductions, 
     p_sss_dedcutions, 
