@@ -1,0 +1,82 @@
+<br>
+
+<!-- Table -->
+
+<div class="card" id="tablecard">
+  <div class="card-header ch-coop">
+    <h3 class="title-card-table m-4" id="titleCard">Manual Regular Holiday</h3>
+    <div class="d-flex gap-4 m-2 mb-4 attendance-field">
+      <div class="col">
+        <input id='myInput' class="pl-2 font-weight-bold" type='text' placeholder="  Search....">
+      </div>
+      <div class="d-flex gap-4 attendance-field">
+        <div class="col" id="dynamicButtonContainer">
+          <div id="dynamicButton" class="d-flex justify-content-between">
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+  <div class="card m-4">
+    <div class="card-header ch-generate">
+      <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active eportal-leave" id="manualMemoTab" data-bs-toggle="tab"
+            data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+            aria-selected="true"><b>For Validation</b>
+          </button>
+          <button class="nav-link eportal-leave" id="automationTab" data-bs-toggle="tab"
+            data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+            aria-selected="false"><b>History</b>
+          </button>
+          </div>
+      </nav>
+    </div>
+    <!-- Tables  -->
+    <div class="card-body db-custom-cards">
+      <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <div class="row">
+                  <div class="col-xl-12 col-lg-12">
+                      <div class="card shadow mb-4">
+                          <table class="table table-light table-bordered" id="dataTableForValidation">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-1">ID</th>
+                                    <th>Employee</th>
+                                    <th>Holiday Name</th>
+                                    <th>Attendance Date</th>
+                                    <th>Payroll Date</th>
+                                    <th class="col-sm-1">Action</th>
+                                </tr>
+                            </thead>
+                        </table>   
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+          aria-labelledby="nav-profile-tab">
+          <div class="card-body">
+              <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-light table-bordered" id="dataTableHistory">
+                  <thead>
+                    <tr>
+                        <th class="col-sm-1">ID</th>
+                        <th>Employee</th>
+                        <th>Holiday Name</th>
+                        <th>Attendance Date</th>
+                        <th>Payroll Date</th>
+                        <th>Create By</th>
+                        <th>Create Date</th>
+                        <th class="col-sm-1">Action</th>
+                    </tr>
+                  </thead>
+              </table>
+              </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
