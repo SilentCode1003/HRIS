@@ -644,7 +644,7 @@ router.post("/clockout", verifyJWT, (req, res) => {
   const employee_id = req.body.employeeid;
   const { latitude, longitude } = req.body;
   const clockoutTime = moment().format("YYYY-MM-DD HH:mm:ss");
-  const geofenceid = req.body.geofenceid;
+  const geofenceid = req.body.geofenceid == undefined ? 0 : req.body.geofenceid;
 
   const checkExistingClockInQuery = `
     SELECT ma_employeeid, ma_attendancedate
@@ -665,7 +665,7 @@ router.post("/clockout", verifyJWT, (req, res) => {
 
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
-        const deviceout = getDeviceInformation(req.body.deviceout);
+        const deviceout = req.body.deviceout;
         let locationout = req.body.locationout;
 
         locationout = RemoveApostrophe(locationout);
