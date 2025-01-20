@@ -1,0 +1,528 @@
+<script>
+  $(document).ready(function () {
+    const manualMemoTab = $("#manualMemoTab");
+    const automationTab = $("#automationTab");
+    const dynamicButtonContainer = $("#dynamicButton");
+    const titleCard = $("#titleCard");
+
+    if (
+      manualMemoTab.length &&
+      automationTab.length &&
+      dynamicButtonContainer.length
+    ) {
+      console.log("Elements found: Adding event listeners.");
+
+      function updateButton(isManualMemo) {
+        if (isManualMemo) {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+                <label for="yearDropdownForValid" class="form-label">Select Year:</label>
+                <select id="yearDropdownForValid" class="form-select btn-load-color">
+                    <option value="" disabled selected>Select Year</option>
+                </select>
+            </div>
+            <div class="flex">
+                <label for="monthDropdownForValid" class="form-label">Select Month:</label>
+                <select id="monthDropdownForValid" class="form-select btn-add-color">
+                    <option value="" disabled selected>Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="flex">
+                <button id="selectAllButton" class="btn btn-primary btn-sm">
+                Select All
+                </button>
+            </div>
+            <div class="flex">
+                <button id="validateButton" class="btn btn-success btn-sm">
+                Validate
+                </button>
+            </div>
+        `);
+          titleCard.text("Manual Regular Holiday - For Validation");
+          console.log("Buttons set for Additional Adjustments.");
+
+          const yearDropdownForValid = document.getElementById(
+            "yearDropdownForValid"
+          );
+          const currentYear = new Date().getFullYear();
+          for (let year = currentYear - 10; year <= currentYear; year++) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            yearDropdownForValid.appendChild(option);
+          }
+        } else {
+          dynamicButtonContainer.html(`
+            <div class="flex">
+                <label for="yearDropdownForHistory" class="form-label">Select Year:</label>
+                <select id="yearDropdownForHistory" class="form-select btn-load-color">
+                    <option value="" disabled selected>Select Year</option>
+                </select>
+            </div>
+            <div class="flex">
+                <label for="monthDropdownForHistory" class="form-label">Select Month:</label>
+                <select id="monthDropdownForHistory" class="form-select btn-add-color">
+                    <option value="" disabled selected>Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+          `);
+          titleCard.text("Manual Regular Holiday - History");
+          console.log("Buttons set for Deductions Adjustments.");
+
+          const yearDropdownForHistory = document.getElementById(
+            "yearDropdownForHistory"
+          );
+          const currentYear = new Date().getFullYear();
+          for (let year = currentYear - 10; year <= currentYear; year++) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            yearDropdownForHistory.appendChild(option);
+          }
+        }
+      }
+
+      manualMemoTab.on("click", function () {
+        updateButton(true);
+      });
+
+      automationTab.on("click", function () {
+        updateButton(false);
+      });
+
+      updateButton(true);
+    } else {
+      console.error("One or more elements are missing:", {
+        manualMemoTab: manualMemoTab.length,
+        automationTab: automationTab.length,
+        dynamicButtonContainer: dynamicButtonContainer.length,
+      });
+    }
+
+    //#region Manual Holiday For Validation
+    LoadTable();
+
+    function LoadTable() {
+      $("#dataTableForValidation").DataTable({
+        destroy: true,
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "GET",
+        ajax: {
+          url: "/manual_regholiday/load",
+          dataSrc: (json) => {
+            var finalData = [];
+            var data = json.data;
+
+            console.log(data);
+
+            $.each(data, (key, item) => {
+              var action = `
+            <input type="checkbox" name="selectCheckbox" class="selectCheckbox" data-id="${item.id}" />
+          `;
+              finalData.push({
+                id: item.id,
+                fullname: item.fullname,
+                holiday_name: item.holiday_name,
+                attendancedate: item.attendancedate,
+                payrolldate: item.payrolldate,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "fullname" },
+          { data: "holiday_name" },
+          { data: "attendancedate" },
+          { data: "payrolldate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          $("#selectAllButton").data("checked", false);
+
+          // Select All/Unselect All Button Functionality
+          $("#selectAllButton").on("click", function () {
+            var isChecked = $(this).data("checked");
+
+            if (isChecked) {
+              // Unselect all checkboxes
+              $("input[name='selectCheckbox']").prop("checked", false);
+              $(this).text("Select All").data("checked", false); // Change button text to "Select All"
+            } else {
+              // Select all checkboxes
+              $("input[name='selectCheckbox']").prop("checked", true);
+              $(this).text("Unselect All").data("checked", true); // Change button text to "Unselect All"
+            }
+          });
+
+          // Change event when a checkbox is clicked
+          $(document).on("change", "input[name='selectCheckbox']", function () {
+            var selectedId = $(this).data("id");
+            console.log("Selected row ID:", selectedId);
+          });
+        },
+      });
+    }
+
+    $(document).on("change", "#monthDropdownForValid", function () {
+      var selectedMonth = $(this).val();
+      var selectedYear = $("#yearDropdownForValid").val();
+
+      LoadTableFilter(selectedYear, selectedMonth);
+    });
+
+    function LoadTableFilter(selectedYear, selectedMonth) {
+      var table = $("#dataTableForValidation").DataTable();
+      table.clear().destroy();
+      table = $("#dataTableForValidation").DataTable({
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/manual_regholiday/getotherpayroll",
+          data: {
+            year: selectedYear,
+            month: selectedMonth,
+          },
+          dataSrc: function (json) {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, function (key, item) {
+              var action = `
+            <input type="checkbox" name="selectCheckbox" class="selectCheckbox" data-id="${item.id}" />
+          `;
+              finalData.push({
+                id: item.id,
+                fullname: item.fullname,
+                holiday_name: item.holiday_name,
+                attendancedate: item.attendancedate,
+                payrolldate: item.payrolldate,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "id" },
+          { data: "fullname" },
+          { data: "holiday_name" },
+          { data: "attendancedate" },
+          { data: "payrolldate" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {
+          $("#selectAllButton").data("checked", false);
+          $("#selectAllButton")
+            .off("click")
+            .on("click", function () {
+              var isChecked = $(this).data("checked");
+
+              if (isChecked) {
+                $("input[name='selectCheckbox']").prop("checked", false);
+                $(this).text("Select All").data("checked", false);
+              } else {
+                $("input[name='selectCheckbox']").prop("checked", true);
+                $(this).text("Unselect All").data("checked", true);
+              }
+            });
+
+          $(document)
+            .off("change", "input[name='selectCheckbox']")
+            .on("change", "input[name='selectCheckbox']", function () {
+              var selectedId = $(this).data("id");
+              console.log("Selected row ID:", selectedId);
+            });
+        },
+      });
+    }
+
+    $("#validateButton").on("click", function () {
+      var selectedData = [];
+
+      $("input[name='selectCheckbox']:checked").each(function () {
+        var rowData = {
+          gpid: $(this).data("id"),
+          fullname: $(this).closest("tr").find("td:nth-child(2)").text().trim(),
+          holidayname: $(this)
+            .closest("tr")
+            .find("td:nth-child(3)")
+            .text()
+            .trim(),
+          attendancedate: $(this)
+            .closest("tr")
+            .find("td:nth-child(4)")
+            .text()
+            .trim(),
+          payrolldate: $(this)
+            .closest("tr")
+            .find("td:nth-child(5)")
+            .text()
+            .trim(),
+        };
+
+        selectedData.push(rowData);
+      });
+
+      if (selectedData.length === 0) {
+        swal("Error", "No records selected for validation.", "error");
+        return;
+      }
+
+      let detailsList = selectedData
+        .map(
+          (data, index) =>
+            `<strong>${index + 1}.</strong> Name: ${data.fullname}, Holiday: ${
+              data.holidayname
+            }`
+        )
+        .join("<br>");
+
+      const contentDiv = document.createElement("div");
+      contentDiv.innerHTML = `
+            <div style="text-align:left;">
+            The following employee have been selected for entittled Regular Holiday:<br><br>
+            ${detailsList}
+            </div>
+        `;
+
+      swal({
+        title: "Confirm Validation",
+        content: contentDiv,
+        icon: "info",
+        buttons: {
+          cancel: "Cancel",
+          confirm: {
+            text: "Confirm",
+            value: true,
+          },
+        },
+        dangerMode: false,
+      }).then((willConfirm) => {
+        if (willConfirm) {
+          $.ajax({
+            url: "/manual_regholiday/updategpstatus",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(selectedData),
+            success: function (response) {
+              if (response.msg === "success") {
+                swal(
+                  "Success",
+                  "Selected records have been validated successfully.",
+                  "success"
+                ).then(() => {
+                  LoadTable();
+                });
+              } else {
+                swal("Error", "An error occurred during validation.", "error");
+              }
+            },
+            error: function (xhr, msg, error) {
+              console.error("API call error: ", error);
+              swal(
+                "Error",
+                "An error occurred while validating the records.",
+                "error"
+              );
+            },
+          });
+        }
+      });
+    });
+
+    //#endregion
+
+    //#region Manual Holiday History
+
+    $(document).on("click", "#automationTab", function () {
+      console.log("Hit");
+      $("#dataTableHistory").find("tr:gt(0)").remove();
+      $("#LoadTable").empty();
+      $("#LoadTableFilter").empty();
+
+      $.ajax({
+        type: "GET",
+        url: "/manual_regholiday/loadhistory",
+        success: function (json) {
+          var finalData = [];
+          var data = json.data;
+          console.log(finalData);
+
+          var material_list_tbl = document.getElementById("dataTableHistory");
+
+          $.each(data, function (key, item) {
+            var row = material_list_tbl.insertRow(1);
+            var HISTORY_ID = row.insertCell(0);
+            var FULLNAME = row.insertCell(1);
+            var HOLIDAY_NAME = row.insertCell(2);
+            var ATTENDANCE_DATE = row.insertCell(3);
+            var PAYROLLDATE = row.insertCell(4);
+            var CREATE_BY = row.insertCell(5);
+            var CREATE_DATE = row.insertCell(6);
+            var ACTION = row.insertCell(7);
+
+            HISTORY_ID.innerHTML = item.history_id;
+            FULLNAME.innerHTML = item.employee;
+            HOLIDAY_NAME.innerHTML = item.holiday_name;
+            ATTENDANCE_DATE.innerHTML = item.attendance_date;
+            PAYROLLDATE.innerHTML = item.payroll_date;
+            CREATE_DATE.innerHTML = item.create_date;
+            CREATE_BY.innerHTML = item.create_by;
+            ACTION.innerHTML =
+              '<button id="viewBtn" class="btn text-primary view-btn"><i class="fas fa-fw fa-eye"></i></button>';
+            $.each(
+              [
+                HISTORY_ID,
+                FULLNAME,
+                HOLIDAY_NAME,
+                ATTENDANCE_DATE,
+                PAYROLLDATE,
+                CREATE_BY,
+                CREATE_DATE,
+                ACTION,
+              ],
+              function (_, cell) {
+                cell.style.textAlign = "center";
+                cell.style.verticalAlign = "middle";
+              }
+            );
+          });
+
+          $("#dataTablePayrollDeductions").on("click", "tr", function () {
+            var dataRow = [];
+            $(this)
+              .find("td")
+              .each(function () {
+                dataRow.push($(this).text());
+              });
+            adjustmentid = dataRow[0];
+            console.log("Selected Leave ID:", adjustmentid);
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching approved leaves:", status, error);
+        },
+      });
+    });
+
+    $(document).on("change", "#monthDropdownForHistory", function () {
+      var selectedMonth = $(this).val();
+      var selectedYear = $("#yearDropdownForHistory").val();
+
+      LoadHistory(selectedYear, selectedMonth);
+    });
+
+    function LoadHistory(selectedYear, selectedMonth) {
+      var table = $("#dataTableHistory").DataTable();
+      table.clear().destroy();
+      table = $("#dataTableHistory").DataTable({
+        processing: true,
+        serverSide: true,
+        paging: false,
+        searching: false,
+        info: false,
+        scrollY: 600,
+        scrollCollapse: true,
+        serverMethod: "POST",
+        ajax: {
+          url: "/manual_regholiday/loadhistoryfilter",
+          data: {
+            year: selectedYear,
+            month: selectedMonth,
+          },
+          dataSrc: function (json) {
+            var finalData = [];
+            var data = json.data;
+
+            $.each(data, function (key, item) {
+              var action = `<button id="viewBtn" class="btn text-primary view-btn"><i class="fas fa-fw fa-eye"></i></button>`;
+              finalData.push({
+                history_id: item.history_id,
+                employee: item.employee,
+                holiday_name: item.holiday_name,
+                attendance_date: item.attendance_date,
+                payroll_date: item.payroll_date,
+                create_date: item.create_date,
+                create_by: item.create_by,
+                action: action,
+              });
+            });
+
+            return finalData;
+          },
+        },
+        columns: [
+          { data: "history_id" },
+          { data: "employee" },
+          { data: "holiday_name" },
+          { data: "attendance_date" },
+          { data: "payroll_date" },
+          { data: "create_date" },
+          { data: "create_by" },
+          { data: "action" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+          $("td", row).each(function (index) {
+            this.style.textAlign = "center";
+            this.style.verticalAlign = "middle";
+          });
+        },
+        initComplete: function () {},
+      });
+    }
+    //#endregion
+  });
+</script>
