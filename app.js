@@ -178,6 +178,7 @@ var teamleadobappliedRouter = require("./routes/teamleadobapplied");
 var teamleadobapproveRouter = require("./routes/teamleadobapprove");
 var official_business_request_activityRouter = require("./routes/official_business_request_activity");
 var manual_regholidayRouter = require("./routes/manual_regholiday");
+var payslipsummaryRouter = require("./routes/payslipsummary");
 
 //#endregion
 
@@ -367,6 +368,7 @@ app.use("/teamleadobapplied", teamleadobappliedRouter);
 app.use("/teamleadobapprove", teamleadobapproveRouter);
 app.use("/obactivity", official_business_request_activityRouter);
 app.use("/manual_regholiday", manual_regholidayRouter);
+app.use("/payslipsummary", payslipsummaryRouter);
 
 //#endregion
 
