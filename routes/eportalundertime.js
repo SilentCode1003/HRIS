@@ -133,7 +133,7 @@ router.post("/save", (req, res) => {
             },
           ];
 
-          // SendEmailNotification(employeeid, subgroupid, REQUEST.UT, emailbody);
+          SendEmailNotification(employeeid, subgroupid, REQUEST.UT, emailbody);
 
           res.status(200).json(JsonSuccess());
         });
