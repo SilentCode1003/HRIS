@@ -2,6 +2,7 @@
   $(document).ready(function () {
     const table = $("#datatable tbody");
 
+
     //#region Initialize Data
     LoadTable();
     LoadList();
@@ -53,13 +54,64 @@
             if (result.msg === "success") {
               success("Success", "Data Saved Successfully");
               LoadTable();
-            } else {
-              warning("Error", result.msg);
+            }
+
+            if (result.msg === "exist") {
+              warning("Request Already Exist", `Request with date ${attendancedate} already exist`);
             }
           }
         );
       }
     });
+   
+    $(document).on("change", "#status", function () {
+      let targetDate = $("#datetime").val();
+      let status = $(this).val();
+
+      console.log(targetDate, status);
+      
+
+      if(targetDate === undefined){
+        warning("Required Fields", "Date is required");
+        return;
+      }
+
+      if(status === undefined){
+        warning("Required Fields", "Status is required");
+        return;
+      }
+      
+      
+      FetchTableData(`/eportalundertime/load/${targetDate}/${status}`, (result) => {
+        console.log(result);
+
+        PopulateTable(table, result);
+      });
+    });
+
+    $(document).on("change", "#datetime", function () {
+      let status = $("#status").val();
+      let targetDate = $(this).val();
+
+      if(targetDate === undefined){
+        warning("Required Fields", "Date is required");
+        return;
+      }
+
+      if(status === undefined){
+        warning("Required Fields", "Status is required");
+        return;
+      }
+      
+      
+      FetchTableData(`/eportalundertime/load/${targetDate}/${status}`, (result) => {
+        console.log(result);
+
+        PopulateTable(table, result);
+      });
+    });
+
+
     //#endregion
 
     //#region Functions
@@ -159,6 +211,10 @@
         },
       });
     }
+
+    $("#search-input").on("input", function () {
+      filterTableRows("#datatable", 6, "#search-input");
+    });
     //#endregion
   });
 </script>
