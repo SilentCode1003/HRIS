@@ -1,0 +1,149 @@
+<script>
+  $(document).ready(function () {
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1;
+    const table = $("#datatable tbody");
+
+    function LoadTable() {
+      FetchTableData(
+        `/payslipsummary/getallpayslip/${currentYear}/${currentMonth
+          .toString()
+          .padStart(2, "0")}`,
+        (result) => {
+          PopulateTable(table, result);
+
+          console.log(result);
+        }
+      );
+    }
+
+    $("#month").change(function () {
+      currentYear = $("#year").val();
+      currentMonth = $("#month").val();
+      LoadTable();
+    });
+
+    $("#year").change(function () {
+      currentYear = $("#year").val();
+      currentMonth = $("#month").val();
+      LoadTable();
+    });
+
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 6,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          action = /*html*/ `<button id="editBtn" class="btn text-secodary" name="editBtn" data-bs-toggle="modal" data-bs-target="#payrollmodal"><i class="fas fa-fw fa-download"></i></button>`;
+
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.fullname,
+              "data-label": "Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.payrolltype,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.overall_netpay,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.total_deductions,
+              "data-label": "Reason",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.total_netpay,
+              "data-label": "Reason",
+              class: "custom-mobile-align",
+            }),
+
+            $("<td>", {
+              html: action,
+              "data-label": "Reason",
+              class: "custom-mobile-align",
+            })
+          );
+          table.append(tr);
+        });
+      }
+    }
+
+    //#region Date Picker
+    let selectedYear = new Date().getFullYear();
+
+    function updateYearOptions() {
+      const currentMonth = new Date().getMonth() + 1;
+      const selectedMonth = parseInt(document.getElementById("month").value);
+      const yearSelect = document.getElementById("year");
+      const currentYear = new Date().getFullYear() - 1;
+      const maxYear = currentYear + 20;
+
+      yearSelect.innerHTML = "";
+
+      let yearToSelect = selectedYear; // Store the year to select (might change below)
+
+      for (let year = currentYear; year <= maxYear; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+
+        if (year === currentYear && selectedMonth < currentMonth) {
+          option.disabled = true;
+
+          if (year === selectedYear && option.disabled) {
+            yearToSelect = year + 1; // If selected year is disabled, set the yearToSelect to the next available year
+          }
+        }
+
+        yearSelect.appendChild(option);
+      }
+
+      yearSelect.value = yearToSelect;
+      selectedYear = yearToSelect;
+      document.getElementById("selectedYear").value = yearToSelect;
+    }
+
+    function updateMonthOptions() {
+      const monthSelect = document.getElementById("month");
+      const currentMonth = new Date().getMonth() + 1;
+      monthSelect.value = currentMonth;
+    }
+
+    function updateSelectedYear() {
+      selectedYear = parseInt(document.getElementById("year").value);
+      document.getElementById("selectedYear").value = selectedYear;
+    }
+
+    // Initialize
+    updateMonthOptions();
+    updateYearOptions();
+    LoadTable();
+    //#endregion
+  });
+</script>

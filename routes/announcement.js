@@ -88,7 +88,6 @@ router.get("/load", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
-  console.log("SAVE");
   try {
     let image = req.body.image;
     let tittle = req.body.tittle;
@@ -99,11 +98,6 @@ router.post("/save", (req, res) => {
     let createby = req.session.fullname;
     let createdate = GetCurrentDatetime();
     let status = "Active";
-
-    console.log(image);
-    console.log(req.body,'body');
-    
-    
 
     let sql = InsertStatement("master_bulletin", "mb", [
       "image",
@@ -116,9 +110,6 @@ router.post("/save", (req, res) => {
       "createdate",
       "status",
     ]);
-
-    console.log(sql);
-    
 
     let data = [
       [
@@ -134,8 +125,7 @@ router.post("/save", (req, res) => {
       ],
     ];
 
-    console.log(data);
-    
+
     let checkStatement = SelectStatement(
       "select * from master_bulletin where mb_tittle=? and mb_type=? and mb_targetdate=? and mb_status",
       [tittle, type, targetdate, status]

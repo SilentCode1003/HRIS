@@ -90,6 +90,9 @@ router.post("/getrdotapproval", (req, res) => {
       master_employee ON restday_ot_approval.roa_employeeid = me_id
       WHERE roa_rdotid = '${rdotid}'`;
 
+      console.log(sql);
+      
+
     Select(sql, (err, result) => {
       if (err) {
         console.error(err);

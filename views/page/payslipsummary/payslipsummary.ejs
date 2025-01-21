@@ -1,0 +1,100 @@
+<div class="card">
+    <div class="progress progress-sm-mb-2">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          style="width: 0%"
+          aria-valuenow="0"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
+  <div class="card-header py-3 header-bg">
+    <div class="row">
+      <div class="col-md-2">
+        <h6 class="mt-2 ml-3 font-weight-bold h4 label-title">
+          Payslip Summary
+        </h6>
+      </div>
+      <div class="col-md-2">
+        <input
+          type="text"
+          id="search"
+          class="form-control"
+          placeholder="Search Employee"
+          autocomplete="off"
+        />
+      </div>
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md">
+            <div class="input-group">
+              <div class="inout-group-append">
+                <span class="input-group-text select-dtrtable">Year</span>
+              </div>
+
+              <select
+                id="year"
+                class="form-control"
+              ></select>
+              <input type="hidden" id="selectedYear" name="selectedYear" />
+            </div>
+          </div>
+
+          <div class="col md">
+            <div class="input-group">
+              <div class="inout-group-append">
+                <span class="input-group-text select-dtrtable">Month</span>
+              </div>
+              <select
+                id="month"
+               
+                class="form-control"
+              >
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <button
+          type="button"
+          id="exportBtn"
+          class="btn btn-add-color w-40"
+        >
+        <i class="fas fa-file-excel"></i>
+          Export to Excel
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-resposive scroll-cardbody-size-710 border">
+      <table class="table table-bordered custom-mobile-table table-hover" id="datatable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Employee Name</th>
+            <th>Payroll Type</th>
+            <th>Total Compensation</th>
+            <th>Total Deduction</th>
+            <th>Total Net</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
