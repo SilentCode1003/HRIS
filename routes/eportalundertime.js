@@ -39,7 +39,19 @@ router.get("/load", (req, res) => {
     const employeeid = req.session.employeeid;
 
     let sql = SelectStatement(
-      "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ?",
+      `select ur_id,
+      ur_id,
+      ur_employee_id,
+      ur_attendance_date,
+      ur_subgroup_id,
+      REPLACE(REPLACE(ur_clockin, 'T', ' '), 'Z', '') as ur_clockin,
+      REPLACE(REPLACE(ur_clockout, 'T', ' '), 'Z', '') as ur_clockout,
+      ur_applied_date,
+      ur_reason,
+      ur_status
+      from undertime_request 
+      where ur_employee_id = ? 
+      and ur_attendance_date between ? and ?`,
       [employeeid, startDate, endDate]
     );
 
@@ -73,7 +85,7 @@ router.post("/save", (req, res) => {
       );
 
       let check_result = await Check(check_sql);
-      console.log(check_result);
+      console.log(check_result.length);
 
       let insert_sql = InsertStatement("undertime_request", "ur", [
         "employee_id",
@@ -87,19 +99,21 @@ router.post("/save", (req, res) => {
         "applied_date",
       ]);
 
-      let insert_data = [[
-        employeeid,
-        attendancedate,
-        clockin,
-        clockout,
-        reason,
-        subgroupid,
-        status,
-        0,
-        GetCurrentDatetime(),
-      ]];
+      let insert_data = [
+        [
+          employeeid,
+          attendancedate,
+          clockin,
+          clockout,
+          reason,
+          subgroupid,
+          status,
+          0,
+          GetCurrentDatetime(),
+        ],
+      ];
 
-      if (check_result) {
+      if (check_result.length == 0) {
         Insert(insert_sql, insert_data, (error, result) => {
           if (error) {
             console.log(error);
@@ -119,7 +133,7 @@ router.post("/save", (req, res) => {
             },
           ];
 
-          SendEmailNotification(employeeid, subgroupid, REQUEST.UT, emailbody);
+          // SendEmailNotification(employeeid, subgroupid, REQUEST.UT, emailbody);
 
           res.status(200).json(JsonSuccess());
         });
@@ -129,6 +143,54 @@ router.post("/save", (req, res) => {
     }
 
     ProcessData();
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/load/:date/:status", (req, res) => {
+  try {
+    const { date, status } = req.params;
+    const employeeid = req.session.employeeid;
+    let sqlStatement  = "select * from undertime_request where ur_employee_id = ?";
+    let whereParams = [];
+
+    whereParams.push(employeeid);
+
+    if (date) {
+      sqlStatement += " and ur_attendance_date = ?";
+      whereParams.push(date);
+    }
+
+    if (status) {
+      if(status === "all") {}
+      else {
+        sqlStatement += " and ur_status = ?";
+        whereParams.push(status);
+      }
+    }
+
+
+    let sql = SelectStatement(
+      sqlStatement,
+      whereParams
+    );
+
+    console.log(sql);
+    
+
+    Select(sql, (error, result) => {
+      if (error) {
+        res.status(500).json(JsonErrorResponse(error));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "ur_");
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
   } catch (error) {
     res.status(500).json(JsonErrorResponse(error));
   }
