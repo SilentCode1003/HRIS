@@ -63,7 +63,6 @@ router.get("/load", (req, res) => {
     }
   });
 
-
   router.post("/viewactualrd", (req, res) => {
     try {
       let employeeid = req.body.employeeid;

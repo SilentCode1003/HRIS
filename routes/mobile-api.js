@@ -4957,7 +4957,7 @@ router.post("/addrequstot", verifyJWT, (req, res) => {
     '${overtimeimage}',
     '${deviceaction}',
     '${applieddate}',
-    '${reason}',
+    '${RemoveApostrophe(reason)}',
     '${approvecount}')`;
 
     let validationQuery1 = SelectStatement(
@@ -5045,7 +5045,7 @@ router.post("/update", verifyJWT, (req, res) => {
       '${overtimeimage}',
       '${deviceaction}',
       '${applieddate}',
-      '${reason}',
+      '${RemoveApostrophe(reason)}',
       ${approvecount},
       '${approveot_id}')`;
 
