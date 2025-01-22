@@ -2165,6 +2165,105 @@
 
     //#endregion
 
+    //miss logs
+    $(document).on("click", "#nav-misslog-tab", function () {
+      $("#datatable-misslogs").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "GET",
+        url: "/teamleadindex/loadmisslogs",
+        success: function (result) {
+          var finalData = [];
+          var data = result.data;
+
+          if (result.msg === "success") {
+            let datatable = document.getElementById("datatable-misslogs");
+            var totalLATE = data.length;
+
+            $.each(data, function (key, item) {
+              console.log(item);
+
+              var row = datatable.insertRow(1);
+              var id = row.insertCell(0);
+              var employeeid = row.insertCell(1);
+              var fullname = row.insertCell(2);
+              var attendancedate = row.insertCell(3);
+              var clockin = row.insertCell(4);
+              var locationin = row.insertCell(5);
+              var devicein = row.insertCell(6);
+              var clockout = row.insertCell(7);
+              var locationout = row.insertCell(8);
+              var deviceout = row.insertCell(9);
+
+              id.innerHTML = item.attendanceid;
+              employeeid.innerHTML = item.employeeid;
+              fullname.innerHTML = item.fullname;
+              attendancedate.innerHTML = item.attendancedate;
+              clockin.innerHTML = item.clockin;
+              locationin.innerHTML = item.locationIn;
+              devicein.innerHTML = item.devicein;
+              clockout.innerHTML = item.clockout;
+              locationout.innerHTML = item.locationOut;
+              deviceout.innerHTML = item.deviceout;
+            });
+
+            $("#loadamisslogBadge").text(totalLATE);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    });
+    //#endregion
+
+    //restay logs
+    $(document).on("click", "#nav-restdaywithlog-tab", function () {
+      $("#datatable-restdaylogs").find("tr:gt(0)").remove();
+      $.ajax({
+        type: "GET",
+        url: "/teamleadindex/loadrestdaylogs",
+        success: function (result) {
+          var finalData = [];
+          var data = result.data;
+
+          if (result.msg === "success") {
+            let datatable = document.getElementById("datatable-restdaylogs");
+            var totalLATE = data.length;
+
+            $.each(data, function (key, item) {
+              console.log(item);
+
+              var row = datatable.insertRow(1);
+              var attendance = row.insertCell(0);
+              var employeeid = row.insertCell(1);
+              var fullname = row.insertCell(2);
+              var daytype = row.insertCell(3);
+              var clockin = row.insertCell(4);
+              var clockout = row.insertCell(5);
+              var originalrestday = row.insertCell(6);
+              var alterrestday = row.insertCell(7);
+             
+
+              attendance.innerHTML = item.attendacedate;
+              employeeid.innerHTML = item.id;
+              fullname.innerHTML = item.employee;
+              daytype.innerHTML = item.day_type;
+              clockin.innerHTML = item.clockin;
+              clockout.innerHTML = item.clockout;
+              originalrestday.innerHTML = item.original_rest_day;
+              alterrestday.innerHTML = item.alter_rest_day;
+            });
+
+            $("#restwithlogsBadge").text(totalLATE);
+          }
+        },
+        error: function (err) {
+          console.error("AJAX error:", err.statusText);
+        },
+      });
+    });
+    //#endregion
+
     async function LoadCards() {
       await loadCOAcard();
       await loadOvertimeCard();

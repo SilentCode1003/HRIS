@@ -1,11 +1,11 @@
 <!-- Begin Page Content -->
-<br>
+<br />
 <div class="d-flex welcome-text">
   <span class="category-style">
     <b class="category-color accesstype">Team Lead</b>
   </span>
   <!-- <span class="slash-category ml-4">||</span> -->
-  <span class="text-shadow2 ">
+  <span class="text-shadow2">
     <span> Welcome back, <%= fullname %>!</span>
     <img
       src="./images/img/db-icon.gif"
@@ -15,7 +15,7 @@
   </span>
 </div>
 
-<br>
+<br />
 <div class="container-fluid">
   <div class="row g-4 mt-4">
     <!-- First Card Row -->
@@ -1148,7 +1148,7 @@
                 </button>
                 <button
                   class="nav-link requestleave-db"
-                  id="nav-leave-tab"
+                  id="nav-misslog-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#nav-missedlogs"
                   type="button"
@@ -1159,6 +1159,23 @@
                   <b>MISSED LOGS</b>
                   <span
                     id="missedlogsBadge"
+                    class="position-sticky translate-middle badge badge-danger"
+                  >
+                  </span>
+                </button>
+                <button
+                  class="nav-link requestleave-db"
+                  id="nav-restdaywithlog-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-restwithlogs"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-home"
+                  aria-selected="false"
+                >
+                  <b>RESTDAY WITH LOGS</b>
+                  <span
+                    id="restwithlogsBadge"
                     class="position-sticky translate-middle badge badge-danger"
                   >
                   </span>
@@ -1288,10 +1305,73 @@
               >
                 <div class="card-body">
                   <div class="box shadow-sm rounded bg-white mb-3">
-                    <div class="box-title border-bottom p-3">
-                      <h6 class="m-0">Recent</h6>
+                    <div class="box-body p-0">
+                      <div class="row">
+                        <div class="card-body">
+                          <div class="tableresposive">
+                            <table
+                              class="table table-light table-bordered"
+                              id="datatable-misslogs"
+                            >
+                              <thead>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Employee ID</th>
+                                  <th>Employee Name</th>
+                                  <th>Attendance Date</th>
+                                  <th>Clock In</th>
+                                  <th>Location In</th>
+                                  <th>Device In</th>
+                                  <th>Clock Out</th>
+                                  <th>Location Out</th>
+                                  <th>Device Out</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="box-body p-0"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RESTDAY WITH ATTENDANCE LOGS -->
+              <div
+                class="tab-pane fade"
+                id="nav-restwithlogs"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <div class="card-body">
+                  <div class="box shadow-sm rounded bg-white mb-3">
+                    <div class="box-body p-0">
+                      <div class="row">
+                        <div class="card-body">
+                          <div class="tableresposive">
+                            <table
+                              class="table table-light table-bordered"
+                              id="datatable-restdaylogs"
+                            >
+                              <thead>
+                                <tr>
+                                  <th>Attendance Date</th>
+                                  <th>Employee ID</th>
+                                  <th>Employee Name</th>
+                                  <th>Day Type</th>
+                                  <th>Clock In</th>
+                                  <th>Clock Out</th>
+                                  <th>Original Restday</th>
+                                  <th>Alter Restday</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

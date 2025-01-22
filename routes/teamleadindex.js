@@ -10,7 +10,11 @@ const {
 const { DataModeling } = require("./model/hrmisdb");
 const { de } = require("date-fns/locale");
 const { REQUEST_STATUS } = require("./repository/enums");
-const { SelectStatement } = require("./repository/customhelper");
+const {
+  SelectStatement,
+  GetCurrentMonthFirstDay,
+  GetCurrentMonthLastDay,
+} = require("./repository/customhelper");
 var router = express.Router();
 //const currentDate = moment();
 
@@ -775,5 +779,80 @@ router.get("/countobcard", (req, res) => {
     });
   } catch (error) {
     res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/loadmisslogs", (req, res) => {
+  try {
+    const first_day_of_month = GetCurrentMonthFirstDay();
+    const last_day_of_month = GetCurrentMonthLastDay();
+    const duration = 22;
+    let sql = SelectStatement(
+      `select 
+      ma_attendanceid,
+      ma_employeeid,
+      concat(me_lastname,' ',me_firstname) as ma_fullname,
+      ma_attendancedate,
+      REPLACE(REPLACE(ma_clockin, 'T', ' '), 'Z', '') as ma_clockin,
+      ma_locationIn,
+      ma_devicein,
+      REPLACE(REPLACE(ma_clockout, 'T', ' '), 'Z', '') as ma_clockout,
+      ma_locationOut,
+      ma_deviceout
+      from master_attendance
+      inner join master_employee on ma_employeeid = me_id and me_department = ${req.session.departmentid}
+      where timestampdiff(HOUR, ma_clockin, ma_clockout) > ?
+      and ma_attendancedate between ? and ?
+      order by ma_attendancedate desc`,
+      [duration, `${first_day_of_month}`, `${last_day_of_month}`]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({
+          msg: err,
+        });
+        return;
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "ma_");
+        res.status(200).json({
+          msg: "success",
+          data: data,
+        });
+      } else {
+        res.status(200).json({
+          msg: "success",
+          data: result,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: error,
+    });
+  }
+});
+
+router.get("/loadrestdaylogs", (req, res) => {
+  try {
+    let sql = `call hrmis.GetListRestdayLogs('2024-12-11', '2024-12-25')`;
+
+    Select(sql, (error, result) => {
+      if (error) {
+        console.log(error);
+
+        res.status(500).json(JsonErrorResponse(error));
+      }
+
+      console.log(result);
+      
+
+      res.status(200).json(JsonDataResponse(result));
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
   }
 });

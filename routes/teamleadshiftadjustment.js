@@ -5,6 +5,7 @@ const { Validator } = require("./controller/middleware");
 const { Select } = require("./repository/dbconnect");
 const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
+const { GetCurrentMonthFirstDay, GetCurrentMonthLastDay } = require("./repository/customhelper");
 var router = express.Router();
 const currentDate = moment();
 
@@ -24,19 +25,24 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
     try {
+
+      const startdate = GetCurrentMonthFirstDay();
+      const enddate = GetCurrentMonthLastDay();
       let departmentid = req.session.departmentid; 
       let sql = `SELECT 
-      cs_id,
-      concat(me_lastname,' ',me_firstname) as cs_fullname,
-      cs_actualrd,
-      cs_changerd,
-      cs_createby,
-      cs_shiftstatus
-      FROM change_shift
-      INNER JOIN master_employee on change_shift.cs_employeeid = me_id
-      WHERE me_department = '${departmentid}'
-      AND cs_employeeid NOT IN (
-          SELECT tu_employeeid FROM teamlead_user)`;
+                cs_id,
+                concat(me_lastname,' ',me_firstname) as cs_fullname,
+                cs_actualrd,
+                cs_changerd,
+                cs_createby,
+                cs_shiftstatus
+                FROM change_shift
+                INNER JOIN master_employee on change_shift.cs_employeeid = me_id
+                WHERE me_department = '${departmentid}'
+                AND cs_employeeid NOT IN (
+                SELECT tu_employeeid FROM teamlead_user)
+                AND cs_actualrd BETWEEN '${startdate}' AND '${enddate}'
+                ORDER BY cs_id DESC`;
   
       Select(sql, (err, result) => {
         if (err) {
@@ -56,7 +62,6 @@ router.get("/load", (req, res) => {
       res.json(JsonErrorResponse(err));
     }
   });
-
 
   router.post("/viewactualrd", (req, res) => {
     try {
