@@ -7,30 +7,16 @@
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
           <span class="input-group-text bank-btn" id="basic-addon1">Route</span>
-          <input
-            id="route"
-            name="route"
-            type="text"
-            class="form-control border-form-modal"
-            placeholder="Route Name"
-            aria-label="Route Name"
-            aria-describedby="basic-addon1"
-          />
+          <input id="route" name="route" type="text" class="form-control border-form-modal" placeholder="Route Name"
+            aria-label="Route Name" aria-describedby="basic-addon1" />
         </div>
       </div>
 
       <div class="col-sm-12 col-lg-6 col-xl-6">
         <div class="input-group mb-3">
           <span class="input-group-text bank-btn" id="basic-addon2">Layout</span>
-          <input
-            id="layout"
-            name="layout"
-            type="text"
-            class="form-control border-form-modal"
-            placeholder="Layout Name"
-            aria-label="Layout Name"
-            aria-describedby="basic-addon2"
-          />
+          <input id="layout" name="layout" type="text" class="form-control border-form-modal" placeholder="Layout Name"
+            aria-label="Layout Name" aria-describedby="basic-addon2" />
         </div>
       </div>
     </div>
@@ -47,11 +33,7 @@
 
     <div class="row justify-content-end">
       <div class="col-sm-1 col-add">
-        <button
-          id="addBtn"
-          name="addBtn"
-          class="btn btn-add-color"
-          type="button"><b>+ Add</b></button>
+        <button id="addBtn" name="addBtn" class="btn btn-add-color" type="button"><b>+ Add</b></button>
       </div>
     </div>
   </div>
@@ -67,10 +49,7 @@
   </div>
   <div class="card-body bank-body">
     <div class="table-responsive-md">
-      <table
-        id="data-table"
-        class="table align-middle table-striped-light"
-      >
+      <table id="data-table" class="table align-middle table-striped-light">
         <thead class="table-dark">
           <tr>
             <th>ID</th>
@@ -90,16 +69,8 @@
 </div>
 
 <!-- Modal -->
-<div
-  class="modal fade bd-example-modal-lg"
-  id="editModal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
-  data-keyboard="false"
-  data-backdrop="static"
->
+<div class="modal fade bd-example-modal-lg" id="editModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
@@ -114,56 +85,28 @@
               <div class="row mb-2">
                 <div class="input-group mb-3">
                   <span class="input-group-text bank-btn" id="basic-addon2">ID</span>
-                  <input
-                    id="idmodal"
-                    name="idmodal"
-                    type="text"
-                    class="form-control border-form-modal"
-                    placeholder="ID"
-                    aria-label="ID"
-                    aria-describedby="basic-addon2"
-                    disabled="true"
-                  />
+                  <input id="idmodal" name="idmodal" type="text" class="form-control border-form-modal" placeholder="ID"
+                    aria-label="ID" aria-describedby="basic-addon2" disabled="true" />
                 </div>
               </div>
               <div class="row">
                 <div class="input-group mb-3">
                   <span class="input-group-text bank-btn" id="basic-addon2">Route</span>
-                  <input
-                    id="routemodal"
-                    name="routemodal"
-                    type="text"
-                    class="form-control border-form-modal"
-                    placeholder="Route Name"
-                    aria-label="Route Name"
-                    aria-describedby="basic-addon2"
-                  />
+                  <input id="routemodal" name="routemodal" type="text" class="form-control border-form-modal"
+                    placeholder="Route Name" aria-label="Route Name" aria-describedby="basic-addon2" />
                 </div>
               </div>
               <div class="row">
                 <div class="input-group mb-3">
                   <span class="input-group-text bank-btn" id="basic-addon2">Layout</span>
-                  <input
-                    id="layoutmodal"
-                    name="layoutmodal"
-                    type="text"
-                    class="form- border-form-modal"
-                    placeholder="Layout Name"
-                    aria-label="Layout Name"
-                    aria-describedby="basic-addon2"
-                  />
+                  <input id="layoutmodal" name="layoutmodal" type="text" class="form- border-form-modal"
+                    placeholder="Layout Name" aria-label="Layout Name" aria-describedby="basic-addon2" />
                 </div>
               </div>
               <div class="row">
                 <div class="input-group mb-3">
-                  <label class="input-group-text bank-btn" for="accesstypemodal"
-                    >Access</label
-                  >
-                  <select
-                    class="form-select border-form-modal"
-                    id="accesstypemodal"
-                    name="accesstypemodal"
-                  >
+                  <label class="input-group-text bank-btn" for="accesstypemodal">Access</label>
+                  <select class="form-select border-form-modal" id="accesstypemodal" name="accesstypemodal">
                     <option selected>--Select Access--</option>
                   </select>
                 </div>
@@ -173,18 +116,10 @@
         </div>
       </div>
       <div class="modal-footer" id="modal-footer">
-        <button
-          type="button"
-          class="btn btn-modal-close"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">
           <i class="fa fa-times" aria-hidden="true"></i> Close
         </button>
-        <button
-          type="button"
-          id="saveBtn"
-          class="btn btn-modal-save"
-        >
+        <button type="button" id="saveBtn" class="btn btn-modal-save">
           <i class="fa fa-check" aria-hidden="true"></i> Save
         </button>
       </div>

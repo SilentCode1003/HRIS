@@ -57,6 +57,8 @@
   let globalgpstatus = "";
   let globalleave_with_out_pay = "";
   let globalleave_with_out_pay_deductions = "";
+  let globalpayrolladjustmentsdetails = "";
+  let globalpayrolladjustmentsdeductionsdetails = "";
   let globalsuddendedductionsName = [];
   let globalsuddendedductionsAmount = [];
 
@@ -307,6 +309,10 @@
                 formatToCurrency(item.payroll_adjustments)
               );
               globalpayrolladjustments = item.payroll_adjustments;
+              $("#payslippayrollAdjustmentsDetails").text(item.payroll_adjustment_details);
+              globalpayrolladjustmentsdetails = item.payroll_adjustment_details;
+              $("#payslipAdjustmentsDeductionsDetails").html(item.payroll_adjustments_deductions_details.replace(/; /g, ';<br>'));
+              globalpayrolladjustmentsdeductionsdetails = item.payroll_adjustments_deductions_details;
               $("#payslipovertime").text(formatToCurrency(item.approveOT));
               globalapproveot = item.approveOT;
               $("#payslipndpay").text(formatToCurrency(item.approvedNightOT));
