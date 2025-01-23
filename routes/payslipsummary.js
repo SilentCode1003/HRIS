@@ -36,6 +36,8 @@ router.get("/", function (req, res, next) {
 module.exports = router;
 
 router.get("/getallpayslip/:year/:month", (req, res) => {
+  console.log('hit');
+  
   try {
     const { year, month } = req.params;
     let yearMonth = `${year}-${month}%`;

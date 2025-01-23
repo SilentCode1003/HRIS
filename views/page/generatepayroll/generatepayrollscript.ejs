@@ -520,8 +520,9 @@
                 formatToCurrency(item.Basic_Adjustments)
               );
               $("#payrolladjustments").text(
-                formatToCurrency(item.Payroll_Adjustments)
-              );
+                formatToCurrency(item.Payroll_Adjustments));
+              $("#payrollAdjustmentsDetails").text(item.Payroll_Adjustment_Details);
+              $("#payrollAdjustmentsDeductionsDetails").html(item.Payroll_Adjustments_Deductions_Details.replace(/; /g, ';<br>'));
               $("#overtimemeal").text(formatToCurrency(item.Overtime_Meal));
               $("#leavepayprofile").text(formatToCurrency(item.Leave_Pay));
               let totalLoans =
