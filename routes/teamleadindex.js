@@ -864,10 +864,6 @@ router.get("/loadrestdaylogs", (req, res) => {
 
       const {startdate, enddate} = payrollDate[0];
 
-      console.log(startdate, enddate);
-      
-
-
       let sql = SelectStatement('call hrmis.GetListRestdayLogs(?, ?)', [startdate, enddate]);
 
       Select(sql, (error, result) => {
@@ -876,8 +872,6 @@ router.get("/loadrestdaylogs", (req, res) => {
 
           res.status(500).json(JsonErrorResponse(error));
         }
-
-        console.log(result[0]);
 
         res.status(200).json(JsonDataResponse(result[0]));
       });

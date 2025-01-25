@@ -12,6 +12,10 @@
                 role="tab" aria-controls="nav-home" aria-selected="false">
                 <b>Missed Logs</b>
             </button>
+            <button class="nav-link teamlead-payroll-attendance" id="nav-payroll-attendance-tab" data-bs-toggle="tab" data-bs-target="#nav-payroll-attendance" type="button"
+            role="tab" aria-controls="nav-home" aria-selected="false">
+            <b>Payroll Attendance</b>
+        </button>
         </div>
     </nav>
 
@@ -140,6 +144,68 @@
                 </div>
             </div>
         </div>
+
+        <!-- Payroll Attendance Tab -->
+        <div class="tab-pane fade" id="nav-payroll-attendance" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="card-header c-header py-4 px-4">
+                <h3 class="title-card-table py-2 mt-2">Payroll Attendance</h3>
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <input class="missedlog-searchbar form-control" id='payroll-attendance-search' type='text' placeholder="  Search....">
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text select-dtrtable">Payroll Date</span>
+                                </div>
+                            <input
+                                autocomplete="off"
+                                id="payrolldate"
+                                class="form-control"
+                                placeholder="Select Payroll Date"
+                                type="text"
+                                name="payrolldate"
+                            />
+                            <input
+                                autocomplete="off"
+                                type="hidden"
+                                id="payrolldateID"
+                                name="payrolldateID"
+                            />
+                            </div>
+
+                            <div
+                            class="custom-dropdown cdw-tableoption"
+                            id="payrolldateDropdown"
+                            ></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="hr-table">
+                <div class="table-responsive">
+                    <table class="table table-striped-light" id="datatable-payroll-attendance">
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Payroll Date</th>
+                                <th>Present</th>
+                                <th>Rest Day</th>
+                                <th>Leave Day</th>
+                                <th>Rest Day OT</th>
+                                <th>Absent</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -216,6 +282,45 @@
             </div>
 
 
+            <div class="modal-footer" id="modal-footer">
+                <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- View Payroll Attendance Modal -->
+<div class="modal fade" id="payslipmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="head-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <h3 class="modal-title" id="head-title">PAYROLL ATTENDACE</h3>
+                <i class='bx bx-x' data-bs-dismiss="modal" aria-label="CLose"></i>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="table-responsive-sm" id="table-responsive-id"> 
+                    <table class="table table-sm table-bordered" id="datatable-payroll-attendance-modal">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2">Date</th>
+                                <th class="col-sm-2">Status</th>
+                                <th class="col-sm-2">Clock In</th>
+                                <th class="col-sm-2">Clock Out</th>
+                                <th >Late In Minutes</th>
+                                <th >Late In Hours</th>
+                                <th >Early OT</th>
+                                <th >Total Night Diff</th>
+                                <th >Total Normal OT</th>
+                                <th >Total Hours</th>
+                                <th >Total in Minutes
+                                </th>
+                            </tr>
+                        </thead>
+                         <tbody></tbody>
+                     </table>
+                    </div>
+            </div>
             <div class="modal-footer" id="modal-footer">
                 <button type="button" class="btn btn-modal-close" data-bs-dismiss="modal">Close</button>
             </div>
