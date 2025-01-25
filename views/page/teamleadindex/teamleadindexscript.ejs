@@ -2218,50 +2218,81 @@
 
     //restay logs
     $(document).on("click", "#nav-restdaywithlog-tab", function () {
-      $("#datatable-restdaylogs").find("tr:gt(0)").remove();
-      $.ajax({
-        type: "GET",
-        url: "/teamleadindex/loadrestdaylogs",
-        success: function (result) {
-          var finalData = [];
-          var data = result.data;
+      const table = $("#datatable-restdaylogs tbody");
+      Fetch("/teamleadindex/loadrestdaylogs", (result) => {
+        console.log(result.data);
 
-          if (result.msg === "success") {
-            let datatable = document.getElementById("datatable-restdaylogs");
-            var totalLATE = data.length;
-
-            $.each(data, function (key, item) {
-              console.log(item);
-
-              var row = datatable.insertRow(1);
-              var attendance = row.insertCell(0);
-              var employeeid = row.insertCell(1);
-              var fullname = row.insertCell(2);
-              var daytype = row.insertCell(3);
-              var clockin = row.insertCell(4);
-              var clockout = row.insertCell(5);
-              var originalrestday = row.insertCell(6);
-              var alterrestday = row.insertCell(7);
-             
-
-              attendance.innerHTML = item.attendacedate;
-              employeeid.innerHTML = item.id;
-              fullname.innerHTML = item.employee;
-              daytype.innerHTML = item.day_type;
-              clockin.innerHTML = item.clockin;
-              clockout.innerHTML = item.clockout;
-              originalrestday.innerHTML = item.original_rest_day;
-              alterrestday.innerHTML = item.alter_rest_day;
-            });
-
-            $("#restwithlogsBadge").text(totalLATE);
-          }
-        },
-        error: function (err) {
-          console.error("AJAX error:", err.statusText);
-        },
+        PopulateTable(table, result.data);
       });
     });
+    //#endregion
+
+    //#region
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 8,
+            class: "text-center",
+            text: "No Data Found",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          console.log(item.length);
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.attendancedate,
+              "data-label": "Attendance Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.id,
+              "data-label": "Employee ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.employee,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.day_type,
+              "data-label": "Day Type",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockin,
+              "data-label": "Clock In",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockout == null ? "" : item.clockout,
+              "data-label": "Clock Out",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.original_rest_day == null ? "NO CAHNGE SHIFT APPLIED" : item.original_rest_day,
+              "data-label": "Original Restday",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.alter_rest_day == null ? "NO CAHNGE SHIFT APPLIED" : item.alter_rest_day,
+              "data-label": "Alter Restday",
+              class: "custom-mobile-align",
+            })
+          );
+
+          table.append(tr);
+        });
+      }
+    }
     //#endregion
 
     async function LoadCards() {
