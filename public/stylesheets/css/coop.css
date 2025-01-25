@@ -2159,6 +2159,7 @@ label.custom-cursor-default-hover #text {
 }
 
 #nav-attendance-tab.nav-link.teamlead-attendance.active,
+#nav-payroll-attendance-tab.nav-link.teamlead-payroll-attendance.active,
 #nav-missed-logs-tab.nav-link.teamlead-misslog.active    {
   background-color: #7a1818 !important;
   color: white !important;
@@ -2169,6 +2170,7 @@ label.custom-cursor-default-hover #text {
 
 
 #nav-attendance-tab.nav-link.teamlead-attendance,
+#nav-payroll-attendance-tab.nav-link.teamlead-payroll-attendance,
 #nav-missed-logs-tab.nav-link.teamlead-misslog {
   background-color: #fcf7eb !important;
   color: #7a1818 !important;

@@ -2,13 +2,13 @@ const mysql = require("./repository/hrmisdb");
 //const moment = require('moment');
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { Select } = require("./repository/dbconnect");
+const { Select, Check } = require("./repository/dbconnect");
 const {
   JsonErrorResponse,
   JsonDataResponse,
 } = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
-const { de } = require("date-fns/locale");
+const { de, sq } = require("date-fns/locale");
 const { REQUEST_STATUS } = require("./repository/enums");
 const {
   SelectStatement,
@@ -838,20 +838,46 @@ router.get("/loadmisslogs", (req, res) => {
 
 router.get("/loadrestdaylogs", (req, res) => {
   try {
-    let sql = `call hrmis.GetListRestdayLogs('2024-12-11', '2024-12-25')`;
+    async function ProcessData() {
+      let sql_get_payroll_cut_off_date = `
+      SELECT 
+      pd_payrollid,
+      pd_name,
+      pd_cutoff,
+      DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
+      DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
+      DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
+      FROM 
+      payroll_date
+      WHERE
+      pd_startdate = (
+        SELECT CASE 
+          WHEN DAY(CURRENT_DATE) <= 15 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
+          WHEN DAY(CURRENT_DATE) <= 30 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
+          ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
+              END
+    )
+      `;
 
-    Select(sql, (error, result) => {
-      if (error) {
-        console.log(error);
+      let payrollDateResult = await Check(sql_get_payroll_cut_off_date);
+      let payrollDate = DataModeling(payrollDateResult, "pd_");
 
-        res.status(500).json(JsonErrorResponse(error));
-      }
+      const {startdate, enddate} = payrollDate[0];
 
-      console.log(result);
-      
+      let sql = SelectStatement('call hrmis.GetListRestdayLogs(?, ?)', [startdate, enddate]);
 
-      res.status(200).json(JsonDataResponse(result));
-    });
+      Select(sql, (error, result) => {
+        if (error) {
+          console.log(error);
+
+          res.status(500).json(JsonErrorResponse(error));
+        }
+
+        res.status(200).json(JsonDataResponse(result[0]));
+      });
+    }
+
+    ProcessData();
   } catch (error) {
     res.status(500).json(JsonErrorResponse(error));
   }

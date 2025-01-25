@@ -231,7 +231,7 @@ router.post("/loadpayslipdetailed", (req, res) => {
 
     mysql
       .mysqlQueryPromise(sql)
-      .then((result) => {
+      .then((result) => { 
         res.json({
           msg: "success",
           data: result,

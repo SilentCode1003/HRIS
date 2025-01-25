@@ -5,12 +5,19 @@
   let enddate = "";
 
   $(document).ready(function () {
-    searchTable();
     LoadTable();
     LoadListEmp();
 
     $(document).on("keyup", "#myInput", function () {
-      searchTable();
+      searchTable("myInput", "dataTableattendance");
+    });
+
+    $(document).on("keyup", "#missed-search", function () {
+      searchTable("missed-search", "datatable-misslogs");
+    });
+
+    $(document).on("keyup", "#payroll-attendance-search", function () {
+      searchTable("payroll-attendance-search", "datatable-payroll-attendance");
     });
 
     function LoadTable() {
@@ -759,8 +766,8 @@
 
     $(document).on("click", "#load-date-miss-log", function () {
       let daterange = $("#miss-log-datepicker").val();
-      let startdate = daterange.split('-')[0]
-      let enddate = daterange.split('-')[1]
+      let startdate = daterange.split("-")[0];
+      let enddate = daterange.split("-")[1];
       console.log(startdate, enddate);
 
       $.ajax({
@@ -784,11 +791,11 @@
       });
     });
 
-    //miss logs
+    //#region Missed Logs
     $(document).on("click", "#nav-missed-logs-tab", function () {
       let daterange = $("#miss-log-datepicker").val();
-      let startdate = daterange.split('-')[0]
-      let enddate = daterange.split('-')[1]
+      let startdate = daterange.split("-")[0];
+      let enddate = daterange.split("-")[1];
       console.log(startdate, enddate);
 
       $.ajax({
@@ -842,6 +849,279 @@
         deviceout.innerHTML = item.deviceout;
       });
     }
+    //#endregion
+
+    //#region Payroll Attendance
+    let employeeid = "";
+    let payrolldate = "";
+
+    $("#datatable-payroll-attendance tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      employeeid = dataRow[0];
+      payrolldate = dataRow[2];
+    });
+
+    $(document).on("click", "#nav-payroll-attendance-tab", function () {
+      LoadPayrollDate();
+    });
+
+    $(document).on("click", "#payrolldateDropdown", function () {
+      let targetDate = $("#payrolldate").val();
+      const table = $("#datatable-payroll-attendance tbody");
+      console.log(targetDate);
+      Fetch(
+        `/teamleadattendance/loadpayrollattendance/${targetDate}`,
+        (result) => {
+          PopulateTable(table, result.data);
+        }
+      );
+    });
+
+    function LoadPayrollDate() {
+      Fetch("/teamleadattendance/load-payslip-payroll-date", (result) => {
+        LoadPayrollDateDropdown(result);
+      });
+    }
+
+    function LoadPayrollDateDropdown(result) {
+      let activeData = [];
+      let dropdownID = "payrolldateDropdown";
+      let inputID = "payrolldate";
+      let hiddenID = "payrolldateID";
+      let container = result.data;
+
+      $("#payrolldateDropdown").empty();
+
+      console.log(container);
+      let counter = 0;
+      $.each(container, (key, item) => {
+        let name = formatDate(item.payrolldate);
+        let id = `parolldate-${counter}`;
+        activeData.push({
+          display: name,
+          value: id,
+        });
+      });
+      AddDropdownData(dropdownID, activeData, inputID, hiddenID);
+    }
+
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 8,
+            class: "text-center",
+            text: "No Data Found",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          console.log(item.length);
+
+          let action = `<button id="viewBtn" class="btn text-primary" name="viewBtn"><i class="fas fa-eye" style="color: rgb(99, 115, 129);"></i></button>`;
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.employeeid,
+              "data-label": "Employee ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.fullname,
+              "data-label": "Employee Name",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: moment(item.payrolldate).format("YYYY-MM-DD"),
+              "data-label": "Payroll Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.present,
+              "data-label": "Present",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.restday,
+              "data-label": "Rest Day",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.leaveday,
+              "data-label": "Leave Day",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.restotday,
+              "data-label": "Rest Day OT",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.absent,
+              "data-label": "Absent",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              html: action,
+              "data-label": "Action",
+              class: "custom-mobile-align",
+            })
+          );
+
+          table.append(tr);
+        });
+      }
+    }
+
+    function PopulateModalTable(table, data) {
+      table.empty();
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 11,
+            class: "text-center",
+            text: "No Data Found",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          console.log(item.Attendance_Status, item.TimeIn);
+          let clockin = "";
+          let clockout = "";
+
+          if (item.Attendance_Status == "Absent") {
+            clockin = "--:--:--";
+            clockout = "--:--:--";
+          } else if (item.Attendance_Status == "Rest Day") {
+            if (item.TimeIn === "00:00:00") {
+              clockin = "Rest Day";
+              clockout = "Rest Day";
+            } else {
+              clockin = item.gp_clockin;
+              clockout = item.gp_clockout;
+            }
+          } else if (item.Attendance_Status == "Rest Day OT") {
+            clockin = item.gp_clockin;
+            clockout = item.gp_clockout;
+          } else if (item.Attendance_Status == "Missed Logs") {
+            clockin = item.gp_clockin;
+            clockout = item.gp_clockout;
+          } else if (
+            item.Attendance_Status == "Regular Holiday" ||
+            item.Attendance_Status == "Special Holiday"
+          ) {
+            if (item.TimeIn === "00:00:00") {
+              clockin = "Holiday";
+              clockout = "Holiday";
+            } else {
+              clockin = item.gp_clockin;
+              clockout = item.gp_clockout;
+            }
+          } else if (item.Attendance_Status == "On Leave" || (item.Attendance_Status == "On Leave W/O Pay" || item.Attendance_Status == "Exempted")) {
+            clockin = item.Attendance_Status;
+            clockout = item.Attendance_Status;
+          }  else {
+            clockin = item.gp_clockin;
+            clockout = item.gp_clockout;
+          }
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: formatDate(item.gp_attendancedate),
+              "data-label": "Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              html: `<span class="${PayrollAttendanceStatus(
+                item.Attendance_Status
+              )}">${item.Attendance_Status}</span>`,
+              "data-label": "Status",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: clockin,
+              "data-label": "Clock In",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: clockout,
+              "data-label": "Clock Out",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.Late_Minutes,
+              "data-label": "Late Minutes",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.Late_Hours,
+              "data-label": "Late Hours",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.EarlyOt,
+              "data-label": "Early OT",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.NightDiff,
+              "data-label": "Rest Day OT",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.NormalOt,
+              "data-label": "Rest Day OT",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.Total_Hours,
+              "data-label": "Rest Day OT",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.Total_Minutes,
+              "data-label": "Rest Day OT",
+              class: "custom-mobile-align",
+            })
+          );
+
+          table.append(tr);
+        });
+      }
+    }
+
+    $(document).on("click", "#viewBtn", function () {
+      const table = $("#datatable-payroll-attendance-modal tbody");
+      $("#payslipmodal").modal("show");
+
+      Upsert(
+        "POST",
+        "/generatepayroll/loadpayslipdetailed",
+        {
+          employeeid: employeeid,
+          payrolldate: payrolldate,
+        },
+        (result) => {
+          console.log(result);
+          PopulateModalTable(table, result.data[0]);
+        }
+      );
+
+      //generatepayroll/loadpayslipdetailed
+    });
+    //#endregion
   });
 
   $(function () {
@@ -876,11 +1156,11 @@
     );
   });
 
-  function searchTable() {
+  function searchTable(inputname, tablename) {
     var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
+    input = document.getElementById(`${inputname}`);
     filter = input.value.toUpperCase();
-    table = document.getElementById("dataTableattendance");
+    table = document.getElementById(`${tablename}`);
     tr = table.getElementsByTagName("tr");
 
     for (i = 1; i < tr.length; i++) {

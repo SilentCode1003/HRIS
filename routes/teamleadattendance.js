@@ -159,11 +159,12 @@ router.post("/exportreports", async (req, res) => {
     let departmentid = req.session.departmentid;
     const { startdate, enddate } = req.body;
 
-    console.log(departmentid,'departmentid');
-    
+    console.log(departmentid, "departmentid");
 
     const sqlExportAttendance = `CALL hrmis.ExportAttendanceData('${startdate}', '${enddate}')`;
-    const resultExportAttendance = await mysql.mysqlQueryPromise(sqlExportAttendance);
+    const resultExportAttendance = await mysql.mysqlQueryPromise(
+      sqlExportAttendance
+    );
 
     if (
       !Array.isArray(resultExportAttendance) ||
@@ -266,13 +267,62 @@ router.post("/exportreports", async (req, res) => {
   }
 });
 
+router.get("/loadpayrollattendance/:payrolldate", (req, res) => {
+  try {
+    const { payrolldate } = req.params;
+    const department = req.session.departmentname;
+
+    let sql = SelectStatement(
+      "select p_employeeid,p_fullname,DATE(p_payrolldate) as p_payrolldate,p_present,p_restday,p_leaveday,p_restotday,p_absent from payslip where  p_payrolldate = ? and p_department = ?",
+      [payrolldate, department]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/load-payslip-payroll-date", (req, res) => {
+  try {
+    let sql = `select distinct p_payrolldate from  payslip`;
+
+    Select(sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "p_");
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
 
 function adjustColumnWidths(worksheet, data) {
   const cols = [];
 
   data.forEach((row) => {
     Object.keys(row).forEach((key, index) => {
-      const length = (row[key] ? row[key].toString().length : 10) + 2; 
+      const length = (row[key] ? row[key].toString().length : 10) + 2;
       if (!cols[index] || cols[index] < length) {
         cols[index] = length;
       }
@@ -281,13 +331,13 @@ function adjustColumnWidths(worksheet, data) {
 
   const headerKeys = Object.keys(data[0]);
   headerKeys.forEach((key, index) => {
-    const headerLength = key.length + 2; 
+    const headerLength = key.length + 2;
     if (!cols[index] || cols[index] < headerLength) {
       cols[index] = headerLength;
     }
   });
 
-  worksheet["!cols"] = cols.map((width) => ({ wpx: width * 10 })); 
+  worksheet["!cols"] = cols.map((width) => ({ wpx: width * 10 }));
 }
 function formatHeaders(worksheet) {
   const headerRow = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
