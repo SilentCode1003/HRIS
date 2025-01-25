@@ -93,13 +93,7 @@ router.get("/loadreqbeforepayout", (req, res) => {
     FROM 
     payroll_date
     WHERE
-    pd_startdate = (
-      SELECT CASE 
-        WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
-        WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
-        ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
-            END
-    )  `;
+    CURRENT_DATE() BETWEEN pd_startdate AND pd_enddate `;
 
     mysql.Select(sql, "Payroll_Date", (err, result) => {
       if (err) console.error("Error: ", err);

@@ -617,7 +617,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
         console.log("Minutes Difference: ", minutesDifference);
         console.log("Hours Difference: ", hoursDifference);
         console.log("Location: ", locationin);
-        
 
         //#endregion
 
@@ -1185,10 +1184,10 @@ router.post("/updatepassword", verifyJWT, async (req, res) => {
 
 //#region PAYROLL
 
-router.post("/getpayrolldate", verifyJWT, (req, res) => {
+router.post("/getpayslip", verifyJWT, (req, res) => {
   try {
     let employeeid = req.body.employeeid;
-    let sql = `SELECT 
+    let sql = `SELECT
       CONCAT(p_startdate, ' To ', p_enddate) AS p_daterange,
       DATE_FORMAT(p_payrolldate, '%Y-%m-%d') AS p_payrolldate,
       p_cutoff as p_cutoff,
@@ -1199,13 +1198,13 @@ router.post("/getpayrolldate", verifyJWT, (req, res) => {
       SUM(p_earlyothours) as p_earlyot,
       SEC_TO_TIME(SUM(TIME_TO_SEC(COALESCE(p_lateminutes, '00:00:00')))) AS p_totalminutes,
       round(p_total_netpay, 2) as p_totalnetpay
-      FROM 
-      payslip  
-      WHERE 
+      FROM
+      payslip
+      WHERE
       p_employeeid = '${employeeid}'
-      GROUP BY 
+      GROUP BY
       p_startdate, p_enddate, p_payrolldate, p_cutoff, p_salary, p_allowances, p_basic_adjustments, p_total_netpay
-      ORDER BY 
+      ORDER BY
       p_payrolldate DESC
       LIMIT 2`;
 
@@ -1336,6 +1335,62 @@ router.post("/loadpayslip", verifyJWT, (req, res) => {
     });
   } catch (error) {
     res.json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getadjustments", verifyJWT, (req, res) => {
+  try {
+    const { employeeid, payrolldate } = req.body;
+    const adjustment_status = "Active";
+
+    let sql_adjustment = SelectStatement(
+      "select pa_adjust_amount, pa_adjustmenttype, pa_reason from payroll_adjustments where pa_employeeid = ? and pa_payrolldate = ? and pa_adjustmentstatus = ?",
+      [employeeid, payrolldate, adjustment_status]
+    );
+
+    async function ProcessData() {
+      let adjustments = await Check(sql_adjustment);
+
+
+      let adjustmentData =
+        adjustments.length > 0 ? DataModeling(adjustments, "pa_") : [];
+
+      res.status(200).json({
+        msg: "success",
+        data:adjustmentData
+      });
+    }
+
+    ProcessData();
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getdeductions", verifyJWT, (req, res) => {
+  try {
+    const { employeeid, payrolldate } = req.body;
+    const adjustment_status = "Active";
+
+    let sql_adjustment_deduction = SelectStatement(
+      "select pad_adjust_amount, pad_adjustmenttype, pad_reason from payroll_adjustments_deductions where pad_employeeid = ? and pad_payrolldate = ? and pad_adjustmentstatus = ?",
+      [employeeid, payrolldate, adjustment_status]
+    );
+
+    async function ProcessData() {
+      let deductions = await Check(sql_adjustment_deduction);
+      let deductionData =
+        deductions.length > 0 ? DataModeling(deductions, "pad_") : [];
+
+      res.status(200).json({
+        msg: "success",
+        data: deductionData,
+      });
+    }
+
+    ProcessData();
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 
