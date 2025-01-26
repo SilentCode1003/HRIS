@@ -15,8 +15,11 @@ const {
   InsertStatement,
   SelectStatement,
   UpdateStatement,
+  GetCurrentDatetime,
+  InsertStatementTransCommit,
 } = require("./repository/customhelper");
 const { log } = require("winston");
+const { Transaction } = require("./utility/utility");
 var router = express.Router();
 const currentDate = moment();
 
@@ -59,54 +62,53 @@ router.get("/load", (req, res) => {
   }
 });
 
-router.post("/save", async (req, res) => {
-  try {
-    let createby = req.session.fullname;
-    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
-    let status = "Active";
-    const { employeeid, targetrddate, actualrddate } = req.body;
+// router.post("/save", async (req, res) => {
+//   try {
+//     let createby = req.session.fullname;
+//     let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+//     let status = "Active";
+//     const { employeeid, targetrddate, actualrddate } = req.body;
 
-    let sql = InsertStatement("change_shift", "cs", [
-      "employeeid",
-      "actualrd",
-      "changerd",
-      "shiftstatus",
-      "createby",
-      "createdate",
-    ]);
-    let data = [
-      [employeeid, actualrddate, targetrddate, status, createby, createdate],
-    ];
+//     let sql = InsertStatement("change_shift", "cs", [
+//       "employeeid",
+//       "actualrd",
+//       "changerd",
+//       "shiftstatus",
+//       "createby",
+//       "createdate",
+//     ]);
+//     let data = [
+//       [employeeid, actualrddate, targetrddate, status, createby, createdate],
+//     ];
 
-    let checkStatement = SelectStatement(
-      "select * from change_shift where cs_employeeid =? and cs_actualrd=? or cs_employeeid =? and  cs_changerd =?",
-      [employeeid, actualrddate, employeeid, targetrddate]
-    );
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, result) => {
-            if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
-            }
+//     let checkStatement = SelectStatement(
+//       "select * from change_shift where cs_employeeid =? and cs_actualrd=? or cs_employeeid =? and  cs_changerd =?",
+//       [employeeid, actualrddate, employeeid, targetrddate]
+//     );
+//     Check(checkStatement)
+//       .then((result) => {
+//         if (result != 0) {
+//           return res.json(JsonWarningResponse(MessageStatus.EXIST));
+//         } else {
+//           InsertTable(sql, data, (err, result) => {
+//             if (err) {
+//               console.log(err);
+//               res.json(JsonErrorResponse(err));
+//             }
 
-            res.json(JsonSuccess());
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
-  } catch (error) {
-    console.log(err);
-    res.json(JsonErrorResponse(error));
-  }
-});
-
+//             res.json(JsonSuccess());
+//           });
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//         res.json(JsonErrorResponse(error));
+//       });
+//   } catch (error) {
+//     console.log(err);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
 
 // router.post("/save", async (req, res) => {
 //   try {
@@ -157,56 +159,121 @@ router.post("/save", async (req, res) => {
 //   }
 // });
 
-
-router.post("/save", async (req, res) => {
+router.post("/save", (req, res) => {
   try {
     let createby = req.session.fullname;
-    let createdate = currentDate.format("YYYY-MM-DD HH:mm:ss");
+    let createdate = GetCurrentDatetime();
     let status = "Active";
     const { employeeid, targetrddate, actualrddate } = req.body;
+    let queries = [];
 
-    let sql = InsertStatement("change_shift", "cs", [
-      "employeeid",
-      "actualrd",
-      "changerd",
-      "shiftstatus",
-      "createby",
-      "createdate",
-    ]);
-    let data = [
-      [employeeid, actualrddate, targetrddate, status, createby, createdate],
-    ];
+    async function ProcessData() {
+      let checkActual = SelectStatement(
+        "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
+        [employeeid, actualrddate]
+      );
 
-    let checkActual = SelectStatement(
-      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_actualrd = ?",
-      [employeeid, actualrddate]
-    );
+      let checkTarget = SelectStatement(
+        "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
+        [employeeid, targetrddate]
+      );
 
-    let checkTarget = SelectStatement(
-      "SELECT * FROM change_shift WHERE cs_employeeid = ? AND cs_changerd = ?",
-      [employeeid, targetrddate]
-    );
+      let getShiftTargetRestday = `
+      SELECT 
+      CASE
+        WHEN DAYOFWEEK('${targetrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_in')
+      END as schedule_time_in,
+      CASE 
+        WHEN DAYOFWEEK('${targetrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_out')
+      END as schedule_time_out
+      FROM master_shift as ms
+      INNER JOIN master_employee on me_id = ms_employeeid
+      WHERE me_id = '${employeeid}'`;
 
-    const actualResult = await Check(checkActual);
-    const targetResult = await Check(checkTarget);
+      const actualResult = await Check(checkActual);
+      const targetResult = await Check(checkTarget);
+      const targetRestdayResult = await Check(getShiftTargetRestday);
+      console.log(actualResult, targetResult, targetRestdayResult);
 
-    if (actualResult.length > 0) {
-      return res.json("Actual Date Exist");
-    }
+      const { schedule_time_in, schedule_time_out } = targetRestdayResult[0];
 
-    if (targetResult.length > 0) {
-      return res.json("Target Date Exist");
-    }
+      console.log(schedule_time_in, schedule_time_out);
 
-    InsertTable(sql, data, (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.json(JsonErrorResponse(err));
+      if (actualResult.length > 0) {
+        return res.json("Actual Date Exist");
       }
 
-      return res.json(JsonSuccess());
-    });
+      if (targetResult.length > 0) {
+        return res.json("Target Date Exist");
+      }
+      if (schedule_time_in == schedule_time_out) {
+        return res.json("Target rest day time is same as actual rest day time");
+      }
 
+      //#region Change Shift Insert
+      const insertChangeSfhit = InsertStatementTransCommit(
+        "change_shift",
+        "cs",
+        [
+          "employeeid",
+          "actualrd",
+          "changerd",
+          "shiftstatus",
+          "createby",
+          "createdate",
+        ]
+      );
+      const chageShiftData = [
+        employeeid,
+        actualrddate,
+        targetrddate,
+        status,
+        createby,
+        createdate,
+      ]
+
+      queries.push({
+        sql: insertChangeSfhit,
+        values: chageShiftData,
+      });
+
+      //#endregion
+
+      //#region Master Attendance Update
+
+      const updateMasterAttendance = UpdateStatement(
+        "master_attendance",
+        "ma",
+        ["shift_timein", "shift_timeout"],
+        ["employeeid", "attendancedate"]
+      );
+
+      console.log(updateMasterAttendance);
+      
+
+      queries.push({
+        sql: updateMasterAttendance,
+        values: [schedule_time_in, schedule_time_out, employeeid, actualrddate],
+      });
+
+     await Transaction(queries);
+
+      res.json(JsonSuccess());
+    }
+
+    ProcessData();
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
@@ -309,7 +376,6 @@ router.put("/edit", async (req, res) => {
       [employeeid, changerd]
     );
 
-
     const actualResult = await Check(checkActual);
     const targetResult = await Check(checkTarget);
 
@@ -376,7 +442,7 @@ router.post("/getshift", (req, res) => {
     let dayname = req.body.dayname;
 
     console.log(employeeid, dayname);
-    
+
     let sql = `
       SELECT 
           CASE 
