@@ -1,0 +1,164 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="viewModal"
+  tabindex="-1"
+  aria-labelledby="viewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header header-bg">
+        <h1 class="modal-title fs-5" id="viewModalLabel">
+          Undertime Request Details
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body gp-4">
+        <div class="row">
+          <div class="col col-sm-2">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">ID</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Request ID"
+                name="undertimeid"
+                id="undertimeid"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="col col-sm-5">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Employee</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Employee Name"
+                name="employeename"
+                id="employeename"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col col-sm-5">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable"
+                  >Applied Date</span
+                >
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Applied Date"
+                name="applieddate"
+                id="applieddate"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col col-sm-6">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Clock In</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Clock In"
+                name="clockin"
+                id="clockin"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+
+          <div class="col col-sm-6">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Clock Out</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Clock Out"
+                name="clockout"
+                id="clockout"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3 mb-5">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable"
+                  >List of Approvers</span
+                >
+              </div>
+              <div id="approvers">Approvers not found</div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="row mt-3 justify-content-center">
+              <textarea
+                class="form-control w-100"
+                name="reason"
+                id="reason"
+                placeholder="Reason"
+                disabled
+              ></textarea>
+            </div>
+            <div class="row mt-3 justify-content-center">
+              <textarea
+                class="form-control w-100"
+                name="remarks"
+                id="remarks"
+                placeholder="Your remarks..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-success" id="approveBtn">
+            Approve
+          </button>
+          <button type="button" class="btn btn-danger" id="rejectBtn">
+            Reject
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

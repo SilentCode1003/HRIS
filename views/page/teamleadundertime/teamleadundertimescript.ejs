@@ -1,0 +1,266 @@
+<script>
+  $(document).ready(function () {
+    //#region Initialize Data
+    let requestid = "";
+    let employeeid = "";
+    let employeename = "";
+    let clockin = "";
+    let clockout = "";
+    let attendancedate = "";
+
+    LoadTable();
+
+    //#endregion
+
+    $("#datatable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      requestid = dataRow[0];
+      employeeid = dataRow[1];
+      employeename = dataRow[2];
+      attendancedate = dataRow[3];
+      clockin = dataRow[4];
+      clockout = dataRow[5];
+    });
+
+    //#region Event Listeners
+    $(document).on("click", "#viewBtn", function () {
+      $("#viewModal").modal("show");
+
+      Fetch(`/teamleadundertime/view/${requestid}`, (result) => {
+        console.log(result);
+
+        //#region Populate Approvers
+        let approverBody = $("<div>", { class: "approver-body" });
+
+        result.approver.forEach((item) => {
+          let approver = $("<div>", { class: "approver-item" });
+          let approverName = $("<div>", { class: "approver-name" });
+          let approverPosition = $("<div>", { class: "approver-position" });
+          let approverDepartment = $("<div>", { class: "approver-department" });
+          let approverStage = $("<div>", { class: "approver-stage" });
+
+          approverName.text(item.fullname);
+          approverPosition.text(item.position);
+          approverDepartment.text(item.department);
+          approverStage.text(item.approval_count == 0 ? "1st" : `2nd`);
+
+          approver.append(
+            approverName,
+            approverPosition,
+            approverDepartment,
+            approverStage
+          );
+          approverBody.append(approver);
+
+          // Append approverBody to #approvers
+          $("#approvers").html(approverBody);
+        });
+
+        //#endregion
+
+        //#region Populate Undertime Request Modal
+        result.undertime.forEach((item) => {
+          $("#undertimeid").val(item.id);
+          $("#employeename").val(employeename);
+          $("#clockin").val(item.clockin);
+          $("#clockout").val(item.clockout);
+          $("#reason").val(item.reason);
+          $("#applieddate").val(item.applied_date);
+        });
+        //#endregion
+      });
+    });
+
+    $(document).on("click", "#approveBtn", function () {
+      let remarks = $("#remarks").val();
+
+      if (remarks == "") {
+        return warning("Empty remarks", "Please enter remarks");
+      }
+      Upsert(
+        "PUT",
+        "/teamleadundertime/approve",
+        {
+          requestid: requestid,
+          employeeid: employeeid,
+          remarks: remarks,
+          clockin: clockin,
+          clockout: clockout,
+          attendancedate,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Approved", "Undertime request approved successfully");
+            $("#viewModal").modal("hide");
+            LoadTable();
+          }
+        }
+      );
+    });
+
+    $(document).on("click", "#acceptBtn", function () {
+      let remarks = "No remarks - Approved";
+      Upsert(
+        "PUT",
+        "/teamleadundertime/approve",
+        {
+          requestid: requestid,
+          employeeid: employeeid,
+          remarks: remarks,
+          clockin: clockin,
+          clockout: clockout,
+          attendancedate,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Approved", "Undertime request approved successfully");
+            LoadTable();
+          }
+        }
+      );
+    });
+
+    $(document).on("click", "#rejectBtn", function () {
+      let remarks = $("#remarks").val();
+
+      if (remarks == "") {
+        return warning("Empty remarks", "Please enter remarks");
+      }
+      Upsert(
+        "PUT",
+        "/teamleadundertime/reject",
+        {
+          requestid: requestid,
+          employeeid: employeeid,
+          remarks: remarks,
+          clockin: clockin,
+          clockout: clockout,
+          attendancedate,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Rejected", "Undertime request rejected successfully");
+            $("#viewModal").modal("hide");
+            LoadTable();
+          }
+        }
+      );
+    });
+
+    $(document).on("click", "#cancelBtn", function () {
+      let remarks = "No remarks - Rejected";
+      Upsert(
+        "PUT",
+        "/teamleadundertime/reject",
+        {
+          requestid: requestid,
+          employeeid: employeeid,
+          remarks: remarks,
+          clockin: clockin,
+          clockout: clockout,
+          attendancedate,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Rejected", "Undertime request rejected successfully");
+            $("#viewModal").modal("hide");
+            LoadTable();
+          }
+        }
+      );
+    });
+    //#endregion
+
+    //#region Load table
+
+    function LoadTable() {
+      const table = $("#datatable tbody");
+      FetchTableData("/teamleadundertime/getundertimerequest", (result) => {
+        console.log(result);
+
+        PopulateTable(table, result);
+      });
+    }
+
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 8,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          let action = "";
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          action = `<button id="viewBtn" class="btn text-primary" name="viewBtn" "><i class="fas fa-fw fa-eye"></i></button>
+          <button id="acceptBtn" class="btn text-success" name="acceptBtn" "><i class="fas fa-fw fa-check"></i></button>
+          <button id="cancelBtn" class="btn text-danger" name="cancelBtn" "><i class="fas fa-fw fa-times"></i></button>`;
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.id,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.employee_id,
+              "data-label": "Employee ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.fullname,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.attendance_date,
+              "data-label": "Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockin,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.clockout,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              class: "custom-mobile-align",
+              "data-label": "Status",
+            }).append(
+              $("<div>", { class: containerBackground }).append(
+                $("<span>", { text: item.status, class: statusBackground })
+              )
+            ),
+            $("<td>", {
+              html: action,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            })
+          );
+          table.append(tr);
+        });
+      }
+    }
+    //#endregion
+  });
+</script>
