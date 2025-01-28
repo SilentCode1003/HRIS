@@ -20,6 +20,7 @@ const {
 } = require("./repository/customhelper");
 const { SendEmailNotification } = require("./repository/emailsender");
 const { REQUEST } = require("./repository/enums");
+const { sub } = require("date-fns");
 var router = express.Router();
 const currentDate = moment();
 
@@ -258,16 +259,125 @@ router.post("/getrestdayot", (req, res) => {
   }
 });
 
+
+router.post("/save", (req, res) => {
+  try {
+    let {
+      timein,
+      timeout,
+      attendancedate,
+      employeeid,
+      payrolldate,
+      reason,
+      subgroup,
+      file,
+      shiftTimeIn,
+      shiftTimeOut,
+    } = req.body;
+    let status = "Applied";
+    let approvecount = 0;
+
+    console.log(req.body);
+    
+
+    let applieddate = GetCurrentDatetime();
+    let sql = `CALL hrmis.RequestRestDayOt(
+      '${timein}',
+      '${timeout}',
+      '${shiftTimeIn}',
+      '${shiftTimeOut}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${status}',
+      '${subgroup}',
+      '${file}',
+      '${applieddate}',
+      '${approvecount}'
+    )`;
+
+    let validationQuery1 = SelectStatement(
+      `SELECT 1 FROM restday_ot_approval WHERE roa_attendancedate = ? AND roa_employeeid = ? AND roa_status = 'Pending'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM restday_ot_approval WHERE roa_attendancedate = ? AND roa_employeeid = ? AND roa_status = 'Applied'`,
+      [attendancedate, employeeid]
+    );
+
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM restday_ot_approval WHERE roa_attendancedate = ? AND roa_employeeid = ? AND roa_status = 'Approved'`,
+      [attendancedate, employeeid]
+    );
+
+    Check(validationQuery1)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.PENDINGRDOT)
+          );
+        }
+        return Check(validationQuery2);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDRDOT));
+        }
+        return Check(validationQuery3);
+      })
+      .then((result3) => {
+        if (result3.length > 0) {
+          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDRDOT));
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
+
+            let emailbody = [
+              {
+                employeename: employeeid,
+                date: attendancedate,
+                reason: reason,
+                status: MessageStatus.APPLIED,
+                requesttype: REQUEST.RD,
+                startdate: timein,
+                enddate: timeout,
+              },
+            ];
+
+            SendEmailNotification(employeeid, subgroup, REQUEST.RD, emailbody);
+
+            return res.json(JsonSuccess());
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+    return res.json(JsonErrorResponse(error));
+  }
+});
+
+
 router.put("/edit", (req, res) => {
   try {
-    let createdby = req.session.fullname;
     let createddate = GetCurrentDatetime();
+    let approvecount = 0;
+
     const {
       rdotid,
       status,
       clockin,
       clockout,
-      total_hours,
+      shiftTimeIn,
+      shiftTimeOut,
       attendancedate,
       payrolldate,
       subgroup,
@@ -275,105 +385,75 @@ router.put("/edit", (req, res) => {
       employeeid,
     } = req.body;
 
+    console.log(req.body);
+    let sql = `call hrmis.UpdateRequestRestDayOt(
+      '${clockin}',
+      '${clockout}',
+      '${shiftTimeIn}',
+      '${shiftTimeOut}',
+      '${attendancedate}',
+      '${employeeid}',
+      '${payrolldate}',
+      '${status}',
+      '${subgroup}',
+      '${file}',
+      '${createddate}',
+      '${approvecount}',
+      '${rdotid}'
+    )`;
 
-    let data = [];
-    let columns = [];
-    let arguments = [];
-
-    if (createdby) {
-      data.push(createdby);
-      columns.push("createby");
-    }
-
-    if (createddate) {
-      data.push(createddate);
-      columns.push("createdate");
-    }
-
-    if (total_hours) {
-      data.push(total_hours);
-      columns.push("total_hours");
-    }
-
-    if (status) {
-      data.push(status);
-      columns.push("status");
-    }
-
-    if (clockin) {
-      data.push(clockin);
-      columns.push("timein");
-    }
-
-    if (clockout) {
-      data.push(clockout);
-      columns.push("timeout");
-    }
-
-    if (attendancedate) {
-      data.push(attendancedate);
-      columns.push("attendancedate");
-    }
-
-    if (payrolldate) {
-      data.push(payrolldate);
-      columns.push("payrolldate");
-    }
-
-    if (file) {
-      data.push(file);
-      columns.push("file");
-    }
-
-    if (subgroup) {
-      data.push(subgroup);
-      columns.push("subgroupid");
-    }
-
-    if (rdotid) {
-      data.push(rdotid);
-      arguments.push("rdotid");
-    }
-
-    let updateStatement = UpdateStatement(
-      "restday_ot_approval",
-      "roa",
-      columns,
-      arguments
+    let validationQuery2 = SelectStatement(
+      `SELECT 1 FROM restday_ot_approval WHERE roa_attendancedate = ? AND roa_employeeid = ? AND roa_status = 'Applied'`,
+      [attendancedate, employeeid]
     );
 
-    let checkStatement = SelectStatement(
-      "select * from restday_ot_approval where roa_employeeid = ? and roa_attendancedate = ? and roa_status = ?",
-      [employeeid, attendancedate, status]
+    let validationQuery3 = SelectStatement(
+      `SELECT 1 FROM restday_ot_approval WHERE roa_attendancedate = ? AND roa_employeeid = ? AND roa_status = 'Approved'`,
+      [attendancedate, employeeid]
     );
 
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          Update(updateStatement, data, (err, result) => {
-            if (err) console.error("Error: ", err);
+    Check(validationQuery2)
+      .then((result1) => {
+        if (result1.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDRDOT)
+          );
+        }
+        return Check(validationQuery3);
+      })
+      .then((result2) => {
+        if (result2.length > 0) {
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDRDOT)
+          );
+        }
+        mysql.StoredProcedure(sql, (err, insertResult) => {
+          if (err) {
+            console.error(err);
+            return res.json(JsonErrorResponse(err));
+          } else {
+            console.log(insertResult);
             let emailbody = [
               {
                 employeename: employeeid,
                 date: createddate,
                 startdate: clockin,
                 enddate: clockout,
-                reason: REQUEST.RD,
-                status: MessageStatus.APPLIED,
-                requesttype: REQUEST.RD,
+                reason: status,
+                status: status,
+                requesttype: REQUEST.HD,
               },
             ];
-            SendEmailNotification(employeeid, subgroup, REQUEST.RD, emailbody);
+            SendEmailNotification(employeeid, subgroup, REQUEST.HD, emailbody);
 
-            res.json(JsonSuccess());
-          });
-        }
+            //res.json(JsonSuccess());
+            return res.json(JsonSuccess());
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
-        res.json(JsonErrorResponse(error));
+        return res.json(error);
       });
   } catch (error) {
     console.log(error);
@@ -381,132 +461,6 @@ router.put("/edit", (req, res) => {
   }
 });
 
-router.post("/save", async (req, res) => {
-  try {
-    let employeeid = req.session.employeeid;
-    let fullname = req.session.fullname;
-    let attendancedate = req.body.attendancedate;
-    let timein = req.body.timein;
-    let timeout = req.body.timeout;
-    let payrolldate = req.body.payrolldate;
-    let subgroupid = req.body.subgroupid;
-    let file = req.body.file;
-    let status = "Applied";
-
-    let timeInDate = new Date(timein);
-    let timeOutDate = new Date(timeout);
-    let total_hours = 0;
-
-    if (timeInDate && timeOutDate && timeOutDate > timeInDate) {
-      total_hours = (timeOutDate - timeInDate) / (1000 * 60 * 60);
-      total_hours = Math.floor(total_hours);
-    }
-
-    let sqlSalary = `SELECT 
-      CASE 
-        WHEN ${total_hours} <= 3 THEN 0
-        WHEN ${total_hours} <= 8 THEN
-          CASE 
-            WHEN s.ms_payrolltype = 'Daily' THEN (s.ms_monthly * 1.30) / 2
-            ELSE (s.ms_monthly / 313 * 12 * 1.30) / 2
-          END
-        ELSE
-          CASE 
-            WHEN s.ms_payrolltype = 'Daily' THEN (s.ms_monthly * 1.30)
-            ELSE (s.ms_monthly / 313 * 12 * 1.30)
-          END
-      END AS ot_total
-      FROM master_salary s 
-      WHERE s.ms_employeeid = '${employeeid}'`;
-
-    Select(sqlSalary, (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.json(JsonErrorResponse(err));
-      }
-
-      let ot_total = result && result.length > 0 ? result[0].ot_total : 0;
-
-      let sqlInsert = InsertStatement("restday_ot_approval", "roa", [
-        "employeeid",
-        "fullname",
-        "timein",
-        "timeout",
-        "attendancedate",
-        "status",
-        "total_hours",
-        "ot_total",
-        "file",
-        "createdate",
-        "createby",
-        "payrolldate",
-        "subgroupid",
-        "approvalcount",
-      ]);
-
-      let data = [
-        [
-          employeeid,
-          fullname,
-          timein,
-          timeout,
-          attendancedate,
-          status,
-          total_hours,
-          ot_total,
-          file,
-          new Date().toISOString(),
-          employeeid,
-          payrolldate,
-          subgroupid,
-          0,
-        ],
-      ];
-
-      let checkStatement = SelectStatement(
-        "SELECT * FROM restday_ot_approval WHERE roa_employeeid=? AND roa_attendancedate=? AND roa_status=?",
-        [employeeid, attendancedate, status]
-      );
-
-      Check(checkStatement)
-        .then((result) => {
-          if (result.length > 0) {
-            return res.json(JsonWarningResponse(MessageStatus.EXIST));
-          } else {
-            InsertTable(sqlInsert, data, (err, result) => {
-              if (err) {
-                console.log(err);
-                return res.json(JsonErrorResponse(err));
-              }
-
-
-              let emailbody = [
-                {
-                  employeename: employeeid,
-                  date: attendancedate,
-                  startdate: timein,
-                  enddate: timeout,
-                  reason: REQUEST.RD,
-                  status: MessageStatus.APPLIED,
-                  requesttype: REQUEST.RD,
-                },
-              ];
-              SendEmailNotification(employeeid, subgroupid, REQUEST.RD, emailbody);
-  
-
-              res.json(JsonSuccess());
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json(JsonErrorResponse(error));
-        });
-    });
-  } catch (error) {
-    res.json(JsonErrorResponse(error));
-  }
-});
 
 
 //#region FUNCTION

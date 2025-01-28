@@ -14,156 +14,155 @@
   
   </div>
 
-
-
-      <div class="card-header ch-generate">
-          <nav>
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
-                      data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="true"><b>Pending</b>
-                  </button>
-                  <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
-                      data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>Approved</b>
-                  </button>
-                  <button class="nav-link eportal-leave" id="appliedtable" data-bs-toggle="tab"
-                        data-bs-target="#nav-applied" type="button" role="tab" aria-controls="nav-profile"
-                        aria-selected="false"><b>Applied</b>
-                  </button>
-                  <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
-                      data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>Rejected</b>
-                  </button>
-                  <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
-                      data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
-                      aria-selected="false"><b>Cancelled</b>
-                  </button>
-              </div>
-          </nav>
-      </div>
-      <!-- Leave  Request -->
-      <div class="card-body db-custom-cards">
-          <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
-                  <div class="row">
-                      <div class="col-xl-12 col-lg-12">
-                            <div class="card-body cbody-requestleave">
-                                <table class="table table-striped-light" id="dataTableRestDayOT">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Attendance Date</th>
-                                            <th scope="col">Day Name</th>
-                                            <th scope="col">Time In</th>
-                                            <th scope="col">Time Out</th>
-                                            <th scope="col">Total Hours</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Applied Date</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+  <div class="card-header ch-generate">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active eportal-leave" id="nav-profile-tab" data-bs-toggle="tab"
+                data-bs-target="#nav-geofence" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="true"><b>Pending</b>
+            </button>
+            <button class="nav-link eportal-leave" id="approvedtable" data-bs-toggle="tab"
+                data-bs-target="#nav-approved" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="false"><b>Approved</b>
+            </button>
+            <button class="nav-link eportal-leave" id="appliedtable" data-bs-toggle="tab"
+                  data-bs-target="#nav-applied" type="button" role="tab" aria-controls="nav-profile"
+                  aria-selected="false"><b>Applied</b>
+            </button>
+            <button class="nav-link eportal-leave" id="rejectedtable" data-bs-toggle="tab"
+                data-bs-target="#nav-rejected" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="false"><b>Rejected</b>
+            </button>
+            <button class="nav-link eportal-leave" id="cancelledtable" data-bs-toggle="tab"
+                data-bs-target="#nav-cancelled" type="button" role="tab" aria-controls="nav-profile"
+                aria-selected="false"><b>Cancelled</b>
+            </button>
+        </div>
+    </nav>
+  </div>
+  <!-- Leave  Request -->
+  <div class="card-body db-custom-cards">
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-geofence" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12">
+                      <div class="card-body cbody-requestleave">
+                          <table class="table table-striped-light" id="dataTableRestDayOT">
+                              <thead>
+                                  <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Attendance Date</th>
+                                      <th scope="col">Day Name</th>
+                                      <th scope="col">Time In</th>
+                                      <th scope="col">Time Out</th>
+                                      <th scope="col">Total Hours</th>
+                                      <th scope="col">Status</th>
+                                      <th scope="col">Applied Date</th>
+                                      <th scope="col">Action</th>
+                                  </tr>
+                              </thead>
+                          </table>
                       </div>
-                  </div>
-              </div>
-              <div class="tab-pane fade" id="nav-approved" role="tabpanel"
-              aria-labelledby="nav-profile-tab">
-              <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-striped-light" id="dataTableleaveApproved">
-                          <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Attendance Date</th>
-                                <th scope="col">Day Name</th>
-                                <th scope="col">Time In</th>
-                                <th scope="col">Time Out</th>
-                                <th scope="col">Total Hours</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Applied Date</th>
-                                <th scope="col">Payroll Date</th>
-                                <th scope="col">Sub Group</th>
-                            </tr>
-                          </thead>
-                      </table>
-                  </div>
-              </div>
+                </div>
             </div>
-            <div class="tab-pane fade" id="nav-applied" role="tabpanel"
-              aria-labelledby="nav-profile-tab">
-              <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-striped-light" id="dataTableOvertimeApplied">
-                          <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Attendance Date</th>
-                                <th scope="col">Day Name</th>
-                                <th scope="col">Time In</th>
-                                <th scope="col">Time Out</th>
-                                <th scope="col">Total Hours</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Applied Date</th>
-                                <th scope="col">Payroll Date</th>
-                                <th scope="col">Sub Group</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                          </thead>
-                      </table>
-                  </div>
-              </div>
+        </div>
+        <div class="tab-pane fade" id="nav-approved" role="tabpanel"
+        aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped-light" id="dataTableleaveApproved">
+                    <thead>
+                      <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Attendance Date</th>
+                          <th scope="col">Day Name</th>
+                          <th scope="col">Time In</th>
+                          <th scope="col">Time Out</th>
+                          <th scope="col">Total Hours</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Applied Date</th>
+                          <th scope="col">Payroll Date</th>
+                          <th scope="col">Sub Group</th>
+                      </tr>
+                    </thead>
+                </table>
             </div>
-            <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
-              aria-labelledby="nav-profile-tab">
-              <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-striped-light" id="dataTableleaveRejected">
-                          <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Attendance Date</th>
-                                <th scope="col">Day Name</th>
-                                <th scope="col">Time In</th>
-                                <th scope="col">Time Out</th>
-                                <th scope="col">Total Hours</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Applied Date</th>
-                                <th scope="col">Payroll Date</th>
-                                <th scope="col">Sub Group</th>
-                            </tr>
-                          </thead>
-                      </table>
-                  </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
-              aria-labelledby="nav-profile-tab">
-              <div class="card-body">
-                  <div class="table-responsive" id="table-responsive-id">
-                      <table class="table table-striped-light" id="dataTableleaveCancelled">
-                          <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Attendance Date</th>
-                                <th scope="col">Day Name</th>
-                                <th scope="col">Time In</th>
-                                <th scope="col">Time Out</th>
-                                <th scope="col">Total Hours</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Applied Date</th>
-                                <th scope="col">Payroll Date</th>
-                                <th scope="col">Sub Group</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                          </thead>
-                      </table>
-                  </div>
-              </div>
-            </div>
-          </div>
+        </div>
       </div>
+      <div class="tab-pane fade" id="nav-applied" role="tabpanel"
+        aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped-light" id="dataTableOvertimeApplied">
+                    <thead>
+                      <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Attendance Date</th>
+                          <th scope="col">Day Name</th>
+                          <th scope="col">Time In</th>
+                          <th scope="col">Time Out</th>
+                          <th scope="col">Total Hours</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Applied Date</th>
+                          <th scope="col">Payroll Date</th>
+                          <th scope="col">Sub Group</th>
+                          <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-rejected" role="tabpanel"
+        aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped-light" id="dataTableleaveRejected">
+                    <thead>
+                      <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Attendance Date</th>
+                          <th scope="col">Day Name</th>
+                          <th scope="col">Time In</th>
+                          <th scope="col">Time Out</th>
+                          <th scope="col">Total Hours</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Applied Date</th>
+                          <th scope="col">Payroll Date</th>
+                          <th scope="col">Sub Group</th>
+                      </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="nav-cancelled" role="tabpanel"
+        aria-labelledby="nav-profile-tab">
+        <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+                <table class="table table-striped-light" id="dataTableleaveCancelled">
+                    <thead>
+                      <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Attendance Date</th>
+                          <th scope="col">Day Name</th>
+                          <th scope="col">Time In</th>
+                          <th scope="col">Time Out</th>
+                          <th scope="col">Total Hours</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Applied Date</th>
+                          <th scope="col">Payroll Date</th>
+                          <th scope="col">Sub Group</th>
+                          <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -189,6 +188,16 @@
                             </select>
                         </div>          
                     </div>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="shifttimein" class="form-label">Shift Time In</label>
+                            <input type="time" class="form-control border-form-modal" id="shifttimein" name="shifttimein">
+                        </div>
+                        <div class="col">
+                            <label for="shifttimeout" class="form-label">Shift Time Out</label>
+                            <input type="time" class="form-control border-form-modal" id="shifttimeout" name="shifttimeout">
+                        </div>    
+                    </div>   
                     <div class="row g-3">
                         <div class="col">
                             <label for="timein" class="form-label">Date Time In</label>
@@ -272,10 +281,6 @@
                             <label for="editsubgroup" class="form-label">Day Name</label>
                             <input type="text" class="form-control border-form-modal" id="editdayname" name="editdayname">
                         </div>
-                        <div class="col">
-                            <label for="editsubgroup" class="form-label">Total Hours</label>
-                            <input type="number" class="form-control border-form-modal" id="edittotalhours" name="edittotalhours" readonly>
-                        </div>
                     </div>
                     <div class="row g-3">
                         <div class="col">
@@ -287,6 +292,16 @@
                             <label for="editpassword" class="form-label">Sub Group</label>
                             <select class="form-control border-form-modal" id="editsubgroup" name="editsubgroup">
                             </select>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="editpassword" class="form-label">Shift Time In</label>
+                            <input type="time" class="form-control border-form-modal" id="editshifttimein" name="editshifttimein">
+                        </div>
+                        <div class="col">
+                            <label for="editpassword" class="form-label">Shift Time Out</label>
+                            <input type="time" class="form-control border-form-modal" id="editshifttimeout" name="editshifttimeout">
                         </div>
                     </div>
                     <br>
