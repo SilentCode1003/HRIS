@@ -34,6 +34,7 @@ const {
   GetCurrentMonthLastDay,
   ConvertToDate,
   InsertStatementTransCommit,
+  GetCurrentDay,
 } = require("./repository/customhelper");
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
@@ -1351,13 +1352,12 @@ router.post("/getadjustments", verifyJWT, (req, res) => {
     async function ProcessData() {
       let adjustments = await Check(sql_adjustment);
 
-
       let adjustmentData =
         adjustments.length > 0 ? DataModeling(adjustments, "pa_") : [];
 
       res.status(200).json({
         msg: "success",
-        data:adjustmentData
+        data: adjustmentData,
       });
     }
 
@@ -1420,7 +1420,7 @@ router.post("/subgrouploadforapp", verifyJWT, (req, res) => {
 
 router.post("/getpayrolldate", verifyJWT, (req, res) => {
   try {
-    let sql = `select pd_payrolldate as gp_payrolldate 
+    let showpayrolldate = `select pd_payrolldate as gp_payrolldate 
               from payroll_date where 
               pd_startdate = (
               SELECT CASE 
@@ -1430,20 +1430,64 @@ router.post("/getpayrolldate", verifyJWT, (req, res) => {
               END
               )`;
 
-    mysql
-      .mysqlQueryPromise(sql)
-      .then((result) => {
-        res.json({
+    let showpayrolldate11th = `
+        SELECT pd_payrolldate AS gp_payrolldate
+        FROM payroll_date
+        WHERE pd_startdate >= (
+          SELECT CASE 
+          WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') 
+          ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') 
+          END
+        ) LIMIT 2
+    `;
+
+    let showpayrolldate26th = `
+    select pd_payrolldate AS gp_payrolldate from payroll_date where  pd_startdate >= (
+    SELECT CASE 
+    WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') 
+    ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') 
+    END
+    ) LIMIT 2
+    `;
+
+    const currentDay = GetCurrentDay();
+
+    console.log(currentDay);
+
+    if (currentDay == "11") {
+      Select(showpayrolldate11th, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        console.log("result", result);
+
+        return res.json({
           msg: "success",
           data: result,
         });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
+      });
+    } else if (currentDay == "26") {
+      Select(showpayrolldate26th, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        console.log("result", result);
+
+        return res.json({
+          msg: "success",
+          data: result,
         });
       });
+    } else {
+      Select(showpayrolldate, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        console.log("result", result);
+
+        return res.json({
+          msg: "success",
+          data: result,
+        });
+      });
+    }
   } catch (error) {
     res.json({
       msg: "error",
@@ -1497,31 +1541,82 @@ router.post("/viewpayslip", verifyJWT, (req, res) => {
 
 router.post("/loadreqbeforepayout", verifyJWT, (req, res) => {
   try {
-    let sql = `SELECT 
-          pd_payrollid,
-          pd_name,
-          pd_cutoff,
-          DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS pd_startdate,
-          DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS pd_enddate,
-          DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS pd_payrolldate
-          FROM 
-          payroll_date
-          WHERE
-          pd_startdate = (
-            SELECT CASE 
-              WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
-              WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
-              ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
-                  END
-          )  `;
+    let showpayrolldate = `SELECT pd_payrollid AS payrolldate_id,
+          pd_name AS payroll_name,
+          pd_cutoff AS payroll_cutoff,
+          DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS payroll_startdate,
+          DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS payroll_enddate,
+          DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS payrolldate
+    from payroll_date where 
+    pd_startdate = (
+    SELECT CASE 
+    WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') -- Previous month's 26th
+    WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') -- Current month's 11th
+    ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') -- Current month's 26th
+    END
+    )`;
 
-    mysql.Select(sql, "Payroll_Date", (err, result) => {
-      if (err) console.error("Error: ", err);
-      res.json({
-        msg: "success",
-        data: result,
+    let showpayrolldate11th = `
+    SELECT pd_payrollid as payrolldate_id,
+          pd_name as payroll_name,
+          pd_cutoff as payroll_cutoff,
+          DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS payroll_startdate,
+          DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS payroll_enddate,
+          DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS payrolldate
+    FROM payroll_date
+    WHERE pd_startdate >= (
+    SELECT CASE 
+    WHEN DAY(CURRENT_DATE) <= 11 THEN DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH), '%Y-%m-26') 
+    ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') 
+    END
+    ) LIMIT 2
+    `;
+
+    let showpayrolldate26th = `
+    SELECT pd_payrollid as payrolldate_id,
+          pd_name as payroll_name,
+          pd_cutoff as payroll_cutoff,
+          DATE_FORMAT(pd_startdate, '%Y-%m-%d') AS payroll_startdate,
+          DATE_FORMAT(pd_enddate, '%Y-%m-%d') AS payroll_enddate,
+          DATE_FORMAT(pd_payrolldate, '%Y-%m-%d') AS payrolldate
+           from payroll_date where  pd_startdate >= (
+    SELECT CASE 
+    WHEN DAY(CURRENT_DATE) <= 26 THEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-11') 
+    ELSE DATE_FORMAT(CURRENT_DATE, '%Y-%m-26') 
+    END
+    ) LIMIT 2
+    `;
+
+    const currentDay = GetCurrentDay();
+
+    if (currentDay == "11") {
+      Select(showpayrolldate11th, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        return res.json({
+          msg: "success",
+          data: result,
+        });
       });
-    });
+    } else if (currentDay == "26") {
+      Select(showpayrolldate26th, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        return res.json({
+          msg: "success",
+          data: result,
+        });
+      });
+    } else {
+      Select(showpayrolldate, (err, result) => {
+        if (err) console.error("Error: ", err);
+
+        return res.json({
+          msg: "success",
+          data: result,
+        });
+      });
+    }
   } catch (error) {
     res.json({
       mag: "error",
