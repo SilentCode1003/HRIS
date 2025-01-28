@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Add stored procedure
     await queryInterface.sequelize.query(`
-      CREATE UpdateRequestRestDayOt(
+      CREATE PROCEDURE UpdateRequestRestDayOt(
         IN clockIn DATETIME,
         IN clockOut DATETIME,
         IN shiftTimeIn TIME,
