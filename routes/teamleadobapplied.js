@@ -139,6 +139,8 @@ router.put("/approved", (req, res) => {
     } = req.body;
     let queries = [];
 
+    const approved_by = req.session.employeeid;
+
     console.log(
       id,
       remarks,
@@ -242,7 +244,7 @@ router.put("/approved", (req, res) => {
         ]),
         values: [
           id,
-          req.session.employeeid,
+          approved_by,
           remarks,
           REQUEST_STATUS.approved,
           GetCurrentDatetime(),
@@ -258,7 +260,7 @@ router.put("/approved", (req, res) => {
           startdate: clockin,
           enddate: clockout,
           reason: remarks,
-          status: `${MessageStatus.APPROVED} - ${update_count} out of ${approval_count}`,
+          status: `${MessageStatus.APPROVED} by ${approved_by} - ${update_count} out of ${approval_count}`,
           requesttype: REQUEST.OB,
         },
       ];

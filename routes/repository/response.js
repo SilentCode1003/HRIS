@@ -24,42 +24,47 @@ const MessageStatus = {
     REJECTION: 'Rejection',
     CANCELLATION: 'Cancellation',
     DELETED: 'Deleted',
-  };
+    PARTIALLY: "Partially Approved",
+};
 
-  function JsonSuccess() {
-    return {
-      msg: MessageStatus.SUCCESS,
-    };
-  }
-  
-  function JsonDataResponse(data) {
-    //JsonDataResponse
-    return {
-      msg: MessageStatus.SUCCESS,
-      data: data,
-    };
-  }
-  
-  function JsonWarningResponse(message, data) {
-    //JsonWarningResponse
-    return {
-      msg: message,
-      data: data,
-    };
-  }
-  
-  function JsonErrorResponse(error) {
-    //JsonErrorResponse
-    return {
-      msg: error,
-    };
-  }
-  
-  module.exports = {
-    MessageStatus,
-    JsonDataResponse,
-    JsonWarningResponse,
-    JsonErrorResponse,
-    JsonSuccess,
+function JsonSuccess() {
+  return {
+    msg: MessageStatus.SUCCESS,
   };
-  
+}
+
+function JsonDataResponse(data) {
+  //JsonDataResponse
+  return {
+    msg: MessageStatus.SUCCESS,
+    data: data,
+  };
+}
+
+function JsonWarningResponse(message, data) {
+  //JsonWarningResponse
+  return {
+    msg: message,
+    data: data,
+  };
+}
+
+function JsonSuccessMulti(data) {
+  return data ;
+}
+
+function JsonErrorResponse(error) {
+  //JsonErrorResponse
+  return {
+    msg: error,
+  };
+}
+
+module.exports = {
+  MessageStatus,
+  JsonDataResponse,
+  JsonWarningResponse,
+  JsonErrorResponse,
+  JsonSuccess,
+  JsonSuccessMulti,
+};

@@ -114,6 +114,8 @@ router.post("/login", (req, res) => {
                   req.session.subgroupid = user.subgroupid;
                   req.session.clientip = req.body.client_ipaddress;
 
+                  console.log(req.session.subgroupid);
+
                   res.cookie("employeeid", user.employeeid, {
                     secure: true,
                     sameSite: "None", // Allow cross-origin

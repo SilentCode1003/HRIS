@@ -7923,7 +7923,11 @@ router.post("/submitleave", verifyJWT, async (req, res) => {
       .map((date) => `'${date}'`)
       .join(",")})
     `;
+
+      const checkRequest = SelectStatement('select * from leaves where ? between l_leavestartdate and l_leaveenddate and l_employeeid = ?', [startdate, employeeid]);
+
     const existingDatesResult = await mysql.mysqlQueryPromise(checkDatesQuery);
+    const existingRequestResult = await mysql.mysqlQueryPromise(checkRequest);
 
     if (existingDatesResult.length > 0) {
       console.log(
@@ -7933,6 +7937,17 @@ router.post("/submitleave", verifyJWT, async (req, res) => {
       return res.json({
         msg: "dates_conflict",
         existingDates: existingDatesResult,
+      });
+    }
+
+    if(existingRequestResult.length > 0) {
+      console.log(
+        "Leave request conflict with existing records:",
+        existingRequestResult
+      );
+      return res.json({
+        msg: "request_conflict",
+        existingRequest: existingRequestResult,
       });
     }
 

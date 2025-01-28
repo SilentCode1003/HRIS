@@ -2,7 +2,6 @@
   $(document).ready(function () {
     const table = $("#datatable tbody");
 
-
     //#region Initialize Data
     LoadTable();
     LoadList();
@@ -57,60 +56,65 @@
             }
 
             if (result.msg === "exist") {
-              warning("Request Already Exist", `Request with date ${attendancedate} already exist`);
+              warning(
+                "Request Already Exist",
+                `Request with date ${attendancedate} already exist`
+              );
             }
           }
         );
       }
     });
-   
+
     $(document).on("change", "#status", function () {
       let targetDate = $("#datetime").val();
       let status = $(this).val();
 
       console.log(targetDate, status);
-      
 
-      if(targetDate === undefined){
+      if (targetDate === undefined) {
         warning("Required Fields", "Date is required");
         return;
       }
 
-      if(status === undefined){
+      if (status === undefined) {
         warning("Required Fields", "Status is required");
         return;
       }
-      
-      
-      FetchTableData(`/eportalundertime/load/${targetDate}/${status}`, (result) => {
-        console.log(result);
 
-        PopulateTable(table, result);
-      });
+      FetchTableData(
+        `/eportalundertime/load/${targetDate}/${status}`,
+        (result) => {
+          console.log(result);
+
+          PopulateTable(table, result);
+        }
+      );
     });
 
     $(document).on("change", "#datetime", function () {
       let status = $("#status").val();
       let targetDate = $(this).val();
 
-      if(targetDate === undefined){
+      if (targetDate === undefined) {
         warning("Required Fields", "Date is required");
         return;
       }
 
-      if(status === undefined){
+      if (status === undefined) {
         warning("Required Fields", "Status is required");
         return;
       }
-      
-      
-      FetchTableData(`/eportalundertime/load/${targetDate}/${status}`, (result) => {
-        console.log(result);
 
-        PopulateTable(table, result);
-      });
+      FetchTableData(
+        `/eportalundertime/load/${targetDate}/${status}`,
+        (result) => {
+          console.log(result);
+
+          PopulateTable(table, result);
+        }
+      );
     });
-
 
     //#endregion
 
@@ -139,14 +143,18 @@
         table.append(tr);
       } else {
         data.forEach((item) => {
+          let action = "";
           const statusBackground = getStatusBackground(item.status);
           const containerBackground = getStatusContainerBackground(item.status);
 
+          action = `<button id="viewBtn" class="btn text-secondary" name="viewBtn" "><i class="fas fa-fw fa-eye"></i></button>`;
+
           const tr = $("<tr>").append(
-            $("<td>", {
+            $("<th>", {
               text: item.id,
               "data-label": "ID",
               class: "custom-mobile-align",
+              scope: "row",
             }),
             $("<td>", {
               text: item.attendance_date,
@@ -176,7 +184,11 @@
                 $("<span>", { text: item.status, class: statusBackground })
               )
             ),
-           
+            // $("<td>", {
+            //   html: action,
+            //   "data-label": "Employee",
+            //   class: "custom-mobile-align",
+            // })
           );
           table.append(tr);
         });

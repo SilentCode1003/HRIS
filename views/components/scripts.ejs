@@ -610,6 +610,8 @@
     switch (status) {
       case "REQUEST":
         return "status-pending";
+      case "APPLIED":
+        return "status-inprogress";
       case "REFUNDED":
         return "status-pending";
       case "PENDING":
@@ -630,6 +632,8 @@
         return "status-inprogress";
       case "DAMAGE":
         return "status-warning";
+      case "REJECTED":
+        return "status-warning";
       case "Inactive":
         return "status-warning";
       case "CANCELLED":
@@ -645,6 +649,8 @@
     switch (status) {
       case "PENDING":
         return "status-container-pd";
+      case "APPLIED":
+        return "status-container-inpg";
       case "REQUEST":
         return "status-container-pd";
       case "REFUNDED":
@@ -664,6 +670,8 @@
       case "IN PROGRESS":
         return "status-container-inpg";
       case "DAMAGE":
+        return "status-container-wr";
+      case "REJECTED":
         return "status-container-wr";
       case "Inactive":
         return "status-container-wr";

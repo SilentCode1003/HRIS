@@ -1111,3 +1111,19 @@ body .fc-widget-header a {
   transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   color: rgb(17, 141, 87);
 }
+
+
+.approver-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #7a1818 !important;
+}
+.approver-name {
+  font-weight: bold;
+  color: #fff;
+}
+.approver-position, .approver-department, .approver-stage {
+  color: #fff;
+}
