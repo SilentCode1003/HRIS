@@ -1,9 +1,23 @@
-const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
+const verifyJWT = require("../middleware/authenticator");
+const {
+  SelectStatement,
+  GetCurrentDate,
+  UpdateStatement,
+  InsertStatement,
+} = require("./repository/customhelper");
+const { SelectAll } = require("./utility/utility");
+const {
+  JsonDataResponse,
+  JsonErrorResponse,
+  JsonSuccess,
+} = require("./repository/response");
+const { Select, Update } = require("./repository/dbconnect");
+const { DataModeling } = require("./model/hrmisdb");
+const { Insert } = require("./repository/hrmisdb");
 var router = express.Router();
-const currentDate = moment();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -13,136 +27,96 @@ router.get("/", function (req, res, next) {
 
 module.exports = router;
 
-router.get("/load", (req, res) => {
+router.get("/load", async (req, res) => {
   try {
-    let sql = `SELECT * FROM  apps_details`;
-
-    mysql.Select(sql, "Apps_Details", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
+    let result = await SelectAll("apps_details", "ad_");
+    console.log(result);
+    res.status(200).json(JsonDataResponse(result));
   } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 
 router.post("/save", (req, res) => {
   try {
-    let appimage = req.body.appimage;
-    let appname = req.body.appname;
-    let appsdetails = req.body.appsdetails;
-    let appversion = req.body.appversion;
-    let appdate = currentDate.format("YYYY-MM-DD");
-    let appcreateby = req.session.fullname;
-    let data = [];
+    const { appimage, appname, appsdetails, appversion, appcreateby } =
+      req.body;
+    let appdate = GetCurrentDate();
+    let insert_sql = InsertStatement(
+      "apps_details",
+      ["image", "name", "details", "version", "date", "createby"],
+      [appimage, appname, appsdetails, appversion, appdate, appcreateby]
+    );
 
-    data.push([
+    Insert(insert_sql, (error, result) => {
+      if (error) {
+        res.status(500).json(JsonErrorResponse(error));
+      }
+
+      res.status(200).json(JsonSuccess());
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getappsdetails", (req, res) => {
+  try {
+    const { appid } = req.body;
+
+    let sql = SelectStatement("select * from apps_details where ad_id = ?", [
+      appid,
+    ]);
+
+    Select(sql, (error, result) => {
+      if (error) {
+        res.status(500).json(JsonErrorResponse(error));
+      }
+
+      if (result.length == 0) {
+        res.status(200).json(JsonDataResponse(result));
+      } else {
+        let data = DataModeling(result, "ad_");
+        res.status(200).json(JsonDataResponse(data));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/update", (req, res) => {
+  try {
+    const { appid, appimage, appname, appsdetails, appversion } = req.body;
+    let appdate = GetCurrentDate();
+    let appcreateby = req.session.fullname;
+    let data = [
       appimage,
       appname,
       appsdetails,
       appversion,
       appdate,
       appcreateby,
-    ]);
+      appid,
+    ];
 
-    let sql = `SELECT * FROM apps_details WHERE ad_name = '${appname}'`;
+    let update_sql = UpdateStatement(
+      "apps_details",
+      "ad",
+      ["image", "name", "details", "version", "date", "createby"],
+      ["id"]
+    );
 
-    mysql.Select(sql, "Apps_Details", (err, result) => {
-      if (err) console.error("Error: ", err);
+    Update(update_sql, data, (error, result) => {
+      if (error) {
+        console.log(error);
 
-      if (result.length != 0) {
-        res.json({
-          msg: "exist",
-        });
-      } else {
-        mysql.InsertTable("apps_details", data, (err, result) => {
-          if (err) console.error("Error: ", err);
-
-          res.json({
-            msg: "success",
-          });
-        });
+        res.status(500).json(JsonErrorResponse(error));
       }
+
+      res.status(200).json(JsonDataResponse(result));
     });
   } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
-
-router.post("/getappsdetails", (req, res) => {
-  try {
-    let appid = req.body.appid;
-    let sql = `select
-    ad_image,
-    ad_name,
-    ad_details,
-    ad_version 
-    from apps_details 
-    where ad_id = '${appid}'`;
-
-    mysql.Select(sql, "Apps_Details", (err, result) => {
-      if (err) console.error("Error: ", err);
-
-      res.json({
-        msg: "success",
-        data: result,
-      });
-    });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
-  }
-});
-
-router.post("/update", (req, res) => {
-  try {
-    let appid = req.body.appid;
-    let appimage = req.body.appimage;
-    let appname = req.body.appname;
-    let appsdetails = req.body.appsdetails;
-    let appversion = req.body.appversion;
-    let appdate = currentDate.format("YYYY-MM-DD");
-    let appcreateby = req.session.fullname;
-
-    let sql = `UPDATE apps_details SET 
-    ad_image = '${appimage}',
-    ad_name = '${appname}',
-    ad_details = '${appsdetails}',
-    ad_version = '${appversion}',
-    ad_date = '${appdate}',
-    ad_createby = '${appcreateby}'
-    WHERE ad_id = '${appid}'`;
-
-    mysql
-      .Update(sql)
-      .then((result) => {
-        res.json({
-          msg: "success",
-          data: result,
-        });
-      })
-      .catch((error) => {
-        res.json({
-          msg: "error",
-          data: error,
-        });
-      });
-  } catch (error) {
-    res.json({
-      msg: "error",
-      data: error,
-    });
+    res.status(500).json(JsonErrorResponse(error));
   }
 });

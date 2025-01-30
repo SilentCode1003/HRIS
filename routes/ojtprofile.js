@@ -37,7 +37,7 @@ router.post("/load", (req, res) => {
     mo_hours as TotalHours,
     SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(TIMEDIFF(oa_clockout, oa_clockin))), 0)) AS AcumulatedHours,
     SEC_TO_TIME(TIME_TO_SEC(mo_hours) - IFNULL(SUM(TIME_TO_SEC(TIMEDIFF(oa_clockout, oa_clockin))), 0)) AS RemainingHours,
-    DATE_ADD(NOW(), INTERVAL CEIL(TIME_TO_SEC(SEC_TO_TIME(TIME_TO_SEC(mo_hours) - IFNULL(SUM(TIME_TO_SEC(TIMEDIFF(oa_clockout, oa_clockin))), 0))) / 28800) DAY) AS EndDate
+    DATE_FORMAT(REPLACE(REPLACE(DATE_ADD(NOW(), INTERVAL CEIL(TIME_TO_SEC(SEC_TO_TIME(TIME_TO_SEC(mo_hours) - IFNULL(SUM(TIME_TO_SEC(TIMEDIFF(oa_clockout, oa_clockin))), 0))) / 28800) DAY), 'T', ' '), 'Z', ''), '%Y-%m-%d') as EndDate
 FROM
     master_ojt
     inner join master_department on mo_department = md_departmentid
