@@ -25,31 +25,31 @@
         ajax: {
           url: "/appsdetails/load",
           dataSrc: (json) => {
+            console.log(json.data);
             var finalData = [];
             var data = json.data;
 
             $.each(data, (key, item) => {
+              console.log(item);
               var action = "";
-              var status = item.status;
-
               action = `
                           <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editmodal"><i class="fas fa-fw fa-pen"></i></button>
                       `;
 
               var imgElement = document.createElement("img");
-              imgElement.src = "data:image/jpg;base64," + item.appimage;
+              imgElement.src = "data:image/jpg;base64," + item.image;
               imgElement.alt = "Profile Image";
               imgElement.style.width = "100px";
               imgElement.style.height = "100px";
 
               finalData.push({
                 appimage: imgElement.outerHTML,
-                appid: item.appid,
-                appname: item.appname,
-                appsdetails: item.appsdetails,
-                appversion: item.appversion,
-                appdate: item.appdate,
-                appcreateby: item.appcreateby,
+                appid: item.id,
+                appname: item.name,
+                appsdetails: item.details,
+                appversion: item.version,
+                appdate: item.date,
+                appcreateby: item.createby,
                 action: action,
               });
             });
@@ -163,12 +163,12 @@
             $.each(existingData, (key, item) => {
               $("#editpreview").attr(
                 "src",
-                "data:image/jpg;base64," + item.appimage
+                "data:image/jpg;base64," + item.image
               );
-              base64String = item.appimage;
-              $("#editappname").val(item.appname);
-              $("#editappdetails").val(item.appsdetails);
-              $("#editappversion").val(item.appversion);
+              base64String = item.image;
+              $("#editappname").val(item.name);
+              $("#editappdetails").val(item.details);
+              $("#editappversion").val(item.version);
             });
           } else {
             swal("Error fetching employee data", msg, "error");
