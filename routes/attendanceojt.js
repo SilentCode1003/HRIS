@@ -181,7 +181,7 @@ function Update_OJTAttendance(data) {
   return new Promise((resolve, reject) => {
     let model = OJTAttendance(data);
     let sql =
-      "update ojt_attendance set oa_clockout = ?, oa_latitudeout = ?, oa_longitudeout = ?, oa_deviceout = ?, oa_geofenceidOut=? where oa_ojtid=? and oa_attendancedate=?";
+      "update ojt_attendance set oa_clockout = ?, oa_latitudeout = ?, oa_longitudeout = ?, oa_deviceout = ?, oa_geofenceidOut = ? where oa_ojtid=? and oa_attendancedate=?";
     let counter = 0;
 
     model.forEach((item) => {
