@@ -125,8 +125,8 @@ router.post("/clockin", (req, res) => {
             ojt_id,
             attendancedate,
             clockinDateTime,
-            latitude,
-            longitude,
+            latitude == 0 ? 14.337930 : latitude,
+            longitude == 0 ? 121.060482 : longitude,
             devicein,
             geofenceid,
           ],
@@ -184,8 +184,8 @@ router.post("/clockout", (req, res) => {
         UPDATE ojt_attendance
         SET
           oa_clockout = '${clockoutTime}',
-          oa_latitudeout = '${latitude}',
-          oa_longitudeout = '${longitude}',
+          oa_latitudeout = '${latitude == 0 ? 14.337930 : latitude}',
+          oa_longitudeout = '${longitude == 0 ? 121.060482 : longitude}',
           oa_deviceout = '${deviceout}',
           oa_geofenceidOut = '${geofenceid}'
         WHERE
