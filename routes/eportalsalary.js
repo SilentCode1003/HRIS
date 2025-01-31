@@ -226,6 +226,9 @@ router.post("/loadpayslip", (req, res) => {
 
       if (result != 0) {
         let data = DataModeling(result, "p_");
+
+        console.log(data);
+        
         res.json(JsonDataResponse(data));
       } else {
         res.json(JsonDataResponse(result));
