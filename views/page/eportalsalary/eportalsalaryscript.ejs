@@ -134,7 +134,7 @@
           { data: "totalnetpay" },
           { data: "action" },
         ],
-       
+
         initComplete: function () {},
       });
     }
@@ -164,10 +164,7 @@
             const existingData = result.data;
             console.log(existingData);
             $.each(existingData, (key, item) => {
-              $("#preview").attr(
-                "src",
-                "data:image/jpg;base64," + item.image
-              );
+              $("#preview").attr("src", "data:image/jpg;base64," + item.image);
               $("#employeename").text(item.fullname);
               $("#position").text(item.position);
               $("#department").text(item.department);
@@ -199,21 +196,18 @@
               $("#restdayot").text(item.restotday);
               $("#13thmonthpay").text(formatToCurrency(item.accrued13thmonth));
             });
-            
 
             $.ajax({
               url: "eportalsalary/loaddinamicamount",
               type: "POST",
-              contentType: "application/json", 
+              contentType: "application/json",
               data: JSON.stringify({
-                payrolldate: payrolldate, 
+                payrolldate: payrolldate,
                 employeeid: employeeid,
               }),
               dataType: "json",
               success: function (response) {
-               
                 if (response && response.data) {
-
                   $("#dinamicloanname").empty();
                   $("#dinamicloandeductions").empty();
 
@@ -222,7 +216,9 @@
                       `<p class="mb-0 payroll-label">${item.loan_type}</p>`
                     );
                     $("#dinamicloandeductions").append(
-                      `<p class="text-muted mb-0">${(formatToCurrency(item.loan_amount))}</p>`
+                      `<p class="text-muted mb-0">${formatToCurrency(
+                        item.loan_amount
+                      )}</p>`
                     );
                   });
                 } else {
@@ -309,10 +305,20 @@
                 formatToCurrency(item.payroll_adjustments)
               );
               globalpayrolladjustments = item.payroll_adjustments;
-              $("#payslippayrollAdjustmentsDetails").text(item.payroll_adjustment_details);
+              $("#payslippayrollAdjustmentsDetails").text(
+                item.payroll_adjustment_details
+              );
               globalpayrolladjustmentsdetails = item.payroll_adjustment_details;
-              $("#payslipAdjustmentsDeductionsDetails").html(item.payroll_adjustments_deductions_details.replace(/; /g, ';<br>'));
-              globalpayrolladjustmentsdeductionsdetails = item.payroll_adjustments_deductions_details;
+              $("#payslipAdjustmentsDeductionsDetails").html(
+                item.payroll_adjustments_deductions_details == null
+                  ? ""
+                  : item.payroll_adjustments_deductions_details.replace(
+                      /; /g,
+                      ";<br>"
+                    )
+              );
+              globalpayrolladjustmentsdeductionsdetails =
+                item.payroll_adjustments_deductions_details;
               $("#payslipovertime").text(formatToCurrency(item.approveOT));
               globalapproveot = item.approveOT;
               $("#payslipndpay").text(formatToCurrency(item.approvedNightOT));
@@ -357,31 +363,38 @@
               }
               globalsuspension_pay = item.suspension_pay;
               globalleave_with_out_pay = item.leave_with_out_pay;
-              globalleave_with_out_pay_deductions = item.leave_with_out_pay_deductions;
+              globalleave_with_out_pay_deductions =
+                item.leave_with_out_pay_deductions;
 
-              if (suspensionPay === 0 && leaveNoPay === 0 && leaveNoPayDeductions === 0) {
-                  $("#payslipsuspensionpay").closest("tr").hide();
+              if (
+                suspensionPay === 0 &&
+                leaveNoPay === 0 &&
+                leaveNoPayDeductions === 0
+              ) {
+                $("#payslipsuspensionpay").closest("tr").hide();
               } else {
-                  $("#payslipsuspensionpay").closest("tr").show();
-                  if (suspensionPay > 0) {
-                      $("#payslipsuspensionpay").text(formatToCurrency(suspensionPay));
-                  } else {
-                      $("#payslipsuspensionpay").text("");
-                  }
-                  if (leaveNoPay > 0) {
-                      $("#payslipnopay").html(
-                          "<strong> ( " + leaveNoPay + " )</strong>"
-                      );
-                  } else {
-                      $("#payslipnopay").html("");
-                  }
-                  if (leaveNoPayDeductions > 0) {
-                      $("#payslipnopaydeductions").text(
-                          formatToCurrency(leaveNoPayDeductions)
-                      );
-                  } else {
-                      $("#payslipnopaydeductions").text("");
-                  }
+                $("#payslipsuspensionpay").closest("tr").show();
+                if (suspensionPay > 0) {
+                  $("#payslipsuspensionpay").text(
+                    formatToCurrency(suspensionPay)
+                  );
+                } else {
+                  $("#payslipsuspensionpay").text("");
+                }
+                if (leaveNoPay > 0) {
+                  $("#payslipnopay").html(
+                    "<strong> ( " + leaveNoPay + " )</strong>"
+                  );
+                } else {
+                  $("#payslipnopay").html("");
+                }
+                if (leaveNoPayDeductions > 0) {
+                  $("#payslipnopaydeductions").text(
+                    formatToCurrency(leaveNoPayDeductions)
+                  );
+                } else {
+                  $("#payslipnopaydeductions").text("");
+                }
               }
 
               $("#paysliptotal").text(formatToCurrency(item.overall_netpay));
@@ -402,7 +415,9 @@
                 formatToCurrency(item.absent_deductions)
               );
               globalabsentdeductions = item.absent_deductions;
-              $("#payslipnumabsent").html("<strong> ( " + item.absent + " )</strong>");
+              $("#payslipnumabsent").html(
+                "<strong> ( " + item.absent + " )</strong>"
+              );
               globalnumabsent = item.absent;
               $("#paysliphealthcard").text(formatToCurrency(item.healthcard));
               globalhealthcard = item.healthcard;
@@ -428,8 +443,14 @@
               globalrestday_ot = item.restday_ot;
               $("#paysliplate").text(formatToCurrency(item.late_deductions));
               globallatedeductions = item.late_deductions;
-              $("#payslipnumlate").html("<strong> ( " + item.latehours + " : " + item.lateminutes + " )</strong>");
-              globalnumlate = (item.latehours + " : " + item.lateminutes);
+              $("#payslipnumlate").html(
+                "<strong> ( " +
+                  item.latehours +
+                  " : " +
+                  item.lateminutes +
+                  " )</strong>"
+              );
+              globalnumlate = item.latehours + " : " + item.lateminutes;
               $("#payslipsalaryloan").text(formatToCurrency(item.salary_loan));
               globalsalary_loan = item.salary_loan;
               $("#paysliptotaldeductions").text(
@@ -525,8 +546,8 @@
       });
     });
 
-       //miyaka
-       function getStatusClass(statusText) {
+    //miyaka
+    function getStatusClass(statusText) {
       switch (statusText.toLowerCase()) {
         case "normal day":
           return "normal-day";
@@ -537,30 +558,30 @@
         case "missed logs":
           return "missed-status";
 
-          case "absent":
+        case "absent":
           return "absent";
 
-          case "regular holiday":
+        case "regular holiday":
           return "regularholiday";
 
-          case "non-working holiday":
+        case "non-working holiday":
           return "nonworking";
 
-          case "rest day ot":
+        case "rest day ot":
           return "restday-ot-status";
 
-          case "on leave w/o pay":
+        case "on leave w/o pay":
           return "onleave-wo-pay";
 
-          case "on leave":
+        case "on leave":
           return "onleave-status";
 
-          case "exempted":
+        case "exempted":
           return "exempted-status";
 
-          case "special holiday":
+        case "special holiday":
           return "specialholiday-status";
-          
+
         default:
           return "";
       }
@@ -611,7 +632,9 @@
             var TOTAL_MINUTES = row.insertCell(10);
 
             DATE.innerHTML = formatDate(item.gp_attendancedate);
-            ATTENDANCE_STATUS.innerHTML = `<span class="${getStatusClass(item.Attendance_Status)}">${item.Attendance_Status}</span>`;
+            ATTENDANCE_STATUS.innerHTML = `<span class="${getStatusClass(
+              item.Attendance_Status
+            )}">${item.Attendance_Status}</span>`;
             CLOCK_IN.innerHTML = item.TimeIn;
             CLOCK_OUT.innerHTML = item.TimeOut;
             LATE_MINUTES.innerHTML = item.Late_Minutes;
@@ -719,7 +742,8 @@
           globalsuspension_pay: globalsuspension_pay,
           globalgpstatus: globalgpstatus,
           globalleave_with_out_pay: globalleave_with_out_pay,
-          globalleave_with_out_pay_deductions: globalleave_with_out_pay_deductions,
+          globalleave_with_out_pay_deductions:
+            globalleave_with_out_pay_deductions,
         },
         dataType: "text",
         success: function (data) {
@@ -774,6 +798,4 @@
 
     //#endregion
   });
-
-
 </script>
