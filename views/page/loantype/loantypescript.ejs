@@ -1,0 +1,185 @@
+<script>
+  $(document).ready(function () {
+    //#region Initialize Data
+    let loantypeid = "";
+    let loantype = "";
+    let gov_agency = "";
+    LoadTable();
+    //#endregion
+
+    //#region Event Listeners
+
+    $("#datatable tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      loantypeid = dataRow[0];
+      loantype = dataRow[1];
+      gov_agency = dataRow[2];
+    });
+
+    $(document).on("click", "#editBtn", function () {
+      $("#loantypeid").val(loantypeid);
+      $("#loantypemodal").val(loantype);
+      $("#governementagencymodal").val(gov_agency);
+
+      $("#editModal").modal("show");
+    });
+
+    $(document).on("click", "#updateBtn", function () {
+      let loantypeid = $("#loantypeid").val();
+      let loantype = $("#loantypemodal").val();
+      let governmentagency = $("#governementagencymodal").val();
+
+      if (loantypeid === "") {
+        warning("Required Fields", "Loan Type ID is required");
+        return;
+      }
+
+      if (loantype === "") {
+        warning("Required Fields", "Loan Type is required");
+        return;
+      }
+
+      if (governmentagency === "") {
+        warning("Required Fields", "Government Agency is required");
+        return;
+      }
+
+      Upsert(
+        "PUT",
+        "/loantype/update",
+        {
+          loantypeid: loantypeid,
+          loantype: loantype,
+          governmentagency: governmentagency,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Success", "Data Saved Successfully");
+            $("#editModal").modal("hide");
+            LoadTable();
+          }
+
+          if (result.msg === "exist") {
+            warning(
+              "Request Already Exist",
+              `Request with date ${loantype} already exist`
+            );
+          }
+        }
+      );
+    });
+   
+    $(document).on("click", "#addBtn", function () {
+      let loantype = $("#loantype").val();
+      let governmentagency = $("#governmentagency").val();
+
+      if (loantype === "") {
+        warning("Required Fields", "Loan Type is required");
+        return;
+      }
+
+      if (governmentagency === "") {
+        warning("Required Fields", "Government Agency is required");
+        return;
+      }
+
+      Upsert(
+        "POST",
+        "/loantype/save",
+        {
+          loantype: loantype,
+          governmentagency: governmentagency,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Success", "Data Saved Successfully");
+            LoadTable();
+          }
+
+          if (result.msg === "exist") {
+            warning(
+              "Request Already Exist",
+              `Request with date ${loantype} already exist`
+            );
+          }
+        }
+      );
+    });
+
+    //#endregion
+
+    //#region Load table
+    function LoadTable() {
+      const table = $("#datatable tbody");
+      FetchTableData("/loantype/getloantype", (result) => {
+        console.log(result);
+
+        PopulateTable(table, result);
+      });
+    }
+
+    function PopulateTable(table, data) {
+      table.empty();
+
+      console.log(data.length);
+
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 4,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        table.append(tr);
+      } else {
+        data.forEach((item) => {
+          let action = "";
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          action = `<button id="editBtn" class="btn text-primary" name="editBtn" "><i class="fas fa-fw fa-edit"></i></button>`;
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.typeid,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.name,
+              "data-label": "Loan Type",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.gov_agency,
+              "data-label": "Government Agency",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              html: action,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            })
+          );
+          table.append(tr);
+        });
+      }
+    }
+
+    //#endregion
+
+    //#region Other Functions
+
+    $("#search-input").on("input", function () {
+      filterTableRows("#datatable", 4, "#search-input");
+    });
+    //#endregion
+  });
+</script>
