@@ -1,0 +1,91 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header header-bg">
+        <h1 class="modal-title fs-5" id="editModalLabel">
+          Undertime Request Details
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body gp-4">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">ID</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Loan Type ID"
+                name="loantypeid"
+                id="loantypeid"
+                type="text"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable">Loan Type</span>
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Loan Type"
+                name="loantypemodal"
+                id="loantypemodal"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text select-dtrtable"
+                  >Government Agency</span
+                >
+              </div>
+              <input
+                autocomplete="off"
+                class="form-control text-center custom-input"
+                placeholder="Government Agency"
+                name="governementagencymodal"
+                id="governementagencymodal"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" id="updateBtn">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
