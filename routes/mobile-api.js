@@ -414,18 +414,23 @@ router.post("/clockin", verifyJWT, (req, res) => {
         });
       }
       if (!locationin) {
+        console.log("locationin is null");
+
         return res.status(400).json({
           status: "error",
           message: "We Can't Find Your Location",
         });
       }
       if (latitude === null || latitude === undefined) {
+        console.log("latitude is null");
         return res.status(400).json({
           status: "error",
           message: "Latitude cannot be null.",
         });
       }
       if (longitude === null || longitude === undefined) {
+        console.log("longitude is null");
+
         return res.status(400).json({
           status: "error",
           message: "Longitude cannot be null.",
@@ -476,6 +481,8 @@ router.post("/clockin", verifyJWT, (req, res) => {
       const isScheduledTimeout = await Check(fetchScheduledTimeOutQuery);
 
       if (isExist.length > 0) {
+        console.log(isExist);
+
         return res.json({
           status: "exist",
           message:
@@ -656,12 +663,10 @@ router.post("/clockout", verifyJWT, (req, res) => {
     LIMIT 1
   `;
 
-  console.log(checkExistingClockInQuery);
-
   mysql
     .mysqlQueryPromise(checkExistingClockInQuery)
     .then((resultClockIn) => {
-      console.log(resultClockIn);
+   
 
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
@@ -685,7 +690,11 @@ router.post("/clockout", verifyJWT, (req, res) => {
         mysql
           .Update(updateQuery)
           .then((updateResult) => {
-            console.log(updateResult);
+            console.log("Employee ID: ", employee_id);
+            console.log("Attendance Date: ", ma_attendancedate);
+            console.log("Clock-out Time: ", clockoutTime);
+            console.log("Location: ", locationout);
+
             res.json({
               status: "success",
               message: "Clock-out successful.",
@@ -2512,21 +2521,21 @@ router.post("/getrestdayot", verifyJWT, (req, res) => {
 //       total_hours = Math.floor(total_hours);
 //     }
 
-//     let sqlSalary = `SELECT 
-//       CASE 
+//     let sqlSalary = `SELECT
+//       CASE
 //         WHEN ${total_hours} <= 3 THEN 0
 //         WHEN ${total_hours} <= 8 THEN
-//           CASE 
+//           CASE
 //             WHEN s.ms_payrolltype = 'Daily' THEN (s.ms_monthly * 1.30) / 2
 //             ELSE (s.ms_monthly / 313 * 12 * 1.30) / 2
 //           END
 //         ELSE
-//           CASE 
+//           CASE
 //             WHEN s.ms_payrolltype = 'Daily' THEN (s.ms_monthly * 1.30)
 //             ELSE (s.ms_monthly / 313 * 12 * 1.30)
 //           END
 //       END AS ot_total
-//       FROM master_salary s 
+//       FROM master_salary s
 //       WHERE s.ms_employeeid = '${employeeid}'`;
 
 //     Select(sqlSalary, (err, result) => {
@@ -2617,12 +2626,13 @@ router.put("/editrdot", verifyJWT, (req, res) => {
       shiftTimeOut,
       attendancedate,
       payrolldate,
-      subgroup,
+      subgroupid,
       file,
       employeeid,
     } = req.body;
 
-    console.log(req.body);
+    console.log(subgroupid);
+
     let sql = `call hrmis.UpdateRequestRestDayOt(
       '${clockin}',
       '${clockout}',
@@ -2632,7 +2642,7 @@ router.put("/editrdot", verifyJWT, (req, res) => {
       '${employeeid}',
       '${payrolldate}',
       '${status}',
-      '${subgroup}',
+      '${subgroupid}',
       '${file}',
       '${createddate}',
       '${approvecount}',
@@ -2694,11 +2704,11 @@ router.put("/editrdot", verifyJWT, (req, res) => {
       });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 
-router.post("/saverdot", verifyJWT,(req, res) => {
+router.post("/saverdot", verifyJWT, (req, res) => {
   try {
     let {
       timein,
@@ -2707,7 +2717,7 @@ router.post("/saverdot", verifyJWT,(req, res) => {
       employeeid,
       payrolldate,
       reason,
-      subgroup,
+      subgroupid,
       file,
       shiftTimeIn,
       shiftTimeOut,
@@ -2715,8 +2725,7 @@ router.post("/saverdot", verifyJWT,(req, res) => {
     let status = "Applied";
     let approvecount = 0;
 
-    console.log(req.body);
-    
+    console.log(subgroupid);
 
     let applieddate = GetCurrentDatetime();
     let sql = `CALL hrmis.RequestRestDayOt(
@@ -2728,7 +2737,7 @@ router.post("/saverdot", verifyJWT,(req, res) => {
       '${employeeid}',
       '${payrolldate}',
       '${status}',
-      '${subgroup}',
+      '${subgroupid}',
       '${file}',
       '${applieddate}',
       '${approvecount}'
@@ -2760,13 +2769,17 @@ router.post("/saverdot", verifyJWT,(req, res) => {
       })
       .then((result2) => {
         if (result2.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPLIEDRDOT));
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPLIEDRDOT)
+          );
         }
         return Check(validationQuery3);
       })
       .then((result3) => {
         if (result3.length > 0) {
-          return Promise.reject(JsonWarningResponse(MessageStatus.EXIST,MessageStatus.APPROVEDRDOT));
+          return Promise.reject(
+            JsonWarningResponse(MessageStatus.EXIST, MessageStatus.APPROVEDRDOT)
+          );
         }
         mysql.StoredProcedure(sql, (err, insertResult) => {
           if (err) {
@@ -2787,7 +2800,12 @@ router.post("/saverdot", verifyJWT,(req, res) => {
               },
             ];
 
-            SendEmailNotification(employeeid, subgroup, REQUEST.RD, emailbody);
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.RD,
+              emailbody
+            );
 
             return res.json(JsonSuccess());
           }
@@ -2940,7 +2958,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       clockout,
       attendancedate,
       payrolldate,
-      subgroup,
+      subgroupid,
       holidayimage,
       employeeid,
     } = req.body;
@@ -2954,7 +2972,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       '${employeeid}',
       '${payrolldate}',
       '${status}',
-      '${subgroup}',
+      '${subgroupid}',
       '${holidayimage}',
       '${createddate}',
       '${approvecount}',
@@ -3001,7 +3019,12 @@ router.put("/editholiday", verifyJWT, (req, res) => {
                 requesttype: REQUEST.HD,
               },
             ];
-            SendEmailNotification(employeeid, subgroup, REQUEST.HD, emailbody);
+            SendEmailNotification(
+              employeeid,
+              subgroupid,
+              REQUEST.HD,
+              emailbody
+            );
 
             //res.json(JsonSuccess());
             return res.json(JsonSuccess());
@@ -7924,7 +7947,10 @@ router.post("/submitleave", verifyJWT, async (req, res) => {
       .join(",")})
     `;
 
-      const checkRequest = SelectStatement('select * from leaves where ? between l_leavestartdate and l_leaveenddate and l_employeeid = ?', [startdate, employeeid]);
+    const checkRequest = SelectStatement(
+      "select * from leaves where ? between l_leavestartdate and l_leaveenddate and l_employeeid = ?",
+      [startdate, employeeid]
+    );
 
     const existingDatesResult = await mysql.mysqlQueryPromise(checkDatesQuery);
     const existingRequestResult = await mysql.mysqlQueryPromise(checkRequest);
@@ -7940,7 +7966,7 @@ router.post("/submitleave", verifyJWT, async (req, res) => {
       });
     }
 
-    if(existingRequestResult.length > 0) {
+    if (existingRequestResult.length > 0) {
       console.log(
         "Leave request conflict with existing records:",
         existingRequestResult
