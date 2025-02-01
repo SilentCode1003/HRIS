@@ -380,21 +380,23 @@ router.put("/edit", async (req, res) => {
     const targetResult = await Check(checkTarget);
 
     if (actualResult.length > 0) {
-      return res.json("Actual Date Exist");
+      console.log("Actual Date Exist");
+      return res.status(400).json("Actual Date Exist");
     }
 
     if (targetResult.length > 0) {
-      return res.json("Target Date Exist");
+      console.log("Target Date Exist");
+      return res.status(400).json("Target Date Exist");
     }
 
     Update(updateStatement, data, (err, result) => {
       if (err) console.error("Error: ", err);
 
-      res.json(JsonSuccess());
+      res.status(200).json(JsonSuccess());
     });
   } catch (error) {
     console.log(error);
-    res.json(JsonErrorResponse(error));
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 

@@ -2,9 +2,21 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { Select } = require("./repository/dbconnect");
-const { JsonErrorResponse, JsonDataResponse } = require("./repository/response");
+const { Select, Check } = require("./repository/dbconnect");
+const {
+  JsonErrorResponse,
+  JsonDataResponse,
+  JsonSuccess,
+} = require("./repository/response");
 const { DataModeling } = require("./model/hrmisdb");
+const {
+  GetCurrentDate,
+  SelectStatement,
+  InsertStatementTransCommit,
+  AddDay,
+} = require("./repository/customhelper");
+const { Transaction, SelectAll } = require("./utility/utility");
+const e = require("express");
 var router = express.Router();
 const currentDate = moment();
 
@@ -59,46 +71,79 @@ router.post("/getgovermentid", (req, res) => {
 
 router.post("/save", async (req, res) => {
   try {
-    let employeeid = req.body.employeeid;
-    let idtype = req.body.idtype;
-    let idnumber = req.body.idnumber;
-    let issuedate = req.body.issuedate;
+    const { employeeid, idtype, idnumber, issuedate } = req.body;
     let createby = req.session.fullname;
-    let createdate = currentDate.format("YYYY-MM-DD");
+    let createdate = GetCurrentDate();
     let status = "Active";
-    let data = [];
+    let queries = [];
 
-    const checkQuery = `SELECT * FROM master_govid WHERE mg_employeeid = '${employeeid}' AND mg_idtype = '${idtype}'`;
-    const checkParams = [employeeid, idtype];
+    async function ProcessData() {
+      let checkQuery = SelectStatement(
+        "SELECT * FROM master_govid WHERE mg_employeeid = ? AND mg_idtype = ?",
+        [employeeid, idtype]
+      );
+      let existingRecord = await Check(checkQuery);
+      if (existingRecord.length > 0) {
+        res.json({ msg: "exist" });
+        return;
+      }
 
-    const existingRecord = await mysql.mysqlQueryPromise(
-      checkQuery,
-      checkParams
-    );
+      queries.push({
+        sql: InsertStatementTransCommit("master_govid", "mg", [
+          "employeeid",
+          "idtype",
+          "idnumber",
+          "issuedate",
+          "createby",
+          "createdate",
+          "status",
+        ]),
+        values: [
+          employeeid,
+          idtype,
+          idnumber,
+          issuedate,
+          createby,
+          createdate,
+          status,
+        ],
+      });
 
-    if (existingRecord.length > 0) {
-      res.json({ msg: "exist" });
-      return;
+
+      let current_cut_off = await GetCurrentCutOff(GetCurrentDate());
+      const { cutoff, startdate, enddate, payrolldate } = current_cut_off[0];
+      let executionDate = "";
+
+      if (cutoff == "1st Cut Off") {
+        executionDate = AddDay(payrolldate, 15);
+      } else {
+        executionDate = AddDay(payrolldate, 30);
+      }
+
+      queries.push({
+        sql: InsertStatementTransCommit("deduction_schedule", "ds", [
+          "employee_id",
+          "description",
+          "date",
+          "create_by",
+          "create_date",
+          "status",
+        ]),
+        values: [
+          employeeid,
+          idtype,
+          executionDate,
+          createby,
+          createdate,
+          status,
+        ],
+      });
+
+      await Transaction(queries);
+      res.status(200).json(JsonSuccess());
     }
 
-    data.push([
-      employeeid,
-      idtype,
-      idnumber,
-      issuedate,
-      createby,
-      createdate,
-      status,
-    ]);
-
-    mysql.InsertTable("master_govid", data, (insertErr, insertResult) => {
-      if (insertErr) {
-        console.error("Error inserting record: ", insertErr);
-        res.json({ msg: "insert_failed" });
-      } else {
-        res.json({ msg: "success" });
-      }
-    });
+    ProcessData();
   } catch (error) {
     console.error("Error: ", error);
     res.json({ msg: "error" });
@@ -178,3 +223,22 @@ router.post("/update", (req, res) => {
     });
   }
 });
+
+//#region Functions
+
+function GetCurrentCutOff(date) {
+  return new Promise((resolve, reject) => {
+    let sql = SelectStatement(
+      "select pd_cutoff as cutoff, DATE_FORMAT(pd_startdate, '%Y-%m-%d') as startdate, DATE_FORMAT(pd_enddate, '%Y-%m-%d')  as enddate,  DATE_FORMAT(pd_payrolldate, '%Y-%m-%d')  as payrolldate from payroll_date where pd_payrolldate > ? limit 1",
+      [date]
+    );
+
+    Select(sql, (error, result) => {
+      if (error) return reject(error);
+
+      return resolve(result);
+    });
+  });
+}
+
+//#endregion

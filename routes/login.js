@@ -100,6 +100,7 @@ router.post("/login", (req, res) => {
                     ),
                     {}
                   );
+                  
                   req.session.employeeid = user.employeeid;
                   req.session.fullname = user.fullname;
                   req.session.accesstype = user.accesstype;
