@@ -459,24 +459,14 @@ router.put("/update", (req, res) => {
       INNER JOIN master_employee on me_id = ms_employeeid
       WHERE me_id = '${employeeid}'`;
 
-      console.log(getShiftActualRestday);
-      
-
       const targetRestdayResult = await Check(getShiftTargetRestday);
       const actualRestdayResult = await Check(getShiftActualRestday);
 
-  
       const { target_schedule_time_in, target_schedule_time_out } =
         targetRestdayResult[0];
 
-        console.log(target_schedule_time_in, target_schedule_time_out);
-        
-
       const { actual_schedule_time_in, actual_schedule_time_out } =
         actualRestdayResult[0];
-
-        console.log(actual_schedule_time_in, actual_schedule_time_out);
-        
 
       if (status === STATUS_LOG.ACTIVE) {
         queries.push({
