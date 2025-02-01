@@ -1,5 +1,9 @@
 <script>
   let changeshift = "";
+  let targetdate = "";
+  let actualdate = "";
+  let employeeid = "";
+  let status = "";
 
   $(document).ready(function () {
     const manualMemoTab = $("#manualMemoTab");
@@ -126,13 +130,25 @@
 
             $.each(data, (key, item) => {
               var action = "";
-              var status = item.status;
+              var status = item.shiftstatus;
 
-              action = `
-                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editchangeshift"><i class="fas fa-fw fa-pen"></i></button>
+              console.log(status);
+              
+
+              if (status == "Active") {
+                action = `
+                <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editchangeshift"><i class="fas fa-fw fa-edit"></i></button>
+                <button id="updateBtn" class="btn text-primary" name="updateBtn"><i class="fas fa-fw fa-eye"></i></button>
                             `;
+              } else {
+                action = `
+                <button id="updateBtn" class="btn text-primary" name="updateBtn"><i class="fas fa-fw fa-eye-slash"></i></button>
+                            `;
+              }
+
               finalData.push({
                 changeshift: item.id,
+                employeeid: item.employeeid,
                 fullname: item.fullname,
                 actualrd: item.actualrd,
                 changerd: item.changerd,
@@ -147,6 +163,7 @@
         },
         columns: [
           { data: "changeshift" },
+          { data: "employeeid" },
           { data: "fullname" },
           { data: "actualrd" },
           { data: "changerd" },
@@ -282,6 +299,10 @@
           dataRow.push($(this).text());
         });
       changeshift = dataRow[0];
+      employeeid = dataRow[1];
+      actualdate = dataRow[3];
+      targetdate = dataRow[4];
+      status = dataRow[5];
     });
 
     $(document).on("click", "#editBtn", function () {
@@ -601,6 +622,30 @@
       });
     });
 
+    //#endregion
+
+    //#region Event Listeners
+    $(document).on("click", "#updateBtn", function () {
+      Upsert(
+        "PUT",
+        "/change_shift/update",
+        {
+          employeeid: employeeid,
+          actualrddate: actualdate,
+          targetrddate: targetdate,
+          changeshift: changeshift,
+          status: status,
+        },
+        (result) => {
+          if (result.msg === "success") {
+            success("Success", "Data Saved Successfully");
+            LoadTable();
+          } else {
+            swal("Error", "An error occurred while updating.", "error");
+          }
+        }
+      );
+    });
     //#endregion
   });
 </script>
