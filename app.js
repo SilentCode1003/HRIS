@@ -17,6 +17,7 @@ const swaggerUi = require("swagger-ui-express");
 cron.schedule("0 0 * * *", () => {
   console.log("Running daily attendance status insertion...");
   insertDailyAttendanceStatus();
+  GenerateEmployeeGovernmentDeduction();
 });
 
 //#region ROUTES IMPORT
@@ -184,6 +185,7 @@ var teamleadundertimeRouter = require("./routes/teamleadundertime");
 //#endregion
 
 const verifyJWT = require("./middleware/authenticator");
+const GenerateEmployeeGovernmentDeduction = require("./routes/scheduler/governmentdeduction");
 
 var app = express();
 

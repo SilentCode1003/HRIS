@@ -16,10 +16,10 @@ Decrypter("59689980b455d496b41c7fc6861b3ee3", (err, encrypted) => {
   console.log(encrypted);
 });
 
-// Encrypter('101520122321', (err, encrypted) => {
-//   if (err) console.error("Error: ", err);
-//   console.log(encrypted);
-// });
+Encrypter('25020119940115', (err, encrypted) => {
+  if (err) console.error("Error: ", err);
+  console.log(encrypted);
+});
 
 // Encrypter("5lsolutions101520", (err, encrypted) => {
 //   if (err) console.error("Error: ", err);
