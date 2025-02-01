@@ -20,6 +20,7 @@ const {
 } = require("./repository/customhelper");
 const { log } = require("winston");
 const { Transaction } = require("./utility/utility");
+const { STATUS_LOG } = require("./repository/enums");
 var router = express.Router();
 const currentDate = moment();
 
@@ -35,6 +36,7 @@ router.get("/load", (req, res) => {
   try {
     let sql = `SELECT 
     cs_id,
+    cs_employeeid,
     concat(me_lastname,' ',me_firstname) as cs_fullname,
     cs_actualrd,
     cs_changerd,
@@ -242,7 +244,7 @@ router.post("/save", (req, res) => {
         status,
         createby,
         createdate,
-      ]
+      ];
 
       queries.push({
         sql: insertChangeSfhit,
@@ -261,14 +263,13 @@ router.post("/save", (req, res) => {
       );
 
       console.log(updateMasterAttendance);
-      
 
       queries.push({
         sql: updateMasterAttendance,
         values: [schedule_time_in, schedule_time_out, employeeid, actualrddate],
       });
 
-     await Transaction(queries);
+      await Transaction(queries);
 
       res.json(JsonSuccess());
     }
@@ -396,6 +397,164 @@ router.put("/edit", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.put("/update", (req, res) => {
+  try {
+    const { employeeid, targetrddate, actualrddate, changeshift, status } =
+      req.body;
+
+    let queries = [];
+
+    console.log(employeeid, targetrddate, actualrddate, changeshift, status);
+
+    async function ProcessData() {
+      let getShiftTargetRestday = `
+      SELECT 
+      CASE
+        WHEN DAYOFWEEK('${targetrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${targetrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_in')
+      END as target_schedule_time_in,
+      CASE 
+        WHEN DAYOFWEEK('${targetrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${targetrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_out')
+      END as target_schedule_time_out
+      FROM master_shift as ms
+      INNER JOIN master_employee on me_id = ms_employeeid
+      WHERE me_id = '${employeeid}'`;
+
+      let getShiftActualRestday = `
+      SELECT 
+      CASE
+        WHEN DAYOFWEEK('${actualrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_in')
+        WHEN DAYOFWEEK('${actualrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_in')
+      END as actual_schedule_time_in,
+      CASE 
+        WHEN DAYOFWEEK('${actualrddate}') = 2 THEN (ms.ms_MONDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 3 THEN (ms.ms_TUESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 4 THEN (ms.ms_WEDNESDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 5 THEN (ms.ms_THURSDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 6 THEN (ms.ms_FRIDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 7 THEN (ms.ms_SATURDAY->>'$.time_out')
+        WHEN DAYOFWEEK('${actualrddate}') = 1 THEN (ms.ms_SUNDAY->>'$.time_out')
+      END as actual_schedule_time_out
+      FROM master_shift as ms
+      INNER JOIN master_employee on me_id = ms_employeeid
+      WHERE me_id = '${employeeid}'`;
+
+      console.log(getShiftActualRestday);
+      
+
+      const targetRestdayResult = await Check(getShiftTargetRestday);
+      const actualRestdayResult = await Check(getShiftActualRestday);
+
+  
+      const { target_schedule_time_in, target_schedule_time_out } =
+        targetRestdayResult[0];
+
+        console.log(target_schedule_time_in, target_schedule_time_out);
+        
+
+      const { actual_schedule_time_in, actual_schedule_time_out } =
+        actualRestdayResult[0];
+
+        console.log(actual_schedule_time_in, actual_schedule_time_out);
+        
+
+      if (status === STATUS_LOG.ACTIVE) {
+        queries.push({
+          sql: UpdateStatement(
+            "master_attendance",
+            "ma",
+            ["shift_timein", "shift_timeout"],
+            ["attendancedate", "employeeid"]
+          ),
+          values: [
+            target_schedule_time_in,
+            target_schedule_time_out,
+            targetrddate,
+            employeeid,
+          ],
+        });
+
+        queries.push({
+          sql: UpdateStatement(
+            "master_attendance",
+            "ma",
+            ["shift_timein", "shift_timeout"],
+            ["attendancedate", "employeeid"]
+          ),
+          values: [
+            actual_schedule_time_in,
+            actual_schedule_time_out,
+            actualrddate,
+            employeeid,
+          ],
+        });
+      } else {
+        queries.push({
+          sql: UpdateStatement(
+            "master_attendance",
+            "ma",
+            ["shift_timein", "shift_timeout"],
+            ["attendancedate", "employeeid"]
+          ),
+          values: [
+            actual_schedule_time_in,
+            actual_schedule_time_out,
+            targetrddate,
+            employeeid,
+          ],
+        });
+
+        queries.push({
+          sql: UpdateStatement(
+            "master_attendance",
+            "ma",
+            ["shift_timein", "shift_timeout"],
+            ["attendancedate", "employeeid"]
+          ),
+          values: [
+            target_schedule_time_in,
+            target_schedule_time_out,
+            actualrddate,
+            employeeid,
+          ],
+        });
+      }
+
+      queries.push({
+        sql: UpdateStatement("change_shift", "cs", ["shiftstatus"], ["id"]),
+        values: [
+          status == STATUS_LOG.ACTIVE ? STATUS_LOG.INACTIVE : STATUS_LOG.ACTIVE,
+          changeshift,
+        ],
+      });
+
+      await Transaction(queries);
+
+      res.status(200).json(JsonSuccess());
+    }
+
+    ProcessData();
+  } catch (error) {
     res.status(500).json(JsonErrorResponse(error));
   }
 });
