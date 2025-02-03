@@ -488,13 +488,13 @@ router.post("/clockin", verifyJWT, (req, res) => {
       if (isExist.length > 0) {
         console.log(isExist);
 
-        return res.json({
+        return res.status(400).json({
           status: "exist",
           message:
             "Clock-in not allowed. Employee already clocked in on the same day.",
         });
       } else if (isMissedLog.length > 0) {
-        return res.json({
+        return res.status(400).json({
           status: "disabled",
           message:
             "Clock-in not allowed. Missing clock-out on the previous day.",
