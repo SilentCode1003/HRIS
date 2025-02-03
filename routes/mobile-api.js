@@ -2,7 +2,12 @@ const mysql = require("./repository/hrmisdb");
 const moment = require("moment");
 var express = require("express");
 const { Validator } = require("./controller/middleware");
-const { Select, InsertTable, Update } = require("./repository/dbconnect");
+const {
+  Select,
+  InsertTable,
+  Update,
+  Insert,
+} = require("./repository/dbconnect");
 const { SendEmailNotification } = require("./repository/emailsender");
 const { Master_Geofence_Settings } = require("./model/hrmisdb");
 const {
@@ -39,7 +44,7 @@ const {
 const verifyJWT = require("../middleware/authenticator");
 const jwt = require("jsonwebtoken");
 const { sq, de } = require("date-fns/locale");
-const { REQUEST } = require("./repository/enums");
+const { REQUEST, REQUEST_STATUS } = require("./repository/enums");
 const { log } = require("winston");
 const { resolveInclude } = require("ejs");
 const { Transaction } = require("./utility/utility");
@@ -666,8 +671,6 @@ router.post("/clockout", verifyJWT, (req, res) => {
   mysql
     .mysqlQueryPromise(checkExistingClockInQuery)
     .then((resultClockIn) => {
-   
-
       if (resultClockIn.length > 0) {
         const { ma_attendancedate } = resultClockIn[0];
         const deviceout = req.body.deviceout;
@@ -8192,10 +8195,10 @@ router.post("/getob", (req, res) => {
 
 router.post("/getobstatus", (req, res) => {
   try {
-    const { employeeid, status } = req.body;
+    const { employeeid, status, startdate, enddate } = req.body;
     let sql = SelectStatement(
       "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ? and obr_status = ?",
-      [employeeid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay(), status]
+      [employeeid, startdate, enddate, status]
     );
 
     Select(sql, (err, result) => {
@@ -8319,6 +8322,172 @@ router.post("/appplyob", (req, res) => {
 
     ProcessData();
   } catch (error) {
+    console.log(error);
+
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+//#endregion
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//#region UNDERTIME
+router.post("/getundertime", (req, res) => {
+  try {
+    const { employeeid } = req.body;
+    let sql = SelectStatement(
+      "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ?",
+      [employeeid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay()]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "ur_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/getundertimestatus", (req, res) => {
+  try {
+    const { employeeid, status, startdate, enddate } = req.body;
+    let sql = SelectStatement(
+      "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ? and ur_status = ?",
+      [employeeid, startdate, enddate, status]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "ur_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/filterundertime", (req, res) => {
+  try {
+    const { employeeid, startdate, enddate } = req.body;
+    let sql = SelectStatement(
+      "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ?",
+      [employeeid, startdate, enddate]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "ur_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/applyundertime", (req, res) => {
+  try {
+    const {
+      employeeid,
+      attendancedate,
+      subgroupid,
+      clockin,
+      clockout,
+      reason,
+    } = req.body;
+    let status = REQUEST_STATUS.applied;
+    let applied_date = GetCurrentDatetime();
+
+    async function ProcessData() {
+      let undertime_request_sql = InsertStatement(
+        "undertime_request",
+        "ur",
+        [
+          "employee_id",
+          "attendance_date",
+          "subgroup_id",
+          "clockin",
+          "clockout",
+          "applied_date",
+          "reason",
+          "status",
+          "approval_count",
+        ]
+      );
+
+      let ur_data = [
+        [
+          employeeid,
+          attendancedate,
+          subgroupid,
+          clockin,
+          clockout,
+          applied_date,
+          reason,
+          status,
+          0,
+        ],
+      ];
+
+      Insert(undertime_request_sql, ur_data, (err, result) => {
+        if (err) {
+          console.log(err);
+
+          res.status(500).json({
+            msg: err,
+          });
+        }
+
+        let emailbody = [
+          {
+            employeename: employeeid,
+            date: attendancedate,
+            reason: reason,
+            status: MessageStatus.APPLIED,
+            requesttype: REQUEST.UT,
+            startdate: clockin,
+            enddate: clockout,
+          },
+        ];
+
+        SendEmailNotification(employeeid, subgroupid, REQUEST.UT, emailbody);
+
+        res.status(200).json({
+          msg: "success",
+          data: result,
+        });
+      });
+    }
+
+    ProcessData();
+  } catch (error) {
+    console.log(error);
+
     res.status(500).json(JsonErrorResponse(error));
   }
 });
