@@ -127,6 +127,10 @@ router.post("/addrequestholiday", (req, res) => {
       holidayImage,
     } = req.body;
 
+
+    console.log(req.body);
+    
+
     let approvecount = 0;
     let applieddate = GetCurrentDatetime();
 
