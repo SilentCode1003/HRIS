@@ -2966,7 +2966,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       employeeid,
     } = req.body;
 
-    // console.log(req.body);
+    console.log(req.body);
 
     let sql = `call hrmis.UpdateRequestHoliday(
       '${clockin}',
