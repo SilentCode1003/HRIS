@@ -2961,7 +2961,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       clockout,
       attendancedate,
       payrolldate,
-      subgroupid,
+      subgroup,
       holidayimage,
       employeeid,
     } = req.body;
@@ -2975,7 +2975,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       '${employeeid}',
       '${payrolldate}',
       '${status}',
-      '${subgroupid}',
+      '${subgroup}',
       '${holidayimage}',
       '${createddate}',
       '${approvecount}',
@@ -3024,7 +3024,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
             ];
             SendEmailNotification(
               employeeid,
-              subgroupid,
+              subgroup,
               REQUEST.HD,
               emailbody
             );
