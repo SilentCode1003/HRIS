@@ -2966,7 +2966,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
       employeeid,
     } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
 
     let sql = `call hrmis.UpdateRequestHoliday(
       '${clockin}',
@@ -3022,12 +3022,7 @@ router.put("/editholiday", verifyJWT, (req, res) => {
                 requesttype: REQUEST.HD,
               },
             ];
-            SendEmailNotification(
-              employeeid,
-              subgroup,
-              REQUEST.HD,
-              emailbody
-            );
+            SendEmailNotification(employeeid, subgroup, REQUEST.HD, emailbody);
 
             //res.json(JsonSuccess());
             return res.json(JsonSuccess());
@@ -8196,10 +8191,20 @@ router.post("/getob", (req, res) => {
 router.post("/getobstatus", (req, res) => {
   try {
     const { employeeid, status, startdate, enddate } = req.body;
-    let sql = SelectStatement(
-      "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ? and obr_status = ?",
-      [employeeid, startdate, enddate, status]
-    );
+
+    let sql = "";
+
+    if (status == "ALL") {
+      sql = SelectStatement(
+        "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ?",
+        [employeeid, startdate, enddate]
+      );
+    } else {
+      sql = SelectStatement(
+        "select * from official_business_request where obr_employee_id = ? and obr_attendance_date between ? and ? and obr_status = ?",
+        [employeeid, startdate, enddate, status]
+      );
+    }
 
     Select(sql, (err, result) => {
       if (err) {
@@ -8245,7 +8250,7 @@ router.post("/filterob", (req, res) => {
   }
 });
 
-router.post("/appplyob", (req, res) => {
+router.post("/applyob", (req, res) => {
   try {
     const {
       employeeid,
@@ -8328,6 +8333,60 @@ router.post("/appplyob", (req, res) => {
   }
 });
 
+router.post("/viewob", (req, res) => {
+  try {
+    const { requestid } = req.body;
+    let sql = SelectStatement(
+      "select * from official_business_request where obr_id = ? and obr_attendance_date between ? and ?",
+      [requestid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay()]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "obr_");
+
+        console.log(data);
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/cancelob", (req, res) => {
+  try {
+    const { requestid } = req.body;
+    let sql = UpdateStatement(
+      "official_business_request",
+      "obr",
+      ["status"],
+      ["id"]
+    );
+
+    let data = [MessageStatus.CANCELLED, requestid];
+
+    Update(sql, data, (err, result) => {
+      if (err) {
+        console.log(err);
+
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      res.status(200).json(JsonSuccess());
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -8361,10 +8420,19 @@ router.post("/getundertime", (req, res) => {
 router.post("/getundertimestatus", (req, res) => {
   try {
     const { employeeid, status, startdate, enddate } = req.body;
-    let sql = SelectStatement(
-      "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ? and ur_status = ?",
-      [employeeid, startdate, enddate, status]
-    );
+    let sql = "";
+
+    if (status == "ALL") {
+      sql = SelectStatement(
+        "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ?",
+        [employeeid, startdate, enddate]
+      );
+    } else {
+      sql = SelectStatement(
+        "select * from undertime_request where ur_employee_id = ? and ur_attendance_date between ? and ? and ur_status = ?",
+        [employeeid, startdate, enddate, status]
+      );
+    }
 
     Select(sql, (err, result) => {
       if (err) {
@@ -8424,21 +8492,17 @@ router.post("/applyundertime", (req, res) => {
     let applied_date = GetCurrentDatetime();
 
     async function ProcessData() {
-      let undertime_request_sql = InsertStatement(
-        "undertime_request",
-        "ur",
-        [
-          "employee_id",
-          "attendance_date",
-          "subgroup_id",
-          "clockin",
-          "clockout",
-          "applied_date",
-          "reason",
-          "status",
-          "approval_count",
-        ]
-      );
+      let undertime_request_sql = InsertStatement("undertime_request", "ur", [
+        "employee_id",
+        "attendance_date",
+        "subgroup_id",
+        "clockin",
+        "clockout",
+        "applied_date",
+        "reason",
+        "status",
+        "approval_count",
+      ]);
 
       let ur_data = [
         [
@@ -8488,6 +8552,51 @@ router.post("/applyundertime", (req, res) => {
   } catch (error) {
     console.log(error);
 
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/viewundertime", (req, res) => {
+  try {
+    const { requestid } = req.body;
+    let sql = SelectStatement(
+      "select * from undertime_request where ur_id = ? and ur_attendance_date between ? and ?",
+      [requestid, GetCurrentMonthFirstDay(), GetCurrentMonthLastDay()]
+    );
+
+    Select(sql, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      if (result.length != 0) {
+        let data = DataModeling(result, "ur_");
+
+        res.status(200).json(JsonDataResponse(data));
+      } else {
+        res.status(200).json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.post("/cancelundertime", (req, res) => {
+  try {
+    const { requestid } = req.body;
+    let sql = UpdateStatement("undertime_request", "ur", ["status"], ["id"]);
+
+    let data = [MessageStatus.CANCELLED, requestid];
+
+    Update(sql, data, (err, result) => {
+      if (err) {
+        return res.status(500).json(JsonErrorResponse(err));
+      }
+
+      res.status(200).json(JsonSuccess());
+    });
+  } catch (error) {
     res.status(500).json(JsonErrorResponse(error));
   }
 });
