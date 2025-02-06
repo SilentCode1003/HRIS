@@ -519,7 +519,7 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Rest Day OT",
                 "₱" + globalrestday_ot,
-                "Calamity Loan",
+                "CALAMITY LOAN (SSS)",
                 "₱" + globalcalamity_loan,
               ],
               [
@@ -531,7 +531,7 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Leave With Pay",
                 "₱" + globalleavepay,
-                "Housing Loan",
+                "Short Term Loan (PAG-IBIG)",
                 "₱" + globalhousing_loan,
               ],
               [
@@ -543,13 +543,13 @@ router.post("/generatepdf", async (req, res) => {
               [
                 "Regular Holiday Overtime",
                 "₱" + globalregularholidayot,
-                "Sterling Loan",
+                "Salary Loan (SBA)",
                 "₱" + globalsterling_loan,
               ],
               [
                 "Regular Holiday",
                 "₱" + globalregularholidaycomp,
-                "Salary Loan",
+                "Salary Loan (SSS)",
                 "₱" + globalsalary_loan,
               ],
               ...finalDeductionRows,
