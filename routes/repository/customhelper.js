@@ -226,6 +226,14 @@ exports.GenerateDates = (startDate, endDate) => {
 
   return dates;
 };
+
+exports.formatDate = (date) => {
+  return moment(`${date}`).format("YYYY-MM-DD");
+};
+
+exports.GetMonthLastDay = (yearMonth) => {
+  return moment(`${yearMonth}`).endOf("month").format("YYYY-MM-DD");
+};
 //#endregion
 
 //#region  SUMMARY REPORTS

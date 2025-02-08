@@ -11,7 +11,7 @@ Decrypter(process.env._PASSWORD_ADMIN, (err, encrypted) => {
   password = encrypted;
 });
 
-Decrypter("094a5e9c43010b3f6349fae38e58b32d712ecf5a0f102cfebbcfec2f8ad8d0da", (err, encrypted) => {
+Decrypter("670e432a2f12bb39006b8cced415e7b4", (err, encrypted) => {
   if (err) console.error("Error: ", err);
   console.log(encrypted);
 });
@@ -126,6 +126,20 @@ exports.Check = (sql) => {
   return new Promise((resolve, reject) => {
     this.Select(sql, (error, result) => {
       if (error) {
+        console.log(error);
+        reject(error);
+      }
+      resolve(result);
+    });
+  });
+};
+
+exports.InsertCheck = (sql, data) => {
+  return new Promise((resolve, reject) => {
+    this.Insert(sql, data, (error, result) => {
+      if (error) {
+        console.log(error);
+
         reject(error);
       }
       resolve(result);

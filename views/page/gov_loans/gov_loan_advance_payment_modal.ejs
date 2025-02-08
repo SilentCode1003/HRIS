@@ -1,0 +1,121 @@
+<div
+  class="modal fade"
+  id="advancedgovloansmodal"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">
+          Advanced Payment
+        </h3>
+        <i class="bx bx-x" data-bs-dismiss="modal" aria-label="Close"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div class="row">
+          <div class="col-md-6" style="padding: 20px">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Payroll Date</th>
+                    <th scope="col">Select</th>
+                  </tr>
+                </thead>
+                <tbody id="payrolldates-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <form>
+              <div class="form-floating mb-3">
+                <select
+                  class="form-select border-form-modal"
+                  id="govloanadvancedemployeeid"
+                  name="govloanadvancedemployeeid"
+                  disabled
+                ></select>
+                <label for="govloanemployeeid">Employee ID</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control border-form-modal"
+                  id="govloanadvancedtype"
+                  name="govloanadvancedtype"
+                  placeholder="Loan Type"
+                  readonly
+                />
+                <label for="govloantype">Loan Type</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control border-form-modal"
+                  id="govloanadvancedrecived"
+                  name="govloanadvancedrecived"
+                  placeholder="Amount Received"
+                  oninput="formatPrice(event, this)"
+                  readonly
+                />
+                <label for="govloanrecieved">Amount Received</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control border-form-modal"
+                  id="govloanadvancedpermonth"
+                  name="govloanadvancedpermonth"
+                  placeholder="Deductions Per Month"
+                  oninput="formatPrice(event, this)"
+                  readonly
+                />
+                <label for="govloanpermonth">Deductions Per Month</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select
+                  class="form-control border-form-modal"
+                  id="govloanpaymenttypeadvanced"
+                  name="govloanpaymenttypeadvanced"
+                  placeholder="govloanpaymenttype Durations"
+                >
+                  <option value="VIA PAYSLIP">Deduct via payslip</option>
+                  <option value="VIA OTC">Deduct Over The Counter</option>
+                </select>
+                <label for="govpayrolldates">Payment Type</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select
+                  class="form-select border-form-modal"
+                  id="govloanadvancedpayrolldate"
+                  name="govloanadvancedpayrolldate"
+                  aria-label="Select Start Date"
+                ></select>
+                <label for="govloaneffectivedate">Select Payroll Date</label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button
+          type="button"
+          class="btn btn-modal-close"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-modal-save"
+          id="govloanadvancedsaveBTN"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
