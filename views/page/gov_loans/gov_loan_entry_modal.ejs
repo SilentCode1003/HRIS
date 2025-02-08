@@ -1,0 +1,168 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="govloansmodal"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">
+          Add Government Loans
+        </h3>
+        <i class="bx bx-x" data-bs-dismiss="modal" aria-label="CLose"></i>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <br />
+        <br />
+        <div class="row">
+          <div class="col-xl-2 col-lg-4" style="margin-left: 10px">
+            <div class="col g-6">
+              <div class="p-4" style="width: 300px; margin-top: -100px">
+                <div class="text-center">
+                  <img
+                    id="previewleave"
+                    src="https://via.placeholder.com/250"
+                    class="border border-5 border-form-modal"
+                    alt="placeholder"
+                  />
+                </div>
+                <br />
+                <h2 class="pb-3 mb-4 text-center modal-content-title">
+                  File Preview
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-7" style="margin-left: 150px">
+            <form>
+              <br />
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select
+                      class="form-select border-form-modal"
+                      id="govloanemployeeid"
+                      name="govloanemployeeid"
+                      aria-label="Floating label select example"
+                    >
+                      <option selected disabled>Select Employee</option>
+                    </select>
+                    <label for="floatingSelectGrid">Employee ID</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select
+                      class="form-select border-form-modal"
+                      id="govloantype"
+                      name="govloantype"
+                      aria-label="Floating label select example"
+                    >
+                      <option selected disabled>Select Loan Type</option>
+                    </select>
+                    <label for="floatingSelectGrid">Loan Type</label>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-form-modal"
+                      id="govloanrecieved"
+                      name="govloanrecieved"
+                      placeholder="First Name"
+                      oninput="formatPrice(event, this)"
+                    />
+                    <label for="floatingInput">Amount Recieved</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control border-form-modal"
+                      id="govloanpermonth"
+                      name="govloanpermonth"
+                      placeholder="First Name"
+                      oninput="formatPrice(event, this)"
+                    />
+                    <label for="floatingInput">Deductions Per month</label>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div class="row g-3">
+                <div class="col">
+                  <div class="form-floating">
+                    <select
+                      class="form-select border-form-modal"
+                      id="govloanpaymenttype"
+                      name="govloanpaymenttype"
+                      aria-label="Floating label select example"
+                    >
+                      <option value="Monthly">Monthly</option>
+                      <option value="Per Cut-off">Per Cut-off</option>
+                    </select>
+                    <label for="floatingSelectGrid">Payment Type</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select
+                      class="form-select border-form-modal"
+                      id="govpayrolldates"
+                      name="govpayrolldates"
+                      aria-label="Floating label select example"
+                    >
+                      <option value="12">12</option>
+                      <option value="18">18</option>
+                      <option value="24">24</option>
+                      <option value="36">36</option>
+                      <option value="48">48</option>
+                      <option value="60">60</option>
+                    </select>
+                    <label for="floatingSelectGrid">Payment Durations</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating">
+                    <select
+                      class="form-select border-form-modal"
+                      id="govloaneffectivedate"
+                      name="govloaneffectivedate"
+                      aria-label="Floating label select example"
+                    ></select>
+                    <label for="floatingSelectGrid">Select Start Date</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <button
+          type="button"
+          class="btn btn-modal-close"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-modal-save"
+          id="govermentloansavebtn"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

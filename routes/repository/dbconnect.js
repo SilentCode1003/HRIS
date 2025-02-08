@@ -126,6 +126,20 @@ exports.Check = (sql) => {
   return new Promise((resolve, reject) => {
     this.Select(sql, (error, result) => {
       if (error) {
+        console.log(error);
+        reject(error);
+      }
+      resolve(result);
+    });
+  });
+};
+
+exports.InsertCheck = (sql, data) => {
+  return new Promise((resolve, reject) => {
+    this.Insert(sql, data, (error, result) => {
+      if (error) {
+        console.log(error);
+
         reject(error);
       }
       resolve(result);

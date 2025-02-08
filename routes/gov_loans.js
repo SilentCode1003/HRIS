@@ -9,7 +9,13 @@ const {
   JsonSuccess,
   MessageStatus,
 } = require("./repository/response");
-const { Select, Update, InsertTable } = require("./repository/dbconnect");
+const {
+  Select,
+  Update,
+  InsertTable,
+  Insert,
+  InsertCheck,
+} = require("./repository/dbconnect");
 const { DataModeling } = require("./model/hrmisdb");
 const { GetValue, ACT, INACT, NPD } = require("./repository/dictionary");
 const {
@@ -19,6 +25,10 @@ const {
   UpdateStatement,
   SelectStatementWithArray,
   UpdateStatementWithArrayDates,
+  ConvertToDate,
+  GetMonthLastDay,
+  formatDate,
+  InsertStatementTransCommit,
 } = require("./repository/customhelper");
 const e = require("express");
 var router = express.Router();
@@ -111,94 +121,96 @@ router.post("/save", (req, res) => {
       duration,
     } = req.body;
 
-    let adjusted_per_month = per_month;
-    let adjusted_duration = duration;
+    async function ProcessData() {
+      let adjusted_per_month = per_month;
+      let adjusted_duration = duration;
 
-    if (payment_type === "Monthly") {
-      adjusted_per_month /= 2;
-      adjusted_duration *= 2;
+      if (payment_type === "Monthly") {
+        adjusted_per_month /= 2;
+        adjusted_duration *= 2;
+      }
+
+      let checkStatement = SelectStatement(
+        "select * from gov_loans where gl_employeeid=? and gl_loan_type=? and gl_status=?",
+        [employeeid, loan_type, status]
+      );
+
+      let cut_off_dates = await generateCutOffDates(
+        effective_date,
+        duration,
+        payment_type
+      );
+      let existResult = await Check(checkStatement);
+
+      if (existResult.length > 0) {
+        return res.json(JsonWarningResponse(MessageStatus.EXIST));
+      }
+
+      let insert_gov_loan = InsertStatement("gov_loans", "gl", [
+        "employeeid",
+        "loan_type",
+        "amount_recieved",
+        "per_month",
+        "payment_type",
+        "affective_date",
+        "duration",
+        "createdate",
+        "status",
+        "createby",
+      ]);
+      
+      let loan_details = [
+        [
+          employeeid,
+          loan_type,
+          amount_recieved,
+          adjusted_per_month,
+          payment_type,
+          effective_date,
+          adjusted_duration,
+          createddate,
+          status,
+          createdby,
+        ],
+      ];
+
+      let loanDetails = await InsertCheck(insert_gov_loan, loan_details);
+
+      let loanId = loanDetails[0].id;
+      // let forecastDates = generateForecastDates(
+      //   effective_date,
+      //   adjusted_duration
+      // );
+      let loanstatus = GetValue(NPD());
+      let deduction_type = "VIA PAYSLIP";
+
+      let detailsData = [];
+
+      detailsData = cut_off_dates.map((date) => [
+        employeeid,
+        loanId,
+        date,
+        loanstatus,
+        deduction_type,
+      ]);
+
+      let detailsSql = InsertStatement("gov_loan_details", "gld", [
+        "employeeid",
+        "loanid",
+        "payrolldates",
+        "loanstatus",
+        "payment_type",
+      ]);
+
+      await InsertCheck(detailsSql, detailsData);
+
+      res.status(200).json({
+        msg: "success",
+        data: "success",
+      });
     }
 
-    let sql = InsertStatement("gov_loans", "gl", [
-      "employeeid",
-      "loan_type",
-      "amount_recieved",
-      "per_month",
-      "payment_type",
-      "affective_date",
-      "duration",
-      "createdate",
-      "status",
-      "createby",
-    ]);
-    let data = [
-      [
-        employeeid,
-        loan_type,
-        amount_recieved,
-        adjusted_per_month,
-        payment_type,
-        effective_date,
-        adjusted_duration,
-        createddate,
-        status,
-        createdby,
-      ],
-    ];
-    let checkStatement = SelectStatement(
-      "select * from gov_loans where gl_employeeid=? and gl_loan_type=? and gl_status=?",
-      [employeeid, loan_type, status]
-    );
-
-    Check(checkStatement)
-      .then((result) => {
-        if (result != 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
-        } else {
-          InsertTable(sql, data, (err, insertResult) => {
-            if (err) {
-              console.log(err);
-              res.json(JsonErrorResponse(err));
-            }
-
-            let loanId = insertResult[0].id;
-            let forecastDates = generateForecastDates(
-              effective_date,
-              adjusted_duration
-            );
-            let loanstatus = GetValue(NPD());
-            let payment_type = "VIA PAYSLIP";
-
-            let detailsData = forecastDates.map((date) => [
-              employeeid,
-              loanId,
-              date.toISOString().split("T")[0],
-              loanstatus,
-              payment_type,
-            ]);
-            let detailsSql = InsertStatement("gov_loan_details", "gld", [
-              "employeeid",
-              "loanid",
-              "payrolldates",
-              "loanstatus",
-              "payment_type",
-            ]);
-
-            InsertTable(detailsSql, detailsData, (err, result) => {
-              if (err) {
-                console.log(err);
-                res.json(JsonErrorResponse(err));
-              } else {
-                res.json(JsonSuccess());
-              }
-            });
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json(JsonErrorResponse(error));
-      });
+    ProcessData();
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
@@ -400,6 +412,93 @@ function generateForecastDates(effectiveDate, duration) {
     dates.push(new Date(currentDate));
   }
   return dates;
+}
+
+async function generateCutOffDates(effectiveDate, duration, paymenttype) {
+  return new Promise((resolve, reject) => {
+    let cut_off_dates = [];
+    let selected_effective_date = effectiveDate.split("-");
+    let selectedYear = parseInt(selected_effective_date[0]);
+    let selectedMonth = parseInt(selected_effective_date[1]);
+    let selectedDay = parseInt(selected_effective_date[2]);
+
+    console.log(
+      paymenttype,
+      duration,
+      effectiveDate,
+      selectedYear,
+      selectedMonth,
+      selectedDay
+    );
+
+    //#region Monthly
+    if (paymenttype === "Monthly") {
+      let duratuionMultiplier = duration * 2;
+      for (let i = 1; i <= duratuionMultiplier; i++) {
+        if (selectedDay === 15) {
+          cut_off_dates.push(
+            formatDate(
+              `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}-15`
+            )
+          );
+          selectedDay = selectedDay + 1;
+        } else {
+          cut_off_dates.push(
+            GetMonthLastDay(
+              `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}`
+            )
+          );
+
+          if (selectedMonth == 12) {
+            selectedDay = 15;
+            selectedMonth = 1;
+            selectedYear += 1;
+          } else {
+            selectedDay = 15;
+            selectedMonth += 1;
+          }
+        }
+      }
+    }
+    //#endregion
+
+    //#region Per Cut-off
+    if (paymenttype === "Per Cut-off") {
+      for (let i = 1; i <= duration; i++) {
+        if (selectedDay === 15) {
+          cut_off_dates.push(
+            formatDate(
+              `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}-15`
+            )
+          );
+
+          if (selectedMonth == 12) {
+            selectedMonth = 1;
+            selectedYear += 1;
+          } else {
+            selectedMonth += 1;
+          }
+        } else {
+          cut_off_dates.push(
+            GetMonthLastDay(
+              `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}`
+            )
+          );
+
+          if (selectedMonth == 12) {
+            selectedMonth = 1;
+            selectedYear += 1;
+          } else {
+            selectedMonth += 1;
+          }
+        }
+      }
+    }
+
+    //#endregion
+
+    resolve(cut_off_dates);
+  });
 }
 
 function Check(sql) {
