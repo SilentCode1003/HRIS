@@ -1078,7 +1078,7 @@ exports.OJTAttendance = (data) => {
         key["latitude"],
         key["longitude"],
         key["device"],
-        key[' geofenceid']
+        key['geofenceid']
       )
   );
 };
