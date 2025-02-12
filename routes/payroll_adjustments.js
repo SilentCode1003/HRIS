@@ -65,7 +65,8 @@ router.get("/load", (req, res) => {
       pa_createby,
       pa_adjustmentstatus
       FROM payroll_adjustments
-      INNER JOIN master_employee on payroll_adjustments.pa_employeeid = me_id`;
+      INNER JOIN master_employee on payroll_adjustments.pa_employeeid = me_id
+      order by pa_adjustmentid desc`;
 
     Select(sql, (err, result) => {
       if (err) {
@@ -358,7 +359,8 @@ router.get("/loaddeductions", (req, res) => {
       pad_createby,
       pad_adjustmentstatus
       FROM payroll_adjustments_deductions
-      INNER JOIN master_employee on payroll_adjustments_deductions.pad_employeeid = me_id`;
+      INNER JOIN master_employee on payroll_adjustments_deductions.pad_employeeid = me_id
+      order by pad_adjustmentid desc`;
 
     Select(sql, (err, result) => {
       if (err) {
