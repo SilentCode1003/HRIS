@@ -1,72 +1,69 @@
 <script>
-  let base64String = "";
-  let payrolldate = "";
-  let employeeid = "<%= employeeid %>";
-  let globalsssid = "";
-  let globaltinid = "";
-  let globalphilhealthid = "";
-  let globalpagibigid = "";
-  let globalaccrued13thmonth = "";
-  let globalemployeeid = "";
-  let globalfullname = "";
-  let globalposition = "";
-  let globaldepartment = "";
-  let globalremainingleave = "";
-  let globalstartdate = "";
-  let globalenddate = "";
-  let globalpayrolldate = "";
-  let globalsalary = "";
-  let globalperday = "";
-  let globalallowances = "";
-  let globalbasicadjustments = "";
-  let globalpayrolladjustments = "";
-  let globalapproveot = "";
-  let globalapprovednightot = "";
-  let globalapprovenormalot = "";
-  let globalapprovedearlyot = "";
-  let globalovertimemeal = "";
-  let globalleavepay = "";
-  let globalregularholidaycomp = "";
-  let globalspecialholidaycomp = "";
-  let globalregularholidayot = "";
-  let globalspecialholidayot = "";
-  let globalsuspension_pay = "";
-  let globaloverallnetpay = "";
-  let globalsssdeductions = "";
-  let globalpagibigdeductions = "";
-  let globalphilhealthdeductions = "";
-  let globaltindeductions = "";
-  let globalabsentdeductions = "";
-  let globalhealthcard = "";
-  let globallatedeductions = "";
-  let globaltotaldeductions = "";
-  let globaltotalnetpay = "";
-  let globaltotalnetpaywords = "";
-  let globalloans = "";
-  let globalRestDay_OTpay = "";
-  let globalsterling_loan = "";
-  let globalwisp_deductions = "";
-  let globalhousing_loan = "";
-  let globaleducation_loan = "";
-  let globalshortterm_loan = "";
-  let globalcalamity_loan = "";
-  let globalrestday_ot = "";
-  let globalsalary_loan = "";
-  let globalnumlate = "";
-  let globalnumabsent = "";
-  let globalgpstatus = "";
-  let globalleave_with_out_pay = "";
-  let globalleave_with_out_pay_deductions = "";
-  let globalpayrolladjustmentsdetails = "";
-  let globalpayrolladjustmentsdeductionsdetails = "";
-  let globalsuddendedductionsName = [];
-  let globalsuddendedductionsAmount = [];
-
-  console.log(globalsuddendedductionsAmount, "globalsuddendeductionsAmount");
-  console.log(globalsuddendedductionsName, "globalsuddendeductionsName");
-
   $(document).ready(function () {
-    console.log("Initializee");
+    //#region Variables
+    let base64String = "";
+    let payrolldate = "";
+    let employeeid = "<%= employeeid %>";
+    let globalsssid = "";
+    let globaltinid = "";
+    let globalphilhealthid = "";
+    let globalpagibigid = "";
+    let globalaccrued13thmonth = "";
+    let globalemployeeid = "";
+    let globalfullname = "";
+    let globalposition = "";
+    let globaldepartment = "";
+    let globalremainingleave = "";
+    let globalstartdate = "";
+    let globalenddate = "";
+    let globalpayrolldate = "";
+    let globalsalary = "";
+    let globalperday = "";
+    let globalallowances = "";
+    let globalbasicadjustments = "";
+    let globalpayrolladjustments = "";
+    let globalapproveot = "";
+    let globalapprovednightot = "";
+    let globalapprovenormalot = "";
+    let globalapprovedearlyot = "";
+    let globalovertimemeal = "";
+    let globalleavepay = "";
+    let globalregularholidaycomp = "";
+    let globalspecialholidaycomp = "";
+    let globalregularholidayot = "";
+    let globalspecialholidayot = "";
+    let globalsuspension_pay = "";
+    let globaloverallnetpay = "";
+    let globalsssdeductions = "";
+    let globalpagibigdeductions = "";
+    let globalphilhealthdeductions = "";
+    let globaltindeductions = "";
+    let globalabsentdeductions = "";
+    let globalhealthcard = "";
+    let globallatedeductions = "";
+    let globaltotaldeductions = "";
+    let globaltotalnetpay = "";
+    let globaltotalnetpaywords = "";
+    let globalloans = "";
+    let globalRestDay_OTpay = "";
+    let globalsterling_loan = "";
+    let globalwisp_deductions = "";
+    let globalhousing_loan = "";
+    let globaleducation_loan = "";
+    let globalshortterm_loan = "";
+    let globalcalamity_loan = "";
+    let globalrestday_ot = "";
+    let globalsalary_loan = "";
+    let globalnumlate = "";
+    let globalnumabsent = "";
+    let globalgpstatus = "";
+    let globalleave_with_out_pay = "";
+    let globalleave_with_out_pay_deductions = "";
+    let globalpayrolladjustmentsdetails = "";
+    let globalpayrolladjustmentsdeductionsdetails = "";
+    let globalsuddendedductionsName = [];
+    let globalsuddendedductionsAmount = [];
+    //#endregion
 
     LoadTable();
     function LoadTable() {
@@ -673,15 +670,6 @@
     });
 
     $("#downloadpfd").click(function () {
-      console.log("Initiating PDF download...");
-
-      // Ensure global arrays have the correct data
-      console.log("GlobalsuddendeductionsName:", globalsuddendedductionsName);
-      console.log(
-        "GlobalsuddendeductionsAmount:",
-        globalsuddendedductionsAmount
-      );
-
       $.ajax({
         url: "/eportalsalary/generatepdf",
         type: "POST",
@@ -752,7 +740,7 @@
           const blob = b64toBlob(data, "application/pdf");
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
-          link.download = `"${payrolldate}"_payslip.pdf`;
+          link.download = `${employeeid}_${payrolldate}_payslip.pdf`;
           document.body.appendChild(link);
           link.click();
 
