@@ -31,6 +31,7 @@ const {
   InsertStatementTransCommit,
 } = require("./repository/customhelper");
 const e = require("express");
+const { Transaction } = require("./utility/utility");
 var router = express.Router();
 
 /* GET home page. */
@@ -43,6 +44,7 @@ module.exports = router;
 
 router.get("/load", (req, res) => {
   try {
+    let status = GetValue(ACT());
     let sql = `SELECT 
     gl_loanid,
     concat(me_lastname,' ',me_firstname) as gl_fullname,
@@ -53,7 +55,8 @@ router.get("/load", (req, res) => {
     gl_createby,
     gl_status 
     FROM gov_loans
-    INNER JOIN master_employee ON gov_loans.gl_employeeid = me_id;
+    INNER JOIN master_employee ON gov_loans.gl_employeeid = me_id
+    where gl_status = '${status}'
     `;
 
     Select(sql, (err, result) => {
@@ -158,7 +161,7 @@ router.post("/save", (req, res) => {
         "status",
         "createby",
       ]);
-      
+
       let loan_details = [
         [
           employeeid,
@@ -358,6 +361,75 @@ router.put("/edit", (req, res) => {
   } catch (error) {
     console.log(error);
     res.json(JsonErrorResponse(error));
+  }
+});
+
+router.get("/load/:status", (req, res) => {
+  try {
+    const { status } = req.params;
+    let select_sql = SelectStatement(
+      `SELECT 
+    gl_loanid,
+    concat(me_lastname,' ',me_firstname) as gl_fullname,
+    gl_loan_type,
+    gl_per_month,
+    gl_amount_recieved,
+    gl_createdate,
+    gl_createby,
+    gl_status 
+    FROM gov_loans
+    INNER JOIN master_employee ON gov_loans.gl_employeeid = me_id
+    where gl_status = ?`,
+      [status]
+    );
+
+    Select(select_sql, (err, result) => {
+      if (err) {
+        console.error(err);
+        res.json(JsonErrorResponse(err));
+      }
+
+      if (result != 0) {
+        let data = DataModeling(result, "gl_");
+        res.json(JsonDataResponse(data));
+      } else {
+        res.json(JsonDataResponse(result));
+      }
+    });
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
+  }
+});
+
+router.put("/complete", (req, res) => {
+  try {
+    const { loanid } = req.body;
+    let queries = [];
+
+    async function ProcessData() {
+      queries.push({
+        sql: UpdateStatement("gov_loans", "gl", ["status"], ["loanid"]),
+        values: ["PAID", loanid],
+      });
+
+      queries.push({
+        sql: UpdateStatement(
+          "gov_loan_details",
+          "gld",
+          ["loanstatus", "payment_type"],
+          ["loanid"]
+        ),
+        values: ["PAID", "VIA OTC", loanid],
+      });
+
+      await Transaction(queries);
+
+      res.status(200).json(JsonSuccess());
+    }
+
+    ProcessData();
+  } catch (error) {
+    res.status(500).json(JsonErrorResponse(error));
   }
 });
 

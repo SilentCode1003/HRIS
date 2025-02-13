@@ -620,8 +620,8 @@
         return "status-success";
       case "SOLD":
         return "status-success";
-      case "Active":
-        return "status-success";
+      case "ACTIVE":
+        return "status-inprogress";
       case "APPROVED":
         return "status-success";
       case "REPLACE":
@@ -640,6 +640,8 @@
         return "status-warning";
       case "NOT COMPLETE":
         return "status-inprogress";
+      case "PAID":
+        return "status-success";
       default:
         return "";
     }
@@ -659,8 +661,8 @@
         return "status-container-sc";
       case "SOLD":
         return "status-container-sc";
-      case "Active":
-        return "status-container-sc";
+      case "ACTIVE":
+        return "status-container-inpg";
       case "APPROVED":
         return "status-container-sc";
       case "REPLACE":
@@ -678,6 +680,8 @@
       case "CANCELLED":
         return "status-container-wr";
       case "COMPLETE":
+        return "status-container-sc";
+      case "PAID":
         return "status-container-sc";
       default:
         return "";

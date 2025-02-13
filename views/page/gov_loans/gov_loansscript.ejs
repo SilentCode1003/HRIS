@@ -1,134 +1,16 @@
 <script>
-  let govloanid = "";
-
   $(document).ready(function () {
+    const loan_table = $("#datatable-loan tbody");
+    const loan_history_table = $("#datatable-loan-history tbody");
+    let govloanid = "";
     LoadTable();
     LoadList();
     LoadEditEmp();
     LoadPayrollDate();
     LoadLoanType();
     EditLoadPayrollDate();
-    searchTable();
     LoadAdvancedList();
     AdvancedLoadPayrollDate();
-
-    $(document).on("keyup", "#myInput", function () {
-      searchTable();
-    });
-
-    function LoadTable() {
-      $("#dataTablegovermentLoans").DataTable({
-        destroy: true,
-        processing: true,
-        serverSide: true,
-        paging: false,
-        searching: false,
-        info: false,
-        scrollY: 600,
-        scrollCollapse: true,
-        serverMethod: "GET",
-        ajax: {
-          url: "/gov_loans/load",
-          dataSrc: (json) => {
-            var finalData = [];
-            var data = json.data;
-
-            $.each(data, (key, item) => {
-              var action = "";
-              var status = item.status;
-              action = `
-                      <button id="editBtn" class="btn text-primary" name="editBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-pen"></i></button>
-                      <button id="advanceBtn" class="btn text-danger" name="advanceBtn" data-bs-toggle="modal" data-bs-target="#advancedgovloansmodal"><i class="fa fa-credit-card"></i></button>
-                      <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-eye"></i></button>
-                     `;
-
-              finalData.push({
-                loanid: item.loanid,
-                fullname: item.fullname,
-                loan_type: item.loan_type,
-                per_month: item.per_month,
-                amount_recieved: item.amount_recieved,
-                createdate: item.createdate,
-                createby: item.createby,
-                status: item.status,
-                action: action,
-              });
-            });
-
-            return finalData;
-          },
-        },
-        columnDefs: [
-          {
-            targets: 1,
-            className: "td-indent",
-          },
-        ],
-        columns: [
-          { data: "loanid" },
-          { data: "fullname" },
-          { data: "loan_type" },
-          {
-            data: "per_month",
-            render: function (data, type, row) {
-              return (
-                "₱" +
-                parseFloat(data).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              );
-            },
-          },
-          {
-            data: "amount_recieved",
-            render: function (data, type, row) {
-              return (
-                "₱" +
-                parseFloat(data).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              );
-            },
-          },
-          { data: "createdate" },
-          { data: "createby" },
-          { data: "status" },
-          { data: "action" },
-        ],
-        createdRow: function (row, data, dataIndex) {
-          var statusCell = $(row).find("td:eq(7)");
-
-          var statusText = data.status;
-
-          var statusClass = "";
-
-          switch (statusText.toLowerCase()) {
-            case "active":
-              statusClass = "active-status";
-              break;
-            case "inactive":
-              statusClass = "inactive-status";
-              break;
-
-            default:
-              statusClass = "";
-          }
-
-
-          statusCell.html(`<span class="${statusClass}">${statusText}</span>`);
-
-
-          $("td", row).each(function (index) {
-            this.style.textAlign = "center";
-            this.style.verticalAlign = "middle";
-          });
-        },
-
-        initComplete: function () {},
-      });
-    }
 
     $("#govloanemployeeid").on("change", function () {
       let employeeid = $(this).val();
@@ -370,7 +252,7 @@
       });
     }
 
-    $("#dataTablegovermentLoans tbody").on("click", "tr", function () {
+    $("#datatable-loan tbody").on("click", "tr", function () {
       var dataRow = [];
       $(this)
         .closest("tr")
@@ -380,6 +262,19 @@
         });
       govloanid = dataRow[0];
     });
+
+    $("#datatable-loan-history tbody").on("click", "tr", function () {
+      var dataRow = [];
+      $(this)
+        .closest("tr")
+        .find("td")
+        .each(function () {
+          dataRow.push($(this).text());
+        });
+      govloanid = dataRow[0];
+    });
+
+    $(document).on("click", "#completeBtn", function () {});
 
     // $(document).on("click", "#editBtn", function () {
     //   $.ajax({
@@ -424,8 +319,7 @@
             const TittleContainer = $("#TittleContainer");
             TittleContainer.empty();
 
-          
-            const firstItem = existingData[0]; 
+            const firstItem = existingData[0];
             const cardHtml = `<h3 class="modal-title" id="">${firstItem.fullname}'s ${firstItem.loan_type}</h3>`;
             $("#datename").text(firstItem.fullname);
             TittleContainer.append(cardHtml);
@@ -433,12 +327,10 @@
             var totalLoanAmount = 0;
             var totalAmountPaid = 0;
 
-
             var material_list_tbl = $("#dataTablegovermentdetails").DataTable();
             material_list_tbl.clear().draw();
 
             $.each(existingData, function (key, item) {
-
               totalLoanAmount += parseFloat(item.per_month);
 
               var rowNode = material_list_tbl.row
@@ -452,7 +344,6 @@
                 ])
                 .draw()
                 .node();
-
 
               var statusCell = $(rowNode).find("td:eq(3)");
               var statusText = item.loanstatus;
@@ -474,7 +365,6 @@
               statusCell.html(
                 `<span class="${statusClass}">${statusText}</span>`
               );
-
 
               $(rowNode).find("td").css({
                 "text-align": "center",
@@ -691,27 +581,131 @@
         });
       }
     });
-  });
 
-  function searchTable() {
-    var input, filter, found, table, tr, td, i, j;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("dataTablegovermentLoans");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td");
-      for (j = 0; j < td.length; j++) {
-        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
-          found = true;
+    //#region Actions
+    $(document).on("input", "#search-input-loan", function () {
+      filterTableRows("#datatable-loan", 9, "#search-input-loan");
+    });
+
+    $(document).on("input", "#search-input-loan-history", function () {
+      filterTableRows(
+        "#datatable-loan-history",
+        8,
+        "#search-input-loan-history"
+      );
+    });
+
+    function LoadTable() {
+      FetchTableData("/gov_loans/load", (result) => {
+        console.log(result);
+        PopulateTable(loan_table, result, "loan");
+      });
+    }
+
+    $(document).on("click", "#loan-tab", function () {
+      FetchTableData("/gov_loans/load", (result) => {
+        PopulateTable(loan_table, result, "loan");
+      });
+    });
+
+    $(document).on("click", "#loan-history-tab", function () {
+      FetchTableData("/gov_loans/load/PAID", (result) => {
+        PopulateTable(loan_history_table, result, "loan_history");
+      });
+    });
+
+    $(document).on("click", "#completeBtn", function () {
+      Upsert("PUT", "/gov_loans/complete", { loanid: govloanid }, (result) => {
+        if (result.msg === "success") {
+          success("Success", "Data Saved Successfully");
+          LoadTable();
+        } else {
+          warning("Error", result.msg);
         }
-      }
-      if (found) {
-        tr[i].style.display = "";
-        found = false;
+      });
+    });
+
+    function PopulateTable(table, data, type) {
+      table.empty();
+      if (data.length === 0) {
+        const tr = $("<tr>").append(
+          $("<td>", {
+            colspan: 8,
+            class: "text-center",
+            text: "No Data Matched",
+          })
+        );
+        table.append(tr);
       } else {
-        tr[i].style.display = "none";
+        data.forEach((item) => {
+          let action = "";
+          const statusBackground = getStatusBackground(item.status);
+          const containerBackground = getStatusContainerBackground(item.status);
+
+          if (type === "loan") {
+            action = `<button id="completeBtn" class="btn text-primary" name="completeBtn" data-bs-toggle="modal" data-bs-target="#editgovloansmodal"><i class="fas fa-check"></i></button>
+          <button id="advanceBtn" class="btn text-danger" name="advanceBtn" data-bs-toggle="modal" data-bs-target="#advancedgovloansmodal"><i class="fa fa-credit-card"></i></button>
+          <button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-eye"></i></button>`;
+          }
+
+          if (type === "loan_history") {
+            action = `<button id="viewBtn" class="btn text-success" name="viewBtn" data-bs-toggle="modal" data-bs-target="#viewgovloansmodal"><i class="fas fa-eye"></i></button>`;
+          }
+
+          const tr = $("<tr>").append(
+            $("<td>", {
+              text: item.loanid,
+              "data-label": "ID",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.fullname,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.loan_type,
+              "data-label": "Loan Type",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: formatToCurrency(item.per_month),
+              "data-label": "Per Cut-Off",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: formatToCurrency(item.amount_recieved),
+              "data-label": "Ammount Recieved",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.createdate,
+              "data-label": "Create Date",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              text: item.createby,
+              "data-label": "Create By",
+              class: "custom-mobile-align",
+            }),
+            $("<td>", {
+              class: "custom-mobile-align",
+              "data-label": "Status",
+            }).append(
+              $("<div>", { class: containerBackground }).append(
+                $("<span>", { text: item.status, class: statusBackground })
+              )
+            ),
+            $("<td>", {
+              html: action,
+              "data-label": "Employee",
+              class: "custom-mobile-align",
+            })
+          );
+          table.append(tr);
+        });
       }
     }
-  }
+    //#endregion
+  });
 </script>

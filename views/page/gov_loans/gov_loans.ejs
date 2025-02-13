@@ -1,49 +1,148 @@
 <div class="card" id="tablecard">
+  <div class="progress progress-sm-mb-2">
+    <div
+      class="progress-bar"
+      role="progressbar"
+      style="width: 0%"
+      aria-valuenow="0"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    ></div>
+  </div>
   <div class="card-header ch-coop">
     <h3 class="title-card-table m-4">Government Loans</h3>
-    <div class="row gap-4 m-2 mb-4">
-      <div class="col">
-        <input
-          id="myInput"
-          class="pl-2 font-weight-bold"
-          type="text"
-          placeholder="  Search...."
-        />
-      </div>
-      <div class="col-sm-1 col-add">
+    <nav>
+      <div class="nav nav-tabs">
         <button
+          class="nav-link active eportal-leave"
+          id="loan-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#nav-loan"
           type="button"
-          class="btn btn-add-color"
-          data-bs-toggle="modal"
-          data-bs-target="#govloansmodal"
+          role="tab"
+          aria-controls="nav-profile"
+          aria-selected="true"
         >
-          <b>+ Add</b>
+          <b>LOANS</b>
+        </button>
+
+        <button
+          class="nav-link eportal-leave"
+          id="loan-history-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#nav-loan-history"
+          type="button"
+          role="tab"
+          aria-controls="nav-profile"
+          aria-selected="false"
+        >
+          <b>LOAN HISTORY</b>
         </button>
       </div>
-    </div>
+    </nav>
   </div>
   <div class="card-body">
-    <div class="table-responsive" id="table-responsive-id">
-      <table class="table table-striped-light" id="dataTablegovermentLoans">
-        <thead>
-          <tr>
-            <th class="col-sm-1">ID</th>
-            <th>Employee ID</th>
-            <th>Loan Type</th>
-            <th>Per Cut-Off</th>
-            <th>Amount Recieved</th>
-            <th>Create Date</th>
-            <th>Create By</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="tab-content" id="nav-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="nav-loan"
+        role="tabpanel"
+        aria-labelledby="nav-profile-tab"
+      >
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                <input
+                  id="search-input-loan"
+                  class="form-control"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+              <div class="col-sm-7 col-md-7 col-lg-7 col-xl-7 d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-add-color w-40"
+                  data-bs-toggle="modal"
+                  data-bs-target="#govloansmodal"
+                >
+                  <i class="fa fa-plus"> ADD</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+              <table class="table table-striped-light" id="datatable-loan">
+                <thead>
+                  <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Employee</th>
+                    <th>Loan Type</th>
+                    <th>Per Cut-Off</th>
+                    <th>Amount Recieved</th>
+                    <th>Create Date</th>
+                    <th>Create By</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="nav-loan-history"
+        role="tabpanel"
+        aria-labelledby="nav-profile-tab"
+      >
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                <input
+                  id="search-input-loan-history"
+                  class="form-control"
+                  type="text"
+                  placeholder="  Search...."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive" id="table-responsive-id">
+              <table
+                class="table table-striped-light"
+                id="datatable-loan-history"
+              >
+                <thead>
+                  <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th>Employee ID</th>
+                    <th>Loan Type</th>
+                    <th>Per Cut-Off</th>
+                    <th>Amount Recieved</th>
+                    <th>Create Date</th>
+                    <th>Create By</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<%- include('gov_loan_entry_modal.ejs') %>
-<%- include('gov_loan_view_modal.ejs') %>
-<%- include('gov_loan_advance_payment_modal.ejs') %>
+<%- include('gov_loan_entry_modal.ejs') %> <%-include('gov_loan_view_modal.ejs')
+%> <%-include('gov_loan_advance_payment_modal.ejs') %>
