@@ -357,11 +357,9 @@ module.exports = {
       END
     `);
   },
-
   down: async (queryInterface, Sequelize) => {
     await queryInterface.sequelize.query(`
       DROP TRIGGER IF EXISTS after_update_attendance;
     `);
   }
-
 };

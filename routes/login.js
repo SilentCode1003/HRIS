@@ -15,7 +15,13 @@ module.exports = router;
 router.post("/login", (req, res) => {
   try {
     const { username, password, accesstypeid } = req.body;
-
+    const sanitizedUsername = username.replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!sanitizedUsername || sanitizedUsername.length < 3) {
+      return res.json({ msg: "sanitized" });
+    }
+    if (sanitizedUsername !== username) {
+      return res.json({ msg: "sanitized" });
+    }
     Encrypter(password, (err, encrypted) => {
       if (err) console.error("Error: ", err);
 
@@ -39,7 +45,7 @@ router.post("/login", (req, res) => {
           WHERE 
           us_userid = (SELECT mu_userid 
                       FROM master_user 
-                      WHERE mu_username = '${username}'
+                      WHERE mu_username = '${sanitizedUsername}'
                       AND mu_password = '${encrypted}'
                       AND mu_accesstype = '${accesstypeid}')) as subgroupid
       FROM 
@@ -56,7 +62,7 @@ router.post("/login", (req, res) => {
           user_subgroup us ON mu_userid = us.us_userid
       LEFT JOIN master_geofence_settings ON mgs_departmentid = me_department 
       WHERE 
-          mu_username = '${username}' 
+          mu_username = '${sanitizedUsername}' 
           AND mu_password = '${encrypted}'
           AND mu_accesstype = '${accesstypeid}'
       GROUP BY 

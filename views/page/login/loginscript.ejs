@@ -93,7 +93,14 @@
                   location.replace("/index");
                 }
               });
-            } else if (result.msg === "inactive") {
+            } else if (result.msg === "sanitized") {
+              swal(
+                "Invalid Username",
+                "Your username contains special characters that are not allowed.",
+                "error"
+              );
+            }
+            else if (result.msg === "inactive") {
               showSweetAlert(
                 "Inactive",
                 "Your account is inactive. Please be guided accordingly.",
@@ -140,7 +147,7 @@
         navigator.geolocation.getCurrentPosition(
           (position) => {
             console.log("Location access granted:", position);
-            validateUserLocation(); // Call your function here
+            validateUserLocation(); 
           },
           (error) => {
             console.error("Error getting location:", error);
@@ -152,24 +159,23 @@
                 buttons: ["Close", "Open Settings"],
               }).then((openSettings) => {
                 if (openSettings) {
-                  // Opening settings based on browser
                   if (navigator.userAgent.indexOf("Chrome") !== -1) {
-                    window.open("chrome://settings/content/location", "_blank"); // For Chrome
+                    window.open("chrome://settings/content/location", "_blank");
                   } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
-                    window.open("about:preferences#privacy", "_blank"); // For Firefox
+                    window.open("about:preferences#privacy", "_blank"); 
                   } else if (navigator.userAgent.indexOf("Safari") !== -1) {
-                    window.open("x-apple-system://settings", "_blank"); // For Safari (on macOS)
+                    window.open("x-apple-system://settings", "_blank"); 
                   }
                 }
               });
             } else {
-              handleError(error); // Handle other errors (e.g., timeout, unavailable)
+              handleError(error); 
             }
           },
           {
             enableHighAccuracy: true,
             maximumAge: 10000,
-            timeout: 10000, // Adjust timeout for location request
+            timeout: 10000, 
           }
         );
       } else {
