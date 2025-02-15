@@ -246,3 +246,34 @@ module.exports = swaggerDocs;
  */
 
 //#endregion
+
+//#region Daily Allowannce
+
+/**
+ * @swagger
+ * /allowance/get-daily-allowance:
+ *   get:
+ *     tags:
+ *       - Daily Allowance
+ *     summary: Get Daily Allowance
+ *     description: Get Daily Allowance
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Server error.
+ * 
+ * components:
+ *   schemas:
+ *     DailyAllowance:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier for a Daily Allowance.
+ * 
+ */
+
+//#endregion

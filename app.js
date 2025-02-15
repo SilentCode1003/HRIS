@@ -181,6 +181,7 @@ var manual_regholidayRouter = require("./routes/manual_regholiday");
 var payslipsummaryRouter = require("./routes/payslipsummary");
 var teamleadundertimeRouter = require("./routes/teamleadundertime");
 var loantypeRouter = require("./routes/loantype");
+var allowanceReouter = require("./routes/allowance");
 
 //#endregion
 
@@ -374,6 +375,7 @@ app.use("/manual_regholiday", manual_regholidayRouter);
 app.use("/payslipsummary", payslipsummaryRouter);
 app.use("/teamleadundertime", teamleadundertimeRouter);
 app.use("/loantype", loantypeRouter);
+app.use("/allowance", allowanceReouter);
 
 //#endregion
 

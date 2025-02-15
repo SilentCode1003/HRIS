@@ -599,6 +599,26 @@ exports.SelectStatement = (str, data) => {
   return statement;
 };
 
+exports.SelectAllStatement = (tablename, columns) => {
+  let statement = `SELECT ${columns} FROM ${tablename}`;
+
+  return statement;
+};
+
+exports.SelectWhereStatement = (tablename, columns, condition, values) => {
+  let cols = "";
+
+  for (let i = 0; i < condition.length; i++) {
+    cols += `${condition[i]} = ${values[i]} AND `;
+  }
+
+  cols = cols.slice(0, -5);
+
+  let statement = `SELECT ${columns} FROM ${tablename} WHERE ${cols}`;
+
+  return statement;
+};
+
 exports.SelectStatementWithArray = (str, data) => {
   let statement = "";
   let found = 0;

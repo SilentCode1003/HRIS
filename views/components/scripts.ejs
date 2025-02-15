@@ -75,7 +75,7 @@
 <!-- swal-->
 <script src="/javascripts/js/sweetalert.min.js"></script>
 <!-- Toastr-->
-<script src="javascripts/js/toastr.min.js"></script>
+<script src="/javascripts/js/toastr.min.js"></script>
 
 <script src="/javascripts/js/scripts.js"></script>
 
@@ -172,10 +172,12 @@
       },
     });
   });
+ 
   function adjustTextareaHeight(textarea) {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
   }
+ 
   function formatPrice(event, input) {
     event.preventDefault();
 
@@ -207,6 +209,7 @@
       input.value = defaultValue;
     }
   }
+  
   // hidespinner();
   function showspinner() {
     console.log("show loader");

@@ -115,3 +115,51 @@ Fixes any formatting issues.
 npx sequelize-cli migration:generate --name <migration-name>
 npm run migrations:status
 npx sequelize-cli db:migrate
+
+
+### Migrations
+
+To create a new migration file, run the following command:
+
+```bash
+npx sequelize-cli migration:generate --name <migration-name>
+```
+
+Replace `<migration-name>` with the name of your migration. For example:
+
+```bash
+npx sequelize-cli migration:generate --name create-employees
+```
+
+This will create a new migration file in the `migrations` directory with the specified name.
+
+To apply the migration, run the following command:
+
+```bash
+npx sequelize-cli db:migrate
+```
+
+This will apply all pending migrations to the database.
+
+To rollback the last migration, run the following command:
+
+```bash
+npx sequelize-cli db:migrate:undo
+```
+
+This will rollback the last migration and apply the previous migration.
+
+To check the current migration status, run the following command:
+
+```bash
+npx sequelize-cli db:migrate:status
+```
+
+This will display the current migration status.
+
+
+npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+
+npx sequelize-cli seed:generate --name demo-user
+
+npx sequelize-cli db:seed:all
