@@ -481,10 +481,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
     `;
 
       const isExist = await Check(checkExistingClockInQuery);
-      const isMissedLog = await Check(checkMissingClockOutQuery);
-      const isScheduledTimein = await Check(fetchScheduledTimeInQuery);
-      const isScheduledTimeout = await Check(fetchScheduledTimeOutQuery);
-
       if (isExist.length > 0) {
         console.log(isExist);
 
@@ -493,13 +489,20 @@ router.post("/clockin", verifyJWT, (req, res) => {
           message:
             "Clock-in not allowed. Employee already clocked in on the same day.",
         });
-      } else if (isMissedLog.length > 0) {
+      }
+
+      const isMissedLog = await Check(checkMissingClockOutQuery);
+      if (isMissedLog.length > 0) {
         return res.status(400).json({
           status: "disabled",
           message:
             "Clock-in not allowed. Missing clock-out on the previous day.",
         });
-      } else if (
+      }
+
+      const isScheduledTimein = await Check(fetchScheduledTimeInQuery);
+      const isScheduledTimeout = await Check(fetchScheduledTimeOutQuery);
+      if (
         isScheduledTimein.length === 0 ||
         isScheduledTimeout.length === 0
       ) {
@@ -507,7 +510,10 @@ router.post("/clockin", verifyJWT, (req, res) => {
           status: "error",
           message: "Scheduled time-in or time-out not found for the employee.",
         });
-      } else {
+      }
+
+     
+
         const clockinDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         const scheduledTimeIn = isScheduledTimein[0].as_scheduled_timein;
         const scheduledTimeOut = isScheduledTimeout[0].as_scheduled_timeout;
@@ -575,6 +581,7 @@ router.post("/clockin", verifyJWT, (req, res) => {
           geofenceid,
           locationin,
         ];
+
         const checkStatement = SelectStatement(
           "SELECT * FROM master_attendance WHERE ma_attendancedate=? AND ma_employeeid=?",
           [attendancedate, employee_id]
@@ -583,7 +590,7 @@ router.post("/clockin", verifyJWT, (req, res) => {
         const isAlreadyClockedIn = await Check(checkStatement);
 
         if (isAlreadyClockedIn.length !== 0) {
-          return res.json(JsonWarningResponse(MessageStatus.EXIST));
+          return res.status(400).json(JsonWarningResponse(MessageStatus.EXIST));
         }
 
         queries.push({
@@ -595,14 +602,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
 
         //#region Update Attendance Status
 
-        // const updateAttendanceStatusQuery = `
-        //                   UPDATE attendance_status
-        //                   SET as_status = '${status}',
-        //                       as_minutes = ${minutesDifference},
-        //                       as_hours = ${hoursDifference}
-        //                   WHERE as_employeeid = '${employee_id}'
-        //                     AND as_attendance_date = '${attendancedate}'
-        //                 `;
 
         const updateAttendanceStatusQuery = UpdateStatement(
           "attendance_status",
@@ -639,7 +638,7 @@ router.post("/clockin", verifyJWT, (req, res) => {
           status: "success",
           message: "Clock-in successful.",
         });
-      }
+      
     }
 
     ProcessData();
@@ -785,14 +784,14 @@ router.post("/offlineclockin", async (req, res) => {
         ];
 
         const clockinCheckStatement = SelectStatement(
-          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ?",
+          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ? AND ma_clockin IS NOT NULL",
           [employeeid, attendancedate]
         );
 
         try {
           const result = await Check(clockinCheckStatement);
-          if (result.length > 0) {
-            return res.json(JsonWarningResponse(MessageStatus.EXIST));
+          if (result.length != 0) {
+            return res.status(400).json(JsonWarningResponse(MessageStatus.EXIST));
           } else {
             await new Promise((resolve, reject) => {
               InsertTable(clockInSQL, clockinData, (err) => {
@@ -809,7 +808,7 @@ router.post("/offlineclockin", async (req, res) => {
           }
         } catch (error) {
           console.log(error);
-          return res.json(JsonErrorResponse(error));
+          return res.status(500).json(JsonErrorResponse(error));
         }
       } else if (type === "Clock Out") {
         let data = [];
