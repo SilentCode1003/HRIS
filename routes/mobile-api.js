@@ -784,7 +784,7 @@ router.post("/offlineclockin", async (req, res) => {
         ];
 
         const clockinCheckStatement = SelectStatement(
-          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ? AND ma_clockin IS NOT NULL",
+          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ?",
           [employeeid, attendancedate]
         );
 
