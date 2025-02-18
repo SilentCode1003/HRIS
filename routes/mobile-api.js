@@ -755,132 +755,132 @@ router.post("/selectgeofence", verifyJWT, (req, res) => {
   }
 });
 
-router.post("/offlineclockin", async (req, res) => {
-  try {
-    const records = req.body;
+// router.post("/offlineclockin", async (req, res) => {
+//   try {
+//     const records = req.body;
 
-    console.log(records, "records");
+//     console.log(records, "records");
 
-    for (const record of records) {
-      const { employeeid, attendancedate, datetime, type } = record;
-      const location = "Offline";
-      const lat = "0.1";
-      const long = "0.1";
-      const device = "App";
+//     for (const record of records) {
+//       const { employeeid, attendancedate, datetime, type } = record;
+//       const location = "Offline";
+//       const lat = "0.1";
+//       const long = "0.1";
+//       const device = "App";
 
-      if (type === "Clock In") {
-        const clockInSQL = InsertStatement("master_attendance", "ma", [
-          "employeeid",
-          "attendancedate",
-          "clockin",
-          "latitudeIn",
-          "longitudein",
-          "devicein",
-          "locationIn",
-        ]);
+//       if (type === "Clock In") {
+//         const clockInSQL = InsertStatement("master_attendance", "ma", [
+//           "employeeid",
+//           "attendancedate",
+//           "clockin",
+//           "latitudeIn",
+//           "longitudein",
+//           "devicein",
+//           "locationIn",
+//         ]);
 
-        const clockinData = [
-          [employeeid, attendancedate, datetime, lat, long, device, location],
-        ];
+//         const clockinData = [
+//           [employeeid, attendancedate, datetime, lat, long, device, location],
+//         ];
 
-        const clockinCheckStatement = SelectStatement(
-          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ?",
-          [employeeid, attendancedate]
-        );
+//         const clockinCheckStatement = SelectStatement(
+//           "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ? AND ma_clockin IS NOT NULL",
+//           [employeeid, attendancedate]
+//         );
 
-        try {
-          const result = await Check(clockinCheckStatement);
-          if (result.length != 0) {
-            return res.status(400).json(JsonWarningResponse(MessageStatus.EXIST));
-          } else {
-            await new Promise((resolve, reject) => {
-              InsertTable(clockInSQL, clockinData, (err) => {
-                if (err) {
-                  console.log(err);
-                  return reject(JsonErrorResponse(err));
-                }
-                console.log(
-                  `Inserted Clock IN for ${employeeid} on ${attendancedate}`
-                );
-                resolve();
-              });
-            });
-          }
-        } catch (error) {
-          console.log(error);
-          return res.status(500).json(JsonErrorResponse(error));
-        }
-      } else if (type === "Clock Out") {
-        let data = [];
-        let columns = [];
-        let arguments = [];
+//         try {
+//           const result = await Check(clockinCheckStatement);
+//           if (result.length != 0) {
+//             return res.status(400).json(JsonWarningResponse(MessageStatus.EXIST));
+//           } else {
+//             await new Promise((resolve, reject) => {
+//               InsertTable(clockInSQL, clockinData, (err) => {
+//                 if (err) {
+//                   console.log(err);
+//                   return reject(JsonErrorResponse(err));
+//                 }
+//                 console.log(
+//                   `Inserted Clock IN for ${employeeid} on ${attendancedate}`
+//                 );
+//                 resolve();
+//               });
+//             });
+//           }
+//         } catch (error) {
+//           console.log(error);
+//           return res.status(500).json(JsonErrorResponse(error));
+//         }
+//       } else if (type === "Clock Out") {
+//         let data = [];
+//         let columns = [];
+//         let arguments = [];
 
-        if (datetime) {
-          data.push(datetime);
-          columns.push("clockout");
-        }
+//         if (datetime) {
+//           data.push(datetime);
+//           columns.push("clockout");
+//         }
 
-        if (lat) {
-          data.push(lat);
-          columns.push("latitudeout");
-        }
+//         if (lat) {
+//           data.push(lat);
+//           columns.push("latitudeout");
+//         }
 
-        if (long) {
-          data.push(long);
-          columns.push("longitudeout");
-        }
+//         if (long) {
+//           data.push(long);
+//           columns.push("longitudeout");
+//         }
 
-        if (location) {
-          data.push(location);
-          columns.push("locationOut");
-        }
+//         if (location) {
+//           data.push(location);
+//           columns.push("locationOut");
+//         }
 
-        if (device) {
-          data.push(device);
-          columns.push("deviceout");
-        }
+//         if (device) {
+//           data.push(device);
+//           columns.push("deviceout");
+//         }
 
-        if (employeeid) {
-          arguments.push(employeeid);
-        }
+//         if (employeeid) {
+//           arguments.push(employeeid);
+//         }
 
-        if (attendancedate) {
-          arguments.push(attendancedate);
-        }
+//         if (attendancedate) {
+//           arguments.push(attendancedate);
+//         }
 
-        if (columns.length > 0 && arguments.length > 0) {
-          let updateStatement = UpdateStatement(
-            "master_attendance",
-            "ma",
-            columns,
-            ["employeeid", "attendancedate"]
-          );
-          const updateData = [...data, employeeid, attendancedate];
-          await new Promise((resolve, reject) => {
-            Update(updateStatement, updateData, (err, result) => {
-              if (err) {
-                console.error("Error updating clock-out:", err);
-                return reject(JsonErrorResponse(err));
-              } else {
-                console.log(
-                  `Updated Clock Out for ${employeeid} on ${attendancedate}, Rows affected: ${result}`
-                );
-                resolve();
-              }
-            });
-          });
-        } else {
-          console.log("No columns to update for Clock Out.");
-        }
-      }
-    }
+//         if (columns.length > 0 && arguments.length > 0) {
+//           let updateStatement = UpdateStatement(
+//             "master_attendance",
+//             "ma",
+//             columns,
+//             ["employeeid", "attendancedate"]
+//           );
+//           const updateData = [...data, employeeid, attendancedate];
+//           await new Promise((resolve, reject) => {
+//             Update(updateStatement, updateData, (err, result) => {
+//               if (err) {
+//                 console.error("Error updating clock-out:", err);
+//                 return reject(JsonErrorResponse(err));
+//               } else {
+//                 console.log(
+//                   `Updated Clock Out for ${employeeid} on ${attendancedate}, Rows affected: ${result}`
+//                 );
+//                 resolve();
+//               }
+//             });
+//           });
+//         } else {
+//           console.log("No columns to update for Clock Out.");
+//         }
+//       }
+//     }
 
-    res.json(JsonSuccess());
-  } catch (error) {
-    console.error(error);
-    res.json(JsonErrorResponse(error));
-  }
-});
+//     res.json(JsonSuccess());
+//   } catch (error) {
+//     console.error(error);
+//     res.json(JsonErrorResponse(error));
+//   }
+// });
 
 //#endregion
 
