@@ -455,7 +455,6 @@ router.post("/clockin", verifyJWT, (req, res) => {
       FROM master_attendance
       WHERE ma_employeeid = '${employee_id}'
         AND ma_attendancedate = '${attendancedate}'
-        AND ma_clockin IS NOT NULL
     `;
 
       const checkMissingClockOutQuery = `

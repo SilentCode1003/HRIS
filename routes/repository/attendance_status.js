@@ -34,7 +34,7 @@ exports.insertDailyAttendanceStatus = () => {
   mysql
     .mysqlQueryPromise(fetchEmployeesQuery)
     .then((employees) => {
-      console.log("Employees and shift data fetched:", employees);
+      // console.log("Employees and shift data fetched:", employees);
       if (employees.length === 0) {
         console.log("No employees found with the specified job statuses.");
         return;
