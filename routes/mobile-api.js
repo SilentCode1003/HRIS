@@ -783,14 +783,14 @@ router.post("/offlineclockin", async (req, res) => {
         ];
 
         const clockinCheckStatement = SelectStatement(
-          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ? AND ma_clockin IS NOT NULL",
+          "SELECT * FROM master_attendance WHERE ma_employeeid = ? AND ma_attendancedate = ?",
           [employeeid, attendancedate]
         );
 
         try {
           const result = await Check(clockinCheckStatement);
           if (result.length != 0) {
-            return res.status(400).json(JsonWarningResponse(MessageStatus.EXIST));
+            return res.status(200).json(JsonWarningResponse(MessageStatus.EXIST));
           } else {
             await new Promise((resolve, reject) => {
               InsertTable(clockInSQL, clockinData, (err) => {
