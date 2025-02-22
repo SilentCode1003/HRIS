@@ -19,6 +19,7 @@ cron.schedule("0 0 * * *", () => {
   insertDailyAttendanceStatus();
   GenerateEmployeeGovernmentDeduction();
 });
+
 //#region ROUTES IMPORT
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");

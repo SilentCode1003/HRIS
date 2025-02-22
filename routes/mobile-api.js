@@ -1635,6 +1635,32 @@ router.post("/loadreqbeforepayout", verifyJWT, (req, res) => {
   }
 });
 
+router.post('/getloandeductions', (req, res) => {
+try {
+  const {employeeid, payrolldate} = req.body;
+    let select_sql = SelectStatement(`
+    select gl_loan_type as loan_type, 
+    gl_per_month as per_month
+    from gov_loan_details
+    inner join gov_loans on gl_loanid = gld_loanid
+    where gld_employeeid = ? and gld_payrolldates = ?`,[employeeid, payrolldate]);
+
+ Select(select_sql, (err, result) => {
+  if (err) console.error("Error: ", err);
+
+  res.json({
+    msg: "success",
+    data: result,
+  });
+});
+
+} catch (error) {
+  res.status(500).json({
+    msg: error,
+  });
+}
+})
+
 //#endregion
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
